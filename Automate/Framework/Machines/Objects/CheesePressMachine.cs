@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A cheese press that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
     internal class CheesePressMachine : GenericObjectMachine<SObject>
     {
         /*********
@@ -64,8 +65,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out IRecipe recipe))
             {
-                this.Machine.heldObject.Value = recipe.Output(consumable.Take());
-                this.Machine.MinutesUntilReady = recipe.Minutes;
+                // get output
+                var inputStack = consumable.Take();
+                this.Machine.heldObject.Value = recipe.Output(inputStack);
+                this.Machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }
 

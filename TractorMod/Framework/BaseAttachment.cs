@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
@@ -6,6 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using SObject = StardewValley.Object;
@@ -20,6 +23,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         *********/
         /// <summary>Simplifies access to private code.</summary>
         protected IReflectionHelper Reflection { get; }
+
+        /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
+        private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
 
 
         /*********
@@ -49,6 +55,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The current location.</param>
         public abstract bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location);
 
+        /// <summary>Method called when the tractor attachments have been activated for a location.</summary>
+        /// <param name="location">The current tractor location.</param>
+        public virtual void OnActivated(GameLocation location)
+        {
+            this.CooldownStartTimes.Clear();
+        }
+
 
         /*********
         ** Protected methods
@@ -62,17 +75,68 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.RateLimit = rateLimit;
         }
 
+        /// <summary>Start a cooldown if it's not already started.</summary>
+        /// <param name="key">An arbitrary cooldown ID to check.</param>
+        /// <param name="delay">The cooldown time.</param>
+        /// <returns>Returns true if the cooldown was successfully started, or false if it was already in progress.</returns>
+        protected bool TryStartCooldown(string key, TimeSpan delay)
+        {
+            long currentTime = (long)Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
+            if (!this.CooldownStartTimes.TryGetValue(key, out long startTime) || (currentTime - startTime) >= delay.TotalMilliseconds)
+            {
+                this.CooldownStartTimes[key] = currentTime;
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>Use a tool on a tile.</summary>
         /// <param name="tool">The tool to use.</param>
         /// <param name="tile">The tile to affect.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="location">The current location.</param>
         /// <returns>Returns <c>true</c> for convenience when implementing tools.</returns>
-        protected bool UseToolOnTile(Tool tool, Vector2 tile)
+        protected bool UseToolOnTile(Tool tool, Vector2 tile, Farmer player, GameLocation location)
         {
             // use tool on center of tile
-            Vector2 useAt = (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
-            Game1.player.lastClick = useAt;
-            tool.DoFunction(Game1.currentLocation, (int)useAt.X, (int)useAt.Y, 0, Game1.player);
+            Vector2 useAt = this.GetToolPixelPosition(tile);
+            player.lastClick = useAt;
+            tool.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
             return true;
+        }
+
+        /// <summary>Get the pixel position relative to the top-left corner of the map at which to use a tool.</summary>
+        /// <param name="tile">The tile to affect.</param>
+        protected Vector2 GetToolPixelPosition(Vector2 tile)
+        {
+            return (tile * Game1.tileSize) + new Vector2(Game1.tileSize / 2f);
+        }
+
+        /// <summary>Use a weapon on the given tile.</summary>
+        /// <param name="weapon">The weapon to use.</param>
+        /// <param name="tile">The tile to attack.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="location">The current location.</param>
+        /// <returns>Returns whether a monster was attacked.</returns>
+        /// <remarks>This is a simplified version of <see cref="MeleeWeapon.DoDamage"/>. This doesn't account for player bonuses (since it's hugely overpowered anyway), doesn't cause particle effects, doesn't trigger animation timers, etc.</remarks>
+        protected bool UseWeaponOnTile(MeleeWeapon weapon, Vector2 tile, Farmer player, GameLocation location)
+        {
+            bool attacked = location.damageMonster(
+                areaOfEffect: this.GetAbsoluteTileArea(tile),
+                minDamage: weapon.minDamage.Value,
+                maxDamage: weapon.maxDamage.Value,
+                isBomb: false,
+                knockBackModifier: weapon.knockback.Value,
+                addedPrecision: weapon.addedPrecision.Value,
+                critChance: weapon.critChance.Value,
+                critMultiplier: weapon.critMultiplier.Value,
+                triggerMonsterInvincibleTimer: weapon.type.Value != MeleeWeapon.dagger,
+                who: player
+            );
+            if (attacked)
+                location.playSound(weapon.type.Value == MeleeWeapon.club ? "clubhit" : "daggerswipe");
+            return attacked;
         }
 
         /// <summary>Trigger the player action on the given tile.</summary>
@@ -84,7 +148,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return location.checkAction(new Location((int)tile.X, (int)tile.Y), Game1.viewport, player);
         }
 
-        /// <summary>Get whether a given object is a weed.</summary>
+        /// <summary>Get whether a given object is a twig.</summary>
         /// <param name="obj">The world object.</param>
         protected bool IsTwig(SObject obj)
         {
@@ -157,6 +221,44 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
 
             return null;
+        }
+
+        /// <summary>Get the best target farm animal for a tool.</summary>
+        /// <param name="tool">The tool to check.</param>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
+        protected FarmAnimal GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
+        {
+            // get animals in the location
+            IEnumerable<FarmAnimal> animals;
+            switch (location)
+            {
+                case Farm farm:
+                    animals = farm.animals.Values;
+                    break;
+
+                case AnimalHouse house:
+                    animals = house.animals.Values;
+                    break;
+
+                default:
+                    animals = location.characters.OfType<FarmAnimal>();
+                    break;
+            }
+
+            // get best harvestable animal
+            Vector2 useAt = this.GetToolPixelPosition(tile);
+            FarmAnimal animal = Utility.GetBestHarvestableFarmAnimal(
+                animals: animals,
+                tool: tool,
+                toolRect: new Rectangle((int)useAt.X, (int)useAt.Y, Game1.tileSize, Game1.tileSize)
+            );
+            if (animal == null || animal.toolUsedForHarvest.Value != tool.BaseName || animal.currentProduce.Value <= 0 || animal.age.Value < animal.ageWhenMature.Value)
+                return null;
+
+            return animal;
+
         }
 
         /// <summary>Get the tilled dirt for a tile, if any.</summary>

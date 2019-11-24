@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly SeedBagModConfig Config;
+        private readonly GenericAttachmentConfig Config;
 
 
         /*********
@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public SeedBagAttachment(SeedBagModConfig config, IReflectionHelper reflection)
+        public SeedBagAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
             : base(reflection)
         {
             this.Config = config;
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         {
             // apply to plain dirt
             if (tileFeature is HoeDirt)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             return false;
         }

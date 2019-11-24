@@ -7,13 +7,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public AxeConfig Axe = new AxeConfig();
 
         /// <summary>Configuration for the fertilizer attachment.</summary>
-        public FertilizerConfig Fertilizer = new FertilizerConfig();
+        public GenericAttachmentConfig Fertilizer = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the grass starter attachment.</summary>
-        public GrassStarterConfig GrassStarter = new GrassStarterConfig();
+        public GenericAttachmentConfig GrassStarter = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the hoe attachment.</summary>
         public HoeConfig Hoe = new HoeConfig();
+
+        /// <summary>Configuration for the milk pail attachment.</summary>
+        public GenericAttachmentConfig MilkPail = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the melee weapon attachment.</summary>
         public MeleeWeaponConfig MeleeWeapon = new MeleeWeaponConfig();
@@ -25,15 +28,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public ScytheConfig Scythe = new ScytheConfig();
 
         /// <summary>Configuration for the seeds attachment.</summary>
-        public SeedsConfig Seeds = new SeedsConfig();
+        public GenericAttachmentConfig Seeds = new GenericAttachmentConfig();
+
+        /// <summary>Configuration for the shears attachment.</summary>
+        public GenericAttachmentConfig Shears = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the slingshot attachment.</summary>
-        public SlingshotConfig Slingshot = new SlingshotConfig();
+        public GenericAttachmentConfig Slingshot = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the watering can attachment.</summary>
-        public WateringCanConfig WateringCan = new WateringCanConfig();
+        public GenericAttachmentConfig WateringCan = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the Seed Bag mod attachment.</summary>
-        public SeedBagModConfig SeedBagMod = new SeedBagModConfig();
+        public GenericAttachmentConfig SeedBagMod = new GenericAttachmentConfig();
     }
 }

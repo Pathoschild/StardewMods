@@ -154,30 +154,34 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
 
                 // draw words to screen
+                bool isFirstOfLine = true;
                 foreach (string word in words)
                 {
                     // check wrap width
                     float wordWidth = font.MeasureString(word).X * scale;
-                    if (word == Environment.NewLine || ((wordWidth + xOffset) > wrapWidth && (int)xOffset != 0))
+                    float prependSpace = isFirstOfLine ? 0 : spaceWidth;
+                    if (word == Environment.NewLine || ((wordWidth + xOffset + prependSpace) > wrapWidth && (int)xOffset != 0))
                     {
                         xOffset = 0;
                         yOffset += lineHeight;
                         blockHeight += lineHeight;
+                        isFirstOfLine = true;
                     }
                     if (word == Environment.NewLine)
                         continue;
 
                     // draw text
-                    Vector2 wordPosition = new Vector2(position.X + xOffset, position.Y + yOffset);
+                    Vector2 wordPosition = new Vector2(position.X + xOffset + prependSpace, position.Y + yOffset);
                     if (snippet.Bold)
                         Utility.drawBoldText(batch, word, font, wordPosition, snippet.Color ?? Color.Black, scale);
                     else
                         batch.DrawString(font, word, wordPosition, snippet.Color ?? Color.Black, 0, Vector2.Zero, scale, SpriteEffects.None, 1);
 
                     // update draw values
-                    if (xOffset + wordWidth > blockWidth)
-                        blockWidth = xOffset + wordWidth;
-                    xOffset += wordWidth + spaceWidth;
+                    if (xOffset + wordWidth + prependSpace > blockWidth)
+                        blockWidth = xOffset + wordWidth + prependSpace;
+                    xOffset += wordWidth + prependSpace;
+                    isFirstOfLine = false;
                 }
             }
 

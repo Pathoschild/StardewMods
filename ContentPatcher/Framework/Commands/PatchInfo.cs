@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
@@ -43,6 +45,9 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Diagnostic info about the patch.</summary>
         public IContextualState State { get; }
 
+        /// <summary>The underlying patch, if any.</summary>
+        public IPatch Patch { get; }
+
 
         /*********
         ** Public methods
@@ -61,6 +66,7 @@ namespace ContentPatcher.Framework.Commands
             this.MatchesContext = false;
             this.IsApplied = false;
             this.State = new ContextualState().AddErrors(patch.ReasonDisabled);
+            this.Patch = null;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -78,6 +84,13 @@ namespace ContentPatcher.Framework.Commands
             this.IsApplied = patch.IsApplied;
             this.PatchContext = patch.GetPatchContext();
             this.State = patch.GetDiagnosticState();
+            this.Patch = patch;
+        }
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public IEnumerable<string> GetChangeLabels()
+        {
+            return this.Patch?.GetChangeLabels() ?? Enumerable.Empty<string>();
         }
 
 

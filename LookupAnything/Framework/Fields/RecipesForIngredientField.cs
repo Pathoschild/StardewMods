@@ -81,7 +81,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // draw icon
                 Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                spriteBatch.DrawSpriteWithin(entry.Sprite, position.X + leftIndent, position.Y + height, iconSize, iconColor);
+                if (entry.Sprite != null)
+                    spriteBatch.DrawSpriteWithin(entry.Sprite, position.X + leftIndent, position.Y + height, iconSize, iconColor);
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;

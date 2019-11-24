@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -52,6 +53,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Whether the player was riding the tractor during the last tick.</summary>
         private bool WasRiding;
+
+        /// <summary>Whether the tractor effects were enabled during the last tick.</summary>
+        private bool WasEnabled;
+
+        /// <summary>The tractor location during the last tick.</summary>
+        private GameLocation WasLocation;
 
         /// <summary>The rider health to maintain if they're invincible.</summary>
         private int RiderHealth;
@@ -136,6 +143,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 Game1.player.toolPower = 0;
             }
 
+            // detect activation or location change
+            bool enabled = this.IsEnabled();
+            if (enabled && (!this.WasEnabled || !object.ReferenceEquals(this.WasLocation, Game1.currentLocation)))
+                this.OnActivated(Game1.currentLocation);
+            this.WasEnabled = enabled;
+            this.WasLocation = Game1.currentLocation;
+
             // apply riding effects
             if (this.IsCurrentPlayerRiding && Game1.activeClickableMenu == null)
             {
@@ -151,9 +165,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 // apply tractor buff
                 this.UpdateBuff();
 
-                // apply tools
-                if (this.UpdateCooldown() && this.IsEnabled())
-                    this.UpdateAttachmentEffects();
+                // apply tool effects
+                if (this.UpdateCooldown())
+                {
+                    if (enabled)
+                        this.UpdateAttachmentEffects();
+                }
             }
         }
 
@@ -228,6 +245,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return true;
         }
 
+        /// <summary>Notify attachments that effects have been enabled for a location.</summary>
+        /// <param name="location">The current tractor location.</param>
+        private void OnActivated(GameLocation location)
+        {
+            foreach (IAttachment attachment in this.Attachments)
+                attachment.OnActivated(location);
+        }
+
         /// <summary>Apply any effects for the current tractor attachment.</summary>
         private void UpdateAttachmentEffects()
         {
@@ -245,7 +270,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // get tile grid to affect
             // This must be done outside the temporary interaction block below, since that dismounts
             // the player which changes their position from what the player may expect.
-            Vector2[] grid = this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance).ToArray();
+            Vector2 origin = Game1.player.getTileLocation();
+            Vector2[] grid = this.GetTileGrid(origin, this.Config.Distance).ToArray();
 
             // apply tools
             this.TemporarilyFakeInteraction(() =>
@@ -253,8 +279,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 foreach (Vector2 tile in grid)
                 {
                     // face tile to avoid game skipping interaction
-                    player.Position = new Vector2(tile.X - 1, tile.Y) * Game1.tileSize;
-                    player.FacingDirection = 1;
+                    this.GetRadialAdjacentTile(origin, tile, out Vector2 adjacentTile, out int facingDirection);
+                    player.Position = adjacentTile * Game1.tileSize;
+                    player.FacingDirection = facingDirection;
 
                     // apply attachment effects
                     location.objects.TryGetValue(tile, out SObject tileObj);
@@ -317,8 +344,41 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
         }
 
+        /// <summary>Get the tile coordinate which is adjacent to the given <paramref name="tile"/> along a radial line from the tractor position.</summary>
+        /// <param name="origin">The tile containing the tractor.</param>
+        /// <param name="tile">The tile to face.</param>
+        /// <param name="adjacent">The tile radially adjacent to the <paramref name="tile"/>.</param>
+        /// <param name="facingDirection">The direction to face.</param>
+        private void GetRadialAdjacentTile(Vector2 origin, Vector2 tile, out Vector2 adjacent, out int facingDirection)
+        {
+            facingDirection = Utility.getDirectionFromChange(tile, origin);
+            switch (facingDirection)
+            {
+                case Game1.up:
+                    adjacent = new Vector2(tile.X, tile.Y + 1);
+                    break;
+
+                case Game1.down:
+                    adjacent = new Vector2(tile.X, tile.Y - 1);
+                    break;
+
+                case Game1.left:
+                    adjacent = new Vector2(tile.X + 1, tile.Y);
+                    break;
+
+                case Game1.right:
+                    adjacent = new Vector2(tile.X - 1, tile.Y);
+                    break;
+
+                default:
+                    adjacent = tile;
+                    break;
+            }
+        }
+
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
         /// <param name="action">The action to perform.</param>
+        [SuppressMessage("SMAPI", "AvoidImplicitNetFieldCast", Justification = "Deliberately accesses net field instance.")]
         private void TemporarilyFakeInteraction(Action action)
         {
             // get references

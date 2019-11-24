@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         MachineInput,
 
         /// <summary>The recipe represents the materials needed to construct a building through Robin or the Wizard.</summary>
-        BuildingBlueprint
+        BuildingBlueprint,
+
+        /// <summary>The recipe represents the input for tailoring clothes.</summary>
+        TailorInput
     }
 }

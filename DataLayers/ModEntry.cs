@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -50,6 +51,10 @@ namespace Pathoschild.Stardew.DataLayers
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+
+            // hook up commands
+            var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay?.CurrentLayer);
+            helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (name, args) => commandHandler.Handle(args));
         }
 
 
@@ -88,6 +93,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods);
             if (layers.CropWater.IsEnabled())
                 yield return new CropWaterLayer(translation, layers.CropWater);
+            if (layers.CropPaddyWater.IsEnabled())
+                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
                 yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
             if (layers.CropHarvest.IsEnabled())
@@ -165,7 +172,7 @@ namespace Pathoschild.Stardew.DataLayers
             return
                 Context.IsPlayerFree // player is free to roam
                 || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()) // on Robin's or Wizard's build screen
-                || (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "OnFarm").GetValue()); // on Pelican Fiber's build screen
+                || (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
         }
     }
 }

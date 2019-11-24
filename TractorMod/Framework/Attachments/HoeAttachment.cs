@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
@@ -20,6 +21,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
         /// <summary>The item ID for an artifact spot.</summary>
         private const int ArtifactSpotItemID = 590;
+
+        /// <summary>The minimum delay before attempting to re-till the same empty dirt tile.</summary>
+        private readonly TimeSpan TillDirtDelay = TimeSpan.FromSeconds(1);
 
 
         /*********
@@ -56,15 +60,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
-                return this.UseToolOnTile(tool, tile);
-
-            // till plain dirt
-            if (this.Config.TillDirt && tileFeature == null && tileObj == null)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // collect artifact spots
             if (this.Config.DigArtifactSpots && tileObj?.ParentSheetIndex == HoeAttachment.ArtifactSpotItemID)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
+
+            // till plain dirt
+            if (this.Config.TillDirt && tileFeature == null && tileObj == null && this.TryStartCooldown(tile.ToString(), this.TillDirtDelay))
+                return this.UseToolOnTile(tool, tile, player, location);
 
             return false;
         }

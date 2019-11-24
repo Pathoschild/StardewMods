@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17
+Released 26 November 2019.
+
+* Updated for Stardew Valley 1.4.
+* Added support for dressers.
+* Fixed auto-grabber sprite not updated when emptied/filled through Chests Anywhere.
+* Improved translations. Thanks to Hesperusrus (updated Russian)!
+
 ## 1.16.2
 Released 25 July 2019.
 
@@ -23,7 +31,7 @@ Released 06 April 2019.
 ## 1.15.1
 Released 05 March 2019.
 
-* Added option to disable player inventory organise button.
+* Added option to disable player inventory organize button.
 * Fixed UI flicker when moving items in the chest menu.
 * Fixed shipping bin also listed in Farm Expansion's custom location.
 * Improved translations. Thanks to S2SKY (added Korean) and VincentRoth (added French)!
@@ -203,7 +211,7 @@ Released 04 October 2016.
 Released 02 October 2016.
 
 * Added feature to rename a chest from the menu.
-* Added organise button for inventory.
+* Added organize button for inventory.
 * Added update check on load.
 * Added error if game or SMAPI are out of date.
 * Improved chest/location dropdowns:
@@ -220,7 +228,7 @@ Released 17 August 2016.
 * Chests are now sorted alphabetically.
 * Chests can now be sorted manually.
 * Added item tooltips.
-* Added organise button.
+* Added organize button.
 * Added controller support.
 * Added support for rebinding keyboard/controller keys in `config.json`.
 * Added hotkeys to navigate between chests.

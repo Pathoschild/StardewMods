@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
-    /// <summary>Tracks a instance whose value is set by a tokenisable <see cref="TokenString"/>.</summary>
-    internal class TokenisableProxy : IContextual
+    /// <summary>Tracks a instance whose value is set by a tokenizable <see cref="TokenString"/>.</summary>
+    internal class TokenizableProxy : IContextual
     {
         /*********
-        ** Access
+        ** Accessors
         *********/
         /// <summary>The token string which provides the field value.</summary>
         public IParsedTokenString TokenString { get; }
@@ -28,7 +28,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenString">The token string which provides the field value.</param>
         /// <param name="setValue">Set the instance value.</param>
-        public TokenisableProxy(IParsedTokenString tokenString, Action<string> setValue)
+        public TokenizableProxy(IParsedTokenString tokenString, Action<string> setValue)
         {
             this.TokenString = tokenString;
             this.SetValue = setValue;

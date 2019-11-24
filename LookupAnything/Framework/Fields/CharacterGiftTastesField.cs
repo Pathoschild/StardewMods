@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -17,8 +18,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
-            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste)) { }
+        /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
+        public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
+            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste, onlyRevealed)) { }
 
 
         /*********
@@ -28,39 +30,53 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        private static IEnumerable<IFormattedText> GetText(GameHelper gameHelper, IDictionary<GiftTaste, Item[]> giftTastes, GiftTaste showTaste)
+        /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
+        private static IEnumerable<IFormattedText> GetText(GameHelper gameHelper, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
 
-            // get item data
+            // get data
             Item[] ownedItems = gameHelper.GetAllOwnedItems().ToArray();
             Item[] inventory = Game1.player.Items.Where(p => p != null).ToArray();
             var items =
                 (
-                    from item in giftTastes[showTaste]
+                    from entry in giftTastes[showTaste]
+                    let item = entry.Item
                     let isInventory = inventory.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
                     let isOwned = ownedItems.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
+                    where !onlyRevealed || entry.IsRevealed
                     orderby isInventory descending, isOwned descending, item.DisplayName
                     select new { Item = item, IsInventory = isInventory, IsOwned = isOwned }
                 )
                 .ToArray();
+            int unrevealed = onlyRevealed
+                ? giftTastes[showTaste].Count(p => !p.IsRevealed)
+                : 0;
 
             // generate text
-            for (int i = 0, last = items.Length - 1; i <= last; i++)
+            if (items.Any())
             {
-                var entry = items[i];
-                string text = i != last
-                    ? entry.Item.DisplayName + ","
-                    : entry.Item.DisplayName;
+                for (int i = 0, last = items.Length - 1; i <= last; i++)
+                {
+                    var entry = items[i];
+                    string text = i != last
+                        ? entry.Item.DisplayName + ","
+                        : entry.Item.DisplayName;
 
-                if (entry.IsInventory)
-                    yield return new FormattedText(text, Color.Green);
-                else if (entry.IsOwned)
-                    yield return new FormattedText(text, Color.Black);
-                else
-                    yield return new FormattedText(text, Color.Gray);
+                    if (entry.IsInventory)
+                        yield return new FormattedText(text, Color.Green);
+                    else if (entry.IsOwned)
+                        yield return new FormattedText(text, Color.Black);
+                    else
+                        yield return new FormattedText(text, Color.Gray);
+                }
+
+                if (unrevealed > 0)
+                    yield return new FormattedText(L10n.Npc.UndiscoveredVillagersAppend(count: unrevealed), Color.Gray);
             }
+            else
+                yield return new FormattedText(L10n.Npc.UndiscoveredVillagers(count: unrevealed), Color.Gray);
         }
     }
 }

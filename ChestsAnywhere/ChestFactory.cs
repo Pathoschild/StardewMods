@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -23,11 +24,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The item ID for auto-grabbers.</summary>
         private readonly int AutoGrabberID = 165;
 
-        /// <summary>Provides translations stored in the mod's folder.</summary>
-        private readonly ITranslationHelper Translations;
-
         /// <summary>An API for reading and storing local mod data.</summary>
         private readonly IDataHelper DataHelper;
+
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+        /// <summary>Provides translations stored in the mod's folder.</summary>
+        private readonly ITranslationHelper Translations;
 
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly bool EnableShippingBin;
@@ -37,14 +41,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(ITranslationHelper translations, IDataHelper dataHelper, bool enableShippingBin)
+        public ChestFactory(IDataHelper dataHelper, IReflectionHelper reflection, ITranslationHelper translations, bool enableShippingBin)
         {
+            this.DataHelper = dataHelper;
+            this.Reflection = reflection;
             this.Translations = translations;
             this.EnableShippingBin = enableShippingBin;
-            this.DataHelper = dataHelper;
         }
 
         /// <summary>Get all player chests.</summary>
@@ -93,7 +99,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             if (obj is Chest chest && chest.playerChest.Value)
                             {
                                 yield return new ManagedChest(
-                                    container: new ChestContainer(chest, context: chest),
+                                    container: new ChestContainer(chest, context: chest, this.Reflection),
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.chest", new { number = ++namelessChests }),
@@ -105,7 +111,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
                             {
                                 yield return new ManagedChest(
-                                    container: new ChestContainer(grabberChest, context: obj),
+                                    container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection), 
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }),
@@ -122,10 +128,28 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(fridge, context: fridge),
+                                container: new ChestContainer(fridge, context: fridge, this.Reflection),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: this.Translations.Get("default-name.fridge"),
+                                defaultCategory: category
+                            );
+                        }
+                    }
+
+                    // dressers
+                    if (location is DecoratableLocation decoratableLocation)
+                    {
+                        var dresserCounts = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+                        foreach (StorageFurniture furniture in decoratableLocation.furniture.OfType<StorageFurniture>())
+                        {
+                            var container = new StorageFurnitureContainer(furniture, this.Reflection);
+                            dresserCounts[container.DefaultName] = dresserCounts.TryGetValue(container.DefaultName, out int count) ? ++count : (count = 1);
+                            yield return new ManagedChest(
+                                container: container,
+                                location,
+                                furniture.TileLocation,
+                                defaultDisplayName: $"{container.DefaultName} #{count}",
                                 defaultCategory: category
                             );
                         }
@@ -140,7 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             if (building is JunimoHut hut)
                             {
                                 yield return new ManagedChest(
-                                    container: new JunimoHutContainer(hut),
+                                    container: new JunimoHutContainer(hut, this.Reflection),
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
                                     defaultDisplayName: this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }),
@@ -181,7 +205,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="tile">The tile to check.</param>
         public ManagedChest GetChestFromTile(Vector2 tile)
         {
-            if (!Game1.currentLocation.Objects.TryGetValue(tile, out Object obj) || !(obj is Chest chest))
+            if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || !(obj is Chest chest))
                 return null;
 
             return this
@@ -189,11 +213,26 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 .FirstOrDefault(p => p.Container.IsSameAs(chest.items));
         }
 
-        /// <summary>Get the player chest from the specified menu (if any).</summary>
+        /// <summary>Get the player chest from the given menu, if any.</summary>
         /// <param name="menu">The menu to check.</param>
-        public ManagedChest GetChestFromMenu(ItemGrabMenu menu)
+        public ManagedChest GetChestFromMenu(IClickableMenu menu)
         {
-            IList<Item> inventory = this.GetInventoryFromContext(menu.context);
+            // get inventory from menu
+            IList<Item> inventory = null;
+            switch (menu)
+            {
+                case ItemGrabMenu itemGrabMenu:
+                    inventory = this.GetInventoryFromContext(itemGrabMenu.context);
+                    break;
+
+                case ShopMenu shopMenu:
+                    inventory = this.GetInventoryFromContext(shopMenu.source);
+                    break;
+            }
+            if (inventory == null)
+                return null;
+
+            // get chest from inventory
             return this
                 .GetChests(RangeHandler.Unlimited())
                 .FirstOrDefault(p => p.Container.IsSameAs(inventory));
@@ -238,7 +277,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // shipping bin
                 case Farm _:
                 case ShippingBin _:
-                    return Game1.getFarm().shippingBin;
+                    return Game1.getFarm().getShippingBin(Game1.player);
+
+                // dresser
+                case StorageFurniture furniture:
+                    return furniture.heldItems;
 
                 // unsupported type
                 default:
@@ -253,7 +296,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (location is Cabin cabin)
             {
                 return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
-                    ? this.Translations.Get("default-category.owned-cabin", new {owner = cabin.owner?.Name})
+                    ? this.Translations.Get("default-category.owned-cabin", new { owner = cabin.owner?.Name })
                     : this.Translations.Get("default-category.unowned-cabin");
             }
 

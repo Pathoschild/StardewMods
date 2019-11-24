@@ -30,6 +30,7 @@ This can be used to automate...
 * [cheese presses](http://stardewvalleywiki.com/Cheese_Press);
 * [crab pots](http://stardewvalleywiki.com/Crab_Pot);
 * [crystalariums](http://stardewvalleywiki.com/Crystalarium);
+* [fish ponds](http://stardewvalleywiki.com/Fish_Pond);
 * [fruit trees](http://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](http://stardewvalleywiki.com/Furnace);
 * [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
@@ -54,6 +55,7 @@ This can be used to automate...
 * [statues of endless fortune](https://stardewvalleywiki.com/Statue_Of_Endless_Fortune);
 * [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [tappers](http://stardewvalleywiki.com/Tapper);
+* [wood chippers](http://stardewvalleywiki.com/Wood_Chipper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 Automated machines will give you the same XP, achievements, and items you'd get for using them
@@ -134,6 +136,14 @@ Default `true`. Whether the shipping bin should automatically pull items out of 
   </td>
 </tr>
 <tr>
+  <td><code>PullGemstonesFromJunimoHuts</code></td>
+  <td>
+
+Default `false`. Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.
+
+  </td>
+</tr>
+<tr>
   <td><code>AutomationInterval</code></td>
   <td>
 
@@ -166,8 +176,8 @@ Enables compatibility with other mods. All values are enabled by default.
 
 field | result
 ----- | ------
-`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertiliser and seeds.
-`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertiliser and seeds.
+`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertilizer and seeds.
+`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertilizer and seeds.
 
   </td>
 </tr>
@@ -197,8 +207,8 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate is compatible with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertiliser in auto-grabbers will be ignored).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertiliser in Junimo huts will be ignored).
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertilizer in auto-grabbers will be ignored).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertilizer in Junimo huts will be ignored).
 * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs

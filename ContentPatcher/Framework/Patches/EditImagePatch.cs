@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Indicates how the image should be patched.</summary>
         private readonly PatchMode PatchMode;
 
+        /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
+        private bool ResizedLastImage;
+
 
         /*********
         ** Public methods
@@ -34,16 +37,16 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The sprite area from which to read an image.</param>
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromAsset)
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normalizeAssetName)
+            : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
@@ -105,10 +108,22 @@ namespace ContentPatcher.Framework.Patches
                 Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, targetArea.Bottom);
                 editor.ReplaceWith(texture);
                 editor.PatchImage(original);
+                this.ResizedLastImage = true;
             }
+            else
+                this.ResizedLastImage = false;
 
             // apply source image
             editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
+        }
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            if (this.ResizedLastImage)
+                yield return "resized image";
+
+            yield return "edited image";
         }
     }
 }

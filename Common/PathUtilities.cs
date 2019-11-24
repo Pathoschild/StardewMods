@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Pathoschild.Stardew.Common
 {
-    /// <summary>Provides utilities for normalising file paths.</summary>
+    /// <summary>Provides utilities for normalizing file paths.</summary>
     /// <remarks>This class is duplicated from <c>StardewModdingAPI.Toolkit.Utilities</c>.</remarks>
     internal static class PathUtilities
     {
@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.Common
         /// <summary>The possible directory separator characters in a file path.</summary>
         private static readonly char[] PossiblePathSeparators = new[] { '/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }.Distinct().ToArray();
 
-        /// <summary>The preferred directory separator chaeacter in an asset key.</summary>
+        /// <summary>The preferred directory separator character in an asset key.</summary>
         private static readonly string PreferredPathSeparator = Path.DirectorySeparatorChar.ToString();
 
 
@@ -33,16 +33,16 @@ namespace Pathoschild.Stardew.Common
                 : path.Split(PathUtilities.PossiblePathSeparators, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        /// <summary>Normalise path separators in a file path.</summary>
-        /// <param name="path">The file path to normalise.</param>
+        /// <summary>Normalize path separators in a file path.</summary>
+        /// <param name="path">The file path to normalize.</param>
         [Pure]
-        public static string NormalisePathSeparators(string path)
+        public static string NormalizePathSeparators(string path)
         {
             string[] parts = PathUtilities.GetSegments(path);
-            string normalised = string.Join(PathUtilities.PreferredPathSeparator, parts);
+            string normalized = string.Join(PathUtilities.PreferredPathSeparator, parts);
             if (path.StartsWith(PathUtilities.PreferredPathSeparator))
-                normalised = PathUtilities.PreferredPathSeparator + normalised; // keep root slash
-            return normalised;
+                normalized = PathUtilities.PreferredPathSeparator + normalized; // keep root slash
+            return normalized;
         }
 
         /// <summary>Get a directory or file path relative to a given source path.</summary>
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.Common
                 throw new InvalidOperationException($"Can't get path for '{targetPath}' relative to '{sourceDir}'.");
 
             // get relative path
-            string relative = PathUtilities.NormalisePathSeparators(Uri.UnescapeDataString(from.MakeRelativeUri(to).ToString()));
+            string relative = PathUtilities.NormalizePathSeparators(Uri.UnescapeDataString(from.MakeRelativeUri(to).ToString()));
             if (relative == "")
                 relative = "./";
             return relative;
@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.Common
                 && PathUtilities.GetSegments(path).All(segment => segment.Trim() != "..");
         }
 
-        /// <summary>Get whether a string is a valid 'slug', containing only basic characters that are safe in all contexts (e.g. filenames, URLs, etc).</summary>
+        /// <summary>Get whether a string is a valid 'slug', containing only basic characters that are safe in all contexts (e.g. file names, URLs, etc).</summary>
         /// <param name="str">The string to check.</param>
         public static bool IsSlug(string str)
         {

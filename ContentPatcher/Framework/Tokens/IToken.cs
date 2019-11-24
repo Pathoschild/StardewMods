@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name.</summary>
         string Name { get; }
 
-        /// <summary>Whether this token recognises input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
+        /// <summary>Whether this token recognizes input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
         bool CanHaveInput { get; }
 
         /// <summary>Whether this token is only valid with an input argument (see <see cref="CanHaveInput"/>).</summary>

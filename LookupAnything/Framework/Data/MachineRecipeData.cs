@@ -27,6 +27,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public int? MaxOutput { get; set; }
 
         /// <summary>The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</summary>
-        public int? OutputChance { get; set; }
+        public decimal? OutputChance { get; set; }
     }
 }

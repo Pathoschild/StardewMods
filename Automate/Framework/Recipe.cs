@@ -19,8 +19,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The output to generate (given an input).</summary>
         public Func<Item, SObject> Output { get; }
 
-        /// <summary>The time needed to prepare an output.</summary>
-        public int Minutes { get; }
+        /// <summary>The time needed to prepare an output (given an input).</summary>
+        public Func<Item, int> Minutes { get; }
 
 
         /*********
@@ -32,6 +32,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="output">The output to generate (given an input).</param>
         /// <param name="minutes">The time needed to prepare an output.</param>
         public Recipe(int input, int inputCount, Func<Item, SObject> output, int minutes)
+            : this(input, inputCount, output, _ => minutes) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="input">The input item or category ID.</param>
+        /// <param name="inputCount">The number of inputs needed.</param>
+        /// <param name="output">The output to generate (given an input).</param>
+        /// <param name="minutes">The time needed to prepare an output (given an input).</param>
+        public Recipe(int input, int inputCount, Func<Item, SObject> output, Func<Item, int> minutes)
         {
             this.InputID = input;
             this.InputCount = inputCount;

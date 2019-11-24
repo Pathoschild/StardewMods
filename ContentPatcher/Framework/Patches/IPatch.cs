@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using StardewModdingAPI;
@@ -19,13 +20,13 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
 
-        /// <summary>The normalised asset key from which to load the local asset (if applicable).</summary>
+        /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
         string FromAsset { get; }
 
         /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
         ITokenString RawFromAsset { get; }
 
-        /// <summary>The normalised asset name to intercept.</summary>
+        /// <summary>The normalized asset name to intercept.</summary>
         string TargetAsset { get; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
@@ -58,5 +59,8 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
         IContext GetPatchContext();
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        IEnumerable<string> GetChangeLabels();
     }
 }

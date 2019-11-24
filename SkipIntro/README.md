@@ -25,4 +25,3 @@ multiplayer. There are no known issues in multiplayer (even if other players don
 ## See also
 * [release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/533)
-* [Discussion thread](http://community.playstarbound.com/threads/smapi-skip-intro.123673/)

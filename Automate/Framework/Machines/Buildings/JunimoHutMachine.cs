@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
 using StardewValley.Buildings;
@@ -19,6 +18,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
         private readonly bool IgnoreFertilizerOutput;
 
+        /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
+        public bool PullGemstonesFromJunimoHuts { get; set; }
+
         /// <summary>The Junimo hut's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
 
@@ -31,11 +33,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <param name="location">The location which contains the machine.</param>
         /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
         /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
-        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput, bool ignoreFertilizerOutput)
+        /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
+        public JunimoHutMachine(JunimoHut hut, GameLocation location, bool ignoreSeedOutput, bool ignoreFertilizerOutput, bool pullGemstonesFromJunimoHuts)
             : base(hut, location, BaseMachine.GetTileAreaFor(hut))
         {
             this.IgnoreSeedOutput = ignoreSeedOutput;
             this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
+            this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -75,14 +79,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the next output item.</summary>
         private Item GetNextOutput()
         {
-            foreach (Item item in this.Output.items)
+            foreach (Item item in this.Output.items.Where(p => p != null))
             {
-                if (item == null)
+                // ignore gems which change Junimo colors (see JunimoHut:getGemColor)
+                if (!this.PullGemstonesFromJunimoHuts && (item.Category == SObject.GemCategory || item.Category == SObject.mineralsCategory))
                     continue;
 
-                if (this.IgnoreSeedOutput && (item as SObject)?.Category == SObject.SeedsCategory)
+                // ignore items used by another mod
+                if (this.IgnoreSeedOutput && item.Category == SObject.SeedsCategory)
                     continue;
-                if (this.IgnoreFertilizerOutput && (item as SObject)?.Category == SObject.fertilizerCategory)
+                if (this.IgnoreFertilizerOutput && item.Category == SObject.fertilizerCategory)
                     continue;
 
                 return item;

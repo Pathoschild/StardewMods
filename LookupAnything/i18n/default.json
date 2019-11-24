@@ -52,6 +52,7 @@
     "friendship-status.engaged": "Engaged",
     "friendship-status.married": "Married",
     "friendship-status.divorced": "Divorced",
+    "friendship-status.kicked-out": "Kicked out",
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "Boiler Room",
     "bundle-area.vault": "Vault",
     "bundle-area.bulletin-board": "Bulletin Board",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart",
 
     // shop names
     "shop.adventure-guild": "Adventure Guild",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "Your loyal pet.",
     "data.npc.horse.description": "Your loyal steed.",
     "data.npc.junimo.description": "A forest spirit from the spirit world. Very little is known about them.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.",
 
     /*********
     ** Item overrides
@@ -139,13 +142,13 @@
     "data.item.copper-node.description": "Break apart to obtain copper ore.",
     "data.item.gold-node.name": "Gold Node",
     "data.item.gold-node.description": "Break apart to obtain gold ore.",
-    "data.item.iridum-node.name": "Iridium Node",
-    "data.item.iridum-node.description": "Break apart to obtain iridium ore.",
+    "data.item.iridium-node.name": "Iridium Node",
+    "data.item.iridium-node.description": "Break apart to obtain iridium ore.",
     "data.item.iron-node.name": "Iron Node",
     "data.item.iron-node.description": "Break apart to obtain iron ore.",
 
     // mine stones
-    "data.item.colored-stone.name": "Coloured Stone",
+    "data.item.colored-stone.name": "Colored Stone",
     "data.item.colored-stone.description": "A nondescript stone. It might contain stone, ores, or geodes.",
     "data.item.mine-stone.name": "Stone",
     "data.item.mine-stone.description": "Break apart to obtain stone.",
@@ -188,6 +191,10 @@
     "building.upgrades": "Upgrades",
     "building.water-trough": "Water trough",
 
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Drops",
+    "building.fish-pond.quests": "Quests",
+
     // building lookup values
     "building.animals.summary": "{{count}} of max {{max}} animals",
     "building.construction.summary": "ready on {{date}}",
@@ -212,15 +219,29 @@
     "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
     "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond",
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
+    "building.fish-pond.quests.done": "{{count}} fish",
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
+    "building.fish-pond.quests.available": "available {{relativeDate}}",
+
     // bush lookup labels
     "bush.name.berry": "Berry Bush",
     "bush.name.plain": "Plain Bush",
+    "bush.name.tea": "Tea Bush",
     "bush.description.berry": "A bush that grows salmonberries and blackberries.",
     "bush.description.plain": "A plain bush that doesn't grow anything.",
+    "bush.description.Tea": "A bush that grows tea leaves.",
+    "bush.date-planted": "Date planted",
+    "bush.growth": "Growth",
     "bush.next-harvest": "Next harvest",
 
     // bush lookup values
+    "bush.growth.summary": "mature on {{date}}",
     "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Complaints",
@@ -257,6 +278,9 @@
     "crop.harvest.too-late": "too late in the season for the next harvest (would be on {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed",
+    "item.produces-dye": "Produces dye",
+
     "item.cask-contents": "Contents",
     "item.cask-schedule": "Aging",
 
@@ -266,9 +290,18 @@
 
     "item.fence-health": "Health",
 
+    "item.movie-snack-preference": "Preference",
+    "item.movie-ticket.movie-this-week": "Movie this week",
+    "item.movie-ticket.loves-movie": "Loves movie",
+    "item.movie-ticket.likes-movie": "Likes movie",
+    "item.movie-ticket.dislikes-movie": "Dislikes movie",
+
     "item.contents": "Contents",
-    "item.likes-this": "Likes this",
     "item.loves-this": "Loves this",
+    "item.likes-this": "Likes this",
+    "item.neutral-about-this": "Neutral about this",
+    "item.dislikes-this": "Dislikes this",
+    "item.hates-this": "Hates this",
     "item.needed-for": "Needed for",
     "item.number-owned": "Owned",
     "item.number-cooked": "Cooked",
@@ -279,6 +312,9 @@
     "item.sells-to": "Sells to",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers",
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers",
+
     "item.cask-schedule.now": "{{quality}} ready now",
     "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
     "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
@@ -286,6 +322,11 @@
 
     "item.fence-health.gold-clock": "no decay with Gold Clock",
     "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this",
+    "item.movie-snack-preference.like": "{{name}} likes this",
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
+    "item.movie-ticket.movie-this-week.none": "No movie this week",
 
     "item.contents.placed": "{{name}} placed",
     "item.contents.ready": "{{name}} ready",
@@ -307,7 +348,7 @@
     "monster.health": "Health",
     "monster.drops": "Drops",
     "monster.experience": "XP",
-    "monster.defence": "Defence",
+    "monster.defense": "Defense",
     "monster.attack": "Attack",
     "monster.adventure-guild": "Adventure Guild",
 
@@ -325,15 +366,21 @@
     "npc.gifted-today": "Gifted today",
     "npc.gifted-this-week": "Gifted this week",
     "npc.kissed-today": "Kissed today",
+    "npc.hugged-today": "Hugged today",
     "npc.loves-gifts": "Loves gifts",
     "npc.likes-gifts": "Likes gifts",
     "npc.neutral-gifts": "Neutral gifts",
+    "npc.dislikes-gifts": "Dislikes gifts",
+    "npc.hates-gifts": "Hates gifts",
 
     // NPC lookup values
     "npc.can-romance.married": "You're married! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!",
     "npc.friendship.not-met": "You haven't met them yet.",
     "npc.friendship.need-bouquet": "need bouquet for next",
     "npc.friendship.need-points": "next in {{count}} pts",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items",
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items",
 
     // NPC child lookup labels
     "npc.child.age": "Age",
@@ -349,19 +396,31 @@
     // pet lookup labels
     "pet.love": "Love",
     "pet.petted-today": "Petted today",
+    "pet.last-petted": "Last petted",
+    "pet.water-bowl": "Water bowl",
+
+    // pet lookup values
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "empty",
+    "pet.water-bowl.filled": "filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "Farm name",
     "player.farm-map": "Farm map",
-    "player.favorite-thing": "Favourite thing",
+    "player.favorite-thing": "Favorite thing",
     "player.gender": "Gender",
+    "player.housemate": "Housemate",
     "player.spouse": "Spouse",
+    "player.watched-movie-this-week": "Watched movie this week",
     "player.combat-skill": "Combat",
     "player.farming-skill": "Farming",
     "player.fishing-skill": "Fishing",
     "player.foraging-skill": "Foraging",
     "player.mining-skill": "Mining",
     "player.luck": "Luck",
+    "player.save-format": "Save format",
 
     // player lookup values
     "player.farm-map.custom": "Custom",
@@ -384,10 +443,15 @@
     // tile lookup values
     "tile.tile.none-here": "no tile here",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted",
+    "trash-bear.quest-progress": "Quest progress",
+
     // tree lookup labels
     "tree.stage": "Growth stage",
-    "tree.next-growth": "Next Growth",
+    "tree.next-growth": "Next growth",
     "tree.has-seed": "Has seed",
+    "tree.is-fertilized": "Is fertilized",
 
     // non-fruit tree lookup values
     "tree.name.maple": "Maple Tree",
@@ -400,7 +464,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
     "tree.next-growth.winter": "can't grow in winter outside greenhouse",
     "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
-    "tree.next-growth.random": "20% chance to grow into {{stage}} tomorrow",
+    "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter",
 
     // tree stages
     "tree.stages.seed": "seed",

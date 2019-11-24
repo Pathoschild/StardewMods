@@ -17,14 +17,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Fields
         *********/
-        /// <summary>The color for a buildable tile.</summary>
-        private readonly Color BuildableColor = Color.Green;
+        /// <summary>The legend entry for buildable tiles.</summary>
+        private readonly LegendEntry Buildable;
 
-        /// <summary>The color for a buildable but occupied tile.</summary>
-        private readonly Color OccupiedColor = Color.Orange;
+        /// <summary>The legend entry for buildable but occupied tiles.</summary>
+        private readonly LegendEntry Occupied;
 
-        /// <summary>The color for a non-buildable tile.</summary>
-        private readonly Color NonBuildableColor = Color.Red;
+        /// <summary>The legend entry for non-buildable tiles.</summary>
+        private readonly LegendEntry NonBuildable;
 
 
         /*********
@@ -38,9 +38,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("buildable.buildable"), this.BuildableColor),
-                new LegendEntry(translations.Get("buildable.occupied"), this.OccupiedColor),
-                new LegendEntry(translations.Get("buildable.not-buildable"), this.NonBuildableColor)
+                this.Buildable = new LegendEntry(translations, "buildable.buildable", Color.Green),
+                this.Occupied = new LegendEntry(translations, "buildable.occupied", Color.Orange),
+                this.NonBuildable = new LegendEntry(translations, "buildable.not-buildable", Color.Red)
             };
         }
 
@@ -53,8 +53,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
             // buildable tiles
-            TileData[] buildableTiles = tiles.Where(p => p.Color == this.BuildableColor).ToArray();
-            yield return new TileGroup(buildableTiles, outerBorderColor: this.BuildableColor);
+            TileData[] buildableTiles = tiles.Where(p => p.Type.Id == this.Buildable.Id).ToArray();
+            yield return new TileGroup(buildableTiles, outerBorderColor: this.Buildable.Color);
 
             // other tiles
             yield return new TileGroup(tiles.Except(buildableTiles).ToArray());
@@ -75,14 +75,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 foreach (Vector2 tile in visibleTiles)
                 {
                     // get color
-                    Color color;
+                    LegendEntry type;
                     if (this.IsBuildable(buildableLocation, tile))
-                        color = this.IsOccupied(buildableLocation, tile) ? this.OccupiedColor : this.BuildableColor;
+                        type = this.IsOccupied(buildableLocation, tile) ? this.Occupied : this.Buildable;
                     else
-                        color = this.NonBuildableColor;
+                        type = this.NonBuildable;
 
                     // yield
-                    yield return new TileData(tile, color);
+                    yield return new TileData(tile, type);
                 }
             }
 
@@ -90,7 +90,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             else
             {
                 foreach (Vector2 tile in visibleTiles)
-                    yield return new TileData(tile, this.NonBuildableColor);
+                    yield return new TileData(tile, this.NonBuildable);
             }
         }
 

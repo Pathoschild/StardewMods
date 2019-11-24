@@ -12,13 +12,16 @@ that change the game's images and data without replacing XNB files.
   * [Replace an entire file](#replace-an-entire-file)
   * [Edit part of an image](#edit-part-of-an-image)
   * [Edit part of a data file](#edit-part-of-a-data-file)
+  * [Edit part of a map](#edit-part-of-a-map)
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
+  * [Mod-provided tokens](#mod-provided-tokens)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
+  * [Schema validator](#schema-validator)
   * [Patch commands](#patch-commands)
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
@@ -63,15 +66,13 @@ easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log + Conten
 
 ### Content Patcher vs other mods
 Content Patcher supports all game assets with some very powerful features, but it's a generalist
-framework. More specialised frameworks might be better for specific things. You should consider
+framework. More specialized frameworks might be better for specific things. You should consider
 whether one of these would work for you:
 
-  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) to add and edit maps.
+  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for complex changes to maps. (For simple changes, see _[edit part of a map](#edit-part-of-a-map)_ below.)
   * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) to add machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
-  * [CustomNPC](https://www.nexusmods.com/stardewvalley/mods/1607) to add NPCs.
-  * [Custom Shirts](https://www.nexusmods.com/stardewvalley/mods/2416) to add shirts.
-  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add items and fruit trees.
+  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add many things like items, crafting recipes, crops, fruit trees, hats, and weapons.
 
 ## Create a content pack
 ### Overview
@@ -84,7 +85,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.9`) to use the latest features and avoid obsolete behavior.
+`Format`       | The format version. You should always use the latest version (currently `1.10.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -92,7 +93,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "Load",
@@ -133,10 +134,12 @@ field      | purpose
 &nbsp;     | See _common fields_ above.
 `FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
 
+Required fields: `FromFile`.
+
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "Load",
@@ -158,15 +161,16 @@ field      | purpose
 ---------- | -------
 &nbsp;     | See _common fields_ above.
 `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
-`FromArea` | _(optional)_ The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
-`ToArea`   | _(optional)_ The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
-`PatchMode`| _(optional)_ How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace the target area with your source image.</li><li><code>Overlay</code>: draw your source image over the target, so the original image shows through transparent pixels. Note that semi-transparent pixels will replace the underlying pixels, they won't be combined.</li></ul>
+`FromArea` | he part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`PatchMode`| How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace every pixel in the target area with your source image. If the source image has transparent pixels, the target image will become transparent there.</li><li><code>Overlay</code>: draw your source image over the target area. If the source image has transparent pixels, the target image will 'show through' those pixels. Semi-transparent or opaque pixels will replace the target pixels.</li></ul>For example, let's say your source image is a pufferchick with a transparent background, and the target image is a solid green square. Here's how they'll be combined with different `PatchMode` values:<br />![](docs/screenshots/patch-mode-examples.png)
 
+Required fields: `FromFile`.
 
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -185,12 +189,15 @@ For example, this changes one object sprite:
 field      | purpose
 ---------- | -------
 &nbsp;     | See _common fields_ above.
-`Fields`   | _(optional)_ The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
-`Entries`  | _(optional)_ The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
-`MoveEntries` | _(optional)_ Change the entry order in a list asset like `██████████`. (Using this with a non-list asset will cause an error, since those have no order.)
+`Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
+`Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
+`MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
+`FromFile` | The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced-tokens--conditions). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.
+
+Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `FromFile`.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
-`Entries`, `Fields`, `MoveEntries`.
+`Entries`, `FromFile`, `Fields`, `MoveEntries`.
 
 <dl>
 <dt>Definitions</dt>
@@ -215,20 +222,20 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
-       {
-          "Action": "EditData",
-          "Target": "Data/ObjectInformation",
-          "Entries": {
-             "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
-          },
-          "Fields": {
-             "70": {
-                4: "Normal Jade",
-                5: "A pale green ornamental stone with no sheen."
-             }
-          }
+      {
+         "Action": "EditData",
+         "Target": "Data/ObjectInformation",
+         "Entries": {
+            "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
+         },
+         "Fields": {
+            "70": {
+               4: "Normal Jade",
+               5: "A pale green ornamental stone with no sheen."
+            }
+         }
        }
    ]
 }
@@ -238,16 +245,69 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
-       {
-          "Action": "EditData",
-          "Target": "Data/Events/Beach",
-          "Entries": {
-             "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
-             "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
-          }
-       }
+      {
+         "Action": "EditData",
+         "Target": "Data/Events/Beach",
+         "Entries": {
+            "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
+            "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
+         }
+      }
+   ]
+}
+```
+
+</dd>
+
+<dt>Load changes from a file</dt>
+<dd>
+
+You can optionally load changes from a separate JSON file in your content pack. The file can contain
+`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
+the patch.
+
+For example, this patch in `content.json`:
+```js
+{
+   "Format": "1.10.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Data/ObjectInformation",
+         "FromFile": "assets/jade.json"
+      }
+   ]
+}
+```
+
+Loads changes from this `assets/jade.json` file:
+```js
+{
+   "Entries": {
+      "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
+   },
+   "Fields": {
+      "70": {
+         4: "Normal Jade",
+         5: "A pale green ornamental stone with no sheen."
+      }
+   }
+}
+```
+
+The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
+this single patch loads a dialogue file for multiple NPCs:
+```js
+{
+   "Format": "1.10.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail, Characters/Dialogue/Alex, Characters/Dialogue/Caroline",
+         "FromFile": "assets/dialogue/{{TargetWithoutPath}}.json"
+      }
    ]
 }
 ```
@@ -257,40 +317,36 @@ used to change event conditions:
 <dt>Edit data model assets</dt>
 <dd>
 
-_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
-Valley 1.4.)_
-
-
-A few assets like `██████████` contain data models, not strings like above. You can edit those
+A few assets like `Data/Movies` contain data models, not strings like above. You can edit those
 the same way, with two differences: fields have names instead of indexes, and entry values are
 structures instead of strings.
 
-For example, this ██████████ and adds ██████████:
+For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditData",
-         "Target": "██████████",
+         "Target": "Data/Movies",
          "Fields": {
-            "██████████": {
-               "██████████": "██████████"
+            "spring_movie_0": {
+               "Title": "The Brave Little Pikmin"
             }
          },
          "Entries": {
-            "██████████": {
-               "ID": "██████████",
-               "██████████": "██████████",
-               "██████████": "██████████",
-               "██████████": "██████████",
-               "██████████": [ "██████████", "██████████" ],
-               "██████████": [
+            "spring_movie_3": {
+               "ID": "spring_movie_3",
+               "Title": "The Brave Little Pikmin II: Now I'm a Piktree",
+               "Description": "Follow the continuing adventures of our pikmin hero as he absorbs nutrients from the soil!",
+               "SheetIndex": 6,
+               "Tags": [ "documentary", "family" ],
+               "Scenes": [
                   {
-                     "██████████": "██████████",
-                     "██████████": "██████████",
-                     "██████████": "██████████",
-                     "██████████": "██████████"
+                     "Image": 0,
+                     "MessageDelay": 500,
+                     "Music": "movie_nature",
+                     "Text": "'The Brave Little Pikmin II: Now I'm a Piktree', sponsored by Joja Cola"
                   }
                ]
             }
@@ -305,33 +361,31 @@ For example, this ██████████ and adds ███████�
 <dt>Edit list assets</dt>
 <dd>
 
-_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
-Valley 1.4.)_
-
-A few assets like `██████████` contain a list of entries (meaning they don't have a key).
+A few assets like `Data/MoviesReactions` contain a list of entries (meaning they don't have a key).
 Content Patcher will automatically select one field to treat as the key, so you can edit them the
 same way as usual:
 
 asset | field used
 ----- | ----------
 _default_ | `ID` if it exists.
-`██████████` | `Name`
-`██████████` | `NPCName`
-`██████████` | ██████████
+`Data/ConcessionTastes` | `Name`
+`Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
+`Data/MoviesReactions` | `NPCName`
+`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like `item_cloth|category_fish,fish_semi_rare`).  The key is space-sensitive.
 
 List assets also have an order which can affect game logic (e.g. the first entry in
-`██████████` matching the NPC is used). You can move an entry within that order using the
+`Data\MoviesReactions` matching the NPC is used). You can move an entry within that order using the
 `MoveEntries` field.
 
 Here's an example showing all possible reorder options. (If you specify a `BeforeID` or `AfterID`
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditData",
-         "Target": "██████████",
+         "Target": "Data/MoviesReactions",
          "MoveEntries": [
             { "ID": "Abigail", "BeforeID": "Leah" }, // move entry so it's right before Leah
             { "ID": "Abigail", "AfterID": "Leah" }, // move entry so it's right after Leah
@@ -348,7 +402,7 @@ New entries are added at the bottom of the list by default.
 </dd>
 </dl>
 
-## Edit part of a map
+### Edit part of a map
 `"Action": "EditMap"` changes part of an in-game map by copying tiles, properties, and tilesheets
 from a source map. This is essentially a copy & paste from one map into another, replacing whatever
 was in the target area before.
@@ -377,11 +431,18 @@ See _common fields_ above.
 </td>
 <td>
 
-The relative path to the map in your content pack folder from which to copy (like `assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
+The relative path to the map in your content pack folder from which to copy (like
+`assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions)
+and capitalisation doesn't matter.
 
-Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin` file:
-* If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only used by your tiles.
-* If you include the tilesheet file in your mod folder, Content Patcher will use that one automatically; otherwise it will be loaded from the game's `Content/Maps` folder.
+Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin`
+file:
+* If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a
+  `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom
+  version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only
+  used by your tiles.
+* If you include the tilesheet file in your mod folder, Content Patcher will use that one
+  automatically; otherwise it will be loaded from the game's `Content/Maps` folder.
 
 </td>
 </tr>
@@ -393,7 +454,9 @@ Content Patcher will handle tilesheets referenced by the `FromFile` map for you 
 </td>
 <td>
 
-_(optional)_ The part of the source map to copy. Defaults to the whole source map. This is specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width and height of the area.
+The part of the source map to copy. Defaults to the whole source map. This is specified as an
+object with the X and Y tile coordinates of the top-left corner, and the tile width and height of
+the area.
 
 </td>
 </tr>
@@ -405,16 +468,36 @@ _(optional)_ The part of the source map to copy. Defaults to the whole source ma
 </td>
 <td>
 
-(Required) The part of the target map to replace. This is specified as an object with the X and Y tile coordinates of the top-left corner, and the tile width and height of the area.
+The part of the target map to replace. This is specified as an object with the X and Y tile
+coordinates of the top-left corner, and the tile width and height of the area.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`MapProperties`
+
+</td>
+<td>
+
+The map properties (not tile properties) to add, replace, or delete. To add an property, just
+specify a key that doesn't exist; to delete an entry, set the value to `null` (like
+`"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in property keys
+and values.
+
+</td>
+</tr>
+
 </table>
+
+Required fields: at least one of (`FromFile` and `ToArea`) or (`MapProperties`).
 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -426,6 +509,24 @@ For example, this replaces the town square with the one in another map:
    ]
 }
 ```
+
+This changes the warp map property for the farm cave:
+```js
+{
+   "Format": "1.10.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/FarmCave",
+         "MapProperties": {
+            "Warp": "8 12 Farm 34 6"
+         }
+      },
+   ]
+}
+```
+
+(You can patch a map area and change map properties in the same patch.)
 
 Known limitations:
 * Patching non-farmhouse-floor tiles into the farmhouse's `Back` layer may cause strange effects,
@@ -584,7 +685,8 @@ The festival or wedding happening today. Possible values:
 <td>DayOfWeek</td>
 <td>
 
-The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`, `Saturday`, and `Sunday`.
+The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday`,
+`Saturday`, and `Sunday`.
 
 </td>
 </tr>
@@ -640,12 +742,21 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
+<td>HasDialogueAnswer</td>
+<td>
+
+The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for the player's
+answers to question dialogues.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasFlag</td>
 <td>
 
-The letter IDs received by the player.
-
-The game also uses this to store some useful flags. For example:
+The flags set for the current player, including letters received and world state IDs. Some useful
+flags:
 
 flag | meaning
 ---- | -------
@@ -653,7 +764,7 @@ flag | meaning
 `Beat_PK` | The player has beaten the Prairie King arcade game.
 `beenToWoods` | The player has entered the Secret Woods at least once.
 `canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
-`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` token instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
+`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` and `IsJojaMartComplete` tokens instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
 `doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
 `galaxySword` | The player has acquired the Galaxy Sword.
 `geodeFound` | The player has found at least one geode.
@@ -785,7 +896,8 @@ The player's skill levels. You can specify the skill level as an input argument 
 }
 ```
 
-The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game), and `Mining`.
+The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused in the base game),
+and `Mining`.
 
 </td>
 </tr>
@@ -837,7 +949,8 @@ The valid relationship types are...
 
 value    | meaning
 -------- | -------
-Friendly | The default if no other applies.
+Unmet    | The player hasn't talked to the NPC yet.
+Friendly | The player talked to the NPC at least once, but hasn't reached one of the other stages yet.
 Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
@@ -871,7 +984,8 @@ conditional map spawn logic.
 <td>FarmCave</td>
 <td>
 
-The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`, `Mushrooms`.
+The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`,
+`Mushrooms`.
 
 </td>
 </tr>
@@ -880,7 +994,9 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 <td>FarmhouseUpgrade</td>
 <td>
 
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values
+are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods
+may add upgrade levels beyond that.
 
 </td>
 </tr>
@@ -894,7 +1010,8 @@ The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades).
 <td>FarmType</td>
 <td>
 
-The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`,
+`FourCorners`, `Forest`, `Hilltop`, `Riverland`, `Wilderness`, `Custom`.
 
 </td>
 </tr>
@@ -904,6 +1021,48 @@ The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible valu
 <td>
 
 Whether all bundles in the community center are completed. Possible values: `true`, `false`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>IsJojaMartComplete</td>
+<td>
+
+Whether the player bought a Joja membership and completed all Joja bundles. Possible values: `true`
+ `false`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>HavingChild</td>
+<td>
+
+The names of players and NPCs whose relationship has an active pregnancy or adoption. Player names
+are prefixed with `@` to avoid ambiguity with NPC names. For example, to check if the current
+player is having a child:
+
+```js
+"When": {
+    "HavingChild": "{{spouse}}"
+}
+```
+
+Usage notes:
+* `HavingChild:@{{playerName}}` and `HavingChild:{{spouse}}` are equivalent for this token.
+* See also the `Pregnant` token.
+
+</td>
+</td>
+</tr>
+
+<tr valign="top">
+<td>Pregnant</td>
+<td>
+
+The players or NPCs who are currently pregnant. This is a subset of `HavingChild` that only applies
+to the female partner in heterosexual relationships. (Same-sex partners adopt a child instead.)
 
 </td>
 </tr>
@@ -957,7 +1116,7 @@ Whether the input argument is non-blank. For example, to check if the player is 
 }
 ```
 
-This isn't limited to a single token. You can pass in any tokenised string, and `HasValue` will
+This isn't limited to a single token. You can pass in any tokenized string, and `HasValue` will
 return true if the resulting string is non-blank:
 
 ```js
@@ -992,7 +1151,66 @@ code | meaning
 
 </td>
 </tr>
+</table>
+</dd>
 
+<dt>String manipulation tokens:</dt>
+<dd>
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+<tr>
+<td>Random</td>
+<td>
+
+A random value from the options you specify:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
+}
+```
+
+The selection is based on the save ID and in-game date, so reloading a save with the same patches
+won't change the selection. Calling the token twice may return different values (you can use a
+[dynamic token](#dynamic-token) to reuse the same selection).
+
+For weighted random, you can specify a value multiple times. For example, 'red' is twice as likely
+as 'blue' in this patch:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Range</td>
+<td>
+
+A list of integers between the specified min/max integers (inclusive). This is mainly meant for
+comparing values; for example:
+
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
+}
+```
+
+You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+`{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
+
+To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
+smaller if possible.
+
+</td>
+</tr>
 </table>
 </dd>
 
@@ -1012,7 +1230,7 @@ any other field outside a patch block.
 <td>Target</td>
 <td>
 
-The patch's `Target` field value for the current asset. Path separators are normalised for the OS.
+The patch's `Target` field value for the current asset. Path separators are normalized for the OS.
 This is mainly useful for patches which specify multiple targets:
 
 ```js
@@ -1042,7 +1260,6 @@ Equivalent to `Target`, but only the part after the last path separator:
 
 </td>
 </tr>
-
 </table>
 </dd>
 </dl>
@@ -1078,27 +1295,27 @@ crop sprites depending on the weather:
 
 ```js
 {
-    "Format": "1.9",
-    "DynamicTokens": [
-        {
-            "Name": "Style",
-            "Value": "dry"
-        },
-        {
-            "Name": "Style",
-            "Value": "wet",
-            "When": {
-                "Weather": "rain, storm"
-            }
-        }
-    ],
-    "Changes": [
-        {
-            "Action": "Load",
-            "Target": "TileSheets/crops",
-            "FromFile": "assets/crop-{{style}}.png"
-        }
-    ]
+   "Format": "1.10.0",
+   "DynamicTokens": [
+      {
+         "Name": "Style",
+         "Value": "dry"
+      },
+      {
+         "Name": "Style",
+         "Value": "wet",
+         "When": {
+            "Weather": "rain, storm"
+         }
+      }
+   ],
+   "Changes": [
+      {
+         "Action": "Load",
+         "Target": "TileSheets/crops",
+         "FromFile": "assets/crop-{{style}}.png"
+      }
+   ]
 }
 ```
 
@@ -1107,8 +1324,8 @@ You can let players configure your mod using a `config.json` file. Content Patch
 automatically create and load the file, and you can use the config values as
 [tokens & conditions](#advanced-tokens--conditions). Config fields are not case-sensitive.
 
-To do this, you add a `ConfigSchema` section which defines your config fields and how to validate them
-(see below for an example).
+To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
+them (see below for an example).
 Available fields for each field:
 
    field               | meaning
@@ -1123,31 +1340,31 @@ patch is applied. See below for more details.
 
 ```js
 {
-    "Format": "1.9",
-    "ConfigSchema": {
-        "Material": {
-            "AllowValues": "Wood, Metal",
-            "Default": "Wood"
-        }
-    },
-    "Changes": [
-        // as a token
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_{{material}}.png"
-        },
+   "Format": "1.10.0",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood"
+      }
+   },
+   "Changes": [
+      // as a token
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_{{material}}.png"
+      },
 
-        // as a condition
-        {
-            "Action": "Load",
-            "Target": "LooseSprites/Billboard",
-            "FromFile": "assets/material_wood.png",
-            "When": {
-                "Material": "Wood"
-            }
-        }
-    ]
+      // as a condition
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_wood.png",
+         "When": {
+            "Material": "Wood"
+         }
+      }
+   ]
 }
 ```
 
@@ -1160,6 +1377,48 @@ When you run the game, a `config.json` file will appear automatically with text 
 ```
 
 Players can edit it to configure your content pack.
+
+### Mod-provided tokens
+SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](#extensibility-for-modders)),
+which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
+Assets:
+```js
+{
+   "Format": "1.10.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Data/NpcGiftTastes",
+         "Entries": {
+            "Universal_Love": "74 446 797 373 {{spacechase0.jsonAssets/ObjectId:item name}}",
+         }
+      }
+   ]
+}
+```
+
+To use a mod-provided token, at least one of these must be true:
+* The mod which provides the token is a [required dependency](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies)
+  of your content pack.
+* Or the patch using the token has an immutable (i.e. not using any tokens) `HasMod` condition
+  which lists the mod:
+  ```js
+  {
+     "Format": "1.10.0",
+     "Changes": [
+        {
+           "Action": "EditData",
+           "Target": "Data/NpcGiftTastes",
+           "Entries": {
+              "Universal_Love": "74 446 797 373 {{spacechase0.jsonAssets/ObjectId:item name}}",
+           },
+           "When": {
+              "HasMod": "spacechase0.jsonAssets"
+           }
+        }
+     ]
+  }
+  ```
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
@@ -1182,33 +1441,143 @@ info. Suggestions:
    generate when the game is launched, just like a SMAPI mod's `content.json`.
 
 ## Troubleshoot
+### Schema validator
+You can validate your `content.json` and `manifest.json` automatically to detect some common issues.
+(You should still test your content pack in-game before releasing it, since the validator won't
+detect all issues.)
+
+To validate online:
+1. Go to [json.smapi.io](https://json.smapi.io/).
+2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
+3. Drag & drop the JSON file onto the textbox, or paste in the text.
+4. Click the button to view the validation summary. You can optionally share the URL to let someone
+   else see the result.
+
+To validate in a text editor that supports JSON Schema, see
+[_Using a schema file directly_](https://github.com/Pathoschild/SMAPI/blob/develop/docs/technical/web.md#using-a-schema-file-directly)
+in the JSON validator documentation.
+
+Tips:
+* You should update your content pack to the latest format version whenever you update it, for best
+  futureproofing.
+* If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
+  line mentioned (or the one above it) for a missing comma, bracket, etc.
+* If you need help figuring out an error, see [_see also_](#see-also) for some links to places you
+  can ask.
+
 ### Patch commands
-Content Patcher adds two patch commands for testing and troubleshooting.
+Content Patcher adds several console commands for testing and troubleshooting. Enter `patch help`
+directly into the SMAPI console for more info.
 
-* `patch summary` lists all the loaded patches, their current values, and (if applicable) the
-  reasons they weren't applied.
+#### patch summary
+`patch summary` lists all the loaded patches, their current values, what they changed, and (if
+applicable) the reasons they weren't applied.
 
-  Example output:
+For example:
 
-  ```
-  Current conditions:
-     Day: 5
-     DayOfWeek: friday
-     Language: en
-     Season: spring
-     Weather: sun
+```
+=====================
+==  Global tokens  ==
+=====================
+   Content Patcher:
 
-  Patches by content pack ([X] means applied):
-     Sample Content Pack:
-        [X] Palm Trees | Load TerrainFeatures/tree_palm
-        [X] Bushes | Load TileSheets/bushes
-        [ ] Maple Trees | Load TerrainFeatures/tree2_{{season}} | failed conditions: Season (summer, fall, winter)
-        [ ] Oak Trees | Load TerrainFeatures/tree1_{{season}} | failed conditions: Season (summer, fall, winter)
-        [X] World Map | EditImage LooseSprites/map
-  ```
-* `patch update` immediately updates Content Patcher's condition context and rechecks all patches.
-  This is mainly useful if you change conditions through the console (like the date), and want to
-  update patches without going to bed.
+      token name       | value
+      ---------------- | -----
+      Day              | [X] 5
+      DayEvent         | [X]
+      DayOfWeek        | [X] Friday
+      DaysPlayed       | [X] 305
+      FarmCave         | [X] Mushrooms
+      FarmhouseUpgrade | [X] 1
+      FarmName         | [X] River Coop
+      FarmType         | [X] Riverland
+
+      [snipped for simplicity]
+
+=====================
+== Content patches ==
+=====================
+The following patches were loaded. For each patch:
+  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).
+  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.
+  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.
+
+
+Example Content Pack:
+------------------------------
+
+   Local tokens:
+      token name        | value
+      ----------------- | -----
+      WeatherVariant    | [X] Wet
+
+   Patches:
+      loaded  | conditions | applied | name + details
+      ------- | ---------- | ------- | --------------
+      [X]     | [ ]        | [ ]     | Dry Palm Trees // conditions don't match: WeatherVariant
+      [X]     | [X]        | [X]     | Wet Palm Trees
+
+   Current changes:
+      asset name                | changes
+      ------------------------- | -------
+      TerrainFeatures/tree_palm | edited image
+```
+
+#### patch update
+`patch update` immediately updates Content Patcher's condition context and rechecks all patches.
+This is mainly useful if you change conditions through the console (like the date), and want to
+update patches without going to bed.
+
+#### patch export
+`patch export` saves a copy of a given asset to your game folder, which lets you see what it looks
+like with all changes applied. This currently works for image and data assets.
+
+For example:
+
+```
+> patch export "Maps/springobjects"
+Exported asset 'Maps/springobjects' to 'C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\patch export\Maps_springobjects.png'.
+```
+
+#### patch parse
+`patch parse` parses a tokenizable string and shows the resulting metadata, using the current
+Content Patcher context (the same values used when applying patches).
+
+This recognizes global tokens by default. You can use tokens for a specific content pack (including
+dynamic tokens and config values) by giving the content pack ID from its `manifest.json` in the
+optional second argument.
+
+For example:
+
+```
+> patch parse "assets/{{Variant}}.{{Language}}.png" "Pathoschild.ExampleContentPack"
+
+Metadata
+----------------
+   raw value:   assets/{{Variant}}.{{Language}}.png
+   ready:       True
+   mutable:     True
+   has tokens:  True
+   tokens used: Language, Variant
+
+Diagnostic state
+----------------
+   valid:    True
+   in scope: True
+   ready:    True
+
+Result
+----------------
+   The token string is valid and ready. Parsed value: "assets/wood.en.png"
+```
+
+This can also be used to troubleshoot token syntax:
+
+```
+> patch parse "assets/{{Season}.png"
+[ERROR] Can't parse that token value: Reached end of input, expected end of token ('}}').
+
+```
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any
@@ -1220,9 +1589,9 @@ reopen the debug UI to refresh the texture list.
 > ![](docs/screenshots/debug-mode.png)
 
 ### Verbose log
-Content Patcher doesn't log much info. You can change that by opening SMAPI's `smapi-internal/StardewModdingAPI.config.json`
-in a text editor and enabling `VerboseLogging`. **This may significantly slow down loading, and
-should normally be left disabled unless you need it.**
+Content Patcher doesn't log much info. You can change that by opening SMAPI's
+`smapi-internal/StardewModdingAPI.config.json` in a text editor and enabling `VerboseLogging`.
+**This may significantly slow down loading, and should normally be left disabled unless you need it.**
 
 Once enabled, it will log significantly more information at three points:
 1. when loading patches (e.g. whether each patch was enabled and which files were preloaded);
@@ -1232,8 +1601,8 @@ Once enabled, it will log significantly more information at three points:
 If your changes aren't appearing in game, make sure you set a `LogName` (see [common fields](#common-fields))
 and then search the SMAPI log file for that name. Particular questions to ask:
 * Did Content Patcher load the patch?  
-  _If it doesn't appear, check that your `content.json` is correct. If it says 'skipped', check your
-  `Enabled` value or `config.json`._
+  _If it doesn't appear, check that your `content.json` is correct. If it says 'skipped', check
+  your `Enabled` value or `config.json`._
 * When the context is updated, is the box ticked next to the patch name?  
   _If not, checked your `When` field._
 * When SMAPI checks if it can load/edit the asset name, is the box ticked?  
@@ -1266,8 +1635,8 @@ need to explicitly patch after another content pack, see [manifest dependencies]
 ### Known limitations
 * Dialogue is set when the day starts, so conditions that update during the day (like `IsOutdoors`)
   won't affect dialogue.
-* Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
-  here for convenience.
+* Some game assets have special logic. This isn't specific to Content Patcher, but they're
+  documented here for convenience.
 
   asset | notes
   ----- | -----
@@ -1330,7 +1699,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1456,7 +1825,7 @@ field | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.9",
+   "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1473,3 +1842,4 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
 * [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)
+* [Ask for help in #modding on Discord](https://stardewvalleywiki.com/Modding:Community#Discord)

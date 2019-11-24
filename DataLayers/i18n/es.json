@@ -43,6 +43,12 @@
     "crop-water.watered": "Cultivo Regado",
     "crop-water.dry": "Cultivo Seco",
 
+    // crops: water for paddy crops
+    // TODO
+    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
+    "crop-paddy-water.in-range": "Near Water",
+    "crop-paddy-water.not-in-range": "Dry Land",
+
     // crops: fertilized
     "crop-fertilizer.name": "Cultivos: Fertilizados",
     "crop-fertilizer.fertilizer": "Fertilizante",

@@ -60,7 +60,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             {
                 if (slot != null && stack.Sample.canStackWith(slot))
                 {
-                    int added = stack.Count - slot.addToStack(stack.Count);
+                    Item sample = stack.Sample.getOne();
+                    sample.Stack = stack.Count;
+                    int added = stack.Count - slot.addToStack(sample);
                     stack.Reduce(added);
                     if (stack.Count <= 0)
                         return;
@@ -136,7 +138,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
         }
 
-        /// <summary>Get a tracked item sync'd with the chest inventory.</summary>
+        /// <summary>Get a tracked item synced with the chest inventory.</summary>
         /// <param name="item">The item to track.</param>
         private ITrackedStack GetTrackedItem(Item item)
         {

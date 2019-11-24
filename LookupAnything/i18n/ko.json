@@ -52,6 +52,7 @@
     "friendship-status.engaged": "약혼함",
     "friendship-status.married": "결혼함",
     "friendship-status.divorced": "이혼함",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "보일러실",
     "bundle-area.vault": "금고",
     "bundle-area.bulletin-board": "게시판",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "모험가 길드",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "당신의 믿음직한 반려동물이다.",
     "data.npc.horse.description": "당신의 충직한 애마이다.",
     "data.npc.junimo.description": "정령계로부터 건너온 숲의 정령. 그들에 대하여는 알려진 바가 거의 없다.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -139,8 +142,8 @@
     "data.item.copper-node.description": "부수면 구리 광석을 얻을 수 있다.",
     "data.item.gold-node.name": "금 노드",
     "data.item.gold-node.description": "부수면 금 광석을 얻을 수 있다.",
-    "data.item.iridum-node.name": "이리듐 노드",
-    "data.item.iridum-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
+    "data.item.iridium-node.name": "이리듐 노드",
+    "data.item.iridium-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
     "data.item.iron-node.name": "철 노드",
     "data.item.iron-node.description": "부수면 철 광석을 얻을 수 있다.",
 
@@ -188,6 +191,10 @@
     "building.upgrades": "업그레이드",
     "building.water-trough": "물통",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "최대 {{max}}마리까지의 동물 중 {{count}}마리 수용 중.",
     "building.construction.summary": "{{date}}에 건설 완료",
@@ -212,17 +219,31 @@
     "building.upgrades.coop.2": "최대 12마리의 동물 수용; 먹이통 자동화가 가능해지며 토끼를 추가",
     "building.water-trough.summary": "최대 {{max}}칸 중 {{filled}}칸의 물통을 채움",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
+
     // bush lookup labels
     // TODO
     "bush.name.berry": "Berry Bush",
     "bush.name.plain": "Plain Bush",
+    "bush.name.tea": "Tea Bush",
     "bush.description.berry": "A bush that grows salmonberries and blackberries.",
     "bush.description.plain": "A plain bush that doesn't grow anything.",
+    "bush.description.Tea": "A bush that grows tea leaves.",
+    "bush.date-planted": "Date planted",
+    "bush.growth": "Growth",
     "bush.next-harvest": "Next harvest",
 
     // bush lookup values
     // TODO
+    "bush.growth.summary": "{{date}}일에 다 자람.",
     "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "불만",
@@ -259,6 +280,9 @@
     "crop.harvest.too-late": "작물을 수확하기엔 너무 늦은 계절이다 (다음 수확까지 {{date}}일 걸림)",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "내용물",
     "item.cask-schedule": "숙성",
 
@@ -268,9 +292,18 @@
 
     "item.fence-health": "내구도",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "내용물",
-    "item.likes-this": "좋아함",
     "item.loves-this": "사랑함",
+    "item.likes-this": "좋아함",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "필요함",
     "item.number-owned": "보유함",
     "item.number-cooked": "요리됨",
@@ -281,6 +314,9 @@
     "item.sells-to": "판매처",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}}의 품질이 준비됨.",
     "item.cask-schedule.now-partial": "현재 품질: {{quality}} (곡괭이를 사용해 숙성을 중단시킬 수 있다)",
     "item.cask-schedule.tomorrow": "내일의 품질: {{quality}}",
@@ -288,6 +324,11 @@
 
     "item.fence-health.gold-clock": "금시계로 인하여 내구도가 감소하지 않음",
     "item.fence-health.summary": "{{percent}}% (대략 {{count}}일 남음)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}}이/가 들어감",
     "item.contents.ready": "{{name}}이/가 준비됨",
@@ -309,7 +350,7 @@
     "monster.health": "체력",
     "monster.drops": "드랍 물품",
     "monster.experience": "XP(경험치)",
-    "monster.defence": "방어력",
+    "monster.defense": "방어력",
     "monster.attack": "공격력",
     "monster.adventure-guild": "모험가 길드",
 
@@ -327,15 +368,21 @@
     "npc.gifted-today": "오늘 선물을 줌",
     "npc.gifted-this-week": "이번 주 선물 횟수를 모두 사용함",
     "npc.kissed-today": "Kissed today", // TODO
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "사랑하는 선물",
     "npc.likes-gifts": "좋아하는 선물",
     "npc.neutral-gifts": "그저그런 선물",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "당신은 이미 결혼했다! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "나이",
@@ -351,19 +398,32 @@
     // pet lookup labels
     "pet.love": "애정도",
     "pet.petted-today": "오늘 쓰다듬음",
+    "pet.last-petted": "Last petted", // TODO
+    "pet.water-bowl": "Water bowl", // TODO
+
+    // pet lookup values
+    // TODO
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "Empty",
+    "pet.water-bowl.filled": "Filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "농장명",
     "player.farm-map": "농장 유형",
     "player.favorite-thing": "좋아하는 것",
     "player.gender": "성별",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "배우자",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "전투",
     "player.farming-skill": "농사",
     "player.fishing-skill": "낚시",
     "player.foraging-skill": "채집",
     "player.mining-skill": "채광",
     "player.luck": "행운",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "사용자 지정",
@@ -386,10 +446,15 @@
     // tile lookup values
     "tile.tile.none-here": "타일 없음",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
+
     // tree lookup labels
     "tree.stage": "성장 단계",
     "tree.next-growth": "다음 성장",
     "tree.has-seed": "씨앗 보유 여부",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "단풍나무",
@@ -402,7 +467,8 @@
     "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",
     "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
-    "tree.next-growth.random": "내일 20%의 확률로 다음으로 성장: {{stage}}",
+    "tree.next-growth.random": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "씨앗",

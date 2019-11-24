@@ -1,6 +1,6 @@
-﻿namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
+namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 {
-    /// <summary>A <see cref="ManageChestOverlay"/> element which can receive input.</summary>
+    /// <summary>An <see cref="IStorageOverlay"/> element which can receive input.</summary>
     internal enum Element
     {
         /// <summary>The underlying menu.</summary>

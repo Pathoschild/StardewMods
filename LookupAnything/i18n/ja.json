@@ -9,7 +9,7 @@
     // date names
     "generic.now": "今",
     "generic.tomorrow": "明日",
-    "generic.yesterday": "yesterday", // TODO
+    "generic.yesterday": "昨日",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -24,14 +24,14 @@
     "generic.hours": "{{count}}時間",
     "generic.days": "{{count}}日",
     "generic.in-x-days": "{{count}}日後",
-    "generic.x-days-ago": "{{count}} days ago", // TODO
+    "generic.x-days-ago": "{{count}}日前",
     "generic.price": "{{price}}G",
     "generic.price-for-quality": "{{price}}G ({{quality}})",
     "generic.price-for-stack": "{{price}}g (スタック:{{count}})",
 
     // types
-    "type.building": "Building", // TODO
-    "type.bush": "Bush", // TODO
+    "type.building": "建物",
+    "type.bush": "茂み",
     "type.fruit-tree": "果樹",
     "type.map-tile": "マップタイル",
     "type.monster": "モンスター",
@@ -52,6 +52,7 @@
     "friendship-status.engaged": "婚約済",
     "friendship-status.married": "結婚済",
     "friendship-status.divorced": "離婚済",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "ボイラー室",
     "bundle-area.vault": "金庫",
     "bundle-area.bulletin-board": "掲示板",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "冒険者ギルド",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "あなたの忠実なペット.",
     "data.npc.horse.description": "あなたの忠実な馬",
     "data.npc.junimo.description": "妖精界から来た森の精。 彼らについてほとんど分かっていない。",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -139,8 +142,8 @@
     "data.item.copper-node.description": "壊すと銅鉱石が手に入る",
     "data.item.gold-node.name": "金鉱脈",
     "data.item.gold-node.description": "壊すと金鉱石が手に入る",
-    "data.item.iridum-node.name": "イリジウム鉱脈",
-    "data.item.iridum-node.description": "壊すとイリジウム鉱石が手に入る",
+    "data.item.iridium-node.name": "イリジウム鉱脈",
+    "data.item.iridium-node.description": "壊すとイリジウム鉱石が手に入る",
     "data.item.iron-node.name": "鉄鉱脈",
     "data.item.iron-node.description": "壊すと鉄鉱石が手に入る",
 
@@ -177,54 +180,68 @@
     "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
     // building lookup labels
-    // TODO
-    "building.animals": "Animals",
-    "building.construction": "Construction",
-    "building.feed-trough": "Feed trough",
-    "building.horse": "Horse",
-    "building.horse-location": "Horse location",
-    "building.owner": "Owner",
-    "building.slimes": "Slimes",
-    "building.stored-hay": "Stored hay",
-    "building.upgrades": "Upgrades",
-    "building.water-trough": "Water trough",
+    "building.animals": "動物",
+    "building.construction": "建設",
+    "building.feed-trough": "餌場",
+    "building.horse": "馬",
+    "building.horse-location": "馬の場所",
+    "building.owner": "所有者",
+    "building.slimes": "スライム",
+    "building.stored-hay": "ためた干し草",
+    "building.upgrades": "アップグレード",
+    "building.water-trough": "給水樋",
+
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Drops",
+    "building.fish-pond.quests": "Quests",
 
     // building lookup values
-    // TODO
-    "building.animals.summary": "{{count}} of max {{max}} animals",
-    "building.construction.summary": "ready on {{date}}",
-    "building.feed-trough.automated": "automated",
-    "building.feed-trough.summary": "{{filled}} of {{max}} feed slots filled",
+    "building.animals.summary": "{{count}}匹 (最大{{max}}匹)",
+    "building.construction.summary": "{{date}}に完了する",
+    "building.feed-trough.automated": "自動化されている",
+    "building.feed-trough.summary": "最大{{max}}中{{filled}}の餌枠が充たされている",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-    "building.junimo-harvesting-enabled": "Harvesting enabled",
-    "building.owner.none": "no owner",
-    "building.output-processing": "Output processing",
-    "building.output-ready": "Output ready",
-    "building.slimes.summary": "{{count}} of max {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
-    "building.upgrades.barn.0": "up to 4 animals, add cows",
-    "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
-    "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
-    "building.upgrades.cabin.0": "initial cabin",
-    "building.upgrades.cabin.1": "add kitchen, enable marriage",
-    "building.upgrades.cabin.2": "enable children",
-    "building.upgrades.coop.0": "up to 4 animals; add chickens",
-    "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
-    "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
-    "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+    "building.junimo-harvesting-enabled": "収穫可能",
+    "building.owner.none": "オーナーなし",
+    "building.output-processing": "処理中",
+    "building.output-ready": "準備完了",
+    "building.slimes.summary": "最大{{max}}匹中{{count}}のスライムがいる",
+    "building.stored-hay.summary-one-silo": "{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{siloCount}}基のサイロに{{hayCount}}個の干し草が入っている (最大個数: {{maxHay}})",
+    "building.upgrades.barn.0": "4匹まで動物が入り、牛が飼える",
+    "building.upgrades.barn.1": "8匹まで動物が入り、動物の妊娠とヤギの飼育ができる",
+    "building.upgrades.barn.2": "12匹まで動物が入り、 自動給餌と、豚や羊の飼育ができる",
+    "building.upgrades.cabin.0": "最初の小屋",
+    "building.upgrades.cabin.1": "台所が追加され、結婚できる",
+    "building.upgrades.cabin.2": "子作りできる",
+    "building.upgrades.coop.0": "4羽まで飼育でき、鶏が飼える",
+    "building.upgrades.coop.1": "8羽まで飼育でき、ふ卵器が付き、恐竜とアヒルの飼育ができる",
+    "building.upgrades.coop.2": "12羽まで飼育でき、自動給餌とウサギの飼育ができる",
+    "building.water-trough.summary": "最大{{max}}中{{filled}}の給水樋が充たされている",
+
+    "building.fish-pond.population.empty": "Add a fish to start this pond",
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
+    "building.fish-pond.quests.done": "{{count}} fish",
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
+    "building.fish-pond.quests.available": "available {{relativeDate}}",
 
     // bush lookup labels
-    // TODO
-    "bush.name.berry": "Berry Bush",
-    "bush.name.plain": "Plain Bush",
-    "bush.description.berry": "A bush that grows salmonberries and blackberries.",
-    "bush.description.plain": "A plain bush that doesn't grow anything.",
-    "bush.next-harvest": "Next harvest",
+    "bush.name.berry": "ベリーの茂み",
+    "bush.name.plain": "ただの茂み",
+    "bush.name.tea": "Tea Bush", // TODO
+    "bush.description.berry": "サーモンベリーとブラックベリーが実る茂み",
+    "bush.description.plain": "何も実らないただの茂み",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
+    "bush.next-harvest": "次の収穫",
 
     // bush lookup values
-    // TODO
-    "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.growth.summary": "{{date}}に成熟", // TODO
+    "bush.schedule.berry": "20%の確率で春15日-18日にサーモンベリーが, 秋8日-11日にブラックベリーが実る",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "不満点",
@@ -261,6 +278,9 @@
     "crop.harvest.too-late": "次の収穫には遅すぎる ({{date}}になる)",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "中身",
     "item.cask-schedule": "成熟日数",
 
@@ -270,19 +290,31 @@
 
     "item.fence-health": "耐久値",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "内容",
-    "item.likes-this": "これが好きな人",
     "item.loves-this": "これが大好きな人",
+    "item.likes-this": "これが好きな人",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "要求されるもの",
     "item.number-owned": "所有数",
-    "item.number-cooked": "Cooked", // TODO
-    "item.number-crafted": "Crafted", // TODO
+    "item.number-cooked": "調理数",
+    "item.number-crafted": "作成数",
     "item.recipes": "レシピ",
     "item.see-also": "これも見て",
     "item.sells-for": "売値",
     "item.sells-to": "売却先",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "現在 {{quality}}",
     "item.cask-schedule.now-partial": "現在 {{quality}} (ツルハシで中止できます)",
     "item.cask-schedule.tomorrow": "明日 {{quality}}",
@@ -291,6 +323,11 @@
     "item.fence-health.gold-clock": "金の時計の効果で減らない",
     "item.fence-health.summary": "{{percent}}% (残り約{{count}}日)",
 
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
+
     "item.contents.placed": "設置した {{name}}",
     "item.contents.ready": "{{name}} ready",
     "item.contents.partial": "{{time}}で{{name}}",
@@ -298,20 +335,20 @@
     "item.needed-for.full-shipment": "実績:満タンの出荷箱 (一つ出荷)",
     "item.needed-for.polyculture": "実績:混作農業 ({{count}}個出荷)",
     "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
-    "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
-    "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
+    "item.needed-for.gourmet-chef": "実績:グルメマスター ({{recipes}}を調理する)",
+    "item.needed-for.craft-master": "実績:クラフトマスター ({{recipes}}を作成する)",
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}個必要)",
-    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
+    "item.recipes-for-machine.multiple-items": "{{name}}が{{count}}個",
     "item.number-owned.summary": "{{count}}個持っている",
-    "item.number-crafted.summary": "you made {{count}} of these", // TODO
+    "item.number-crafted.summary": "{{count}}個作成した",
 
     // monster lookup labels
     "monster.invincible": "無敵",
     "monster.health": "体力",
     "monster.drops": "落とす物",
     "monster.experience": "経験値",
-    "monster.defence": "防御力",
+    "monster.defense": "防御力",
     "monster.attack": "攻撃力",
     "monster.adventure-guild": "冒険者ギルド",
 
@@ -328,16 +365,22 @@
     "npc.talked-today": "今日話した",
     "npc.gifted-today": "今日贈り物をした",
     "npc.gifted-this-week": "今週贈り物をした",
-    "npc.kissed-today": "Kissed today", // TODO
+    "npc.kissed-today": "今日キスをした",
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "大好きな贈り物",
     "npc.likes-gifts": "好きな贈り物",
-    "npc.neutral-gifts": "Neutral gifts", // TODO
+    "npc.neutral-gifts": "普通の贈り物",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "まだ会っていません",
     "npc.friendship.need-bouquet": "進むには花束が必要",
     "npc.friendship.need-points": "{{count}}pts必要",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "年齢",
@@ -353,22 +396,35 @@
     // pet lookup labels
     "pet.love": "親愛度",
     "pet.petted-today": "今日なでた",
+    "pet.last-petted": "Last petted", // TODO
+    "pet.water-bowl": "Water bowl", // TODO
+
+    // pet lookup values
+    // TODO
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "Empty",
+    "pet.water-bowl.filled": "Filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "牧場名",
-    "player.farm-map": "Farm map", // TODO
+    "player.farm-map": "牧場マップ",
     "player.favorite-thing": "好きなもの",
     "player.gender": "性別",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "配偶者",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "戦闘",
     "player.farming-skill": "農業",
     "player.fishing-skill": "釣り",
     "player.foraging-skill": "採集",
     "player.mining-skill": "採掘",
     "player.luck": "運勢",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
-    "player.farm-map.custom": "Custom", // TODO
+    "player.farm-map.custom": "カスタム",
     "player.gender.male": "男",
     "player.gender.female": "女",
     "player.luck.summary": "{{percent}}%追加の確率",
@@ -388,10 +444,15 @@
     // tile lookup values
     "tile.tile.none-here": "タイルがありません",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
+
     // tree lookup labels
     "tree.stage": "成長段階",
     "tree.next-growth": "次の成長",
     "tree.has-seed": "種をつけている",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "カエデの木",
@@ -404,7 +465,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
     "tree.next-growth.winter": "温室の外では冬に育たない",
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
-    "tree.next-growth.random": "20%の確率で明日{{stage}}に成長する",
+    "tree.next-growth.random": "{{chance}}%の確率で明日{{stage}}に成長する",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "種",

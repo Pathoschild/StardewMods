@@ -14,8 +14,8 @@ using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 {
-    /// <summary>An overlay for <see cref="ItemGrabMenu"/> which lets the player navigate and edit chests.</summary>
-    internal class ManageChestOverlay : BaseOverlay
+    /// <summary>The base overlay for a menu which lets the player navigate and edit containers.</summary>
+    internal abstract class BaseChestOverlay : BaseOverlay, IStorageOverlay
     {
         /*********
         ** Fields
@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         ** Data
         ****/
         /// <summary>Provides translations stored in the mod's folder.</summary>
-        private readonly ITranslationHelper Translations;
+        protected readonly ITranslationHelper Translations;
 
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
@@ -35,14 +35,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Whether to show Automate options.</summary>
         private readonly bool ShowAutomateOptions;
 
-        /// <summary>The number of draw cycles since the menu was initialised.</summary>
+        /// <summary>The number of draw cycles since the menu was initialized.</summary>
         private int DrawCount;
+
+        /// <summary>Get whether the menu and its components have been initialized.</summary>
+        protected bool IsInitialized => this.DrawCount > 1;
 
         /// <summary>The backing field for <see cref="ActiveElement"/>; shouldn't be edited directly.</summary>
         private Element _activeElement;
 
         /// <summary>The overlay element which should receive input.</summary>
-        private Element ActiveElement
+        protected Element ActiveElement
         {
             get => this._activeElement;
             set
@@ -59,31 +62,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private string SelectedCategory => this.Chest.DisplayCategory;
 
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        protected ModConfig Config { get; }
 
         /// <summary>The configured key bindings.</summary>
         private readonly ModConfigKeys Keys;
 
         /// <summary>Whether to show the category dropdown.</summary>
-        private bool ShowCategoryDropdown => this.Categories.Length > 1;
+        protected bool ShowCategoryDropdown => this.Categories.Length > 1;
 
         /****
         ** Menu management
         ****/
         /// <summary>The underlying chest menu.</summary>
-        private readonly ItemGrabMenu Menu;
-
-        /// <summary>The underlying menu's player inventory submenu.</summary>
-        private readonly InventoryMenu MenuInventoryMenu;
-
-        /// <summary>The default highlight function for the chest items.</summary>
-        private readonly InventoryMenu.highlightThisItem DefaultChestHighlighter;
-
-        /// <summary>The default highlight function for the player inventory items.</summary>
-        private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
+        private readonly IClickableMenu Menu;
 
         /// <summary>Whether the chest menu is ready to close.</summary>
-        private bool CanCloseChest => this.Menu.readyToClose();
+        protected bool CanCloseChest => this.Menu.readyToClose();
 
         /****
         ** Access UI
@@ -92,22 +86,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private readonly SpriteFont Font = Game1.smallFont;
 
         /// <summary>The chest selector tab.</summary>
-        private Tab ChestTab;
+        protected Tab ChestTab;
 
         /// <summary>The category selector tab.</summary>
-        private Tab CategoryTab;
+        protected Tab CategoryTab;
 
         /// <summary>The chest selector dropdown.</summary>
-        private DropList<ManagedChest> ChestSelector;
+        protected DropList<ManagedChest> ChestSelector;
 
         /// <summary>The category selector dropdown.</summary>
-        private DropList<string> CategorySelector;
+        protected DropList<string> CategorySelector;
 
         /// <summary>The edit button.</summary>
-        private ClickableTextureComponent EditButton;
+        protected ClickableTextureComponent EditButton;
 
-        /// <summary>The button which sorts the player inventory.</summary>
-        private ClickableTextureComponent SortInventoryButton;
+        /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
+        private readonly int TopOffset;
 
         /****
         ** Edit UI
@@ -159,42 +153,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="menu">The underlying chest menu.</param>
-        /// <param name="chest">The selected chest.</param>
-        /// <param name="chests">The available chests.</param>
-        /// <param name="config">The mod configuration.</param>
-        /// <param name="keys">The configured key bindings.</param>
-        /// <param name="events">The SMAPI events available for mods.</param>
-        /// <param name="input">An API for checking and changing input state.</param>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
-        /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ManageChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions)
-            : base(events, input, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu)
-        {
-            this.ForMenuInstance = menu;
-            this.ShowAutomateOptions = showAutomateOptions;
-
-            // helpers
-            this.Translations = translations;
-
-            // menu
-            this.Menu = menu;
-            this.MenuInventoryMenu = menu.ItemsToGrabMenu;
-            this.DefaultChestHighlighter = menu.inventory.highlightMethod;
-            this.DefaultInventoryHighlighter = this.MenuInventoryMenu.highlightMethod;
-
-            // chests & config
-            this.Chest = chest;
-            this.Chests = chests;
-            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
-            this.Config = config;
-            this.Keys = keys;
-
-            // components
-            this.ReinitialiseComponents();
-        }
-
         /// <summary>Sort the player's inventory.</summary>
         public void SortInventory()
         {
@@ -220,10 +178,47 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Protected methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="menu">The underlying chest menu.</param>
+        /// <param name="chest">The selected chest.</param>
+        /// <param name="chests">The available chests.</param>
+        /// <param name="config">The mod configuration.</param>
+        /// <param name="keys">The configured key bindings.</param>
+        /// <param name="events">The SMAPI events available for mods.</param>
+        /// <param name="input">An API for checking and changing input state.</param>
+        /// <param name="translations">Provides translations stored in the mod's folder.</param>
+        /// <param name="showAutomateOptions">Whether to show Automate options.</param>
+        /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
+        /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
+        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
+            : base(events, input, keepAlive)
+        {
+            // data
+            this.ForMenuInstance = menu;
+            this.ShowAutomateOptions = showAutomateOptions;
+            this.TopOffset = topOffset;
+
+            // helpers
+            this.Translations = translations;
+
+            // menu
+            this.Menu = menu;
+
+            // chests & config
+            this.Chest = chest;
+            this.Chests = chests;
+            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
+            this.Config = config;
+            this.Keys = keys;
+        }
+
         /// <summary>Draw the overlay to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         protected override void Draw(SpriteBatch batch)
         {
+            if (this.DrawCount == 0)
+                this.ReinitializeComponents();
+
             this.DrawCount++;
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 
@@ -245,9 +240,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 // edit button
                 if (this.Chest.CanEdit)
                     this.EditButton.draw(batch, Color.White * navOpacity, 1f);
-
-                // sort inventory button
-                this.SortInventoryButton?.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -323,14 +315,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player resizes the game windoww.</summary>
+        /// <summary>The method invoked when the player resizes the game window.</summary>
         /// <param name="oldBounds">The previous game window bounds.</param>
         /// <param name="newBounds">The new game window bounds.</param>
         protected override void ReceiveGameWindowResized(xTile.Dimensions.Rectangle oldBounds, xTile.Dimensions.Rectangle newBounds)
         {
-            this.ChestSelector.ReceiveGameWindowResized();
-            this.CategorySelector?.ReceiveGameWindowResized();
-            this.ReinitialiseComponents();
+            this.ReinitializeComponents();
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
@@ -338,7 +328,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveButtonPress(SButton input)
         {
-            if (this.IsInitialising())
+            if (!this.IsInitialized)
                 return false;
 
             bool canNavigate = this.CanCloseChest;
@@ -384,6 +374,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveScrollWheelAction(int amount)
         {
+            if (!this.IsInitialized)
+                return false;
+
             switch (this.ActiveElement)
             {
                 case Element.Menu:
@@ -429,6 +422,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveLeftClick(int x, int y)
         {
+            if (!this.IsInitialized)
+                return false;
+
             switch (this.ActiveElement)
             {
                 // edit form
@@ -486,7 +482,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         if (chest != null)
                         {
                             this.SelectChest(chest);
-                            this.ReinitialiseComponents();
+                            this.ReinitializeComponents();
                         }
                     }
                     return true; // handle all clicks while open
@@ -503,7 +499,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         if (category != null && category != this.SelectedCategory)
                         {
                             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
-                            this.ReinitialiseComponents();
+                            this.ReinitializeComponents();
                         }
                     }
                     return true; // handle all clicks while open
@@ -511,12 +507,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 // buttons & dropdown
                 default:
                     bool canNavigate = this.CanCloseChest;
-                    if (this.Menu.okButton.containsPoint(x, y) && canNavigate)
-                        this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
-                    else if (this.EditButton.containsPoint(x, y) && canNavigate)
+                    if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.SortInventoryButton?.containsPoint(x, y) == true)
-                        this.SortInventory();
                     else if (this.ChestTab.containsPoint(x, y) && canNavigate)
                         this.ActiveElement = Element.ChestList;
                     else if (this.CategoryTab?.containsPoint(x, y) == true && canNavigate)
@@ -533,11 +525,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveCursorHover(int x, int y)
         {
+            if (!this.IsInitialized)
+                return false;
+
             switch (this.ActiveElement)
             {
                 case Element.Menu:
                     this.EditButton.tryHover(x, y);
-                    this.SortInventoryButton?.tryHover(x, y);
                     return false;
 
                 case Element.EditForm:
@@ -557,8 +551,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Private methods
         *********/
-        /// <summary>Initialise the edit-chest overlay for rendering.</summary>
-        private void ReinitialiseComponents()
+        /// <summary>Initialize the edit-chest overlay for rendering.</summary>
+        protected virtual void ReinitializeComponents()
         {
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 
@@ -567,7 +561,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 // tab
                 Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedCategory);
-                this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
+                this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
                 this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
@@ -576,7 +570,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chest dropdown
             {
                 // tab
-                this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - Game1.pixelZoom * 25, true, this.Font);
+                Vector2 tabSize = Tab.GetTabSize(this.Font, this.Chest.DisplayName);
+                this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
@@ -590,18 +585,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, this.Translations.Get("button.edit-chest"), Sprites.Icons.Sheet, sprite, zoom);
             }
-
-            // sort inventory button overlay (based on OK button position)
-            if (this.Config.AddOrganisePlayerInventoryButton)
-            {
-                Rectangle sprite = Sprites.Buttons.Organize;
-                ClickableTextureComponent okButton = this.Menu.okButton;
-                float zoom = Game1.pixelZoom;
-                Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, this.Translations.Get("button.sort-inventory"), Sprites.Icons.Sheet, sprite, zoom);
-            }
-            else
-                this.SortInventoryButton = null;
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
@@ -618,10 +601,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
             this.EditResetButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "reset-chest");
             this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
-
-            // adjust menu to fit
-            if (this.Config.AddOrganisePlayerInventoryButton)
-                this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;
         }
 
         /// <summary>Set the form values to match the underlying chest.</summary>
@@ -669,7 +648,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         }
 
         /// <summary>Exit the chest menu.</summary>
-        private void Exit()
+        protected void Exit()
         {
             this.Dispose();
             this.Menu.exitThisMenu();
@@ -744,26 +723,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             return this.Chests.Where(chest => chest.DisplayCategory == category).ToArray();
         }
 
-        /// <summary>Get whether the menu is initialising itself.</summary>
-        private bool IsInitialising()
-        {
-            return this.DrawCount < 10;
-        }
-
         /// <summary>Set whether the chest or inventory items should be clickable.</summary>
-        private void SetItemsClickable(bool clickable)
-        {
-            if (clickable)
-            {
-                this.Menu.inventory.highlightMethod = this.DefaultChestHighlighter;
-                this.MenuInventoryMenu.highlightMethod = this.DefaultInventoryHighlighter;
-            }
-            else
-            {
-                this.Menu.inventory.highlightMethod = item => false;
-                this.MenuInventoryMenu.highlightMethod = item => false;
-            }
-        }
+        /// <param name="clickable">Whether items should be clickable.</param>
+        protected abstract void SetItemsClickable(bool clickable);
 
         /// <summary>Draw a checkbox to the screen, including any position updates needed.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>

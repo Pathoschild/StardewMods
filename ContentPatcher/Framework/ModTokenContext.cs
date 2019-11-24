@@ -15,14 +15,14 @@ namespace ContentPatcher.Framework
         /// <summary>The namespace for tokens specific to this mod.</summary>
         private readonly string Scope;
 
-        /// <summary>The available global tokens.</summary>
-        private readonly IContext GlobalContext;
+        /// <summary>The parent token context.</summary>
+        private readonly IContext ParentContext;
 
         /// <summary>The available local standard tokens.</summary>
-        private readonly GenericTokenContext LocalContext = new GenericTokenContext();
+        private readonly GenericTokenContext LocalContext;
 
         /// <summary>The dynamic tokens whose value depends on <see cref="DynamicTokenValues"/>.</summary>
-        private readonly GenericTokenContext<DynamicToken> DynamicContext = new GenericTokenContext<DynamicToken>();
+        private readonly GenericTokenContext<DynamicToken> DynamicContext;
 
         /// <summary>The conditional values used to set the values of <see cref="DynamicContext"/> tokens.</summary>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
@@ -42,12 +42,14 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Construct an instance.</summary>
         /// <param name="scope">The namespace for tokens specific to this mod.</param>
-        /// <param name="tokenManager">Manages the available global tokens.</param>
-        public ModTokenContext(string scope, IContext tokenManager)
+        /// <param name="parentContext">The parent token context.</param>
+        public ModTokenContext(string scope, IContext parentContext)
         {
             this.Scope = scope;
-            this.GlobalContext = tokenManager;
-            this.Contexts = new[] { this.GlobalContext, this.LocalContext, this.DynamicContext };
+            this.ParentContext = parentContext;
+            this.LocalContext = new GenericTokenContext(this.IsModInstalled);
+            this.DynamicContext = new GenericTokenContext<DynamicToken>(this.IsModInstalled);
+            this.Contexts = new[] { this.ParentContext, this.LocalContext, this.DynamicContext };
         }
 
         /// <summary>Add a standard token to the context.</summary>
@@ -58,7 +60,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
             if (token.Name.Contains(InternalConstants.InputArgSeparator))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because input arguments aren't supported ({InternalConstants.InputArgSeparator} character).");
-            if (this.GlobalContext.Contains(token.Name, enforceContext: false))
+            if (this.ParentContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
             if (this.LocalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
@@ -71,7 +73,7 @@ namespace ContentPatcher.Framework
         public void Add(DynamicTokenValue tokenValue)
         {
             // validate
-            if (this.GlobalContext.Contains(tokenValue.Name, enforceContext: false))
+            if (this.ParentContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue}' token because there's a global token with that name.");
             if (this.LocalContext.Contains(tokenValue.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
@@ -81,6 +83,7 @@ namespace ContentPatcher.Framework
                 this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name, this.Scope));
 
             // add token value
+            token.AddTokensUsed(tokenValue.GetTokensUsed());
             token.AddAllowedValues(tokenValue.Value);
             this.DynamicTokenValues.Add(tokenValue);
 
@@ -112,9 +115,8 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Update the current context.</summary>
-        /// <param name="globalContext">The global token context.</param>
         /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
-        public void UpdateContext(IContext globalContext, InvariantHashSet globalChangedTokens)
+        public void UpdateContext(InvariantHashSet globalChangedTokens)
         {
             // get affected tokens (or null to update all tokens)
             InvariantHashSet affectedTokens = null;
@@ -169,6 +171,13 @@ namespace ContentPatcher.Framework
         /****
         ** IContext
         ****/
+        /// <summary>Get whether a mod is installed.</summary>
+        /// <param name="id">The mod ID.</param>
+        public bool IsModInstalled(string id)
+        {
+            return this.ParentContext.IsModInstalled(id);
+        }
+
         /// <summary>Get whether the context contains the given token.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>

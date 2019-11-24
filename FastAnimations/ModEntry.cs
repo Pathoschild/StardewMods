@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            // initialise handlers
+            // initialize handlers
             foreach (IAnimationHandler handler in this.Handlers)
                 handler.OnNewLocation(Game1.currentLocation);
         }

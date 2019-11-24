@@ -48,8 +48,37 @@ namespace ContentPatcher.Framework
         /// <param name="values">The context values to track. Null values are ignored.</param>
         public AggregateContextual Add(IEnumerable<IContextual> values)
         {
-            foreach (IContextual value in values)
-                this.Add(value);
+            if (values != null)
+            {
+                foreach (IContextual value in values)
+                    this.Add(value);
+            }
+
+            return this;
+        }
+
+        /// <summary>Remove contextual values from the tracker.</summary>
+        /// <param name="value">The context value to stop tracking. Null values are ignored.</param>
+        public AggregateContextual Remove(IContextual value)
+        {
+            if (value != null && this.ValuesImpl.Remove(value))
+            {
+                this.IsMutable = this.ValuesImpl.Any(p => p.IsMutable);
+                this.IsReady = this.ValuesImpl.All(p => p.IsReady);
+            }
+
+            return this;
+        }
+
+        /// <summary>Remove contextual values from the tracker.</summary>
+        /// <param name="values">The context values to stop tracking. Null values are ignored.</param>
+        public AggregateContextual Remove(IEnumerable<IContextual> values)
+        {
+            if (values != null)
+            {
+                foreach (IContextual value in values)
+                    this.Remove(value);
+            }
 
             return this;
         }

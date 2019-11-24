@@ -25,9 +25,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
-        /// <summary>The bush texture.</summary>
-        private readonly Lazy<Texture2D> Texture;
-
 
         /*********
         ** Public methods
@@ -42,12 +39,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             this.Target = bush;
             this.Reflection = reflection;
-            this.Texture = this.Reflection.GetField<Lazy<Texture2D>>(typeof(Bush), "texture").GetValue();
 
             if (this.IsBerryBush(bush))
-                this.Initialise(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
+            else if (this.IsTeaBush(bush))
+                this.Initialize(L10n.Bush.TeaName(), L10n.Bush.TeaDescription(), L10n.Types.Bush());
             else
-                this.Initialise(L10n.Bush.PlainName(), L10n.Bush.PlainDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush.PlainName(), L10n.Bush.PlainDescription(), L10n.Types.Bush());
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -57,17 +55,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get basic info
             Bush bush = this.Target;
             bool isBerryBush = this.IsBerryBush(bush);
+            bool isTeaBush = this.IsTeaBush(bush);
+            SDate today = SDate.Now();
 
             // next harvest
-            if (isBerryBush)
+            if (isBerryBush || isTeaBush)
             {
                 SDate nextHarvest = this.GetNextHarvestDate(bush);
-                string nextHarvestStr = nextHarvest == SDate.Now()
+                string nextHarvestStr = nextHarvest == today
                     ? L10n.Generic.Now()
                     : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
-                string harvestSchedule = L10n.Bush.ScheduleBerry();
+                string harvestSchedule = isTeaBush ? L10n.Bush.ScheduleTea() : L10n.Bush.ScheduleBerry();
 
                 yield return new GenericField(this.GameHelper, L10n.Bush.NextHarvest(), $"{nextHarvestStr}{Environment.NewLine}{harvestSchedule}");
+            }
+
+            // date planted + grown
+            if (isTeaBush)
+            {
+                SDate datePlanted = this.GetDatePlanted(bush);
+                SDate dateGrown = this.GetDateFullyGrown(bush);
+
+                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-bush.getAge())})");
+                if (dateGrown > today)
+                {
+                    string grownOnDateText = L10n.Bush.GrowthSummary(date: this.Stringify(dateGrown));
+                    yield return new GenericField(this.GameHelper, L10n.Bush.Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dateGrown)})");
+                }
             }
         }
 
@@ -79,6 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // pinned fields
             yield return new GenericDebugField("health", target.health, pinned: true);
+            yield return new GenericDebugField("is greenhouse bush", this.Stringify(target.greenhouseBush.Value), pinned: true);
             yield return new GenericDebugField("is town bush", this.Stringify(target.townBush.Value), pinned: true);
             yield return new GenericDebugField("is in bloom", this.Stringify(target.inBloom(Game1.currentSeason, Game1.dayOfMonth)), pinned: true);
 
@@ -108,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // draw portrait
             spriteBatch.Draw(
-                texture: this.Texture.Value,
+                texture: Bush.texture.Value,
                 destinationRectangle: new Rectangle((int)(position.X + offset.X), (int)(position.Y + offset.Y), targetSize.X, targetSize.Y),
                 sourceRectangle: sourceArea,
                 color: Color.White,
@@ -131,6 +146,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             return bush.size.Value == Bush.mediumBush && !bush.townBush.Value;
         }
 
+        /// <summary>Get whether a given bush produces tea.</summary>
+        /// <param name="bush">The bush to check.</param>
+        private bool IsTeaBush(Bush bush)
+        {
+            return bush.size.Value == Bush.greenTeaBush;
+        }
+
+        /// <summary>Get the date when the bush was planted.</summary>
+        /// <param name="bush">The bush to check.</param>
+        private SDate GetDatePlanted(Bush bush)
+        {
+            SDate date = new SDate(1, "spring", 1);
+            if (this.IsTeaBush(bush))
+                date = date.AddDays(bush.datePlanted.Value);
+            return date;
+        }
+
+        /// <summary>Get the date when the bush will be fully grown.</summary>
+        /// <param name="bush">The bush to check.</param>
+        private SDate GetDateFullyGrown(Bush bush)
+        {
+            SDate date = this.GetDatePlanted(bush);
+            if (this.IsTeaBush(bush))
+                date = date.AddDays(Bush.daysToMatureGreenTeaBush);
+            return date;
+        }
+
         /// <summary>Get the next date when the bush will produce forage.</summary>
         /// <param name="bush">The bush to check.</param>
         /// <remarks>Derived from <see cref="Bush.inBloom"/>.</remarks>
@@ -141,6 +183,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // currently has produce
             if (bush.tileSheetOffset.Value == 1)
                 return today;
+
+            // tea bushes take 20 days to grow, then produce leaves on day 22+ of each season (except winter if not in the greenhouse).
+            if (this.IsTeaBush(bush))
+            {
+                SDate fromDate = this.GetDateFullyGrown(bush);
+                if (fromDate < SDate.Now())
+                    fromDate = SDate.Now();
+
+                SDate nextHarvest;
+                if (fromDate.Season == "winter" && !bush.greenhouseBush.Value)
+                    nextHarvest = new SDate(22, "spring", fromDate.Year + 1);
+                else if (fromDate.Day < 22)
+                    nextHarvest = new SDate(22, fromDate.Season);
+                else
+                    nextHarvest = fromDate.AddDays(1);
+
+                return nextHarvest;
+            }
 
             // wild bushes produce salmonberries in spring 15-18, and blackberries in fall 8-11
             SDate springStart = new SDate(15, "spring");

@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly WateringCanConfig Config;
+        private readonly GenericAttachmentConfig Config;
 
 
         /*********
@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public WateringCanAttachment(WateringCanConfig config, IReflectionHelper reflection)
+        public WateringCanAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
             : base(reflection)
         {
             this.Config = config;
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             WateringCan can = (WateringCan)tool;
             int prevWater = can.WaterLeft;
             can.WaterLeft = 100;
-            this.UseToolOnTile(tool, tile);
+            this.UseToolOnTile(tool, tile, player, location);
             can.WaterLeft = prevWater;
 
             return true;

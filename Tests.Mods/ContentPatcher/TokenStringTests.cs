@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void TokenStringBuilder_PlainString(string raw)
         {
             // act
-            TokenString tokenStr = new TokenString(raw, new GenericTokenContext());
+            TokenString tokenStr = new TokenString(raw, new GenericTokenContext(modId => false));
             IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(0);
             tokenStr.HasAnyTokens.Should().BeFalse();
             diagnosticState.IsReady.Should().BeTrue();
-            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.UnreadyTokens.Should().BeEmpty();
             diagnosticState.InvalidTokens.Should().BeEmpty();
             diagnosticState.Errors.Should().BeEmpty();
         }
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             // arrange
             const string configKey = "tokenKey";
-            var context = new GenericTokenContext();
+            var context = new GenericTokenContext(modId => false);
             context.Save(new ImmutableToken(configKey, new InvariantHashSet { "value" }));
 
             // act
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
             diagnosticState.IsReady.Should().BeTrue();
-            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.UnreadyTokens.Should().BeEmpty();
             diagnosticState.InvalidTokens.Should().BeEmpty();
             diagnosticState.Errors.Should().BeEmpty();
         }
@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string configValue = "A";
             const string tokenKey = "season";
             const string raw = "  assets/{{configKey}}_{{season}}_{{ invalid  }}.png  ";
-            var context = new GenericTokenContext();
+            var context = new GenericTokenContext(modId => false);
             context.Save(new ImmutableToken(configKey, new InvariantHashSet { configValue }));
             context.Save(new ImmutableToken(tokenKey, new InvariantHashSet { "A" }));
 
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();
             diagnosticState.IsReady.Should().BeFalse();
-            diagnosticState.UnavailableTokens.Should().BeEmpty();
+            diagnosticState.UnreadyTokens.Should().BeEmpty();
             diagnosticState.InvalidTokens.Should().HaveCount(1).And.BeEquivalentTo("invalid");
             diagnosticState.Errors.Should().BeEmpty();
         }

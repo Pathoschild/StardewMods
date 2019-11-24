@@ -27,13 +27,13 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name.</summary>
         public string Name { get; }
 
-        /// <summary>Whether the value can change after it's initialised.</summary>
+        /// <summary>Whether the value can change after it's initialized.</summary>
         public bool IsMutable => this.Values.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady => this.Values.IsReady;
 
-        /// <summary>Whether this token recognises input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
+        /// <summary>Whether this token recognizes input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
         public bool CanHaveInput => this.Values.AllowsInput;
 
         /// <summary>Whether this token is only valid with an input argument (see <see cref="IToken.CanHaveInput"/>).</summary>

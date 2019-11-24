@@ -1,3 +1,7 @@
+**This mod is obsolete and no longer maintained.**
+
+----
+
 **The Long Night** is a [Stardew Valley](http://stardewvalley.net/) mod that disables collapsing.
 You just stay awake forever and the night never ends (until you go to bed).
 
@@ -33,4 +37,3 @@ end their day too (which will take effect when they change location).
 ## See also
 * [release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1369)
-* [Discussion thread](http://community.playstarbound.com/threads/the-long-night.136228)

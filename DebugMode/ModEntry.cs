@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.DebugMode
@@ -25,14 +26,24 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys;
 
+        /// <summary>Whether to show the debug info overlay.</summary>
+        private bool ShowOverlay;
+
         /// <summary>Whether the built-in debug mode is enabled.</summary>
-        private bool DebugMode
+        private bool GameDebugMode
         {
-            get => Game1.debugMode;
-            set => Game1.debugMode = value;
+            get
+            {
+                return Game1.debugMode;
+            }
+            set
+            {
+                Game1.debugMode = value;
+                Program.releaseBuild = !value;
+            }
         }
 
-        /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
+        /// <summary>A pixel texture that can be stretched and colorized for display.</summary>
         private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
@@ -40,11 +51,11 @@ namespace Pathoschild.Stardew.DebugMode
         {
             SButton.P, // ends current day
             SButton.M, // ends current season
-            SButton.H, // randomises player's hat
-            SButton.I, // randomises player's hair
-            SButton.J, // randomises player's shirt and pants
-            SButton.L, // randomises player
-            SButton.U, // randomises farmhouse wallpaper and floors
+            SButton.H, // randomizes player's hat
+            SButton.I, // randomizes player's hair
+            SButton.J, // randomizes player's shirt and pants
+            SButton.L, // randomizes player
+            SButton.U, // randomizes farmhouse wallpaper and floors
             SButton.F10 // tries to launch a multiplayer server and crashes
         };
 
@@ -56,14 +67,16 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // initialise
+            // initialize
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
 
             // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Display.Rendered += this.OnRendered;
+            if (this.Config.AllowGameDebug)
+                helper.Events.Player.Warped += this.OnWarped;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -85,12 +98,13 @@ namespace Pathoschild.Stardew.DebugMode
             // toggle debug menu
             if (this.Keys.ToggleDebug.Contains(e.Button))
             {
-                Program.releaseBuild = !Program.releaseBuild;
-                this.DebugMode = !this.DebugMode;
+                this.ShowOverlay = !this.ShowOverlay;
+                if (this.Config.AllowGameDebug)
+                    this.GameDebugMode = !this.GameDebugMode;
             }
 
             // suppress dangerous actions
-            if (this.DebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
+            if (this.GameDebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
                 this.Helper.Input.Suppress(e.Button);
         }
 
@@ -99,7 +113,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            if (this.DebugMode && e.IsLocalPlayer)
+            if (this.GameDebugMode && e.IsLocalPlayer)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
         }
 
@@ -108,7 +122,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event arguments.</param>
         public void OnRendered(object sender, RenderedEventArgs e)
         {
-            if (this.DebugMode)
+            if (this.ShowOverlay)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
         }
 
@@ -154,7 +168,7 @@ namespace Pathoschild.Stardew.DebugMode
             }
         }
 
-        /// <summary>Create a pixel texture that can be stretched and colourised for display.</summary>
+        /// <summary>Create a pixel texture that can be stretched and colorized for display.</summary>
         private static Texture2D CreatePixel()
         {
             Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
@@ -165,22 +179,27 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Draw the debug overlay to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         /// <param name="font">The font with which to render text.</param>
-        /// <param name="pixel">A pixel texture that can be stretched and colourised for display.</param>
+        /// <param name="pixel">A pixel texture that can be stretched and colorized for display.</param>
         private void DrawOverlay(SpriteBatch batch, SpriteFont font, Texture2D pixel)
         {
             // draw debug info at cursor position
             {
-                // get cursor position
-                Vector2 position = new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
-
                 // generate debug text
                 string[] lines = this.GetDebugInfo().ToArray();
 
-                // draw text
+                // get text
                 string text = string.Join(Environment.NewLine, lines.Where(p => p != null));
                 Vector2 textSize = font.MeasureString(text);
                 const int scrollPadding = 5;
-                CommonHelper.DrawScroll(batch, new Vector2(position.X - textSize.X - (scrollPadding * 2) - (CommonHelper.ScrollEdgeSize.X * 2), position.Y), textSize, out Vector2 contentPos, out Rectangle _, padding: scrollPadding);
+
+                // calculate scroll position
+                int width = (int)(textSize.X + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.X * 2));
+                int height = (int)(textSize.Y + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.Y * 2));
+                int x = (int)MathHelper.Clamp(Game1.getMouseX() - width, 0, Game1.viewport.Width - width);
+                int y = (int)MathHelper.Clamp(Game1.getMouseY(), 0, Game1.viewport.Height - height);
+
+                // draw
+                CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);
                 batch.DrawString(font, text, new Vector2(contentPos.X, contentPos.Y), Color.Black);
             }
 
@@ -213,6 +232,15 @@ namespace Pathoschild.Stardew.DebugMode
                     yield return $"{this.Helper.Translation.Get("label.submenu")}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
             }
 
+            // minigame
+            if (Game1.currentMinigame != null)
+            {
+                Type minigameType = Game1.currentMinigame.GetType();
+                string vanillaNamespace = typeof(AbigailGame).Namespace;
+
+                yield return $"{this.Helper.Translation.Get("label.minigame")}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
+            }
+
             // event
             if (Game1.CurrentEvent != null)
             {
@@ -242,7 +270,7 @@ namespace Pathoschild.Stardew.DebugMode
         private IClickableMenu GetSubmenu(IClickableMenu menu)
         {
             if (menu is GameMenu gameMenu)
-                return this.Helper.Reflection.GetField<List<IClickableMenu>>(menu, "pages").GetValue()[gameMenu.currentTab];
+                return gameMenu.pages[gameMenu.currentTab];
             if (menu is TitleMenu)
                 return TitleMenu.subMenu;
 

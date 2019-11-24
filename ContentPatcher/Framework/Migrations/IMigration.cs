@@ -30,16 +30,16 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         bool TryMigrate(ref ILexToken lexToken, out string error);
 
-        /// <summary>Migrate a tokenised string.</summary>
-        /// <param name="tokenStr">The tokenised string to migrate.</param>
+        /// <summary>Migrate a tokenized string.</summary>
+        /// <param name="tokenStr">The tokenized string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
         bool TryMigrate(IParsedTokenString tokenStr, out string error);
 
-        /// <summary>Migrate a tokenised JSON structure.</summary>
-        /// <param name="tokenStructure">The tokenised JSON structure to migrate.</param>
+        /// <summary>Migrate a tokenized JSON structure.</summary>
+        /// <param name="tokenStructure">The tokenized JSON structure to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(TokenisableJToken tokenStructure, out string error);
+        bool TryMigrate(TokenizableJToken tokenStructure, out string error);
     }
 }

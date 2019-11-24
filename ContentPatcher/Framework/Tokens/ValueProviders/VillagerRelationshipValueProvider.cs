@@ -37,8 +37,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 this.Values.Clear();
                 if (this.MarkReady(Context.IsWorldReady))
                 {
+                    // met NPCs
                     foreach (KeyValuePair<string, Friendship> pair in Game1.player.friendshipData.Pairs)
                         this.Values[pair.Key] = pair.Value.Status.ToString();
+
+                    // unmet NPCs
+                    foreach (NPC npc in this.GetSocialVillagers())
+                    {
+                        if (!this.Values.ContainsKey(npc.Name))
+                            this.Values[npc.Name] = "Unmet";
+                    }
                 }
             });
         }

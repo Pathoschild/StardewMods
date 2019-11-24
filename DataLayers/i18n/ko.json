@@ -42,6 +42,12 @@
     "crop-water.watered": "물 준 작물",
     "crop-water.dry": "물 주지않은 작물",
 
+    // crops: water for paddy crops
+    // TODO
+    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
+    "crop-paddy-water.in-range": "Near Water",
+    "crop-paddy-water.not-in-range": "Dry Land",
+
     // crops: fertilized
     "crop-fertilizer.name": "작물: 비료줌 여부",
     "crop-fertilizer.fertilizer": "비료",

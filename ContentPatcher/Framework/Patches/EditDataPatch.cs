@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,16 +23,33 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The data records to edit.</summary>
-        private readonly EditDataPatchRecord[] Records;
+        private EditDataPatchRecord[] Records;
 
         /// <summary>The data fields to edit.</summary>
-        private readonly EditDataPatchField[] Fields;
+        private EditDataPatchField[] Fields;
 
         /// <summary>The records to reorder, if the target is a list asset.</summary>
-        private readonly EditDataPatchMoveRecord[] MoveRecords;
+        private EditDataPatchMoveRecord[] MoveRecords;
 
         /// <summary>A list of warning messages which have been previously logged.</summary>
         private readonly HashSet<string> LoggedWarnings = new HashSet<string>();
+
+        /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
+        private readonly TryParseFieldsDelegate TryParseFields;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
+        /// <param name="context">The tokens available for this content pack.</param>
+        /// <param name="entry">The change to load.</param>
+        /// <param name="entries">The parsed data entry changes.</param>
+        /// <param name="fields">The parsed data field changes.</param>
+        /// <param name="moveEntries">The parsed move entry records.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error);
 
 
         /*********
@@ -40,21 +58,24 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName)
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
+        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IParsedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromFile)
         {
             // set fields
-            this.Records = records.ToArray();
-            this.Fields = fields.ToArray();
-            this.MoveRecords = moveRecords.ToArray();
+            this.Records = records?.ToArray();
+            this.Fields = fields?.ToArray();
+            this.MoveRecords = moveRecords?.ToArray();
             this.Monitor = monitor;
+            this.TryParseFields = tryParseFields;
 
             // track contextuals
             this.Contextuals
@@ -62,6 +83,48 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Fields)
                 .Add(this.MoveRecords)
                 .Add(this.Conditions);
+        }
+
+        /// <summary>Update the patch data when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the patch data changed.</returns>
+        public override bool UpdateContext(IContext context)
+        {
+            // update loaded entries
+            bool fromFileChanged = false;
+            if (this.RawFromAsset != null)
+            {
+                fromFileChanged = this.RawFromAsset.UpdateContext(context) || this.Records == null;
+
+                if (fromFileChanged)
+                {
+                    this.Contextuals
+                        .Remove(this.Records)
+                        .Remove(this.Fields)
+                        .Remove(this.MoveRecords);
+
+                    if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
+                    {
+                        this.Records = records.ToArray();
+                        this.Fields = fields.ToArray();
+                        this.MoveRecords = moveEntries.ToArray();
+                    }
+                    else
+                    {
+                        this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
+                        this.Records = new EditDataPatchRecord[0];
+                        this.Fields = new EditDataPatchField[0];
+                        this.MoveRecords = new EditDataPatchMoveRecord[0];
+                    }
+
+                    this.Contextuals
+                        .Add(this.Records)
+                        .Add(this.Fields)
+                        .Add(this.MoveRecords);
+                }
+            }
+
+            return base.UpdateContext(context) || fromFileChanged;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -126,10 +189,62 @@ namespace ContentPatcher.Framework.Patches
                 throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
         }
 
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            if (this.Records?.Any(p => p.Value?.Value == null) == true)
+                yield return "deleted entries";
+
+            if (this.Fields?.Any() == true || this.Records?.Any(p => p.Value?.Value != null) == true)
+                yield return "changed entries";
+
+            if (this.MoveRecords?.Any() == true)
+                yield return "reordered entries";
+        }
+
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
+        /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
+        /// <param name="context">The tokens available for this content pack.</param>
+        /// <param name="entries">The parsed data entry changes.</param>
+        /// <param name="fields">The parsed data field changes.</param>
+        /// <param name="moveEntries">The parsed move entry records.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        private bool TryLoadFile(ITokenString fromFile, IContext context, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        {
+            // validate path
+            if (!this.ContentPack.HasFile(fromFile.Value))
+            {
+                error = "that file doesn't exist in the content pack";
+                entries = null;
+                fields = null;
+                moveEntries = null;
+                return false;
+            }
+
+            // load JSON file
+            PatchConfig model;
+            try
+            {
+                model = this.ContentPack.ReadJsonFile<PatchConfig>(fromFile.Value);
+            }
+            catch (JsonException ex)
+            {
+                error = $"could not parse that file: {ex}";
+                entries = null;
+                fields = null;
+                moveEntries = null;
+                return false;
+            }
+
+            // parse fields
+            return this.TryParseFields(context, model, out entries, out fields, out moveEntries, out error);
+        }
+
         /// <summary>Apply the patch to a dictionary asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>

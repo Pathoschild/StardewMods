@@ -20,8 +20,8 @@ namespace ContentPatcher.Framework.Lexing
         ** Public methods
         *********/
         /// <summary>Break a raw string into its constituent lexical character patterns.</summary>
-        /// <param name="rawText">The raw text to tokenise.</param>
-        public IEnumerable<LexBit> TokeniseString(string rawText)
+        /// <param name="rawText">The raw text to tokenize.</param>
+        public IEnumerable<LexBit> TokenizeString(string rawText)
         {
             // special cases
             if (rawText == null)
@@ -64,17 +64,17 @@ namespace ContentPatcher.Framework.Lexing
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
-        /// <param name="rawText">The raw text to tokenise.</param>
-        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
+        /// <param name="rawText">The raw text to tokenize.</param>
+        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         public IEnumerable<ILexToken> ParseBits(string rawText, bool impliedBraces)
         {
-            IEnumerable<LexBit> bits = this.TokeniseString(rawText);
+            IEnumerable<LexBit> bits = this.TokenizeString(rawText);
             return this.ParseBits(bits, impliedBraces);
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="bits">The lexical character patterns to parse.</param>
-        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
+        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         public IEnumerable<ILexToken> ParseBits(IEnumerable<LexBit> bits, bool impliedBraces)
         {
             return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: false);
@@ -86,7 +86,7 @@ namespace ContentPatcher.Framework.Lexing
         *********/
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="input">The lexical character patterns to parse.</param>
-        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
+        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         /// <param name="trim">Whether the value should be trimmed.</param>
         private IEnumerable<ILexToken> ParseBitQueue(Queue<LexBit> input, bool impliedBraces, bool trim)
         {
@@ -106,12 +106,12 @@ namespace ContentPatcher.Framework.Lexing
 
                         // throw error if there's content after the token ends
                         var next = input.Peek();
-                        throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.Literal}");
+                        throw new LexFormatException($"Unexpected {next.Type}, expected {LexBitType.Literal}");
                     }
                     yield break;
                 }
 
-                // Otherwise this is a tokenisable string which may contain a mix of literal and {{token}} values.
+                // Otherwise this is a tokenizable string which may contain a mix of literal and {{token}} values.
                 while (input.Any())
                 {
                     LexBit next = input.Peek();
@@ -131,7 +131,7 @@ namespace ContentPatcher.Framework.Lexing
 
                         // anything else is invalid
                         default:
-                            throw new InvalidOperationException($"Unexpected {next.Type}, expected {LexBitType.StartToken} or {LexBitType.Literal}");
+                            throw new LexFormatException($"Unexpected {next.Type}, expected {LexBitType.StartToken} or {LexBitType.Literal}");
                     }
                 }
             }
@@ -143,10 +143,10 @@ namespace ContentPatcher.Framework.Lexing
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException($"Error parsing '{rawInput}' as a tokenisable string", ex);
+                throw new InvalidOperationException($"Error parsing '{rawInput}' as a tokenizable string", ex);
             }
 
-            // normalise literal values
+            // normalize literal values
             IList<LinkedListNode<ILexToken>> removeQueue = new List<LinkedListNode<ILexToken>>();
             for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
             {
@@ -197,29 +197,29 @@ namespace ContentPatcher.Framework.Lexing
 
         /// <summary>Extract a token from the front of a lexical input queue.</summary>
         /// <param name="input">The input from which to extract a token. The extracted lexical bits will be removed from the queue.</param>
-        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
+        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         /// <returns>Returns the token.</returns>
         public LexTokenToken ExtractToken(Queue<LexBit> input, bool impliedBraces)
         {
-            LexBit GetNextAndAssert()
+            LexBit GetNextAndAssert(string expectedPhrase)
             {
                 if (!input.Any())
-                    throw new InvalidOperationException();
+                    throw new LexFormatException($"Reached end of input, expected {expectedPhrase}.");
                 return input.Dequeue();
             }
 
             // start token
             if (!impliedBraces)
             {
-                LexBit startToken = GetNextAndAssert();
+                LexBit startToken = GetNextAndAssert("start of token ('{{')");
                 if (startToken.Type != LexBitType.StartToken)
-                    throw new InvalidOperationException($"Unexpected {startToken.Type} at start of token.");
+                    throw new LexFormatException($"Unexpected {startToken.Type} at start of token.");
             }
 
             // extract token name
-            LexBit name = GetNextAndAssert();
+            LexBit name = GetNextAndAssert("token name");
             if (name.Type != LexBitType.Literal)
-                throw new InvalidOperationException($"Unexpected {name.Type} where token name should be.");
+                throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
             // extract input argument if present
             LexTokenInputArg? inputArg = null;
@@ -232,9 +232,9 @@ namespace ContentPatcher.Framework.Lexing
             // end token
             if (!impliedBraces)
             {
-                LexBit endToken = GetNextAndAssert();
+                LexBit endToken = GetNextAndAssert("end of token ('}}')");
                 if (endToken.Type != LexBitType.EndToken)
-                    throw new InvalidOperationException($"Unexpected {endToken.Type} before end of token.");
+                    throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }
 
             return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces);
@@ -277,8 +277,8 @@ namespace ContentPatcher.Framework.Lexing
             }
 
             // parse
-            ILexToken[] tokenised = this.ParseBitQueue(inputArgBits, impliedBraces: false, trim: true).ToArray();
-            return new LexTokenInputArg(tokenised);
+            ILexToken[] tokenized = this.ParseBitQueue(inputArgBits, impliedBraces: false, trim: true).ToArray();
+            return new LexTokenInputArg(tokenized);
         }
     }
 }

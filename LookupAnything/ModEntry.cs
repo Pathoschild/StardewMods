@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -51,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
 
-        /// <summary>Finds and analyses lookup targets in the world.</summary>
+        /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
 
         /// <summary>Draws debug information to the screen.</summary>
@@ -102,7 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked on the first update tick, once all mods are initialised.</summary>
+        /// <summary>The method invoked on the first update tick, once all mods are initialized.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -110,10 +111,13 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!this.IsDataValid)
                 return;
 
-            // initialise functionality
+            // get mod APIs
+            JsonAssetsIntegration jsonAssets = new JsonAssetsIntegration(this.Helper.ModRegistry, this.Monitor);
+
+            // initialize functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming);
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper);
+            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, jsonAssets, this.Config);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -300,7 +304,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("closing the menu", () =>
             {
                 if (Game1.activeClickableMenu is LookupMenu menu)
-                    menu.exitThisMenu();
+                    menu.QueueExit();
             });
         }
 

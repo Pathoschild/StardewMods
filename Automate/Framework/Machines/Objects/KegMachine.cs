@@ -30,6 +30,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 minutes: 120
             ),
 
+            // tea leaves => green tea
+            new Recipe(
+                input: 815,
+                inputCount: 1,
+                output: input => new Object(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
+                minutes: 180
+            ),
+
             // wheat => beer
             new Recipe(
                 input: 262,
@@ -43,6 +51,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 input: 304,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 303, "Pale Ale", false, true, false, false) { name = "Pale Ale" },
+                minutes: 2250
+            ),
+
+            // roe => caviar or aged roe
+            new Recipe(
+                input: 812,
+                inputCount: 1,
+                output: input =>
+                {
+                    if (input is SObject obj && obj.preservedParentSheetIndex.Value == 698) // sturgeon roe
+                        return new SObject(Vector2.Zero, 445, "Caviar", false, true, false, false) { name = "Caviar" };
+                    return new SObject(Vector2.Zero, 447, "Aged Roe", false, true, false, false) { name = "Aged Roe" };
+                },
                 minutes: 2250
             ),
 

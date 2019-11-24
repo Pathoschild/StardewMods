@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -28,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The value provider name.</summary>
         public string Name { get; }
 
-        /// <summary>Whether the provided values can change after the provider is initialised.</summary>
+        /// <summary>Whether the provided values can change after the provider is initialized.</summary>
         public bool IsMutable { get; protected set; } = true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
@@ -77,7 +78,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        public virtual bool TryValidateInput(ITokenString input, out string error)
         {
             // validate input
             if (input.IsMeaningful())
@@ -95,7 +96,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 {
                     if (!validInputs.Contains(input.Value))
                     {
-                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs)}";
+                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs.OrderByIgnoreCase(p => p))}";
                         return false;
                     }
                 }
@@ -243,7 +244,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (ready)
                 this.State.Reset();
             else
-                this.State.AddUnavailableTokens(this.Name);
+                this.State.AddUnreadyTokens(this.Name);
 
             return ready;
         }
@@ -278,11 +279,25 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
-        /// <param name="action">The action to perform, which returns true if the valus changed.</param>
+        /// <param name="action">The action to perform, which returns true if the values changed.</param>
         protected bool IsChanged(Func<bool> action)
         {
             bool wasReady = this.IsReady;
             return action() || this.IsReady != wasReady;
+        }
+
+        /// <summary>Get all social NPCs.</summary>
+        protected IEnumerable<NPC> GetSocialVillagers()
+        {
+            foreach (NPC npc in Utility.getAllCharacters())
+            {
+                bool isSocial =
+                    npc.CanSocialize
+                    || (npc.Name == "Krobus" && !Game1.player.friendshipData.ContainsKey(npc.Name)); // Krobus is marked non-social before he's met
+
+                if (isSocial)
+                    yield return npc;
+            }
         }
     }
 }

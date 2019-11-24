@@ -71,8 +71,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!input.IsMeaningful() || !input.IsReady)
                 return false;
 
-            // get normalised path
-            string path = PathUtilities.NormalisePathSeparators(input.Value);
+            // get normalized path
+            string path = PathUtilities.NormalizePathSeparators(input.Value);
 
             // validate
             if (Path.IsPathRooted(path))
@@ -81,7 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 throw new InvalidOperationException($"The {ConditionType.HasFile} token requires a relative path and cannot contain directory climbing (../).");
 
             // check file existence
-            string fullPath = Path.Combine(this.ModFolder, PathUtilities.NormalisePathSeparators(path));
+            string fullPath = Path.Combine(this.ModFolder, PathUtilities.NormalizePathSeparators(path));
             return File.Exists(fullPath);
         }
     }

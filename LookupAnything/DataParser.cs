@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="pet">The pet.</param>
         public FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
         {
-            return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+            return new FriendshipModel(pet.friendshipTowardFarmer.Value, Pet.maxFriendship / 10, Pet.maxFriendship);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -103,10 +103,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the raw gift tastes from the underlying data.</summary>
         /// <param name="objects">The game's object data.</param>
         /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
+        public IEnumerable<GiftTasteEntry> GetGiftTastes(ObjectModel[] objects)
         {
             // extract raw values
-            var tastes = new List<GiftTasteModel>();
+            var tastes = new List<GiftTasteEntry>();
             {
                 // define data schema
                 var universal = new Dictionary<string, GiftTaste>
@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
                             from refID in tasteStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                            select new GiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
+                            select new GiftTasteEntry(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
                     else
@@ -149,14 +149,14 @@ namespace Pathoschild.Stardew.LookupAnything
                             tastes.AddRange(
                                 from refID in
                                     personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                select new GiftTasteModel(taste.Value, villager, int.Parse(refID))
+                                select new GiftTasteEntry(taste.Value, villager, int.Parse(refID))
                             );
                         }
                     }
                 }
             }
 
-            // get sanitised data
+            // get sanitized data
             HashSet<int> validItemIDs = new HashSet<int>(objects.Select(p => p.ParentSpriteIndex));
             HashSet<int> validCategories = new HashSet<int>(objects.Where(p => p.Category != 0).Select(p => p.Category));
             return tastes
@@ -310,23 +310,27 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper)
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, IMonitor monitor)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
-            // cooking recipes
-            recipes.AddRange(
-                from entry in CraftingRecipe.cookingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe, reflectionHelper)
-            );
-
-            // crafting recipes
-            recipes.AddRange(
-                from entry in CraftingRecipe.craftingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe, reflectionHelper)
-            );
+            // cooking/crafting recipes
+            var craftingRecipes =
+                (from pair in CraftingRecipe.cookingRecipes select new { pair.Key, pair.Value, IsCookingRecipe = true })
+                .Concat(from pair in CraftingRecipe.craftingRecipes select new { pair.Key, pair.Value, IsCookingRecipe = false });
+            foreach (var entry in craftingRecipes)
+            {
+                try
+                {
+                    var recipe = new CraftingRecipe(entry.Key, entry.IsCookingRecipe);
+                    recipes.Add(new RecipeModel(recipe, reflectionHelper));
+                }
+                catch (Exception ex)
+                {
+                    monitor.Log($"Couldn't parse {(entry.IsCookingRecipe ? "cooking" : "crafting")} recipe '{entry.Key}' due to an invalid format.\nRecipe data: '{entry.Value}'\nError: {ex}", LogLevel.Warn);
+                }
+            }
 
             // machine recipes
             recipes.AddRange(

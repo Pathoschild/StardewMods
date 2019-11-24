@@ -3,7 +3,7 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
-    /// <summary>A tokens whose values don't change after it's initialised.</summary>
+    /// <summary>A tokens whose values don't change after it's initialized.</summary>
     internal class ImmutableToken : GenericToken
     {
         /*********

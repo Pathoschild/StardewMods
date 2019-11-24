@@ -78,7 +78,8 @@ namespace Pathoschild.Stardew.Automate
                 reflection: helper.Reflection,
                 data: data,
                 betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
-                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
+                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
+                pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
 
             // hook events
@@ -92,7 +93,7 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             // log info
-            this.Monitor.VerboseLog($"Initialised with automation every {this.Config.AutomationInterval} ticks.");
+            this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>

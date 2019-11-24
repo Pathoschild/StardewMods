@@ -18,14 +18,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Fields
         *********/
-        /// <summary>The color for a tillable tile.</summary>
-        private readonly Color TillableColor = Color.Green;
+        /// <summary>The legend entry for tillable tiles.</summary>
+        private readonly LegendEntry Tillable;
 
-        /// <summary>The color for a tillable but occupied tile.</summary>
-        private readonly Color OccupiedColor = Color.Orange;
+        /// <summary>The legend entry for tillable but occupied tiles.</summary>
+        private readonly LegendEntry Occupied;
 
-        /// <summary>The color for a non-tillable tile.</summary>
-        private readonly Color NonTillableColor = Color.Red;
+        /// <summary>The legend entry for non-tillable tiles.</summary>
+        private readonly LegendEntry NonTillable;
 
 
         /*********
@@ -39,9 +39,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("tillable.tillable"), this.TillableColor),
-                new LegendEntry(translations.Get("tillable.occupied"), this.OccupiedColor),
-                new LegendEntry(translations.Get("tillable.not-tillable"), this.NonTillableColor)
+                this.Tillable = new LegendEntry(translations, "tillable.tillable", Color.Green),
+                this.Occupied = new LegendEntry(translations, "tillable.occupied", Color.Orange),
+                this.NonTillable = new LegendEntry(translations, "tillable.not-tillable", Color.Red)
             };
         }
 
@@ -54,8 +54,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
 
             // tillable tiles
-            TileData[] tillableTiles = tiles.Where(p => p.Color == this.TillableColor).ToArray();
-            yield return new TileGroup(tillableTiles, outerBorderColor: this.TillableColor);
+            TileData[] tillableTiles = tiles.Where(p => p.Type.Id == this.Tillable.Id).ToArray();
+            yield return new TileGroup(tillableTiles, outerBorderColor: this.Tillable.Color);
 
             // other tiles
             yield return new TileGroup(tiles.Except(tillableTiles).ToArray());
@@ -73,14 +73,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             foreach (Vector2 tile in visibleTiles)
             {
                 // get color
-                Color color;
+                LegendEntry type;
                 if (this.IsTillable(location, tile))
-                    color = this.IsOccupied(location, tile) ? this.OccupiedColor : this.TillableColor;
+                    type = this.IsOccupied(location, tile) ? this.Occupied : this.Tillable;
                 else
-                    color = this.NonTillableColor;
+                    type = this.NonTillable;
 
                 // yield
-                yield return new TileData(tile, color);
+                yield return new TileData(tile, type);
             }
         }
 

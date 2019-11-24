@@ -9,6 +9,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
         public bool AutomateShippingBin { get; set; } = true;
 
+        /// <summary>Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.</summary>
+        public bool PullGemstonesFromJunimoHuts { get; set; } = false;
+
         /// <summary>The number of ticks between each automation process (60 = once per second).</summary>
         public int AutomationInterval { get; set; } = 60;
 

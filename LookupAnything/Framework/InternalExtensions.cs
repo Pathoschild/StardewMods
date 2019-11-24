@@ -1,7 +1,7 @@
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="item">The item to check.</param>
         public static ItemSpriteType GetSpriteType(this Item item)
         {
-            if (item is Object obj)
+            if (item is SObject obj)
             {
                 if (obj is Furniture)
                     return ItemSpriteType.Furniture;

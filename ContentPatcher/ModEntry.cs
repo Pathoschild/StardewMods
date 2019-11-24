@@ -38,7 +38,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9" };
+        private readonly string[] SupportedFormatVersions = { "1.0.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -49,7 +49,8 @@ namespace ContentPatcher
             new Migration_1_6(),
             new Migration_1_7(),
             new Migration_1_8(),
-            new Migration_1_9()
+            new Migration_1_9(),
+            new Migration_1_10()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -114,7 +115,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // initialise after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
             if (this.IsFirstTick)
             {
                 this.IsFirstTick = false;
@@ -213,19 +214,19 @@ namespace ContentPatcher
 
             // fetch content packs
             RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
-            string[] installedMods =
+            InvariantHashSet installedMods = new InvariantHashSet(
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
                 .OrderByIgnoreCase(p => p)
-                .ToArray();
+            );
 
             // load content packs and context
-            this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens);
+            this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
             this.UpdateContext(); // set initial context before loading any custom mod tokens
 
             // load context
-            this.LoadContentPacks(contentPacks);
+            this.LoadContentPacks(contentPacks, installedMods);
             this.UpdateContext(); // set initial context once patches + dynamic tokens + custom tokens are loaded
 
             // register patcher
@@ -238,10 +239,10 @@ namespace ContentPatcher
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.Player.Warped += this.OnWarped;
-            helper.Events.Specialised.LoadStageChanged += this.OnLoadStageChanged;
+            helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, () => this.UpdateContext());
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.Monitor, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext());
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
 
             // can no longer queue tokens
@@ -323,9 +324,10 @@ namespace ContentPatcher
 
         /// <summary>Load the patches from all registered content packs.</summary>
         /// <param name="contentPacks">The content packs to load.</param>
+        /// <param name="installedMods">The mod IDs which are currently installed.</param>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private void LoadContentPacks(IEnumerable<RawContentPack> contentPacks)
+        private void LoadContentPacks(IEnumerable<RawContentPack> contentPacks, InvariantHashSet installedMods)
         {
             // load content packs
             ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}", LogLevel.Warn));
@@ -339,6 +341,7 @@ namespace ContentPatcher
 
                     // load tokens
                     ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
+                    TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
                     {
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
@@ -380,11 +383,22 @@ namespace ContentPatcher
                                 continue;
                             }
 
+                            // parse conditions
+                            IList<Condition> conditions;
+                            InvariantHashSet immutableRequiredModIDs;
+                            {
+                                if (!this.TryParseConditions(entry.When, tokenParser, out conditions, out immutableRequiredModIDs, out string conditionError))
+                                {
+                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
+                                    continue;
+                                }
+                            }
+
                             // parse values
                             IParsedTokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!this.TryParseStringTokens(entry.Value, modContext, current.Manifest, current.Migrator, out string valueError, out values))
+                                if (!tokenParser.TryParseStringTokens(entry.Value, immutableRequiredModIDs, out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
@@ -393,31 +407,24 @@ namespace ContentPatcher
                             else
                                 values = new LiteralString("");
 
-                            // parse conditions
-                            IList<Condition> conditions;
-                            {
-                                if (!this.TryParseConditions(entry.When, modContext, current.Manifest, current.Migrator, out conditions, out string conditionError))
-                                {
-                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
-                                    continue;
-                                }
-                            }
-
                             // add token
                             modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
                         }
                     }
 
-                    // load patches
-                    IContext patchTokenContext = new SinglePatchContext(current.Manifest.UniqueID, parentContext: modContext); // make patch tokens available to patches
+                    // get fake patch context (so patch tokens are available in patch validation)
+                    LocalContext fakePatchContext = new LocalContext(current.Manifest.UniqueID, parentContext: modContext);
+                    fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
+                    fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "");
+                    tokenParser = new TokenParser(fakePatchContext, current.Manifest, current.Migrator, installedMods);
 
+                    // load patches
                     content.Changes = this.SplitPatches(content.Changes).ToArray();
                     this.NamePatches(current.ManagedPack, content.Changes);
-
                     foreach (PatchConfig patch in content.Changes)
                     {
                         this.Monitor.VerboseLog($"   loading {patch.LogName}...");
-                        this.LoadPatch(current.ManagedPack, patch, patchTokenContext, current.Migrator, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                        this.LoadPatch(current.ManagedPack, patch, tokenParser, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
                     }
                 }
                 catch (Exception ex)
@@ -482,10 +489,9 @@ namespace ContentPatcher
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
         /// <param name="pack">The content pack being loaded.</param>
         /// <param name="entry">The change to load.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, IContext tokenContext, IMigration migrator, Action<string> logSkip)
+        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, TokenParser tokenParser, Action<string> logSkip)
         {
             bool TrackSkip(string reason, bool warn = true)
             {
@@ -498,9 +504,7 @@ namespace ContentPatcher
 
             try
             {
-                IManifest forMod = pack.Manifest;
-
-                // normalise patch fields
+                // normalize patch fields
                 if (entry.When == null)
                     entry.When = new InvariantDictionary<string>();
 
@@ -513,27 +517,28 @@ namespace ContentPatcher
                     );
                 }
 
+                // parse conditions
+                IList<Condition> conditions;
+                InvariantHashSet immutableRequiredModIDs;
+                {
+                    if (!this.TryParseConditions(entry.When, tokenParser, out conditions, out immutableRequiredModIDs, out string error))
+                        return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}");
+                }
+
                 // parse target asset
                 IParsedTokenString assetName;
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
-                    if (!this.TryParseStringTokens(entry.Target, tokenContext, forMod, migrator, out string error, out assetName))
+                    if (!tokenParser.TryParseStringTokens(entry.Target, immutableRequiredModIDs, out string error, out assetName))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
                 // parse 'enabled'
                 bool enabled = true;
                 {
-                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenContext, forMod, migrator, out string error, out enabled))
+                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, out string error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
-                }
-
-                // parse conditions
-                IList<Condition> conditions;
-                {
-                    if (!this.TryParseConditions(entry.When, tokenContext, forMod, migrator, out conditions, out string error))
-                        return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}");
                 }
 
                 // get patch instance
@@ -544,9 +549,9 @@ namespace ContentPatcher
                     case PatchType.Load:
                         {
                             // init patch
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormaliseAssetName);
+                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -554,87 +559,44 @@ namespace ContentPatcher
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null)
-                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, or {nameof(PatchConfig.MoveEntries)} must be specified for an '{action}' change");
+                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.FromFile == null)
+                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
+                            if (entry.FromFile != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                                return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
 
-                            // parse entries
-                            List<EditDataPatchRecord> entries = new List<EditDataPatchRecord>();
-                            if (entry.Entries != null)
+                            // parse 'from file' field
+                            IParsedTokenString fromAsset = null;
+                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string fromFileError, out fromAsset))
+                                return TrackSkip(fromFileError);
+
+                            // parse data changes
+                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string error)
                             {
-                                foreach (KeyValuePair<string, JToken> pair in entry.Entries)
-                                {
-                                    if (!this.TryParseStringTokens(pair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' key is invalid: {keyError}");
-                                    if (!this.TryParseJsonTokens(pair.Value, tokenContext, forMod, migrator, out string error, out TokenisableJToken value))
-                                        return TrackSkip($"{nameof(PatchConfig.Entries)} > '{key.Raw}' value is invalid: {error}");
-
-                                    entries.Add(new EditDataPatchRecord(key, value));
-                                }
+                                return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, out parsedEntries, out parsedFields, out parsedMoveEntries, out error);
                             }
-
-                            // parse fields
-                            List<EditDataPatchField> fields = new List<EditDataPatchField>();
-                            if (entry.Fields != null)
+                            List<EditDataPatchRecord> entries = null;
+                            List<EditDataPatchField> fields = null;
+                            List<EditDataPatchMoveRecord> moveEntries = null;
+                            if (entry.FromFile == null)
                             {
-                                foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
-                                {
-                                    // parse entry key
-                                    if (!this.TryParseStringTokens(recordPair.Key, tokenContext, forMod, migrator, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}");
-
-                                    // parse fields
-                                    foreach (var fieldPair in recordPair.Value)
-                                    {
-                                        // parse field key
-                                        if (!this.TryParseStringTokens(fieldPair.Key, tokenContext, forMod, migrator, out string fieldError, out IParsedTokenString fieldKey))
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}");
-
-                                        // parse value
-                                        if (!this.TryParseJsonTokens(fieldPair.Value, tokenContext, forMod, migrator, out string valueError, out TokenisableJToken value))
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}");
-                                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
-                                            return TrackSkip($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'");
-
-                                        fields.Add(new EditDataPatchField(key, fieldKey, value));
-                                    }
-                                }
-                            }
-
-                            // parse move entries
-                            List<EditDataPatchMoveRecord> moveEntries = new List<EditDataPatchMoveRecord>();
-                            if (entry.MoveEntries != null)
-                            {
-                                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
-                                {
-                                    // validate
-                                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
-                                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value");
-                                    if (targets.All(string.IsNullOrWhiteSpace))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}");
-                                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}");
-
-                                    // parse IDs
-                                    if (!this.TryParseStringTokens(moveEntry.ID, tokenContext, forMod, migrator, out string idError, out IParsedTokenString moveId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}");
-                                    if (!this.TryParseStringTokens(moveEntry.BeforeID, tokenContext, forMod, migrator, out string beforeIdError, out IParsedTokenString beforeId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}");
-                                    if (!this.TryParseStringTokens(moveEntry.AfterID, tokenContext, forMod, migrator, out string afterIdError, out IParsedTokenString afterId))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}");
-
-                                    // parse position
-                                    MoveEntryPosition toPosition = MoveEntryPosition.None;
-                                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
-                                        return TrackSkip($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}");
-
-                                    // create move entry
-                                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
-                                }
+                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out string parseError))
+                                    return TrackSkip(parseError);
                             }
 
                             // save
-                            patch = new EditDataPatch(entry.LogName, pack, assetName, conditions, entries, fields, moveEntries, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditDataPatch(
+                                logName: entry.LogName,
+                                contentPack: pack,
+                                assetName: assetName,
+                                conditions: conditions,
+                                fromFile: fromAsset,
+                                records: entries,
+                                fields: fields,
+                                moveRecords: moveEntries,
+                                monitor: this.Monitor,
+                                normalizeAssetName: this.Helper.Content.NormalizeAssetName,
+                                tryParseFields: TryParseFields
+                            );
                         }
                         break;
 
@@ -647,9 +609,9 @@ namespace ContentPatcher
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
 
                             // save
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -657,15 +619,34 @@ namespace ContentPatcher
                     case PatchType.EditMap:
                         {
                             // read map asset
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenContext, forMod, migrator, out string error, out IParsedTokenString fromAsset))
+                            IParsedTokenString fromAsset = null;
+                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
                                 return TrackSkip(error);
 
+                            // read map properties
+                            List<EditMapPatchProperty> mapProperties = null;
+                            if (entry.MapProperties?.Any() == true)
+                            {
+                                mapProperties = new List<EditMapPatchProperty>();
+                                foreach (var pair in entry.MapProperties)
+                                {
+                                    if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out string keyError, out IParsedTokenString key))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {keyError}");
+                                    if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out string valueError, out IParsedTokenString value))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {keyError}");
+
+                                    mapProperties.Add(new EditMapPatchProperty(key, value));
+                                }
+                            }
+
                             // validate
-                            if (entry.ToArea == Rectangle.Empty)
-                                return TrackSkip($"must specify {nameof(entry.ToArea)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
+                            if (fromAsset == null && mapProperties == null)
+                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)} or {entry.MapProperties}");
+                            if (fromAsset != null && entry.ToArea == Rectangle.Empty)
+                                return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, this.Monitor, this.Helper.Content.NormaliseAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, mapProperties, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -688,16 +669,114 @@ namespace ContentPatcher
             }
         }
 
-        /// <summary>Normalise and parse the given condition values.</summary>
-        /// <param name="raw">The raw condition values to normalise.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
-        /// <param name="conditions">The normalised conditions.</param>
-        /// <param name="error">An error message indicating why normalisation failed.</param>
-        private bool TryParseConditions(InvariantDictionary<string> raw, IContext tokenContext, IManifest forMod, IMigration migrator, out IList<Condition> conditions, out string error)
+        /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
+        /// <param name="entry">The change to load.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="entries">The parsed data entry changes.</param>
+        /// <param name="fields">The parsed data field changes.</param>
+        /// <param name="moveEntries">The parsed move entry records.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        bool TryParseEditDataFields(PatchConfig entry, TokenParser tokenParser, InvariantHashSet assumeModIds, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        {
+            entries = new List<EditDataPatchRecord>();
+            fields = new List<EditDataPatchField>();
+            moveEntries = new List<EditDataPatchMoveRecord>();
+
+            bool Fail(string reason, out string outReason)
+            {
+                outReason = reason;
+                return false;
+            }
+
+            // parse entries
+            if (entry.Entries != null)
+            {
+                foreach (KeyValuePair<string, JToken> pair in entry.Entries)
+                {
+                    if (!tokenParser.TryParseStringTokens(pair.Key, assumeModIds, out string keyError, out IParsedTokenString key))
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
+                    if (!tokenParser.TryParseJsonTokens(pair.Value, assumeModIds, out string valueError, out TokenizableJToken value))
+                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
+
+                    entries.Add(new EditDataPatchRecord(key, value));
+                }
+            }
+
+            // parse fields
+            if (entry.Fields != null)
+            {
+                foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
+                {
+                    // parse entry key
+                    if (!tokenParser.TryParseStringTokens(recordPair.Key, assumeModIds, out string keyError, out IParsedTokenString key))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}", out error);
+
+                    // parse fields
+                    foreach (var fieldPair in recordPair.Value)
+                    {
+                        // parse field key
+                        if (!tokenParser.TryParseStringTokens(fieldPair.Key, assumeModIds, out string fieldError, out IParsedTokenString fieldKey))
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
+
+                        // parse value
+                        if (!tokenParser.TryParseJsonTokens(fieldPair.Value, assumeModIds, out string valueError, out TokenizableJToken value))
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
+                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
+                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
+
+                        fields.Add(new EditDataPatchField(key, fieldKey, value));
+                    }
+                }
+            }
+
+            // parse move entries
+            if (entry.MoveEntries != null)
+            {
+                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
+                {
+                    // validate
+                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                    if (string.IsNullOrWhiteSpace(moveEntry.ID))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
+                    if (targets.All(string.IsNullOrWhiteSpace))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, or {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+                    if (targets.Count(p => !string.IsNullOrWhiteSpace(p)) > 1)
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
+
+                    // parse IDs
+                    if (!tokenParser.TryParseStringTokens(moveEntry.ID, assumeModIds, out string idError, out IParsedTokenString moveId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}", out error);
+                    if (!tokenParser.TryParseStringTokens(moveEntry.BeforeID, assumeModIds, out string beforeIdError, out IParsedTokenString beforeId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}", out error);
+                    if (!tokenParser.TryParseStringTokens(moveEntry.AfterID, assumeModIds, out string afterIdError, out IParsedTokenString afterId))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}", out error);
+
+                    // parse position
+                    MoveEntryPosition toPosition = MoveEntryPosition.None;
+                    if (!string.IsNullOrWhiteSpace(moveEntry.ToPosition) && (!Enum.TryParse(moveEntry.ToPosition, true, out toPosition) || toPosition == MoveEntryPosition.None))
+                        return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ToPosition)} is invalid: must be one of {nameof(MoveEntryPosition.Bottom)} or {nameof(MoveEntryPosition.Top)}", out error);
+
+                    // create move entry
+                    moveEntries.Add(new EditDataPatchMoveRecord(moveId, beforeId, afterId, toPosition));
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        /// <summary>Normalize and parse the given condition values.</summary>
+        /// <param name="raw">The raw condition values to normalize.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="conditions">The normalized conditions.</param>
+        /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
+        /// <param name="error">An error message indicating why normalization failed.</param>
+        private bool TryParseConditions(InvariantDictionary<string> raw, TokenParser tokenParser, out IList<Condition> conditions, out InvariantHashSet immutableRequiredModIDs, out string error)
         {
             conditions = new List<Condition>();
+            immutableRequiredModIDs = new InvariantHashSet();
 
             // no conditions
             if (raw == null || !raw.Any())
@@ -710,74 +789,90 @@ namespace ContentPatcher
             Lexer lexer = new Lexer();
             foreach (KeyValuePair<string, string> pair in raw)
             {
-                // get lexical tokens
-                ILexToken[] lexTokens = lexer.ParseBits(pair.Key, impliedBraces: true).ToArray();
-                for (int i = 0; i < lexTokens.Length; i++)
-                {
-                    if (!migrator.TryMigrate(ref lexTokens[0], out error))
-                    {
-                        conditions = null;
-                        return false;
-                    }
-                }
-
-                // parse condition key
-                if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
-                {
-                    error = $"'{pair.Key}' isn't a valid token name";
-                    conditions = null;
-                    return false;
-                }
-                ITokenString input = new TokenString(lexToken.InputArg, tokenContext);
-
-                // get token
-                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-                if (token == null)
-                {
-                    error = $"'{pair.Key}' isn't a valid condition; must be one of {string.Join(", ", tokenContext.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}";
-                    conditions = null;
-                    return false;
-                }
-                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
+                if (!this.TryParseCondition(pair.Key, pair.Value, tokenParser, lexer, out Condition condition, out InvariantHashSet localImmutableRequiredModIDs, out error))
                 {
                     conditions = null;
                     return false;
                 }
 
-                // validate input
-                if (!token.TryValidateInput(input, out error))
+                if (localImmutableRequiredModIDs != null)
                 {
-                    conditions = null;
-                    return false;
+                    foreach (string id in localImmutableRequiredModIDs)
+                        immutableRequiredModIDs.Add(id);
                 }
-
-                // parse values
-                if (string.IsNullOrWhiteSpace(pair.Value))
-                {
-                    error = $"can't parse condition {pair.Key}: value can't be empty";
-                    conditions = null;
-                    return false;
-                }
-                if (!this.TryParseStringTokens(pair.Value, tokenContext, forMod, migrator, out error, out IParsedTokenString values))
-                {
-                    error = $"can't parse condition {pair.Key}: {error}";
-                    return false;
-                }
-
-                // validate token keys & values
-                if (!values.IsMutable && !token.TryValidateValues(input, values.SplitValues(), tokenContext, out string customError))
-                {
-                    error = $"invalid {lexToken.Name} condition: {customError}";
-                    conditions = null;
-                    return false;
-                }
-
-                // create condition
-                conditions.Add(new Condition(name: token.Name, input: input, values: values));
+                conditions.Add(condition);
             }
 
-            // return parsed conditions
             error = null;
+            return true;
+        }
+
+        /// <summary>Normalize and parse the given condition values.</summary>
+        /// <param name="name">The raw condition name.</param>
+        /// <param name="value">The raw condition value.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="lexer">Handles parsing raw strings into tokens.</param>
+        /// <param name="condition">The normalized condition.</param>
+        /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by this condition (if it's <see cref="ConditionType.HasMod"/> and immutable).</param>
+        /// <param name="error">An error message indicating why normalization failed.</param>
+        private bool TryParseCondition(string name, string value, TokenParser tokenParser, Lexer lexer, out Condition condition, out InvariantHashSet immutableRequiredModIDs, out string error)
+        {
+            bool Fail(string reason, out string setError, out Condition setCondition, out InvariantHashSet setImmutableRequiredModIDs)
+            {
+                setCondition = null;
+                setImmutableRequiredModIDs = null;
+                setError = reason;
+                return false;
+            }
+
+            // get lexical tokens
+            ILexToken[] lexTokens = lexer.ParseBits(name, impliedBraces: true).ToArray();
+            for (int i = 0; i < lexTokens.Length; i++)
+            {
+                if (!tokenParser.Migrator.TryMigrate(ref lexTokens[0], out error))
+                    return Fail(error, out error, out condition, out immutableRequiredModIDs);
+            }
+
+            // parse condition key
+            if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
+                return Fail($"'{name}' isn't a valid token name", out error, out condition, out immutableRequiredModIDs);
+
+            ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
+
+            // get token
+            IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+            if (token == null)
+                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}", out error, out condition, out immutableRequiredModIDs);
+            if (!tokenParser.TryValidateToken(lexToken, assumeModIds: null, out error))
+                return Fail(error, out error, out condition, out immutableRequiredModIDs);
+
+            // validate input
+            if (!token.TryValidateInput(input, out error))
+                return Fail(error, out error, out condition, out immutableRequiredModIDs);
+
+            // parse values
+            if (string.IsNullOrWhiteSpace(value))
+                return Fail($"can't parse condition {name}: value can't be empty", out error, out condition, out immutableRequiredModIDs);
+            if (!tokenParser.TryParseStringTokens(value, assumeModIds: null, out error, out IParsedTokenString values))
+                return Fail($"can't parse condition {name}: {error}", out error, out condition, out immutableRequiredModIDs);
+
+            // validate token keys & values
+            if (!values.IsMutable && !token.TryValidateValues(input, values.SplitValuesUnique(), tokenParser.Context, out string customError))
+                return Fail($"invalid {lexToken.Name} condition: {customError}", out error, out condition, out immutableRequiredModIDs);
+
+            // create condition
+            condition = new Condition(name: token.Name, input: input, values: values);
+
+            // extract HasMod required IDs if immutable
+            immutableRequiredModIDs = null;
+            if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
+            {
+                if (!condition.HasInput())
+                    immutableRequiredModIDs = condition.CurrentValues;
+                else if (bool.TryParse(condition.Values.Value, out bool required) && required)
+                    immutableRequiredModIDs = new InvariantHashSet(condition.Input.Value);
+            }
+
             return true;
         }
 
@@ -798,17 +893,16 @@ namespace ContentPatcher
 
         /// <summary>Parse a boolean <see cref="PatchConfig.Enabled"/> value from a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
+        /// <param name="tokenParser">The  tokens available for this content pack.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseEnabled(string rawValue, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out bool parsed)
+        private bool TryParseEnabled(string rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out bool parsed)
         {
             parsed = false;
 
-            // analyse string
-            if (!this.TryParseStringTokens(rawValue, tokenContext, forMod, migrator, out error, out IParsedTokenString tokenString))
+            // analyze string
+            if (!tokenParser.TryParseStringTokens(rawValue, assumeModIds, out error, out IParsedTokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -824,8 +918,8 @@ namespace ContentPatcher
 
                 // parse token
                 LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
-                IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-                ITokenString input = new TokenString(lexToken.InputArg, tokenContext);
+                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
 
                 // check token options
                 InvariantHashSet allowedValues = token?.GetAllowedValues(input);
@@ -857,114 +951,16 @@ namespace ContentPatcher
             return true;
         }
 
-        /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
-        /// <param name="rawJson">The raw JSON structure which may contain tokens.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
-        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
-        /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
-        private bool TryParseJsonTokens(JToken rawJson, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out TokenisableJToken parsed)
-        {
-            if (rawJson == null || rawJson.Type == JTokenType.Null)
-            {
-                error = null;
-                parsed = null;
-                return true;
-            }
-
-            // parse
-            parsed = new TokenisableJToken(rawJson, tokenContext);
-            if (!migrator.TryMigrate(parsed, out error))
-                return false;
-
-            // validate tokens
-            foreach (LexTokenToken lexToken in parsed.GetTokenStrings().SelectMany(p => p.GetTokenPlaceholders(recursive: false)))
-            {
-                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
-                    return false;
-            }
-
-            // looks OK
-            if (parsed.Value.Type == JTokenType.Null)
-                parsed = null;
-            error = null;
-            return true;
-        }
-
-        /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
-        /// <param name="rawValue">The raw string which may contain tokens.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
-        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
-        /// <param name="parsed">The parsed value.</param>
-        private bool TryParseStringTokens(string rawValue, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString parsed)
-        {
-            // parse
-            parsed = new TokenString(rawValue, tokenContext);
-            if (!migrator.TryMigrate(parsed, out error))
-                return false;
-
-            // validate unknown tokens
-            IContextualState state = parsed.GetDiagnosticState();
-            if (state.InvalidTokens.Any())
-            {
-                error = $"found unknown tokens ({string.Join(", ", state.InvalidTokens.OrderBy(p => p))})";
-                parsed = null;
-                return false;
-            }
-
-            // validate tokens
-            foreach (LexTokenToken lexToken in parsed.GetTokenPlaceholders(recursive: false))
-            {
-                if (!this.TryValidateToken(lexToken, tokenContext, forMod, out error))
-                    return false;
-            }
-
-            // looks OK
-            error = null;
-            return true;
-        }
-
-        /// <summary>Validate whether a token referenced in a content pack field is valid.</summary>
-        /// <param name="lexToken">The lexical token reference to check.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
-        private bool TryValidateToken(LexTokenToken lexToken, IContext tokenContext, IManifest forMod, out string error)
-        {
-            // token doesn't exist
-            IToken token = tokenContext.GetToken(lexToken.Name, enforceContext: false);
-            if (token == null)
-            {
-                error = $"'{lexToken}' can't be used as a token because that token could not be found.";
-                return false;
-            }
-
-            // token requires dependency
-            if (token is ModProvidedToken modToken && !forMod.HasDependency(modToken.Mod.UniqueID, canBeOptional: false))
-            {
-                error = $"'{lexToken}' can't be used because it's provided by {modToken.Mod.Name} (ID: {modToken.Mod.UniqueID}), but {forMod.Name} doesn't list it as a dependency.";
-                return false;
-            }
-
-            // no error found
-            error = null;
-            return true;
-        }
-
         /// <summary>Prepare a local asset file for a patch to use.</summary>
         /// <param name="path">The asset path in the content patch.</param>
-        /// <param name="tokenContext">The tokens available for this content pack.</param>
-        /// <param name="forMod">The manifest for the content pack being parsed.</param>
-        /// <param name="migrator">The migrator which validates and migrates content pack data.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(string path, IContext tokenContext, IManifest forMod, IMigration migrator, out string error, out IParsedTokenString tokenedPath)
+        private bool TryPrepareLocalAsset(string path, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out IParsedTokenString tokenedPath)
         {
-            // normalise raw value
+            // normalize raw value
             path = path?.Trim();
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -973,8 +969,8 @@ namespace ContentPatcher
                 return false;
             }
 
-            // tokenise
-            if (!this.TryParseStringTokens(path, tokenContext, forMod, migrator, out string tokenError, out tokenedPath))
+            // tokenize
+            if (!tokenParser.TryParseStringTokens(path, assumeModIds, out string tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;

@@ -7,6 +7,7 @@ includes data from other mods if applicable.
 * [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
+* [Advanced](#advanced)
 * [See also](#see-also)
 
 ## Install
@@ -55,13 +56,17 @@ Shows which crops are ready to harvest, or which won't be ready before they die 
 change.
 > ![](docs/screenshots/crops-harvest.png)
 
-### Crops: fertilised
-Shows which crops have fertiliser applied.
+### Crops: fertilized
+Shows which crops have fertilizer applied.
 > ![](docs/screenshots/crops-fertilized.png)
 
 ### Crops: watered
 Shows which crops have been watered today.
 > ![](docs/screenshots/crops-watered.png)
+
+### Crops: water for paddy crops
+Shows which tiles are close enough to water for paddy crops to get auto-watered and bonus growth.
+> ![](docs/screenshots/crops-paddy-water.png)
 
 ### Machine processing
 Shows whether your machines are empty, processing, or finished. (You need to install
@@ -103,7 +108,13 @@ Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler throu
 Prismatic Tools   | Shows prismatic sprinkler coverage.
 Simple Sprinkler  | Shows custom sprinkler coverage.
 
+
+## Advanced
+### Export to JSON
+You can export a data layer to a JSON file (e.g. to use in another tool). Just go to the location
+in-game you want to export, open a data layer, and enter `data-layers export` in the SMAPI console.
+The layer data will be exported for the entire current location (not just the visible area).
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1691)
-* [Discussion thread](https://community.playstarbound.com/threads/data-layers.139625/)

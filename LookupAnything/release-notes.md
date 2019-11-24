@@ -1,6 +1,32 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.23
+Released 26 November 2019.
+
+* Updated for Stardew Valley 1.4, including...
+  * per-player shipping bins;
+  * movie theater;
+  * new mechanics (clothing, dyeing, tailoring, and tree fertilizer);
+  * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
+  * new content (fish ponds, tea bushes, and trash bear);
+  * new farm map;
+  * new 14-heart spouse events;
+  * new social NPC profiles;
+  * new Krobus relationship;
+  * new Adventurer's Guild goals;
+  * pet water bowl and petting changes;
+  * chance of double Loom output with higher-quality input.
+* Added optional progression mode (only shows gift tastes for gifts you've already given).
+* Added save format version to save slot lookups.
+* Updated for compatibility with Json Assets 1.3.8.
+* Fixed player luck in multiplayer showing your own luck instead of theirs.
+* Fixed 'scissor rectangle is invalid' error in rare cases.
+* Fixed game freeze if you open a lookup on the load screen and then close it by pressing `F1` again.
+* Fixed invalid crafting recipe data causing lookups to fail.
+* Fixed some flowers never shown as needed for a community center bundle.
+* Improved translations. Thanks to Hesperusrus (updated Russian), pomepome (updated Japanese), and shiro2579 (updated Portuguese)!
+
 ## 1.22.2
 Released 25 July 2019.
 
@@ -55,7 +81,7 @@ Released 04 January 2019.
 * After clicking a link in a lookup menu, closing the new lookup now returns you to the previous one.
 * Fixed previous menu not restored when `HideOnKeyUp` option is enabled.
 * Fixed visual bug on social tab after lookup when zoom is exactly 100%.
-* Fixed debug fields showing wrong values in rare cases when an item was customised after it was spawned.
+* Fixed debug fields showing wrong values in rare cases when an item was customized after it was spawned.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.20.1

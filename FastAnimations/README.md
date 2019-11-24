@@ -65,4 +65,3 @@ Multiplayer notes:
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1089/)
-* [Discussion thread](http://community.playstarbound.com/threads/smapi-fast-animations.132074/)

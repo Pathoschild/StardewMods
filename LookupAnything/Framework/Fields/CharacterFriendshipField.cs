@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // draw status
             float leftOffset = 0;
             {
-                string statusText = L10n.For(friendship.Status);
+                string statusText = L10n.For(friendship.Status, friendship.CanHousemate);
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, statusText, new Vector2(position.X + leftOffset, position.Y), wrapWidth - leftOffset);
                 leftOffset += textSize.X + DrawHelper.GetSpaceWidth(font);
             }

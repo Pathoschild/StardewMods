@@ -3,7 +3,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
     /// <summary>The type of an in-game object for the mod's purposes.</summary>
     internal enum TargetType
     {
-        /// <summary>The target type isn't recognised by the mod.</summary>
+        /// <summary>The target type isn't recognized by the mod.</summary>
         Unknown,
 
         /****

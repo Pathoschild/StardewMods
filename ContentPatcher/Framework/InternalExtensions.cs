@@ -77,18 +77,25 @@ namespace ContentPatcher.Framework
         /// <summary>Get unique comma-separated values from a token string.</summary>
         /// <param name="tokenStr">The token string to parse.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static InvariantHashSet SplitValues(this ITokenString tokenStr)
+        public static InvariantHashSet SplitValuesUnique(this ITokenString tokenStr)
+        {
+            return new InvariantHashSet(tokenStr.SplitValuesNonUnique());
+        }
+
+        /// <summary>Get comma-separated values from a token string.</summary>
+        /// <param name="tokenStr">The token string to parse.</param>
+        /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
+        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString tokenStr)
         {
             if (string.IsNullOrWhiteSpace(tokenStr?.Value))
-                return new InvariantHashSet();
+                return Enumerable.Empty<string>();
+
             if (!tokenStr.IsReady)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
-            return new InvariantHashSet(
-                tokenStr.Value
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(p => p.Trim())
-            );
+            return tokenStr.Value
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => p.Trim());
         }
 
         /****

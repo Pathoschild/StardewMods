@@ -29,13 +29,18 @@ namespace ContentPatcher.Framework.Tokens
             this.DynamicValues = (DynamicTokenValueProvider)base.Values;
         }
 
+        /// <summary>Add token names which this dynamic token may depend on.</summary>
+        /// <param name="tokens">The token names used.</param>
+        public void AddTokensUsed(IEnumerable<string> tokens)
+        {
+            foreach (string name in tokens)
+                this.PossibleTokensUsed.Add(name);
+        }
+
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
         public void AddAllowedValues(ITokenString possibleValues)
         {
-            foreach (string name in possibleValues.GetTokensUsed())
-                this.PossibleTokensUsed.Add(name);
-
             this.DynamicValues.AddAllowedValues(possibleValues);
             this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues();
         }

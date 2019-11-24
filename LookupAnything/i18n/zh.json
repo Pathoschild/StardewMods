@@ -52,6 +52,7 @@
     "friendship-status.engaged": "已订婚",
     "friendship-status.married": "已结婚",
     "friendship-status.divorced": "已离婚",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "锅炉房",
     "bundle-area.vault": "地下室",
     "bundle-area.bulletin-board": "布告栏",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "探险家公会",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "对你忠心耿耿的宠物。",
     "data.npc.horse.description": "对你忠心耿耿的坐骑。",
     "data.npc.junimo.description": "来自精神世界的森林精灵。人类对它们知之甚少。",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -139,8 +142,8 @@
     "data.item.copper-node.description": "打碎之后可以获得铜矿石。",
     "data.item.gold-node.name": "黄金矿点",
     "data.item.gold-node.description": "打碎之后可以获得黄金矿石。",
-    "data.item.iridum-node.name": "铱矿点",
-    "data.item.iridum-node.description": "打碎之后可以获得铱矿石。",
+    "data.item.iridium-node.name": "铱矿点",
+    "data.item.iridium-node.description": "打碎之后可以获得铱矿石。",
     "data.item.iron-node.name": "铁矿点",
     "data.item.iron-node.description": "打碎之后可以获得铁矿石。",
 
@@ -188,6 +191,10 @@
     "building.upgrades": "升级",
     "building.water-trough": "水槽",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} 之 {{max}} 只动物",
     "building.construction.summary": "完成至 {{date}}",
@@ -212,17 +219,31 @@
     "building.upgrades.coop.2": "上升至 12 只动物，解锁自动喂食和兔子",
     "building.water-trough.summary": "{{filled}} 之 {{max}} 水槽已填充",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
+
     // bush lookup labels
     // TODO
     "bush.name.berry": "Berry Bush",
     "bush.name.plain": "Plain Bush",
+    "bush.name.tea": "Tea Bush",
     "bush.description.berry": "A bush that grows salmonberries and blackberries.",
     "bush.description.plain": "A plain bush that doesn't grow anything.",
+    "bush.description.Tea": "A bush that grows tea leaves.",
+    "bush.date-planted": "Date planted",
+    "bush.growth": "Growth",
     "bush.next-harvest": "Next harvest",
 
     // bush lookup values
     // TODO
+    "bush.growth.summary": "将于 {{date}} 成熟",
     "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "问题",
@@ -259,6 +280,9 @@
     "crop.harvest.too-late": "下次收获超出本季(下次收获将在{{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "内容",
     "item.cask-schedule": "陈酿中",
 
@@ -268,9 +292,18 @@
 
     "item.fence-health": "耐久",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "内容",
-    "item.likes-this": "喜欢",
     "item.loves-this": "最爱",
+    "item.likes-this": "喜欢",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "用于",
     "item.number-owned": "拥有",
     "item.number-cooked": "已烹饪",
@@ -281,6 +314,9 @@
     "item.sells-to": "卖给",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "目前{{quality}}",
     "item.cask-schedule.now-partial": "目前{{quality}}(用镐停止陈酿)",
     "item.cask-schedule.tomorrow": "明天{{quality}}",
@@ -288,6 +324,11 @@
 
     "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
     "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
@@ -309,7 +350,7 @@
     "monster.health": "血量",
     "monster.drops": "掉落",
     "monster.experience": "经验",
-    "monster.defence": "防御",
+    "monster.defense": "防御",
     "monster.attack": "攻击",
     "monster.adventure-guild": "探险家公会",
 
@@ -327,15 +368,21 @@
     "npc.gifted-today": "今天已送礼",
     "npc.gifted-this-week": "本周送礼",
     "npc.kissed-today": "Kissed today", // TODO
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
     "npc.neutral-gifts": "普通",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "你已经结婚了！ <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "你们还没有见过面",
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "年龄",
@@ -351,19 +398,32 @@
     // pet lookup labels
     "pet.love": "友好度",
     "pet.petted-today": "今日已爱抚",
+    "pet.last-petted": "Last petted", // TODO
+    "pet.water-bowl": "Water bowl", // TODO
+
+    // pet lookup values
+    // TODO
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "Empty",
+    "pet.water-bowl.filled": "Filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "农场名字",
     "player.farm-map": "农场地图",
     "player.favorite-thing": "兴趣",
     "player.gender": "性别",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "配偶",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "战斗",
     "player.farming-skill": "耕种",
     "player.fishing-skill": "钓鱼",
     "player.foraging-skill": "觅食",
     "player.mining-skill": "采矿",
     "player.luck": "运气",
+    "player.save-format": "Save format", // TODO
 
     // player lookup values
     "player.farm-map.custom": "自定义",
@@ -386,10 +446,15 @@
     // tile lookup values
     "tile.tile.none-here": "此处无地格",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
+
     // tree lookup labels
     "tree.stage": "生长阶段",
     "tree.next-growth": "下次生长",
     "tree.has-seed": "产出种子",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "枫树",
@@ -402,7 +467,8 @@
     "tree.stage.partial": "{{stageName}} (总共{{max}}个阶段中的第{{step}}阶段)",
     "tree.next-growth.winter": "冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
-    "tree.next-growth.random": "有20%几率明天成长到{{stage}}",
+    "tree.next-growth.random": "有{{chance}}%几率明天成长到{{stage}}",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "种子",

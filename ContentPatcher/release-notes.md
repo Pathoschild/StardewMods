@@ -1,12 +1,38 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.10
+Released 26 November 2019.
+
+* Updated for Stardew Valley 1.4, including new farm type.
+* Added new tokens:
+  * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
+  * `HasDialogueAnswer`: the player's selected response IDs for question dialogues (thanks to mus-candidus!).
+  * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
+  * `Random`: a random value from the given list.
+  * `Range`: a list of integers between the specified min/max values.
+* Added support for editing map properties with `EditMap` patches.
+* Added support for using `FromFile` with `EditData` patches.
+* Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
+* Added `patch parse` console command, which parses an arbitrary tokenizable string and shows the result.
+* Added new 'current changes' list for each content pack to `patch summary` output.
+* Added world state IDs to the `HasFlag` token.
+* Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
+* Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
+* Improved error if a content pack sets a `FromFile` path with invalid characters.
+* Fixed `Hearts` and `Relationship` tokens not working for unmet NPCs. They now return `0` and `Unmet` respectively.
+* Fixed issue where dynamic tokens weren't correctly updated in some cases if they depend on another dynamic token whose conditions changed. (Thanks to kfahy!)
+* Fixed `patch summary` display for mod-provided tokens which require an unbounded input.
+* Fixed `patch summary` not showing token input validation errors in some cases.
+* Fixed `NullReferenceException` in some cases with invalid `Entries` keys.
+
 ## 1.9.2
 Released 25 July 2019.
 
 * Fixed `Day` token not allowing zero values.
 * Fixed dynamic tokens validated before they're ready.
-* Fixed custom tokens called with non-ready inputs in some cases.
+* Fixed mod-provided tokens called with non-ready inputs in some cases.
+* Fixed Linux/Mac players getting `HasFile`-related errors in some cases.
 
 ## 1.9.1
 Released 12 June 2019.
@@ -219,7 +245,7 @@ Released 26 March 2018.
 * Added unique patch names (editable via `LogName` field) to simplify troubleshooting.
 * Improved error when a patch specifies an invalid source/target area.
 * Fixed issue where an exception in one patch prevented other patches from being applied.
-* Fixed `Target` not being normalised.
+* Fixed `Target` not being normalized.
 * Fixed errors using debug overlay on Linux/Mac.
 
 ## 1.2

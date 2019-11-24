@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
@@ -59,38 +60,58 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
-            // clear twigs & weeds
+            // clear debris
             if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
-            // check terrain feature
+            // cut terrain features
             switch (tileFeature)
             {
                 // cut non-fruit tree
                 case Tree tree:
-                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile, player, location);
 
                 // cut fruit tree
                 case FruitTree tree:
-                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile);
+                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile, player, location);
+
+                // cut bushes
+                case Bush bush:
+                    return this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location);
 
                 // clear crops
                 case HoeDirt dirt when dirt.crop != null:
                     if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
-                        return this.UseToolOnTile(tool, tile);
+                        return this.UseToolOnTile(tool, tile, player, location);
                     if (this.Config.ClearLiveCrops && !dirt.crop.dead.Value)
-                        return this.UseToolOnTile(tool, tile);
+                        return this.UseToolOnTile(tool, tile, player, location);
                     break;
             }
 
-            // clear stumps
-            // This needs to check if the axe upgrade level is high enough first, to avoid spamming
-            // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
-            if (this.Config.ClearDebris)
+            // cut resource stumps
+            if (this.Config.ClearDebris || this.Config.CutGiantCrops)
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
-                if (clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
-                    this.UseToolOnTile(tool, tile);
+
+                // giant crops
+                if (this.Config.CutGiantCrops && clump is GiantCrop)
+                    this.UseToolOnTile(tool, tile, player, location);
+
+                // big stumps and fallen logs
+                // This needs to check if the axe upgrade level is high enough first, to avoid spamming
+                // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+                if (this.Config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
+                    this.UseToolOnTile(tool, tile, player, location);
+            }
+
+            // cut bushes in large terrain features
+            if (this.Config.CutBushes)
+            {
+                foreach (Bush bush in location.largeTerrainFeatures.OfType<Bush>().Where(p => p.tilePosition.Value == tile))
+                {
+                    if (this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location))
+                        return true;
+                }
             }
 
             return false;
@@ -134,6 +155,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // full-grown
             return config.CutGrownFruitTrees;
+        }
+
+        /// <summary>Get whether a given bush should be chopped.</summary>
+        /// <param name="bush">The bush to check.</param>
+        private bool ShouldCut(Bush bush)
+        {
+            var config = this.Config;
+
+            return config.CutBushes;
         }
     }
 }

@@ -9,8 +9,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to close the lookup UI when the lookup key is release.</summary>
         public bool HideOnKeyUp { get; set; }
 
-        /// <summary>The amount to scroll long content on each up/down scroll.</summary>
+        /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
         public int ScrollAmount { get; set; } = 160;
+
+        /// <summary>Hide content until the player has discovered it in-game (where applicable).</summary>
+        public bool ProgressionMode { get; set; } = false;
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }

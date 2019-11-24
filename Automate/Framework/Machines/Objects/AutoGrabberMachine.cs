@@ -75,6 +75,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             Chest output = this.GetOutputChest();
             output.clearNulls();
             output.items.Remove(item);
+            this.Machine.showNextIndex.Value = !output.isEmpty();
         }
 
         /// <summary>Get the next output item.</summary>
@@ -85,9 +86,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 if (item == null)
                     continue;
 
-                if (this.IgnoreSeedOutput && (item as SObject)?.Category == SObject.SeedsCategory)
+                if (this.IgnoreSeedOutput && item.Category == SObject.SeedsCategory)
                     continue;
-                if (this.IgnoreFertilizerOutput && (item as SObject)?.Category == SObject.fertilizerCategory)
+                if (this.IgnoreFertilizerOutput && item.Category == SObject.fertilizerCategory)
                     continue;
 
                 return item;

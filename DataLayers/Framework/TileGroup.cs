@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>A border color to draw along edges that aren't touching another tile in the group (if any).</summary>
         public Color? OuterBorderColor { get; }
 
+        /// <summary>Whether to include this tile group in data exports.</summary>
+        public bool ShouldExport { get; }
+
 
         /*********
         ** Public methods
@@ -23,10 +26,12 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="tiles">The tiles in the group.</param>
         /// <param name="outerBorderColor">A border color to draw along edges that aren't touching another tile in the group (if any).</param>
-        public TileGroup(IEnumerable<TileData> tiles, Color? outerBorderColor = null)
+        /// <param name="shouldExport">Whether to include this tile group in data exports.</param>
+        public TileGroup(IEnumerable<TileData> tiles, Color? outerBorderColor = null, bool shouldExport = true)
         {
             this.Tiles = tiles.ToArray();
             this.OuterBorderColor = outerBorderColor;
+            this.ShouldExport = shouldExport;
         }
     }
 }

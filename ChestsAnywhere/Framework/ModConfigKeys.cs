@@ -48,8 +48,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="editChest">The key which edits the current chest.</param>
         /// <param name="sortItems">The key which sorts items in the chest.</param>
         /// <param name="holdToMouseWheelScrollChests">The key which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</param>
-        /// <param name="holdtoMouseWheelScrollCategories">The key which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</param>
-        public ModConfigKeys(SButton[] toggle, SButton[] prevChest, SButton[] nextChest, SButton[] prevCategory, SButton[] nextCategory, SButton[] editChest, SButton[] sortItems, SButton[] holdToMouseWheelScrollChests, SButton[] holdtoMouseWheelScrollCategories)
+        /// <param name="holdToMouseWheelScrollCategories">The key which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</param>
+        public ModConfigKeys(SButton[] toggle, SButton[] prevChest, SButton[] nextChest, SButton[] prevCategory, SButton[] nextCategory, SButton[] editChest, SButton[] sortItems, SButton[] holdToMouseWheelScrollChests, SButton[] holdToMouseWheelScrollCategories)
         {
             this.Toggle = toggle;
             this.PrevChest = prevChest;
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.EditChest = editChest;
             this.SortItems = sortItems;
             this.HoldToMouseWheelScrollChests = holdToMouseWheelScrollChests;
-            this.HoldToMouseWheelScrollCategories = holdtoMouseWheelScrollCategories;
+            this.HoldToMouseWheelScrollCategories = holdToMouseWheelScrollCategories;
         }
     }
 }

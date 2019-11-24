@@ -15,14 +15,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Fields
         *********/
-        /// <summary>The color for a machine with no input.</summary>
-        private readonly Color EmptyColor = Color.Red;
+        /// <summary>The legend entry for machines with no input.</summary>
+        private readonly LegendEntry Empty;
 
-        /// <summary>The color for a machine that's currently processing input.</summary>
-        private readonly Color ProcessingColor = Color.Orange;
+        /// <summary>The legend entry for machines that are currently processing input.</summary>
+        private readonly LegendEntry Processing;
 
-        /// <summary>The color for a machine whose output is ready to collect.</summary>
-        private readonly Color FinishedColor = Color.Green;
+        /// <summary>The legend entry for machines whose output is ready to collect.</summary>
+        private readonly LegendEntry Finished;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
@@ -40,9 +40,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             this.Legend = new[]
             {
-                new LegendEntry(translations.Get("machines.empty"), this.EmptyColor),
-                new LegendEntry(translations.Get("machines.processing"), this.ProcessingColor),
-                new LegendEntry(translations.Get("machines.finished"), this.FinishedColor)
+                this.Empty = new LegendEntry(translations, "machines.empty", Color.Red),
+                this.Processing = new LegendEntry(translations, "machines.processing", Color.Orange),
+                this.Finished = new LegendEntry(translations, "machines.finished", Color.Green)
             };
             this.Mods = mods;
         }
@@ -54,17 +54,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
         {
             // get tiles by color
-            IDictionary<Color, TileData[]> tiles = this
+            IDictionary<string, TileData[]> tiles = this
                 .GetTiles(location, visibleArea)
-                .GroupBy(p => p.Color)
+                .GroupBy(p => p.Type.Id)
                 .ToDictionary(p => p.Key, p => p.ToArray());
 
             // create tile groups
-            foreach (Color color in new[] { this.EmptyColor, this.ProcessingColor, this.FinishedColor })
+            foreach (LegendEntry type in new[] { this.Empty, this.Processing, this.Finished })
             {
-                if (!tiles.TryGetValue(color, out TileData[] groupTiles))
+                if (!tiles.TryGetValue(type.Id, out TileData[] groupTiles))
                     groupTiles = new TileData[0];
-                yield return new TileGroup(groupTiles, outerBorderColor: color);
+                yield return new TileGroup(groupTiles, outerBorderColor: type.Color);
             }
         }
 
@@ -80,27 +80,27 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             IDictionary<Vector2, int> machineStates = this.Mods.Automate.GetMachineStates(location, visibleArea);
             foreach (Vector2 tile in visibleArea.GetTiles())
             {
-                Color? color = null;
+                LegendEntry type = null;
                 if (machineStates.TryGetValue(tile, out int state))
                 {
                     switch (state)
                     {
                         case 1:
-                            color = this.EmptyColor;
+                            type = this.Empty;
                             break;
 
                         case 2:
-                            color = this.ProcessingColor;
+                            type = this.Processing;
                             break;
 
                         case 3:
-                            color = this.FinishedColor;
+                            type = this.Finished;
                             break;
                     }
                 }
 
-                if (color.HasValue)
-                    yield return new TileData(tile, color.Value);
+                if (type != null)
+                    yield return new TileData(tile, type);
             }
         }
     }

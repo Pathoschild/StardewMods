@@ -62,15 +62,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // break stones
             if (this.Config.ClearDebris && tileObj?.Name == "Stone")
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // break flooring & paths
             if (this.Config.ClearFlooring && tileFeature is Flooring)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // break objects
             if (this.Config.ClearObjects && tileObj != null)
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // break mine containers
             if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
@@ -78,18 +78,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
-                return this.UseToolOnTile(tool, tile);
+                return this.UseToolOnTile(tool, tile, player, location);
 
             // handle dirt
             if (tileFeature is HoeDirt dirt)
             {
                 // clear tilled dirt
                 if (this.Config.ClearDirt && dirt.crop == null)
-                    return this.UseToolOnTile(tool, tile);
+                    return this.UseToolOnTile(tool, tile, player, location);
 
                 // clear dead crops
                 if (this.Config.ClearDeadCrops && dirt.crop != null && dirt.crop.dead.Value)
-                    return this.UseToolOnTile(tool, tile);
+                    return this.UseToolOnTile(tool, tile, player, location);
             }
 
             // clear boulders / meteorites
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
                 if (clump != null && (!this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel) || tool.UpgradeLevel >= requiredUpgradeLevel))
-                    return this.UseToolOnTile(tool, tile);
+                    return this.UseToolOnTile(tool, tile, player, location);
             }
 
             return false;

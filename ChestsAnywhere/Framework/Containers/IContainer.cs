@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted data for this container.</summary>
         ContainerData Data { get; }
 
-        /// <summary>Whether the player can customise the container data.</summary>
+        /// <summary>Whether the player can customize the container data.</summary>
         bool IsDataEditable { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         bool IsSameAs(IList<Item> inventory);
 
         /// <summary>Open a menu to transfer items between the player's inventory and this container.</summary>
-        ItemGrabMenu OpenMenu();
+        IClickableMenu OpenMenu();
 
         /// <summary>Persist the container data.</summary>
         void SaveData();

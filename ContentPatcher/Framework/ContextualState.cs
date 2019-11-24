@@ -11,10 +11,10 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>Whether the instance is valid in general (ignoring the context).</summary>
-        public bool IsValid => !this.InvalidTokens.Any();
+        public bool IsValid => !this.InvalidTokens.Any() && !this.UnavailableModTokens.Any();
 
         /// <summary>Whether <see cref="IsValid"/> and the instance is applicable in the current context.</summary>
-        public bool IsInScope => this.IsValid && !this.UnavailableTokens.Any();
+        public bool IsInScope => this.IsValid && !this.UnreadyTokens.Any();
 
         /// <summary>Whether <see cref="IsInScope"/> and there are no issues preventing the contextual from being used.</summary>
         public bool IsReady => this.IsInScope && !this.Errors.Any();
@@ -22,8 +22,11 @@ namespace ContentPatcher.Framework
         /// <summary>The unknown tokens required by the instance, if any.</summary>
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
-        /// <summary>The valid tokens required by the instance which aren't available in the current context, if any.</summary>
-        public InvariantHashSet UnavailableTokens { get; } = new InvariantHashSet();
+        /// <summary>The valid tokens required by the instance which aren't ready in the current context, if any.</summary>
+        public InvariantHashSet UnreadyTokens { get; } = new InvariantHashSet();
+
+        /// <summary>The tokens which are provided by a mod which isn't installed, if any.</summary>
+        public InvariantHashSet UnavailableModTokens { get; } = new InvariantHashSet();
 
         /// <summary>Error phrases indicating why the instance is not ready to use, if any.</summary>
         public InvariantHashSet Errors { get; } = new InvariantHashSet();
@@ -36,7 +39,7 @@ namespace ContentPatcher.Framework
         public ContextualState Reset()
         {
             this.InvalidTokens.Clear();
-            this.UnavailableTokens.Clear();
+            this.UnreadyTokens.Clear();
             this.Errors.Clear();
             return this;
         }
@@ -54,7 +57,7 @@ namespace ContentPatcher.Framework
             if (other != null)
             {
                 this.AddRange(this.InvalidTokens, other.InvalidTokens);
-                this.AddRange(this.UnavailableTokens, other.UnavailableTokens);
+                this.AddRange(this.UnreadyTokens, other.UnreadyTokens);
                 this.AddRange(this.Errors, other.Errors);
             }
             return this;
@@ -70,9 +73,17 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add valid tokens required by the instance which aren't available in the current context.</summary>
         /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddUnavailableTokens(params string[] tokens)
+        public ContextualState AddUnreadyTokens(params string[] tokens)
         {
-            this.AddRange(this.UnavailableTokens, tokens);
+            this.AddRange(this.UnreadyTokens, tokens);
+            return this;
+        }
+
+        /// <summary>Add tokens which are provided by a mod which isn't installed, if any.</summary>
+        /// <param name="tokens">The tokens to add.</param>
+        public ContextualState AddUnavailableModTokens(params string[] tokens)
+        {
+            this.AddRange(this.UnavailableModTokens, tokens);
             return this;
         }
 

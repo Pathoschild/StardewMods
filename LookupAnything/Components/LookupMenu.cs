@@ -67,6 +67,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Whether the game HUD was enabled when the menu was opened.</summary>
         private readonly bool WasHudEnabled;
 
+        /// <summary>Whether to exit the menu on the next update tick.</summary>
+        private bool ExitOnNextTick;
+
 
         /*********
         ** Public methods
@@ -183,9 +186,26 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             }
         }
 
+        /// <summary>Update the menu state if needed.</summary>
+        /// <param name="time">The elapsed game time.</param>
+        public override void update(GameTime time)
+        {
+            if (this.ExitOnNextTick && this.readyToClose())
+                this.exitThisMenu();
+            else
+                base.update(time);
+        }
+
         /****
         ** Methods
         ****/
+        /// <summary>Exit the menu at the next safe opportunity.</summary>
+        /// <remarks>This circumvents an issue where the game may freeze in some cases like the load selection screen when the menu is exited at an arbitrary time.</remarks>
+        public void QueueExit()
+        {
+            this.ExitOnNextTick = true;
+        }
+
         /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
         public void ScrollUp()
         {
@@ -390,12 +410,21 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Update the layout dimensions based on the current game scale.</summary>
         private void UpdateLayout()
         {
+            // get viewport size
+            Point viewport = new Point(
+                x: Math.Min(Game1.viewport.Width, Game1.graphics.GraphicsDevice.Viewport.Width),
+                y: Math.Min(Game1.viewport.Height, Game1.graphics.GraphicsDevice.Viewport.Height)
+            );
+
             // update size
-            this.width = Math.Min(Game1.tileSize * 20, Game1.viewport.Width);
-            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), Game1.viewport.Height);
+            {
+                Point size = this.GetMenuSize(viewport.X, viewport.Y);
+                this.width = size.X;
+                this.height = size.Y;
+            }
 
             // update position
-            Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
+            Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
 
@@ -419,6 +448,17 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         protected override void cleanupBeforeExit()
         {
             Game1.displayHUD = this.WasHudEnabled;
+            base.cleanupBeforeExit();
+        }
+
+        /// <summary>Get the maximum width and height for the given viewport size.</summary>
+        /// <param name="viewportWidth">The viewport width.</param>
+        /// <param name="viewportHeight">The viewport height.</param>
+        private Point GetMenuSize(int viewportWidth, int viewportHeight)
+        {
+            int maxWidth = Math.Min(Game1.tileSize * 20, viewportWidth);
+            int maxHeight = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * maxWidth), viewportHeight);
+            return new Point(maxWidth, maxHeight);
         }
     }
 }

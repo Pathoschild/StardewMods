@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <AssemblyName>LookupAnything</AssemblyName>
-    <Version>1.22.2</Version>
+    <Version>1.23.0</Version>
     <RootNamespace>Pathoschild.Stardew.LookupAnything</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0-beta.8" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

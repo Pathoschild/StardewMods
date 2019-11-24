@@ -42,6 +42,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 
+        /// <summary>The response IDs for the player's answers to question dialogues.</summary>
+        HasDialogueAnswer,
+
         /// <summary>The special items in the player's wallet.</summary>
         HasWalletItem,
 
@@ -96,6 +99,15 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether all bundles in the community center are completed.</summary>
         IsCommunityCenterComplete,
 
+        /// <summary>Whether all bundles in the JojaMart are completed.</summary>
+        IsJojaMartComplete,
+
+        /// <summary>NPCs and players whose relationships have an active adoption or pregnancy.</summary>
+        HavingChild,
+
+        /// <summary>NPCs and players who are currently pregnant.</summary>
+        Pregnant,
+
         /****
         ** Other
         ****/
@@ -111,6 +123,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
 
+        /****
+        ** String manipulation
+        ****/
+        /// <summary>A random value selected from the given input.</summary>
+        Random,
+
+        /// <summary>A list of numeric values based on the specified min/max values.</summary>
+        Range,
 
         /****
         ** Patch-specific

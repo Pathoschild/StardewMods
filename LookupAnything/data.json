@@ -22,8 +22,8 @@ You shouldn't change this file unless you know what you're doing.
         /* NPCs */
         "AsocialVillagers": [ "Bouncer", "Gunther", "Henchman", "Marlon", "Mister Qi" ],
         "DatingHearts": 2,
-        "SpouseMaxFriendship": 3000,
-        "SpouseFriendshipForStardrop": 3375,
+        "SpouseMaxFriendship": 3500,
+        "SpouseFriendshipForStardrop": 3125,
 
         /* players */
         "PlayerMaxSkillPoints": 15000,
@@ -278,6 +278,13 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 12,
             "Ingredients": [
+                { "ID": 815 } // tea leaves
+            ],
+            "Output": 614 // green tea
+        },
+        {
+            "MachineID": 12,
+            "Ingredients": [
                 { "ID": 340 } // honey
             ],
             "Output": 459 // mead
@@ -303,7 +310,8 @@ You shouldn't change this file unless you know what you're doing.
             ],
             "ExceptIngredients": [
                 { "ID": 262 }, // wheat
-                { "ID": 304 } // hops
+                { "ID": 304 }, // hops
+                { "ID": 815 } // tea leaves
             ],
             "Output": 350 // juice
         },
@@ -351,7 +359,7 @@ You shouldn't change this file unless you know what you're doing.
             "Ingredients": [
                 { "ID": 107 } // dinosaur egg
             ],
-            "Output": 306 // mayonnaise
+            "Output": 807 // dinosaur mayonnaise
         },
         {
             "MachineID": 24,
@@ -412,6 +420,23 @@ You shouldn't change this file unless you know what you're doing.
                 { "ID": -75 } // any vegetable
             ],
             "Output": 342 // pickled
+        },
+        {
+            "MachineID": 15,
+            "Ingredients": [
+                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
+            ],
+            "Output": 445 // caviar
+        },
+        {
+            "MachineID": 15,
+            "Ingredients": [
+                { "ID": 812 } // roe (non-sturgeon)
+            ],
+            "ExceptIngredients": [
+                { "ID": 812, "PreserveType": "Roe", "PreservedParentSheetIndex": 698 } // sturgeon roe
+            ],
+            "Output": 447 // aged roe
         },
 
         /* recycling machine */
@@ -534,6 +559,62 @@ You shouldn't change this file unless you know what you're doing.
             ],
             "Output": 413, // blue slime egg
             "OutputChance": 21
+        },
+
+        /* wood chipper */
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 724, // maple syrup
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 725, // oak resin
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 726, // pine tar
+            "OutputChance": 0.67
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 5,
+            "MaxOutput": 10,
+            "OutputChance": 88.2
+        },
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 709 } // hardwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 15,
+            "MaxOutput": 20,
+            "OutputChance": 9.8
+        },
+
+        {
+            "MachineID": 211,
+            "Ingredients": [
+                { "ID": 169 } // driftwood
+            ],
+            "Output": 388, // wood
+            "MinOutput": 5,
+            "MaxOutput": 9
         }
     ],
 
@@ -552,6 +633,10 @@ You shouldn't change this file unless you know what you're doing.
         {
             "ID": "Junimo",
             "DescriptionKey": "data.npc.junimo.description"
+        },
+        {
+            "ID": "Villager::TrashBear",
+            "DescriptionKey": "data.npc.trashbear.description"
         }
     ],
 
@@ -729,9 +814,9 @@ You shouldn't change this file unless you know what you're doing.
         {
             "SpriteID": [ 765 ],
             "Context": "World",
-            "NameKey": "data.item.iridum-node.name",
+            "NameKey": "data.item.iridium-node.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.iridum-node.description"
+            "DescriptionKey": "data.item.iridium-node.description"
         },
         {
             "SpriteID": [ 290 ],
@@ -793,16 +878,20 @@ You shouldn't change this file unless you know what you're doing.
             "RequiredKills": 150
         },
         {
-            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
-            "RequiredKills": 200
-        },
-        {
             "Targets": [ "Skeleton", "Skeleton Mage" ],
             "RequiredKills": 50
         },
         {
+            "Targets": [ "Rock Crab", "Lava Crab", "Iridium Crab" ],
+            "RequiredKills": 60
+        },
+        {
             "Targets": [ "Grub", "Fly", "Bug" ],
             "RequiredKills": 125
+        },
+        {
+            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
+            "RequiredKills": 200
         },
         {
             "Targets": [ "Duggy" ],
@@ -811,6 +900,18 @@ You shouldn't change this file unless you know what you're doing.
         {
             "Targets": [ "Dust Spirit" ],
             "RequiredKills": 500
+        },
+        {
+            "Targets": [ "Mummy" ],
+            "RequiredKills": 100
+        },
+        {
+            "Targets": [ "Pepper Rex" ],
+            "RequiredKills": 50
+        },
+        {
+            "Targets": [ "Serpent" ],
+            "RequiredKills": 250
         }
     ]
 }

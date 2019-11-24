@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted container data.</summary>
         public ContainerData Data { get; }
 
-        /// <summary>Whether the player can customise the container data.</summary>
+        /// <summary>Whether the player can customize the container data.</summary>
         public bool IsDataEditable { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         {
             this.DataHelper = dataHelper;
             this.Farm = farm;
-            this.ShippingBin = farm.shippingBin;
+            this.ShippingBin = farm.getShippingBin(Game1.player);
             this.IsDataEditable = Context.IsMainPlayer;
             this.Data = this.IsDataEditable
                 ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
-        public ItemGrabMenu OpenMenu()
+        public IClickableMenu OpenMenu()
         {
             return new ItemGrabMenu(
                 inventory: this.Inventory,
@@ -121,7 +121,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>This implementation replicates <see cref="StardewValley.Objects.Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
-            // normalise
+            // normalize
             if (item.Stack == 0)
                 item.Stack = 1;
 
@@ -132,7 +132,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 if (!slot.canStackWith(item))
                     continue;
 
-                item.Stack = slot.addToStack(item.Stack);
+                item.Stack = slot.addToStack(item);
                 if (item.Stack <= 0)
                     break;
             }
@@ -164,7 +164,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.ShippingBin.Remove(item);
             this.ShippingBin.Filter(p => p != null);
             if (item == this.Farm.lastItemShipped)
-                this.Farm.lastItemShipped = this.Farm.shippingBin.LastOrDefault();
+                this.Farm.lastItemShipped = this.ShippingBin.LastOrDefault();
         }
     }
 }

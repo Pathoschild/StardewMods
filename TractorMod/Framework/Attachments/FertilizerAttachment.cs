@@ -7,14 +7,14 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
-    /// <summary>An attachment for fertiliser or speed-gro.</summary>
+    /// <summary>An attachment for fertilizer or speed-gro.</summary>
     internal class FertilizerAttachment : BaseAttachment
     {
         /*********
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly FertilizerConfig Config;
+        private readonly GenericAttachmentConfig Config;
 
 
         /*********
@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public FertilizerAttachment(FertilizerConfig config, IReflectionHelper reflection)
+        public FertilizerAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
             : base(reflection)
         {
             this.Config = config;
@@ -52,15 +52,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (item == null || item.Stack <= 0)
                 return false;
 
-            // get empty dirt
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.crop != null || dirt.fertilizer.Value != HoeDirt.noFertilizer)
+            // get unfertilised dirt
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
             if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
                 return false;
 
-            // apply fertiliser
+            // apply fertilizer
             dirt.fertilizer.Value = item.ParentSheetIndex;
             this.ConsumeItem(player, item);
             return true;

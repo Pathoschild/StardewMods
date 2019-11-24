@@ -27,6 +27,12 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The map area to overwrite.</summary>
         private readonly Rectangle? ToArea;
 
+        /// <summary>The map property to change when editing a map.</summary>
+        private readonly EditMapPatchProperty[] MapProperties;
+
+        /// <summary>Whether the patch makes changes to the map tiles.</summary>
+        private bool PatchesTiles => this.RawFromAsset != null;
+
 
         /*********
         ** Public methods
@@ -34,18 +40,20 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The map area from which to read tiles.</param>
         /// <param name="toArea">The map area to overwrite.</param>
+        /// <param name="mapProperties">The map property to change when editing a map, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromAsset)
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IMonitor monitor, Func<string, string> normalizeAssetName)
+            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
+            this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.Monitor = monitor;
         }
 
@@ -60,58 +68,86 @@ namespace ContentPatcher.Framework.Patches
                 this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
-            if (!this.FromAssetExists())
+            if (this.PatchesTiles && !this.FromAssetExists())
             {
                 this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 
-            // fetch data
-            Map source = this.ContentPack.Load<Map>(this.FromAsset);
-            Rectangle sourceArea = this.FromArea ?? this.GetMapArea(source);
-            Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
+            // get map
             Map target = asset.GetData<Map>();
 
-            // validate area values
-            string errorPrefix = $"Can't apply map patch \"{this.LogName}\"";
-            string sourceAreaLabel = this.FromArea.HasValue ? $"{nameof(this.FromArea)}" : "source map";
-            string targetAreaLabel = this.ToArea.HasValue ? $"{nameof(this.ToArea)}" : "target map";
-            Point sourceMapSize = new Point(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));
-            Point targetMapSize = new Point(target.Layers.Max(p => p.LayerWidth), target.Layers.Max(p => p.LayerHeight));
+            // patch map tiles
+            if (this.PatchesTiles)
+            {
+                // fetch data
+                Map source = this.ContentPack.Load<Map>(this.FromAsset);
+                Rectangle sourceArea = this.FromArea ?? this.GetMapArea(source);
+                Rectangle targetArea = this.ToArea ?? new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
 
-            if (sourceArea.X < 0 || sourceArea.Y < 0 || sourceArea.Width < 0 || sourceArea.Height < 0)
-            {
-                this.Monitor.Log($"{errorPrefix}: source area (X:{sourceArea.X}, Y:{sourceArea.Y}, Width:{sourceArea.Width}, Height:{sourceArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
-                return;
-            }
-            if (targetArea.X < 0 || targetArea.Y < 0 || targetArea.Width < 0 || targetArea.Height < 0)
-            {
-                this.Monitor.Log($"{errorPrefix}: target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
-                return;
-            }
-            if (targetArea.Right > target.DisplayWidth || targetArea.Bottom > target.DisplayHeight)
-            {
-                this.Monitor.Log($"{errorPrefix}: target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) extends past the edges of the map, which isn't allowed.", LogLevel.Error);
-                return;
-            }
-            if (sourceArea.Width != targetArea.Width || sourceArea.Height != targetArea.Height)
-            {
-                this.Monitor.Log($"{errorPrefix}: {sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", LogLevel.Error);
-                return;
-            }
-            if (sourceArea.Right > sourceMapSize.X || sourceArea.Bottom > sourceMapSize.Y)
-            {
-                this.Monitor.Log($"{errorPrefix}: {sourceAreaLabel} area (X:{sourceArea.X}, Y:{sourceArea.Y}, Width:{sourceArea.Width}, Height:{sourceArea.Height}) extends past the edge of the source map (Width:{sourceMapSize.X}, Height:{sourceMapSize.Y}).", LogLevel.Error);
-                return;
-            }
-            if (targetArea.Right > targetMapSize.X || targetArea.Bottom > targetMapSize.Y)
-            {
-                this.Monitor.Log($"{errorPrefix}: {targetAreaLabel} area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) extends past the edge of the source map (Width:{targetMapSize.X}, Height:{targetMapSize.Y}).", LogLevel.Error);
-                return;
+                // validate area values
+                string errorPrefix = $"Can't apply map patch \"{this.LogName}\"";
+                string sourceAreaLabel = this.FromArea.HasValue ? $"{nameof(this.FromArea)}" : "source map";
+                string targetAreaLabel = this.ToArea.HasValue ? $"{nameof(this.ToArea)}" : "target map";
+                Point sourceMapSize = new Point(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));
+                Point targetMapSize = new Point(target.Layers.Max(p => p.LayerWidth), target.Layers.Max(p => p.LayerHeight));
+
+                if (sourceArea.X < 0 || sourceArea.Y < 0 || sourceArea.Width < 0 || sourceArea.Height < 0)
+                {
+                    this.Monitor.Log($"{errorPrefix}: source area (X:{sourceArea.X}, Y:{sourceArea.Y}, Width:{sourceArea.Width}, Height:{sourceArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
+                    return;
+                }
+                if (targetArea.X < 0 || targetArea.Y < 0 || targetArea.Width < 0 || targetArea.Height < 0)
+                {
+                    this.Monitor.Log($"{errorPrefix}: target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) has negative values, which isn't valid.", LogLevel.Error);
+                    return;
+                }
+                if (targetArea.Right > target.DisplayWidth || targetArea.Bottom > target.DisplayHeight)
+                {
+                    this.Monitor.Log($"{errorPrefix}: target area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) extends past the edges of the map, which isn't allowed.", LogLevel.Error);
+                    return;
+                }
+                if (sourceArea.Width != targetArea.Width || sourceArea.Height != targetArea.Height)
+                {
+                    this.Monitor.Log($"{errorPrefix}: {sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", LogLevel.Error);
+                    return;
+                }
+                if (sourceArea.Right > sourceMapSize.X || sourceArea.Bottom > sourceMapSize.Y)
+                {
+                    this.Monitor.Log($"{errorPrefix}: {sourceAreaLabel} area (X:{sourceArea.X}, Y:{sourceArea.Y}, Width:{sourceArea.Width}, Height:{sourceArea.Height}) extends past the edge of the source map (Width:{sourceMapSize.X}, Height:{sourceMapSize.Y}).", LogLevel.Error);
+                    return;
+                }
+                if (targetArea.Right > targetMapSize.X || targetArea.Bottom > targetMapSize.Y)
+                {
+                    this.Monitor.Log($"{errorPrefix}: {targetAreaLabel} area (X:{targetArea.X}, Y:{targetArea.Y}, Width:{targetArea.Width}, Height:{targetArea.Height}) extends past the edge of the source map (Width:{targetMapSize.X}, Height:{targetMapSize.Y}).", LogLevel.Error);
+                    return;
+                }
+
+                // apply source map
+                this.ApplyMapOverride(source, sourceArea, target, targetArea);
             }
 
-            // apply source map
-            this.ApplyMapOverride(source, sourceArea, target, targetArea);
+            // patch map properties
+            foreach (EditMapPatchProperty property in this.MapProperties)
+            {
+                string key = property.Key.Value;
+                string value = property.Value.Value;
+
+                if (value == null)
+                    target.Properties.Remove(key);
+                else
+                    target.Properties[key] = value;
+            }
+        }
+
+        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        public override IEnumerable<string> GetChangeLabels()
+        {
+            if (this.PatchesTiles)
+                yield return "patched map tiles";
+
+            if (this.MapProperties.Any())
+                yield return "changed map properties";
         }
 
 

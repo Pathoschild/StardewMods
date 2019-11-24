@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             public static readonly Rectangle Stardrop = new Rectangle(346, 392, 8, 8);
         }
 
-        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        /// <summary>A blank pixel which can be colorized and stretched to draw geometric shapes.</summary>
         public static readonly Texture2D Pixel = CommonHelper.Pixel;
     }
 }
