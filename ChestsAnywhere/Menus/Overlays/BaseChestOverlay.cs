@@ -35,11 +35,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Whether to show Automate options.</summary>
         private readonly bool ShowAutomateOptions;
 
-        /// <summary>The number of draw cycles since the menu was initialised.</summary>
+        /// <summary>The number of draw cycles since the menu was initialized.</summary>
         private int DrawCount;
 
-        /// <summary>Get whether the menu and its components have been initialised.</summary>
-        protected bool IsInitialised => this.DrawCount > 1;
+        /// <summary>Get whether the menu and its components have been initialized.</summary>
+        protected bool IsInitialized => this.DrawCount > 1;
 
         /// <summary>The backing field for <see cref="ActiveElement"/>; shouldn't be edited directly.</summary>
         private Element _activeElement;
@@ -217,7 +217,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         protected override void Draw(SpriteBatch batch)
         {
             if (this.DrawCount == 0)
-                this.ReinitialiseComponents();
+                this.ReinitializeComponents();
 
             this.DrawCount++;
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
@@ -315,12 +315,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player resizes the game windoww.</summary>
+        /// <summary>The method invoked when the player resizes the game window.</summary>
         /// <param name="oldBounds">The previous game window bounds.</param>
         /// <param name="newBounds">The new game window bounds.</param>
         protected override void ReceiveGameWindowResized(xTile.Dimensions.Rectangle oldBounds, xTile.Dimensions.Rectangle newBounds)
         {
-            this.ReinitialiseComponents();
+            this.ReinitializeComponents();
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
@@ -328,7 +328,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveButtonPress(SButton input)
         {
-            if (!this.IsInitialised)
+            if (!this.IsInitialized)
                 return false;
 
             bool canNavigate = this.CanCloseChest;
@@ -374,7 +374,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveScrollWheelAction(int amount)
         {
-            if (!this.IsInitialised)
+            if (!this.IsInitialized)
                 return false;
 
             switch (this.ActiveElement)
@@ -422,7 +422,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveLeftClick(int x, int y)
         {
-            if (!this.IsInitialised)
+            if (!this.IsInitialized)
                 return false;
 
             switch (this.ActiveElement)
@@ -482,7 +482,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         if (chest != null)
                         {
                             this.SelectChest(chest);
-                            this.ReinitialiseComponents();
+                            this.ReinitializeComponents();
                         }
                     }
                     return true; // handle all clicks while open
@@ -499,7 +499,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         if (category != null && category != this.SelectedCategory)
                         {
                             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
-                            this.ReinitialiseComponents();
+                            this.ReinitializeComponents();
                         }
                     }
                     return true; // handle all clicks while open
@@ -525,7 +525,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveCursorHover(int x, int y)
         {
-            if (!this.IsInitialised)
+            if (!this.IsInitialized)
                 return false;
 
             switch (this.ActiveElement)
@@ -551,8 +551,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Private methods
         *********/
-        /// <summary>Initialise the edit-chest overlay for rendering.</summary>
-        protected virtual void ReinitialiseComponents()
+        /// <summary>Initialize the edit-chest overlay for rendering.</summary>
+        protected virtual void ReinitializeComponents()
         {
             Rectangle bounds = new Rectangle(this.Menu.xPositionOnScreen, this.Menu.yPositionOnScreen, this.Menu.width, this.Menu.height);
 

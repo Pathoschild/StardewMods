@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
 
-        /// <summary>Finds and analyses lookup targets in the world.</summary>
+        /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
 
         /// <summary>Draws debug information to the screen.</summary>
@@ -103,7 +103,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked on the first update tick, once all mods are initialised.</summary>
+        /// <summary>The method invoked on the first update tick, once all mods are initialized.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // get mod APIs
             JsonAssetsIntegration jsonAssets = new JsonAssetsIntegration(this.Helper.ModRegistry, this.Monitor);
 
-            // initialise functionality
+            // initialize functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming);
             this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, jsonAssets);

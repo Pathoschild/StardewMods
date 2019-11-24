@@ -56,8 +56,8 @@ Shows which crops are ready to harvest, or which won't be ready before they die 
 change.
 > ![](docs/screenshots/crops-harvest.png)
 
-### Crops: fertilised
-Shows which crops have fertiliser applied.
+### Crops: fertilized
+Shows which crops have fertilizer applied.
 > ![](docs/screenshots/crops-fertilized.png)
 
 ### Crops: watered

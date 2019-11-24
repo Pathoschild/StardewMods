@@ -40,16 +40,16 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The map area from which to read tiles.</param>
         /// <param name="toArea">The map area to overwrite.</param>
         /// <param name="mapProperties">The map property to change when editing a map, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IMonitor monitor, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromAsset)
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        public EditMapPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IMonitor monitor, Func<string, string> normalizeAssetName)
+            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;

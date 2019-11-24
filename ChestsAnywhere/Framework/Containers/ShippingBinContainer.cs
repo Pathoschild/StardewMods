@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted container data.</summary>
         public ContainerData Data { get; }
 
-        /// <summary>Whether the player can customise the container data.</summary>
+        /// <summary>Whether the player can customize the container data.</summary>
         public bool IsDataEditable { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
@@ -121,7 +121,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>This implementation replicates <see cref="StardewValley.Objects.Chest.grabItemFromInventory"/> without the slot limit (instead of using <c>Farm::shipItem</c> which does some weird things that don't work well with a full chest UI).</remarks>
         private void GrabItemFromInventoryImpl(Item item, SFarmer player)
         {
-            // normalise
+            // normalize
             if (item.Stack == 0)
                 item.Stack = 1;
 

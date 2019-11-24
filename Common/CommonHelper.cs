@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Common
         /*********
         ** Fields
         *********/
-        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        /// <summary>A blank pixel which can be colorized and stretched to draw geometric shapes.</summary>
         private static readonly Lazy<Texture2D> LazyPixel = new Lazy<Texture2D>(() =>
         {
             Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.Common
         /*********
         ** Accessors
         *********/
-        /// <summary>A blank pixel which can be colorised and stretched to draw geometric shapes.</summary>
+        /// <summary>A blank pixel which can be colorized and stretched to draw geometric shapes.</summary>
         public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
 
         /// <summary>The width of the horizontal and vertical scroll edges (between the origin position and start of content padding).</summary>

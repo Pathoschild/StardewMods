@@ -5,8 +5,8 @@ using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
-    /// <summary>A JSON structure containing tokenisable values.</summary>
-    internal class TokenisableJToken : IContextual
+    /// <summary>A JSON structure containing tokenizable values.</summary>
+    internal class TokenizableJToken : IContextual
     {
         /*********
         ** Fields
@@ -34,10 +34,10 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The JSON object to modify.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
-        public TokenisableJToken(JToken value, IContext context)
+        public TokenizableJToken(JToken value, IContext context)
         {
             this.Value = value;
-            this.Contextuals.Add(this.ResolveTokenisableFields(value, context));
+            this.Contextuals.Add(this.ResolveTokenizableFields(value, context));
         }
 
         /// <summary>Update the instance when the context changes.</summary>
@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens.Json
             {
                 if (contextual is IParsedTokenString tokenStr)
                     yield return tokenStr;
-                if (contextual is TokenisableProxy proxy)
+                if (contextual is TokenizableProxy proxy)
                     yield return proxy.TokenString;
             }
         }
@@ -76,17 +76,17 @@ namespace ContentPatcher.Framework.Tokens.Json
         /*********
         ** Private methods
         *********/
-        /// <summary>Find all tokenisable fields in a JSON structure, replace immutable tokens with their values, and get a list of mutable tokens.</summary>
+        /// <summary>Find all tokenizable fields in a JSON structure, replace immutable tokens with their values, and get a list of mutable tokens.</summary>
         /// <param name="token">The JSON structure to scan.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
-        private IEnumerable<TokenisableProxy> ResolveTokenisableFields(JToken token, IContext context)
+        private IEnumerable<TokenizableProxy> ResolveTokenizableFields(JToken token, IContext context)
         {
             switch (token)
             {
                 case JValue valueToken:
                     {
                         string value = valueToken.Value<string>();
-                        TokenisableProxy proxy = this.TryResolveTokenisableFields(value, context, val => valueToken.Value = val);
+                        TokenizableProxy proxy = this.TryResolveTokenizableFields(value, context, val => valueToken.Value = val);
                         if (proxy != null)
                             yield return proxy;
                         break;
@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Tokens.Json
 
                         // resolve property name
                         {
-                            TokenisableProxy proxy = this.TryResolveTokenisableFields(property.Name, context, val =>
+                            TokenizableProxy proxy = this.TryResolveTokenizableFields(property.Name, context, val =>
                             {
                                 var newProperty = new JProperty(val, property.Value);
                                 property.Replace(newProperty);
@@ -110,7 +110,7 @@ namespace ContentPatcher.Framework.Tokens.Json
                         }
 
                         // resolve property values
-                        foreach (TokenisableProxy contextual in this.ResolveTokenisableFields(property.Value, context))
+                        foreach (TokenizableProxy contextual in this.ResolveTokenizableFields(property.Value, context))
                             yield return contextual;
                     }
                     break;
@@ -118,7 +118,7 @@ namespace ContentPatcher.Framework.Tokens.Json
                 case JArray arrToken:
                     foreach (JToken valueToken in arrToken)
                     {
-                        foreach (TokenisableProxy contextual in this.ResolveTokenisableFields(valueToken, context))
+                        foreach (TokenizableProxy contextual in this.ResolveTokenizableFields(valueToken, context))
                             yield return contextual;
                     }
                     break;
@@ -132,13 +132,13 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <param name="str">The string to scan.</param>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="setValue">Update the source with a new value.</param>
-        private TokenisableProxy TryResolveTokenisableFields(string str, IContext context, Action<string> setValue)
+        private TokenizableProxy TryResolveTokenizableFields(string str, IContext context, Action<string> setValue)
         {
             IParsedTokenString tokenStr = new TokenString(str, context);
 
             // handle mutable token
             if (tokenStr.IsMutable)
-                return new TokenisableProxy(tokenStr, setValue);
+                return new TokenizableProxy(tokenStr, setValue);
 
             // substitute immutable value
             if (tokenStr.Value != str)

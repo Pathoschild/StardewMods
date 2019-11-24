@@ -14,8 +14,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether to enable access to the shipping bin.</summary>
         public bool EnableShippingBin { get; set; } = true;
 
-        /// <summary>Whether to add an 'organise' button in chest UIs for the player inventory.</summary>
-        public bool AddOrganisePlayerInventoryButton { get; set; } = true;
+        /// <summary>Whether to add an 'organize' button in chest UIs for the player inventory.</summary>
+        public bool AddOrganizePlayerInventoryButton { get; set; } = true;
 
         /// <summary>The range at which chests are accessible.</summary>
         public ChestRange Range { get; set; } = ChestRange.Unlimited;

@@ -156,7 +156,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
             }
 
-            // get sanitised data
+            // get sanitized data
             HashSet<int> validItemIDs = new HashSet<int>(objects.Select(p => p.ParentSpriteIndex));
             HashSet<int> validCategories = new HashSet<int>(objects.Where(p => p.Category != 0).Select(p => p.Category));
             return tastes

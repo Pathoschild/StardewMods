@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "Baue sie ab, um Kupfererz zu bekommen.",
     "data.item.gold-node.name": "Goldader",
     "data.item.gold-node.description": "Baue sie ab, um Golderz zu bekommen.",
-    "data.item.iridum-node.name": "Iridiumader",
-    "data.item.iridum-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
+    "data.item.iridium-node.name": "Iridiumader",
+    "data.item.iridium-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
     "data.item.iron-node.name": "Eisenader",
     "data.item.iron-node.description": "Baue sie ab, um Eisenerz zu bekommen.",
 
@@ -308,7 +308,7 @@
     "monster.health": "Leben",
     "monster.drops": "Beute",
     "monster.experience": "XP",
-    "monster.defence": "Verteidigung",
+    "monster.defense": "Verteidigung",
     "monster.attack": "Angriff",
     "monster.adventure-guild": "Abenteurergilde",
 

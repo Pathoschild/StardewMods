@@ -729,9 +729,9 @@ You shouldn't change this file unless you know what you're doing.
         {
             "SpriteID": [ 765 ],
             "Context": "World",
-            "NameKey": "data.item.iridum-node.name",
+            "NameKey": "data.item.iridium-node.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.iridum-node.description"
+            "DescriptionKey": "data.item.iridium-node.description"
         },
         {
             "SpriteID": [ 290 ],

@@ -78,14 +78,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         protected BaseSubject(GameHelper gameHelper, string name, string description, string type, ITranslationHelper translations)
             : this(gameHelper, translations)
         {
-            this.Initialise(name, description, type);
+            this.Initialize(name, description, type);
         }
 
-        /// <summary>Initialise the base values.</summary>
+        /// <summary>Initialize the base values.</summary>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        protected void Initialise(string name, string description, string type)
+        protected void Initialize(string name, string description, string type)
         {
             this.Name = name;
             this.Description = description;

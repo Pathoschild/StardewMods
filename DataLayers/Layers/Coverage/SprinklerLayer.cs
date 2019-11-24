@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             return terrain is HoeDirt dirt && dirt.crop != null;
         }
 
-        /// <summary>Get the relative sprinkler tile coverage, including any mod customisations which don't change after launch.</summary>
+        /// <summary>Get the relative sprinkler tile coverage, including any mod customizations which don't change after launch.</summary>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         private IDictionary<int, Vector2[]> GetStaticSprinklerTiles(ModIntegrations mods)
         {

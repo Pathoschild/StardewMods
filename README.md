@@ -9,7 +9,7 @@ Active mods:
   machines with a chest to create factories._
 
 * **[Chests Anywhere](http://www.nexusmods.com/stardewvalley/mods/518)** <small>([source](ChestsAnywhere))</small>  
-  _Access your chests from anywhere and organise them your way. Transfer items without having to
+  _Access your chests from anywhere and organize them your way. Transfer items without having to
   run around, from the comfort of your bed to the deepest mine level._
 
 * **[Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915)** <small>([source](ContentPatcher))</small>  
@@ -34,7 +34,7 @@ Active mods:
   breaking geodes). Optionally configure the speed for each animation._
 
 * **[Lookup Anything](http://www.nexusmods.com/stardewvalley/mods/541)** <small>([source](LookupAnything))</small>  
-  _See live info about whatever's under your cursor when you press F1. Learn a villager's favourite
+  _See live info about whatever's under your cursor when you press F1. Learn a villager's favorite
   gifts, when a crop will be ready to harvest, how long a fence will last, why your farm animals
   are unhappy, and more._
 

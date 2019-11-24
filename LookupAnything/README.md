@@ -1,5 +1,5 @@
 **Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
-whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
+whatever's under your cursor when you press `F1`. Learn a villager's favorite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
 For advanced users, the optional data mining mode also shows raw game values so you can see exactly
@@ -119,7 +119,7 @@ multiplayer. There are no known issues in multiplayer (even if other players don
   * Windows:
     * [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
   project.
-    * [ReSharper](https://www.jetbrains.com/resharper/) to analyse the game code (e.g. find usages).
+    * [ReSharper](https://www.jetbrains.com/resharper/) to analyze the game code (e.g. find usages).
     * [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
   to extract the game's assets and data.
   * [YAML Analyzer](http://catox.free.fr/StardewTools/yaml_analyzer.html) to help figure out data

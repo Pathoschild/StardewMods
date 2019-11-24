@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveLeftClick(int x, int y)
         {
-            if (this.IsInitialised)
+            if (this.IsInitialized)
             {
 
                 switch (this.ActiveElement)
@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         protected override bool ReceiveCursorHover(int x, int y)
         {
-            if (this.IsInitialised)
+            if (this.IsInitialized)
             {
                 if (this.ActiveElement == Element.Menu)
                     this.SortInventoryButton?.tryHover(x, y);
@@ -120,13 +120,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             base.Draw(batch); // run base logic last, to draw cursor over everything else
         }
 
-        /// <summary>Initialise the edit-chest overlay for rendering.</summary>
-        protected override void ReinitialiseComponents()
+        /// <summary>Initialize the edit-chest overlay for rendering.</summary>
+        protected override void ReinitializeComponents()
         {
-            base.ReinitialiseComponents();
+            base.ReinitializeComponents();
 
             // sort inventory button
-            if (this.Config.AddOrganisePlayerInventoryButton)
+            if (this.Config.AddOrganizePlayerInventoryButton)
             {
                 // add button
                 Rectangle sprite = Sprites.Buttons.Organize;

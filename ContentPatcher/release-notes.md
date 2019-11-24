@@ -11,7 +11,7 @@
 * Added support for editing map properties with `EditMap` patches.
 * Added support for using `FromFile` with `EditData` patches.
 * Added `patch export` console command, which lets you see what an asset looks like with all changes applied.
-* Added `patch parse` console command, which parses an arbitrary tokenisable string and shows the result.
+* Added `patch parse` console command, which parses an arbitrary tokenizable string and shows the result.
 * Added new 'current changes' list for each content pack to `patch summary` output.
 * Added world state IDs to the `HasFlag` token.
 * Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
@@ -242,7 +242,7 @@ Released 26 March 2018.
 * Added unique patch names (editable via `LogName` field) to simplify troubleshooting.
 * Improved error when a patch specifies an invalid source/target area.
 * Fixed issue where an exception in one patch prevented other patches from being applied.
-* Fixed `Target` not being normalised.
+* Fixed `Target` not being normalized.
 * Fixed errors using debug overlay on Linux/Mac.
 
 ## 1.2

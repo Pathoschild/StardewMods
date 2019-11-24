@@ -6,7 +6,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common.DataParsers
 {
-    /// <summary>Analyses crop data for a tile.</summary>
+    /// <summary>Analyzes crop data for a tile.</summary>
     internal class CropDataParser
     {
         /*********

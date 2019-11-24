@@ -56,8 +56,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.DefaultInternalName = defaultInternalName;
         }
 
-        /// <summary>Parse a serialised name string.</summary>
-        /// <param name="name">The serialised name string.</param>
+        /// <summary>Parse a serialized name string.</summary>
+        /// <param name="name">The serialized name string.</param>
         /// <param name="defaultDisplayName">The default display name for the container.</param>
         public static ContainerData ParseName(string name, string defaultDisplayName)
         {
@@ -103,7 +103,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return data;
         }
 
-        /// <summary>Get a serialised name representation of the container data.</summary>
+        /// <summary>Get a serialized name representation of the container data.</summary>
         public string ToName()
         {
             string internalName = !this.HasDefaultDisplayName() ? this.Name : this.DefaultInternalName;

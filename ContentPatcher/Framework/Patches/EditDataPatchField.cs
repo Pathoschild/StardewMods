@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Patches
         public ITokenString FieldKey { get; }
 
         /// <summary>The entry value to set.</summary>
-        public TokenisableJToken Value { get; }
+        public TokenizableJToken Value { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
         public bool IsMutable => this.Contextuals.IsMutable;
@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="entryKey">The unique key for the entry in the data file.</param>
         /// <param name="fieldKey">The field number to change.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchField(ITokenString entryKey, ITokenString fieldKey, TokenisableJToken value)
+        public EditDataPatchField(ITokenString entryKey, ITokenString fieldKey, TokenizableJToken value)
         {
             this.EntryKey = entryKey;
             this.FieldKey = fieldKey;

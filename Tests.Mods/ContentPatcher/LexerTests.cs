@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         /*********
         ** Unit tests
         *********/
-        /// <summary>Test that <see cref="Lexer.TokeniseString"/> generates the expected low-level structure.</summary>
+        /// <summary>Test that <see cref="Lexer.TokenizeString"/> generates the expected low-level structure.</summary>
         /// <remarks>
         /// 
         /// </remarks>
@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             "[ ]<StartToken:{{>[  Relationship ]<InputArgSeparator::>[ Abigail ]<EndToken:}}>[   ]",
             "[ ]<Token:Relationship input=<input:[Abigail]>>[   ]"
         )]
-        public void ParseTokenisedString(string input, string expectedBits, string expectedTokens)
+        public void ParseTokenizedString(string input, string expectedBits, string expectedTokens)
         {
             // act
             this.GetLexInfo(input, false, out LexBit[] bits, out ILexToken[] tokens);
@@ -74,14 +74,14 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         ** Private methods
         *********/
         /// <summary>Get lexical info for an input string.</summary>
-        /// <param name="input">The raw text to tokenise.</param>
-        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenisable string which main contain a mix of literal and {{token}} values.</param>
+        /// <param name="input">The raw text to tokenize.</param>
+        /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         /// <param name="bits">The low-level lexical character patterns.</param>
         /// <param name="tokens">The higher-level lexical tokens.</param>
         private void GetLexInfo(string input, bool impliedBraces, out LexBit[] bits, out ILexToken[] tokens)
         {
             Lexer lexer = new Lexer();
-            bits = lexer.TokeniseString(input).ToArray();
+            bits = lexer.TokenizeString(input).ToArray();
             tokens = lexer.ParseBits(bits, impliedBraces).ToArray();
         }
 

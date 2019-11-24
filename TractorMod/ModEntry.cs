@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            // Allow for garages from older versions that didn't get normalised correctly.
+            // Allow for garages from older versions that didn't get normalized correctly.
             // This can be removed once support for legacy data is dropped.
             return asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}");
         }
@@ -231,7 +231,7 @@ namespace Pathoschild.Stardew.TractorMod
                             tractor.DefaultPosition = tractorTile;
                         }
 
-                        // normalise tractor
+                        // normalize tractor
                         if (tractor != null)
                             tractor.Name = TractorManager.GetTractorName(garage.HorseId);
 
@@ -672,7 +672,7 @@ namespace Pathoschild.Stardew.TractorMod
                 stable != null
                 && (
                     stable.maxOccupants.Value == this.MaxOccupantsID
-                    || stable.buildingType.Value == this.BlueprintBuildingType // freshly constructed, not yet normalised
+                    || stable.buildingType.Value == this.BlueprintBuildingType // freshly constructed, not yet normalized
                 );
         }
 

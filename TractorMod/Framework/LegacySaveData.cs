@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <remarks>This constructor is needed to deserialise from JSON.</remarks>
+        /// <remarks>This constructor is needed to deserialize from JSON.</remarks>
         public LegacySaveData() { }
 
         /// <summary>Construct an instance.</summary>

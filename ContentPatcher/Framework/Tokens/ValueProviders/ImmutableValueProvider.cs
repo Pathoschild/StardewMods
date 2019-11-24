@@ -5,7 +5,7 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A value provider whose values don't change after it's initialised.</summary>
+    /// <summary>A value provider whose values don't change after it's initialized.</summary>
     internal class ImmutableValueProvider : BaseValueProvider
     {
         /*********

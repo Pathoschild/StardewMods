@@ -7,7 +7,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
-    /// <summary>An attachment for fertiliser or speed-gro.</summary>
+    /// <summary>An attachment for fertilizer or speed-gro.</summary>
     internal class FertilizerAttachment : BaseAttachment
     {
         /*********
@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
                 return false;
 
-            // apply fertiliser
+            // apply fertilizer
             dirt.fertilizer.Value = item.ParentSheetIndex;
             this.ConsumeItem(player, item);
             return true;

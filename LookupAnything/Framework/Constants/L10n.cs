@@ -6,7 +6,7 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
-    /// <summary>Localisation Keys matching the mod's <c>i18n</c> schema.</summary>
+    /// <summary>Localization Keys matching the mod's <c>i18n</c> schema.</summary>
     [SuppressMessage("ReSharper", "MemberHidesStaticFromOuterClass", Justification = "Irrelevant in this context.")]
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Deliberately named to keep translation keys short.")]
     internal static class L10n
@@ -589,8 +589,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>XP</c>.</summary>
             public static Translation Experience() => L10n.Helper.Get("monster.experience");
 
-            /// <summary>A value like <c>Defence</c>.</summary>
-            public static Translation Defence() => L10n.Helper.Get("monster.defence");
+            /// <summary>A value like <c>Defense</c>.</summary>
+            public static Translation Defense() => L10n.Helper.Get("monster.defense");
 
             /// <summary>A value like <c>Attack</c>.</summary>
             public static Translation Attack() => L10n.Helper.Get("monster.attack");
@@ -719,7 +719,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Farm map</c>.</summary>
             public static Translation FarmMap() => L10n.Helper.Get("player.farm-map");
 
-            /// <summary>A value like <c>Favourite thing</c>.</summary>
+            /// <summary>A value like <c>Favorite thing</c>.</summary>
             public static Translation FavoriteThing() => L10n.Helper.Get("player.favorite-thing");
 
             /// <summary>A value like <c>Gender</c>.</summary>
@@ -863,7 +863,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialise the static helper.</summary>
+        /// <summary>Initialize the static helper.</summary>
         /// <param name="translation">The translation helper.</param>
         public static void Init(ITranslationHelper translation)
         {

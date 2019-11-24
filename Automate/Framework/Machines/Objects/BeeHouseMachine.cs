@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /*********
         ** Fields
         *********/
-        /// <summary>The honey types produced by this beehouse indexed by input ID.</summary>
+        /// <summary>The honey types produced by this bee house indexed by input ID.</summary>
         private readonly IDictionary<int, SObject.HoneyType> HoneyTypes = new Dictionary<int, SObject.HoneyType>
         {
             [376] = SObject.HoneyType.Poppy,

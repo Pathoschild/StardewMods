@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Patches
         public ITokenString Key { get; }
 
         /// <summary>The entry value to set.</summary>
-        public TokenisableJToken Value { get; }
+        public TokenizableJToken Value { get; }
 
         /// <summary>Whether the instance may change depending on the context.</summary>
         public bool IsMutable => this.Contextuals.IsMutable;
@@ -36,7 +36,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The unique key for the entry in the data file.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(ITokenString key, TokenisableJToken value)
+        public EditDataPatchRecord(ITokenString key, TokenizableJToken value)
         {
             this.Key = key;
             this.Value = value;

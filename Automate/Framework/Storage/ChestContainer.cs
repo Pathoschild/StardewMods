@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
         }
 
-        /// <summary>Get a tracked item sync'd with the chest inventory.</summary>
+        /// <summary>Get a tracked item synced with the chest inventory.</summary>
         /// <param name="item">The item to track.</param>
         private ITrackedStack GetTrackedItem(Item item)
         {

@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "A casser pour obtenir du minerais de cuivre.",
     "data.item.gold-node.name": "Filon d'or",
     "data.item.gold-node.description": "A casser pour obtenir du minerais d'or.",
-    "data.item.iridum-node.name": "Filon d'iridium",
-    "data.item.iridum-node.description": "A casser pour obtenir du minerais d'iridium.",
+    "data.item.iridium-node.name": "Filon d'iridium",
+    "data.item.iridium-node.description": "A casser pour obtenir du minerais d'iridium.",
     "data.item.iron-node.name": "Filon de fer",
     "data.item.iron-node.description": "A casser pour obtenir du minerais du fer.",
 
@@ -309,7 +309,7 @@
     "monster.health": "Santé",
     "monster.drops": "Butin",
     "monster.experience": "XP",
-    "monster.defence": "Défense",
+    "monster.defense": "Défense",
     "monster.attack": "Attaque",
     "monster.adventure-guild": "Guilde des aventuriers",
 

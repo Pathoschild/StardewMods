@@ -15,12 +15,12 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normaliseAssetName)
-            : base(logName, PatchType.Load, contentPack, assetName, conditions, normaliseAssetName, fromAsset: localAsset) { }
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normalizeAssetName)
+            : base(logName, PatchType.Load, contentPack, assetName, conditions, normalizeAssetName, fromAsset: localAsset) { }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>
@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Clone a texture.</summary>
         /// <param name="source">The texture to clone.</param>
-        /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronised texture changes.</returns>
+        /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronized texture changes.</returns>
         private Texture2D CloneTexture(Texture2D source)
         {
             // get data

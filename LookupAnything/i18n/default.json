@@ -139,13 +139,13 @@
     "data.item.copper-node.description": "Break apart to obtain copper ore.",
     "data.item.gold-node.name": "Gold Node",
     "data.item.gold-node.description": "Break apart to obtain gold ore.",
-    "data.item.iridum-node.name": "Iridium Node",
-    "data.item.iridum-node.description": "Break apart to obtain iridium ore.",
+    "data.item.iridium-node.name": "Iridium Node",
+    "data.item.iridium-node.description": "Break apart to obtain iridium ore.",
     "data.item.iron-node.name": "Iron Node",
     "data.item.iron-node.description": "Break apart to obtain iron ore.",
 
     // mine stones
-    "data.item.colored-stone.name": "Coloured Stone",
+    "data.item.colored-stone.name": "Colored Stone",
     "data.item.colored-stone.description": "A nondescript stone. It might contain stone, ores, or geodes.",
     "data.item.mine-stone.name": "Stone",
     "data.item.mine-stone.description": "Break apart to obtain stone.",
@@ -307,7 +307,7 @@
     "monster.health": "Health",
     "monster.drops": "Drops",
     "monster.experience": "XP",
-    "monster.defence": "Defence",
+    "monster.defense": "Defense",
     "monster.attack": "Attack",
     "monster.adventure-guild": "Adventure Guild",
 
@@ -353,7 +353,7 @@
     // player lookup labels
     "player.farm-name": "Farm name",
     "player.farm-map": "Farm map",
-    "player.favorite-thing": "Favourite thing",
+    "player.favorite-thing": "Favorite thing",
     "player.gender": "Gender",
     "player.spouse": "Spouse",
     "player.combat-skill": "Combat",

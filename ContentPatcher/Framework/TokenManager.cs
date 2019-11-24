@@ -154,7 +154,7 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the global value providers with which to initialise the token manager.</summary>
+        /// <summary>Get the global value providers with which to initialize the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
@@ -209,7 +209,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
         }
 
-        /// <summary>Get the local value providers with which to initialise a local context.</summary>
+        /// <summary>Get the local value providers with which to initialize a local context.</summary>
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {

@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "打碎之后可以获得铜矿石。",
     "data.item.gold-node.name": "黄金矿点",
     "data.item.gold-node.description": "打碎之后可以获得黄金矿石。",
-    "data.item.iridum-node.name": "铱矿点",
-    "data.item.iridum-node.description": "打碎之后可以获得铱矿石。",
+    "data.item.iridium-node.name": "铱矿点",
+    "data.item.iridium-node.description": "打碎之后可以获得铱矿石。",
     "data.item.iron-node.name": "铁矿点",
     "data.item.iron-node.description": "打碎之后可以获得铁矿石。",
 
@@ -309,7 +309,7 @@
     "monster.health": "血量",
     "monster.drops": "掉落",
     "monster.experience": "经验",
-    "monster.defence": "防御",
+    "monster.defense": "防御",
     "monster.attack": "攻击",
     "monster.adventure-guild": "探险家公会",
 

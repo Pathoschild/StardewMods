@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted data for this container.</summary>
         ContainerData Data { get; }
 
-        /// <summary>Whether the player can customise the container data.</summary>
+        /// <summary>Whether the player can customize the container data.</summary>
         bool IsDataEditable { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>

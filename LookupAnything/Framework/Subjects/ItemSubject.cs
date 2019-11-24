@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
-            this.Initialise(this.DisplayItem.DisplayName, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
+            this.Initialize(this.DisplayItem.DisplayName, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
         }
 
         /// <summary>Get the data to display for this subject.</summary>

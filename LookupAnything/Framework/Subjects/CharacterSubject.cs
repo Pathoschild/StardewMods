@@ -58,13 +58,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else
                 typeName = npc.GetType().Name;
 
-            // initialise
+            // initialize
             this.Target = npc;
             this.TargetType = type;
             CharacterData overrides = metadata.GetCharacter(npc, type);
             string name = npc.getName();
             string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
-            this.Initialise(name, description, typeName);
+            this.Initialize(name, description, typeName);
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -189,7 +189,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new PercentageBarField(this.GameHelper, L10n.Monster.Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, L10n.Generic.PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
             yield return new ItemDropListField(this.GameHelper, L10n.Monster.Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: L10n.Monster.DropsNothing());
             yield return new GenericField(this.GameHelper, L10n.Monster.Experience(), this.Stringify(monster.ExperienceGained));
-            yield return new GenericField(this.GameHelper, L10n.Monster.Defence(), this.Stringify(monster.resilience.Value));
+            yield return new GenericField(this.GameHelper, L10n.Monster.Defense(), this.Stringify(monster.resilience.Value));
             yield return new GenericField(this.GameHelper, L10n.Monster.Attack(), this.Stringify(monster.DamageToFarmer));
 
             // Adventure Guild quest

@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.Common.UI
             return false;
         }
 
-        /// <summary>The method invoked when the player resizes the game windoww.</summary>
+        /// <summary>The method invoked when the player resizes the game window.</summary>
         /// <param name="oldBounds">The previous game window bounds.</param>
         /// <param name="newBounds">The new game window bounds.</param>
         protected virtual void ReceiveGameWindowResized(Rectangle oldBounds, Rectangle newBounds) { }

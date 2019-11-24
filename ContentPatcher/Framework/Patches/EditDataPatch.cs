@@ -58,17 +58,17 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
-        /// <param name="fromFile">The normalised asset key from which to load entries (if applicable), including tokens.</param>
+        /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IParsedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normaliseAssetName, TryParseFieldsDelegate tryParseFields)
-            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normaliseAssetName, fromAsset: fromFile)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IParsedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromFile)
         {
             // set fields
             this.Records = records?.ToArray();
@@ -207,7 +207,7 @@ namespace ContentPatcher.Framework.Patches
         ** Private methods
         *********/
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
-        /// <param name="fromFile">The normalised asset key from which to load entries (if applicable), including tokens.</param>
+        /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
         /// <param name="context">The tokens available for this content pack.</param>
         /// <param name="entries">The parsed data entry changes.</param>
         /// <param name="fields">The parsed data field changes.</param>

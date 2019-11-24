@@ -193,7 +193,7 @@ namespace Pathoschild.Stardew.LookupAnything
             ).Sum();
         }
 
-        /// <summary>Get whether two items are the same type (ignoring flavour text like 'blueberry wine' vs 'cranberry wine').</summary>
+        /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
         /// <param name="a">The first item to compare.</param>
         /// <param name="b">The second item to compare.</param>
         private bool AreEquivalent(Item a, Item b)
@@ -415,7 +415,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             spriteSize = spriteSize ?? Constant.MaxTargetSpriteSize;
             return
-                spriteTile.Y >= occludeTile.Y // sprites never extend downard from their tile
+                spriteTile.Y >= occludeTile.Y // sprites never extend downward from their tile
                 && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.Value.X
                 && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Value.Y;
         }

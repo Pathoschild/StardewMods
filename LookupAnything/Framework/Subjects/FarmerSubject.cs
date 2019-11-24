@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>The lookup target.</summary>
         private readonly SFarmer Target;
 
-        /// <summary>Whether this is being displayed on the load menu, before the save data is fully initialised.</summary>
+        /// <summary>Whether this is being displayed on the load menu, before the save data is fully initialized.</summary>
         private readonly bool IsLoadMenu;
 
         /// <summary>The raw save data for this player, if <see cref="IsLoadMenu"/> is true.</summary>
@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="farmer">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialised.</param>
+        /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialized.</param>
         public FarmerSubject(GameHelper gameHelper, SFarmer farmer, ITranslationHelper translations, bool isLoadMenu = false)
             : base(gameHelper, farmer.Name, null, L10n.Types.Player(), translations)
         {

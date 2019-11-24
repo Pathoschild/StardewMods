@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
         public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
         {
-            // normalise values
+            // normalize values
             if (minOutput == null && maxOutput == null)
             {
                 minOutput = 1;

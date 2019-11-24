@@ -4,7 +4,7 @@ using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
-    /// <summary>Summarises details about the friendship between an NPC and a player.</summary>
+    /// <summary>Summarizes details about the friendship between an NPC and a player.</summary>
     internal class FriendshipModel
     {
         /*********
@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.EmptyHearts = this.MaxPoints / pointsPerLevel - this.FilledHearts;
         }
 
-        /// <summary>Get the number of points to the next heart level or startdrop.</summary>
+        /// <summary>Get the number of points to the next heart level or stardrop.</summary>
         public int GetPointsToNext()
         {
             if (this.Points < this.MaxPoints)

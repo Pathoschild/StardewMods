@@ -35,7 +35,7 @@ You can do these by default:
 hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
 axe        | clear debris; clear dead crops; cut giant crops. | chop down trees; clear live crops.
-fertiliser | fertilise dirt. | —
+fertilizer | fertilize dirt. | —
 hoe        | till dirt; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
 milk pail  | collect milk from farm animals. | —
@@ -47,7 +47,7 @@ slingshot  | — | shoot one projectile/tile/second in the aimed direction.
 watering can | water crops. | —
 
 Tractors use no stamina when using tools, and the watering can won't run out of water. They will
-consume fertiliser or seeds when you sow those, though.
+consume fertilizer or seeds when you sow those, though.
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that

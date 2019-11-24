@@ -16,8 +16,8 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Fields
         *********/
-        /// <summary>Normalise an asset name.</summary>
-        private readonly Func<string, string> NormaliseAssetNameImpl;
+        /// <summary>Normalize an asset name.</summary>
+        private readonly Func<string, string> NormalizeAssetNameImpl;
 
         /// <summary>The underlying contextual values.</summary>
         protected readonly AggregateContextual Contextuals = new AggregateContextual();
@@ -50,13 +50,13 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady { get; private set; }
 
-        /// <summary>The normalised asset key from which to load the local asset (if applicable).</summary>
+        /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
         public string FromAsset { get; private set; }
 
         /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
         public ITokenString RawFromAsset { get; }
 
-        /// <summary>The normalised asset name to intercept.</summary>
+        /// <summary>The normalized asset name to intercept.</summary>
         public string TargetAsset { get; private set; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
@@ -84,13 +84,13 @@ namespace ContentPatcher.Framework.Patches
 
             // update target asset
             changed = this.RawTargetAsset.UpdateContext(context);
-            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormaliseAssetNameImpl(this.RawTargetAsset.Value) : "";
+            this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormalizeAssetNameImpl(this.RawTargetAsset.Value) : "";
 
             // update local tokens
             this.PrivateContext.Update(context);
             if (this.RawTargetAsset.IsReady)
             {
-                string path = PathUtilities.NormalisePathSeparators(this.RawTargetAsset.Value);
+                string path = PathUtilities.NormalizePathSeparators(this.RawTargetAsset.Value);
 
                 this.PrivateContext.SetLocalValue(ConditionType.Target.ToString(), path);
                 this.PrivateContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(path));
@@ -102,7 +102,7 @@ namespace ContentPatcher.Framework.Patches
 
             // update from asset
             this.FromAsset = this.RawFromAsset?.IsReady == true
-                ? this.NormaliseLocalAssetPath(this.RawFromAsset.Value, logName: $"{nameof(PatchConfig.FromFile)} field")
+                ? this.NormalizeLocalAssetPath(this.RawFromAsset.Value, logName: $"{nameof(PatchConfig.FromFile)} field")
                 : null;
             if (this.Contextuals.IsReady && this.FromAsset != null)
             {
@@ -174,18 +174,18 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="logName">A unique name for this patch shown in log messages.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="assetName">The normalised asset name to intercept.</param>
+        /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
-        /// <param name="normaliseAssetName">Normalise an asset name.</param>
-        /// <param name="fromAsset">The normalised asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normaliseAssetName, ITokenString fromAsset = null)
+        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, ITokenString fromAsset = null)
         {
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
             this.RawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
-            this.NormaliseAssetNameImpl = normaliseAssetName;
+            this.NormalizeAssetNameImpl = normalizeAssetName;
             this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
             this.RawFromAsset = fromAsset;
 
@@ -195,17 +195,17 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.RawFromAsset);
         }
 
-        /// <summary>Get a normalised file path relative to the content pack folder.</summary>
+        /// <summary>Get a normalized file path relative to the content pack folder.</summary>
         /// <param name="path">The relative asset path.</param>
-        /// <param name="logName">A descriptive name for the field being normalised shown in error messages.</param>
-        protected string NormaliseLocalAssetPath(string path, string logName)
+        /// <param name="logName">A descriptive name for the field being normalized shown in error messages.</param>
+        protected string NormalizeLocalAssetPath(string path, string logName)
         {
             try
             {
-                // normalise asset name
+                // normalize asset name
                 if (string.IsNullOrWhiteSpace(path))
                     return null;
-                string newPath = this.NormaliseAssetNameImpl(path);
+                string newPath = this.NormalizeAssetNameImpl(path);
 
                 // add .xnb extension if needed (it's stripped from asset names)
                 string fullPath = this.ContentPack.GetFullPath(newPath);

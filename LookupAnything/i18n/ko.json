@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "부수면 구리 광석을 얻을 수 있다.",
     "data.item.gold-node.name": "금 노드",
     "data.item.gold-node.description": "부수면 금 광석을 얻을 수 있다.",
-    "data.item.iridum-node.name": "이리듐 노드",
-    "data.item.iridum-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
+    "data.item.iridium-node.name": "이리듐 노드",
+    "data.item.iridium-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
     "data.item.iron-node.name": "철 노드",
     "data.item.iron-node.description": "부수면 철 광석을 얻을 수 있다.",
 
@@ -309,7 +309,7 @@
     "monster.health": "체력",
     "monster.drops": "드랍 물품",
     "monster.experience": "XP(경험치)",
-    "monster.defence": "방어력",
+    "monster.defense": "방어력",
     "monster.attack": "공격력",
     "monster.adventure-guild": "모험가 길드",
 

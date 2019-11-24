@@ -9,7 +9,7 @@ using StardewModdingAPI;
 
 namespace ContentPatcher.Framework
 {
-    /// <summary>Handles the logic for reading, normalising, and saving the configuration for a content pack.</summary>
+    /// <summary>Handles the logic for reading, normalizing, and saving the configuration for a content pack.</summary>
     internal class ConfigFileHandler
     {
         /*********

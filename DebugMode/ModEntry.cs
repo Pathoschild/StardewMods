@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.DebugMode
             }
         }
 
-        /// <summary>A pixel texture that can be stretched and colourised for display.</summary>
+        /// <summary>A pixel texture that can be stretched and colorized for display.</summary>
         private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
@@ -51,11 +51,11 @@ namespace Pathoschild.Stardew.DebugMode
         {
             SButton.P, // ends current day
             SButton.M, // ends current season
-            SButton.H, // randomises player's hat
-            SButton.I, // randomises player's hair
-            SButton.J, // randomises player's shirt and pants
-            SButton.L, // randomises player
-            SButton.U, // randomises farmhouse wallpaper and floors
+            SButton.H, // randomizes player's hat
+            SButton.I, // randomizes player's hair
+            SButton.J, // randomizes player's shirt and pants
+            SButton.L, // randomizes player
+            SButton.U, // randomizes farmhouse wallpaper and floors
             SButton.F10 // tries to launch a multiplayer server and crashes
         };
 
@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // initialise
+            // initialize
             this.Config = helper.ReadConfig<ModConfig>();
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
             this.Keys = this.Config.Controls.ParseControls(this.Monitor);
@@ -168,7 +168,7 @@ namespace Pathoschild.Stardew.DebugMode
             }
         }
 
-        /// <summary>Create a pixel texture that can be stretched and colourised for display.</summary>
+        /// <summary>Create a pixel texture that can be stretched and colorized for display.</summary>
         private static Texture2D CreatePixel()
         {
             Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
@@ -179,7 +179,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Draw the debug overlay to the screen.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
         /// <param name="font">The font with which to render text.</param>
-        /// <param name="pixel">A pixel texture that can be stretched and colourised for display.</param>
+        /// <param name="pixel">A pixel texture that can be stretched and colorized for display.</param>
         private void DrawOverlay(SpriteBatch batch, SpriteFont font, Texture2D pixel)
         {
             // draw debug info at cursor position

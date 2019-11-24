@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
-        /// <summary>Finds and analyses lookup targets in the world.</summary>
+        /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private readonly TargetFactory TargetFactory;
 
         /// <summary>Encapsulates monitoring and logging.</summary>
@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="targetFactory">Finds and analyses lookup targets in the world.</param>
+        /// <param name="targetFactory">Finds and analyzes lookup targets in the world.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public DebugInterface(GameHelper gameHelper, TargetFactory targetFactory, ModConfig config, IMonitor monitor)
@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 IEnumerable<ITarget> targets = this.TargetFactory
                     .GetNearbyTargets(currentLocation, cursorTile, includeMapTile: false)
                     .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1);
-                // if targets overlap, prioritise info on known targets
+                // if targets overlap, prioritize info on known targets
                 foreach (ITarget target in targets)
                 {
                     // get metadata

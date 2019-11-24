@@ -11,10 +11,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>The default name to display if it hasn't been customised.</summary>
+        /// <summary>The default name to display if it hasn't been customized.</summary>
         private readonly string DefaultDisplayName;
 
-        /// <summary>The default category to display if it hasn't been customised.</summary>
+        /// <summary>The default category to display if it hasn't been customized.</summary>
         private readonly string DefaultCategory;
 
 
@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The chest's tile position within its location or building.</summary>
         public Vector2 Tile { get; }
 
-        /// <summary>Whether the player can customise the container data.</summary>
+        /// <summary>Whether the player can customize the container data.</summary>
         public bool CanEdit => this.Container.IsDataEditable;
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
@@ -68,8 +68,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="container">The storage container.</param>
         /// <param name="location">The location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
-        /// <param name="defaultDisplayName">The default name to display if it hasn't been customised.</param>
-        /// <param name="defaultCategory">The default category to display if it hasn't been customised.</param>
+        /// <param name="defaultDisplayName">The default name to display if it hasn't been customized.</param>
+        /// <param name="defaultCategory">The default category to display if it hasn't been customized.</param>
         public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultDisplayName, string defaultCategory)
         {
             this.Container = container;

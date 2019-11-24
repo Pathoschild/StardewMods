@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The fish IDs for which any crabpot has logged an 'invalid fish data' error.</summary>
+        /// <summary>The fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
         private static readonly ISet<int> LoggedInvalidDataErrors = new HashSet<int>();
 
 
@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     // The fish length stats don't affect anything, so it's not worth notifying the
                     // user; just log one trace message per affected fish for troubleshooting.
                     if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.ParentSheetIndex))
-                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crabpots won't track fish length stats for that fish.\n{ex}", LogLevel.Trace);
+                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}", LogLevel.Trace);
                 }
 
                 Game1.player.caughtFish(item.ParentSheetIndex, size);

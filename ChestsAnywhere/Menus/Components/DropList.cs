@@ -86,9 +86,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             this.FontHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
             this.ToRight = toRight;
 
-            // initialise UI
+            // initialize UI
             this.Origin = new Vector2(x, y);
-            this.ReinitialiseComponents();
+            this.ReinitializeComponents();
         }
 
         /// <summary>A method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
@@ -151,7 +151,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         ** Private methods
         *********/
         /// <summary>Recalculate dimensions and components for rendering.</summary>
-        private void ReinitialiseComponents()
+        private void ReinitializeComponents()
         {
             // get item size
             int minItemWidth = Game1.tileSize * 2;

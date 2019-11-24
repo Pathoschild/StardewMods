@@ -115,7 +115,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // initialise after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
             if (this.IsFirstTick)
             {
                 this.IsFirstTick = false;
@@ -504,7 +504,7 @@ namespace ContentPatcher
 
             try
             {
-                // normalise patch fields
+                // normalize patch fields
                 if (entry.When == null)
                     entry.When = new InvariantDictionary<string>();
 
@@ -594,7 +594,7 @@ namespace ContentPatcher
                                 fields: fields,
                                 moveRecords: moveEntries,
                                 monitor: this.Monitor,
-                                normaliseAssetName: this.Helper.Content.NormalizeAssetName,
+                                normalizeAssetName: this.Helper.Content.NormalizeAssetName,
                                 tryParseFields: TryParseFields
                             );
                         }
@@ -697,7 +697,7 @@ namespace ContentPatcher
                 {
                     if (!tokenParser.TryParseStringTokens(pair.Key, assumeModIds, out string keyError, out IParsedTokenString key))
                         return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
-                    if (!tokenParser.TryParseJsonTokens(pair.Value, assumeModIds, out string valueError, out TokenisableJToken value))
+                    if (!tokenParser.TryParseJsonTokens(pair.Value, assumeModIds, out string valueError, out TokenizableJToken value))
                         return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
 
                     entries.Add(new EditDataPatchRecord(key, value));
@@ -721,7 +721,7 @@ namespace ContentPatcher
                             return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
 
                         // parse value
-                        if (!tokenParser.TryParseJsonTokens(fieldPair.Value, assumeModIds, out string valueError, out TokenisableJToken value))
+                        if (!tokenParser.TryParseJsonTokens(fieldPair.Value, assumeModIds, out string valueError, out TokenizableJToken value))
                             return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
                         if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
                             return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
@@ -767,12 +767,12 @@ namespace ContentPatcher
             return true;
         }
 
-        /// <summary>Normalise and parse the given condition values.</summary>
-        /// <param name="raw">The raw condition values to normalise.</param>
+        /// <summary>Normalize and parse the given condition values.</summary>
+        /// <param name="raw">The raw condition values to normalize.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
-        /// <param name="conditions">The normalised conditions.</param>
+        /// <param name="conditions">The normalized conditions.</param>
         /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
-        /// <param name="error">An error message indicating why normalisation failed.</param>
+        /// <param name="error">An error message indicating why normalization failed.</param>
         private bool TryParseConditions(InvariantDictionary<string> raw, TokenParser tokenParser, out IList<Condition> conditions, out InvariantHashSet immutableRequiredModIDs, out string error)
         {
             conditions = new List<Condition>();
@@ -807,14 +807,14 @@ namespace ContentPatcher
             return true;
         }
 
-        /// <summary>Normalise and parse the given condition values.</summary>
+        /// <summary>Normalize and parse the given condition values.</summary>
         /// <param name="name">The raw condition name.</param>
         /// <param name="value">The raw condition value.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="lexer">Handles parsing raw strings into tokens.</param>
-        /// <param name="condition">The normalised condition.</param>
+        /// <param name="condition">The normalized condition.</param>
         /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by this condition (if it's <see cref="ConditionType.HasMod"/> and immutable).</param>
-        /// <param name="error">An error message indicating why normalisation failed.</param>
+        /// <param name="error">An error message indicating why normalization failed.</param>
         private bool TryParseCondition(string name, string value, TokenParser tokenParser, Lexer lexer, out Condition condition, out InvariantHashSet immutableRequiredModIDs, out string error)
         {
             bool Fail(string reason, out string setError, out Condition setCondition, out InvariantHashSet setImmutableRequiredModIDs)
@@ -901,7 +901,7 @@ namespace ContentPatcher
         {
             parsed = false;
 
-            // analyse string
+            // analyze string
             if (!tokenParser.TryParseStringTokens(rawValue, assumeModIds, out error, out IParsedTokenString tokenString))
                 return false;
 
@@ -960,7 +960,7 @@ namespace ContentPatcher
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
         private bool TryPrepareLocalAsset(string path, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out IParsedTokenString tokenedPath)
         {
-            // normalise raw value
+            // normalize raw value
             path = path?.Trim();
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -969,7 +969,7 @@ namespace ContentPatcher
                 return false;
             }
 
-            // tokenise
+            // tokenize
             if (!tokenParser.TryParseStringTokens(path, assumeModIds, out string tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";

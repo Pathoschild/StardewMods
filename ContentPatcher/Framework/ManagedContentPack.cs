@@ -55,7 +55,7 @@ namespace ContentPatcher.Framework
         /// <summary>Read a JSON file from the content pack folder.</summary>
         /// <typeparam name="TModel">The model type.</typeparam>
         /// <param name="path">The file path relative to the content pack directory.</param>
-        /// <returns>Returns the deserialised model, or <c>null</c> if the file doesn't exist or is empty.</returns>
+        /// <returns>Returns the deserialized model, or <c>null</c> if the file doesn't exist or is empty.</returns>
         public TModel ReadJsonFile<TModel>(string path) where TModel : class
         {
             return this.Pack.ReadJsonFile<TModel>(path);
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework
         /// <param name="key">The case-insensitive asset key.</param>
         private string GetRealPath(string key)
         {
-            key = PathUtilities.NormalisePathSeparators(key);
+            key = PathUtilities.NormalizePathSeparators(key);
 
             // cache file paths
             if (this.RelativePaths == null)

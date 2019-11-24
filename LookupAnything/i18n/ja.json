@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "壊すと銅鉱石が手に入る",
     "data.item.gold-node.name": "金鉱脈",
     "data.item.gold-node.description": "壊すと金鉱石が手に入る",
-    "data.item.iridum-node.name": "イリジウム鉱脈",
-    "data.item.iridum-node.description": "壊すとイリジウム鉱石が手に入る",
+    "data.item.iridium-node.name": "イリジウム鉱脈",
+    "data.item.iridium-node.description": "壊すとイリジウム鉱石が手に入る",
     "data.item.iron-node.name": "鉄鉱脈",
     "data.item.iron-node.description": "壊すと鉄鉱石が手に入る",
 
@@ -307,7 +307,7 @@
     "monster.health": "体力",
     "monster.drops": "落とす物",
     "monster.experience": "経験値",
-    "monster.defence": "防御力",
+    "monster.defense": "防御力",
     "monster.attack": "攻撃力",
     "monster.adventure-guild": "冒険者ギルド",
 

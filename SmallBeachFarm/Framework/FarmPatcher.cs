@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialise the Harmony patches.</summary>
+        /// <summary>Initialize the Harmony patches.</summary>
         /// <param name="harmony">The Harmony patching API.</param>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
         /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>

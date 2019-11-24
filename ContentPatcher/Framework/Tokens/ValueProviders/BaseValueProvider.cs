@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The value provider name.</summary>
         public string Name { get; }
 
-        /// <summary>Whether the provided values can change after the provider is initialised.</summary>
+        /// <summary>Whether the provided values can change after the provider is initialized.</summary>
         public bool IsMutable { get; protected set; } = true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
@@ -279,7 +279,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <summary>Get whether the value provider's <see cref="IsReady"/> or values change when an action is invoked.</summary>
-        /// <param name="action">The action to perform, which returns true if the valus changed.</param>
+        /// <param name="action">The action to perform, which returns true if the values changed.</param>
         protected bool IsChanged(Func<bool> action)
         {
             bool wasReady = this.IsReady;

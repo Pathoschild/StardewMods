@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             : base(events, inputHelper)
         {
             if (!layers.Any())
-                throw new InvalidOperationException("Can't initialise the data layers overlay with no data layers.");
+                throw new InvalidOperationException("Can't initialize the data layers overlay with no data layers.");
 
             this.Layers = layers.OrderBy(p => p.Name).ToArray();
             this.DrawOverlay = drawOverlay;
@@ -267,7 +267,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                     if (!data.BorderColors.Any())
                         continue;
 
-                    // get neighbours
+                    // get neighbors
                     tiles.TryGetValue(new Vector2(x - 1, y), out TileDrawData left);
                     tiles.TryGetValue(new Vector2(x + 1, y), out TileDrawData right);
                     tiles.TryGetValue(new Vector2(x, y - 1), out TileDrawData top);

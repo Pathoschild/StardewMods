@@ -41,9 +41,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Reflection = reflection;
 
             if (this.IsBerryBush(bush))
-                this.Initialise(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
             else
-                this.Initialise(L10n.Bush.PlainName(), L10n.Bush.PlainDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush.PlainName(), L10n.Bush.PlainDescription(), L10n.Types.Bush());
         }
 
         /// <summary>Get the data to display for this subject.</summary>

@@ -75,7 +75,7 @@ namespace ContentPatcher.Framework
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
-        public bool TryParseJsonTokens(JToken rawJson, InvariantHashSet assumeModIds, out string error, out TokenisableJToken parsed)
+        public bool TryParseJsonTokens(JToken rawJson, InvariantHashSet assumeModIds, out string error, out TokenizableJToken parsed)
         {
             if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework
             }
 
             // parse
-            parsed = new TokenisableJToken(rawJson, this.Context);
+            parsed = new TokenizableJToken(rawJson, this.Context);
             if (!this.Migrator.TryMigrate(parsed, out error))
                 return false;
 

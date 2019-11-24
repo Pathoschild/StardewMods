@@ -61,11 +61,11 @@ hotkey | action | multiplayer notes
 :----- | :----- | -----------------
 `P`    | Immediately go to bed and start the next day. | Affects current player. Will take effect when you change location.
 `M`    | Immediately go to bed and start the next season. | Affects all players if used by main player; else equivalent to `P`. Will take effect when you change location.
-`H`    | Randomise the player's hat. | Affects current player.
-`I`    | Randomise the player's hair. | Affects current player.
-`J`    | Randomise the player's shirt and pants. | **Affects all players!**
-`L`    | Randomise the player. | **Affects all players!**
-`U`    | Randomise the farmhouse wallpaper and floors. | Affects main player's farmhouse (even if used by another player).
+`H`    | Randomize the player's hat. | Affects current player.
+`I`    | Randomize the player's hair. | Affects current player.
+`J`    | Randomize the player's shirt and pants. | **Affects all players!**
+`L`    | Randomize the player. | **Affects all players!**
+`U`    | Randomize the farmhouse wallpaper and floors. | Affects main player's farmhouse (even if used by another player).
 `F10`  | Starts a multiplayer server for the current save (if not already started). | No meaningful effect.
 
 ## Configure
@@ -78,7 +78,7 @@ setting           | what it affects
 :---------------- | :------------------
 `Controls`        | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default value is `~` to toggle debug mode.
 `AllowGameDebug` | Default `false`. Whether pressing the key also enables the [game's built-in debug mode](#game-debug-mode).
-`AllowDangerousCommands` | Default `false`. This allows game debug commands which end the current day/season & save, randomise your player or farmhouse decorations, or crash the game. Only change this if you're aware of the consequences.
+`AllowDangerousCommands` | Default `false`. This allows game debug commands which end the current day/season & save, randomize your player or farmhouse decorations, or crash the game. Only change this if you're aware of the consequences.
 
 ## Compatibility
 Debug Mode is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and

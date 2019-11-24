@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "Разбейте для получения медной руды.",
     "data.item.gold-node.name": "Золотая жила",
     "data.item.gold-node.description": "Разбейте для получения золотой руды.",
-    "data.item.iridum-node.name": "Иридиевая жила",
-    "data.item.iridum-node.description": "Разбейте для получения иридиевой руды.",
+    "data.item.iridium-node.name": "Иридиевая жила",
+    "data.item.iridium-node.description": "Разбейте для получения иридиевой руды.",
     "data.item.iron-node.name": "Железная жила",
     "data.item.iron-node.description": "Разбейте для получения железной руды.",
 
@@ -307,7 +307,7 @@
     "monster.health": "Здоровье",
     "monster.drops": "Добыча",
     "monster.experience": "XP",
-    "monster.defence": "Защита",
+    "monster.defense": "Защита",
     "monster.attack": "Атака",
     "monster.adventure-guild": "Гильдия Приключений",
 

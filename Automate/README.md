@@ -166,8 +166,8 @@ Enables compatibility with other mods. All values are enabled by default.
 
 field | result
 ----- | ------
-`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertiliser and seeds.
-`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertiliser and seeds.
+`AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertilizer and seeds.
+`BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertilizer and seeds.
 
   </td>
 </tr>
@@ -197,8 +197,8 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate is compatible with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertiliser in auto-grabbers will be ignored).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertiliser in Junimo huts will be ignored).
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertilizer in auto-grabbers will be ignored).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertilizer in Junimo huts will be ignored).
 * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs

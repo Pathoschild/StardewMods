@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "Quebre-a para coletar minérios de cobre.",
     "data.item.gold-node.name": "Aglomerado de Ouro",
     "data.item.gold-node.description": "Quebre para receber minérios de ouro.",
-    "data.item.iridum-node.name": "Aglomerado de Irídio",
-    "data.item.iridum-node.description": "Quebre-a para receber minérios de irídio.",
+    "data.item.iridium-node.name": "Aglomerado de Irídio",
+    "data.item.iridium-node.description": "Quebre-a para receber minérios de irídio.",
     "data.item.iron-node.name": "Aglomerado de Ferro",
     "data.item.iron-node.description": "Quebre-a pra receber minérios de ferro.",
 
@@ -307,7 +307,7 @@
     "monster.health": "Saúde",
     "monster.drops": "Derruba",
     "monster.experience": "XP",
-    "monster.defence": "Defesa",
+    "monster.defense": "Defesa",
     "monster.attack": "Ataque",
     "monster.adventure-guild": "Guilda dos Aventureiros",
 

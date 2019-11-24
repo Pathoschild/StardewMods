@@ -19,10 +19,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Constructs machine groups.</summary>
         private readonly MachineGroupFactory MachineGroupFactory;
 
-        /// <summary>The active machine groups recognised by Automate.</summary>
+        /// <summary>The active machine groups recognized by Automate.</summary>
         private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups;
 
-        /// <summary>The disabled machine groups recognised by Automate (e.g. machines not connected to a chest).</summary>
+        /// <summary>The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</summary>
         private readonly IDictionary<GameLocation, MachineGroup[]> DisabledMachineGroups;
 
 
@@ -32,8 +32,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="machineGroupFactory">Constructs machine groups.</param>
-        /// <param name="activeMachineGroups">The active machine groups recognised by Automate.</param>
-        /// <param name="disabledMachineGroups">The disabled machine groups recognised by Automate (e.g. machines not connected to a chest).</param>
+        /// <param name="activeMachineGroups">The active machine groups recognized by Automate.</param>
+        /// <param name="disabledMachineGroups">The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</param>
         internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups, IDictionary<GameLocation, MachineGroup[]> disabledMachineGroups)
         {
             this.Monitor = monitor;
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.MachineGroupFactory.Add(factory);
         }
 
-        /// <summary>Get the status of machines in a tile area. This is a specialised API for Data Layers and similar mods.</summary>
+        /// <summary>Get the status of machines in a tile area. This is a specialized API for Data Layers and similar mods.</summary>
         /// <param name="location">The location for which to display data.</param>
         /// <param name="tileArea">The tile area for which to display data.</param>
         public IDictionary<Vector2, int> GetMachineStates(GameLocation location, Rectangle tileArea)
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Private methods
         *********/
         /// <summary>Get all machines in a location.</summary>
-        /// <param name="location">The location whose maches to fetch.</param>
+        /// <param name="location">The location whose matches to fetch.</param>
         private IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
         {
             // active groups

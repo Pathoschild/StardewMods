@@ -139,8 +139,8 @@
     "data.item.copper-node.description": "Romper para obtener mineral de cobre.",
     "data.item.gold-node.name": "Nodo de oro",
     "data.item.gold-node.description": "Romper para obtener mineral de oro.",
-    "data.item.iridum-node.name": "Nodo de iridio",
-    "data.item.iridum-node.description": "Romper para obtener mineral de iridio.",
+    "data.item.iridium-node.name": "Nodo de iridio",
+    "data.item.iridium-node.description": "Romper para obtener mineral de iridio.",
     "data.item.iron-node.name": "Nodo de hierro",
     "data.item.iron-node.description": "Romper para obtener mineral de hierro.",
 
@@ -311,7 +311,7 @@
     "monster.health": "Salud",
     "monster.drops": "Botín",
     "monster.experience": "EXP",
-    "monster.defence": "Defensa",
+    "monster.defense": "Defensa",
     "monster.attack": "Ataque",
     "monster.adventure-guild": "Gremio de aventureros",
 
