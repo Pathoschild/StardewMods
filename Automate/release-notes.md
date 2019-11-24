@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.14
+Released 26 November 2019.
+
 * Updated for Stardew Valley 1.4, including new machine recipes.
 * Fixed auto-grabbers not showing empty sprite when emptied automatically.
 

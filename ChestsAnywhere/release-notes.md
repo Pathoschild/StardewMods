@@ -1,10 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17
+Released 26 November 2019.
+
 * Updated for Stardew Valley 1.4.
-* Improved translations. Thanks to Hesperusrus (updated Russian)!
 * Fixed auto-grabber sprite not updated when emptied/filled through Chests Anywhere.
+* Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 1.16.2
 Released 25 July 2019.

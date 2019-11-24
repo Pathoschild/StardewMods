@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.11
+Released 26 November 2019.
+
 * Updated for Stardew Valley 1.4.
 * The hotkey to show the debug info overlay no longer enables the game debug mode too, unless that's enabled in `config.json`. That prevents accidentally triggering game debug hotkeys if you just want the overlay.
 * Added support for minigames.

@@ -1,12 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.10
+Released 26 November 2019.
+
+* Updated for Stardew Valley 1.4.
 * Added new tokens:
   * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
-  * `HasDialogueAnswer`: the response IDs for the player's answers to question dialogues (thanks to mus-candidus!).
+  * `HasDialogueAnswer`: the player's selected response IDs for question dialogues (thanks to mus-candidus!).
   * `IsJojaMartComplete`: whether the player bought a Joja membership and completed all Joja bundles.
-  * `Random`: choose a random value from a given list.
+  * `Random`: a random value from the given list.
   * `Range`: a list of integers between the specified min/max values.
 * Added support for editing map properties with `EditMap` patches.
 * Added support for using `FromFile` with `EditData` patches.
