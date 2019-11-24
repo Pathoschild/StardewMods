@@ -52,6 +52,7 @@
     "friendship-status.engaged": "Noivos",
     "friendship-status.married": "Casados",
     "friendship-status.divorced": "Divorciados",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "Sala da Caldeira",
     "bundle-area.vault": "Cofre",
     "bundle-area.bulletin-board": "Mural de Recados",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Guilda dos Aventureiros",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "Seu animal de estimação leal.",
     "data.npc.horse.description": "Seu cavalo leal.",
     "data.npc.junimo.description": "Um espírito da floresta do mundo espiritual. Sabe-se muito pouco sobre eles.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -188,6 +191,10 @@
     "building.upgrades": "Melhorias",
     "building.water-trough": "Cocho de Água",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} de no máximo {{max}} animais",
     "building.construction.summary": "Pronto em {{date}}",
@@ -212,15 +219,29 @@
     "building.upgrades.coop.2": "até 12 animais; adiciona auto alimentação e coelhos",
     "building.water-trough.summary": "{{filled}} de {{max}} cochas de água preenchidas",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
+
     // bush lookup labels
     "bush.name.berry": "Arbusto de bagas",
     "bush.name.plain": "Arbusto simples",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "Um arbusto que cresce amoras e amoras-silvestres.",
     "bush.description.plain": "Um arbusto simples que não cresce nada.",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "Próxima colheita",
 
     // bush lookup values
+    "bush.growth.summary": "fica madura em {{date}}",
     "bush.schedule.berry": "20% de chance de dar: amora-silvestre, na primavera, entre os dias 15 e 18; amoras no outono, entre os dias 8 a 11.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Reclamações",
@@ -257,6 +278,9 @@
     "crop.harvest.too-late": "Muito tarde para colher nessa estação (deveria ser no {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Conteúdos",
     "item.cask-schedule": "Envelhecimento",
 
@@ -266,9 +290,18 @@
 
     "item.fence-health": "Saúde",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Conteúdo",
-    "item.likes-this": "Gosta disso",
     "item.loves-this": "Ama isso",
+    "item.likes-this": "Gosta disso",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "Preciso para",
     "item.number-owned": "Possui",
     "item.number-cooked": "Cozinhado",
@@ -279,6 +312,9 @@
     "item.sells-to": "Vende para",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}} está pronto agora",
     "item.cask-schedule.now-partial": "{{quality}} por agora (use a picareta para parar de envelhecer)",
     "item.cask-schedule.tomorrow": "{{quality}} amanhã",
@@ -286,6 +322,11 @@
 
     "item.fence-health.gold-clock": "Não decai com o Relógio de Ouro",
     "item.fence-health.summary": "{{percent}}% (aproximadamente {{count}} dias restantes)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "{{name}} colocado",
     "item.contents.ready": "{{name}} pronto",
@@ -325,15 +366,21 @@
     "npc.gifted-today": "Presenteou hoje",
     "npc.gifted-this-week": "Presentes dados essa semana",
     "npc.kissed-today": "Já beijou hoje",
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "Presentes que ama",
     "npc.likes-gifts": "Presentes que gosta",
     "npc.neutral-gifts": "Presentes neutros",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "Você é casado! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "Você não os conheceu ainda.",
     "npc.friendship.need-bouquet": "Precisa de um buquê pra prosseguir",
     "npc.friendship.need-points": "Precisa de {{count}} pontos para prosseguir",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "Idade",
@@ -349,13 +396,25 @@
     // pet lookup labels
     "pet.love": "Amor",
     "pet.petted-today": "Recebeu carinho hoje",
+    "pet.last-petted": "Last petted", // TODO
+    "pet.water-bowl": "Water bowl", // TODO
+
+    // pet lookup values
+    // TODO
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "Empty",
+    "pet.water-bowl.filled": "Filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "Nome da fazenda",
     "player.farm-map": "Mapa da fazenda",
     "player.favorite-thing": "Coisa Favorida",
     "player.gender": "Genero",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "Esposa(o)",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Combate",
     "player.farming-skill": "Cultivo",
     "player.fishing-skill": "Pescaria",
@@ -385,10 +444,15 @@
     // tile lookup values
     "tile.tile.none-here": "Sem azulejos aqui",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
+
     // tree lookup labels
     "tree.stage": "Estágio do crescimento",
     "tree.next-growth": "Próximo cultivo",
     "tree.has-seed": "Tem sementes",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Árvode de Ácer",
@@ -401,7 +465,8 @@
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
     "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
     "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
-    "tree.next-growth.random": "20% Chance de crescer {{stage}} amanhã",
+    "tree.next-growth.random": "{{chance}}% Chance de crescer {{stage}} amanhã",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "Semente",

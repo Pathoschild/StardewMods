@@ -47,6 +47,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Whether to enable compatibility with Auto-Grabber Mod.</summary>
         private readonly bool AutoGrabberModCompat;
 
+        /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
+        public bool PullGemstonesFromJunimoHuts { get; set; }
+
 
         /*********
         ** Public methods
@@ -59,7 +62,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="data">The internal Automate data that can't be derived automatically.</param>
         /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
         /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
-        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat)
+        /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
+        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
         {
             this.Connectors = new HashSet<string>(connectors, StringComparer.InvariantCultureIgnoreCase);
             this.AutomateShippingBin = automateShippingBin;
@@ -68,6 +72,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Data = data;
             this.BetterJunimosCompat = betterJunimosCompat;
             this.AutoGrabberModCompat = autoGrabberModCompat;
+            this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
         }
 
         /// <summary>Get a machine, container, or connector instance for a given object.</summary>
@@ -135,6 +140,8 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
                     return new TapperMachine(obj, location, tile, tree.treeType.Value);
             }
+            if (obj is WoodChipper woodChipper)
+                return new WoodChipperMachine(woodChipper, location, tile);
             if (obj.name == "Worm Bin")
                 return new WormBinMachine(obj, location, tile);
 
@@ -171,8 +178,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
         {
             // machine
+            if (building is FishPond pond)
+                return new FishPondMachine(pond, location);
             if (building is JunimoHut hut)
-                return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat);
+                return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
             if (building is Mill mill)
                 return new MillMachine(mill, location);
             if (this.AutomateShippingBin && building is ShippingBin bin)

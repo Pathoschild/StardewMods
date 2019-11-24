@@ -103,10 +103,10 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the raw gift tastes from the underlying data.</summary>
         /// <param name="objects">The game's object data.</param>
         /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
+        public IEnumerable<GiftTasteEntry> GetGiftTastes(ObjectModel[] objects)
         {
             // extract raw values
-            var tastes = new List<GiftTasteModel>();
+            var tastes = new List<GiftTasteEntry>();
             {
                 // define data schema
                 var universal = new Dictionary<string, GiftTaste>
@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
                             from refID in tasteStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                            select new GiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
+                            select new GiftTasteEntry(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
                     else
@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.LookupAnything
                             tastes.AddRange(
                                 from refID in
                                     personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                select new GiftTasteModel(taste.Value, villager, int.Parse(refID))
+                                select new GiftTasteEntry(taste.Value, villager, int.Parse(refID))
                             );
                         }
                     }

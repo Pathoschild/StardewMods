@@ -78,7 +78,8 @@ namespace Pathoschild.Stardew.Automate
                 reflection: helper.Reflection,
                 data: data,
                 betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
-                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod")
+                autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
+                pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
 
             // hook events

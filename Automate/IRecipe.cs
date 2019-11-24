@@ -19,8 +19,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The output to generate (given an input).</summary>
         Func<Item, SObject> Output { get; }
 
-        /// <summary>The time needed to prepare an output.</summary>
-        int Minutes { get; }
+        /// <summary>The time needed to prepare an output (given an input).</summary>
+        Func<Item, int> Minutes { get; }
 
 
         /*********

@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.DataLayers
             if (layers.Buildable.IsEnabled())
                 yield return new BuildableLayer(translation, layers.Buildable);
             if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses, hasBeeHouseFlowerRangeFix: mods.HasMod("kirbylink.beehousefix"));
+                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses);
             if (layers.CoverageForScarecrows.IsEnabled())
                 yield return new ScarecrowLayer(translation, layers.CoverageForScarecrows, mods);
             if (layers.CoverageForSprinklers.IsEnabled())
@@ -93,6 +93,8 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods);
             if (layers.CropWater.IsEnabled())
                 yield return new CropWaterLayer(translation, layers.CropWater);
+            if (layers.CropPaddyWater.IsEnabled())
+                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
                 yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
             if (layers.CropHarvest.IsEnabled())

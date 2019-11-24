@@ -191,7 +191,7 @@ field      | purpose
 &nbsp;     | See _common fields_ above.
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced-tokens--conditions) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
-`MoveEntries` | Change the entry order in a list asset like `██████████`. (Using this with a non-list asset will cause an error, since those have no order.)
+`MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
 `FromFile` | The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced-tokens--conditions). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.
 
 Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `FromFile`.
@@ -317,40 +317,36 @@ this single patch loads a dialogue file for multiple NPCs:
 <dt>Edit data model assets</dt>
 <dd>
 
-_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
-Valley 1.4.)_
-
-
-A few assets like `██████████` contain data models, not strings like above. You can edit those
+A few assets like `Data/Movies` contain data models, not strings like above. You can edit those
 the same way, with two differences: fields have names instead of indexes, and entry values are
 structures instead of strings.
 
-For example, this ██████████ and adds ██████████:
+For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
    "Format": "1.10.0",
    "Changes": [
       {
          "Action": "EditData",
-         "Target": "██████████",
+         "Target": "Data/Movies",
          "Fields": {
-            "██████████": {
-               "██████████": "██████████"
+            "spring_movie_0": {
+               "Title": "The Brave Little Pikmin"
             }
          },
          "Entries": {
-            "██████████": {
-               "ID": "██████████",
-               "██████████": "██████████",
-               "██████████": "██████████",
-               "██████████": "██████████",
-               "██████████": [ "██████████", "██████████" ],
-               "██████████": [
+            "spring_movie_3": {
+               "ID": "spring_movie_3",
+               "Title": "The Brave Little Pikmin II: Now I'm a Piktree",
+               "Description": "Follow the continuing adventures of our pikmin hero as he absorbs nutrients from the soil!",
+               "SheetIndex": 6,
+               "Tags": [ "documentary", "family" ],
+               "Scenes": [
                   {
-                     "██████████": "██████████",
-                     "██████████": "██████████",
-                     "██████████": "██████████",
-                     "██████████": "██████████"
+                     "Image": 0,
+                     "MessageDelay": 500,
+                     "Music": "movie_nature",
+                     "Text": "'The Brave Little Pikmin II: Now I'm a Piktree', sponsored by Joja Cola"
                   }
                ]
             }
@@ -365,22 +361,20 @@ For example, this ██████████ and adds ███████�
 <dt>Edit list assets</dt>
 <dd>
 
-_(Some of the text below is censored because it reveals unannounced info about the upcoming Stardew
-Valley 1.4.)_
-
-A few assets like `██████████` contain a list of entries (meaning they don't have a key).
+A few assets like `Data/MoviesReactions` contain a list of entries (meaning they don't have a key).
 Content Patcher will automatically select one field to treat as the key, so you can edit them the
 same way as usual:
 
 asset | field used
 ----- | ----------
 _default_ | `ID` if it exists.
-`██████████` | `Name`
-`██████████` | `NPCName`
-`██████████` | ██████████
+`Data/ConcessionTastes` | `Name`
+`Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
+`Data/MoviesReactions` | `NPCName`
+`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like `item_cloth|category_fish,fish_semi_rare`).  The key is space-sensitive.
 
 List assets also have an order which can affect game logic (e.g. the first entry in
-`██████████` matching the NPC is used). You can move an entry within that order using the
+`Data\MoviesReactions` matching the NPC is used). You can move an entry within that order using the
 `MoveEntries` field.
 
 Here's an example showing all possible reorder options. (If you specify a `BeforeID` or `AfterID`
@@ -391,7 +385,7 @@ that doesn't match any entry, a warning will be shown.)
    "Changes": [
       {
          "Action": "EditData",
-         "Target": "██████████",
+         "Target": "Data/MoviesReactions",
          "MoveEntries": [
             { "ID": "Abigail", "BeforeID": "Leah" }, // move entry so it's right before Leah
             { "ID": "Abigail", "AfterID": "Leah" }, // move entry so it's right after Leah
@@ -1017,7 +1011,7 @@ may add upgrade levels beyond that.
 <td>
 
 The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`,
-`Riverland`, `Forest`, `Hilltop`, `Wilderness`, `Custom`.
+`FourCorners`, `Forest`, `Hilltop`, `Riverland`, `Wilderness`, `Custom`.
 
 </td>
 </tr>

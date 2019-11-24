@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
@@ -115,11 +116,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // grass
+            // (see Grass.performToolAction)
             if (this.Config.HarvestGrass && tileFeature is Grass)
             {
                 location.terrainFeatures.Remove(tile);
-                if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
-                    Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+
+                Random random = Game1.IsMultiplayer
+                    ? Game1.recentMultiplayerRandom
+                    : new Random((int)(Game1.uniqueIDForThisGame + tile.X * 1000.0 + tile.Y * 11.0));
+
+                if (random.NextDouble() < (tool.InitialParentTileIndex == MeleeWeapon.goldenScythe ? 0.75 : 0.5))
+                {
+                    if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
+                        Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+                }
+
                 return true;
             }
 
@@ -134,9 +145,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
             // bush
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
-            if (this.Config.HarvestForage && location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) is Bush bush)
+            if (this.Config.HarvestForage)
             {
-                if (!bush.townBush.Value && bush.tileSheetOffset.Value == 1 && bush.inBloom(Game1.currentSeason, Game1.dayOfMonth))
+                Bush bush = tileFeature as Bush ?? location.largeTerrainFeatures.FirstOrDefault(p => p.getBoundingBox(p.tilePosition.Value).Intersects(tileArea)) as Bush;
+                if (bush?.tileSheetOffset.Value == 1 && (bush.size.Value == Bush.greenTeaBush || (bush.size.Value == Bush.mediumBush && !bush.townBush.Value)))
                 {
                     bush.performUseAction(bush.tilePosition.Value, location);
                     return true;

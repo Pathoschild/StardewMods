@@ -2,7 +2,10 @@
 ## 4.9
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4.
+* Updated for Stardew Valley 1.4, including...
+  * fertiliser can now be applied to planted crops;
+  * harvesting tea bushes;
+  * using the golden scythe.
 * Added attachment features:
   * axe: cut giant crops; cut choppable bushes (disabled by default).
   * milk pail: collect milk from animals.
@@ -12,6 +15,7 @@ Released 26 November 2019.
 * Updated for compatibility with the latest version of Pelican Fiber.
 * Fixed scythe sometimes interacting with incorrect targets (e.g. shipping bin or farm animals).
 * Fixed scythe showing item pickup animation when collecting forage items.
+* Fixed scythe incorrectly having a 100% chance to drop hay. The probability now matches the vanilla 50% (scythe) or 75% (golden scythe).
 * Fixed incorrect speed changes when a different speed buff expires while riding the tractor (via Stardew Valley 1.4 change).
 * Fixed lag when using the hoe attachment while surrounded by untillable tiles.
 * Fixed issue where a dismissed tractor would return to the previous garage position if the garage was moved that day.

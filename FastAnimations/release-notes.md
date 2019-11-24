@@ -4,7 +4,7 @@
 ## 1.7.2
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4.
+* Added support for the golden scythe in Stardew Valley 1.4.
 
 ## 1.7.1
 Released 07 April 2019.

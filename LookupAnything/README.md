@@ -28,15 +28,32 @@ You can do this in the world, your inventory, the calendar, or a shop.
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
-These are the available settings:
+Common settings:
 
-| setting           | what it affects
-| ----------------- | -------------------
-| `Controls`    | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `F1` to lookup, and `Up`/`Down` to scroll the lookup results. Available inputs:<ul><li>`ToggleLookup`: lookup whatever's under the cursor.</li><li>`ToggleLookupInFrontOfPlayer`: lookup whatever's in front of the player.</li><li>`ScrollUp`/`ScrollDown`: scroll the displayed lookup results.</li><li>`ToggleDebug`: show information intended for developers.</li></ul>
-| `HideOnKeyUp` | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
-| `ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
+setting           | what it affects
+----------------- | -------------------
+`Controls`    | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `F1` to lookup, and `Up`/`Down` to scroll the lookup results. Available inputs:<ul><li>`ToggleLookup`: lookup whatever's under the cursor.</li><li>`ToggleLookupInFrontOfPlayer`: lookup whatever's in front of the player.</li><li>`ScrollUp`/`ScrollDown`: scroll the displayed lookup results.</li><li>`ToggleDebug`: show information intended for developers.</li></ul>
+`ProgressionMode` | Default `false`. Whether to hide some content (current gift tastes) until you've discovered it in-game.
+`HideOnKeyUp` | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
+
+Advanced settings:
+
+setting           | what it affects
+----------------- | -------------------
+`EnableTileLookups` | Default `false`. Whether to include map tiles as lookup targets.
+`ScrollAmount` | Default `160`. The number of pixels to shift content on each up/down scroll.
+`ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
 
 ## Showcase
+### Progression mode
+The optional 'progression mode' hides spoilers until you've discovered them in-game ([disabled by
+default](#Configure)). This currently affects gift tastes. Hidden content is indicated by
+grayed-out text like this:
+> ![](screenshots/progression-mode.png)
+
+
+The screenshots below are without progression mode, and may show spoilers.
+
 ### Sample lookups
 * See a villager's social data, friendship with you, and the gifts they like. This will highlight
   the gifts you're carrying (green) or own (black).
@@ -56,7 +73,8 @@ These are the available settings:
   (gray but not crossed out).
   > ![](screenshots/monster.png)
 
-* See what an item is used for, and who likes getting it as a gift.
+* See what an item is used for, who likes getting it as a gift, and its dye color (and strength)
+  when used in tailoring. Look up a movie ticket to see what's playing and who would like the movie.
   > ![](screenshots/item.png)
 
 * See when a crop will be ready to harvest.
@@ -67,8 +85,9 @@ These are the available settings:
   > ![](screenshots/crafting.png)
   > ![](screenshots/cask.png)
 
-* See useful info about your buildings (different for each building type).
+* See useful info about your buildings (different for each building type). For example:
   > ![](screenshots/barn.png)
+  > ![](screenshots/fish-pond.png)
 
 * See when a tree will bear fruit, how long until its fruit quality increases, and any
   problems preventing it from growing.

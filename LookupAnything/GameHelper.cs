@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Crafting;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -30,7 +31,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private Lazy<ObjectModel[]> Objects;
 
         /// <summary>The cached villagers' gift tastes.</summary>
-        private Lazy<GiftTasteModel[]> GiftTastes;
+        private Lazy<GiftTasteEntry[]> GiftTastes;
 
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
@@ -61,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
-            this.GiftTastes = new Lazy<GiftTasteModel[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
+            this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
             this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, monitor).ToArray());
         }
 
@@ -228,7 +229,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetGiftTastes(Item item, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item, Metadata metadata)
         {
             if (!item.canBeGivenAsGift())
                 yield break;
@@ -240,17 +241,17 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 GiftTaste? taste = this.GetGiftTaste(npc, item);
                 if (taste.HasValue)
-                    yield return new KeyValuePair<NPC, GiftTaste>(npc, taste.Value);
+                    yield return new GiftTasteModel(npc, item, taste.Value);
             }
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IDictionary<SObject, GiftTaste> GetGiftTastes(NPC npc, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc, Metadata metadata)
         {
             if (!this.IsSocialVillager(npc, metadata))
-                return new Dictionary<SObject, GiftTaste>();
+                return new GiftTasteModel[0];
 
             // get giftable items
             HashSet<int> giftableItemIDs = new HashSet<int>(
@@ -267,9 +268,22 @@ namespace Pathoschild.Stardew.LookupAnything
                     let item = this.GetObjectBySpriteIndex(itemID)
                     let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
-                    select new { Item = item, Taste = taste.Value }
-                )
-                .ToDictionary(p => p.Item, p => p.Taste);
+                    select new GiftTasteModel(npc, item, taste.Value)
+                );
+        }
+
+        /// <summary>Get how much each NPC likes watching this week's movie.</summary>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(Metadata metadata)
+        {
+            foreach (NPC npc in this.GetAllCharacters())
+            {
+                if (!this.IsSocialVillager(npc, metadata))
+                    continue;
+
+                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
+                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
+            }
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -334,6 +348,18 @@ namespace Pathoschild.Stardew.LookupAnything
                     continue;
 
                 yield return recipe;
+            }
+
+            // from tailor recipes
+            List<TailorItemRecipe> tailorRecipes = Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes");
+            foreach (TailorItemRecipe recipe in tailorRecipes)
+            {
+                if (recipe.FirstItemTags?.All(item.HasContextTag) == false && recipe.SecondItemTags?.All(item.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                RecipeIngredientModel ingredient = new RecipeIngredientModel(item.ParentSheetIndex, 1);
+                Item Output(Item input) => new Clothing(recipe.CraftedItemID);
+                yield return new RecipeModel(null, RecipeType.TailorInput, "Tailoring", new[] { ingredient }, Output, mustBeLearned: false, outputItemIndex: recipe.CraftedItemID, isForMachine: _ => false);
             }
         }
 
@@ -494,6 +520,19 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
                 return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+            }
+
+            // clothing
+            if (item is Clothing clothing)
+            {
+                switch (clothing.clothesType.Value)
+                {
+                    case (int)Clothing.ClothesType.SHIRT:
+                        return new SpriteInfo(FarmerRenderer.shirtsTexture, new Rectangle(clothing.indexInTileSheetMale.Value * 8 % 128, clothing.indexInTileSheetMale.Value * 8 / 128 * 32, 8, 8));
+
+                    case (int)Clothing.ClothesType.PANTS:
+                        return new SpriteInfo(FarmerRenderer.pantsTexture, new Rectangle(192 * (clothing.indexInTileSheetMale.Value % (FarmerRenderer.pantsTexture.Width / 192)), 688 * (clothing.indexInTileSheetMale.Value / (FarmerRenderer.pantsTexture.Width / 192)) + 672, 16, 16));
+                }
             }
 
             // unknown item

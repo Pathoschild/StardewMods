@@ -1,5 +1,8 @@
 using System;
 using System.Reflection;
+using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
+using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework
 {
@@ -29,6 +32,18 @@ namespace ContentPatcher.Framework
         {
             switch (entity)
             {
+                case ConcessionTaste entry:
+                    return entry.Name;
+
+                case FishPondData entry:
+                    return string.Join(",", entry.RequiredTags);
+
+                case MovieCharacterReaction entry:
+                    return entry.NPCName;
+
+                case TailorItemRecipe entry:
+                    return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
+
                 default:
                     PropertyInfo property = entity.GetType().GetProperty("ID");
                     if (property != null)

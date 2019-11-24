@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public int MaxOutput { get; }
 
         /// <summary>The percentage chance of this recipe being produced.</summary>
-        public int OutputChance { get; set; }
+        public decimal OutputChance { get; set; }
 
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
         public RecipeIngredientModel[] ExceptIngredients { get; }
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, int? outputChance = null)
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)

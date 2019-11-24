@@ -37,6 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
+        /// <summary>The mod configuration.</summary>
+        private readonly ModConfig Config;
+
         /// <summary>The Json Assets API.</summary>
         private readonly JsonAssetsIntegration JsonAssets;
 
@@ -53,13 +56,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets)
+        /// <param name="config">The mod configuration.</param>
+        public TargetFactory(Metadata metadata, ITranslationHelper translations, IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets, ModConfig config)
         {
             this.Metadata = metadata;
             this.Translations = translations;
             this.Reflection = reflection;
             this.GameHelper = gameHelper;
             this.JsonAssets = jsonAssets;
+            this.GameHelper = gameHelper;
+            this.Config = config;
         }
 
         /****
@@ -291,7 +297,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case TargetType.Pet:
                 case TargetType.Monster:
                 case TargetType.Villager:
-                    return new CharacterSubject(this.GameHelper, target.GetValue<NPC>(), target.Type, this.Metadata, this.Translations, this.Reflection);
+                    return new CharacterSubject(this.GameHelper, target.GetValue<NPC>(), target.Type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode);
 
                 // player
                 case TargetType.Farmer:
@@ -304,7 +310,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // crop
                 case TargetType.Crop:
                     Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new ItemSubject(this.GameHelper, this.Translations, this.GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: crop);
+                    return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, this.GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: crop);
 
                 // tree
                 case TargetType.FruitTree:
@@ -314,13 +320,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // object
                 case TargetType.InventoryItem:
-                    return new ItemSubject(this.GameHelper, this.Translations, target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
+                    return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
-                    return new ItemSubject(this.GameHelper, this.Translations, target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
+                    return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
 
                 // building
                 case TargetType.Building:
-                    return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection);
+                    return new BuildingSubject(this.GameHelper, this.Metadata, target.GetValue<Building>(), target.GetSpritesheetArea(), this.Translations, this.Reflection, this.Config.ProgressionMode);
 
                 case TargetType.Bush:
                     return new BushSubject(this.GameHelper, target.GetValue<Bush>(), this.Translations, this.Reflection);
@@ -363,7 +369,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get villager with a birthday on that date
                         NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
                         if (target != null)
-                            return new CharacterSubject(this.GameHelper, target, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
+                            return new CharacterSubject(this.GameHelper, target, TargetType.Villager, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode);
                     }
                     break;
 
@@ -372,7 +378,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         Item item = inventoryMenu.hoveredItem;
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -381,7 +387,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         Item item = this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -401,7 +407,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             {
                                 int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
                                 SObject obj = new SObject(itemID, 1);
-                                return new ItemSubject(this.GameHelper, this.Translations, obj, ObjectContext.Inventory, knownQuality: false);
+                                return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, obj, ObjectContext.Inventory, knownQuality: false);
                             }
                         }
                     }
@@ -413,12 +419,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // player inventory item
                         Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
 
                         // crafting recipe
                         CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
                         if (recipe != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, recipe.createItem(), ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -448,11 +454,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             {
                                 NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)
-                                    return new CharacterSubject(this.GameHelper, npc, TargetType.Villager, this.Metadata, this.Translations, this.Reflection);
+                                    return new CharacterSubject(this.GameHelper, npc, TargetType.Villager, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode);
                             }
                         }
                     }
                     break;
+
+                case ProfileMenu profileMenu:
+                    {
+                        Item item = profileMenu.hoveredItem;
+                        if (item != null)
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
+                        break;
+                    }
 
                 // Community Center bundle menu
                 case JunimoNoteMenu bundleMenu:
@@ -461,7 +475,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         {
                             Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
                             if (item != null)
-                                return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                                return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                         }
 
                         // list of required ingredients
@@ -473,7 +487,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                                 var ingredient = bundle.ingredients[i];
                                 var item = this.GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
                                 item.Quality = ingredient.quality;
-                                return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                                return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                             }
                         }
 
@@ -481,7 +495,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
                         {
                             if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
-                                return new ItemSubject(this.GameHelper, this.Translations, slot.item, ObjectContext.Inventory, knownQuality: true);
+                                return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, slot.item, ObjectContext.Inventory, knownQuality: true);
                         }
                     }
                     break;
@@ -506,7 +520,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         ISalable entry = shopMenu.hoveredItem;
                         if (entry is Item item)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
+                        if (entry is MovieConcession snack)
+                            return new MovieSnackSubject(this.GameHelper, this.Translations, snack);
                     }
                     break;
 
@@ -527,7 +543,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get hovered item
                         Item item = Game1.player.Items[index];
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
 
@@ -536,7 +552,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         Item item = this.Reflection.GetField<Item>(menu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
                         if (item != null)
-                            return new ItemSubject(this.GameHelper, this.Translations, item, ObjectContext.Inventory, knownQuality: true);
+                            return new ItemSubject(this.GameHelper, this.Translations, this.Config.ProgressionMode, item, ObjectContext.Inventory, knownQuality: true);
                     }
                     break;
             }

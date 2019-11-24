@@ -59,7 +59,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.GameHelper, L10n.Player.FarmName(), target.farmName.Value);
             yield return new GenericField(this.GameHelper, L10n.Player.FarmMap(), this.GetFarmType());
             yield return new GenericField(this.GameHelper, L10n.Player.FavoriteThing(), target.favoriteThing.Value);
-            yield return new GenericField(this.GameHelper, L10n.Player.Spouse(), this.GetSpouseName());
+            yield return new GenericField(this.GameHelper, Game1.player.spouse == "Krobus" ? L10n.Player.Housemate() : L10n.Player.Spouse(), this.GetSpouseName());
+
+            // saw a movie this week
+            if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater"))
+                yield return new GenericField(this.GameHelper, L10n.Player.WatchedMovieThisWeek(), this.Stringify(target.lastSeenMovieWeek.Value >= Game1.Date.TotalSundayWeeks));
 
             // skills
             int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
@@ -164,6 +168,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
                 case Farm.riverlands_layout:
                     return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
+                case Farm.fourCorners_layout:
+                    return Game1.content.LoadString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
 
                 default:
                     return L10n.Player.FarmMapCustom();

@@ -52,6 +52,7 @@
     "friendship-status.engaged": "Помолвлены",
     "friendship-status.married": "В браке",
     "friendship-status.divorced": "Разведены",
+    "friendship-status.kicked-out": "Kicked out", // TODO
 
     /*********
     ** Data translations
@@ -63,6 +64,7 @@
     "bundle-area.boiler-room": "Бойлерная",
     "bundle-area.vault": "Сейф",
     "bundle-area.bulletin-board": "Доска объявлений",
+    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
 
     // shop names
     "shop.adventure-guild": "Гильдия Приключений",
@@ -82,6 +84,7 @@
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
     "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
+    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
 
     /*********
     ** Item overrides
@@ -188,6 +191,10 @@
     "building.upgrades": "Улучшения",
     "building.water-trough": "Корыто",
 
+    "building.fish-pond.population": "Population", // TODO
+    "building.fish-pond.drops": "Drops", // TODO
+    "building.fish-pond.quests": "Quests", // TODO
+
     // building lookup values
     "building.animals.summary": "{{count}} из {{max}} животных внутри",
     "building.construction.summary": "будет готово {{date}}",
@@ -212,15 +219,30 @@
     "building.upgrades.coop.2": "до 12-ти животных; разблокируются: система подачи корма и кролики",
     "building.water-trough.summary": "{{filled}} из {{max}} корыт заполнено",
 
+    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
+    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
+    "building.fish-pond.quests.done": "{{count}} fish", // TODO
+    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
+    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
+    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
+
     // bush lookup labels
     "bush.name.berry": "Ягодный куст",
     "bush.name.plain": "Обычный куст",
+    "bush.name.tea": "Tea Bush", // TODO
     "bush.description.berry": "Куст, на котором растёт морошка или ежевика.",
     "bush.description.plain": "Куст, на котором ничего не растёт.",
+    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
+    "bush.date-planted": "Date planted", // TODO
+    "bush.growth": "Growth", // TODO
     "bush.next-harvest": "Следующий сбор",
 
     // bush lookup values
+    // TODO
+    "bush.growth.summary": "вырастет {{date}}",
     "bush.schedule.berry": "20% шанса на сбор морошки, с 15-го по 18-ое число весны, а также на сбор ежевики, с 8-го по 11-ое число осени.",
+    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Жалобы",
@@ -257,6 +279,9 @@
     "crop.harvest.too-late": "слишком поздно в этом сезоне для следующего сбора (урожай {{date}})",
 
     // item lookup labels
+    "item.can-be-dyed": "Can be dyed", // TODO
+    "item.produces-dye": "Produces dye", // TODO
+
     "item.cask-contents": "Содержит",
     "item.cask-schedule": "Изнашивается",
 
@@ -266,9 +291,18 @@
 
     "item.fence-health": "Здоровье",
 
+    "item.movie-snack-preference": "Preference", // TODO
+    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
+    "item.movie-ticket.loves-movie": "Loves movie", // TODO
+    "item.movie-ticket.likes-movie": "Likes movie", // TODO
+    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+
     "item.contents": "Содержит",
-    "item.likes-this": "Нравится",
     "item.loves-this": "Любят",
+    "item.likes-this": "Нравится",
+    "item.neutral-about-this": "Neutral about this", // TODO
+    "item.dislikes-this": "Dislikes this", // TODO
+    "item.hates-this": "Hates this", // TODO
     "item.needed-for": "Необходим для",
     "item.number-owned": "Наличие",
     "item.number-cooked": "Приготовлено",
@@ -279,6 +313,9 @@
     "item.sells-to": "Место продажи",
 
     // item lookup values
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+
     "item.cask-schedule.now": "{{quality}} теперь готово.",
     "item.cask-schedule.now-partial": "{{quality}} сейчас (используйте кирку для остановки старения)",
     "item.cask-schedule.tomorrow": "{{quality}} завтра",
@@ -286,6 +323,11 @@
 
     "item.fence-health.gold-clock": "не разрушается благодаря золотым часам",
     "item.fence-health.summary": "{{percent}}% (сломается через {{count}} дн.)",
+
+    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
+    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
+    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
     "item.contents.placed": "содержит {{name}}",
     "item.contents.ready": "{{name}} готов",
@@ -325,15 +367,21 @@
     "npc.gifted-today": "Подарок за сегодня",
     "npc.gifted-this-week": "Подарки за эту неделю",
     "npc.kissed-today": "Поцелуй за сегодня",
+    "npc.hugged-today": "Hugged today", // TODO
     "npc.loves-gifts": "Любит подарки:",
     "npc.likes-gifts": "Нравятся подарки:",
     "npc.neutral-gifts": "Равнодушен к подаркам:",
+    "npc.dislikes-gifts": "Dislikes gifts", // TODO
+    "npc.hates-gifts": "Hates gifts", // TODO
 
     // NPC lookup values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
+    "npc.can-romance.housemate": "You're housemates!", // TODO
     "npc.friendship.not-met": "Вы ещё не встречались.",
     "npc.friendship.need-bouquet": "нужен букет для след.",
     "npc.friendship.need-points": "след. через {{count}}",
+    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
 
     // NPC child lookup labels
     "npc.child.age": "Возраст",
@@ -349,13 +397,25 @@
     // pet lookup labels
     "pet.love": "Привязанность",
     "pet.petted-today": "За сегодня в настроении",
+    "pet.last-petted": "Last petted", // TODO
+    "pet.water-bowl": "Water bowl", // TODO
+
+    // pet lookup values
+    // TODO
+    "pet.last-petted.yes": "yes (+12 love)",
+    "pet.last-petted.days-ago": "{{days}} days ago",
+    "pet.last-petted.never": "never",
+    "pet.water-bowl.empty": "Empty",
+    "pet.water-bowl.filled": "Filled (+6 love)",
 
     // player lookup labels
     "player.farm-name": "Название фермы",
     "player.farm-map": "Карта фермы",
     "player.favorite-thing": "Любимая вещь",
     "player.gender": "Пол",
+    "player.housemate": "Housemate", // TODO
     "player.spouse": "Супруг(а)",
+    "player.watched-movie-this-week": "Watched movie this week", // TODO
     "player.combat-skill": "Боевые навыки",
     "player.farming-skill": "Фермерство",
     "player.fishing-skill": "Рыбная ловля",
@@ -385,10 +445,15 @@
     // tile lookup values
     "tile.tile.none-here": "здесь нет тайла",
 
+    // trash bear lookup labels
+    "trash-bear.item-wanted": "Item wanted", // TODO
+    "trash-bear.quest-progress": "Quest progress", // TODO
+
     // tree lookup labels
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
     "tree.has-seed": "Содержит семена",
+    "tree.is-fertilized": "Is fertilized", // TODO
 
     // non-fruit tree lookup values
     "tree.name.maple": "Клён",
@@ -402,6 +467,7 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.random": "20% шанс, что завтра вырастит в {{stage}}",
+    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // tree stages
     "tree.stages.seed": "семя",

@@ -64,6 +64,10 @@ Shows which crops have fertilizer applied.
 Shows which crops have been watered today.
 > ![](docs/screenshots/crops-watered.png)
 
+### Crops: water for paddy crops
+Shows which tiles are close enough to water for paddy crops to get auto-watered and bonus growth.
+> ![](docs/screenshots/crops-paddy-water.png)
+
 ### Machine processing
 Shows whether your machines are empty, processing, or finished. (You need to install
 [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
@@ -96,7 +100,6 @@ Data Layers will automatically integrate with these mods if you they're installe
 mod installed     | effects
 ----------------- | ----------
 Automate          | Shows whether your machines are empty, processing, or ready to harvest.
-Bee House Flower Range Fix | Adjusts the bee house range to match.
 Better Junimos    | Shows custom Junimo hut coverage.
 Better Sprinklers | Shows custom sprinkler coverage.
 Cobalt            | Shows cobalt sprinkler coverage.

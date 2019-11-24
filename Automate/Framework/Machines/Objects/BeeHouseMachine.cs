@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -10,20 +9,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     /// <remarks>See the game's machine logic in <see cref="SObject.performDropDownAction"/>, <see cref="SObject.checkForAction"/>, and <see cref="SObject.minutesElapsed"/>.</remarks>
     internal class BeeHouseMachine : GenericObjectMachine<SObject>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The honey types produced by this bee house indexed by input ID.</summary>
-        private readonly IDictionary<int, SObject.HoneyType> HoneyTypes = new Dictionary<int, SObject.HoneyType>
-        {
-            [376] = SObject.HoneyType.Poppy,
-            [591] = SObject.HoneyType.Tulip,
-            [593] = SObject.HoneyType.SummerSpangle,
-            [595] = SObject.HoneyType.FairyRose,
-            [597] = SObject.HoneyType.BlueJazz
-        };
-
-
         /*********
         ** Public methods
         *********/
@@ -51,28 +36,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 return null;
 
             // get flower data
-            SObject.HoneyType type = SObject.HoneyType.Wild;
-            string prefix = type.ToString();
+            int flowerId = -1;
+            string flowerName = null;
             int addedPrice = 0;
-            Crop flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation);
+            Crop flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation, 5, crop => !crop.forageCrop.Value);
             if (flower != null)
             {
-                string[] flowerData = Game1.objectInformation[flower.indexOfHarvest.Value].Split('/');
-                prefix = flowerData[0];
-                addedPrice = Convert.ToInt32(flowerData[1]) * 2;
-                if (!this.HoneyTypes.TryGetValue(flower.indexOfHarvest.Value, out type))
-                    type = SObject.HoneyType.Wild;
+                flowerId = flower.indexOfHarvest.Value;
+                string[] fields = Game1.objectInformation[flowerId].Split('/');
+                flowerName = fields[0];
+                addedPrice = Convert.ToInt32(fields[1]) * 2;
             }
 
             // build object
             SObject result = new SObject(output.ParentSheetIndex, output.Stack)
             {
-                name = $"{prefix} Honey",
+                name = $"{flowerName ?? "Wild"} Honey",
                 Price = output.Price + addedPrice
             };
-            result.honeyType.Value = type;
-
-            // yield
+            result.preservedParentSheetIndex.Value = flowerId;
             return new TrackedItem(result, onEmpty: this.Reset);
         }
 

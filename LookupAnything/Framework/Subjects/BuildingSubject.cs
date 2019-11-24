@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -12,6 +13,7 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.FishPond;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using SObject = StardewValley.Object;
@@ -36,6 +38,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private readonly Metadata Metadata;
 
+        /// <summary>Whether to only show content once the player discovers it.</summary>
+        private readonly bool ProgressionMode;
+
 
         /*********
         ** Public methods
@@ -47,7 +52,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper)
+        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
+        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
             : base(gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
         {
             // init
@@ -55,6 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
+            this.ProgressionMode = progressionMode;
 
             // get name/description from blueprint if available
             try
@@ -101,7 +108,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection, this.ProgressionMode));
                     yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
@@ -146,6 +153,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 switch (building)
                 {
+                    // fish pond
+                    case FishPond pond:
+                        if (pond.fishType.Value <= -1)
+                            yield return new GenericField(this.GameHelper, L10n.Building.FishPondPopulation(), L10n.Building.FishPondPopulationEmpty());
+                        else
+                        {
+                            // get fish population
+                            SObject fish = pond.GetFishObject();
+                            fish.Stack = pond.FishCount;
+                            var pondData = pond.GetFishPondData();
+
+                            // population field
+                            {
+                                string populationStr = $"{fish.DisplayName} ({L10n.Generic.Ratio(pond.FishCount, pond.maxOccupants.Value)})";
+                                if (pond.FishCount < pond.maxOccupants.Value)
+                                {
+                                    SDate nextSpawn = SDate.Now().AddDays(pondData.SpawnTime - pond.daysSinceSpawn.Value);
+                                    populationStr += Environment.NewLine + L10n.Building.FishPondPopulationNextSpawn(relativeDate: this.GetRelativeDateStr(nextSpawn));
+                                }
+
+                                yield return new ItemIconField(this.GameHelper, L10n.Building.FishPondPopulation(), fish, text: populationStr);
+                            }
+
+                            // output
+                            yield return new ItemIconField(this.GameHelper, L10n.Building.OutputReady(), pond.output.Value);
+
+                            // drops
+                            int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
+                            yield return new ItemDropListField(this.GameHelper, L10n.Building.FishPondDrops(), this.GetPossibleDrops(pond, pondData), sort: false, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
+
+                            // quests
+                            if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
+                                yield return new CheckboxListField(this.GameHelper, L10n.Building.FishPondQuests(), this.GetPopulationGates(pond, pondData));
+                        }
+                        break;
+
                     // Junimo hut
                     case JunimoHut hut:
                         yield return new GenericField(this.GameHelper, L10n.Building.JunimoHarvestingEnabled(), text.Stringify(!hut.noHarvest.Value));
@@ -328,6 +371,100 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop2()) },
                     value: upgradeLevel >= 2
                 );
+            }
+        }
+
+        /// <summary>Get a fish pond's population gates for display.</summary>
+        /// <param name="pond">The fish pond.</param>
+        /// <param name="data">The fish pond data.</param>
+        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetPopulationGates(FishPond pond, FishPondData data)
+        {
+            int nextQuest = -1;
+            foreach (var gate in data.PopulationGates)
+            {
+                int newPopulation = gate.Key + 1;
+
+                // done
+                if (pond.lastUnlockedPopulationGate.Value >= gate.Key)
+                {
+                    yield return new KeyValuePair<IFormattedText[], bool>(
+                        key: new IFormattedText[] { new FormattedText(L10n.Building.FishPondQuestsDone(count: newPopulation)) },
+                        value: true
+                    );
+                    continue;
+                }
+
+                // get required items
+                if (nextQuest == -1)
+                    nextQuest = gate.Key;
+                List<string> requiredItems = new List<string>();
+                foreach (string entry in gate.Value)
+                {
+                    // parse requirement
+                    string[] parts = entry.Split(' ');
+                    int id = -1;
+                    int minCount = 1;
+                    int maxCount = 1;
+                    if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out int itemID))
+                    {
+                        requiredItems.Add(entry);
+                        continue;
+                    }
+                    if (parts.Length >= 2 && !int.TryParse(parts[1], out minCount))
+                    {
+                        requiredItems.Add(entry);
+                        continue;
+                    }
+                    if (parts.Length >= 3 && !int.TryParse(parts[1], out maxCount))
+                    {
+                        requiredItems.Add(entry);
+                        continue;
+                    }
+
+                    // build display string
+                    if (maxCount < minCount)
+                        maxCount = minCount;
+                    SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
+                    string summary = obj.DisplayName;
+                    if (minCount != maxCount)
+                        summary += $" ({L10n.Generic.Range(min: minCount, max: maxCount)})";
+                    else if (minCount > 1)
+                        summary += $" ({minCount})";
+
+                    // track requirement
+                    requiredItems.Add(summary);
+                }
+
+                // display requirements
+                string itemList = string.Join(", ", requiredItems);
+                string result = requiredItems.Count > 1
+                    ? L10n.Building.FishPondQuestsIncompleteRandom(newPopulation, itemList)
+                    : L10n.Building.FishPondQuestsIncompleteOne(newPopulation, requiredItems[0]);
+                if (nextQuest == gate.Key)
+                {
+                    int nextQuestDays = data.SpawnTime
+                        + (data.SpawnTime * (pond.maxOccupants.Value - pond.currentOccupants.Value))
+                        - pond.daysSinceSpawn.Value;
+                    result += $"; {L10n.Building.FishPondQuestsAvailable(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
+                }
+                yield return new KeyValuePair<IFormattedText[], bool>(key: new IFormattedText[] { new FormattedText(result) }, value: false);
+            }
+        }
+
+        /// <summary>Get a fish pond's possible drops.</summary>
+        /// <param name="pond">The fish pond.</param>
+        /// <param name="data">The fish pond data.</param>
+        /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
+        private IEnumerable<ItemDropData> GetPossibleDrops(FishPond pond, FishPondData data)
+        {
+            foreach (FishPondReward drop in data.ProducedItems)
+            {
+                if (pond.currentOccupants.Value < drop.RequiredPopulation)
+                    continue;
+
+                yield return new ItemDropData(drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+                if (drop.Chance >= 1)
+                    break; // guaranteed drop, any further drops will be ignored
             }
         }
     }

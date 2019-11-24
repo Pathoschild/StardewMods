@@ -1,5 +1,7 @@
+using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -49,6 +51,33 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
                 },
                 minutes: 4000
+            ),
+
+            // roe => aged roe || sturgeon roe => caviar
+            new Recipe(
+                input: 812, // Roe
+                inputCount: 1,
+                output: input =>
+                {
+                    if (!(input is SObject inputObj))
+                        throw new InvalidOperationException($"Unexpected recipe input: expected {typeof(SObject).FullName} instance.");
+
+                    // sturgeon roe => caviar
+                    if (inputObj.preservedParentSheetIndex.Value == 698)
+                        return new SObject(445, 1);
+
+                    // roe => aged roe
+                    var result = (input is ColoredObject coloredInput) ? new ColoredObject(447, 1, coloredInput.color.Value) : new SObject(447, 1);
+                    result.name = $"Aged {input.Name}";
+                    result.preserve.Value = SObject.PreserveType.AgedRoe;
+                    result.preservedParentSheetIndex.Value = inputObj.preservedParentSheetIndex.Value;
+                    result.Category = -26;
+                    result.Price = inputObj.Price * 2;
+                    return result;
+                },
+                minutes: input => input is SObject obj && obj.preservedParentSheetIndex.Value == 698
+                    ? 6000 // caviar
+                    : 4000 // aged roe
             )
         };
 

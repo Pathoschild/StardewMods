@@ -30,6 +30,7 @@ This can be used to automate...
 * [cheese presses](http://stardewvalleywiki.com/Cheese_Press);
 * [crab pots](http://stardewvalleywiki.com/Crab_Pot);
 * [crystalariums](http://stardewvalleywiki.com/Crystalarium);
+* [fish ponds](http://stardewvalleywiki.com/Fish_Pond);
 * [fruit trees](http://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](http://stardewvalleywiki.com/Furnace);
 * [garbage cans](http://stardewvalleywiki.com/Garbage_Can);
@@ -54,6 +55,7 @@ This can be used to automate...
 * [statues of endless fortune](https://stardewvalleywiki.com/Statue_Of_Endless_Fortune);
 * [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [tappers](http://stardewvalleywiki.com/Tapper);
+* [wood chippers](http://stardewvalleywiki.com/Wood_Chipper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
 Automated machines will give you the same XP, achievements, and items you'd get for using them
@@ -130,6 +132,14 @@ overlay.
   <td>
 
 Default `true`. Whether the shipping bin should automatically pull items out of connected chests.
+
+  </td>
+</tr>
+<tr>
+  <td><code>PullGemstonesFromJunimoHuts</code></td>
+  <td>
+
+Default `false`. Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.
 
   </td>
 </tr>

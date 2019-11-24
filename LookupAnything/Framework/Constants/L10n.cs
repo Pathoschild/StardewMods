@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{percent}}%</c>.</summary>
             /// <param name="percent">The percentage chance.</param>
-            public static Translation Percent(int percent) => L10n.Helper.Get("generic.percent", new { percent });
+            public static Translation Percent(decimal percent) => L10n.Helper.Get("generic.percent", new { percent });
 
             /// <summary>A value like <c>{{percent}}% chance of {{label}}</c>.</summary>
             /// <param name="percent">The percentage chance.</param>
@@ -157,6 +157,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Bulletin Board</c>.</summary>
             public static Translation BulletinBoard() => L10n.Helper.Get("bundle-area.bulletin-board");
+
+            /// <summary>A value like <c>Abandoned Joja Mart</c>.</summary>
+            public static Translation AbandonedJojaMart() => L10n.Helper.Get("bundle-area.abandoned-joja-mart");
         }
 
         /// <summary>Recipe types.</summary>
@@ -263,6 +266,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Water trough</c>.</summary>
             public static Translation WaterTrough() => L10n.Helper.Get("building.water-trough");
 
+            /// <summary>A value like <c>Population</c>.</summary>
+            public static Translation FishPondPopulation() => L10n.Helper.Get("building.fish-pond.population");
+
+            /// <summary>A value like <c>Quests</c>.</summary>
+            public static Translation FishPondQuests() => L10n.Helper.Get("building.fish-pond.quests");
+
+            /// <summary>A value like <c>Drops</c>.</summary>
+            public static Translation FishPondDrops() => L10n.Helper.Get("building.fish-pond.drops");
+
             /****
             ** Values
             ****/
@@ -322,6 +334,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{filled}} of {{max}} water troughs filled</c>.</summary>
             public static Translation WaterTroughSummary(int filled, int max) => L10n.Helper.Get("building.water-trough.summary", new { filled, max });
+
+            /// <summary>A value like <c>Add a fish to start this pond</c>.</summary>
+            public static Translation FishPondPopulationEmpty() => L10n.Helper.Get("building.fish-pond.population.empty");
+
+            /// <summary>A value like <c>New fish will spawn {{relativeDate}}</c>.</summary>
+            public static Translation FishPondPopulationNextSpawn(string relativeDate) => L10n.Helper.Get("building.fish-pond.population.next-spawn", new { relativeDate });
+
+            /// <summary>A value like <c>{{count}} fish</c>.</summary>
+            public static Translation FishPondQuestsDone(int count) => L10n.Helper.Get("building.fish-pond.quests.done", new { count });
+
+            /// <summary>A value like <c>{{count}} fish: will need {{itemName}}</c>.</summary>
+            public static Translation FishPondQuestsIncompleteOne(int count, string itemName) => L10n.Helper.Get("building.fish-pond.quests.incomplete-one", new { count, itemName });
+
+            /// <summary>A value like <c>{{count}} fish: will need one of {{itemList}}</c>.</summary>
+            public static Translation FishPondQuestsIncompleteRandom(int count, string itemList) => L10n.Helper.Get("building.fish-pond.quests.incomplete-random", new { count, itemList });
+
+            /// <summary>A value like <c>available {{relativeDate}}</c>.</summary>
+            public static Translation FishPondQuestsAvailable(string relativeDate) => L10n.Helper.Get("building.fish-pond.quests.available", new { relativeDate });
+
+            /// <summary>A value like <c>{{chance}}% chance each day of producing one of these:</c>.</summary>
+            public static Translation FishPondDropsPreface(int chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
         }
 
         /// <summary>Bush lookup translations.</summary>
@@ -342,14 +375,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>A plain bush that doesn't grow anything.</c></summary>
             public static Translation PlainDescription() => L10n.Helper.Get("bush.description.plain");
 
+            /// <summary>A value like <c>Tea Bush</c>.</summary>
+            public static Translation TeaName() => L10n.Helper.Get("bush.name.tea");
+
+            /// <summary>A value like <c>A bush that grows tea leaves.</c></summary>
+            public static Translation TeaDescription() => L10n.Helper.Get("bush.description.tea");
+
+            /// <summary>A value like <c>Date planted</c>.</summary>
+            public static Translation DatePlanted() => L10n.Helper.Get("bush.date-planted");
+
+            /// <summary>A value like <c>Growth</c>.</summary>
+            public static Translation Growth() => L10n.Helper.Get("bush.growth");
+
             /// <summary>A value like <c>Next harvest</c>.</summary>
             public static Translation NextHarvest() => L10n.Helper.Get("bush.next-harvest");
 
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>mature on {{date}}</c>.</summary>
+            public static Translation GrowthSummary(string date) => L10n.Helper.Get("bush.growth.summary", new { date });
+
             /// <summary>A value like <c>Provides salmonberries in spring 15 to 18, and blackberries in fall 8 to 11.</c>.</summary>
             public static Translation ScheduleBerry() => L10n.Helper.Get("bush.schedule.berry");
+
+            /// <summary>A value like <c>Provides tea leaves after the 22nd of spring, summer, fall, and (if in the greenhouse) winter.</c>.</summary>
+            public static Translation ScheduleTea() => L10n.Helper.Get("bush.schedule.tea");
         }
 
         /// <summary>Fruit tree lookup translations.</summary>
@@ -456,6 +507,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Labels
             ****/
+            /// <summary>A value like <c>Can be dyed</c>.</summary>
+            public static Translation CanBeDyed() => L10n.Helper.Get("item.can-be-dyed");
+
+            /// <summary>A value like <c>Produces dye</c>.</summary>
+            public static Translation ProducesDye() => L10n.Helper.Get("item.produces-dye");
+
             /// <summary>A value like <c>Aging</c>.</summary>
             public static Translation CaskSchedule() => L10n.Helper.Get("item.cask-schedule");
 
@@ -480,11 +537,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Sells to</c>.</summary>
             public static Translation SellsTo() => L10n.Helper.Get("item.sells-to");
 
+            /// <summary>A value like <c>Loves this</c>.</summary>
+            public static Translation LovesThis() => L10n.Helper.Get("item.loves-this");
+
             /// <summary>A value like <c>Likes this</c>.</summary>
             public static Translation LikesThis() => L10n.Helper.Get("item.likes-this");
 
-            /// <summary>A value like <c>Loves this</c>.</summary>
-            public static Translation LovesThis() => L10n.Helper.Get("item.loves-this");
+            /// <summary>A value like <c>Neutral about this</c>.</summary>
+            public static Translation NeutralAboutThis() => L10n.Helper.Get("item.neutral-about-this");
+
+            /// <summary>A value like <c>Dislikes this</c>.</summary>
+            public static Translation DislikesThis() => L10n.Helper.Get("item.dislikes-this");
+
+            /// <summary>A value like <c>Hates this</c>.</summary>
+            public static Translation HatesThis() => L10n.Helper.Get("item.hates-this");
 
             /// <summary>A value like <c>Health</c>.</summary>
             public static Translation FenceHealth() => L10n.Helper.Get("item.fence-health");
@@ -507,6 +573,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>, and {{count}} unrevealed villagers</c>.</summary>
+            public static Translation UndiscoveredVillagers(int count) => L10n.Helper.Get("item.undiscovered-gift-taste", new { count });
+
+            /// <summary>A value like <c>, and {{count}} unrevealed villagers</c>.</summary>
+            public static Translation UndiscoveredVillagersAppend(int count) => L10n.Helper.Get("item.undiscovered-gift-taste-appended", new { count });
+
             /// <summary>A value like <c>{{quality}} ready now</c>.</summary>
             public static Translation CaskScheduleNow(ItemQuality quality) => L10n.Helper.Get("item.cask-schedule.now", new { quality = L10n.For(quality) });
 
@@ -569,6 +641,53 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>you made {{count}} of these</c>.</summary>
             public static Translation CraftedSummary(int count) => L10n.Helper.Get("item.number-crafted.summary", new { count });
+        }
+
+        /// <summary>Movie snack lookup translations.</summary>
+        public static class MovieSnack
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Preference</c>.</summary>
+            public static Translation Preference() => L10n.Helper.Get("item.movie-snack-preference");
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Get a value like <c>{{name}} loves this</c>, <c>{{name}} likes this</c>, etc.</summary>
+            /// <param name="taste">The taste value returned by <see cref="StardewValley.Locations.MovieTheater.GetConcessionTasteForCharacter"/>.</param>
+            /// <param name="name">The NPC name.</param>
+            public static Translation ForTaste(string taste, string name)
+            {
+                return L10n.Helper.Get($"item.movie-snack-preference.{taste}", new { name });
+            }
+        }
+
+        /// <summary>Movie ticket lookup translations.</summary>
+        public static class MovieTicket
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Movie this week</c>.</summary>
+            public static Translation MovieThisWeek() => L10n.Helper.Get("item.movie-ticket.movie-this-week");
+
+            /// <summary>A value like <c>Loves movie</c>.</summary>
+            public static Translation LovesMovie() => L10n.Helper.Get("item.movie-ticket.loves-movie");
+
+            /// <summary>A value like <c>Likes movie</c>.</summary>
+            public static Translation LikesMovie() => L10n.Helper.Get("item.movie-ticket.likes-movie");
+
+            /// <summary>A value like <c>Dislikes movie</c>.</summary>
+            public static Translation DislikesMovie() => L10n.Helper.Get("item.movie-ticket.dislikes-movie");
+
+            /****
+            ** Values
+            ****/
+            /// <summary>A value like <c>No movie this week</c>.</summary>
+            public static Translation NoMovieThisWeek() => L10n.Helper.Get("item.movie-ticket.movie-this-week.none");
         }
 
         /// <summary>Monster lookup translations.</summary>
@@ -635,6 +754,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Gifted today</c>.</summary>
             public static Translation GiftedToday() => L10n.Helper.Get("npc.gifted-today");
 
+            /// <summary>A value like <c>Hugged today</c>.</summary>
+            public static Translation HuggedToday() => L10n.Helper.Get("npc.hugged-today");
+
             /// <summary>A value like <c>Kissed today</c>.</summary>
             public static Translation KissedToday() => L10n.Helper.Get("npc.kissed-today");
 
@@ -650,11 +772,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Neutral gifts</c>.</summary>
             public static Translation NeutralGifts() => L10n.Helper.Get("npc.neutral-gifts");
 
+            /// <summary>A value like <c>Dislikes gifts</c>.</summary>
+            public static Translation DislikesGifts() => L10n.Helper.Get("npc.dislikes-gifts");
+
+            /// <summary>A value like <c>Hates gifts</c>.</summary>
+            public static Translation HatesGifts() => L10n.Helper.Get("npc.hates-gifts");
+
             /****
             ** Values
             ****/
+            /// <summary>A value like <c>, and {{count}} unrevealed items</c>.</summary>
+            public static Translation UndiscoveredVillagers(int count) => L10n.Helper.Get("npc.undiscovered-gift-taste", new { count });
+
+            /// <summary>A value like <c>, and {{count}} unrevealed items</c>.</summary>
+            public static Translation UndiscoveredVillagersAppend(int count) => L10n.Helper.Get("npc.undiscovered-gift-taste-appended", new { count });
+
             /// <summary>A value like <c>You're married! &lt;</c>.</summary>
             public static Translation CanRomanceMarried() => L10n.Helper.Get("npc.can-romance.married");
+
+            /// <summary>A value like <c>You're housemates!</c>.</summary>
+            public static Translation CanRomanceHousemate() => L10n.Helper.Get("npc.can-romance.housemate");
 
             /// <summary>A value like <c>You haven't met them yet.</c>.</summary>
             public static Translation FriendshipNotMet() => L10n.Helper.Get("npc.friendship.not-met");
@@ -705,6 +842,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Petted today</c>.</summary>
             public static Translation PettedToday() => L10n.Helper.Get("pet.petted-today");
+
+            /// <summary>A value like <c>Last petted</c>.</summary>
+            public static Translation LastPetted() => L10n.Helper.Get("pet.last-petted");
+
+            /// <summary>A value like <c>yes (+12 love)</c>.</summary>
+            public static Translation LastPettedYes() => L10n.Helper.Get("pet.last-petted.yes");
+
+            /// <summary>A value like <c>{{days}} days ago</c>.</summary>
+            public static Translation LastPettedDaysAgo(int days) => L10n.Helper.Get("pet.last-petted.days-ago", new { days });
+
+            /// <summary>A value like <c>never</c>.</summary>
+            public static Translation LastPettedNever() => L10n.Helper.Get("pet.last-petted.never");
+
+            /// <summary>A value like <c>Water bowl</c>.</summary>
+            public static Translation WaterBowl() => L10n.Helper.Get("pet.water-bowl");
+
+            /// <summary>A value like <c>empty</c>.</summary>
+            public static Translation WaterBowlEmpty() => L10n.Helper.Get("pet.water-bowl.empty");
+
+            /// <summary>A value like <c>filled (+6 love)</c>.</summary>
+            public static Translation WaterBowlFilled() => L10n.Helper.Get("pet.water-bowl.filled");
         }
 
         /// <summary>Player lookup translations.</summary>
@@ -725,8 +883,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Gender</c>.</summary>
             public static Translation Gender() => L10n.Helper.Get("player.gender");
 
+            /// <summary>A value like <c>Housemate</c>.</summary>
+            public static Translation Housemate() => L10n.Helper.Get("player.housemate");
+
             /// <summary>A value like <c>Spouse</c>.</summary>
             public static Translation Spouse() => L10n.Helper.Get("player.spouse");
+
+            /// <summary>A value like <c>Watched movie this week</c>.</summary>
+            public static Translation WatchedMovieThisWeek() => L10n.Helper.Get("player.watched-movie-this-week");
 
             /// <summary>A value like <c>Combat skill</c>.</summary>
             public static Translation CombatSkill() => L10n.Helper.Get("player.combat-skill");
@@ -808,6 +972,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation TileFieldNoneFound() => L10n.Helper.Get("tile.tile.none-here");
         }
 
+        /// <summary>Trash bear lookup translations.</summary>
+        public static class TrashBear
+        {
+            /****
+            ** Labels
+            ****/
+            /// <summary>A value like <c>Item wanted</c>.</summary>
+            public static Translation ItemWanted() => L10n.Helper.Get("trash-bear.item-wanted");
+
+            /// <summary>A value like <c>Quest progress</c>.</summary>
+            public static Translation QuestProgress() => L10n.Helper.Get("trash-bear.quest-progress");
+        }
+
         /// <summary>Wild tree lookup translations.</summary>
         public static class Tree
         {
@@ -841,6 +1018,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Has seed</c>.</summary>
             public static Translation HasSeed() => L10n.Helper.Get("tree.has-seed");
 
+            /// <summary>A value like <c>Is fertilized</c>.</summary>
+            public static Translation IsFertilized() => L10n.Helper.Get("tree.is-fertilized");
+
             /****
             ** Values
             ****/
@@ -856,8 +1036,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>can't grow because other trees are too close</c>.</summary>
             public static Translation NextGrowthAdjacentTrees() => L10n.Helper.Get("tree.next-growth.adjacent-trees");
 
-            /// <summary>A value like <c>20% chance to grow into {{stage}} tomorrow</c>.</summary>
-            public static Translation NextGrowthRandom(string stage) => L10n.Helper.Get("tree.next-growth.random", new { stage });
+            /// <summary>A value like <c>{{chance}}% chance to grow into {{stage}} tomorrow</c>.</summary>
+            public static Translation NextGrowthChance(string stage, int chance) => L10n.Helper.Get("tree.next-growth.chance", new { stage, chance });
+
+            /// <summary>A value like <c>tree grows in winter and grows twice as fast</c>.</summary>
+            public static Translation IsFertilizedEffects() => L10n.Helper.Get("tree.is-fertilized.effects");
         }
 
         /*********
@@ -886,8 +1069,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
         /// <summary>Get a translation for an enum value.</summary>
         /// <param name="status">The friendship status.</param>
-        public static Translation For(FriendshipStatus status)
+        /// <param name="wasHousemate">Whether the NPC is eligible to be a housemate, rather than spouse.</param>
+        public static Translation For(FriendshipStatus status, bool wasHousemate)
         {
+            if (wasHousemate && status == FriendshipStatus.Divorced)
+                return L10n.Helper.Get("friendship-status.kicked-out");
             return L10n.Helper.Get($"friendship-status.{status.ToString().ToLower()}");
         }
 

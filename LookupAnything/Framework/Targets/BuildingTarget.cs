@@ -25,7 +25,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
             ["Coop"] = new[] { new Rectangle(33, 97, 14, 15) },
             ["Big Coop"] = new[] { new Rectangle(33, 97, 14, 15) },
-            ["Deluxe Coop"] = new[] { new Rectangle(33, 97, 14, 15) }
+            ["Deluxe Coop"] = new[] { new Rectangle(33, 97, 14, 15) },
+
+            ["Fish Pond"] = new[] { new Rectangle(12, 12, 56, 56) }
         };
 
 

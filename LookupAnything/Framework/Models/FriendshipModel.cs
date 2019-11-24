@@ -16,11 +16,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Whether the player can date the NPC.</summary>
         public bool CanDate { get; set; }
 
+        /// <summary>Whether the NPC is eligible to be a housemate, rather than spouse.</summary>
+        public bool CanHousemate { get; set; }
+
         /// <summary>Whether the NPC is dating the player.</summary>
         public bool IsDating { get; set; }
 
         /// <summary>Whether the NPC is married to the player.</summary>
         public bool IsSpouse { get; set; }
+
+        /// <summary>Whether the NPC is the player's housemate.</summary>
+        public bool IsHousemate { get; set; }
+
+        /// <summary>Whether the NPC is divorced from the player.</summary>
+        public bool IsDivorced { get; set; }
 
         /// <summary>Whether the NPC has a stardrop to give to the player once they reach enough points.</summary>
         public bool HasStardrop { get; set; }
@@ -82,20 +91,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             // flags
             this.CanDate = npc.datable.Value;
             this.IsDating = friendship.IsDating();
-            this.IsSpouse = friendship.IsMarried();
+            this.CanHousemate = npc.Name == "Krobus";
+            this.IsSpouse = friendship.IsMarried() && !this.CanHousemate;
+            this.IsHousemate = friendship.IsMarried() && this.CanHousemate;
+            this.IsDivorced = friendship.IsDivorced();
             this.Status = friendship.Status;
             this.TalkedToday = friendship.TalkedToToday;
             this.GiftsToday = friendship.GiftsToday;
             this.GiftsThisWeek = friendship.GiftsThisWeek;
 
             // points
-            this.MaxPoints = this.IsSpouse ? constants.SpouseMaxFriendship : NPC.maxFriendshipPoints;
+            this.MaxPoints = this.IsSpouse || this.IsHousemate ? constants.SpouseMaxFriendship : NPC.maxFriendshipPoints;
             this.Points = friendship.Points;
             this.PointsPerLevel = NPC.friendshipPointsPerHeartLevel;
             this.FilledHearts = this.Points / NPC.friendshipPointsPerHeartLevel;
             this.LockedHearts = this.CanDate && !this.IsDating ? constants.DatingHearts : 0;
             this.EmptyHearts = this.MaxPoints / NPC.friendshipPointsPerHeartLevel - this.FilledHearts - this.LockedHearts;
-            if (this.IsSpouse)
+            if (this.IsSpouse || this.IsHousemate)
             {
                 this.StardropPoints = constants.SpouseFriendshipForStardrop;
                 this.HasStardrop = !player.mailReceived.Contains(Constants.Constant.MailLetters.ReceivedSpouseStardrop);

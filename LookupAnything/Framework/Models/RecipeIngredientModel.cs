@@ -1,5 +1,6 @@
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -15,6 +16,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The number required.</summary>
         public int Count { get; }
 
+        /// <summary>The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</summary>
+        public Object.PreserveType? PreserveType { get; }
+
+        /// <summary>The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</summary>
+        public int? PreservedParentSheetIndex { get; }
+
 
         /*********
         ** Public methods
@@ -22,10 +29,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Construct an instance.</summary>
         /// <param name="id">The unique item ID.</param>
         /// <param name="count">The number required.</param>
-        public RecipeIngredientModel(int id, int count)
+        /// <param name="preserveType">The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</param>
+        /// <param name="preservedParentSheetIndex">The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+        public RecipeIngredientModel(int id, int count, Object.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
         {
             this.ID = id;
             this.Count = count;
+            this.PreserveType = preserveType;
+            this.PreservedParentSheetIndex = preservedParentSheetIndex;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -33,7 +44,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public RecipeIngredientModel(MachineRecipeIngredientData ingredient)
             : this(
                 id: ingredient.ID,
-                count: ingredient.Count ?? 1
+                count: ingredient.Count ?? 1,
+                preserveType: ingredient.PreserveType,
+                preservedParentSheetIndex: ingredient.PreservedParentSheetIndex
             )
         { }
 
@@ -41,10 +54,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="item">The item to check.</param>
         public bool Matches(Item item)
         {
+            // ignore if null
             if (item == null)
                 return false;
+
+            // item fields
             if (item.ParentSheetIndex != this.ID && item.Category != this.ID)
                 return false;
+
+            // object fields
+            if (this.PreservedParentSheetIndex != null || this.PreserveType != null)
+            {
+                if (!(item is SObject obj))
+                    return false;
+                if (this.PreservedParentSheetIndex != null && this.PreservedParentSheetIndex != obj.preservedParentSheetIndex.Value)
+                    return false;
+                if (this.PreserveType != null && this.PreserveType != obj.preserve.Value)
+                    return false;
+            }
 
             return true;
         }

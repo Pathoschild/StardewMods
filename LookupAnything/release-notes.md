@@ -4,7 +4,20 @@
 ## 1.23
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4, including new content.
+* Updated for Stardew Valley 1.4, including...
+  * per-player shipping bins;
+  * movie theater;
+  * new mechanics (clothing, dyeing, tailoring, and tree fertilizer);
+  * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
+  * new content (fish ponds, tea bushes, and trash bear);
+  * new farm map;
+  * new 14-heart spouse events;
+  * new social NPC profiles;
+  * new Krobus relationship;
+  * new Adventurer's Guild goals;
+  * pet water bowl and petting changes;
+  * chance of double Loom output with higher-quality input.
+* Added optional progression mode (only shows gift tastes for gifts you've already given).
 * Added save format version to save slot lookups.
 * Updated for compatibility with Json Assets 1.3.8.
 * Fixed player luck in multiplayer showing your own luck instead of theirs.

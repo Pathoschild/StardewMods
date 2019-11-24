@@ -4,7 +4,11 @@
 ## 1.14
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4, including new machine recipes.
+* Updated for Stardew Valley 1.4, including...
+  * new machines (fish pond and wood chipper);
+  * new recipes (aged roe, caviar, dinosaur mayonnaise, and green tea);
+  * chance of double Loom output with higher quality input;
+  * gemstones are no longer pulled from Junimo huts by default (configurable).
 * Fixed auto-grabbers not showing empty sprite when emptied automatically.
 
 ## 1.13.2

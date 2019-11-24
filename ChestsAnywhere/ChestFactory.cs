@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -136,6 +137,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         }
                     }
 
+                    // dressers
+                    if (location is DecoratableLocation decoratableLocation)
+                    {
+                        var dresserCounts = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+                        foreach (StorageFurniture furniture in decoratableLocation.furniture.OfType<StorageFurniture>())
+                        {
+                            var container = new StorageFurnitureContainer(furniture, this.Reflection);
+                            dresserCounts[container.DefaultName] = dresserCounts.TryGetValue(container.DefaultName, out int count) ? ++count : (count = 1);
+                            yield return new ManagedChest(
+                                container: container,
+                                location,
+                                furniture.TileLocation,
+                                defaultDisplayName: $"{container.DefaultName} #{count}",
+                                defaultCategory: category
+                            );
+                        }
+                    }
+
                     // buildings
                     if (location is BuildableGameLocation buildableLocation)
                     {
@@ -205,6 +224,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 case ItemGrabMenu itemGrabMenu:
                     inventory = this.GetInventoryFromContext(itemGrabMenu.context);
                     break;
+
+                case ShopMenu shopMenu:
+                    inventory = this.GetInventoryFromContext(shopMenu.source);
+                    break;
             }
             if (inventory == null)
                 return null;
@@ -255,6 +278,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 case Farm _:
                 case ShippingBin _:
                     return Game1.getFarm().getShippingBin(Game1.player);
+
+                // dresser
+                case StorageFurniture furniture:
+                    return furniture.heldItems;
 
                 // unsupported type
                 default:

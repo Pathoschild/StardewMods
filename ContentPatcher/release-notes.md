@@ -4,7 +4,7 @@
 ## 1.10
 Released 26 November 2019.
 
-* Updated for Stardew Valley 1.4.
+* Updated for Stardew Valley 1.4, including new farm type.
 * Added new tokens:
   * `HavingChild` and `Pregnant`: check if an NPC/player is having a child.
   * `HasDialogueAnswer`: the player's selected response IDs for question dialogues (thanks to mus-candidus!).
