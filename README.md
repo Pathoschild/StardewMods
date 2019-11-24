@@ -42,9 +42,6 @@ Active mods:
   _Toggle [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button,
   letting you walk through anything (even map boundaries)._
 
-* **[Rotate Toolbar](http://www.nexusmods.com/stardewvalley/mods/1100)** <small>([source](RotateToolbar))</small>  
-  _Rotate the top inventory row for the toolbar by pressing Tab (configurable)._
-
 * **[Skip Intro](http://www.nexusmods.com/stardewvalley/mods/533)** <small>([source](SkipIntro))</small>  
   _Skip straight to the title screen or load screen (configurable) when you start the game. It also
   skips the screen transitions, so starting the game is much faster._
@@ -63,6 +60,11 @@ Inactive mods:
 * ~~[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)~~ <small>([source](LongNight))</small>  
   _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).
   Broke permanently in Stardew Valley 1.3.20._
+
+* ~~[Rotate Toolbar](http://www.nexusmods.com/stardewvalley/mods/1100)~~ <small>([source](RotateToolbar))</small>  
+  _Rotate the top inventory row for the toolbar by pressing Tab (configurable). Added to the game
+  in Stardew Valley 1.4.0._
+
 
 ## Translating the mods
 The mods can be translated into any language supported by the game, and SMAPI will automatically
