@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 editChest: CommonHelper.ParseButtons(this.EditChest, monitor, nameof(this.EditChest)),
                 sortItems: CommonHelper.ParseButtons(this.SortItems, monitor, nameof(this.SortItems)),
                 holdToMouseWheelScrollChests: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollChests, monitor, nameof(this.HoldToMouseWheelScrollChests)),
-                holdtoMouseWheelScrollCategories: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollCategories, monitor, nameof(this.HoldToMouseWheelScrollCategories))
+                holdToMouseWheelScrollCategories: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollCategories, monitor, nameof(this.HoldToMouseWheelScrollCategories))
             );
         }
     }
