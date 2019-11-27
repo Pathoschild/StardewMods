@@ -34,8 +34,7 @@ build at Robin's.
 > ![](docs/screenshots/buildable.png)
 
 ### Coverage: bee houses
-Shows bee houses' flower search range. (The weird shape isn't a bug, that's the game's
-actual range.)
+Shows bee houses' flower search range.
 > ![](docs/screenshots/bee-houses.png)
 
 ### Coverage: Junimo huts
@@ -51,11 +50,6 @@ Shows scarecrow coverage, and highlights unprotected crops. Also works on scarec
 Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
 > ![](docs/screenshots/sprinklers.png)
 
-### Crops: ready for harvest
-Shows which crops are ready to harvest, or which won't be ready before they die due to a season
-change.
-> ![](docs/screenshots/crops-harvest.png)
-
 ### Crops: fertilized
 Shows which crops have fertilizer applied.
 > ![](docs/screenshots/crops-fertilized.png)
@@ -63,6 +57,11 @@ Shows which crops have fertilizer applied.
 ### Crops: watered
 Shows which crops have been watered today.
 > ![](docs/screenshots/crops-watered.png)
+
+### Crops: ready for harvest
+Shows which crops are ready to harvest, or which won't be ready before they die due to a season
+change.
+> ![](docs/screenshots/crops-harvest.png)
 
 ### Crops: water for paddy crops
 Shows which tiles are close enough to water for paddy crops to get auto-watered and bonus growth.
