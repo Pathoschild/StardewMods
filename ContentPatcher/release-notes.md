@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming version
+
+* Fixed error when an `EditData` patch uses tokens in `FromFile` that aren't available.
+
 ## 1.10
 Released 26 November 2019.
 

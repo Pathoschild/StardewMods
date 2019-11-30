@@ -103,18 +103,20 @@ namespace ContentPatcher.Framework.Patches
                         .Remove(this.Fields)
                         .Remove(this.MoveRecords);
 
-                    if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
+                    this.Records = new EditDataPatchRecord[0];
+                    this.Fields = new EditDataPatchField[0];
+                    this.MoveRecords = new EditDataPatchMoveRecord[0];
+
+                    if (this.RawFromAsset.IsReady)
                     {
-                        this.Records = records.ToArray();
-                        this.Fields = fields.ToArray();
-                        this.MoveRecords = moveEntries.ToArray();
-                    }
-                    else
-                    {
-                        this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
-                        this.Records = new EditDataPatchRecord[0];
-                        this.Fields = new EditDataPatchField[0];
-                        this.MoveRecords = new EditDataPatchMoveRecord[0];
+                        if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
+                        {
+                            this.Records = records.ToArray();
+                            this.Fields = fields.ToArray();
+                            this.MoveRecords = moveEntries.ToArray();
+                        }
+                        else
+                            this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
                     }
 
                     this.Contextuals
@@ -216,6 +218,15 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether parsing succeeded.</returns>
         private bool TryLoadFile(ITokenString fromFile, IContext context, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
         {
+            if (fromFile.IsMutable && !fromFile.IsReady)
+            {
+                error = $"the {nameof(fromFile)} contains tokens which aren't available yet"; // this shouldn't happen, since the patch should check before calling this method
+                entries = null;
+                fields = null;
+                moveEntries = null;
+                return false;
+            }
+
             // validate path
             if (!this.ContentPack.HasFile(fromFile.Value))
             {
