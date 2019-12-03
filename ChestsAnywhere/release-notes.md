@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17.1
+Released 02 December 2019.
+
+* Updated for Stardew Valley 1.4.0.1.
+
 ## 1.17
 Released 26 November 2019.
 

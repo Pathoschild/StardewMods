@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.10.1
+Released 02 December 2019.
+
+* Updated for Stardew Valley 1.4.0.1.
+* Fixed error when an `EditData` patch uses tokens in `FromFile` that aren't available.
+
 ## 1.10
 Released 26 November 2019.
 
