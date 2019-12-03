@@ -46,6 +46,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>Indicates how the image should be patched.</summary>
         public string PatchMode { get; set; }
 
+        /// <summary>The blend color.</summary>.
+        public Color BlendColor { get; set; } = Color.White;
+
         /****
         ** EditData
         ****/

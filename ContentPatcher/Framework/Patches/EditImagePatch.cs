@@ -30,6 +30,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
         private bool ResizedLastImage;
 
+        /// <summary>Color used for blending.</summary>
+        private Color BlendColor;
+
 
         /*********
         ** Public methods
@@ -45,12 +48,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, Color blendColor, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
             this.ToArea = toArea != Rectangle.Empty ? toArea : null as Rectangle?;
             this.PatchMode = patchMode;
+            this.BlendColor = blendColor;
             this.Monitor = monitor;
         }
 
@@ -113,8 +117,31 @@ namespace ContentPatcher.Framework.Patches
             else
                 this.ResizedLastImage = false;
 
-            // apply source image
-            editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
+            // color blending
+            if (this.BlendColor != Color.White)
+            {
+                Color[] sourcePixels = new Color[source.Width * source.Height];
+                source.GetData(sourcePixels);
+                for (int i = 0; i < sourcePixels.Length; i++)
+                {
+                    sourcePixels[i]
+                        = new Color((byte)(sourcePixels[i].R * this.BlendColor.R / 255),
+                                    (byte)(sourcePixels[i].G * this.BlendColor.G / 255),
+                                    (byte)(sourcePixels[i].B * this.BlendColor.B / 255),
+                                    (byte)(sourcePixels[i].A * this.BlendColor.A / 255));
+                }
+
+                Texture2D colorBlendedSource = new Texture2D(Game1.graphics.GraphicsDevice, source.Width, source.Height);
+                colorBlendedSource.SetData(sourcePixels);
+
+                // apply source image
+                editor.PatchImage(colorBlendedSource, sourceArea, this.ToArea, this.PatchMode);
+            }
+            else
+            {
+                // apply source image
+                editor.PatchImage(source, sourceArea, this.ToArea, this.PatchMode);
+            }
         }
 
         /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>

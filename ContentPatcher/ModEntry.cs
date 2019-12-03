@@ -611,7 +611,7 @@ namespace ContentPatcher
                             // save
                             if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IParsedTokenString fromAsset))
                                 return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, entry.BlendColor, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
