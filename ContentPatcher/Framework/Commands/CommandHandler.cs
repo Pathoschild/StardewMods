@@ -631,11 +631,12 @@ namespace ContentPatcher.Framework.Commands
                 if (pixel.A == 0)
                     continue;
 
+                // avoid named arguments since they differ between Microsoft XNA and MonoGame
                 data[i] = new Color(
-                    r: (byte)((pixel.R * 255) / pixel.A),
-                    g: (byte)((pixel.G * 255) / pixel.A),
-                    b: (byte)((pixel.B * 255) / pixel.A),
-                    a: pixel.A
+                    (byte)((pixel.R * 255) / pixel.A),
+                    (byte)((pixel.G * 255) / pixel.A),
+                    (byte)((pixel.B * 255) / pixel.A),
+                    pixel.A
                 );
             }
 
