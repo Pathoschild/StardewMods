@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public string PatchMode { get; set; }
 
         /// <summary>The blend color.</summary>.
-        public Color BlendColor { get; set; } = Color.White;
+        public Color? BlendColor { get; set; }
 
         /****
         ** EditData

@@ -31,7 +31,7 @@ namespace ContentPatcher.Framework.Patches
         private bool ResizedLastImage;
 
         /// <summary>Color used for blending.</summary>
-        private Color BlendColor;
+        private Color? BlendColor;
 
 
         /*********
@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the image should be patched.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, Color blendColor, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString fromAsset, Rectangle fromArea, Rectangle toArea, PatchMode patchMode, Color? blendColor, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(logName, PatchType.EditImage, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea != Rectangle.Empty ? fromArea : null as Rectangle?;
@@ -118,9 +118,9 @@ namespace ContentPatcher.Framework.Patches
                 this.ResizedLastImage = false;
 
             // color blending
-            if (this.BlendColor != Color.White)
+            if (this.BlendColor.HasValue)
             {
-                Texture2D colorBlendedSource = ColorBlend(source, this.BlendColor);
+                Texture2D colorBlendedSource = ColorBlend(source, this.BlendColor.Value);
 
                 // apply color blended source image
                 editor.PatchImage(colorBlendedSource, sourceArea, this.ToArea, this.PatchMode);
