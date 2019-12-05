@@ -77,7 +77,6 @@
     // recipe types
     "recipe-type.cooking": "Cucina",
     "recipe-type.crafting": "Fabbricazione",
-	"recipe-type.tailoring": "Sartoria",
 
     /*********
     ** NPC overrides
