@@ -120,21 +120,9 @@ namespace ContentPatcher.Framework.Patches
             // color blending
             if (this.BlendColor != Color.White)
             {
-                Color[] sourcePixels = new Color[source.Width * source.Height];
-                source.GetData(sourcePixels);
-                for (int i = 0; i < sourcePixels.Length; i++)
-                {
-                    sourcePixels[i]
-                        = new Color((byte)(sourcePixels[i].R * this.BlendColor.R / 255),
-                                    (byte)(sourcePixels[i].G * this.BlendColor.G / 255),
-                                    (byte)(sourcePixels[i].B * this.BlendColor.B / 255),
-                                    (byte)(sourcePixels[i].A * this.BlendColor.A / 255));
-                }
+                Texture2D colorBlendedSource = ColorBlend(source, this.BlendColor);
 
-                Texture2D colorBlendedSource = new Texture2D(Game1.graphics.GraphicsDevice, source.Width, source.Height);
-                colorBlendedSource.SetData(sourcePixels);
-
-                // apply source image
+                // apply color blended source image
                 editor.PatchImage(colorBlendedSource, sourceArea, this.ToArea, this.PatchMode);
             }
             else
@@ -151,6 +139,26 @@ namespace ContentPatcher.Framework.Patches
                 yield return "resized image";
 
             yield return "edited image";
+        }
+
+        // <summary>Color blending (multiplication).</summary>
+        private Texture2D ColorBlend(Texture2D source, Color blendColor)
+        {
+            Color[] sourcePixels = new Color[source.Width * source.Height];
+            source.GetData(sourcePixels);
+            for (int i = 0; i < sourcePixels.Length; i++)
+            {
+                sourcePixels[i]
+                    = new Color((byte)(sourcePixels[i].R * blendColor.R / 255),
+                                (byte)(sourcePixels[i].G * blendColor.G / 255),
+                                (byte)(sourcePixels[i].B * blendColor.B / 255),
+                                (byte)(sourcePixels[i].A * blendColor.A / 255));
+            }
+
+            Texture2D blended = new Texture2D(Game1.graphics.GraphicsDevice, source.Width, source.Height);
+            blended.SetData(sourcePixels);
+
+            return blended;
         }
     }
 }
