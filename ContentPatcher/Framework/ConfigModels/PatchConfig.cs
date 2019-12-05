@@ -87,6 +87,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.FromArea = other.FromArea;
             this.ToArea = other.ToArea;
             this.PatchMode = other.PatchMode;
+            this.BlendColor = other.BlendColor;
             this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
             this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
             this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToArray();
