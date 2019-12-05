@@ -1,0 +1,38 @@
+{
+    // default chest names
+    "default-name.auto-grabber": "Auto-arraffona n.{{number}}",
+    "default-name.chest": "Baule n.{{number}}",
+    "default-name.fridge": "Frigo",
+    "default-name.junimo-hut": "Capanno dei Junimo n.{{number}}",
+    "default-name.shipping-bin": "Bidone delle consegne",
+
+    // default category names
+    "default-category.owned-cabin": "Cabina ({{owner}})",
+    "default-category.unowned-cabin": "Cabina (vuota)",
+    "default-category.duplicate": "{{locationName}} n.{{number}}",
+
+    // edit-chest labels
+    "label.location": "Luogo",
+    "label.location.tile": "posizione {{x}}, {{y}}",
+    "label.name": "Nome",
+    "label.category": "Categoria",
+    "label.order": "Ordine",
+    "label.hide-chest": "Nascondi questo baule",
+    "label.hide-chest-hidden": "Nascondi questo baule (per annullare l'azione devi ritrovare il baule!)",
+    "label.automate-prefer-output": "(Automatizza) Metti prima gli oggetti nel baule",
+    "label.automate-no-input": "(Automatizza) Non mettere oggetti in questo baule",
+    "label.automate-no-output": "(Automatizza) Non prendere oggetti da questo baule",
+    "label.automate-ignore": "(Automatizza) Non automatizzare questo baule",
+
+    // button labels
+    "button.edit-chest": "modifica baule",
+    "button.sort-inventory": "ordina inventario",
+    "button.save": "salva",
+    "button.reset": "ripristina",
+
+    // errors
+    "errors.disabled-from-here": "Non puoi accedere al baule da qui.",
+    "errors.no-chests": "Non hai ancora nessun baule.",
+    "errors.no-chests-in-location": "Non hai nessun baule in quest'area.",
+    "errors.no-chests-in-range": "Non hai nessun baule vicino a te."
+}
