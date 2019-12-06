@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 4.9
 Released 26 November 2019.
 
