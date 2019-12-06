@@ -168,8 +168,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
             // get tile groups
             GameLocation location = Game1.currentLocation;
-            int width = location.Map.Layers.Max(p => p.TileWidth);
-            int height = location.Map.Layers.Max(p => p.TileHeight);
+            int width = location.Map.Layers.Max(p => p.LayerWidth);
+            int height = location.Map.Layers.Max(p => p.LayerHeight);
             return layer.Update(Game1.currentLocation, new Rectangle(0, 0, width, height), new Vector2(0, 0));
         }
     }

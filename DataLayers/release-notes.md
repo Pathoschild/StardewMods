@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Fixed the `export` console command not exporting the full map.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.8
