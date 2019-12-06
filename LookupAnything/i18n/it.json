@@ -13,7 +13,7 @@
 
     // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% probabilità di {{label}}",
+    "generic.percent-chance-of": "probabilità del {{percent}}% di {{label}}",
     "generic.percent-ratio": "{{percent}}% ({{value}} su {{max}})",
     "generic.ratio": "{{value}} su {{max}}",
     "generic.range": "Da {{min}} a {{max}}",
@@ -23,7 +23,7 @@
     "generic.minutes": "{{count}} minuti",
     "generic.hours": "{{count}} ore",
     "generic.days": "{{count}} giorni",
-    "generic.in-x-days": "in {{count}} giorni",
+    "generic.in-x-days": "fra {{count}} giorni",
     "generic.x-days-ago": "{{count}} giorni fa",
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g ({{quality}})",
@@ -33,7 +33,7 @@
     "type.building": "Edificio",
     "type.bush": "Cespuglio",
     "type.fruit-tree": "Albero da frutta",
-    "type.map-tile": "Sezione della mappa",
+    "type.map-tile": "Tassello della mappa",
     "type.monster": "Mostro",
     "type.player": "Giocatore",
     "type.tree": "Albero",
