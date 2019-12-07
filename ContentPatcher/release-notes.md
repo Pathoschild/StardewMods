@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed incorrect warning when an `EditData` patch references a file that doesn't exist when it should be skipped due to a `HasFile` condition.
+
 ## 1.10.1
 Released 02 December 2019.
 

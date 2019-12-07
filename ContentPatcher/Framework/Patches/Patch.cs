@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Patches
         public bool IsMutable { get; } = true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady { get; private set; }
+        public bool IsReady { get; protected set; }
 
         /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
         public string FromAsset { get; private set; }
