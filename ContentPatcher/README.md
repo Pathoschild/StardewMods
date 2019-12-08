@@ -16,6 +16,7 @@ that change the game's images and data without replacing XNB files.
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
+  * [Randomization](#randomization)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
   * [Mod-provided tokens](#mod-provided-tokens)
@@ -1070,7 +1071,7 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 </table>
 </dd>
 
-<dt>Other:</dt>
+<dt>Metadata:</dt>
 
 <dd>
 <table>
@@ -1160,35 +1161,6 @@ code | meaning
 <tr>
 <th>condition</th>
 <th>purpose</th>
-<tr>
-<td>Random</td>
-<td>
-
-A random value from the options you specify:
-```js
-{
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
-}
-```
-
-The selection is based on the save ID and in-game date, so reloading a save with the same patches
-won't change the selection. Calling the token twice may return different values (you can use a
-[dynamic token](#dynamic-token) to reuse the same selection).
-
-For weighted random, you can specify a value multiple times. For example, 'red' is twice as likely
-as 'blue' in this patch:
-```js
-{
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
-}
-```
-
-</td>
-</tr>
 
 <tr valign="top">
 <td>Range</td>
@@ -1269,6 +1241,151 @@ Each file can only be loaded by one patch. You can have multiple load patches wi
 conditions, and the correct one will be used when the conditions change. However if multiple
 patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
 and apply none of them.
+
+### Randomization
+You can randomize values using the `Random` token:
+
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
+}
+```
+
+This token is dynamic and may behave in unexpected ways; see below to avoid surprises.
+
+<dl>
+<dt>When random values change:</dt>
+<dd>
+
+The randomness is seeded with the save ID and in-game date, so reloading the save won't change
+which choices were made.
+
+Random tokens rechoose each time they're evaluated, specifically...
+
+* When a new day starts.
+* When you change location, if used in a patch or [dynamic token](#dynamic-tokens) linked to a
+  location token like `LocationName`. This is true even if the location token value doesn't change
+  (e.g. using `IsOutdoors` while warping between two outdoor locations). You can prevent
+  location-linked changes by using pinned keys (see below), or by storing the `Random` token in a
+  [dynamic token](#dynamic-tokens) which isn't linked to a location token.
+
+</dd>
+
+<dt>Token independence:</dt>
+<dd>
+
+Each `Random` token changes independently. In particular:
+
+* If a patch has multiple `Target` values, `Random` may have a different value for each target.
+* If a `FromFile` field has a `Random` token, you can't just copy its value into a `HasFile` field
+  to check if the file exists, since `Random` may return a different choice in each field.
+
+To keep multiple `Random` tokens in sync, see _pinned keys_ below.
+
+</dd>
+
+<dt>Value weight:</dt>
+<dd>
+
+Each option has an equal chance of being chosen. To load the dice, just specify a value multiple
+times. For example, 'red' is twice as likely as 'blue' in this patch:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
+}
+```
+
+</dd>
+
+<dt>Basic pinned keys:</dt>
+<dd>
+
+If you need multiple `Random` tokens to make the same choices (e.g. to keep an NPC's portrait and
+sprite in sync), you can specify a 'pinned key'. This is like a name for the random; every `Random`
+token with the same pinned key will make the same choice.
+
+For example, this keeps Abigail's sprite and portrait in sync using `abigail-outfit` as the pinned
+key:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | abigail-outfit}}.png"
+}
+```
+
+You can use tokens in a pinned key. For example, this synchronizes values separately for each NPC:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail, Characters/Haley, Portraits/Haley",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | {{TargetWithoutPath}}-outfit}}.png"
+}
+```
+
+<dt>Advanced pinned keys:</dt>
+<dd>
+
+The pinned key affects the internal random number used to make a choice, not the choice itself. You
+can use it with `Random` tokens containing different values (even different numbers of values) for
+more interesting features.
+
+For example, this gives Abigail and Haley random outfits but ensures they never wear the same one:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | outfit}}.png"
+},
+{
+   "Action": "Load",
+   "Target": "Characters/Haley, Portraits/Haley",
+   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood | outfit}}.png"
+}
+```
+
+</dd>
+
+<dt>Okay, I'm confused. What the heck are pinned keys?</dt>
+<dd>
+
+Basically using a pinned key ensures the `Random` tokens have the same internal number. For
+example, _without_ pinned keys each token will randomly choose its own value:
+```txt
+{{Random: hood, jacket, raincoat}} = raincoat
+{{Random: hood, jacket, raincoat}} = hood
+{{Random: hood, jacket, raincoat}} = jacket
+```
+
+If you use a pinned key, they'll always be in sync:
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat | outfit}} = hood
+```
+
+For basic cases, you just need to know that same options + same key = same value.
+
+If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
+key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
+```
+
+You can use that in interesting ways. For example, shifting the values guarantees they'll never
+choose the same value (since same index = different value):
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
+{{Random: jacket, raincoat, hood | outfit}} = 217437 % 3 choices = index 0 = jacket
+```
+</dd>
+</dl>
 
 ### Dynamic tokens
 Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
