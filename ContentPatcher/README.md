@@ -1244,12 +1244,24 @@ and apply none of them.
 
 ### Randomization
 You can randomize values using the `Random` token:
-
 ```js
 {
    "Action": "Load",
    "Target": "Characters/Abigail",
    "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
+}
+```
+
+And you can optionally use pinned keys to keep multiple `Random` tokens in sync (see below for more
+info):
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png",
+   "When": {
+      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png"
+   }
 }
 ```
 
@@ -1306,7 +1318,7 @@ times. For example, 'red' is twice as likely as 'blue' in this patch:
 
 If you need multiple `Random` tokens to make the same choices (e.g. to keep an NPC's portrait and
 sprite in sync), you can specify a 'pinned key'. This is like a name for the random; every `Random`
-token with the same pinned key will make the same choice.
+token with the same pinned key will make the same choice. (Note that list order does matter.)
 
 For example, this keeps Abigail's sprite and portrait in sync using `abigail-outfit` as the pinned
 key:
