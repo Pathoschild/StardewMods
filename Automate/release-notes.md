@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed wood chippers not interactable after automation.
+
 ## 1.14
 Released 26 November 2019.
 

@@ -38,12 +38,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             SObject machine = this.Machine;
-            return new TrackedItem(machine.heldObject.Value, item =>
-            {
-                machine.heldObject.Value = null;
-                machine.readyForHarvest.Value = false;
-                machine.showNextIndex.Value = false;
-            });
+
+            return new TrackedItem(machine.heldObject.Value, this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -51,6 +47,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
+            SObject machine = this.Machine;
+
             if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out IRecipe recipe))
             {
                 // get output
@@ -62,8 +60,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         output.Stack = 2;
                 }
 
-                this.Machine.heldObject.Value = output;
-                this.Machine.MinutesUntilReady = recipe.Minutes(inputStack);
+                machine.heldObject.Value = output;
+                machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }
 
@@ -92,6 +90,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 default:
                     return 0.1f;
             }
+        }
+
+        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
+        /// <param name="item">The output item that was taken.</param>
+        private void Reset(Item item)
+        {
+            SObject machine = this.Machine;
+
+            this.GenericReset(item);
+            machine.showNextIndex.Value = false;
         }
     }
 }
