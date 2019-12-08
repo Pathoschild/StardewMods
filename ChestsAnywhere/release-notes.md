@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed being able to open the menu when using a tool, causing a softlock in some cases.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.17.1

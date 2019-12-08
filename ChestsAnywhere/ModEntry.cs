@@ -128,6 +128,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
+            if (!Context.IsWorldReady)
+                return;
+
             try
             {
                 ModConfigKeys keys = this.Keys;
@@ -137,7 +140,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 {
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)
-                        this.OpenMenu();
+                    {
+                        if (Context.IsPlayerFree && !Game1.player.UsingTool)
+                            this.OpenMenu();
+                    }
 
                     // open from inventory if it's safe to close the inventory screen
                     else if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.currentTab == GameMenu.inventoryTab)
