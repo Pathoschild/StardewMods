@@ -609,10 +609,18 @@ namespace ContentPatcher
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
 
-                            // save
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IParsedTokenString fromAsset))
+                            // read from/to asset areas
+                            TokenRectangle fromArea = null;
+                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea.X, entry.FromArea.Y, entry.FromArea.Width, entry.FromArea.Height, tokenParser, immutableRequiredModIDs, out string error, out fromArea))
                                 return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            TokenRectangle toArea = null;
+                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea.X, entry.ToArea.Y, entry.ToArea.Width, entry.ToArea.Height, tokenParser, immutableRequiredModIDs, out error, out toArea))
+                                return TrackSkip(error);
+
+                            // save
+                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out error, out IParsedTokenString fromAsset))
+                                return TrackSkip(error);
+                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -640,14 +648,22 @@ namespace ContentPatcher
                                 }
                             }
 
+                            // read from/to asset areas
+                            TokenRectangle fromArea = null;
+                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea.X, entry.FromArea.Y, entry.FromArea.Width, entry.FromArea.Height, tokenParser, immutableRequiredModIDs, out error, out fromArea))
+                                return TrackSkip(error);
+                            TokenRectangle toArea = null;
+                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea.X, entry.ToArea.Y, entry.ToArea.Width, entry.ToArea.Height, tokenParser, immutableRequiredModIDs, out error, out toArea))
+                                return TrackSkip(error);
+
                             // validate
                             if (fromAsset == null && mapProperties == null)
                                 return TrackSkip($"must specify at least one of {nameof(entry.FromFile)} or {entry.MapProperties}");
-                            if (fromAsset != null && entry.ToArea == Rectangle.Empty)
+                            if (fromAsset != null && entry.ToArea == null)
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, entry.FromArea, entry.ToArea, mapProperties, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, mapProperties, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -949,6 +965,79 @@ namespace ContentPatcher
                 error = $"can't parse {tokenString.Raw} as a true/false value.";
                 return false;
             }
+            return true;
+        }
+
+        /// <summary>Parse a <see cref="TokenRectangle"/> value from four strings which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawX">The raw string for the X value which may contain tokens.</param>
+        /// <param name="rawY">The raw string for the Y value which may contain tokens.</param>
+        /// <param name="rawWidth">The raw string for the width value which may contain tokens.</param>
+        /// <param name="rawHeight">The raw string for the height value which may contain tokens.</param>
+        /// <param name="tokenParser">The  tokens available for this content pack.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParseRectangle(string rawX, string rawY, string rawWidth, string rawHeight, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out TokenRectangle parsed)
+        {
+            parsed = null;
+
+            if (!this.TryParseInt(rawX, tokenParser, assumeModIds, out error, out ITokenString x) ||
+                !this.TryParseInt(rawY, tokenParser, assumeModIds, out error, out ITokenString y) ||
+                !this.TryParseInt(rawWidth, tokenParser, assumeModIds, out error, out ITokenString width) ||
+                !this.TryParseInt(rawHeight, tokenParser, assumeModIds, out error, out ITokenString height))
+                return false;
+
+            parsed = new TokenRectangle(x, y, width, height);
+            
+            return true;
+        }
+
+        /// <summary>Parse an integer value from a string which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawString">The raw string which may contain tokens.</param>
+        /// <param name="tokenParser">The  tokens available for this content pack.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParseInt(string rawString, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out ITokenString parsed)
+        {
+            parsed = null;
+
+            // analyze string
+            if (!tokenParser.TryParseStringTokens(rawString, assumeModIds, out error, out IParsedTokenString tokenString))
+                return false;
+
+            // validate tokens
+            string text = rawString;
+            if (tokenString.HasAnyTokens)
+            {
+                // only one token allowed
+                if (!tokenString.IsSingleTokenOnly)
+                {
+                    error = "can't be treated as a single integer because it contains multiple tokens.";
+                    return false;
+                }
+
+                // parse token
+                LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
+                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
+
+                // check token options
+                InvariantHashSet allowedValues = token?.GetAllowedValues(input);
+                if (allowedValues == null || !allowedValues.All(p => int.TryParse(p, out _)))
+                {
+                    error = "that token isn't restricted to integers.";
+                    return false;
+                }
+                if (token.CanHaveMultipleValues(input))
+                {
+                    error = "can't be treated as an integer value because that token can have multiple values.";
+                    return false;
+                }
+            }
+
+            parsed = tokenString;
+
             return true;
         }
 
