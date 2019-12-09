@@ -43,62 +43,91 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return Context.IsWorldReady && Game1.player.isEating && Game1.player.Sprite.CurrentAnimation != null;
+            return
+                (this.Multiplier > 1 && this.IsAnimationPlaying())
+                || (this.DisableConfirmation && this.IsConfirmationShown(out _));
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            // When the animation starts, the game shows a yes/no dialogue asking the player to
-            // confirm they really want to eat the item. This code answers 'yes' and closes the
-            // dialogue.
-            if (Game1.activeClickableMenu is DialogueBox eatMenu)
+            // disable confirmation
+            if (this.DisableConfirmation && this.IsConfirmationShown(out DialogueBox eatMenu))
             {
-                if (this.DisableConfirmation)
+                // When the animation starts, the game shows a yes/no dialogue asking the player to
+                // confirm they really want to eat the item. This code answers 'yes' and closes the
+                // dialogue.
+                Response yes = this.Reflection.GetField<List<Response>>(eatMenu, "responses").GetValue()[0];
+                Game1.currentLocation.answerDialogue(yes);
+                eatMenu.closeDialogue();
+            }
+
+            // speed up animation
+            if (this.Multiplier > 1 && this.IsAnimationPlaying())
+            {
+                // The farmer eating animation spins off two main temporary animations: the item being
+                // held (at index 1) and the item being thrown into the air (at index 2). The drinking
+                // animation only has one temporary animation (at index 1). This code runs after each
+                // one is spawned, and adds it to the list of temporary animations to handle.
+                int indexInAnimation = Game1.player.FarmerSprite.currentAnimationIndex;
+                if (indexInAnimation <= 1)
+                    this.ItemAnimations.Clear();
+                if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.ParentSheetIndex != Object.stardrop)
                 {
-                    Response yes = this.Reflection.GetField<List<Response>>(eatMenu, "responses").GetValue()[0];
-                    Game1.currentLocation.answerDialogue(yes);
-                    eatMenu.closeDialogue();
+                    Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16);
+                    TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
+                    if (tempAnimation != null)
+                        this.ItemAnimations.Add(tempAnimation);
                 }
-                else
-                    return; // wait until confirmation closed
-            }
 
-            // The farmer eating animation spins off two main temporary animations: the item being
-            // held (at index 1) and the item being thrown into the air (at index 2). The drinking
-            // animation only has one temporary animation (at index 1). This code runs after each
-            // one is spawned, and adds it to the list of temporary animations to handle.
-            int indexInAnimation = Game1.player.FarmerSprite.currentAnimationIndex;
-            if (indexInAnimation <= 1)
-                this.ItemAnimations.Clear();
-            if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.ParentSheetIndex != Object.stardrop)
-            {
-                Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16);
-                TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
-                if (tempAnimation != null)
-                    this.ItemAnimations.Add(tempAnimation);
-            }
-
-            // speed up animations
-            GameTime gameTime = Game1.currentGameTime;
-            GameLocation location = Game1.player.currentLocation;
-            for (int i = 1; i < this.Multiplier; i++)
-            {
-                // temporary item animations
-                foreach (TemporaryAnimatedSprite animation in this.ItemAnimations.ToArray())
+                // speed up animations
+                GameTime gameTime = Game1.currentGameTime;
+                GameLocation location = Game1.player.currentLocation;
+                for (int i = 1; i < this.Multiplier; i++)
                 {
-                    bool animationDone = animation.update(gameTime);
-                    if (animationDone)
+                    // temporary item animations
+                    foreach (TemporaryAnimatedSprite animation in this.ItemAnimations.ToArray())
                     {
-                        this.ItemAnimations.Remove(animation);
-                        location.TemporarySprites.Remove(animation);
+                        bool animationDone = animation.update(gameTime);
+                        if (animationDone)
+                        {
+                            this.ItemAnimations.Remove(animation);
+                            location.TemporarySprites.Remove(animation);
+                        }
                     }
-                }
 
-                // eating animation
-                Game1.player.Update(gameTime, location);
+                    // eating animation
+                    Game1.player.Update(gameTime, location);
+                }
             }
+        }
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether the eat/drink confirmation is being shown.</summary>
+        /// <param name="menu">The confirmation menu.</param>
+        private bool IsConfirmationShown(out DialogueBox menu)
+        {
+            if (Game1.player.itemToEat != null && Game1.activeClickableMenu is DialogueBox dialogue)
+            {
+                menu = dialogue;
+                return true;
+            }
+
+            menu = null;
+            return false;
+
+        }
+
+        /// <summary>Get whether the eat/drink animation is being played.</summary>
+        private bool IsAnimationPlaying()
+        {
+            return
+                Context.IsWorldReady
+                && Game1.player.isEating
+                && Game1.player.Sprite.CurrentAnimation != null;
         }
     }
 }
