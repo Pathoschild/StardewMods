@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for recent versions of Json Assets.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.23
