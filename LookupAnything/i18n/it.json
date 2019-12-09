@@ -48,10 +48,10 @@
 
     // NPC friendship
     "friendship-status.friendly": "Amichevole",
-    "friendship-status.dating": "Frequentando",
-    "friendship-status.engaged": "Fidanzato/a",
-    "friendship-status.married": "Sposato/a",
-    "friendship-status.divorced": "Divorziato/a",
+    "friendship-status.dating": "Frequentazione",
+    "friendship-status.engaged": "Fidanzati",
+    "friendship-status.married": "Sposati",
+    "friendship-status.divorced": "Divorziati",
     "friendship-status.kicked-out": "Cacciato via",
 
     /*********
@@ -83,7 +83,7 @@
     *********/
     "data.npc.pet.description": "Il tuo fedele animale domestico.",
     "data.npc.horse.description": "Il tuo fedele destriero.",
-    "data.npc.junimo.description": "Uno spirito della foresta dal mondo degli spiriti. Si sa molto poco di loro.",
+    "data.npc.junimo.description": "Uno spirito della foresta, proveniente dal mondo degli spiriti. Si sa molto poco di loro.",
     "data.npc.trashbear.description": "Uno spirito amichevole che ripulisce la spazzatura.",
 
     /*********
@@ -208,31 +208,31 @@
     "building.slimes.summary": "{{count}} di un massimo di {{max}} melme",
     "building.stored-hay.summary-one-silo": "{{hayCount}} fieno (capacità massima: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{hayCount}} fieno in {{siloCount}} silo (capacità massima: {{maxHay}})",
-    "building.upgrades.barn.0": "fino a 4 animali, aggiunge mucche",
-    "building.upgrades.barn.1": "fino a 8 animali, aggiunge maternità e capre",
-    "building.upgrades.barn.2": "fino a 12 animali, aggiunge auto-nutrimento, maiali, e pecore",
-    "building.upgrades.cabin.0": "cabina iniziale",
-    "building.upgrades.cabin.1": "aggiungi cucina, abilita matrimonio",
-    "building.upgrades.cabin.2": "abilita bambini",
-    "building.upgrades.coop.0": "fino a 4 animali; aggiunge galline",
-    "building.upgrades.coop.1": "fino a 8 animali; aggiunge incubatrice, dinosauri, e anatre",
-    "building.upgrades.coop.2": "fino a 12 animali; aggiunge auto-nutrimento e conigli",
+    "building.upgrades.barn.0": "fino a 4 animali, aggiunge le mucche",
+    "building.upgrades.barn.1": "fino a 8 animali, aggiunge la maternità e le capre",
+    "building.upgrades.barn.2": "fino a 12 animali, aggiunge l'auto-nutrimento, i maiali, e le pecore",
+    "building.upgrades.cabin.0": "casupola iniziale",
+    "building.upgrades.cabin.1": "aggiunge la cucina, possibilità di sposarsi",
+    "building.upgrades.cabin.2": "possibilità di avere bambini",
+    "building.upgrades.coop.0": "fino a 4 animali; aggiunge le galline",
+    "building.upgrades.coop.1": "fino a 8 animali; aggiunge l'incubatrice, i dinosauri, e le anatre",
+    "building.upgrades.coop.2": "fino a 12 animali; aggiunge l'auto-nutrimento ed i conigli",
     "building.water-trough.summary": "{{filled}} di {{max}} trogoli d'acqua riempiti",
 
-    "building.fish-pond.population.empty": "Aggiungi un pesce per avviare questo stagno",
+    "building.fish-pond.population.empty": "Aggiungi un pesce per dare vita a questo stagno",
     "building.fish-pond.population.next-spawn": "Nuovo pesce generato il {{relativeDate}}",
     "building.fish-pond.drops.preface": "{{chance}}% di probabilità che ogni giorno produca uno di questi:",
-    "building.fish-pond.quests.done": "{{count}} pesce",
-    "building.fish-pond.quests.incomplete-one": "{{count}} pesce: avrà bisogno di {{itemName}}",
-    "building.fish-pond.quests.incomplete-random": "{{count}} pesce: avrà bisogno di un {{itemList}}",
-    "building.fish-pond.quests.available": "disponibile il {{relativeDate}}",
+    "building.fish-pond.quests.done": "{{count}} pesci",
+    "building.fish-pond.quests.incomplete-one": "{{count}} pesci: avranno bisogno di {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} pesci: avranno bisogno di un {{itemList}}",
+    "building.fish-pond.quests.available": "disponibili il {{relativeDate}}",
 
     // bush lookup labels
     "bush.name.berry": "Cespuglio di bacche",
-    "bush.name.plain": "Cespuglio semplice",
+    "bush.name.plain": "Cespuglio",
     "bush.name.tea": "Cespuglio di tè",
     "bush.description.berry": "Un cespuglio che fa crescere lamponi e more.",
-    "bush.description.plain": "Un cespuglio semplice che non fa crescere niente.",
+    "bush.description.plain": "Un cespuglio normale, non fa crescere niente.",
     "bush.description.Tea": "Un cespuglio che fa crescere foglie di tè.",
     "bush.date-planted": "Piantato in data",
     "bush.growth": "Crescita",
@@ -240,7 +240,7 @@
 
     // bush lookup values
     "bush.growth.summary": "matura il giorno {{date}}",
-    "bush.schedule.berry": "Ha il 20% di probabilità di far crescere lamponi dal 15 al 18 di Primavera e more dal 8 al 11 di Autunno.",
+    "bush.schedule.berry": "Ha il 20% di probabilità di far crescere lamponi dal 15 al 18 di Primavera e di far crescere more dal 8 al 11 di Autunno.",
     "bush.schedule.tea": "Fa crescere foglie di té il 22 di ogni stagione (eccetto in inverno se non si trova in una serra).",
 
     // fruit tree lookup labels
@@ -326,22 +326,22 @@
     "item.movie-snack-preference.love": "{{name}} lo adora",
     "item.movie-snack-preference.like": "A {{name}} piace",
     "item.movie-snack-preference.dislike": "A {{name}} non piace",
-    "item.movie-ticket.movie-this-week.none": "Niente film questa settimana",
+    "item.movie-ticket.movie-this-week.none": "Nessun film questa settimana",
 
     "item.contents.placed": "{{name}} piazzato",
     "item.contents.ready": "{{name}} pronto",
     "item.contents.partial": "{{name}} fra {{time}}",
     "item.needed-for.community-center": "centro sociale ({{bundles}})",
-    "item.needed-for.full-shipment": "l'achievement 'carico completo' (consegnane uno)",
-    "item.needed-for.polyculture": "l'achievement 'policultura' (consegnane ancora {{count}})",
+    "item.needed-for.full-shipment": "l'achievement 'spedizione completa' (consegnane uno)",
+    "item.needed-for.polyculture": "l'achievement 'policoltura' (consegnane ancora {{count}})",
     "item.needed-for.full-collection": "l'achievement 'collezione completa' (donane ancora uno al museo)",
     "item.needed-for.gourmet-chef": "l'achievement 'chef da gourmet' (cucina {{recipes}})",
-    "item.needed-for.craft-master": "l'achievement 'maestro della creazione' (crea {{recipes}})",
-    "item.sells-to.shipping-box": "Baule per le consegne",
+    "item.needed-for.craft-master": "l'achievement 'maestro della fabbricazione' (crea {{recipes}})",
+    "item.sells-to.shipping-box": "Cassetta delle spedizioni",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} necessari)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
-    "item.number-owned.summary": "{{count}} di questo/i posseduto/i",
-    "item.number-crafted.summary": "{{count}} di questo/i fabbricato/i",
+    "item.number-owned.summary": "Quantità posseduta: {{count}}",
+    "item.number-crafted.summary": "Quantità fabbricata: {{count}}",
 
     // monster lookup labels
     "monster.invincible": "Invincibile",
@@ -361,23 +361,23 @@
     // NPC lookup labels
     "npc.birthday": "Compleanno",
     "npc.can-romance": "Vi potete innamorare",
-    "npc.friendship": "Amicizia",
-    "npc.talked-today": "Gli/Le hai parlato oggi",
+    "npc.friendship": "Relazione",
+    "npc.talked-today": "Parlato oggi",
     "npc.gifted-today": "Regalo fatto oggi",
     "npc.gifted-this-week": "Regali fatti questa settimana",
-    "npc.kissed-today": "L'hai baciato/a oggi",
-    "npc.hugged-today": "L'hai abbracciato/a oggi",
-    "npc.loves-gifts": "Regali che ama",
-    "npc.likes-gifts": "Regali che gli/le piacciono",
+    "npc.kissed-today": "Baciato/a oggi",
+    "npc.hugged-today": "Abbracciato/a oggi",
+    "npc.loves-gifts": "Regali che adora",
+    "npc.likes-gifts": "Regali che piacciono",
     "npc.neutral-gifts": "Regali neutrali",
-    "npc.dislikes-gifts": "Regali che non gli/le piacciono",
+    "npc.dislikes-gifts": "Regali che non piacciono",
     "npc.hates-gifts": "Regali che odia",
 
     // NPC lookup values
-    "npc.can-romance.married": "Sei sposato/a! <", // < turns into a heart
+    "npc.can-romance.married": "Siete sposati! <", // < turns into a heart
     "npc.can-romance.housemate": "Siete coinquilini!",
-    "npc.friendship.not-met": "Non l'hai ancora incontrato/a.",
-    "npc.friendship.need-bouquet": "ha bisogno di un bouquet per il prossimo",
+    "npc.friendship.not-met": "Non vi siete ancora incontrati.",
+    "npc.friendship.need-bouquet": "ha bisogno di un bouquet per avanzare",
     "npc.friendship.need-points": "prossimo fra {{count}} pti",
     "npc.undiscovered-gift-taste": "{{count}} oggetti non rivelati",
     "npc.undiscovered-gift-taste-appended": ", e {{count}} oggetti non rivelati",
@@ -391,7 +391,7 @@
     "npc.child.age.newborn": "neonato",
     "npc.child.age.baby": "bebè",
     "npc.child.age.crawler": "gattonatore",
-    "npc.child.age.toddler": "bambino/a piccolo/a",
+    "npc.child.age.toddler": "lattante",
 
     // pet lookup labels
     "pet.love": "Amore",
@@ -412,7 +412,7 @@
     "player.favorite-thing": "Oggetto preferito",
     "player.gender": "Sesso",
     "player.housemate": "Coinquilino",
-    "player.spouse": "Marito/Moglie",
+    "player.spouse": "Coniuge",
     "player.watched-movie-this-week": "Hai guardato il film questa settimana",
     "player.combat-skill": "Combattimento",
     "player.farming-skill": "Fattoria",
@@ -426,7 +426,7 @@
     "player.farm-map.custom": "Personalizzata",
     "player.gender.male": "maschile",
     "player.gender.female": "femminile",
-    "player.luck.summary": "{{percent}}% di fortuna in più a molti controlli casuali",
+    "player.luck.summary": "{{percent}}% di fortuna a molti controlli casuali",
     "player.skill.progress": "livello {{level}} ({{expNeeded}} ESP per il prossimo)",
     "player.skill.progress-last": "livello {{level}}",
 
