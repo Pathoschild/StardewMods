@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Workbenches are now treated as connectors by default (configurable). This doesn't affect players who already have a `config.json`.
 * Fixed wood chippers not interactable after automation.
 
 ## 1.14
