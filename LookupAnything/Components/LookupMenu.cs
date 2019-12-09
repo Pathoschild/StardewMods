@@ -17,7 +17,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which shows information about an item.</summary>
-    internal class LookupMenu : IClickableMenu
+    internal class LookupMenu : IClickableMenu, IDisposable
     {
         /*********
         ** Fields
@@ -403,6 +403,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             }, this.OnDrawError);
         }
 
+        /// <summary>Clean up after the menu when it's disposed.</summary>
+        public void Dispose()
+        {
+            this.CleanupImpl();
+        }
+
 
         /*********
         ** Private methods
@@ -447,7 +453,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Perform any cleanup needed when the menu exits.</summary>
         protected override void cleanupBeforeExit()
         {
-            Game1.displayHUD = this.WasHudEnabled;
+            this.CleanupImpl();
             base.cleanupBeforeExit();
         }
 
@@ -459,6 +465,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             int maxWidth = Math.Min(Game1.tileSize * 20, viewportWidth);
             int maxHeight = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * maxWidth), viewportHeight);
             return new Point(maxWidth, maxHeight);
+        }
+
+        /// <summary>Perform cleanup specific to the lookup menu.</summary>
+        private void CleanupImpl()
+        {
+            Game1.displayHUD = this.WasHudEnabled;
         }
     }
 }
