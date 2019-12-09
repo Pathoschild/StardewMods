@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -36,6 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
+
+        /// <summary>Whether the NPC is a haunted skull monster.</summary>
+        private readonly bool IsHauntedSkull;
 
 
         /*********
@@ -72,6 +76,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             string name = npc.getName();
             string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
             this.Initialize(name, description, typeName);
+
+            this.IsHauntedSkull = npc is Bat && this.Reflection.GetField<NetBool>(npc, "hauntedSkull").GetValue().Value;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -136,6 +142,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (npc.Portrait != null)
             {
                 spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
+                return true;
+            }
+
+            // haunted skulls
+            if (this.IsHauntedSkull)
+            {
+                var sourceRect = Game1.getSourceRectForStandardTileSheet(npc.Sprite.Texture, 4, 16, 16);
+                spriteBatch.Draw(npc.Sprite.Texture, position: position, sourceRectangle: sourceRect, color: Color.White, rotation: 0, origin: Vector2.Zero, scale: new Vector2(size.X / 16), effects: SpriteEffects.None, layerDepth: 1);
                 return true;
             }
 
@@ -364,9 +378,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="monster">The monster whose drops to get.</param>
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
+            // get actual drops
             int[] drops = monster.objectsToDrop.ToArray();
-            ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().First(p => p.Name == monster.Name).Drops;
 
+            // get possible drops
+            ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
+            if (possibleDrops == null && this.IsHauntedSkull)
+                possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
+            if (possibleDrops == null)
+                possibleDrops = new ItemDropData[0];
+
+            // get combined data
             return (
                 from possibleDrop in possibleDrops
                 let isGuaranteed = drops.Contains(possibleDrop.ItemID)

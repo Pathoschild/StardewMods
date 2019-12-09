@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for recent versions of Json Assets.
+* Fixed Haunted Skull lookups.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.23
