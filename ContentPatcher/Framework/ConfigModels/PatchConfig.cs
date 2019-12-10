@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -38,10 +37,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** EditImage
         ****/
         /// <summary>The sprite area from which to read an image.</summary>
-        public Rectangle FromArea { get; set; }
+        public PatchRectangleConfig FromArea { get; set; }
 
         /// <summary>The sprite area to overwrite.</summary>
-        public Rectangle ToArea { get; set; }
+        public PatchRectangleConfig ToArea { get; set; }
 
         /// <summary>Indicates how the image should be patched.</summary>
         public string PatchMode { get; set; }
@@ -81,8 +80,8 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Enabled = other.Enabled;
             this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
             this.FromFile = other.FromFile;
-            this.FromArea = other.FromArea;
-            this.ToArea = other.ToArea;
+            this.FromArea = other.FromArea != null ? new PatchRectangleConfig(other.FromArea) : null;
+            this.ToArea = other.ToArea != null ? new PatchRectangleConfig(other.ToArea) : null;
             this.PatchMode = other.PatchMode;
             this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
             this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
