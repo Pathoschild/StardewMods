@@ -14,7 +14,6 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using ContentPatcher.Framework.Validators;
-using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -567,21 +566,21 @@ namespace ContentPatcher
 
                             // parse 'from file' field
                             IParsedTokenString fromAsset = null;
-                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string fromFileError, out fromAsset))
-                                return TrackSkip(fromFileError);
+                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
+                                return TrackSkip(error);
 
                             // parse data changes
-                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string error)
+                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string parseError)
                             {
-                                return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, out parsedEntries, out parsedFields, out parsedMoveEntries, out error);
+                                return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, out parsedEntries, out parsedFields, out parsedMoveEntries, out parseError);
                             }
                             List<EditDataPatchRecord> entries = null;
                             List<EditDataPatchField> fields = null;
                             List<EditDataPatchMoveRecord> moveEntries = null;
                             if (entry.FromFile == null)
                             {
-                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out string parseError))
-                                    return TrackSkip(parseError);
+                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out error))
+                                    return TrackSkip(error);
                             }
 
                             // save
@@ -609,12 +608,14 @@ namespace ContentPatcher
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
 
-                            // read from/to asset areas
+                            // read from area
                             TokenRectangle fromArea = null;
-                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea.X, entry.FromArea.Y, entry.FromArea.Width, entry.FromArea.Height, tokenParser, immutableRequiredModIDs, out string error, out fromArea))
+                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, out string error, out fromArea))
                                 return TrackSkip(error);
+
+                            // read to area
                             TokenRectangle toArea = null;
-                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea.X, entry.ToArea.Y, entry.ToArea.Width, entry.ToArea.Height, tokenParser, immutableRequiredModIDs, out error, out toArea))
+                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, out error, out toArea))
                                 return TrackSkip(error);
 
                             // save
@@ -639,10 +640,10 @@ namespace ContentPatcher
                                 mapProperties = new List<EditMapPatchProperty>();
                                 foreach (var pair in entry.MapProperties)
                                 {
-                                    if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out string keyError, out IParsedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {keyError}");
-                                    if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out string valueError, out IParsedTokenString value))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {keyError}");
+                                    if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out error, out IParsedTokenString key))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
+                                    if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out error, out IParsedTokenString value))
+                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                                     mapProperties.Add(new EditMapPatchProperty(key, value));
                                 }
@@ -650,10 +651,10 @@ namespace ContentPatcher
 
                             // read from/to asset areas
                             TokenRectangle fromArea = null;
-                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea.X, entry.FromArea.Y, entry.FromArea.Width, entry.FromArea.Height, tokenParser, immutableRequiredModIDs, out error, out fromArea))
+                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, out error, out fromArea))
                                 return TrackSkip(error);
                             TokenRectangle toArea = null;
-                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea.X, entry.ToArea.Y, entry.ToArea.Width, entry.ToArea.Height, tokenParser, immutableRequiredModIDs, out error, out toArea))
+                            if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, out error, out toArea))
                                 return TrackSkip(error);
 
                             // validate
@@ -968,27 +969,36 @@ namespace ContentPatcher
             return true;
         }
 
-        /// <summary>Parse a <see cref="TokenRectangle"/> value from four strings which can contain tokens, and validate that it's valid.</summary>
-        /// <param name="rawX">The raw string for the X value which may contain tokens.</param>
-        /// <param name="rawY">The raw string for the Y value which may contain tokens.</param>
-        /// <param name="rawWidth">The raw string for the width value which may contain tokens.</param>
-        /// <param name="rawHeight">The raw string for the height value which may contain tokens.</param>
-        /// <param name="tokenParser">The  tokens available for this content pack.</param>
+        /// <summary>Parse a tokenizable rectangle from its parts, and validate that it's valid.</summary>
+        /// <param name="raw">The raw rectangle to parse.</param>
+        /// <param name="tokenParser">The tokens available for this content pack.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseRectangle(string rawX, string rawY, string rawWidth, string rawHeight, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out TokenRectangle parsed)
+        private bool TryParseRectangle(PatchRectangleConfig raw, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out TokenRectangle parsed)
         {
-            parsed = null;
+            bool TryParseField(string rawField, string name, out ITokenString result, out string parseError)
+            {
+                if (!this.TryParseInt(rawField, tokenParser, assumeModIds, out parseError, out result))
+                {
+                    parseError = $"invalid {name}: {parseError}";
+                    return false;
+                }
+                return true;
+            }
 
-            if (!this.TryParseInt(rawX, tokenParser, assumeModIds, out error, out ITokenString x) ||
-                !this.TryParseInt(rawY, tokenParser, assumeModIds, out error, out ITokenString y) ||
-                !this.TryParseInt(rawWidth, tokenParser, assumeModIds, out error, out ITokenString width) ||
-                !this.TryParseInt(rawHeight, tokenParser, assumeModIds, out error, out ITokenString height))
+            if (
+                !TryParseField(raw.X, nameof(raw.X), out ITokenString x, out error)
+                || !TryParseField(raw.Y, nameof(raw.Y), out ITokenString y, out error)
+                || !TryParseField(raw.Width, nameof(raw.Width), out ITokenString width, out error)
+                || !TryParseField(raw.Height, nameof(raw.Height), out ITokenString height, out error)
+            )
+            {
+                parsed = null;
                 return false;
+            }
 
             parsed = new TokenRectangle(x, y, width, height);
-            
             return true;
         }
 
@@ -1007,13 +1017,12 @@ namespace ContentPatcher
                 return false;
 
             // validate tokens
-            string text = rawString;
             if (tokenString.HasAnyTokens)
             {
                 // only one token allowed
                 if (!tokenString.IsSingleTokenOnly)
                 {
-                    error = "can't be treated as a single integer because it contains multiple tokens.";
+                    error = "can't be treated as a number because it contains multiple tokens.";
                     return false;
                 }
 
@@ -1031,7 +1040,7 @@ namespace ContentPatcher
                 }
                 if (token.CanHaveMultipleValues(input))
                 {
-                    error = "can't be treated as an integer value because that token can have multiple values.";
+                    error = "can't be treated as a number because that token can have multiple values.";
                     return false;
                 }
             }

@@ -56,10 +56,10 @@ namespace ContentPatcher.Framework.Patches
             this.ToArea = toArea;
             this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.Monitor = monitor;
-            if (fromArea != null)
-                this.Contextuals.Add(fromArea.X).Add(fromArea.Y).Add(fromArea.Width).Add(fromArea.Height);
-            if (toArea != null)
-                this.Contextuals.Add(toArea.X).Add(toArea.Y).Add(toArea.Width).Add(toArea.Height);
+
+            this.Contextuals
+                .Add(fromArea)
+                .Add(toArea);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -67,15 +67,17 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to edit.</param>
         public override void Edit<T>(IAssetData asset)
         {
+            string errorPrefix = $"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}";
+
             // validate
             if (typeof(T) != typeof(Map))
             {
-                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
+                this.Monitor.Log($"{errorPrefix}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
                 return;
             }
             if (this.PatchesTiles && !this.FromAssetExists())
             {
-                this.Monitor.Log($"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
+                this.Monitor.Log($"{errorPrefix}: the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
                 return;
             }
 
@@ -87,11 +89,19 @@ namespace ContentPatcher.Framework.Patches
             {
                 // fetch data
                 Map source = this.ContentPack.Load<Map>(this.FromAsset);
-                Rectangle sourceArea = this.FromArea != null ? this.FromArea.ToRectangle() : this.GetMapArea(source);
-                Rectangle targetArea = this.ToArea != null ? this.ToArea.ToRectangle() : new Rectangle(0, 0, sourceArea.Width, sourceArea.Height);
+                Rectangle mapBounds = this.GetMapArea(source);
+                if (!this.TryReadArea(this.FromArea, 0, 0, mapBounds.Width, mapBounds.Height, out Rectangle sourceArea, out string error))
+                {
+                    this.Monitor.Log($"{errorPrefix}: the source area is invalid: {error}.", LogLevel.Warn);
+                    return;
+                }
+                if (!this.TryReadArea(this.ToArea, 0, 0, sourceArea.Width, sourceArea.Height, out Rectangle targetArea, out error))
+                {
+                    this.Monitor.Log($"{errorPrefix}: the target area is invalid: {error}.", LogLevel.Warn);
+                    return;
+                }
 
                 // validate area values
-                string errorPrefix = $"Can't apply map patch \"{this.LogName}\"";
                 string sourceAreaLabel = this.FromArea != null ? $"{nameof(this.FromArea)}" : "source map";
                 string targetAreaLabel = this.ToArea != null ? $"{nameof(this.ToArea)}" : "target map";
                 Point sourceMapSize = new Point(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));

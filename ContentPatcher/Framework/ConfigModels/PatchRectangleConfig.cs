@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The input settings for a Rectangle field in <see cref="PatchConfig"/>.</summary>

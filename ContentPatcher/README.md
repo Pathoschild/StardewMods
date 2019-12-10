@@ -162,8 +162,8 @@ field      | purpose
 ---------- | -------
 &nbsp;     | See _common fields_ above.
 `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
-`FromArea` | he part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
-`ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`FromArea` | The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
+`ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
 `PatchMode`| How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace every pixel in the target area with your source image. If the source image has transparent pixels, the target image will become transparent there.</li><li><code>Overlay</code>: draw your source image over the target area. If the source image has transparent pixels, the target image will 'show through' those pixels. Semi-transparent or opaque pixels will replace the target pixels.</li></ul>For example, let's say your source image is a pufferchick with a transparent background, and the target image is a solid green square. Here's how they'll be combined with different `PatchMode` values:<br />![](docs/screenshots/patch-mode-examples.png)
 
 Required fields: `FromFile`.
@@ -457,7 +457,7 @@ file:
 
 The part of the source map to copy. Defaults to the whole source map. This is specified as an
 object with the X and Y tile coordinates of the top-left corner, and the tile width and height of
-the area.
+the area. Its fields may contain tokens.
 
 </td>
 </tr>
@@ -470,7 +470,7 @@ the area.
 <td>
 
 The part of the target map to replace. This is specified as an object with the X and Y tile
-coordinates of the top-left corner, and the tile width and height of the area.
+coordinates of the top-left corner, and the tile width and height of the area. Its fields may contain tokens.
 
 </td>
 </tr>
