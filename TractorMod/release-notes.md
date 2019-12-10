@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added tree fertilizer support.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 4.9
