@@ -1268,40 +1268,40 @@ info):
 This token is dynamic and may behave in unexpected ways; see below to avoid surprises.
 
 <dl>
-<dt>When random values change:</dt>
+<dt>Unique properties:</dt>
 <dd>
 
-The randomness is seeded with the save ID and in-game date, so reloading the save won't change
-which choices were made.
+`Random` tokens are...
 
-Random tokens rechoose each time they're evaluated, specifically...
+<ol>
+<li>
+
+**Dynamic.** Random tokens rechoose each time they're evaluated, specifically...
 
 * When a new day starts.
 * When you change location, if used in a patch or [dynamic token](#dynamic-tokens) linked to a
   location token like `LocationName`. This is true even if the location token value doesn't change
   (e.g. using `IsOutdoors` while warping between two outdoor locations). You can prevent
   location-linked changes by using pinned keys (see below), or by storing the `Random` token in a
-  [dynamic token](#dynamic-tokens) which isn't linked to a location token.
+  [dynamic token](#dynamic-tokens) which doesn't depend on a location token.
 
-</dd>
+The randomness is seeded with the save ID and in-game date, so reloading the save won't change
+which choices were made.
 
-<dt>Token independence:</dt>
-<dd>
+</li>
+<li>
 
-Each `Random` token changes independently. In particular:
+**Independent**. Each `Random` token changes separately. In particular:
 
 * If a patch has multiple `Target` values, `Random` may have a different value for each target.
 * If a `FromFile` field has a `Random` token, you can't just copy its value into a `HasFile` field
   to check if the file exists, since `Random` may return a different choice in each field.
 
 To keep multiple `Random` tokens in sync, see _pinned keys_ below.
+</li>
+<li>
 
-</dd>
-
-<dt>Value weight:</dt>
-<dd>
-
-Each option has an equal chance of being chosen. To load the dice, just specify a value multiple
+**Fair**. Each option has an equal chance of being chosen. To load the dice, just specify a value multiple
 times. For example, 'red' is twice as likely as 'blue' in this patch:
 ```js
 {
@@ -1311,6 +1311,14 @@ times. For example, 'red' is twice as likely as 'blue' in this patch:
 }
 ```
 
+</li>
+<li>
+
+**Bounded** if the choices don't contain tokens. For example, you can use it in true/false contexts
+if all the choices are 'true' or 'false', or numeric contexts if all the choices are numbers.
+
+</li>
+</ul>
 </dd>
 
 <dt>Basic pinned keys:</dt>
@@ -1365,15 +1373,14 @@ For example, this gives Abigail and Haley random outfits but ensures they never 
 <dt>Okay, I'm confused. What the heck are pinned keys?</dt>
 <dd>
 
-Basically using a pinned key ensures the `Random` tokens have the same internal number. For
-example, _without_ pinned keys each token will randomly choose its own value:
+Without pinned keys, each token will randomly choose its own value:
 ```txt
 {{Random: hood, jacket, raincoat}} = raincoat
 {{Random: hood, jacket, raincoat}} = hood
 {{Random: hood, jacket, raincoat}} = jacket
 ```
 
-If you use a pinned key, they'll always be in sync:
+If they have the same pinned key, they'll always be in sync:
 ```txt
 {{Random: hood, jacket, raincoat | outfit}} = hood
 {{Random: hood, jacket, raincoat | outfit}} = hood
@@ -1385,16 +1392,16 @@ For basic cases, you just need to know that same options + same key = same value
 If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
 key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
 ```
 
 You can use that in interesting ways. For example, shifting the values guarantees they'll never
 choose the same value (since same index = different value):
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 % 3 choices = index 0 = hood
-{{Random: jacket, raincoat, hood | outfit}} = 217437 % 3 choices = index 0 = jacket
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: jacket, raincoat, hood | outfit}} = 217437 modulo 3 choices = index 0 = jacket
 ```
 </dd>
 </dl>

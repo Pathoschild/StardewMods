@@ -77,6 +77,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             yield return result;
         }
 
+        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        {
+            if (input.IsMutable || !input.IsReady)
+                return null;
+
+            return this.TryGetPinnedNumber(input, out string choices, out _)
+                ? new InvariantHashSet(choices.SplitValuesNonUnique())
+                : new InvariantHashSet(input.SplitValuesNonUnique());
+        }
+
 
         /*********
         ** Private methods
