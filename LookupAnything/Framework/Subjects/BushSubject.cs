@@ -158,7 +158,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private SDate GetDatePlanted(Bush bush)
         {
             SDate date = new SDate(1, "spring", 1);
-            if (this.IsTeaBush(bush))
+            if (this.IsTeaBush(bush) && bush.datePlanted.Value > 0) // Caroline's sun room bush has datePlanted = -999
                 date = date.AddDays(bush.datePlanted.Value);
             return date;
         }

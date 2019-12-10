@@ -5,6 +5,7 @@
 * Updated for recent versions of Json Assets.
 * Fixed Haunted Skull lookups.
 * Fixed rare issue where the HUD isn't restored when the lookup menu is force-replaced by another menu.
+* Fixed lookup on Caroline's tea bush.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.23
