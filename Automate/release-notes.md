@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added rice support to automated mills.
 * Workbenches are now treated as connectors by default (configurable). This doesn't affect players who already have a `config.json`.
 * Fixed wood chippers not interactable after automation.
 

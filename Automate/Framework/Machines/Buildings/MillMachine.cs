@@ -9,6 +9,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A mill machine that accepts input and provides output.</summary>
+    /// <remarks>See the game's default logic in <see cref="Mill.doAction"/>.</remarks>
     internal class MillMachine : BaseMachine<Mill>
     {
         /*********
@@ -64,9 +65,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (this.InputFull())
                 return false;
 
-            // fill input with wheat (262) and beets (284)
+            // fill input with wheat (262), beets (284), and rice (271)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.ParentSheetIndex == 262 || i.Sample.ParentSheetIndex == 284))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.ParentSheetIndex == 262 || i.Sample.ParentSheetIndex == 284 || i.Sample.ParentSheetIndex == 271))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);
