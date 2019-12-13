@@ -5,6 +5,7 @@
 * Added 'pinned key' feature to the `Random` token, which significantly expands what you can do with it (see readme).
 * Added token support in `FromArea` and `ToArea` fields (thanks to spacechase0!).
 * `Random` token is now bounded if the choices are immutable.
+* Internal optimizations for asset loading/editing.
 * Fixed incorrect warning when an `EditData` patch references a file that doesn't exist when it should be skipped due to a `HasFile` condition.
 
 ## 1.10.1
