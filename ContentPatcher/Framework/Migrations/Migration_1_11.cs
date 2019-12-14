@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -14,7 +16,14 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         public Migration_1_11()
-            : base(new SemanticVersion(1, 11, 0)) { }
+            : base(new SemanticVersion(1, 11, 0))
+        {
+            this.AddedTokens = new InvariantHashSet
+            {
+                ConditionType.Lowercase.ToString(),
+                ConditionType.Uppercase.ToString()
+            };
+        }
 
         /// <summary>Migrate a lexical token.</summary>
         /// <param name="lexToken">The lexical token to migrate.</param>

@@ -202,6 +202,8 @@ namespace ContentPatcher.Framework
 
             // string manipulation
             yield return new RangeValueProvider();
+            yield return new LetterCaseValueProvider(ConditionType.Lowercase);
+            yield return new LetterCaseValueProvider(ConditionType.Uppercase);
 
             // other
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);

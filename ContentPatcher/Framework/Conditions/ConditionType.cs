@@ -132,6 +132,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A list of numeric values based on the specified min/max values.</summary>
         Range,
 
+        /// <summary>A token which transforms its input text to lowercase.</summary>
+        Lowercase,
+
+        /// <summary>A token which transforms its input text to uppercase.</summary>
+        Uppercase,
+
         /****
         ** Patch-specific
         ****/
