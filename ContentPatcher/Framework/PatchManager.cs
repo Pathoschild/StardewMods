@@ -198,7 +198,7 @@ namespace ContentPatcher.Framework
                 bool wasReady = patch.IsReady;
 
                 // update patch
-                IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
+                IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
                 bool changed = patch.UpdateContext(tokenContext);
                 bool isReady = patch.IsReady;
 
@@ -259,7 +259,7 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to add.</param>
         public void Add(IPatch patch)
         {
-            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack.Pack);
+            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
 
             // set initial context
             patch.UpdateContext(modContext);

@@ -340,7 +340,7 @@ namespace ContentPatcher
                     ContentConfig content = current.Content;
 
                     // load tokens
-                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack.Pack);
+                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack);
                     TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
                     {
                         // load config.json
