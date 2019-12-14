@@ -67,12 +67,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
-
             // get coverage
             IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCurrentSprinklerTiles(this.StaticTilesBySprinklerID);
 
@@ -89,26 +88,38 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 .ToArray();
 
             // yield sprinkler coverage
-            HashSet<Vector2> covered = new HashSet<Vector2>();
+            var covered = new HashSet<Vector2>();
+            var groups = new List<TileGroup>();
             foreach (SObject sprinkler in sprinklers)
             {
-                TileData[] tiles = this.GetCoverage(sprinkler, sprinkler.TileLocation, coverageBySprinklerID).Select(pos => new TileData(pos, this.Wet)).ToArray();
+                TileData[] tiles = this
+                    .GetCoverage(sprinkler, sprinkler.TileLocation, coverageBySprinklerID)
+                    .Select(pos => new TileData(pos, this.Wet))
+                    .ToArray();
+
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: sprinkler.TileLocation == cursorTile ? this.SelectedColor : this.Wet.Color);
+
+                groups.Add(new TileGroup(tiles, outerBorderColor: sprinkler.TileLocation == cursorTile ? this.SelectedColor : this.Wet.Color));
             }
 
             // yield dry crops
-            TileData[] dryCrops = this.GetDryCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.Dry)).ToArray();
-            yield return new TileGroup(dryCrops, outerBorderColor: this.Dry.Color);
+            var dryCrops = this
+                .GetDryCrops(location, visibleTiles, covered)
+                .Select(pos => new TileData(pos, this.Dry));
+            groups.Add(new TileGroup(dryCrops, outerBorderColor: this.Dry.Color));
 
             // yield sprinkler being placed
             SObject heldObj = Game1.player.ActiveObject;
             if (heldObj != null && coverageBySprinklerID.ContainsKey(heldObj.ParentSheetIndex))
             {
-                TileData[] tiles = this.GetCoverage(heldObj, cursorTile, coverageBySprinklerID).Select(pos => new TileData(pos, this.Wet, this.Wet.Color * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
+                var tiles = this
+                    .GetCoverage(heldObj, cursorTile, coverageBySprinklerID)
+                    .Select(pos => new TileData(pos, this.Wet, this.Wet.Color * 0.75f));
+                groups.Add(new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false));
             }
+
+            return groups.ToArray();
         }
 
 

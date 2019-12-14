@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
@@ -170,7 +171,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             GameLocation location = Game1.currentLocation;
             int width = location.Map.Layers.Max(p => p.LayerWidth);
             int height = location.Map.Layers.Max(p => p.LayerHeight);
-            return layer.Update(Game1.currentLocation, new Rectangle(0, 0, width, height), new Vector2(0, 0));
+
+            var visibleArea = new Rectangle(0, 0, width, height);
+            return layer.Update(Game1.currentLocation, visibleArea, visibleArea.GetTiles().ToArray(), new Vector2(0, 0));
         }
     }
 

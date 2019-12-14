@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 {
@@ -45,15 +43,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles().ToArray()).ToArray();
+            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
 
-            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.Ready.Id), outerBorderColor: this.Ready.Color);
-            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.NotReady.Id));
-            yield return new TileGroup(tiles.Where(p => p.Type.Id == this.NotEnoughTime.Id), outerBorderColor: this.NotEnoughTime.Color);
+            return new[]
+            {
+                new TileGroup(tiles.Where(p => p.Type.Id == this.Ready.Id), outerBorderColor: this.Ready.Color),
+                new TileGroup(tiles.Where(p => p.Type.Id == this.NotReady.Id)),
+                new TileGroup(tiles.Where(p => p.Type.Id == this.NotEnoughTime.Id), outerBorderColor: this.NotEnoughTime.Color)
+            };
         }
 
 

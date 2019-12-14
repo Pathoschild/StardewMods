@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 {
@@ -54,9 +52,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             // update cache on location change
             if (this.LastLocation == null || !object.ReferenceEquals(location, this.LastLocation))
@@ -78,11 +77,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             }
 
             // get paddy tiles
-            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
             HashSet<Vector2> tilesInRange = new HashSet<Vector2>(this.GetTilesInRange(visibleTiles));
-
-            yield return new TileGroup(tilesInRange.Select(pos => new TileData(pos, this.InRange)).ToArray(), outerBorderColor: this.InRange.Color);
-            yield return new TileGroup(visibleTiles.Where(pos => !tilesInRange.Contains(pos)).Select(pos => new TileData(pos, this.NotInRange)).ToArray());
+            return new[]
+            {
+                new TileGroup(tilesInRange.Select(pos => new TileData(pos, this.InRange)), outerBorderColor: this.InRange.Color),
+                new TileGroup(visibleTiles.Where(pos => !tilesInRange.Contains(pos)).Select(pos => new TileData(pos, this.NotInRange)))
+            };
         }
 
 
