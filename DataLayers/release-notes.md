@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.9
+Released 15 December 2019.
+
 * Added grid feature (disabled by default).
 * Fixed the `export` console command not exporting the full map.
 * Improved translations. Thanks to LeecanIt (added Italian)!

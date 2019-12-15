@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed being able to open the menu when using a tool, causing a softlock in some cases.
+## 1.17.2
+Released 15 December 2019.
+
+* Fixed being able to open the menu when using a tool.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
 ## 1.17.1

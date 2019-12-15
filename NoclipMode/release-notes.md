@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1
+Released 15 December 2019.
+
 * Added settings for noclip enabled/disabled notifications.
 * Added optional notification when noclip disabled (off by default).
 * Improved translations. Thanks to LeecanIt (added Italian)!

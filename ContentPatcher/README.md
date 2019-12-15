@@ -1166,13 +1166,22 @@ code | meaning
 <td>Lowercase<br />Uppercase</td>
 <td>
 
-Convert the input text to lowercase or uppercase. For example, you can use `{{Lowercase:{{Season}}}}`
-in dialogue:
+Convert the input text to a different letter case:
 
-```js
-"Mon": "It's a warm {{Lowercase:{{Season}}}} day!" // It's a warm summer day!
-```
+<dl>
+<dt>Lowercase</dt>
+<dd>
 
+Change to all small letters.<br />Example: `{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`
+
+</dd>
+<dt>Uppercase</dt>
+<dd>
+
+Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`
+
+</dd>
+</dl>
 </td>
 </tr>
 

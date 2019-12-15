@@ -1,14 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added 'pinned key' feature to the `Random` token, which significantly expands what you can do with it (see readme).
-* Added token support in `FromArea` and `ToArea` fields (thanks to spacechase0!).
-* Added new tokens:
-  * `Lowercase` and `Uppercase` let you transform input text.
-* `Random` token is now bounded if the choices are immutable.
-* Internal optimizations for asset loading/editing.
-* Fixed incorrect warning when an `EditData` patch references a file that doesn't exist when it should be skipped due to a `HasFile` condition.
+## 1.11
+Released 15 December 2019.
+
+* Added `Lowercase` and `Uppercase` tokens.
+* `Random` tokens can have 'pinned keys' to support many new scenarios (see readme).
+* `Random` tokens are now bounded for immutable choices (e.g. you can use them in numeric fields if all their choices are numeric).
+* `FromArea` and `ToArea` fields can now use tokens (thanks to spacechase0!).
+* Optimized asset loading/editing a bit.
+* Fixed warning when an `EditData` patch references a file that doesn't exist when that's checked with a `HasFile` condition.
 * Fixed `HasFile` token being case-sensitive on Linux/Mac.
 * Fixed error if a content pack has a null patch.
 

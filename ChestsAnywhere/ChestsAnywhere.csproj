@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>ChestsAnywhere</AssemblyName>
-    <Version>1.17.1</Version>
+    <Version>1.17.2</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
