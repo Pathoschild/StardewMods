@@ -6,6 +6,7 @@
 * Workbenches are now treated as connectors by default (configurable). This doesn't affect players who already have a `config.json`.
 * Fixed brick floors not usable as connectors.
 * Fixed wood chippers not interactable after automation.
+* Fixed automated kegs using roe.
 
 ## 1.14
 Released 26 November 2019.
