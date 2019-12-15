@@ -10,6 +10,7 @@
 * Internal optimizations for asset loading/editing.
 * Fixed incorrect warning when an `EditData` patch references a file that doesn't exist when it should be skipped due to a `HasFile` condition.
 * Fixed `HasFile` token being case-sensitive on Linux/Mac.
+* Fixed error if a content pack has a null patch.
 
 ## 1.10.1
 Released 02 December 2019.
