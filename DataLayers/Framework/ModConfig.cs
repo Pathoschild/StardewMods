@@ -9,6 +9,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         public bool CombineOverlappingBorders { get; set; } = true;
 
+        /// <summary>Whether to show a tile grid when a layer is open.</summary>
+        public bool ShowGrid { get; set; }
+
         /// <summary>The key bindings.</summary>
         public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
 

@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added grid feature (disabled by default).
 * Fixed the `export` console command not exporting the full map.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 

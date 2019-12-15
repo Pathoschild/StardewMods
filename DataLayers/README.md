@@ -87,6 +87,7 @@ setting    | what it affects
 ---------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous layer, and right `CTRL` or right controller shoulder for the next one.
 `Layers`   | For each data layer, configure... <ul><li>`Enabled`: whether it should be available in-game.</li><li>`UpdatesPerSecond`: how often the layer should update. The maximum is 60 per seconds, but can be less than 1 to update less than once per second (or zero to disable the data layer entirely).</li><li>`UpdateWhenViewChange`: Whether to update when your viewpoint in the game changes, regardless of the `UpdatesPerSecond` value.</li></ul>
+`ShowGrid` | Default `false`. Whether to show a tile grid when a layer is open.
 `CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
 
 ## Compatibility
