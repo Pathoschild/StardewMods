@@ -35,7 +35,7 @@ You can do these by default:
 hold item  | default effects | optional effects (disabled by default)
 ---------- | --------------- | --------------------------------------
 axe        | clear debris; clear dead crops; cut giant crops. | chop down bushes and trees; clear live crops.
-fertilizer | fertilize dirt. | —
+fertilizer | fertilize crops and trees. | —
 grass starter | plant grass. | —
 hoe        | till dirt; clear weeds; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.

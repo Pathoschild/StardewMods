@@ -77,6 +77,12 @@ work for machines that aren't being automated too.)
 Shows where you can till dirt with your hoe. Useful for planning crop layouts.
 > ![](docs/screenshots/tillable.png)
 
+### Grid
+There's an optional tile grid when viewing data layers:
+> ![](docs/screenshots/grid.png)
+
+It's disabled by default, but you can [edit the `config.json` file](#configure) to enable it.
+
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
