@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7.4
+Released 15 December 2019.
+
+* Fixed disable eat/drink confirmation also affecting some other dialogues.
+
 ## 1.7.3
 Released 15 December 2019.
 
