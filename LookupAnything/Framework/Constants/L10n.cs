@@ -239,7 +239,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Horse</c>.</summary>
             public static Translation Horse() => L10n.Helper.Get("building.horse");
 
-            /// <summary>A value like <c>Horse</c>.</summary>
+            /// <summary>A value like <c>Horse location</c>.</summary>
             public static Translation HorseLocation() => L10n.Helper.Get("building.horse-location");
 
             /// <summary>A value like <c>Harvesting enabled</c>.</summary>
