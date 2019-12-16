@@ -13,19 +13,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>The mod folder from which to load assets.</summary>
-        private readonly string ModFolder;
+        /// <summary>Get whether a relative file path exists in the content pack.</summary>
+        private readonly Func<string, bool> RelativePathExists;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="modFolder">The absolute path to the mod folder.</param>
-        public HasFileValueProvider(string modFolder)
+        /// <param name="relativePathExists">Get whether a relative file path exists in the content pack.</param>
+        public HasFileValueProvider(Func<string, bool> relativePathExists)
             : base(ConditionType.HasFile, canHaveMultipleValuesForRoot: false)
         {
-            this.ModFolder = modFolder;
+            this.RelativePathExists = relativePathExists;
             this.EnableInputArguments(required: true, canHaveMultipleValues: false);
         }
 
@@ -81,8 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 throw new InvalidOperationException($"The {ConditionType.HasFile} token requires a relative path and cannot contain directory climbing (../).");
 
             // check file existence
-            string fullPath = Path.Combine(this.ModFolder, PathUtilities.NormalizePathSeparators(path));
-            return File.Exists(fullPath);
+            return this.RelativePathExists(path);
         }
     }
 }

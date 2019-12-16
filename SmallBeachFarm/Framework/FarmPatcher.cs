@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>A method called via Harmony before <see cref="Farm.getFish(float, int, int, Farmer, double)"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
+        /// <summary>A method called via Harmony before <see cref="Farm.getFish"/>, which gets ocean fish from the beach properties if fishing the ocean water.</summary>
         /// <param name="__instance">The farm instance.</param>
         /// <param name="millisecondsAfterNibble">An argument passed through to the underlying method.</param>
         /// <param name="bait">An argument passed through to the underlying method.</param>
@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref SObject __result)
         {
             if (FarmPatcher.IsInPatch || !FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
-                return false;
+                return true;
 
             try
             {

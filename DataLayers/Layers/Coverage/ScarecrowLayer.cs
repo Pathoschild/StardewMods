@@ -55,12 +55,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
-
             // get scarecrows
             Vector2[] searchTiles = visibleArea.Expand(this.MaxDeluxeRadius).GetTiles().ToArray();
             SObject[] scarecrows =
@@ -74,26 +73,38 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 .ToArray();
 
             // yield scarecrow coverage
-            HashSet<Vector2> covered = new HashSet<Vector2>();
+            var covered = new HashSet<Vector2>();
+            var groups = new List<TileGroup>();
             foreach (SObject scarecrow in scarecrows)
             {
-                TileData[] tiles = this.GetCoverage(scarecrow).Select(pos => new TileData(pos, this.Covered)).ToArray();
+                TileData[] tiles = this
+                    .GetCoverage(scarecrow)
+                    .Select(pos => new TileData(pos, this.Covered))
+                    .ToArray();
+
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color);
+
+                groups.Add(new TileGroup(tiles, outerBorderColor: scarecrow.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color));
             }
 
             // yield exposed crops
-            TileData[] exposedCrops = this.GetExposedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.Exposed)).ToArray();
-            yield return new TileGroup(exposedCrops, outerBorderColor: this.Exposed.Color);
+            var exposedCrops = this
+                .GetExposedCrops(location, visibleTiles, covered)
+                .Select(pos => new TileData(pos, this.Exposed));
+            groups.Add(new TileGroup(exposedCrops, outerBorderColor: this.Exposed.Color));
 
             // yield scarecrow being placed
             SObject heldObj = Game1.player.ActiveObject;
             if (this.IsScarecrow(heldObj))
             {
-                TileData[] tiles = this.GetCoverage(heldObj, cursorTile).Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
+                var tiles = this
+                    .GetCoverage(heldObj, cursorTile)
+                    .Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f));
+                groups.Add(new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false));
             }
+
+            return groups.ToArray();
         }
 
 

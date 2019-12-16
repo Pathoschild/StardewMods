@@ -248,7 +248,7 @@ namespace ContentPatcher.Framework.Commands
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
-                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack.Pack);
+                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack);
                 output.AppendLine($"{patchGroup.Key}:");
                 output.AppendLine("".PadRight(patchGroup.Key.Length + 1, '-'));
 

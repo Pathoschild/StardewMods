@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17.2
+Released 15 December 2019.
+
+* Fixed being able to open the menu when using a tool.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 1.17.1
 Released 02 December 2019.
 

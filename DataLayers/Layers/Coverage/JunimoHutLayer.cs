@@ -60,14 +60,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             if (!(location is BuildableGameLocation buildableLocation))
-                yield break;
-
-            Vector2[] visibleTiles = visibleArea.GetTiles().ToArray();
+                return new TileGroup[0];
 
             // get Junimo huts
             Rectangle searchArea = visibleArea.Expand(this.MaxRadius);
@@ -80,26 +79,39 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 .ToArray();
 
             // yield Junimo hut coverage
-            HashSet<Vector2> covered = new HashSet<Vector2>();
+            var groups = new List<TileGroup>();
+            var covered = new HashSet<Vector2>();
             foreach (JunimoHut hut in huts)
             {
-                TileData[] tiles = this.GetCoverage(hut.tileX.Value, hut.tileY.Value).Select(pos => new TileData(pos, this.Covered)).ToArray();
+                TileData[] tiles = this
+                    .GetCoverage(hut.tileX.Value, hut.tileY.Value)
+                    .Select(pos => new TileData(pos, this.Covered))
+                    .ToArray();
+
                 foreach (TileData tile in tiles)
                     covered.Add(tile.TilePosition);
-                yield return new TileGroup(tiles, outerBorderColor: this.IntersectsTile(hut, cursorTile) ? this.SelectedColor : this.Covered.Color);
+
+                groups.Add(new TileGroup(tiles, outerBorderColor: this.IntersectsTile(hut, cursorTile) ? this.SelectedColor : this.Covered.Color));
             }
 
             // yield unharvested crops
-            TileData[] unharvested = this.GetUnharvestedCrops(location, visibleTiles, covered).Select(pos => new TileData(pos, this.NotCovered)).ToArray();
-            yield return new TileGroup(unharvested, outerBorderColor: this.NotCovered.Color);
+            var unharvested = this
+                .GetUnharvestedCrops(location, visibleTiles, covered)
+                .Select(pos => new TileData(pos, this.NotCovered));
+            groups.Add(new TileGroup(unharvested, outerBorderColor: this.NotCovered.Color));
 
             // yield hut being placed in build menu
             if (this.IsBuildingHut())
             {
                 Vector2 tile = TileHelper.GetTileFromCursor();
-                TileData[] tiles = this.GetCoverage((int)tile.X, (int)tile.Y).Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f)).ToArray();
-                yield return new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false);
+                var tiles = this
+                    .GetCoverage((int)tile.X, (int)tile.Y)
+                    .Select(pos => new TileData(pos, this.Covered, this.Covered.Color * 0.75f));
+
+                groups.Add(new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false));
             }
+
+            return groups.ToArray();
         }
 
 

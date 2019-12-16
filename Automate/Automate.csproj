@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>Automate</AssemblyName>
-    <Version>1.14.0</Version>
+    <Version>1.14.1</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

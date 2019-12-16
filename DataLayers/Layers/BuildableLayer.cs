@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
@@ -46,18 +44,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
-
-            // buildable tiles
+            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
             TileData[] buildableTiles = tiles.Where(p => p.Type.Id == this.Buildable.Id).ToArray();
-            yield return new TileGroup(buildableTiles, outerBorderColor: this.Buildable.Color);
 
-            // other tiles
-            yield return new TileGroup(tiles.Except(buildableTiles).ToArray());
+            return new[]
+            {
+                new TileGroup(buildableTiles, outerBorderColor: this.Buildable.Color),
+                new TileGroup(tiles.Except(buildableTiles))
+            };
         }
 
 

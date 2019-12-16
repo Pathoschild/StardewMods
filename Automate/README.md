@@ -98,11 +98,13 @@ You can increase production by just adding more machines.
   > ![](screenshots/iridium-cheese-factory.png)
 
 ### Connectors
-Connectors are placed objects or flooring which connect adjacent machines together. Automate doesn't
-have any connectors by default, but you can edit the `config.json` to specify what should be treated
-as connectors (see _[configure](#configure)_ below).
+You can optionally configure objects or paths as connectors, which link machines together. For
+example, here are wooden paths used as connectors:
 
 > ![](screenshots/connectors.png)
+
+Workbenches are the only connectors by default. You can edit the `config.json` to add connectors
+(see _[configure](#configure)_ below).
 
 ## Configure
 ### config.json

@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.4.2
+Released 15 December 2019.
+
+* Fixed ocean fishing on the farm only finding trash in 1.4.1.
+* Fixed fishing in fish ponds.
+
 ## 1.4.1
 Released 26 November 2019.
 

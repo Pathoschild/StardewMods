@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
-using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -26,35 +25,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to load.</param>
         public override T Load<T>(IAssetInfo asset)
         {
-            T data = this.ContentPack.Load<T>(this.FromAsset);
-            return (data as object) is Texture2D texture
-                ? (T)(object)this.CloneTexture(texture)
-                : data;
+            return this.ContentPack.Load<T>(this.FromAsset);
         }
 
         /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
         public override IEnumerable<string> GetChangeLabels()
         {
             yield return "replaced asset";
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Clone a texture.</summary>
-        /// <param name="source">The texture to clone.</param>
-        /// <returns>Cloning a texture is necessary when loading to avoid having it shared between different content managers, which can lead to undesirable effects like two players having synchronized texture changes.</returns>
-        private Texture2D CloneTexture(Texture2D source)
-        {
-            // get data
-            int[] pixels = new int[source.Width * source.Height];
-            source.GetData(pixels);
-
-            // create clone
-            Texture2D target = new Texture2D(source.GraphicsDevice, source.Width, source.Height);
-            target.SetData(pixels);
-            return target;
         }
     }
 }

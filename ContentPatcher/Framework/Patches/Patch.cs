@@ -5,6 +5,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
+using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
@@ -48,7 +49,7 @@ namespace ContentPatcher.Framework.Patches
         public bool IsMutable { get; } = true;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady { get; private set; }
+        public bool IsReady { get; protected set; }
 
         /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
         public string FromAsset { get; private set; }
@@ -221,6 +222,25 @@ namespace ContentPatcher.Framework.Patches
             {
                 throw new FormatException($"The {logName} for patch '{this.LogName}' isn't a valid asset path (current value: '{path}').", ex);
             }
+        }
+
+        /// <summary>Try to read a tokenized rectangle.</summary>
+        /// <param name="tokenArea">The tokenized rectangle to parse.</param>
+        /// <param name="defaultX">The X value if the input area is null.</param>
+        /// <param name="defaultY">The Y value if the input area is null.</param>
+        /// <param name="defaultWidth">The width if the input area is null.</param>
+        /// <param name="defaultHeight">The height if the input area is null.</param>
+        /// <param name="area">The parsed rectangle.</param>
+        /// <param name="error">The error phrase indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether the rectangle was successfully parsed.</returns>
+        protected bool TryReadArea(TokenRectangle tokenArea, int defaultX, int defaultY, int defaultWidth, int defaultHeight, out Rectangle area, out string error)
+        {
+            if (tokenArea != null)
+                return tokenArea.TryGetRectangle(out area, out error);
+
+            area = new Rectangle(defaultX, defaultY, defaultWidth, defaultHeight);
+            error = null;
+            return true;
         }
     }
 }

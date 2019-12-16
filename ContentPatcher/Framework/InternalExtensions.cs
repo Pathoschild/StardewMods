@@ -87,13 +87,23 @@ namespace ContentPatcher.Framework
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
         public static IEnumerable<string> SplitValuesNonUnique(this ITokenString tokenStr)
         {
-            if (string.IsNullOrWhiteSpace(tokenStr?.Value))
+            if (tokenStr == null)
                 return Enumerable.Empty<string>();
 
             if (!tokenStr.IsReady)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
-            return tokenStr.Value
+            return tokenStr.Value.SplitValuesNonUnique();
+        }
+
+        /// <summary>Get comma-separated values from a string.</summary>
+        /// <param name="str">The string to parse.</param>
+        public static IEnumerable<string> SplitValuesNonUnique(this string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+                return Enumerable.Empty<string>();
+
+            return str
                 .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(p => p.Trim());
         }

@@ -1,6 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.23.1
+Released 15 December 2019.
+
+* Updated for recent versions of Json Assets.
+* Fixed lookup on Haunted Skulls.
+* Fixed lookup on Caroline's tea bush.
+* Fixed rare issue where the HUD isn't restored when the lookup menu is force-replaced by another menu.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 1.23
 Released 26 November 2019.
 

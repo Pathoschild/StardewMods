@@ -1,6 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.14.1
+Released 15 December 2019.
+
+* Added rice to automated mills.
+* Workbenches are now treated as connectors by default (configurable). This doesn't affect players who already have a `config.json`.
+* Fixed brick floors not usable as connectors.
+* Fixed wood chippers not interactable after automation.
+* Fixed automated kegs using roe.
+
 ## 1.14
 Released 26 November 2019.
 

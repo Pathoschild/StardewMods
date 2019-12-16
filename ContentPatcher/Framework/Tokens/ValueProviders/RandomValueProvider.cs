@@ -24,6 +24,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The cached results by token string instance.</summary>
         private readonly IDictionary<ITokenString, string> CachedResults = new Dictionary<ITokenString, string>(new ObjectReferenceComparer<ITokenString>());
 
+        /// <summary>The random numbers assigned for each pinned key.</summary>
+        private readonly InvariantDictionary<int> PinnedKeys = new InvariantDictionary<int>();
+
 
         /*********
         ** Public methods
@@ -41,9 +44,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <returns>Returns whether the instance changed.</returns>
         public override bool UpdateContext(IContext context)
         {
+            this.PinnedKeys.Clear();
+            this.CachedResults.Clear();
             bool changed = this.UpdateRandom();
-            if (changed)
-                this.CachedResults.Clear();
 
             return base.UpdateContext(context) || changed;
         }
@@ -55,6 +58,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
+            if (string.IsNullOrWhiteSpace(input.Value))
+                yield break;
+
+            // get for pinned key
+            if (this.TryGetPinnedNumber(input, out string choices, out int randomNumber))
+            {
+                yield return this.Choose(choices, randomNumber);
+                yield break;
+            }
+
+            // get for input string
             if (!this.CachedResults.TryGetValue(input, out string result))
             {
                 string[] options = input.SplitValuesNonUnique().ToArray();
@@ -63,10 +77,63 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             yield return result;
         }
 
+        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        {
+            if (input.IsMutable || !input.IsReady)
+                return null;
+
+            return this.TryGetPinnedNumber(input, out string choices, out _)
+                ? new InvariantHashSet(choices.SplitValuesNonUnique())
+                : new InvariantHashSet(input.SplitValuesNonUnique());
+        }
+
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Get a value from the given input based on the selected random number.</summary>
+        /// <param name="input">The comma-delimited input to parse.</param>
+        /// <param name="randomNumber">The random number to apply.</param>
+        private string Choose(string input, int randomNumber)
+        {
+            string[] options = input.SplitValuesNonUnique().ToArray();
+            return options[randomNumber % options.Length];
+        }
+
+        /// <summary>Parse a token string to extract the underlying input and the number associated with the pinned key, if applicable.</summary>
+        /// <param name="tokenStr">The token string to parse.</param>
+        /// <param name="choices">The comma-delimited choices.</param>
+        /// <param name="randomNumber">The random number associated with the pinned value.</param>
+        private bool TryGetPinnedNumber(ITokenString tokenStr, out string choices, out int randomNumber)
+        {
+            choices = null;
+            randomNumber = -1;
+            if (!tokenStr.IsReady || string.IsNullOrWhiteSpace(tokenStr.Value))
+                return false;
+
+            // parse token
+            string rawInput, pinnedKey;
+            {
+                string[] parts = tokenStr.Value.Split(new[] { '|' }, 2);
+                if (parts.Length != 2)
+                    return false;
+
+                rawInput = parts[0].Trim();
+                pinnedKey = parts[1].Trim();
+            }
+            if (string.IsNullOrWhiteSpace(pinnedKey))
+                return false;
+
+            // get value
+            choices = rawInput;
+            if (!this.PinnedKeys.TryGetValue(pinnedKey, out randomNumber))
+                this.PinnedKeys[pinnedKey] = randomNumber = this.Random.Next();
+            return true;
+        }
+
         /// <summary>Update the random number generator if needed.</summary>
         /// <returns>Returns whether the RNG changed.</returns>
         private bool UpdateRandom()

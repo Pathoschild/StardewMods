@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.7.3
+Released 15 December 2019.
+
+* Fixed option to disable eat/drink confirmation...
+  * not working correctly in Stardew Valley 1.4;
+  * ignored if the eat/drink animation is set to default speed.
+
 ## 1.7.2
 Released 26 November 2019.
 

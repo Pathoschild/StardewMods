@@ -54,19 +54,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 minutes: 2250
             ),
 
-            // roe => caviar or aged roe
-            new Recipe(
-                input: 812,
-                inputCount: 1,
-                output: input =>
-                {
-                    if (input is SObject obj && obj.preservedParentSheetIndex.Value == 698) // sturgeon roe
-                        return new SObject(Vector2.Zero, 445, "Caviar", false, true, false, false) { name = "Caviar" };
-                    return new SObject(Vector2.Zero, 447, "Aged Roe", false, true, false, false) { name = "Aged Roe" };
-                },
-                minutes: 2250
-            ),
-
             // fruit => wine
             new Recipe(
                 input: SObject.FruitsCategory,

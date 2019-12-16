@@ -16,6 +16,7 @@ that change the game's images and data without replacing XNB files.
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
+  * [Randomization](#randomization)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
   * [Mod-provided tokens](#mod-provided-tokens)
@@ -85,7 +86,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.10.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Format`       | The format version. You should always use the latest version (currently `1.11.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -93,7 +94,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "Load",
@@ -139,7 +140,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "Load",
@@ -161,8 +162,8 @@ field      | purpose
 ---------- | -------
 &nbsp;     | See _common fields_ above.
 `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced-tokens--conditions) and capitalisation doesn't matter.
-`FromArea` | he part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
-`ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area.
+`FromArea` | The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
+`ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
 `PatchMode`| How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace every pixel in the target area with your source image. If the source image has transparent pixels, the target image will become transparent there.</li><li><code>Overlay</code>: draw your source image over the target area. If the source image has transparent pixels, the target image will 'show through' those pixels. Semi-transparent or opaque pixels will replace the target pixels.</li></ul>For example, let's say your source image is a pufferchick with a transparent background, and the target image is a solid green square. Here's how they'll be combined with different `PatchMode` values:<br />![](docs/screenshots/patch-mode-examples.png)
 
 Required fields: `FromFile`.
@@ -170,7 +171,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -222,7 +223,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -245,7 +246,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -271,7 +272,7 @@ the patch.
 For example, this patch in `content.json`:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -301,7 +302,7 @@ The `FromFile` field can contain tokens, so you can dynamically load a different
 this single patch loads a dialogue file for multiple NPCs:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -324,7 +325,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -381,7 +382,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -456,7 +457,7 @@ file:
 
 The part of the source map to copy. Defaults to the whole source map. This is specified as an
 object with the X and Y tile coordinates of the top-left corner, and the tile width and height of
-the area.
+the area. Its fields may contain tokens.
 
 </td>
 </tr>
@@ -469,7 +470,7 @@ the area.
 <td>
 
 The part of the target map to replace. This is specified as an object with the X and Y tile
-coordinates of the top-left corner, and the tile width and height of the area.
+coordinates of the top-left corner, and the tile width and height of the area. Its fields may contain tokens.
 
 </td>
 </tr>
@@ -497,7 +498,7 @@ Required fields: at least one of (`FromFile` and `ToArea`) or (`MapProperties`).
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -513,7 +514,7 @@ For example, this replaces the town square with the one in another map:
 This changes the warp map property for the farm cave:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -1070,7 +1071,7 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 </table>
 </dd>
 
-<dt>Other:</dt>
+<dt>Metadata:</dt>
 
 <dd>
 <table>
@@ -1160,33 +1161,27 @@ code | meaning
 <tr>
 <th>condition</th>
 <th>purpose</th>
-<tr>
-<td>Random</td>
+
+<tr valign="top">
+<td>Lowercase<br />Uppercase</td>
 <td>
 
-A random value from the options you specify:
-```js
-{
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
-}
-```
+Convert the input text to a different letter case:
 
-The selection is based on the save ID and in-game date, so reloading a save with the same patches
-won't change the selection. Calling the token twice may return different values (you can use a
-[dynamic token](#dynamic-token) to reuse the same selection).
+<dl>
+<dt>Lowercase</dt>
+<dd>
 
-For weighted random, you can specify a value multiple times. For example, 'red' is twice as likely
-as 'blue' in this patch:
-```js
-{
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
-}
-```
+Change to all small letters.<br />Example: `{{Lowercase:It's a warm {{Season}} day!}}` &rarr; `it's a warm summer day!`
 
+</dd>
+<dt>Uppercase</dt>
+<dd>
+
+Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}} day!}}` &rarr; `IT'S A WARM SUMMER DAY!`
+
+</dd>
+</dl>
 </td>
 </tr>
 
@@ -1270,6 +1265,170 @@ conditions, and the correct one will be used when the conditions change. However
 patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
 and apply none of them.
 
+### Randomization
+You can randomize values using the `Random` token:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat}}.png"
+}
+```
+
+And you can optionally use pinned keys to keep multiple `Random` tokens in sync (see below for more
+info):
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png",
+   "When": {
+      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png"
+   }
+}
+```
+
+This token is dynamic and may behave in unexpected ways; see below to avoid surprises.
+
+<dl>
+<dt>Unique properties:</dt>
+<dd>
+
+`Random` tokens are...
+
+<ol>
+<li>
+
+**Dynamic.** Random tokens rechoose each time they're evaluated, specifically...
+
+* When a new day starts.
+* When you change location, if used in a patch or [dynamic token](#dynamic-tokens) linked to a
+  location token like `LocationName`. This is true even if the location token value doesn't change
+  (e.g. using `IsOutdoors` while warping between two outdoor locations). You can prevent
+  location-linked changes by using pinned keys (see below), or by storing the `Random` token in a
+  [dynamic token](#dynamic-tokens) which doesn't depend on a location token.
+
+The randomness is seeded with the save ID and in-game date, so reloading the save won't change
+which choices were made.
+
+</li>
+<li>
+
+**Independent**. Each `Random` token changes separately. In particular:
+
+* If a patch has multiple `Target` values, `Random` may have a different value for each target.
+* If a `FromFile` field has a `Random` token, you can't just copy its value into a `HasFile` field
+  to check if the file exists, since `Random` may return a different choice in each field.
+
+To keep multiple `Random` tokens in sync, see _pinned keys_ below.
+</li>
+<li>
+
+**Fair**. Each option has an equal chance of being chosen. To load the dice, just specify a value multiple
+times. For example, 'red' is twice as likely as 'blue' in this patch:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-{{Random:red, red, blue}}.png"
+}
+```
+
+</li>
+<li>
+
+**Bounded** if the choices don't contain tokens. For example, you can use it in true/false contexts
+if all the choices are 'true' or 'false', or numeric contexts if all the choices are numbers.
+
+</li>
+</ul>
+</dd>
+
+<dt>Basic pinned keys:</dt>
+<dd>
+
+If you need multiple `Random` tokens to make the same choices (e.g. to keep an NPC's portrait and
+sprite in sync), you can specify a 'pinned key'. This is like a name for the random; every `Random`
+token with the same pinned key will make the same choice. (Note that list order does matter.)
+
+For example, this keeps Abigail's sprite and portrait in sync using `abigail-outfit` as the pinned
+key:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | abigail-outfit}}.png"
+}
+```
+
+You can use tokens in a pinned key. For example, this synchronizes values separately for each NPC:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail, Characters/Haley, Portraits/Haley",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | {{TargetWithoutPath}}-outfit}}.png"
+}
+```
+
+<dt>Advanced pinned keys:</dt>
+<dd>
+
+The pinned key affects the internal random number used to make a choice, not the choice itself. You
+can use it with `Random` tokens containing different values (even different numbers of values) for
+more interesting features.
+
+For example, this gives Abigail and Haley random outfits but ensures they never wear the same one:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | outfit}}.png"
+},
+{
+   "Action": "Load",
+   "Target": "Characters/Haley, Portraits/Haley",
+   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood | outfit}}.png"
+}
+```
+
+</dd>
+
+<dt>Okay, I'm confused. What the heck are pinned keys?</dt>
+<dd>
+
+Without pinned keys, each token will randomly choose its own value:
+```txt
+{{Random: hood, jacket, raincoat}} = raincoat
+{{Random: hood, jacket, raincoat}} = hood
+{{Random: hood, jacket, raincoat}} = jacket
+```
+
+If they have the same pinned key, they'll always be in sync:
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat | outfit}} = hood
+```
+
+For basic cases, you just need to know that same options + same key = same value.
+
+If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
+key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+```
+
+You can use that in interesting ways. For example, shifting the values guarantees they'll never
+choose the same value (since same index = different value):
+```txt
+{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: jacket, raincoat, hood | outfit}} = 217437 modulo 3 choices = index 0 = jacket
+```
+</dd>
+</dl>
+
 ### Dynamic tokens
 Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
 Each block in this section defines the value for a token using these fields:
@@ -1295,7 +1454,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1340,7 +1499,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1384,7 +1543,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1404,7 +1563,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.10.0",
+     "Format": "1.11.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1699,7 +1858,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1825,7 +1984,7 @@ field | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.10.0",
+   "Format": "1.11.0",
    "Changes": [
       {
          "Action": "EditData",

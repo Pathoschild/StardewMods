@@ -55,6 +55,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             };
         }
 
+        /// <summary>Get the output item.</summary>
+        public override ITrackedStack GetOutput()
+        {
+            WoodChipper machine = this.Machine;
+
+            return new TrackedItem(machine.heldObject.Value, this.Reset);
+        }
+
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
         /// <returns>Returns whether the machine started processing an item.</returns>
@@ -66,6 +74,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 return true;
             }
             return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
+        /// <param name="item">The output item that was taken.</param>
+        private void Reset(Item item)
+        {
+            WoodChipper machine = this.Machine;
+
+            this.GenericReset(item);
+            machine.depositedItem.Value = null;
         }
     }
 }

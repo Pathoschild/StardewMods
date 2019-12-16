@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>FastAnimations</AssemblyName>
-    <Version>1.7.2</Version>
+    <Version>1.7.3</Version>
     <RootNamespace>Pathoschild.Stardew.FastAnimations</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
