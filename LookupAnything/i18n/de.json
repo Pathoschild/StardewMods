@@ -13,7 +13,7 @@
 
     // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% Chance von {{label}}",
+    "generic.percent-chance-of": "{{percent}}% Chance auf {{label}}",
     "generic.percent-ratio": "{{percent}}% ({{value}} von {{max}})",
     "generic.ratio": "{{value}} von {{max}}",
     "generic.range": "{{min}} zu {{max}}",
@@ -52,7 +52,7 @@
     "friendship-status.engaged": "Verlobt",
     "friendship-status.married": "Verheiratet",
     "friendship-status.divorced": "Geschieden",
-    "friendship-status.kicked-out": "Kicked out", // TODO
+    "friendship-status.kicked-out": "Rausgeschmissen",
 
     /*********
     ** Data translations
@@ -64,7 +64,7 @@
     "bundle-area.boiler-room": "Heizraum",
     "bundle-area.vault": "Tresor",
     "bundle-area.bulletin-board": "Schwarzes Brett",
-    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
+    "bundle-area.abandoned-joja-mart": "Verlassener Joja-Markt",
 
     // shop names
     "shop.adventure-guild": "Abenteurergilde",
@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Dein treues Haustier.",
     "data.npc.horse.description": "Dein treues Ross.",
     "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
+    "data.npc.trashbear.description": "Ein freundlicher Geist, der Müll beseitigt.",
 
     /*********
     ** Item overrides
@@ -191,9 +191,9 @@
     "building.upgrades": "Verbesserungen",
     "building.water-trough": "Wassertrog",
 
-    "building.fish-pond.population": "Population", // TODO
-    "building.fish-pond.drops": "Drops", // TODO
-    "building.fish-pond.quests": "Quests", // TODO
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Produziert",
+    "building.fish-pond.quests": "Aufträge",
 
     // building lookup values
     "building.animals.summary": "{{count}} von bis zu {{max}} Tieren",
@@ -219,29 +219,29 @@
     "building.upgrades.coop.2": "bis zu 12 Tiere, fügt automatische Fütterung und Hasen hinzu",
     "building.water-trough.summary": "{{filled}} von {{max}} Wassertrögen gefüllt",
 
-    "building.fish-pond.population.empty": "Add a fish to start this pond", // TODO
-    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}", // TODO
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:", // TODO
-    "building.fish-pond.quests.done": "{{count}} fish", // TODO
-    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}", // TODO
-    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}", // TODO
-    "building.fish-pond.quests.available": "available {{relativeDate}}", // TODO
+    "building.fish-pond.population.empty": "Füge einen Fisch hinzu, um den Teich zu starten",
+    "building.fish-pond.population.next-spawn": "Neuer Fisch erscheint {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% Chance jeden Tag eines hiervon zu produzieren:",
+    "building.fish-pond.quests.done": "{{count}} Fische",
+    "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",
+    "building.fish-pond.quests.available": "{{relativeDate}} verfügbar",
 
     // bush lookup labels
     "bush.name.berry": "Beerenbusch",
     "bush.name.plain": "Einfacher Busch",
-    "bush.name.tea": "Tea Bush", // TODO
+    "bush.name.tea": "Teestrauch",
     "bush.description.berry": "Ein Busch an dem Lachsbeeren und Brombeeren wachsen.",
     "bush.description.plain": "Ein einfacher Busch an dem nichts wächst.",
-    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
-    "bush.date-planted": "Date planted", // TODO
-    "bush.growth": "Growth", // TODO
+    "bush.description.Tea": "Ein Strauch an dem Teeblätter wachsen.",
+    "bush.date-planted": "Pflanzdatum",
+    "bush.growth": "Wachstum",
     "bush.next-harvest": "Nächste Ernte",
 
     // bush lookup values
     "bush.growth.summary": "Ausgewachsen am {{date}}",
     "bush.schedule.berry": "20% Chance auf Lachsbeeren im Frühling 15-18 und Brombeeren im Herbst 8-11.",
-    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
+    "bush.schedule.tea": "Bekommt Teeblätter ab dem 22. jeder Jahreszeit (außer im Winter wenn nicht im Gewächshaus).",
 
     // fruit tree lookup labels
     "fruit-tree.complaints": "Beschwerden",
@@ -278,8 +278,8 @@
     "crop.harvest.too-late": "Zu spät in der Jahrezeit für eine weitere Ernte (wäre am {{date}}).",
 
     // item lookup labels
-    "item.can-be-dyed": "Can be dyed", // TODO
-    "item.produces-dye": "Produces dye", // TODO
+    "item.can-be-dyed": "Kann gefärbt werden",
+    "item.produces-dye": "Erzeugt Farbe",
 
     "item.cask-contents": "Inhalt",
     "item.cask-schedule": "Altern",
@@ -290,18 +290,18 @@
 
     "item.fence-health": "Leben",
 
-    "item.movie-snack-preference": "Preference", // TODO
-    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
-    "item.movie-ticket.loves-movie": "Loves movie", // TODO
-    "item.movie-ticket.likes-movie": "Likes movie", // TODO
-    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
+    "item.movie-snack-preference": "Bevorzugt",
+    "item.movie-ticket.movie-this-week": "Film dieser Woche",
+    "item.movie-ticket.loves-movie": "Liebt Film",
+    "item.movie-ticket.likes-movie": "Mag Film",
+    "item.movie-ticket.dislikes-movie": "Mag Film nicht",
 
     "item.contents": "Inhalt",
     "item.loves-this": "Liebt das",
     "item.likes-this": "Mag das",
-    "item.neutral-about-this": "Neutral about this", // TODO
-    "item.dislikes-this": "Dislikes this", // TODO
-    "item.hates-this": "Hates this", // TODO
+    "item.neutral-about-this": "Steht neutral dazu",
+    "item.dislikes-this": "Magt dies nicht",
+    "item.hates-this": "Hasst das",
     "item.needed-for": "Gebraucht für",
     "item.number-owned": "Im Besitz",
     "item.number-cooked": "Gekocht",
@@ -312,8 +312,8 @@
     "item.sells-to": "Lässt sich verkaufen bei",
 
     // item lookup values
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste": "{{count}} unaufgedeckte Dorfbewohner",
+    "item.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Dorfbewohner",
 
     "item.cask-schedule.now": "{{quality}} jetzt bereit.",
     "item.cask-schedule.now-partial": "{{quality}} jetzt bereit (benutze die Spitzhacke um das Altern zu stoppen).",
@@ -323,10 +323,10 @@
     "item.fence-health.gold-clock": "Kein Verfall mit Gold-Uhr",
     "item.fence-health.summary": "{{percent}}% (ungefähr {{count}} Tage übrig)",
 
-    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
-    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
-    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
-    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
+    "item.movie-snack-preference.love": "{{name}} liebt das",
+    "item.movie-snack-preference.like": "{{name}} mag das",
+    "item.movie-snack-preference.dislike": "{{name}} mag das nicht",
+    "item.movie-ticket.movie-this-week.none": "Kein Film diese Woche",
 
     "item.contents.placed": "{{name}} platziert",
     "item.contents.ready": "{{name}} bereit",
@@ -366,21 +366,21 @@
     "npc.gifted-today": "Heute beschenkt",
     "npc.gifted-this-week": "Diese Woche beschenkt",
     "npc.kissed-today": "Heute geküsst",
-    "npc.hugged-today": "Hugged today", // TODO
+    "npc.hugged-today": "Heute umarmt",
     "npc.loves-gifts": "Geliebte Geschenke",
     "npc.likes-gifts": "Gemochte Geschenke",
     "npc.neutral-gifts": "Neutrale Geschenke",
-    "npc.dislikes-gifts": "Dislikes gifts", // TODO
-    "npc.hates-gifts": "Hates gifts", // TODO
+    "npc.dislikes-gifts": "Nicht gemochte Geschenke",
+    "npc.hates-gifts": "Gehasste Geschenke",
 
     // NPC lookup values
     "npc.can-romance.married": "Du bist verheiratet! <", // < turns into a heart
-    "npc.can-romance.housemate": "You're housemates!", // TODO
+    "npc.can-romance.housemate": "Ihr seid Mitbewohner!",
     "npc.friendship.not-met": "Du hast die Person noch nicht getroffen",
     "npc.friendship.need-bouquet": "Blumenstrauß für nächstes erforderlich",
     "npc.friendship.need-points": "nächstes in {{count}} Punkten",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste": "{{count}} unaufgedeckte Gegenstände",
+    "npc.undiscovered-gift-taste-appended": " und {{count}} unaufgedeckte Gegenstände",
 
     // NPC child lookup labels
     "npc.child.age": "Alter",
@@ -396,32 +396,31 @@
     // pet lookup labels
     "pet.love": "Liebe",
     "pet.petted-today": "Heute gestreichelt",
-    "pet.last-petted": "Last petted", // TODO
-    "pet.water-bowl": "Water bowl", // TODO
+    "pet.last-petted": "Zuletzt gestreichelt",
+    "pet.water-bowl": "Wasserschale",
 
     // pet lookup values
-    // TODO
-    "pet.last-petted.yes": "yes (+12 love)",
-    "pet.last-petted.days-ago": "{{days}} days ago",
-    "pet.last-petted.never": "never",
-    "pet.water-bowl.empty": "Empty",
-    "pet.water-bowl.filled": "Filled (+6 love)",
+    "pet.last-petted.yes": "Ja (+12 Liebe)",
+    "pet.last-petted.days-ago": "Vor {{days}} Tagen",
+    "pet.last-petted.never": "Nie",
+    "pet.water-bowl.empty": "Leer",
+    "pet.water-bowl.filled": "Gefüllt (+6 Liebe)",
 
     // player lookup labels
     "player.farm-name": "Farmname",
     "player.farm-map": "Farmtyp",
     "player.favorite-thing": "Lieblingsgegenstand",
     "player.gender": "Geschlecht",
-    "player.housemate": "Housemate", // TODO
+    "player.housemate": "Mitbewohner",
     "player.spouse": "Ehepartner",
-    "player.watched-movie-this-week": "Watched movie this week", // TODO
+    "player.watched-movie-this-week": "Film diese Woche gesehen",
     "player.combat-skill": "Kampf",
     "player.farming-skill": "Hofarbeit",
     "player.fishing-skill": "Fischen",
     "player.foraging-skill": "Sammeln",
     "player.mining-skill": "Bergbau",
     "player.luck": "Glück",
-    "player.save-format": "Save format", // TODO
+    "player.save-format": "Speicherformat",
 
     // player lookup values
     "player.farm-map.custom": "Eigene",
@@ -445,14 +444,14 @@
     "tile.tile.none-here": "Keine Kachel hier.",
 
     // trash bear lookup labels
-    "trash-bear.item-wanted": "Item wanted", // TODO
-    "trash-bear.quest-progress": "Quest progress", // TODO
+    "trash-bear.item-wanted": "Gegenstand benötigt",
+    "trash-bear.quest-progress": "Auftragsfortschritt",
 
     // tree lookup labels
     "tree.stage": "Wachstumsstadium",
     "tree.next-growth": "Nächstes Wachstum",
     "tree.has-seed": "Trägt Samen",
-    "tree.is-fertilized": "Is fertilized", // TODO
+    "tree.is-fertilized": "Ist gedüngt",
 
     // non-fruit tree lookup values
     "tree.name.maple": "Ahornbaum",
@@ -466,7 +465,7 @@
     "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen.",
     "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
     "tree.next-growth.random": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
-    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
+    "tree.is-fertilized.effects": "garantiertes tägliches Wachstum, auch im Winter",
 
     // tree stages
     "tree.stages.seed": "Samen",
