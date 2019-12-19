@@ -7,11 +7,10 @@
     "accessible.warp": "Portal",
 
     // buildable
-    // TODO
-    "buildable.name": "Buildable",
-    "buildable.buildable": "Can Build here",
-    "buildable.occupied": "Occupied",
-    "buildable.not-buildable": "Can't Build Here",
+    "buildable.name": "Construcciones",
+    "buildable.buildable": "Se puede construir aquí",
+    "buildable.occupied": "Ocupado",
+    "buildable.not-buildable": "No se puede construir aquí",
 
     // coverage: bee houses
     "bee-houses.name": "Cobertura: Colmenas",
@@ -44,10 +43,9 @@
     "crop-water.dry": "Cultivo Seco",
 
     // crops: water for paddy crops
-    // TODO
-    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
-    "crop-paddy-water.in-range": "Near Water",
-    "crop-paddy-water.not-in-range": "Dry Land",
+    "crop-paddy-water.name": "Cultivos: Agua para arrozales",
+    "crop-paddy-water.in-range": "Cerca del agua",
+    "crop-paddy-water.not-in-range": "Tierra Seca",
 
     // crops: fertilized
     "crop-fertilizer.name": "Cultivos: Fertilizados",
@@ -56,16 +54,14 @@
     "crop-fertilizer.speed-gro": "Acelerador",
 
     // machine processing
-    // TODO
-    "machines.name": "Machine Processing",
-    "machines.empty": "Empty",
-    "machines.processing": "Processing",
-    "machines.finished": "Finished",
+    "machines.name": "Procesamiento de las máquinas",
+    "machines.empty": "Vacío",
+    "machines.processing": "Procesando",
+    "machines.finished": "Finalizado",
 
     // tillable
-    // TODO
-    "tillable.name": "Tillable",
-    "tillable.tillable": "Tillable",
-    "tillable.occupied": "Occupied",
-    "tillable.not-tillable": "Not Tillable"
+    "tillable.name": "Tierra Cultivable",
+    "tillable.tillable": "Cultivable",
+    "tillable.occupied": "Ocupada",
+    "tillable.not-tillable": "No Cultivable"
 }
