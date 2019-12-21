@@ -126,10 +126,22 @@ namespace Pathoschild.Stardew.LookupAnything
                 if (snippet?.Text == null)
                     continue;
 
+                // track surrounding spaces for combined translations
+                bool startSpace = snippet.Text.StartsWith(" ");
+                bool endSpace = snippet.Text.StartsWith(" ");
+
                 // get word list
-                List<string> words = new List<string>();
-                foreach (string word in snippet.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+                IList<string> words = new List<string>();
+                string[] rawWords = snippet.Text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0, last = rawWords.Length - 1; i <= last; i++)
                 {
+                    // get word
+                    string word = rawWords[i];
+                    if (startSpace && i == 0)
+                        word = $" {word}";
+                    if (endSpace && i == last)
+                        word += " ";
+
                     // split on newlines
                     string wordPart = word;
                     int newlineIndex;
