@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed pet lookups showing untranslated 'cat' or 'dog' type.
 * Improved translations. Thanks to PlussRolf (updated Spanish)!
 
 ## 1.23.1

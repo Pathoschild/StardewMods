@@ -60,23 +60,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
 
-            // get display type
-            string typeName;
-            if (type == TargetType.Villager)
-                typeName = L10n.Types.Villager();
-            else if (type == TargetType.Monster)
-                typeName = L10n.Types.Monster();
-            else
-                typeName = npc.GetType().Name;
-
             // initialize
             this.Target = npc;
             this.TargetType = type;
             CharacterData overrides = metadata.GetCharacter(npc, type);
-            string name = npc.getName();
-            string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
-            this.Initialize(name, description, typeName);
-
+            this.Initialize(
+                name: npc.getName(),
+                description: overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null,
+                type: CharacterSubject.GetTypeName(npc, type)
+            );
             this.IsHauntedSkull = npc is Bat && this.Reflection.GetField<NetBool>(npc, "hauntedSkull").GetValue().Value;
         }
 
@@ -331,6 +323,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*****
         ** Other
         ****/
+        /// <summary>Get the display type for a character.</summary>
+        /// <param name="npc">The lookup target.</param>
+        /// <param name="type">The NPC type.</param>
+        private static string GetTypeName(Character npc, TargetType type)
+        {
+            switch (type)
+            {
+                case TargetType.Villager:
+                    return L10n.Types.Villager();
+
+                case TargetType.Monster:
+                    return L10n.Types.Monster();
+
+                case TargetType.Pet:
+                    {
+                        string typeName = Game1.content.LoadString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
+                        if (typeName?.Length > 1)
+                            typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
+                        return typeName;
+                    }
+
+                default:
+                    return npc.GetType().Name;
+            }
+        }
+
         /// <summary>Get how much an NPC likes receiving each item as a gift.</summary>
         /// <param name="npc">The NPC.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
