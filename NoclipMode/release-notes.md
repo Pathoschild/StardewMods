@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to GwydionAshe (added German)!
+
 ## 1.1
 Released 15 December 2019.
 
