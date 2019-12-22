@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Mitigated `OutOfMemoryException` issue for some players.
+* Mitigated performance impact when warping in some cases with content packs with a large number of seasonal changes.
+* Fixed patches being reapplied unnecessarily in some cases.
+* Fixed token validation not applied to the entire token string in some cases.
+* Fixed `Random` tokens being rerolled when warping if the patch is location-dependent.
+
 ## 1.11
 Released 15 December 2019.
 

@@ -4,7 +4,7 @@ using System.Text;
 namespace ContentPatcher.Framework.Lexing.LexTokens
 {
     /// <summary>A lexical token representing a Content Patcher token.</summary>
-    internal readonly struct LexTokenToken : ILexToken
+    internal class LexTokenToken : ILexToken
     {
         /*********
         ** Accessors
@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         public string Name { get; }
 
         /// <summary>The input argument passed to the Content Patcher token.</summary>
-        public LexTokenInputArg? InputArg { get; }
+        public LexTokenInputArg InputArg { get; }
 
         /// <summary>Whether the token omits the start/end character patterns because it's in a token-only context.</summary>
         public bool ImpliedBraces { get; }
@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
             if (tokenInputArgArgument != null)
             {
                 str.Append(InternalConstants.InputArgSeparator);
-                str.Append(tokenInputArgArgument.Value.Text);
+                str.Append(tokenInputArgArgument.Text);
             }
             if (!impliedBraces)
                 str.Append("}}");

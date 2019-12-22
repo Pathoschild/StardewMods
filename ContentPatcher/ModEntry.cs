@@ -858,9 +858,9 @@ namespace ContentPatcher
 
             // get lexical tokens
             ILexToken[] lexTokens = lexer.ParseBits(name, impliedBraces: true).ToArray();
-            for (int i = 0; i < lexTokens.Length; i++)
+            foreach (ILexToken cur in lexTokens)
             {
-                if (!tokenParser.Migrator.TryMigrate(ref lexTokens[0], out error))
+                if (!tokenParser.Migrator.TryMigrate(cur, out error))
                     return Fail(error, out error, out condition, out immutableRequiredModIDs);
             }
 

@@ -1,7 +1,7 @@
 namespace ContentPatcher.Framework.Lexing.LexTokens
 {
     /// <summary>A lexical token representing a literal string value.</summary>
-    internal readonly struct LexTokenLiteral : ILexToken
+    internal class LexTokenLiteral : ILexToken
     {
         /*********
         ** Accessors
