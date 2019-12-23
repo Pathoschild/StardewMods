@@ -113,9 +113,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             if (Game1.player.itemToEat != null && Game1.activeClickableMenu is DialogueBox dialogue)
             {
                 string actualLine = this.Reflection.GetField<List<string>>(dialogue, "dialogues").GetValue().FirstOrDefault();
-                string expectedLine = Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName);
+                bool isConfirmation =
+                    actualLine == Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3159", Game1.player.itemToEat.DisplayName) // drink
+                    || actualLine == Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName); // eat
 
-                if (actualLine == expectedLine)
+                if (isConfirmation)
                 {
                     menu = dialogue;
                     return true;
