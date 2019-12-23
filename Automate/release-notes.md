@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated trash can logic for Stardew Valley 1.4.
+
 ## 1.14.1
 Released 15 December 2019.
 
