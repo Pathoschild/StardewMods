@@ -4,6 +4,7 @@
 ## Upcoming release
 * Fixed pet lookups showing untranslated 'cat' or 'dog' type.
 * Fixed hay in silos not counted for number owned or when highlighting owned gifts.
+* Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.
 * Improved translations. Thanks to jahangmar (updated German) and PlussRolf (updated Spanish)!
 
 ## 1.23.1

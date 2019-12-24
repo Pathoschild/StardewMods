@@ -74,9 +74,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (isTeaBush)
             {
                 SDate datePlanted = this.GetDatePlanted(bush);
+                int daysOld = SDate.Now().DaysSinceStart - datePlanted.DaysSinceStart; // bush.getAge() not reliable, e.g. for Caroline's tea bush
                 SDate dateGrown = this.GetDateFullyGrown(bush);
 
-                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-bush.getAge())})");
+                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
                 if (dateGrown > today)
                 {
                     string grownOnDateText = L10n.Bush.GrowthSummary(date: this.Stringify(dateGrown));
