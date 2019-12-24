@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 // track surrounding spaces for combined translations
                 bool startSpace = snippet.Text.StartsWith(" ");
-                bool endSpace = snippet.Text.StartsWith(" ");
+                bool endSpace = snippet.Text.EndsWith(" ");
 
                 // get word list
                 IList<string> words = new List<string>();

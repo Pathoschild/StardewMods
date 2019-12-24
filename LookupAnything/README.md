@@ -34,6 +34,7 @@ setting           | what it affects
 ----------------- | -------------------
 `Controls`    | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `F1` to lookup, and `Up`/`Down` to scroll the lookup results. Available inputs:<ul><li>`ToggleLookup`: lookup whatever's under the cursor.</li><li>`ToggleLookupInFrontOfPlayer`: lookup whatever's in front of the player.</li><li>`ScrollUp`/`ScrollDown`: scroll the displayed lookup results.</li><li>`ToggleDebug`: show information intended for developers.</li></ul>
 `ProgressionMode` | Default `false`. Whether to hide some content (current gift tastes) until you've discovered it in-game.
+`HighlightUnrevealedGiftTastes` | Default `false`. Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.
 `HideOnKeyUp` | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
 
 Advanced settings:

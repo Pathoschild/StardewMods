@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
 * Fixed pet lookups showing untranslated 'cat' or 'dog' type.
 * Fixed hay in silos not counted for number owned or when highlighting owned gifts.
 * Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.

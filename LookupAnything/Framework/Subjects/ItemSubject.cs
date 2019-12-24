@@ -47,6 +47,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
 
+        /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        private readonly bool HighlightUnrevealedGiftTastes;
+
 
         /*********
         ** Public methods
@@ -56,14 +59,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
+        /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
-        public ItemSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations, bool progressionMode, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
+        public ItemSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations, bool progressionMode, bool highlightUnrevealedGiftTastes, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
             : base(codex, gameHelper, translations)
         {
             this.ProgressionMode = progressionMode;
+            this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
             this.Target = item;
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop;
@@ -159,13 +164,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // gift tastes
                 IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item, metadata);
-                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
-                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
-                if (this.ProgressionMode)
+                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
                 {
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.NeutralAboutThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.DislikesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode);
-                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.HatesThis(), item.ParentSheetIndex, giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
                 }
             }
 

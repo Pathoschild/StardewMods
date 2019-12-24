@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="type">The NPC type.</param>
         public ISubject GetCharacter(NPC target, TargetType type)
         {
-            return new CharacterSubject(this, this.GameHelper, target, type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode);
+            return new CharacterSubject(this, this.GameHelper, target, type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
         }
 
         /// <summary>Get a player subject.</summary>
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="context">The context of the object being looked up.</param>
         public ISubject GetCrop(Crop target, ObjectContext context)
         {
-            return new ItemSubject(this, this.GameHelper, this.Translations, this.Config.ProgressionMode, this.GameHelper.GetObjectBySpriteIndex(target.indexOfHarvest.Value), context, knownQuality: false, fromCrop: target);
+            return new ItemSubject(this, this.GameHelper, this.Translations, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(target.indexOfHarvest.Value), context, knownQuality: false, fromCrop: target);
         }
 
         /// <summary>Get a fruit tree subject.</summary>
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         public ISubject GetItem(Item target, ObjectContext context, bool knownQuality = true)
         {
-            return new ItemSubject(this, this.GameHelper, this.Translations, this.Config.ProgressionMode, target, context, knownQuality);
+            return new ItemSubject(this, this.GameHelper, this.Translations, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, target, context, knownQuality);
         }
 
         /// <summary>Get a movie concession subject.</summary>

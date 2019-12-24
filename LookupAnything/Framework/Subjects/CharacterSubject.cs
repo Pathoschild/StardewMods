@@ -38,6 +38,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
 
+        /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        private readonly bool HighlightUnrevealedGiftTastes;
+
         /// <summary>Whether the NPC is a haunted skull monster.</summary>
         private readonly bool IsHauntedSkull;
 
@@ -54,12 +57,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
+        /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(SubjectFactory codex, GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
+        public CharacterSubject(SubjectFactory codex, GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes)
             : base(codex, gameHelper, translations)
         {
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
+            this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
 
             // initialize
             this.Target = npc;
@@ -310,15 +315,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // gift tastes
                 IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc, metadata);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
-                if (this.ProgressionMode)
+                yield return this.GetGiftTasteField(L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love);
+                yield return this.GetGiftTasteField(L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like);
+                yield return this.GetGiftTasteField(L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral);
+                if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
                 {
-                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.DislikesGifts(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode);
-                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.HatesGifts(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode);
+                    yield return this.GetGiftTasteField(L10n.Npc.DislikesGifts(), giftTastes, GiftTaste.Dislike);
+                    yield return this.GetGiftTasteField(L10n.Npc.HatesGifts(), giftTastes, GiftTaste.Hate);
                 }
             }
+        }
+
+        /// <summary>Get a list of gift tastes for an NPC.</summary>
+        /// <param name="label">The field label.</param>
+        /// <param name="giftTastes">The gift taste data.</param>
+        /// <param name="taste">The gift taste to display.</param>
+        private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste taste)
+        {
+            return new CharacterGiftTastesField(this.GameHelper, label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
         }
 
         /*****
