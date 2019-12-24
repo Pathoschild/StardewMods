@@ -15,6 +15,7 @@ using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -341,6 +342,41 @@ namespace Pathoschild.Stardew.LookupAnything
             return this.Recipes.Value;
         }
 
+        /// <summary>Get all tailoring recipes which take an item as input.</summary>
+        /// <param name="input">The input item.</param>
+        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
+        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
+        {
+            HashSet<int> seenRecipes = new HashSet<int>();
+
+            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
+            {
+                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
+                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
+                    : new[] { recipe.CraftedItemID };
+
+                foreach (int outputId in outputItemIds)
+                {
+                    if (outputId < 0 || !seenRecipes.Add(outputId))
+                        continue;
+
+                    yield return new RecipeModel(
+                        key: null,
+                        type: RecipeType.TailorInput,
+                        displayType: "Tailoring",
+                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
+                        item: input => new Clothing(outputId),
+                        mustBeLearned: false,
+                        outputItemIndex: recipe.CraftedItemID,
+                        isForMachine: _ => false
+                    );
+                }
+            }
+        }
+
         /// <summary>Get the recipes for which an item is needed.</summary>
         /// <param name="item">The item.</param>
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
@@ -361,16 +397,8 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // from tailor recipes
-            List<TailorItemRecipe> tailorRecipes = Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes");
-            foreach (TailorItemRecipe recipe in tailorRecipes)
-            {
-                if (recipe.FirstItemTags?.All(item.HasContextTag) == false && recipe.SecondItemTags?.All(item.HasContextTag) == false)
-                    continue; // needs all tags for one of the recipe slots
-
-                RecipeIngredientModel ingredient = new RecipeIngredientModel(item.ParentSheetIndex, 1);
-                Item Output(Item input) => new Clothing(recipe.CraftedItemID);
-                yield return new RecipeModel(null, RecipeType.TailorInput, "Tailoring", new[] { ingredient }, Output, mustBeLearned: false, outputItemIndex: recipe.CraftedItemID, isForMachine: _ => false);
-            }
+            foreach (var recipe in this.GetTailorRecipes(item))
+                yield return recipe;
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
