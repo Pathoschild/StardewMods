@@ -566,7 +566,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 switch (clothing.clothesType.Value)
                 {
                     case (int)Clothing.ClothesType.SHIRT:
-                        return new SpriteInfo(FarmerRenderer.shirtsTexture, new Rectangle(clothing.indexInTileSheetMale.Value * 8 % 128, clothing.indexInTileSheetMale.Value * 8 / 128 * 32, 8, 8));
+                        return new ShirtSpriteInfo(clothing);
 
                     case (int)Clothing.ClothesType.PANTS:
                         return new SpriteInfo(FarmerRenderer.pantsTexture, new Rectangle(192 * (clothing.indexInTileSheetMale.Value % (FarmerRenderer.pantsTexture.Width / 192)), 688 * (clothing.indexInTileSheetMale.Value / (FarmerRenderer.pantsTexture.Width / 192)) + 672, 16, 16));
