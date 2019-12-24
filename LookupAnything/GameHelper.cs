@@ -90,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get all items owned by the player.</summary>
-        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
+        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>, with extra logic for hay.</remarks>
         public IEnumerable<Item> GetAllOwnedItems()
         {
             List<Item> items = new List<Item>();
@@ -169,6 +169,16 @@ namespace Pathoschild.Stardew.LookupAnything
                 // farmhouse fridge
                 if (location is FarmHouse house)
                     items.AddRange(house.fridge.Value.items);
+            }
+
+            // hay in silos
+            int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
+            while (hayCount > 0)
+            {
+                SObject hay = new SObject(178, 1);
+                hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
+                hayCount -= hay.Stack;
+                items.Add(hay);
             }
 
             return items.Where(p => p != null);
