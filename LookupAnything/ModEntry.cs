@@ -117,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // initialize functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming);
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, jsonAssets, this.Config);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config));
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 

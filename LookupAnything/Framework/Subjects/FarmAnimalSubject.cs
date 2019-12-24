@@ -25,12 +25,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="animal">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(GameHelper gameHelper, FarmAnimal animal, ITranslationHelper translations)
-            : base(gameHelper, animal.displayName, null, animal.type.Value, translations)
+        public FarmAnimalSubject(SubjectFactory codex, GameHelper gameHelper, FarmAnimal animal, ITranslationHelper translations)
+            : base(codex, gameHelper, animal.displayName, null, animal.type.Value, translations)
         {
             this.Target = animal;
         }

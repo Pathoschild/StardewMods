@@ -30,12 +30,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile, ITranslationHelper translations)
-            : base(gameHelper, L10n.FruitTree.Name(fruitName: gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName), null, L10n.Types.FruitTree(), translations)
+        public FruitTreeSubject(SubjectFactory codex, GameHelper gameHelper, FruitTree tree, Vector2 tile, ITranslationHelper translations)
+            : base(codex, gameHelper, L10n.FruitTree.Name(fruitName: gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName), null, L10n.Types.FruitTree(), translations)
         {
             this.Target = tree;
             this.Tile = tile;

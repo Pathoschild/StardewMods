@@ -26,42 +26,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The lookup target.</summary>
         private readonly Building Target;
 
         /// <summary>The building's source rectangle in its spritesheet.</summary>
         private readonly Rectangle SourceRectangle;
 
-        /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private readonly Metadata Metadata;
-
-        /// <summary>Whether to only show content once the player discovers it.</summary>
-        private readonly bool ProgressionMode;
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="building">The lookup target.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
-        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
-            : base(gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
+        public BuildingSubject(SubjectFactory codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle, ITranslationHelper translations)
+            : base(codex, gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
         {
             // init
-            this.Metadata = metadata;
-            this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
-            this.ProgressionMode = progressionMode;
 
             // get name/description from blueprint if available
             try
@@ -98,7 +84,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text));
+                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => this.Codex.GetPlayer(owner));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, L10n.Building.Owner(), L10n.Building.OwnerNone());
 
@@ -108,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection, this.ProgressionMode));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => this.Codex.GetCharacter(horse, TargetType.Horse));
                     yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }

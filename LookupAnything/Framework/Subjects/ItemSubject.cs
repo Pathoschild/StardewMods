@@ -52,6 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
@@ -59,8 +60,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
-        public ItemSubject(GameHelper gameHelper, ITranslationHelper translations, bool progressionMode, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
-            : base(gameHelper, translations)
+        public ItemSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations, bool progressionMode, Item item, ObjectContext context, bool knownQuality, Crop fromCrop = null)
+            : base(codex, gameHelper, translations)
         {
             this.ProgressionMode = progressionMode;
             this.Target = item;
@@ -116,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (potCrop != null)
                 {
                     Item drop = this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
-                    yield return new LinkField(this.GameHelper, L10n.Item.Contents(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.ProgressionMode, this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value), ObjectContext.World, knownQuality: false, fromCrop: potCrop));
+                    yield return new LinkField(this.GameHelper, L10n.Item.Contents(), drop.DisplayName, () => this.Codex.GetCrop(potCrop, ObjectContext.World));
                 }
             }
 
@@ -267,7 +268,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (seeAlsoCrop)
             {
                 Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
-                yield return new LinkField(this.GameHelper, L10n.Item.SeeAlso(), drop.DisplayName, () => new ItemSubject(this.GameHelper, this.Text, this.ProgressionMode, drop, ObjectContext.Inventory, false, this.SeedForCrop));
+                yield return new LinkField(this.GameHelper, L10n.Item.SeeAlso(), drop.DisplayName, () => this.Codex.GetCrop(this.SeedForCrop, ObjectContext.Inventory));
             }
         }
 

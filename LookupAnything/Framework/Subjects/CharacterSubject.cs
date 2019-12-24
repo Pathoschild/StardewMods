@@ -46,6 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
@@ -54,8 +55,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
-            : base(gameHelper, translations)
+        public CharacterSubject(SubjectFactory codex, GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
+            : base(codex, gameHelper, translations)
         {
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;

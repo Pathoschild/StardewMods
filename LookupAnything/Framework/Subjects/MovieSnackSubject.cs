@@ -25,11 +25,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="item">The underlying target.</param>
-        public MovieSnackSubject(GameHelper gameHelper, ITranslationHelper translations, MovieConcession item)
-            : base(gameHelper, translations)
+        public MovieSnackSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations, MovieConcession item)
+            : base(codex, gameHelper, translations)
         {
             this.Target = item;
             this.Initialize(item.DisplayName, item.getDescription(), L10n.Types.Other());

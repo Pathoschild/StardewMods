@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper { get; }
 
+        /// <summary>Provides subject entries for target values.</summary>
+        protected SubjectFactory Codex { get; }
+
 
         /*********
         ** Accessors
@@ -61,22 +64,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(GameHelper gameHelper, ITranslationHelper translations)
+        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations)
         {
+            this.Codex = codex;
             this.GameHelper = gameHelper;
             this.Text = translations;
         }
 
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(GameHelper gameHelper, string name, string description, string type, ITranslationHelper translations)
-            : this(gameHelper, translations)
+        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper, string name, string description, string type, ITranslationHelper translations)
+            : this(codex, gameHelper, translations)
         {
             this.Initialize(name, description, type);
         }

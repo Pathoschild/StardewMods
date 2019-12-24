@@ -30,12 +30,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public BushSubject(GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
-            : base(gameHelper, translations)
+        public BushSubject(SubjectFactory codex, GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
+            : base(codex, gameHelper, translations)
         {
             this.Target = bush;
             this.Reflection = reflection;
