@@ -8,7 +8,7 @@
 * Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.
 * Fixed item lookups sometimes showing wrong tailoring recipes.
 * Fixed missing/partial shirt item icons in some cases.
-* Improved translations. Thanks to jahangmar (updated German) and PlussRolf (updated Spanish)!
+* Improved translations. Thanks to jahangmar (updated German), L30Bola (updated Portuguese), and PlussRolf (updated Spanish)!
 
 ## 1.23.1
 Released 15 December 2019.

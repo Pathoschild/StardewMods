@@ -230,10 +230,10 @@
     // bush lookup labels
     "bush.name.berry": "Arbusto de bagas",
     "bush.name.plain": "Arbusto simples",
-    "bush.name.tea": "Arbusto de chá", 
+    "bush.name.tea": "Arbusto de chá",
     "bush.description.berry": "Um arbusto que cresce amoras e amoras-silvestres.",
     "bush.description.plain": "Um arbusto simples que não cresce nada.",
-    "bush.description.Tea": "Um arbusto que cresce folhas de chá.", 
+    "bush.description.Tea": "Um arbusto que cresce folhas de chá.",
     "bush.date-planted": "Data plantada",
     "bush.growth": "Crescimento",
     "bush.next-harvest": "Próxima colheita",

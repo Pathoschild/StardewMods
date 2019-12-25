@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to GwydionAshe (added German)!
+* Improved translations. Thanks to GwydionAshe (added German) and L30Bola (added Portuguese)!
 
 ## 1.1
 Released 15 December 2019.

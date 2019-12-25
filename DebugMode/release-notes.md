@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to PlussRolf (updated Spanish)!
+* Improved translations. Thanks to L30Bola (updated Portuguese) and PlussRolf (updated Spanish)!
 
 ## 1.11
 Released 26 November 2019.
