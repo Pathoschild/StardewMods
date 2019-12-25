@@ -43,10 +43,9 @@
     "crop-water.dry": "Plantação seca",
 
     // crops: water for paddy crops
-    // TODO
-    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
-    "crop-paddy-water.in-range": "Near Water",
-    "crop-paddy-water.not-in-range": "Dry Land",
+    "crop-paddy-water.name": "Plantações: Água para Arrozal",
+    "crop-paddy-water.in-range": "Próximo da água",
+    "crop-paddy-water.not-in-range": "Terra seca",
 
     // crops: fertilized
     "crop-fertilizer.name": "Plantações: Fertilizante Utilizado",
