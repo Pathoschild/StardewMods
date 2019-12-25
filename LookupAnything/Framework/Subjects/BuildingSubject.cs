@@ -365,13 +365,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="data">The fish pond data.</param>
         private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetPopulationGates(FishPond pond, FishPondData data)
         {
-            int nextQuest = -1;
-            foreach (var gate in data.PopulationGates)
+            bool foundNextQuest = false;
+            foreach (FishPondPopulationGateData gate in this.GameHelper.GetFishPondPopulationGates(data))
             {
-                int newPopulation = gate.Key + 1;
+                int newPopulation = gate.NewPopulation;
 
                 // done
-                if (pond.lastUnlockedPopulationGate.Value >= gate.Key)
+                if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
                 {
                     yield return new KeyValuePair<IFormattedText[], bool>(
                         key: new IFormattedText[] { new FormattedText(L10n.Building.FishPondQuestsDone(count: newPopulation)) },
@@ -381,53 +381,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
 
                 // get required items
-                if (nextQuest == -1)
-                    nextQuest = gate.Key;
-                List<string> requiredItems = new List<string>();
-                foreach (string entry in gate.Value)
-                {
-                    // parse requirement
-                    string[] parts = entry.Split(' ');
-                    int id = -1;
-                    int minCount = 1;
-                    int maxCount = 1;
-                    if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out int itemID))
+                string[] requiredItems = gate.RequiredItems
+                    .Select(drop =>
                     {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
-                    if (parts.Length >= 2 && !int.TryParse(parts[1], out minCount))
-                    {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
-                    if (parts.Length >= 3 && !int.TryParse(parts[1], out maxCount))
-                    {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
+                        // build display string
+                        SObject obj = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                        string summary = obj.DisplayName;
+                        if (drop.MinCount != drop.MaxCount)
+                            summary += $" ({L10n.Generic.Range(min: drop.MinCount, max: drop.MaxCount)})";
+                        else if (drop.MinCount > 1)
+                            summary += $" ({drop.MinCount})";
 
-                    // build display string
-                    if (maxCount < minCount)
-                        maxCount = minCount;
-                    SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
-                    string summary = obj.DisplayName;
-                    if (minCount != maxCount)
-                        summary += $" ({L10n.Generic.Range(min: minCount, max: maxCount)})";
-                    else if (minCount > 1)
-                        summary += $" ({minCount})";
-
-                    // track requirement
-                    requiredItems.Add(summary);
-                }
+                        // track requirement
+                        return summary;
+                    })
+                    .ToArray();
 
                 // display requirements
                 string itemList = string.Join(", ", requiredItems);
-                string result = requiredItems.Count > 1
+                string result = requiredItems.Length > 1
                     ? L10n.Building.FishPondQuestsIncompleteRandom(newPopulation, itemList)
                     : L10n.Building.FishPondQuestsIncompleteOne(newPopulation, requiredItems[0]);
-                if (nextQuest == gate.Key)
+
+                // show next quest
+                if (!foundNextQuest)
                 {
+                    foundNextQuest = true;
+
                     int nextQuestDays = data.SpawnTime
                         + (data.SpawnTime * (pond.maxOccupants.Value - pond.currentOccupants.Value))
                         - pond.daysSinceSpawn.Value;
@@ -443,13 +423,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
         private IEnumerable<ItemDropData> GetPossibleDrops(FishPond pond, FishPondData data)
         {
-            foreach (FishPondReward drop in data.ProducedItems)
+            foreach (FishPondDropData drop in this.GameHelper.GetFishPondDrops(data))
             {
-                if (pond.currentOccupants.Value < drop.RequiredPopulation)
+                if (pond.currentOccupants.Value < drop.MinPopulation)
                     continue;
 
-                yield return new ItemDropData(drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
-                if (drop.Chance >= 1)
+                yield return drop;
+                if (drop.Probability >= 1)
                     break; // guaranteed drop, any further drops will be ignored
             }
         }

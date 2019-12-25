@@ -10,6 +10,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.FishPond;
 using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
@@ -71,6 +72,55 @@ namespace Pathoschild.Stardew.LookupAnything
                 // create bundle
                 yield return new BundleModel(id, name, displayName, area, reward, ingredients);
             }
+        }
+
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            foreach (var gate in data.PopulationGates)
+            {
+                // get required items
+                FishPondPopulationGateQuestItemData[] questItems = gate.Value
+                    .Select(entry =>
+                    {
+                        // parse ID
+                        string[] parts = entry.Split(' ');
+                        int id;
+                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out id))
+                            return null;
+
+                        // parse counts
+                        int minCount = 1;
+                        int maxCount = 1;
+                        if (parts.Length >= 2)
+                            int.TryParse(parts[1], out minCount);
+                        if (parts.Length >= 3)
+                            int.TryParse(parts[1], out maxCount);
+
+                        // normalize counts
+                        minCount = Math.Max(1, minCount);
+                        maxCount = Math.Max(1, maxCount);
+                        if (maxCount < minCount)
+                            maxCount = minCount;
+
+                        // build entry
+                        return new FishPondPopulationGateQuestItemData(id, minCount, maxCount);
+                    })
+                    .Where(p => p != null)
+                    .ToArray();
+
+                // build entry
+                yield return new FishPondPopulationGateData(gate.Key, questItems);
+            }
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            foreach (FishPondReward drop in data.ProducedItems)
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

@@ -14,6 +14,7 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -295,6 +296,20 @@ namespace Pathoschild.Stardew.LookupAnything
                 GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
                 yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
             }
+        }
+
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            return this.DataParser.GetFishPondPopulationGates(data);
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            return this.DataParser.GetFishPondDrops(data);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
