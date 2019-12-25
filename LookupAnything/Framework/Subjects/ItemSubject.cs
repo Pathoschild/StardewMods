@@ -13,6 +13,8 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.GameData.FishPond;
 using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -174,6 +176,45 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
             }
 
+            // recipes
+            switch (item.GetSpriteType())
+            {
+                // for ingredient
+                case ItemSpriteType.Object:
+                    {
+                        RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                        if (recipes.Any())
+                            yield return new RecipesForIngredientField(this.GameHelper, L10n.Item.Recipes(), item, recipes);
+                    }
+                    break;
+
+                // for machine
+                case ItemSpriteType.BigCraftable:
+                    {
+                        RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
+                        if (recipes.Any())
+                            yield return new RecipesForMachineField(this.GameHelper, L10n.Item.Recipes(), recipes);
+                    }
+                    break;
+            }
+
+            // fish
+            if (item.Category == SObject.FishCategory)
+            {
+                // fish pond data
+                foreach (FishPondData fishPondData in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
+                {
+                    if (!fishPondData.RequiredTags.All(item.HasContextTag))
+                        continue;
+
+                    int minChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, 1 / 10f) * 100);
+                    int maxChanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, FishPond.MAXIMUM_OCCUPANCY / 10f) * 100);
+                    string preface = L10n.Building.FishPondDropsPreface(chance: L10n.Generic.Range(min: minChanceOfAnyDrop, max: maxChanceOfAnyDrop));
+                    yield return new FishPondDropsField(this.GameHelper, L10n.Item.FishPondDrops(), -1, fishPondData, preface);
+                    break;
+                }
+            }
+
             // fence
             if (item is Fence fence)
             {
@@ -217,28 +258,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new MovieTastesField(this.GameHelper, L10n.MovieTicket.LikesMovie(), tastes, GiftTaste.Like);
                     yield return new MovieTastesField(this.GameHelper, L10n.MovieTicket.DislikesMovie(), tastes, GiftTaste.Dislike);
                 }
-            }
-
-            // recipes
-            switch (item.GetSpriteType())
-            {
-                // for ingredient
-                case ItemSpriteType.Object:
-                    {
-                        RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                        if (recipes.Any())
-                            yield return new RecipesForIngredientField(this.GameHelper, L10n.Item.Recipes(), item, recipes);
-                    }
-                    break;
-
-                // for machine
-                case ItemSpriteType.BigCraftable:
-                    {
-                        RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
-                        if (recipes.Any())
-                            yield return new RecipesForMachineField(this.GameHelper, L10n.Item.Recipes(), recipes);
-                    }
-                    break;
             }
 
             // dyes

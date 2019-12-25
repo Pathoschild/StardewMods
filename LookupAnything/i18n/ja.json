@@ -291,6 +291,8 @@
 
     "item.fence-health": "耐久値",
 
+    "item.fish-pond-drops": "Fish pond drops", // TODO
+
     "item.movie-snack-preference": "Preference", // TODO
     "item.movie-ticket.movie-this-week": "Movie this week", // TODO
     "item.movie-ticket.loves-movie": "Loves movie", // TODO

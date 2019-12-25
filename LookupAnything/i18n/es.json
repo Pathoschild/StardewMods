@@ -291,6 +291,8 @@
 
     "item.fence-health": "Salud",
 
+    "item.fish-pond-drops": "Fish pond drops", // TODO
+
     "item.movie-snack-preference": "Preferencia",
     "item.movie-ticket.movie-this-week": "Película de esta semana",
     "item.movie-ticket.loves-movie": "Ama la película",

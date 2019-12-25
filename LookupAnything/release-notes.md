@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
+* Added fish pond drops on fish item lookups.
 * Fish pond lookups now show drops that haven't been unlocked yet.
 * Fish pond lookups use a new format for drops to make it more clear how they're selected.
 * Fixed pet lookups showing untranslated 'cat' or 'dog' type.

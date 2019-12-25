@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // drops
                             int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                            yield return new FishPondDropsField(this.GameHelper, L10n.Building.FishPondDrops(), pond.currentOccupants.Value, pondData, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
+                            yield return new FishPondDropsField(this.GameHelper, L10n.Building.FishPondDrops(), pond.currentOccupants.Value, pondData, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop.ToString()));
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)

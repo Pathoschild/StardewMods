@@ -354,7 +354,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation FishPondQuestsAvailable(string relativeDate) => L10n.Helper.Get("building.fish-pond.quests.available", new { relativeDate });
 
             /// <summary>A value like <c>{{chance}}% chance each day of producing one of these:</c>.</summary>
-            public static Translation FishPondDropsPreface(int chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
+            public static Translation FishPondDropsPreface(string chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
 
             /// <summary>A value like <c>With {{count}} fish:</c>.</summary>
             public static Translation FishPondDropsMinFish(int count) => L10n.Helper.Get("building.fish-pond.drops.min-fish", new { count });
@@ -557,6 +557,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Health</c>.</summary>
             public static Translation FenceHealth() => L10n.Helper.Get("item.fence-health");
+
+            /// <summary>A value like <c>Fish pond drops</c>.</summary>
+            public static Translation FishPondDrops() => L10n.Helper.Get("item.fish-pond-drops");
 
             /// <summary>A value like <c>Recipes</c>.</summary>
             public static Translation Recipes() => L10n.Helper.Get("item.recipes");
