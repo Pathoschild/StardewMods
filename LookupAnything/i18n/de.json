@@ -221,7 +221,8 @@
 
     "building.fish-pond.population.empty": "Füge einen Fisch hinzu, um den Teich zu starten",
     "building.fish-pond.population.next-spawn": "Neuer Fisch erscheint {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% Chance jeden Tag eines hiervon zu produzieren:",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
     "building.fish-pond.quests.done": "{{count}} Fische",
     "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",

@@ -221,7 +221,8 @@
 
     "building.fish-pond.population.empty": "Añade un pescado para iniciar el criadero",
     "building.fish-pond.population.next-spawn": "Un nuevo pez ha desovado {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% probabilidad diaria de producir uno de los siguientes:",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
     "building.fish-pond.quests.done": "{{count}} pescados",
     "building.fish-pond.quests.incomplete-one": "{{count}} pescados: necesitaran {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} pescados: necesitan uno de {{itemList}}",

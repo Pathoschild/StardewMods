@@ -221,7 +221,8 @@
 
     "building.fish-pond.population.empty": "Aggiungi un pesce per dare vita a questo stagno",
     "building.fish-pond.population.next-spawn": "Nuovo pesce generato il {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% di probabilità che ogni giorno produca uno di questi:",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
     "building.fish-pond.quests.done": "{{count}} pesci",
     "building.fish-pond.quests.incomplete-one": "{{count}} pesci: avranno bisogno di {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} pesci: avranno bisogno di un {{itemList}}",

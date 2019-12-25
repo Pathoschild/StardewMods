@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // drops
                             int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                            yield return new ItemDropListField(this.GameHelper, L10n.Building.FishPondDrops(), this.GetPossibleDrops(pond, pondData), sort: false, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
+                            yield return new FishPondDropsField(this.GameHelper, L10n.Building.FishPondDrops(), pond.currentOccupants.Value, pondData, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
@@ -414,23 +414,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     result += $"; {L10n.Building.FishPondQuestsAvailable(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
                 }
                 yield return new KeyValuePair<IFormattedText[], bool>(key: new IFormattedText[] { new FormattedText(result) }, value: false);
-            }
-        }
-
-        /// <summary>Get a fish pond's possible drops.</summary>
-        /// <param name="pond">The fish pond.</param>
-        /// <param name="data">The fish pond data.</param>
-        /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
-        private IEnumerable<ItemDropData> GetPossibleDrops(FishPond pond, FishPondData data)
-        {
-            foreach (FishPondDropData drop in this.GameHelper.GetFishPondDrops(data))
-            {
-                if (pond.currentOccupants.Value < drop.MinPopulation)
-                    continue;
-
-                yield return drop;
-                if (drop.Probability >= 1)
-                    break; // guaranteed drop, any further drops will be ignored
             }
         }
     }

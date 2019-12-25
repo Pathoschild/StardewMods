@@ -221,7 +221,8 @@
 
     "building.fish-pond.population.empty": "Adicionar um peixe à este lago",
     "building.fish-pond.population.next-spawn": "Novo peixe aparece {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance diária de produzir um destes:",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
     "building.fish-pond.quests.done": "{{count}} peixe",
     "building.fish-pond.quests.incomplete-one": "{{count}} peixe: vai precisar {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} peixe: vai precisar de um {{itemList}}",

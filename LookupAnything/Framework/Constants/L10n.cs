@@ -355,6 +355,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{chance}}% chance each day of producing one of these:</c>.</summary>
             public static Translation FishPondDropsPreface(int chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
+
+            /// <summary>A value like <c>With {{count}} fish:</c>.</summary>
+            public static Translation FishPondDropsMinFish(int count) => L10n.Helper.Get("building.fish-pond.drops.min-fish", new { count });
         }
 
         /// <summary>Bush lookup translations.</summary>
