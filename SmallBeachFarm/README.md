@@ -45,7 +45,7 @@ setting         | default | what it affects
 
 ## FAQs
 ### Compatibility
-This is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+This is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. It can't be combined with other mods that replace the riverlands farm.
 
 It should work with most map recolors (notably A Wittily Named Recolor, Eemie's Just Another Map

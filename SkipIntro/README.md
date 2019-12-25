@@ -19,7 +19,7 @@ These are the available settings:
 | `SkipTo` | Default `Title`. Which screen to skip to; can be `Title`, `Load`, `JoinCoop`, `HostCoop`.
 
 ## Compatibility
-Skip Intro is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Skip Intro is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
 
 ## See also

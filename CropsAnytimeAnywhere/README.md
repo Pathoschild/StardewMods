@@ -31,7 +31,7 @@ setting              | default     | what it affects
 `ForceTillable`      | dirt, grass | The tile types to make tillable beyond those that would normally be (`other` includes indoor flooring). The default values let you plant on dirt and grass tiles.
 
 ## Compatibility
-Compatible with Stardew Valley 1.3.32+ on Linux/Mac/Windows, both single-player and multiplayer. In
+Compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and multiplayer. In
 multiplayer mode, it must be installed by the main player to work correctly; farmhands only need it
 if they want to enable tilling more tile types (but it won't cause any issues if they don't have
 it).
