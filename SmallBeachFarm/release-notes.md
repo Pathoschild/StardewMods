@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated compatibility with Eeemie's Just A New Recolor (thanks to laulajatar!).
+
 ## 1.4.2
 Released 15 December 2019.
 
