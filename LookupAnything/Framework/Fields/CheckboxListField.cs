@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Fields
         *********/
         /// <summary>The checkbox values to display.</summary>
-        private readonly KeyValuePair<IFormattedText[], bool>[] Checkboxes;
+        protected KeyValuePair<IFormattedText[], bool>[] Checkboxes;
 
 
         /*********
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="checkboxes">The checkbox labels and values to display.</param>
         public CheckboxListField(GameHelper gameHelper, string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
-            : base(gameHelper, label, hasValue: true)
+            : this(gameHelper, label)
         {
             this.Checkboxes = checkboxes.ToArray();
         }
@@ -67,6 +67,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             return new Vector2(wrapWidth, topOffset);
+        }
+
+
+        /*********
+        ** Protected methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="label">A short field label.</param>
+        protected CheckboxListField(GameHelper gameHelper, string label)
+            : base(gameHelper, label, hasValue: true)
+        {
+            this.Checkboxes = new KeyValuePair<IFormattedText[], bool>[0];
         }
     }
 }

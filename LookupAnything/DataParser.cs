@@ -6,6 +6,7 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -121,6 +122,94 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             foreach (FishPondReward drop in data.ProducedItems)
                 yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID)
+        {
+            // get raw fish data
+            string[] fishFields;
+            {
+                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string rawData))
+                    return null;
+                fishFields = rawData.Split('/');
+                if (fishFields.Length < 13)
+                    return null;
+            }
+
+            // parse raw data
+            var timesOfDay = new List<FishSpawnTimeOfDayData>();
+            FishSpawnWeather weather;
+            int minFishingLevel;
+            {
+                // times of day
+                string[] timeFields = fishFields[5].Split(' ');
+                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                {
+                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
+                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                }
+
+                // weather
+                if (!Enum.TryParse(fishFields[7], true, out weather))
+                    weather = FishSpawnWeather.Both;
+
+                // min fishing level
+                if (!int.TryParse(fishFields[12], out minFishingLevel))
+                    minFishingLevel = 0;
+            }
+
+            // parse location data
+            var locations = new List<FishSpawnLocationData>();
+            foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
+            {
+                if (entry.Key == "Temp" || entry.Key == "fishingGame")
+                    continue; // ignore event data
+
+                string locationName = entry.Key;
+                List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
+
+                // get locations
+                string[] locationFields = entry.Value.Split('/');
+                for (int s = 4; s <= 7; s++)
+                {
+                    string[] seasonFields = locationFields[s].Split(' ');
+                    string season = s switch
+                    {
+                        4 => "spring",
+                        5 => "summer",
+                        6 => "fall",
+                        7 => "winter",
+                        _ => throw new NotSupportedException() // should never happen
+                    };
+
+                    for (int i = 0, last = seasonFields.Length + 1; i + 1 < last; i += 2)
+                    {
+                        if (!int.TryParse(seasonFields[i], out int curFishID) || curFishID != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
+                            continue;
+
+                        curLocations.Add(new FishSpawnLocationData(locationName, areaID, new[] { season }));
+                    }
+                }
+
+                // combine seasons for same area
+                locations.AddRange(
+                    from areaGroup in curLocations.GroupBy(p => p.Area)
+                    let seasons = areaGroup.SelectMany(p => p.Seasons).Distinct().ToArray()
+                    select new FishSpawnLocationData(locationName, areaGroup.Key, seasons)
+                );
+            }
+
+            // build model
+            return new FishSpawnData(
+                fishID: fishID,
+                locations: locations.ToArray(),
+                timesOfDay: timesOfDay.ToArray(),
+                weather: weather,
+                minFishingLevel: minFishingLevel
+            );
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

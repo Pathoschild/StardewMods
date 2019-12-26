@@ -9,6 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -66,6 +67,27 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
             this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, monitor).ToArray());
+        }
+
+        /****
+        ** Text helpers
+        ****/
+        /// <summary>Format a game time in military 24-hour notation.</summary>
+        /// <param name="time">The time to format.</param>
+        public string FormatMilitaryTime(int time)
+        {
+            time %= 2400;
+            return $"{time / 100:00}:{time % 100:00}";
+        }
+
+        /// <summary>Get a translated season name for the current language.</summary>
+        /// <param name="season">The English season name.</param>
+        public string TranslateSeason(string season)
+        {
+            int number = Utility.getSeasonNumber(season);
+            return number != -1
+                ? Utility.getSeasonNameFromNumber(number)
+                : season;
         }
 
         /****
@@ -310,6 +332,14 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
         {
             return this.DataParser.GetFishPondDrops(data);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID)
+        {
+            return this.DataParser.GetFishSpawnRules(fishID);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

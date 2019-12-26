@@ -155,6 +155,30 @@
     "data.item.box.name": "Kiste",
     "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
 
+    // location names
+    // TODO
+    "location.backwoods": "backwoods",
+    "location.beach": "beach",
+    "location.bugLand": "mutant bug lair",
+    "location.busStop": "bus stop",
+    "location.desert": "desert",
+    "location.farm": "farm",
+    "location.farmCave": "farm cave",
+    "location.farmHouse": "farmhouse",
+    "location.forest": "forest",
+    "location.forest.fish-area-0": "forest river",
+    "location.forest.fish-area-1": "forest pond",
+    "location.mountain": "mountain",
+    "location.railroad": "railroad",
+    "location.sewer": "sewers",
+    "location.town": "town",
+    "location.tunnel": "bus tunnel",
+    "location.undergroundMine": "mines",
+    "location.witchSwamp": "witch's swamp",
+    "location.woods": "secret woods",
+    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+
+
     /*********
     ** Animal lookups
     *********/
@@ -377,6 +401,19 @@
     // labels
     // TODO
     "item.fish-pond-drops": "Fish pond drops",
+    "item.fish-spawn-rules": "Spawn rules",
+
+    // values
+    // TODO
+    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
+    "item.fish-spawn-rules.locations": "locations: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "any season",
+    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
+    "item.fish-spawn-rules.time": "time of day: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
+    "item.fish-spawn-rules.weather-rainy": "weather: raining",
 
 
     /*********

@@ -201,6 +201,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // fish
             if (item.Category == SObject.FishCategory)
             {
+                // spawn rules
+                yield return new FishSpawnRulesField(this.GameHelper, L10n.Item.FishSpawnRules(), item.ParentSheetIndex, this.Text);
+
                 // fish pond data
                 foreach (FishPondData fishPondData in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
                 {
