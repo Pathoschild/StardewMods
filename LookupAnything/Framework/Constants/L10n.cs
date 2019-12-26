@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
@@ -183,7 +184,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation LocationName(string locationName) => L10n.Helper.Get($"location.{locationName}").Default(locationName);
 
             /// <summary>The translated name for a fishing area.</summary>
-            public static Translation AreaName(string locationName, int id) => L10n.Helper.Get($"location.{locationName}.fish-area-{id}").Default(L10n.Helper.Get("location.unknown-fish-area", new { locationName, id }));
+            public static Translation AreaName(string locationName, int id)
+            {
+                Translation areaTranslation = string.Equals(locationName, "UndergroundMine", StringComparison.InvariantCultureIgnoreCase) && id >= 0
+                    ? L10n.Helper.Get("location.undergroundMine.level", new { level = id })
+                    : L10n.Helper.Get($"location.{locationName}.fish-area-{id}");
+
+                return areaTranslation
+                    .Default(L10n.Helper.Get("location.unknown-fish-area", new { locationName, id }));
+            }
         }
 
         /// <summary>Animal lookup translations.</summary>

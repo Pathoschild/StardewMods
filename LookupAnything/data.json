@@ -643,7 +643,16 @@ You shouldn't change this file unless you know what you're doing.
     /*********
     ** Added fish spawn rules
     *********/
-    // submarine rules derived from StardewValley.Locations.Submarine::getFish
+    /*
+       Submarine rules are from StardewValley.Locations.Submarine::getFish.
+
+       UndergroundMine rules are from StardewValley.Locations.MineShaft::getFish and getMineArea.
+       The mine fishing areas cover multiple floors where water never appears, so the 'area' field
+       for mines specify the actual level where water can appear (i.e. 20, 60, and 100), rather
+       than the internal area ID used by getMineArea.
+     */
+    // 
+    // 
     "CustomFishSpawnRules": {
         // Octopus
         "149": {
@@ -681,6 +690,39 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "LocationName": "Submarine",
                     "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Stonefish
+        "158": {
+            "Locations": [
+                {
+                    "LocationName": "UndergroundMine",
+                    "Area": 20,
+                    "Seasons": [ "Spring", "Summer", "Fall", "Winter" ]
+                }
+            ]
+        },
+
+        // Ice Pip
+        "161": {
+            "Locations": [
+                {
+                    "LocationName": "UndergroundMine",
+                    "Area": 60,
+                    "Seasons": [ "Spring", "Summer", "Fall", "Winter" ]
+                }
+            ]
+        },
+
+        // Lava Eel
+        "162": {
+            "Locations": [
+                {
+                    "LocationName": "UndergroundMine",
+                    "Area": 100,
+                    "Seasons": [ "Spring", "Summer", "Fall", "Winter" ]
                 }
             ]
         },
