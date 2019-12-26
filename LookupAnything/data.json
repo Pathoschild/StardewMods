@@ -643,7 +643,87 @@ You shouldn't change this file unless you know what you're doing.
     /*********
     ** Added fish spawn rules
     *********/
+    // submarine rules derived from StardewValley.Locations.Submarine::getFish
     "CustomFishSpawnRules": {
+        // Octopus
+        "149": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Seaweed
+        "152": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Sea Cucumber
+        "154": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Super Cucumber
+        "155": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Pearl
+        "797": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Midnight Squid
+        "798": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Spook Fish
+        "799": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        },
+
+        // Blobfish
+        "800": {
+            "Locations": [
+                {
+                    "LocationName": "Submarine",
+                    "Seasons": [ "Winter" ]
+                }
+            ]
+        }
     },
 
     /*********
