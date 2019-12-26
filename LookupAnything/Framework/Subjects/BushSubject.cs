@@ -50,8 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             // get basic info
             Bush bush = this.Target;
@@ -88,8 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Bush target = this.Target;
 

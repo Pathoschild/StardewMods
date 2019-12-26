@@ -82,8 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             // get data
             Item item = this.Target;
@@ -91,12 +90,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead.Value == true;
-            bool canSell = obj?.canBeShipped() == true || metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
+            bool canSell = obj?.canBeShipped() == true || this.Metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
 
             // get overrides
             bool showInventoryFields = true;
             {
-                ObjectData objData = metadata.GetObject(item, this.Context);
+                ObjectData objData = this.Metadata.GetObject(item, this.Context);
                 if (objData != null)
                 {
                     this.Name = objData.NameKey != null ? L10n.GetRaw(objData.NameKey) : this.Name;
@@ -114,7 +113,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // crop fields
-            foreach (ICustomField field in this.GetCropFields(this.FromCrop ?? this.SeedForCrop, isSeed, metadata))
+            foreach (ICustomField field in this.GetCropFields(this.FromCrop ?? this.SeedForCrop, isSeed))
                 yield return field;
 
             // indoor pot crop
@@ -129,21 +128,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // machine output
-            foreach (ICustomField field in this.GetMachineOutputFields(obj, metadata))
+            foreach (ICustomField field in this.GetMachineOutputFields(obj))
                 yield return field;
 
             // item
             if (showInventoryFields)
             {
                 // needed for
-                foreach (ICustomField field in this.GetNeededForFields(obj, metadata))
+                foreach (ICustomField field in this.GetNeededForFields(obj))
                     yield return field;
 
                 // sale data
                 if (canSell && !isCrop)
                 {
                     // sale price
-                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality, metadata), item.Stack, this.Text);
+                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack, this.Text);
                     yield return new GenericField(this.GameHelper, L10n.Item.SellsFor(), saleValueSummary);
 
                     // sell to
@@ -151,7 +150,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     if (obj?.canBeShipped() == true)
                         buyers.Add(L10n.Item.SellsToShippingBox());
                     buyers.AddRange(
-                        from shop in metadata.Shops
+                        from shop in this.Metadata.Shops
                         where shop.BuysCategories.Contains(item.Category)
                         let name = L10n.GetRaw(shop.DisplayKey).ToString()
                         orderby name
@@ -165,7 +164,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(this.GameHelper, L10n.Item.CanBeDyed(), this.Stringify(clothing.dyeable.Value));
 
                 // gift tastes
-                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item, metadata);
+                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item);
                 yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
                 yield return new ItemGiftTastesField(this.GameHelper, L10n.Item.LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
                 if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
@@ -230,7 +229,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 {
                     float maxHealth = fence.isGate.Value ? fence.maxHealth.Value * 2 : fence.maxHealth.Value;
                     float health = fence.health.Value / maxHealth;
-                    double daysLeft = Math.Round(fence.health.Value * metadata.Constants.FenceDecayRate / 60 / 24);
+                    double daysLeft = Math.Round(fence.health.Value * this.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
                     yield return new PercentageBarField(this.GameHelper, healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, L10n.Item.FenceHealthSummary(percent: (int)percent, count: (int)daysLeft));
                 }
@@ -253,7 +252,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     });
 
                     // movie tastes
-                    IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes(metadata)
+                    IDictionary<GiftTaste, string[]> tastes = this.GameHelper.GetMovieTastes()
                         .GroupBy(entry => entry.Value)
                         .ToDictionary(group => group.Key, group => group.Select(p => p.Key.Name).OrderBy(p => p).ToArray());
 
@@ -300,8 +299,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Item target = this.Target;
             SObject obj = target as SObject;
@@ -404,8 +402,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the custom fields for a crop.</summary>
         /// <param name="crop">The crop to represent.</param>
         /// <param name="isSeed">Whether the crop being displayed is for an unplanted seed.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IEnumerable<ICustomField> GetCropFields(Crop crop, bool isSeed, Metadata metadata)
+        private IEnumerable<ICustomField> GetCropFields(Crop crop, bool isSeed)
         {
             if (crop == null)
                 yield break;
@@ -451,7 +448,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 // crop sale price
                 Item drop = data.GetSampleDrop();
-                summary.Add(L10n.Crop.SummarySellsFor(price: GenericField.GetSaleValueString(this.GetSaleValue(drop, false, metadata), 1, this.Text)));
+                summary.Add(L10n.Crop.SummarySellsFor(price: GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1, this.Text)));
 
                 // generate field
                 yield return new GenericField(this.GameHelper, L10n.Crop.Summary(), "-" + string.Join($"{Environment.NewLine}-", summary));
@@ -460,8 +457,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get the custom fields for machine output.</summary>
         /// <param name="machine">The machine whose output to represent.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IEnumerable<ICustomField> GetMachineOutputFields(SObject machine, Metadata metadata)
+        private IEnumerable<ICustomField> GetMachineOutputFields(SObject machine)
         {
             if (machine == null)
                 yield break;
@@ -478,10 +474,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     ItemQuality curQuality = (ItemQuality)heldObj.Quality;
 
                     // calculate aging schedule
-                    float effectiveAge = metadata.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
+                    float effectiveAge = this.Constants.CaskAgeSchedule.Values.Max() - cask.daysToMature.Value;
                     var schedule =
                         (
-                            from entry in metadata.Constants.CaskAgeSchedule
+                            from entry in this.Constants.CaskAgeSchedule
                             let quality = entry.Key
                             let baseDays = entry.Value
                             where baseDays > effectiveAge
@@ -569,8 +565,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get the custom fields indicating what an item is needed for.</summary>
         /// <param name="obj">The machine whose output to represent.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IEnumerable<ICustomField> GetNeededForFields(SObject obj, Metadata metadata)
+        private IEnumerable<ICustomField> GetNeededForFields(SObject obj)
         {
             if (obj == null)
                 yield break;
@@ -604,9 +599,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // polyculture achievement (ship 15 crops)
-            if (metadata.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
+            if (this.Constants.PolycultureCrops.Contains(obj.ParentSheetIndex))
             {
-                int needed = metadata.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ParentSheetIndex);
+                int needed = this.Constants.PolycultureCount - this.GameHelper.GetShipped(obj.ParentSheetIndex);
                 if (needed > 0)
                     neededFor.Add(L10n.Item.NeededForPolyculture(count: needed));
             }
@@ -696,8 +691,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the possible sale values for an item.</summary>
         /// <param name="item">The item.</param>
         /// <param name="qualityIsKnown">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown, Metadata metadata)
+        private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown)
         {
             // get sale price
             // derived from Utility.getSellToStorePriceOfItem
@@ -718,7 +712,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // multiple qualities
-            int[] iridiumItems = metadata.Constants.ItemsWithIridiumQuality;
+            int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
             var prices = new Dictionary<ItemQuality, int>
             {
                 [ItemQuality.Normal] = GetPrice(new SObject(item.ParentSheetIndex, 1)),
@@ -732,10 +726,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The potential gift item.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(Item item, Metadata metadata)
+        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(Item item)
         {
-            return this.GameHelper.GetGiftTastes(item, metadata)
+            return this.GameHelper.GetGiftTastes(item)
                 .GroupBy(p => p.Taste)
                 .ToDictionary(p => p.Key, p => p.Distinct().ToArray());
         }

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -80,17 +79,16 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="subject">The metadata to display.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
         /// <param name="showDebugFields">Whether to display debug fields.</param>
         /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-        public LookupMenu(GameHelper gameHelper, ISubject subject, Metadata metadata, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
+        public LookupMenu(GameHelper gameHelper, ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
         {
             // save data
             this.Subject = subject;
-            this.Fields = subject.GetData(metadata).Where(p => p.HasValue).ToArray();
+            this.Fields = subject.GetData().Where(p => p.HasValue).ToArray();
             this.Monitor = monitor;
             this.Reflection = reflectionHelper;
             this.ScrollAmount = scroll;
@@ -100,7 +98,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // save debug fields
             if (showDebugFields)
             {
-                IDebugField[] debugFields = subject.GetDebugFields(metadata).ToArray();
+                IDebugField[] debugFields = subject.GetDebugFields().ToArray();
                 this.Fields = this.Fields
                     .Concat(new[]
                     {

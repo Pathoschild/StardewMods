@@ -37,8 +37,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             FarmAnimal animal = this.Target;
 
@@ -53,8 +52,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // yield fields
-            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal.Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal, metadata), this.Text);
-            yield return new PercentageBarField(this.GameHelper, L10n.Animal.Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic.Percent(percent: (int)Math.Round(animal.happiness.Value / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal.Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal), this.Text);
+            yield return new PercentageBarField(this.GameHelper, L10n.Animal.Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic.Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
             yield return new GenericField(this.GameHelper, L10n.Animal.Mood(), animal.getMoodMessage());
             yield return new GenericField(this.GameHelper, L10n.Animal.Complaints(), this.GetMoodReason(animal));
             yield return new ItemIconField(this.GameHelper, L10n.Animal.ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
@@ -64,14 +63,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             FarmAnimal target = this.Target;
 
             // pinned fields
             yield return new GenericDebugField("age", $"{target.age} days", pinned: true);
-            yield return new GenericDebugField("friendship", $"{target.friendshipTowardFarmer} (max {metadata.Constants.AnimalMaxHappiness})", pinned: true);
+            yield return new GenericDebugField("friendship", $"{target.friendshipTowardFarmer} (max {this.Constants.AnimalMaxHappiness})", pinned: true);
             yield return new GenericDebugField("fullness", this.Stringify(target.fullness.Value), pinned: true);
             yield return new GenericDebugField("happiness", this.Stringify(target.happiness.Value), pinned: true);
 

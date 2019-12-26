@@ -43,8 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             // yield map data
             yield return new GenericField(this.GameHelper, L10n.Tile.MapName(), this.Location.Name);
@@ -72,8 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             foreach (Tile tile in tiles)

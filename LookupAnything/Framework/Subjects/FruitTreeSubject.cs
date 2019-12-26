@@ -43,9 +43,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="FruitTree.dayUpdate"/>.</remarks>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             FruitTree tree = this.Target;
 
@@ -82,13 +81,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else
             {
                 // get quality schedule
-                ItemQuality currentQuality = this.GetCurrentQuality(tree, metadata.Constants.FruitTreeQualityGrowthTime);
+                ItemQuality currentQuality = this.GetCurrentQuality(tree, this.Constants.FruitTreeQualityGrowthTime);
                 if (currentQuality == ItemQuality.Iridium)
                     yield return new GenericField(this.GameHelper, L10n.FruitTree.Quality(), L10n.FruitTree.QualityNow(quality: currentQuality));
                 else
                 {
                     string[] summary = this
-                        .GetQualitySchedule(tree, currentQuality, metadata.Constants.FruitTreeQualityGrowthTime)
+                        .GetQualitySchedule(tree, currentQuality, this.Constants.FruitTreeQualityGrowthTime)
                         .Select(entry =>
                         {
                             // read schedule
@@ -124,8 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             FruitTree target = this.Target;
 

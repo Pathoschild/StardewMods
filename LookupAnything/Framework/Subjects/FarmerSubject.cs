@@ -50,8 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             SFarmer target = this.Target;
 
@@ -67,8 +66,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 yield return new GenericField(this.GameHelper, L10n.Player.WatchedMovieThisWeek(), this.Stringify(target.lastSeenMovieWeek.Value >= Game1.Date.TotalSundayWeeks));
 
             // skills
-            int maxSkillPoints = metadata.Constants.PlayerMaxSkillPoints;
-            int[] skillPointsPerLevel = metadata.Constants.PlayerSkillPointsPerLevel;
+            int maxSkillPoints = this.Constants.PlayerMaxSkillPoints;
+            int[] skillPointsPerLevel = this.Constants.PlayerSkillPointsPerLevel;
             yield return new SkillBarField(this.GameHelper, L10n.Player.FarmingSkill(), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
             yield return new SkillBarField(this.GameHelper, L10n.Player.MiningSkill(), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
             yield return new SkillBarField(this.GameHelper, L10n.Player.ForagingSkill(), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
@@ -85,8 +84,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             SFarmer target = this.Target;
 

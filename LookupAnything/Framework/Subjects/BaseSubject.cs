@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -23,6 +24,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper { get; }
+
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        protected Metadata Metadata => this.GameHelper.Metadata;
+
+        /// <summary>Constant values hardcoded by the game.</summary>
+        protected ConstantData Constants => this.Metadata.Constants;
 
         /// <summary>Provides subject entries for target values.</summary>
         protected SubjectFactory Codex { get; }
@@ -45,12 +52,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public abstract IEnumerable<ICustomField> GetData(Metadata metadata);
+        public abstract IEnumerable<ICustomField> GetData();
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public abstract IEnumerable<IDebugField> GetDebugFields(Metadata metadata);
+        public abstract IEnumerable<IDebugField> GetDebugFields();
 
         /// <summary>Draw the subject portrait (if available).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>

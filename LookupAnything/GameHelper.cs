@@ -47,26 +47,33 @@ namespace Pathoschild.Stardew.LookupAnything
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        public Metadata Metadata { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, Metadata metadata)
         {
             this.DataParser = new DataParser(this);
             this.CustomFarmingRedux = customFarmingRedux;
+            this.Metadata = metadata;
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
+        public void ResetCache(IReflectionHelper reflectionHelper, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, monitor).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(this.Metadata, reflectionHelper, monitor).ToArray());
         }
 
         /****
@@ -254,23 +261,21 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public bool IsSocialVillager(NPC npc, Metadata metadata)
+        public bool IsSocialVillager(NPC npc)
         {
-            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.Name);
+            return npc.isVillager() && !this.Metadata.Constants.AsocialVillagers.Contains(npc.Name);
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item)
         {
             if (!item.canBeGivenAsGift())
                 yield break;
 
             foreach (NPC npc in this.GetAllCharacters())
             {
-                if (!this.IsSocialVillager(npc, metadata))
+                if (!this.IsSocialVillager(npc))
                     continue;
 
                 GiftTaste? taste = this.GetGiftTaste(npc, item);
@@ -281,10 +286,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc)
         {
-            if (!this.IsSocialVillager(npc, metadata))
+            if (!this.IsSocialVillager(npc))
                 return new GiftTasteModel[0];
 
             // get giftable items
@@ -307,12 +311,11 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get how much each NPC likes watching this week's movie.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(Metadata metadata)
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes()
         {
             foreach (NPC npc in this.GetAllCharacters())
             {
-                if (!this.IsSocialVillager(npc, metadata))
+                if (!this.IsSocialVillager(npc))
                     continue;
 
                 GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
@@ -346,10 +349,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="friendship">The current friendship data.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship, Metadata metadata)
+        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship)
         {
-            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, metadata);
+            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, this.Metadata);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -363,10 +365,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="animal">The farm animal.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal)
         {
-            return this.DataParser.GetFriendshipForAnimal(player, animal, metadata);
+            return this.DataParser.GetFriendshipForAnimal(player, animal, this.Metadata);
         }
 
         /// <summary>Parse monster data.</summary>
