@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -35,6 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The shops that buy items from the player.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</remarks>
         public ShopData[] Shops { get; set; }
+
+        /// <summary>Added fish spawn rules.</summary>
+        public IDictionary<int, FishSpawnData> CustomFishSpawnRules { get; set; }
 
 
         /*********

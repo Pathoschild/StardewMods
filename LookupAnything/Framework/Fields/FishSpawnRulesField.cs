@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             // get spawn data
             FishSpawnData spawnRules = gameHelper.GetFishSpawnRules(fishID);
-            if (spawnRules == null || !spawnRules.TimesOfDay.Any() || !spawnRules.Locations.Any())
+            if (spawnRules == null || !spawnRules.Locations.Any())
                 yield break;
 
             // fishing level
@@ -60,12 +60,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 yield return this.GetCondition(L10n.Item.FishSpawnRulesWeatherRaining(), Game1.isRaining);
 
             // time of day
-            yield return this.GetCondition(
-                label: L10n.Item.FishSpawnRulesTime(
-                    times: spawnRules.TimesOfDay.Select(p => L10n.Generic.Range(gameHelper.FormatMilitaryTime(p.MinTime), gameHelper.FormatMilitaryTime(p.MaxTime)).ToString()).ToArray()
-                ),
-                isMet: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
-            );
+            if (spawnRules.TimesOfDay.Any())
+            {
+                yield return this.GetCondition(
+                    label: L10n.Item.FishSpawnRulesTime(
+                        times: spawnRules.TimesOfDay.Select(p => L10n.Generic.Range(gameHelper.FormatMilitaryTime(p.MinTime), gameHelper.FormatMilitaryTime(p.MaxTime)).ToString()).ToArray()
+                    ),
+                    isMet: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
+                );
+            }
 
             // locations & seasons
             if (this.HaveSameSeasons(spawnRules.Locations))

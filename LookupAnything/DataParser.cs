@@ -126,8 +126,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
         /// <param name="fishID">The fish ID.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-        public FishSpawnData GetFishSpawnRules(int fishID)
+        public FishSpawnData GetFishSpawnRules(int fishID, Metadata metadata)
         {
             // get raw fish data
             string[] fishFields;
@@ -201,6 +202,27 @@ namespace Pathoschild.Stardew.LookupAnything
                     select new FishSpawnLocationData(locationName, areaGroup.Key, seasons)
                 );
             }
+
+            // ignore times of day if the fish doesn't spawn naturally (so we don't have duplicate times from custom data)
+            if (!locations.Any())
+                timesOfDay.Clear();
+
+            // read custom data
+            if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData customRules))
+            {
+                if (customRules.MinFishingLevel > minFishingLevel)
+                    minFishingLevel = customRules.MinFishingLevel;
+
+                if (customRules.Weather != FishSpawnWeather.Unknown)
+                    weather = customRules.Weather;
+
+                if (customRules.TimesOfDay != null)
+                    timesOfDay.AddRange(customRules.TimesOfDay);
+
+                if (customRules.Locations != null)
+                    locations.AddRange(customRules.Locations);
+            }
+
 
             // build model
             return new FishSpawnData(

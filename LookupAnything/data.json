@@ -641,6 +641,12 @@ You shouldn't change this file unless you know what you're doing.
     ],
 
     /*********
+    ** Added fish spawn rules
+    *********/
+    "CustomFishSpawnRules": {
+    },
+
+    /*********
     ** Corrects metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).
     *********/
     "Objects": [

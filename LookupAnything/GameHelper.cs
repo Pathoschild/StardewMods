@@ -342,7 +342,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
         public FishSpawnData GetFishSpawnRules(int fishID)
         {
-            return this.DataParser.GetFishSpawnRules(fishID);
+            return this.DataParser.GetFishSpawnRules(fishID, this.Metadata);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

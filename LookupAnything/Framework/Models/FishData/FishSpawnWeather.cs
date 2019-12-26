@@ -6,6 +6,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
     [Flags]
     internal enum FishSpawnWeather
     {
+        /// <summary>No specified value.</summary>
+        Unknown,
+
         /// <summary>The fish only spawns when it's sunny.</summary>
         Sunny = 1,
 
