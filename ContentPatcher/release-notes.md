@@ -7,6 +7,7 @@
 * Fixed patches being reapplied unnecessarily in some cases.
 * Fixed token validation not applied to the entire token string in some cases.
 * Fixed `Random` tokens being rerolled when warping if the patch is location-dependent.
+* Fixed error when married to an NPC that's not loaded.
 
 ## 1.11
 Released 15 December 2019.
