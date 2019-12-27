@@ -112,8 +112,15 @@ Default 20 iron bars, 5 iridium bars, and 5 battery packs.
 </td>
 <td>
 
-The number of tiles on each side of the tractor to affect (in addition to the tile under it).
+The number of tiles in each direction around the tractor to affect (in addition to the tile under
+it):
+> ![](screenshots/distance.png)
+
 Default 1, which is a 3 by 3 grid.
+
+**Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
+screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
+recommended to avoid lag.
 
 </td>
 </tr>
