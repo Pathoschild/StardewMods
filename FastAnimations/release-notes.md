@@ -1,7 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.7.5
+Released 27 December 2019.
 
 * Fixed option to disable eat/drink confirmation no longer affecting drinks.
 

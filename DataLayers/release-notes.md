@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.9.1
+Released 27 December 2019.
+
 * Improved translations. Thanks to L30Bola (updated Portuguese) and PlussRolf (updated Spanish)!
 
 ## 1.9

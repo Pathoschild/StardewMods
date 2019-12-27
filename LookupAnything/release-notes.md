@@ -1,16 +1,18 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.24
+Released 27 December 2019.
+
 * Added fish spawn rules to fish lookups.
 * Added fish pond drops to fish lookups.
 * Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
 * Revamped fish pond lookups to show locked drops and make the selection process more clear.
 * Fixed pet lookups showing untranslated 'cat' or 'dog' type.
-* Fixed hay in silos not counted for number owned or when highlighting owned gifts.
+* Fixed hay in silos not counted towards number owned or when highlighting owned gifts.
 * Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.
 * Fixed item lookups sometimes showing wrong tailoring recipes.
-* Fixed missing/partial shirt item icons in some cases.
+* Fixed missing/partial shirt icons in some cases.
 * Improved translations. Thanks to jahangmar (updated German), L30Bola (updated Portuguese), and PlussRolf (updated Spanish)!
 
 ## 1.23.1

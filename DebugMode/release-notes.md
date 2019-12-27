@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.11.1
+Released 27 December 2019.
+
 * Improved translations. Thanks to L30Bola (updated Portuguese) and PlussRolf (updated Spanish)!
 
 ## 1.11

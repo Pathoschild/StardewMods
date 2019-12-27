@@ -1,9 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Mitigated `OutOfMemoryException` issue for some players.
-* Mitigated performance impact when warping in some cases with content packs with a large number of seasonal changes.
+## 1.11.1
+Released 27 December 2019.
+
+* Mitigated `OutOfMemoryException` issue for some players. (The underlying issue in SMAPI is still being investigated.)
+* Reduced performance impact in some cases when warping with content packs which have a large number of seasonal changes.
 * Fixed patches being reapplied unnecessarily in some cases.
 * Fixed token validation not applied to the entire token string in some cases.
 * Fixed `Random` tokens being rerolled when warping if the patch is location-dependent.
