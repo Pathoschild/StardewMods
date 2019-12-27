@@ -61,6 +61,8 @@ The screenshots below are without progression mode, and may show spoilers.
   > ![](screenshots/villager.png)
   > ![](screenshots/child.png)
 
+  The optional progression mode hides gift tastes until you've learned them in-game.
+
 * See your farm animals' happiness, friendship, problems, and any produce ready for you.
   > ![](screenshots/farm-animal.png)
 
@@ -77,6 +79,9 @@ The screenshots below are without progression mode, and may show spoilers.
 * See what an item is used for, who likes getting it as a gift, and its dye color (and strength)
   when used in tailoring. Look up a movie ticket to see what's playing and who would like the movie.
   > ![](screenshots/item.png)
+
+* See where you can catch a fish:
+  > ![](screenshots/fish.png)
 
 * See when a crop will be ready to harvest.
   > ![](screenshots/crop.png)
@@ -103,6 +108,8 @@ The screenshots below are without progression mode, and may show spoilers.
   > ![](screenshots/mine-stone.png)
   > ![](screenshots/mine-ore.png)
   > ![](screenshots/mine-ice.png)
+
+* And much more!
 
 ### Where you can look things up
 You can look things up by pointing at them...

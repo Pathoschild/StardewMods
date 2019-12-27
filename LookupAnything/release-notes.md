@@ -2,11 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Added fish spawn rules to fish lookups (including special cases like mine and legendary fish).
+* Added fish spawn rules to fish lookups.
+* Added fish pond drops to fish lookups.
 * Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
-* Added fish pond drops on fish item lookups.
-* Fish pond lookups now show drops that haven't been unlocked yet.
-* Fish pond lookups use a new format for drops to make it more clear how they're selected.
+* Revamped fish pond lookups to show locked drops and make the selection process more clear.
 * Fixed pet lookups showing untranslated 'cat' or 'dog' type.
 * Fixed hay in silos not counted for number owned or when highlighting owned gifts.
 * Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.
