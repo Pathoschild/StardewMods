@@ -30,12 +30,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public BushSubject(GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
-            : base(gameHelper, translations)
+        public BushSubject(SubjectFactory codex, GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
+            : base(codex, gameHelper, translations)
         {
             this.Target = bush;
             this.Reflection = reflection;
@@ -49,8 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             // get basic info
             Bush bush = this.Target;
@@ -74,9 +74,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (isTeaBush)
             {
                 SDate datePlanted = this.GetDatePlanted(bush);
+                int daysOld = SDate.Now().DaysSinceStart - datePlanted.DaysSinceStart; // bush.getAge() not reliable, e.g. for Caroline's tea bush
                 SDate dateGrown = this.GetDateFullyGrown(bush);
 
-                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-bush.getAge())})");
+                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
                 if (dateGrown > today)
                 {
                     string grownOnDateText = L10n.Bush.GrowthSummary(date: this.Stringify(dateGrown));
@@ -86,8 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Bush target = this.Target;
 

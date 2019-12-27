@@ -153,18 +153,30 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (spousePlayerID.HasValue)
             {
                 Farmer spouse = Game1.getFarmerMaybeOffline(spousePlayerID.Value);
-                name = spouse.Name;
-                gender = spouse.IsMale ? Gender.Male : Gender.Female;
-                isPlayer = true;
+                if (spouse != null)
+                {
+                    name = spouse.Name;
+                    gender = spouse.IsMale ? Gender.Male : Gender.Female;
+                    isPlayer = true;
+                    return true;
+                }
             }
             else
             {
                 NPC spouse = Game1.getCharacterFromName(player.spouse, mustBeVillager: true);
-                name = spouse.Name;
-                gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
-                isPlayer = false;
+                if (spouse != null)
+                {
+                    name = spouse.Name;
+                    gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
+                    isPlayer = false;
+                    return true;
+                }
             }
-            return true;
+
+            name = null;
+            gender = Gender.Male;
+            isPlayer = false;
+            return false;
         }
     }
 }

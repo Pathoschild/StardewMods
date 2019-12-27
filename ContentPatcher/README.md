@@ -1299,14 +1299,7 @@ This token is dynamic and may behave in unexpected ways; see below to avoid surp
 <ol>
 <li>
 
-**Dynamic.** Random tokens rechoose each time they're evaluated, specifically...
-
-* When a new day starts.
-* When you change location, if used in a patch or [dynamic token](#dynamic-tokens) linked to a
-  location token like `LocationName`. This is true even if the location token value doesn't change
-  (e.g. using `IsOutdoors` while warping between two outdoor locations). You can prevent
-  location-linked changes by using pinned keys (see below), or by storing the `Random` token in a
-  [dynamic token](#dynamic-tokens) which doesn't depend on a location token.
+**Dynamic.** Random tokens rechoose each time they're evaluated, generally when a new day starts.
 
 The randomness is seeded with the save ID and in-game date, so reloading the save won't change
 which choices were made.
@@ -1769,7 +1762,7 @@ and then search the SMAPI log file for that name. Particular questions to ask:
 
 ## FAQs
 ### Compatibility
-Content Patcher is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Content Patcher is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 ### Multiplayer

@@ -97,7 +97,7 @@ setting    | what it affects
 `CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
 
 ## Compatibility
-Data Layers is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Data Layers is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it
 installed).
 

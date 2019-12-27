@@ -30,20 +30,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public TileSubject(GameHelper gameHelper, GameLocation location, Vector2 position, ITranslationHelper translations)
-            : base(gameHelper, $"({position.X}, {position.Y})", L10n.Tile.Description(), L10n.Types.Tile(), translations)
+        public TileSubject(SubjectFactory codex, GameHelper gameHelper, GameLocation location, Vector2 position, ITranslationHelper translations)
+            : base(codex, gameHelper, $"({position.X}, {position.Y})", L10n.Tile.Description(), L10n.Types.Tile(), translations)
         {
             this.Location = location;
             this.Position = position;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             // yield map data
             yield return new GenericField(this.GameHelper, L10n.Tile.MapName(), this.Location.Name);
@@ -71,8 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             foreach (Tile tile in tiles)

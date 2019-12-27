@@ -9,7 +9,7 @@
     // date names
     "generic.now": "Ahora",
     "generic.tomorrow": "Mañana",
-    "generic.yesterday": "yesterday", // TODO
+    "generic.yesterday": "ayer",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -24,14 +24,14 @@
     "generic.hours": "{{count}} horas",
     "generic.days": "{{count}} días",
     "generic.in-x-days": "en {{count}} días",
-    "generic.x-days-ago": "{{count}} days ago", // TODO
+    "generic.x-days-ago": "hace {{count}} días",
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g ({{quality}})",
     "generic.price-for-stack": "{{price}}g por montón de {{count}}",
 
     // types
-    "type.building": "Building", // TODO
-    "type.bush": "Bush", // TODO
+    "type.building": "Edificio",
+    "type.bush": "Arbusto",
     "type.fruit-tree": "Árbol frutal",
     "type.map-tile": "Casilla del mapa",
     "type.monster": "Monstruo",
@@ -52,7 +52,8 @@
     "friendship-status.engaged": "Prometido",
     "friendship-status.married": "Casado",
     "friendship-status.divorced": "Divorciado",
-    "friendship-status.kicked-out": "Kicked out", // TODO
+    "friendship-status.kicked-out": "Hechado",
+
 
     /*********
     ** Data translations
@@ -64,7 +65,7 @@
     "bundle-area.boiler-room": "Sala de caldera",
     "bundle-area.vault": "Caja fuerte",
     "bundle-area.bulletin-board": "Tablón de anuncios",
-    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
+    "bundle-area.abandoned-joja-mart": "Mercado Joja abandonado",
 
     // shop names
     "shop.adventure-guild": "Gremio de aventureros",
@@ -78,23 +79,18 @@
     "recipe-type.cooking": "Cocina",
     "recipe-type.crafting": "Artesanía",
 
-    /*********
-    ** NPC overrides
-    *********/
+    // NPC descriptions
     "data.npc.pet.description": "Tu fiel mascota.",
     "data.npc.horse.description": "Tu fiel corcel.",
     "data.npc.junimo.description": "Un espíritu forestal del mundo de los espíritus. Se sabe muy poco sobre ellos.",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
+    "data.npc.trashbear.description": "Un espíritu amistodo que limpia la basura.",
 
-    /*********
-    ** Item overrides
-    *********/
     // item types
     "data.type.debris": "Maleza",
     "data.type.stone": "Piedra",
     "data.type.container": "Contenedor",
 
-    // farm
+    // farm items
     "data.item.egg-incubator.description": "Incuba huevos en pollitos y patitos.",
     "data.item.broken-branch.name": "Rama rota",
     "data.item.broken-branch.description": "Una rama rota. Córtala con un hacha para obtener madera.",
@@ -159,10 +155,39 @@
     "data.item.box.name": "Caja",
     "data.item.box.description": "Romper para obtener diversos bienes.",
 
+    // location names
+    // TODO
+    "location.backwoods": "backwoods",
+    "location.beach": "beach",
+    "location.beach.east-pier": "beach (eastern pier)",
+    "location.bugLand": "mutant bug lair",
+    "location.busStop": "bus stop",
+    "location.desert": "desert",
+    "location.farm": "farm",
+    "location.farmCave": "farm cave",
+    "location.farmHouse": "farmhouse",
+    "location.forest": "forest",
+    "location.forest.fish-area-0": "forest river",
+    "location.forest.fish-area-1": "forest pond",
+    "location.forest.island-tip": "forest river (south tip of large island)",
+    "location.mountain": "mountain",
+    "location.railroad": "railroad",
+    "location.sewer": "sewers",
+    "location.submarine": "Night Market submarine",
+    "location.town": "town",
+    "location.town.northmost-bridge": "town (northmost bridge)",
+    "location.tunnel": "bus tunnel",
+    "location.undergroundMine": "mines",
+    "location.undergroundMine.level": "mine level {{level}}",
+    "location.witchSwamp": "witch's swamp",
+    "location.woods": "secret woods",
+    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+
+
     /*********
-    ** Specific lookups
+    ** Animal lookups
     *********/
-    // animal lookup labels
+    // labels
     "animal.love": "Aprecio",
     "animal.happiness": "Felicidad",
     "animal.mood": "Estado de Hoy",
@@ -171,7 +196,7 @@
     "animal.growth": "Crecimiento",
     "animal.sells-for": "Se vende por",
 
-    // animal lookup values
+    // values
     "animal.complaints.hungry": "No fue alimentado ayer",
     "animal.complaints.left-out": "Se quedó afuera anoche",
     "animal.complaints.new-home": "Se fue a su nuevo hogar",
@@ -179,75 +204,90 @@
     "animal.complaints.not-petted": "No ha sido acariciado hoy",
     "animal.complaints.wild-animal-attack": "Atacado por animales salvajes durante la noche",
 
-    // building lookup labels
-    // TODO
-    "building.animals": "Animals",
-    "building.construction": "Construction",
-    "building.feed-trough": "Feed trough",
-    "building.horse": "Horse",
-    "building.horse-location": "Horse location",
-    "building.owner": "Owner",
-    "building.slimes": "Slimes",
-    "building.stored-hay": "Stored hay",
-    "building.upgrades": "Upgrades",
-    "building.water-trough": "Water trough",
 
-    "building.fish-pond.population": "Population",
-    "building.fish-pond.drops": "Drops",
-    "building.fish-pond.quests": "Quests",
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Animales",
+    "building.construction": "Construcción",
+    "building.feed-trough": "Comedero",
+    "building.horse": "Caballo",
+    "building.horse-location": "Ubicación del caballo",
+    "building.owner": "Dueño",
+    "building.slimes": "Slimes", // translator note: Slimes is already an adopted word, like hacking
+    "building.stored-hay": "Heno almacenado",
+    "building.upgrades": "Actualizaciones",
+    "building.water-trough": "Abrevadero",
 
-    // building lookup values
-    // TODO
-    "building.animals.summary": "{{count}} of max {{max}} animals",
-    "building.construction.summary": "ready on {{date}}",
-    "building.feed-trough.automated": "automated",
-    "building.feed-trough.summary": "{{filled}} of {{max}} feed slots filled",
+    // values
+    "building.animals.summary": "{{count}} de {{max}} animales",
+    "building.construction.summary": "listo el {{date}}",
+    "building.feed-trough.automated": "automatizado",
+    "building.feed-trough.summary": "{{filled}} de {{max}} comederos llenos",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-    "building.junimo-harvesting-enabled": "Harvesting enabled",
-    "building.owner.none": "no owner",
-    "building.output-processing": "Output processing",
-    "building.output-ready": "Output ready",
-    "building.slimes.summary": "{{count}} of max {{max}} slimes",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} hay (max capacity: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} hay in {{siloCount}} silos (max capacity: {{maxHay}})",
-    "building.upgrades.barn.0": "up to 4 animals, add cows",
-    "building.upgrades.barn.1": "up to 8 animals, add pregnancy and goats",
-    "building.upgrades.barn.2": "up to 12 animals, add autofeed, pigs, and sheep",
-    "building.upgrades.cabin.0": "initial cabin",
-    "building.upgrades.cabin.1": "add kitchen, enable marriage",
-    "building.upgrades.cabin.2": "enable children",
-    "building.upgrades.coop.0": "up to 4 animals; add chickens",
-    "building.upgrades.coop.1": "up to 8 animals; add incubator, dinosaurs, and ducks",
-    "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
-    "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
+    "building.junimo-harvesting-enabled": "Cosechador habilitado",
+    "building.owner.none": "sin dueño",
+    "building.output-processing": "Procesando producto", // translator note: changed 'output' to 'product' as we don't have a word with the same meaning
+    "building.output-ready": "Producto listo",
+    "building.slimes.summary": "{{count}} de {{max}} slimes",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} heno (capacidad máxima: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} heno en {{siloCount}} silos (capacidad máxima: {{maxHay}})",
+    "building.upgrades.barn.0": "hasta 4 animales, añade vacas",
+    "building.upgrades.barn.1": "hasta 8 animales, añade cabras y permite embarazos",
+    "building.upgrades.barn.2": "hasta 12 animales, añade cerdos, ovejas y automatiza los comederos",
+    "building.upgrades.cabin.0": "cabina inical",
+    "building.upgrades.cabin.1": "añade una cocina, permite casarse",
+    "building.upgrades.cabin.2": "permite tener hijos",
+    "building.upgrades.coop.0": "hasta 4 animales; añade gallinas",
+    "building.upgrades.coop.1": "hasta 8 animales; añade dinosaurios, patos y agrega una incubadora",
+    "building.upgrades.coop.2": "hasta 12 animales; añade conejos y automatiza los comederos",
+    "building.water-trough.summary": "{{filled}} de {{max}} abrevaderos llenos",
 
-    "building.fish-pond.population.empty": "Add a fish to start this pond",
-    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
-    "building.fish-pond.quests.done": "{{count}} fish",
-    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
-    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
-    "building.fish-pond.quests.available": "available {{relativeDate}}",
 
-    // bush lookup labels
-    // TODO
-    "bush.name.berry": "Berry Bush",
-    "bush.name.plain": "Plain Bush",
-    "bush.name.tea": "Tea Bush",
-    "bush.description.berry": "A bush that grows salmonberries and blackberries.",
-    "bush.description.plain": "A plain bush that doesn't grow anything.",
-    "bush.description.Tea": "A bush that grows tea leaves.",
-    "bush.date-planted": "Date planted",
-    "bush.growth": "Growth",
-    "bush.next-harvest": "Next harvest",
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Población",
+    "building.fish-pond.drops": "Artículos",
+    "building.fish-pond.quests": "Misiones",
 
-    // bush lookup values
-    // TODO
-    "bush.growth.summary": "Madura en {{date}}",
-    "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
-    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
+    // values
+    "building.fish-pond.population.empty": "Añade un pescado para iniciar el criadero",
+    "building.fish-pond.population.next-spawn": "Un nuevo pez ha desovado {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
+    "building.fish-pond.quests.done": "{{count}} pescados",
+    "building.fish-pond.quests.incomplete-one": "{{count}} pescados: necesitaran {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} pescados: necesitan uno de {{itemList}}",
+    "building.fish-pond.quests.available": "disponible {{relativeDate}}",
 
-    // fruit tree lookup labels
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Arbusto de moras",
+    "bush.name.plain": "Arbusto simple",
+    "bush.name.tea": "Arbusto de té",
+    "bush.description.berry": "Un arbusto que da moras rojas y negras.",
+    "bush.description.plain": "Un arbusto simple.",
+    "bush.description.Tea": "Un arbusto que da hojas de té.",
+    "bush.date-planted": "Fecha de plantada",
+    "bush.growth": "Crecimiento",
+    "bush.next-harvest": "Proxima cosecha",
+
+    // values
+    "bush.growth.summary": "Madura al {{date}}",
+    "bush.schedule.berry": "20% de chance de dar moras rojas en primavera 15-18 ó moras negras en otoño 8-11.",
+    "bush.schedule.tea": "Da hojas de té desde el 22 de cada temporada (excepto en invierno si no está dentro del invernadero.)",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
     "fruit-tree.complaints": "Quejas",
     "fruit-tree.name": "Árbol de {{fruitName}}",
     "fruit-tree.growth": "Crecimiento",
@@ -255,7 +295,7 @@
     "fruit-tree.season": "Temporada",
     "fruit-tree.quality": "Calidad",
 
-    // fruit tree lookup values
+    // values
     "fruit-tree.complaints.adjacent-objects": "No puede crecer porque hay objetos a su alrededor",
     "fruit-tree.growth.summary": "Madura en {{date}}",
     "fruit-tree.next-fruit.struck-by-lighting": "¡Alcanzado por un rayo! Se recuperará en {{count}} días.",
@@ -267,11 +307,15 @@
     "fruit-tree.quality.on-date-next-year": "{{quality}} en {{date}} del año que viene",
     "fruit-tree.season.summary": "{{season}} (o en cualquier momento en el invernadero)",
 
-    // crop lookup labels
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
     "crop.summary": "Cultivo",
     "crop.harvest": "Cosecha",
 
-    // crop lookup values
+    // values
     "crop.summary.dead": "Esta cosecha está muerta.",
     "crop.summary.drops-X": "Suelta {{count}}",
     "crop.summary.drops-X-to-Y": "Suelta de {{min}} a {{max}} ({{percent}}% de probabilidad de cultivos extra)",
@@ -281,73 +325,124 @@
     "crop.summary.sells-for": "Se vende por {{price}}",
     "crop.harvest.too-late": "Demasiado tarde para cosecharlo esta temporada (sería en {{date}})",
 
-    // item lookup labels
-    "item.can-be-dyed": "Can be dyed", // TODO
-    "item.produces-dye": "Produces dye", // TODO
 
-    "item.cask-contents": "Contiene",
-    "item.cask-schedule": "Envejecimiento",
-
-    "item.crabpot-bait": "Cebo",
-    "item.crabpot-bait-needed": "¡Necesita cebo!",
-    "item.crabpot-bait-not-needed": "No es necesario debido a la profesión de As del señuelo.",
-
-    "item.fence-health": "Salud",
-
-    "item.movie-snack-preference": "Preference", // TODO
-    "item.movie-ticket.movie-this-week": "Movie this week", // TODO
-    "item.movie-ticket.loves-movie": "Loves movie", // TODO
-    "item.movie-ticket.likes-movie": "Likes movie", // TODO
-    "item.movie-ticket.dislikes-movie": "Dislikes movie", // TODO
-
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
     "item.contents": "Contiene",
     "item.loves-this": "Lo ama",
     "item.likes-this": "Le gusta a",
-    "item.neutral-about-this": "Neutral about this", // TODO
-    "item.dislikes-this": "Dislikes this", // TODO
-    "item.hates-this": "Hates this", // TODO
+    "item.neutral-about-this": "Neutrales",
+    "item.dislikes-this": "No le gusta a",
+    "item.hates-this": "Odian esto",
     "item.needed-for": "Necesario para",
     "item.number-owned": "Tienes",
-    "item.number-cooked": "Cooked", // TODO
-    "item.number-crafted": "Crafted", // TODO
+    "item.number-cooked": "Cocinado",
+    "item.number-crafted": "Creado",
     "item.recipes": "Recetas",
     "item.see-also": "Ver también",
     "item.sells-for": "Se vende por",
     "item.sells-to": "Se vende a",
+    "item.can-be-dyed": "Puede ser teñido",
+    "item.produces-dye": "Produce  tinte",
 
-    // item lookup values
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    // values
+    "item.contents.placed": "{{name}}",
+    "item.contents.ready": "{{name}} listo",
+    "item.contents.partial": "{{name}} en {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} aldeanos sin revelar",
+    "item.undiscovered-gift-taste-appended": ", y {{count}} aldeanos sin revelar",
+    "item.needed-for.community-center": "Centro comunitario ({{bundles}})",
+    "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
+    "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
+    "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
+    "item.needed-for.gourmet-chef": "Logro de ''gourmet chef'' (cocina {{recipes}})",
+    "item.needed-for.craft-master": "Logro de ''craft master'' (crea {{recipes}})",
+    "item.sells-to.shipping-box": "Caja de envío",
+    "item.recipes-for-ingredient.entry": "{{name}} (necesita {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
+    "item.number-owned.summary": "{{count}} ud(s)",
+    "item.number-crafted.summary": "creaste {{count}} de estos",
 
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Contiene",
+    "item.cask-schedule": "Envejecimiento",
+
+    // values
     "item.cask-schedule.now": "{{quality}} listo ahora",
     "item.cask-schedule.now-partial": "{{quality}} ahora (usar pico para detener envejecimiento)",
     "item.cask-schedule.tomorrow": "{{quality}} mañana",
     "item.cask-schedule.in-x-days": "{{quality}} en {{count}} días ({{date}})",
 
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Cebo",
+    "item.crabpot-bait-needed": "¡Necesita cebo!",
+    "item.crabpot-bait-not-needed": "No es necesario debido a la profesión de As del señuelo.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Salud",
+
+    // values
     "item.fence-health.gold-clock": "Sin decaidas del reloj de oro",
     "item.fence-health.summary": "{{percent}}% (dificilmente {{count}} días)",
 
-    "item.movie-snack-preference.love": "{{name}} loves this", // TODO
-    "item.movie-snack-preference.like": "{{name}} likes this", // TODO
-    "item.movie-snack-preference.dislike": "{{name}} dislikes this", // TODO
-    "item.movie-ticket.movie-this-week.none": "No movie this week", // TODO
 
-    "item.contents.placed": "{{name}}",
-    "item.contents.ready": "{{name}} listo",
-    "item.contents.partial": "{{name}} en {{time}}",
-    "item.needed-for.community-center": "Centro comunitario ({{bundles}})",
-    "item.needed-for.full-shipment": "Logro de ''full shipment'' (enviar uno)",
-    "item.needed-for.polyculture": "Logro de ''polyculture'' (enviar {{count}} más)",
-    "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
-    "item.needed-for.gourmet-chef": "gourmet chef achievement (cook {{recipes}})", // TODO
-    "item.needed-for.craft-master": "craft master achievement (make {{recipes}})", // TODO
-    "item.sells-to.shipping-box": "Caja de envío",
-    "item.recipes-for-ingredient.entry": "{{name}} (necesita {{count}})",
-    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}", // TODO
-    "item.number-owned.summary": "{{count}} ud(s)",
-    "item.number-crafted.summary": "you made {{count}} of these", // TODO
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    // TODO
+    "item.fish-pond-drops": "Fish pond drops",
+    "item.fish-spawn-rules": "Spawn rules",
 
-    // monster lookup labels
+    // values
+    // TODO
+    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
+    "item.fish-spawn-rules.locations": "locations: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "any season",
+    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
+    "item.fish-spawn-rules.time": "time of day: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
+    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Preferencia",
+    "item.movie-ticket.movie-this-week": "Película de esta semana",
+    "item.movie-ticket.loves-movie": "Ama la película",
+    "item.movie-ticket.likes-movie": "Le gusta la película",
+    "item.movie-ticket.dislikes-movie": "No le gusta la película",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} ama esto",
+    "item.movie-snack-preference.like": "a {{name}} le gusta esto",
+    "item.movie-snack-preference.dislike": "{{name}} odia esto",
+    "item.movie-ticket.movie-this-week.none": "No hay película esta semana",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
     "monster.invincible": "Invencible",
     "monster.health": "Salud",
     "monster.drops": "Botín",
@@ -356,40 +451,48 @@
     "monster.attack": "Ataque",
     "monster.adventure-guild": "Gremio de aventureros",
 
-    // monster lookup values
+    // values
     "monster.drops.nothing": "Nada",
     "monster.adventure-guild.complete": "Completo",
     "monster.adventure-guild.incomplete": "En progreso",
     "monster.adventure-guild.progress": "Eliminados {{count}} de {{requiredCount}}",
 
-    // NPC lookup labels
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
     "npc.birthday": "Cumpleaños",
     "npc.can-romance": "Se puede casar",
     "npc.friendship": "Relación",
     "npc.talked-today": "Hemos hablado hoy",
     "npc.gifted-today": "Le he regalado hoy",
     "npc.gifted-this-week": "Regalos semanales",
-    "npc.kissed-today": "Kissed today", // TODO
-    "npc.hugged-today": "Hugged today", // TODO
+    "npc.kissed-today": "Besado hoy",
+    "npc.hugged-today": "Abrazado hoy",
     "npc.loves-gifts": "Ama",
     "npc.likes-gifts": "Le gusta",
-    "npc.neutral-gifts": "Neutral gifts", // TODO
-    "npc.dislikes-gifts": "Dislikes gifts", // TODO
-    "npc.hates-gifts": "Hates gifts", // TODO
+    "npc.neutral-gifts": "Regalos neutrales",
+    "npc.dislikes-gifts": "Regalos que no le gustaron",
+    "npc.hates-gifts": "Regalos odiados",
 
-    // NPC lookup values
+    // values
     "npc.can-romance.married": "¡Estás casado! <", // < turns into a heart
-    "npc.can-romance.housemate": "You're housemates!", // TODO
+    "npc.can-romance.housemate": "Son compañeros de casa!",
     "npc.friendship.not-met": "No lo has conocido todavía.",
     "npc.friendship.need-bouquet": "Necesitas un ramo de flores para lo siguiente",
     "npc.friendship.need-points": "siguiente en {{count}} puntos",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste": "{{count}} items sin revelar",
+    "npc.undiscovered-gift-taste-appended": ", y {{count}} items sin revelar",
 
-    // NPC child lookup labels
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
     "npc.child.age": "Edad",
 
-    // NPC child lookup values
+    // values
     "npc.child.age.description-partial": "{{label}} ({{count}} días para {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "Recién nacido",
@@ -397,45 +500,56 @@
     "npc.child.age.crawler": "Bebé que gatea",
     "npc.child.age.toddler": "Niño pequeño",
 
-    // pet lookup labels
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
     "pet.love": "Aprecio",
     "pet.petted-today": "Acariciado hoy",
-    "pet.last-petted": "Last petted", // TODO
-    "pet.water-bowl": "Water bowl", // TODO
+    "pet.last-petted": "Última vez acariciado",
+    "pet.water-bowl": "Tazón de agua",
 
-    // pet lookup values
-    // TODO
-    "pet.last-petted.yes": "yes (+12 love)",
-    "pet.last-petted.days-ago": "{{days}} days ago",
-    "pet.last-petted.never": "never",
-    "pet.water-bowl.empty": "Empty",
-    "pet.water-bowl.filled": "Filled (+6 love)",
+    // values
+    "pet.last-petted.yes": "Sí (+12 amor)",
+    "pet.last-petted.days-ago": "{{days}} días atras",
+    "pet.last-petted.never": "Nunca",
+    "pet.water-bowl.empty": "Vacio",
+    "pet.water-bowl.filled": "Lleno (+6 amor)",
 
-    // player lookup labels
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
     "player.farm-name": "Nombre de la granja",
-    "player.farm-map": "Farm map", // TODO
+    "player.farm-map": "Mapa",
     "player.favorite-thing": "Cosa favorita",
     "player.gender": "Género",
-    "player.housemate": "Housemate", // TODO
-    "player.spouse": "Esposa",
-    "player.watched-movie-this-week": "Watched movie this week", // TODO
+    "player.housemate": "Compañero/a",
+    "player.spouse": "Esposo/a",
+    "player.watched-movie-this-week": "Has mirado una película esta semana",
     "player.combat-skill": "Combate",
     "player.farming-skill": "Agricultura",
     "player.fishing-skill": "Pesca",
     "player.foraging-skill": "Recolección",
     "player.mining-skill": "Minería",
     "player.luck": "Suerte",
-    "player.save-format": "Save format", // TODO
+    "player.save-format": "Formato de guardado",
 
-    // player lookup values
-    "player.farm-map.custom": "Custom", // TODO
+    // values
+    "player.farm-map.custom": "Mapa personalizado",
     "player.gender.male": "Hombre",
     "player.gender.female": "Mujer",
     "player.luck.summary": "{{percent}}% para varias comprobaciones aleatorias",
     "player.skill.progress": "Nivel {{level}} ({{expNeeded}} de EXP para el siguiente nivel)",
     "player.skill.progress-last": "Nivel {{level}}",
 
-    // tile lookup labels
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
     // note from translator: better not to translate the technical terms
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
     "tile.map-name": "Nombre del mapa",
@@ -446,20 +560,28 @@
     "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
     "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
 
-    // tile lookup values
+    // values
     "tile.tile.none-here": "Sin título aquí",
 
-    // trash bear lookup labels
-    "trash-bear.item-wanted": "Item wanted", // TODO
-    "trash-bear.quest-progress": "Quest progress", // TODO
 
-    // tree lookup labels
+    /*********
+    ** Trash bear lookups
+    *********/
+    // labels
+    "trash-bear.item-wanted": "Artículo deseado",
+    "trash-bear.quest-progress": "Progreso de la búsqueda",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
     "tree.stage": "Etapa de crecimiento",
     "tree.next-growth": "Evolución",
     "tree.has-seed": "Tiene semilla",
-    "tree.is-fertilized": "Is fertilized", // TODO
+    "tree.is-fertilized": "ha sido fertilizado",
 
-    // non-fruit tree lookup values
+    // values
     "tree.name.maple": "Arce",
     "tree.name.oak": "Roble",
     "tree.name.pine": "Pino",
@@ -471,9 +593,9 @@
     "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros árboles estan muy cerca",
     "tree.next-growth.random": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
-    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
+    "tree.is-fertilized.effects": "asegura el crecimiento diario, incluso en invierno",
 
-    // tree stages
+    // growth stages
     "tree.stages.seed": "Semilla",
     "tree.stages.sprout": "Brote",
     "tree.stages.sapling": "Plántula",

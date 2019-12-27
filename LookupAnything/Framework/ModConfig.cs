@@ -12,8 +12,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
         public int ScrollAmount { get; set; } = 160;
 
-        /// <summary>Hide content until the player has discovered it in-game (where applicable).</summary>
+        /// <summary>Whether to hide content until the player has discovered it in-game (where applicable).</summary>
         public bool ProgressionMode { get; set; } = false;
+
+        /// <summary>>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        public bool HighlightUnrevealedGiftTastes { get; set; } = false;
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }

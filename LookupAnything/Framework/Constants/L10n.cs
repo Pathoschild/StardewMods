@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
@@ -70,7 +71,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>{{min}} to {{max}}</c>.</summary>
             /// <param name="min">The minimum value.</param>
             /// <param name="max">The maximum value.</param>
-            public static Translation Range(int min, int max) => L10n.Helper.Get("generic.range", new { min, max });
+            public static Translation Range(int min, int max) => L10n.Generic.Range(min.ToString(), max.ToString());
+
+            /// <summary>A value like <c>{{min}} to {{max}}</c>.</summary>
+            /// <param name="min">The minimum value.</param>
+            /// <param name="max">The maximum value.</param>
+            public static Translation Range(string min, string max) => L10n.Helper.Get("generic.range", new { min, max });
 
             /// <summary>A value like <c>yes</c>.</summary>
             public static Translation Yes() => L10n.Helper.Get("generic.yes");
@@ -170,6 +176,27 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>Crafting</c>.</summary>
             public static Translation Crafting() => L10n.Helper.Get("recipe-type.crafting");
+        }
+
+        public static class LocationOverrides
+        {
+            /// <summary>The translated name for a location, or the internal name if no translation is available.</summary>
+            public static Translation LocationName(string locationName) => L10n.Helper.Get($"location.{locationName}").Default(locationName);
+
+            /// <summary>The translated name for a fishing area.</summary>
+            public static Translation AreaName(string locationName, string id)
+            {
+                Translation areaTranslation;
+                if (string.Equals(locationName, "UndergroundMine", StringComparison.InvariantCultureIgnoreCase))
+                    areaTranslation = L10n.Helper.Get("location.undergroundMine.level", new { level = id });
+                else if (int.TryParse(id, out int _))
+                    areaTranslation = L10n.Helper.Get($"location.{locationName}.fish-area-{id}");
+                else
+                    areaTranslation = L10n.Helper.Get($"location.{locationName}.{id}");
+
+                return areaTranslation
+                    .Default(L10n.Helper.Get("location.unknown-fish-area", new { locationName = L10n.LocationOverrides.LocationName(locationName), id }));
+            }
         }
 
         /// <summary>Animal lookup translations.</summary>
@@ -354,7 +381,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation FishPondQuestsAvailable(string relativeDate) => L10n.Helper.Get("building.fish-pond.quests.available", new { relativeDate });
 
             /// <summary>A value like <c>{{chance}}% chance each day of producing one of these:</c>.</summary>
-            public static Translation FishPondDropsPreface(int chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
+            public static Translation FishPondDropsPreface(string chance) => L10n.Helper.Get("building.fish-pond.drops.preface", new { chance });
+
+            /// <summary>A value like <c>With {{count}} fish:</c>.</summary>
+            public static Translation FishPondDropsMinFish(int count) => L10n.Helper.Get("building.fish-pond.drops.min-fish", new { count });
         }
 
         /// <summary>Bush lookup translations.</summary>
@@ -555,6 +585,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             /// <summary>A value like <c>Health</c>.</summary>
             public static Translation FenceHealth() => L10n.Helper.Get("item.fence-health");
 
+            /// <summary>A value like <c>Fish pond drops</c>.</summary>
+            public static Translation FishPondDrops() => L10n.Helper.Get("item.fish-pond-drops");
+
+            /// <summary>A value like <c>Spawn rules</c>.</summary>
+            public static Translation FishSpawnRules() => L10n.Helper.Get("item.fish-spawn-rules");
+
             /// <summary>A value like <c>Recipes</c>.</summary>
             public static Translation Recipes() => L10n.Helper.Get("item.recipes");
 
@@ -626,6 +662,36 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>{{percent}}% (roughly {{count}} days left)</c>.</summary>
             public static Translation FenceHealthSummary(int percent, int count) => L10n.Helper.Get("item.fence-health.summary", new { percent, count });
+
+            /// <summary>A value like <c>min fishing level: {{level}}</c>.</summary>
+            public static Translation FishSpawnRulesMinFishingLevel(int level) => L10n.Helper.Get("item.fish-spawn-rules.min-fishing-level", new { level });
+
+            /// <summary>A value like <c>not caught yet (can only be caught once)</c>.</summary>
+            public static Translation FishSpawnRulesNotCaughtYet() => L10n.Helper.Get("item.fish-spawn-rules.not-caught-yet");
+
+            /// <summary>A value like <c>locations: {{locations}}</c>.</summary>
+            public static Translation FishSpawnRulesLocations(string locations) => L10n.Helper.Get("item.fish-spawn-rules.locations", new { locations });
+
+            /// <summary>A value like <c>locations:</c>.</summary>
+            public static Translation FishSpawnRulesLocationsBySeasonLabel() => L10n.Helper.Get("item.fish-spawn-rules.locations-by-season.label");
+
+            /// <summary>A value like <c>{{season}}: {{locations}}</c>.</summary>
+            public static Translation FishSpawnRulesLocationsBySeasonSeasonLocations(string season, params string[] locations) => L10n.Helper.Get("item.fish-spawn-rules.locations-by-season.season-locations", new { season, locations = string.Join(", ", locations) });
+
+            /// <summary>A value like <c>any season</c>.</summary>
+            public static Translation FishSpawnRulesSeasonAny() => L10n.Helper.Get("item.fish-spawn-rules.season-any");
+
+            /// <summary>A value like <c>seasons: {{seasons}}</c>.</summary>
+            public static Translation FishSpawnRulesSeasonList(params string[] seasons) => L10n.Helper.Get("item.fish-spawn-rules.season-list", new { seasons = string.Join(", ", seasons) });
+
+            /// <summary>A value like <c>time of day: {{times}}</c>.</summary>
+            public static Translation FishSpawnRulesTime(params string[] times) => L10n.Helper.Get("item.fish-spawn-rules.time", new { times = string.Join(", ", times) });
+
+            /// <summary>A value like <c>weather: sunny</c>.</summary>
+            public static Translation FishSpawnRulesWeatherSunny() => L10n.Helper.Get("item.fish-spawn-rules.weather-sunny");
+
+            /// <summary>A value like <c>weather: raining</c>.</summary>
+            public static Translation FishSpawnRulesWeatherRaining() => L10n.Helper.Get("item.fish-spawn-rules.weather-rainy");
 
             /// <summary>A value like <c>{{name}} (needs {{count}})</c>.</summary>
             public static Translation RecipesForIngredientEntry(string name, int count) => L10n.Helper.Get("item.recipes-for-ingredient.entry", new { name, count });

@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 {
@@ -54,9 +56,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         public override ITrackedStack GetOutput()
         {
             // get trash
-            int? itemID = this.GetRandomTrash(this.TrashCanIndex);
-            if (itemID.HasValue)
-                return new TrackedItem(new StardewValley.Object(itemID.Value, 1), onEmpty: this.MarkChecked);
+            Item item = this.GetRandomTrash(this.TrashCanIndex);
+            if (item != null)
+                return new TrackedItem(item, onEmpty: this.MarkChecked);
 
             // if nothing is returned, mark trash can checked
             this.MarkChecked(null);
@@ -80,68 +82,90 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         private void MarkChecked(Item item)
         {
             this.TrashCansChecked[this.TrashCanIndex] = true;
+            Game1.stats.incrementStat("trashCansChecked", 1);
         }
 
         /// <summary>Get a random trash item ID.</summary>
         /// <param name="index">The trash can index.</param>
-        /// <remarks>Duplicated from <see cref="Town.checkAction"/>.</remarks>
-        private int? GetRandomTrash(int index)
+        /// <remarks>Derived from <see cref="Town.checkAction"/>.</remarks>
+        private Item GetRandomTrash(int index)
         {
-            Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + 777 + index);
+            Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + 777 + index * 77);
             double dailyLuck = Game1.MasterPlayer.DailyLuck;
-            if (random.NextDouble() < 0.2 + dailyLuck)
+
+            // randomization noise
             {
-                int parentSheetIndex = 168;
+                for (int index2 = 0; index2 < random.Next(0, 100); ++index2)
+                    random.NextDouble();
+                for (int index2 = 0; index2 < random.Next(0, 100); ++index2)
+                    random.NextDouble();
+            }
+
+            // rare chance of garbage hat
+            if (Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.002)
+                return new Hat(66);
+
+            // normal loot
+            if ((Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.01) || random.NextDouble() < 0.2 + dailyLuck)
+            {
+                int itemID = 168;
                 switch (random.Next(10))
                 {
                     case 0:
-                        parentSheetIndex = 168;
+                        itemID = 168;
                         break;
                     case 1:
-                        parentSheetIndex = 167;
+                        itemID = 167;
                         break;
                     case 2:
-                        parentSheetIndex = 170;
+                        itemID = 170;
                         break;
                     case 3:
-                        parentSheetIndex = 171;
+                        itemID = 171;
                         break;
                     case 4:
-                        parentSheetIndex = 172;
+                        itemID = 172;
                         break;
                     case 5:
-                        parentSheetIndex = 216;
+                        itemID = 216;
                         break;
                     case 6:
-                        parentSheetIndex = Utility.getRandomItemFromSeason(Game1.currentSeason, ((int)this.Tile.X) * 653 + ((int)this.Tile.Y) * 777, false);
+                        itemID = Utility.getRandomItemFromSeason(Game1.currentSeason, ((int)this.Tile.X) * 653 + ((int)this.Tile.Y) * 777, false);
                         break;
                     case 7:
-                        parentSheetIndex = 403;
+                        itemID = 403;
                         break;
                     case 8:
-                        parentSheetIndex = 309 + random.Next(3);
+                        itemID = 309 + random.Next(3);
                         break;
                     case 9:
-                        parentSheetIndex = 153;
+                        itemID = 153;
                         break;
                 }
                 if (index == 3 && random.NextDouble() < 0.2 + dailyLuck)
                 {
-                    parentSheetIndex = 535;
+                    itemID = 535;
                     if (random.NextDouble() < 0.05)
-                        parentSheetIndex = 749;
+                        itemID = 749;
                 }
                 if (index == 4 && random.NextDouble() < 0.2 + dailyLuck)
                 {
-                    parentSheetIndex = 378 + random.Next(3) * 2;
+                    itemID = 378 + random.Next(3) * 2;
                     random.Next(1, 5);
                 }
                 if (index == 5 && random.NextDouble() < 0.2 + dailyLuck && Game1.dishOfTheDay != null)
-                    parentSheetIndex = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216;
+                    itemID = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216;
                 if (index == 6 && random.NextDouble() < 0.2 + dailyLuck)
-                    parentSheetIndex = 223;
+                    itemID = 223;
+                if (index == 7 && random.NextDouble() < 0.2)
+                {
+                    if (!Utility.HasAnyPlayerSeenEvent(191393))
+                        itemID = 167;
+                    if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater") && !Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja"))
+                        itemID = random.NextDouble() >= 0.25 ? 270 : 809;
+                }
 
-                return parentSheetIndex;
+                return new SObject(itemID, 1);
             }
 
             return null;

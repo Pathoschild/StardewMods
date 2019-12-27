@@ -38,6 +38,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
 
+        /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        private readonly bool HighlightUnrevealedGiftTastes;
+
         /// <summary>Whether the NPC is a haunted skull monster.</summary>
         private readonly bool IsHauntedSkull;
 
@@ -46,6 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
@@ -53,53 +57,46 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
+        /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
-            : base(gameHelper, translations)
+        public CharacterSubject(SubjectFactory codex, GameHelper gameHelper, NPC npc, TargetType type, Metadata metadata, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes)
+            : base(codex, gameHelper, translations)
         {
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
-
-            // get display type
-            string typeName;
-            if (type == TargetType.Villager)
-                typeName = L10n.Types.Villager();
-            else if (type == TargetType.Monster)
-                typeName = L10n.Types.Monster();
-            else
-                typeName = npc.GetType().Name;
+            this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
 
             // initialize
             this.Target = npc;
             this.TargetType = type;
             CharacterData overrides = metadata.GetCharacter(npc, type);
-            string name = npc.getName();
-            string description = overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null;
-            this.Initialize(name, description, typeName);
-
+            this.Initialize(
+                name: npc.getName(),
+                description: overrides?.DescriptionKey != null ? translations.Get(overrides.DescriptionKey) : null,
+                type: CharacterSubject.GetTypeName(npc, type)
+            );
             this.IsHauntedSkull = npc is Bat && this.Reflection.GetField<NetBool>(npc, "hauntedSkull").GetValue().Value;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             NPC npc = this.Target;
             switch (this.TargetType)
             {
                 case TargetType.Villager:
                     if (npc is Child child)
-                        return this.GetDataForChild(child, metadata);
+                        return this.GetDataForChild(child);
                     else if (npc is TrashBear trashBear)
                         return this.GetDataForTrashBear(trashBear);
                     else
-                        return this.GetDataForVillager(npc, metadata);
+                        return this.GetDataForVillager(npc);
 
                 case TargetType.Pet:
                     return this.GetDataForPet((Pet)npc);
 
                 case TargetType.Monster:
-                    return this.GetDataForMonster((Monster)npc, metadata);
+                    return this.GetDataForMonster((Monster)npc);
 
                 default:
                     return Enumerable.Empty<ICustomField>();
@@ -107,8 +104,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             NPC target = this.Target;
             Pet pet = target as Pet;
@@ -118,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericDebugField("walking towards player", this.Stringify(target.IsWalkingTowardPlayer), pinned: true);
             if (Game1.player.friendshipData.ContainsKey(target.Name))
             {
-                FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, target, Game1.player.friendshipData[target.Name], metadata);
+                FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, target, Game1.player.friendshipData[target.Name]);
                 yield return new GenericDebugField("friendship", $"{friendship.Points} (max {friendship.MaxPoints})", pinned: true);
             }
             if (pet != null)
@@ -167,9 +163,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ****/
         /// <summary>Get the fields to display for a child.</summary>
         /// <param name="child">The child for which to show info.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Derived from <see cref="Child.dayUpdate"/>.</remarks>
-        private IEnumerable<ICustomField> GetDataForChild(Child child, Metadata metadata)
+        private IEnumerable<ICustomField> GetDataForChild(Child child)
         {
             // birthday
             SDate birthday = SDate.Now().AddDays(-child.daysOld.Value);
@@ -193,7 +188,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // friendship
             if (Game1.player.friendshipData.ContainsKey(child.Name))
             {
-                FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, child, Game1.player.friendshipData[child.Name], metadata);
+                FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, child, Game1.player.friendshipData[child.Name]);
                 yield return new CharacterFriendshipField(this.GameHelper, L10n.Npc.Friendship(), friendship, this.Text);
                 yield return new GenericField(this.GameHelper, L10n.Npc.TalkedToday(), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
             }
@@ -201,9 +196,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get the fields to display for a monster.</summary>
         /// <param name="monster">The monster for which to show info.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Derived from <see cref="Monster.parseMonsterInfo"/>.</remarks>
-        private IEnumerable<ICustomField> GetDataForMonster(Monster monster, Metadata metadata)
+        private IEnumerable<ICustomField> GetDataForMonster(Monster monster)
         {
             // basic info
             bool canRerollDrops = Game1.player.isWearingRing(Ring.burglarsRing);
@@ -216,7 +210,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new GenericField(this.GameHelper, L10n.Monster.Attack(), this.Stringify(monster.DamageToFarmer));
 
             // Adventure Guild quest
-            AdventureGuildQuestData adventureGuildQuest = metadata.GetAdventurerGuildQuest(monster.Name);
+            AdventureGuildQuestData adventureGuildQuest = this.Metadata.GetAdventurerGuildQuest(monster.Name);
             if (adventureGuildQuest != null)
             {
                 int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
@@ -280,10 +274,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
         /// <summary>Get the fields to display for a villager NPC.</summary>
         /// <param name="npc">The NPC for which to show info.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IEnumerable<ICustomField> GetDataForVillager(NPC npc, Metadata metadata)
+        private IEnumerable<ICustomField> GetDataForVillager(NPC npc)
         {
-            if (!metadata.Constants.AsocialVillagers.Contains(npc.Name))
+            if (!this.Constants.AsocialVillagers.Contains(npc.Name))
             {
                 // birthday
                 if (npc.Birthday_Season != null)
@@ -296,7 +289,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (Game1.player.friendshipData.ContainsKey(npc.Name))
                 {
                     // friendship/romance
-                    FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name], metadata);
+                    FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name]);
                     yield return new GenericField(this.GameHelper, L10n.Npc.CanRomance(), friendship.IsSpouse ? L10n.Npc.CanRomanceMarried() : friendship.IsHousemate ? L10n.Npc.CanRomanceHousemate() : this.Stringify(friendship.CanDate));
                     yield return new CharacterFriendshipField(this.GameHelper, L10n.Npc.Friendship(), friendship, this.Text);
 
@@ -316,27 +309,61 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     yield return new GenericField(this.GameHelper, L10n.Npc.Friendship(), L10n.Npc.FriendshipNotMet());
 
                 // gift tastes
-                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc, metadata);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode);
-                yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode);
-                if (this.ProgressionMode)
+                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc);
+                yield return this.GetGiftTasteField(L10n.Npc.LovesGifts(), giftTastes, GiftTaste.Love);
+                yield return this.GetGiftTasteField(L10n.Npc.LikesGifts(), giftTastes, GiftTaste.Like);
+                yield return this.GetGiftTasteField(L10n.Npc.NeutralGifts(), giftTastes, GiftTaste.Neutral);
+                if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
                 {
-                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.DislikesGifts(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode);
-                    yield return new CharacterGiftTastesField(this.GameHelper, L10n.Npc.HatesGifts(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode);
+                    yield return this.GetGiftTasteField(L10n.Npc.DislikesGifts(), giftTastes, GiftTaste.Dislike);
+                    yield return this.GetGiftTasteField(L10n.Npc.HatesGifts(), giftTastes, GiftTaste.Hate);
                 }
             }
+        }
+
+        /// <summary>Get a list of gift tastes for an NPC.</summary>
+        /// <param name="label">The field label.</param>
+        /// <param name="giftTastes">The gift taste data.</param>
+        /// <param name="taste">The gift taste to display.</param>
+        private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste taste)
+        {
+            return new CharacterGiftTastesField(this.GameHelper, label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
         }
 
         /*****
         ** Other
         ****/
+        /// <summary>Get the display type for a character.</summary>
+        /// <param name="npc">The lookup target.</param>
+        /// <param name="type">The NPC type.</param>
+        private static string GetTypeName(Character npc, TargetType type)
+        {
+            switch (type)
+            {
+                case TargetType.Villager:
+                    return L10n.Types.Villager();
+
+                case TargetType.Monster:
+                    return L10n.Types.Monster();
+
+                case TargetType.Pet:
+                    {
+                        string typeName = Game1.content.LoadString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
+                        if (typeName?.Length > 1)
+                            typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
+                        return typeName;
+                    }
+
+                default:
+                    return npc.GetType().Name;
+            }
+        }
+
         /// <summary>Get how much an NPC likes receiving each item as a gift.</summary>
         /// <param name="npc">The NPC.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(NPC npc, Metadata metadata)
+        private IDictionary<GiftTaste, GiftTasteModel[]> GetGiftTastes(NPC npc)
         {
-            return this.GameHelper.GetGiftTastes(npc, metadata)
+            return this.GameHelper.GetGiftTastes(npc)
                 .GroupBy(entry => entry.Taste)
                 .ToDictionary(
                     tasteGroup => tasteGroup.Key,

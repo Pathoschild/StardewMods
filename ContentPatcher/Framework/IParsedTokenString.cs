@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework
         bool IsSingleTokenOnly { get; }
 
         /// <summary>The lexical tokens parsed from the raw string.</summary>
-        ILexToken[] LexTokens { get; }
+        IEnumerable<ILexToken> LexTokens { get; }
 
         
         /*********

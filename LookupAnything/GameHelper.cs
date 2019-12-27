@@ -9,12 +9,15 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -44,26 +47,54 @@ namespace Pathoschild.Stardew.LookupAnything
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        public Metadata Metadata { get; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux)
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, Metadata metadata)
         {
             this.DataParser = new DataParser(this);
             this.CustomFarmingRedux = customFarmingRedux;
+            this.Metadata = metadata;
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public void ResetCache(Metadata metadata, IReflectionHelper reflectionHelper, ITranslationHelper translations, IMonitor monitor)
+        public void ResetCache(IReflectionHelper reflectionHelper, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(metadata, reflectionHelper, monitor).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(this.Metadata, reflectionHelper, monitor).ToArray());
+        }
+
+        /****
+        ** Text helpers
+        ****/
+        /// <summary>Format a game time in military 24-hour notation.</summary>
+        /// <param name="time">The time to format.</param>
+        public string FormatMilitaryTime(int time)
+        {
+            time %= 2400;
+            return $"{time / 100:00}:{time % 100:00}";
+        }
+
+        /// <summary>Get a translated season name for the current language.</summary>
+        /// <param name="season">The English season name.</param>
+        public string TranslateSeason(string season)
+        {
+            int number = Utility.getSeasonNumber(season);
+            return number != -1
+                ? Utility.getSeasonNameFromNumber(number)
+                : season;
         }
 
         /****
@@ -90,7 +121,7 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get all items owned by the player.</summary>
-        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>.</remarks>
+        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>, with extra logic for hay.</remarks>
         public IEnumerable<Item> GetAllOwnedItems()
         {
             List<Item> items = new List<Item>();
@@ -171,6 +202,16 @@ namespace Pathoschild.Stardew.LookupAnything
                     items.AddRange(house.fridge.Value.items);
             }
 
+            // hay in silos
+            int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
+            while (hayCount > 0)
+            {
+                SObject hay = new SObject(178, 1);
+                hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
+                hayCount -= hay.Stack;
+                items.Add(hay);
+            }
+
             return items.Where(p => p != null);
         }
 
@@ -220,23 +261,21 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public bool IsSocialVillager(NPC npc, Metadata metadata)
+        public bool IsSocialVillager(NPC npc)
         {
-            return npc.isVillager() && !metadata.Constants.AsocialVillagers.Contains(npc.Name);
+            return npc.isVillager() && !this.Metadata.Constants.AsocialVillagers.Contains(npc.Name);
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item)
         {
             if (!item.canBeGivenAsGift())
                 yield break;
 
             foreach (NPC npc in this.GetAllCharacters())
             {
-                if (!this.IsSocialVillager(npc, metadata))
+                if (!this.IsSocialVillager(npc))
                     continue;
 
                 GiftTaste? taste = this.GetGiftTaste(npc, item);
@@ -247,10 +286,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc, Metadata metadata)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc)
         {
-            if (!this.IsSocialVillager(npc, metadata))
+            if (!this.IsSocialVillager(npc))
                 return new GiftTasteModel[0];
 
             // get giftable items
@@ -273,12 +311,11 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get how much each NPC likes watching this week's movie.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes(Metadata metadata)
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes()
         {
             foreach (NPC npc in this.GetAllCharacters())
             {
-                if (!this.IsSocialVillager(npc, metadata))
+                if (!this.IsSocialVillager(npc))
                     continue;
 
                 GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
@@ -286,14 +323,35 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            return this.DataParser.GetFishPondPopulationGates(data);
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            return this.DataParser.GetFishPondDrops(data);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID)
+        {
+            return this.DataParser.GetFishSpawnRules(fishID, this.Metadata);
+        }
+
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="friendship">The current friendship data.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship, Metadata metadata)
+        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship)
         {
-            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, metadata);
+            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, this.Metadata);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
@@ -307,10 +365,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="animal">The farm animal.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal)
         {
-            return this.DataParser.GetFriendshipForAnimal(player, animal, metadata);
+            return this.DataParser.GetFriendshipForAnimal(player, animal, this.Metadata);
         }
 
         /// <summary>Parse monster data.</summary>
@@ -329,6 +386,41 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipes()
         {
             return this.Recipes.Value;
+        }
+
+        /// <summary>Get all tailoring recipes which take an item as input.</summary>
+        /// <param name="input">The input item.</param>
+        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
+        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
+        {
+            HashSet<int> seenRecipes = new HashSet<int>();
+
+            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
+            {
+                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
+                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
+                    : new[] { recipe.CraftedItemID };
+
+                foreach (int outputId in outputItemIds)
+                {
+                    if (outputId < 0 || !seenRecipes.Add(outputId))
+                        continue;
+
+                    yield return new RecipeModel(
+                        key: null,
+                        type: RecipeType.TailorInput,
+                        displayType: "Tailoring",
+                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
+                        item: input => new Clothing(outputId),
+                        mustBeLearned: false,
+                        outputItemIndex: recipe.CraftedItemID,
+                        isForMachine: _ => false
+                    );
+                }
+            }
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
@@ -351,16 +443,8 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // from tailor recipes
-            List<TailorItemRecipe> tailorRecipes = Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes");
-            foreach (TailorItemRecipe recipe in tailorRecipes)
-            {
-                if (recipe.FirstItemTags?.All(item.HasContextTag) == false && recipe.SecondItemTags?.All(item.HasContextTag) == false)
-                    continue; // needs all tags for one of the recipe slots
-
-                RecipeIngredientModel ingredient = new RecipeIngredientModel(item.ParentSheetIndex, 1);
-                Item Output(Item input) => new Clothing(recipe.CraftedItemID);
-                yield return new RecipeModel(null, RecipeType.TailorInput, "Tailoring", new[] { ingredient }, Output, mustBeLearned: false, outputItemIndex: recipe.CraftedItemID, isForMachine: _ => false);
-            }
+            foreach (var recipe in this.GetTailorRecipes(item))
+                yield return recipe;
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -528,7 +612,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 switch (clothing.clothesType.Value)
                 {
                     case (int)Clothing.ClothesType.SHIRT:
-                        return new SpriteInfo(FarmerRenderer.shirtsTexture, new Rectangle(clothing.indexInTileSheetMale.Value * 8 % 128, clothing.indexInTileSheetMale.Value * 8 / 128 * 32, 8, 8));
+                        return new ShirtSpriteInfo(clothing);
 
                     case (int)Clothing.ClothesType.PANTS:
                         return new SpriteInfo(FarmerRenderer.pantsTexture, new Rectangle(192 * (clothing.indexInTileSheetMale.Value % (FarmerRenderer.pantsTexture.Width / 192)), 688 * (clothing.indexInTileSheetMale.Value / (FarmerRenderer.pantsTexture.Width / 192)) + 672, 16, 16));

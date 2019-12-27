@@ -1,9 +1,6 @@
 **Tractor Mod** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you buy a tractor
 (and tractor garage) to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc.
 
-Compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, for single-player and multiplayer. See
-[_compatibility_](#compatibility) for details.
-
 ## Contents
 * [Install](#install)
 * [Use](#use)
@@ -115,8 +112,15 @@ Default 20 iron bars, 5 iridium bars, and 5 battery packs.
 </td>
 <td>
 
-The number of tiles on each side of the tractor to affect (in addition to the tile under it).
+The number of tiles in each direction around the tractor to affect (in addition to the tile under
+it):
+> ![](screenshots/distance.png)
+
 Default 1, which is a 3 by 3 grid.
+
+**Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
+screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
+recommended to avoid lag.
 
 </td>
 </tr>
@@ -468,7 +472,7 @@ For a seasonal texture, just prefix the name with the season (like `spring_tract
 will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
 
 ## Compatibility
-Tractor Mod is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Tractor Mod is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 In multiplayer mode it must be installed by the host player, plus any farmhands who

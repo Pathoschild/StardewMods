@@ -3,7 +3,7 @@ using System.Linq;
 namespace ContentPatcher.Framework.Lexing.LexTokens
 {
     /// <summary>A lexical token representing the input argument for a Content Patcher token.</summary>
-    internal readonly struct LexTokenInputArg : ILexToken
+    internal class LexTokenInputArg : ILexToken
     {
         /*********
         ** Accessors
