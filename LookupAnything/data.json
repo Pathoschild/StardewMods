@@ -644,15 +644,17 @@ You shouldn't change this file unless you know what you're doing.
     ** Added fish spawn rules
     *********/
     /*
-       Submarine rules are from StardewValley.Locations.Submarine::getFish.
+       Implementation notes:
+         - Submarine rules are from StardewValley.Locations.Submarine::getFish.
+         - UndergroundMine rules are from StardewValley.Locations.MineShaft::getFish and
+           getMineArea. The mine fishing areas cover multiple floors where water never appears, so
+           the 'area' field for mines specify the actual level where water can appear (i.e. 20, 60,
+           and 100), rather than the internal area ID used by getMineArea.
+         - Legendary fish rules are from the getFish implementations of each location.
 
-       UndergroundMine rules are from StardewValley.Locations.MineShaft::getFish and getMineArea.
-       The mine fishing areas cover multiple floors where water never appears, so the 'area' field
-       for mines specify the actual level where water can appear (i.e. 20, 60, and 100), rather
-       than the internal area ID used by getMineArea.
+        Numeric area IDs are for the vanilla game (except mines per the above); named areas are
+        matched to translations.
      */
-    // 
-    // 
     "CustomFishSpawnRules": {
         // Octopus
         "149": {
@@ -705,6 +707,32 @@ You shouldn't change this file unless you know what you're doing.
             ]
         },
 
+        // Crimsonfish (legendary)
+        "159": {
+            "IsUnique": true,
+            "MinFishingLevel": 5,
+            "Locations": [
+                {
+                    "LocationName": "Beach",
+                    "Area": "east-pier",
+                    "Seasons": [ "Summer" ]
+                }
+            ]
+        },
+
+        // Angler (legendary)
+        "160": {
+            "IsUnique": true,
+            "MinFishingLevel": 3,
+            "Locations": [
+                {
+                    "LocationName": "Town",
+                    "Area": "northmost-bridge",
+                    "Seasons": [ "Fall" ]
+                }
+            ]
+        },
+
         // Ice Pip
         "161": {
             "Locations": [
@@ -727,11 +755,38 @@ You shouldn't change this file unless you know what you're doing.
             ]
         },
 
-        // Pearl
-        "797": {
+        // Legend (legendary)
+        "163": {
+            "IsUnique": true,
+            "MinFishingLevel": 10,
+            "Weather": "Rainy",
             "Locations": [
                 {
-                    "LocationName": "Submarine",
+                    "LocationName": "Mountain",
+                    "Seasons": [ "Spring" ]
+                }
+            ]
+        },
+
+        // Mutant Carp (legendary)
+        "682": {
+            "IsUnique": true,
+            "Locations": [
+                {
+                    "LocationName": "Sewer",
+                    "Seasons": [ "Spring", "Summer", "Fall", "Winter" ]
+                }
+            ]
+        },
+
+        // Glacierfish (legendary)
+        "775": {
+            "IsUnique": true,
+            "MinFishingLevel": 6,
+            "Locations": [
+                {
+                    "LocationName": "Forest",
+                    "Area": "island-tip",
                     "Seasons": [ "Winter" ]
                 }
             ]

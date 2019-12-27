@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Added fish spawn rules to fish lookups.
+* Added fish spawn rules to fish lookups (including special cases like mine and legendary fish).
 * Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
 * Added fish pond drops on fish item lookups.
 * Fish pond lookups now show drops that haven't been unlocked yet.

@@ -184,14 +184,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation LocationName(string locationName) => L10n.Helper.Get($"location.{locationName}").Default(locationName);
 
             /// <summary>The translated name for a fishing area.</summary>
-            public static Translation AreaName(string locationName, int id)
+            public static Translation AreaName(string locationName, string id)
             {
-                Translation areaTranslation = string.Equals(locationName, "UndergroundMine", StringComparison.InvariantCultureIgnoreCase) && id >= 0
-                    ? L10n.Helper.Get("location.undergroundMine.level", new { level = id })
-                    : L10n.Helper.Get($"location.{locationName}.fish-area-{id}");
+                Translation areaTranslation;
+                if (string.Equals(locationName, "UndergroundMine", StringComparison.InvariantCultureIgnoreCase))
+                    areaTranslation = L10n.Helper.Get("location.undergroundMine.level", new { level = id });
+                else if (int.TryParse(id, out int _))
+                    areaTranslation = L10n.Helper.Get($"location.{locationName}.fish-area-{id}");
+                else
+                    areaTranslation = L10n.Helper.Get($"location.{locationName}.{id}");
 
                 return areaTranslation
-                    .Default(L10n.Helper.Get("location.unknown-fish-area", new { locationName, id }));
+                    .Default(L10n.Helper.Get("location.unknown-fish-area", new { locationName = L10n.LocationOverrides.LocationName(locationName), id }));
             }
         }
 
@@ -661,6 +665,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 
             /// <summary>A value like <c>min fishing level: {{level}}</c>.</summary>
             public static Translation FishSpawnRulesMinFishingLevel(int level) => L10n.Helper.Get("item.fish-spawn-rules.min-fishing-level", new { level });
+
+            /// <summary>A value like <c>not caught yet (can only be caught once)</c>.</summary>
+            public static Translation FishSpawnRulesNotCaughtYet() => L10n.Helper.Get("item.fish-spawn-rules.not-caught-yet");
 
             /// <summary>A value like <c>locations: {{locations}}</c>.</summary>
             public static Translation FishSpawnRulesLocations(string locations) => L10n.Helper.Get("item.fish-spawn-rules.locations", new { locations });

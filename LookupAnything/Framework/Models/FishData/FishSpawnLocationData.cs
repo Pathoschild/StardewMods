@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         public string LocationDisplayName { get; }
 
         /// <summary>The area ID within the location, if applicable.</summary>
-        public int? Area { get; }
+        public string Area { get; }
 
         /// <summary>The required seasons.</summary>
         public ISet<string> Seasons { get; }
@@ -30,14 +30,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         /// <param name="locationName">The location name.</param>
         /// <param name="area">The area ID within the location, if applicable.</param>
         /// <param name="seasons">The required seasons.</param>
-        public FishSpawnLocationData(string locationName, int? area, string[] seasons)
+        internal FishSpawnLocationData(string locationName, int? area, string[] seasons)
+            : this(locationName, area >= 0 ? area.ToString() : null, seasons) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="locationName">The location name.</param>
+        /// <param name="area">The area ID within the location, if applicable.</param>
+        /// <param name="seasons">The required seasons.</param>
+        public FishSpawnLocationData(string locationName, string area, string[] seasons)
         {
             this.LocationName = locationName;
-            this.Area = area >= 0 ? area : null;
+            this.Area = area;
             this.Seasons = new HashSet<string>(seasons, StringComparer.InvariantCultureIgnoreCase);
 
-            this.LocationDisplayName = this.Area.HasValue
-                ? L10n.LocationOverrides.AreaName(this.LocationName, this.Area.Value)
+            this.LocationDisplayName = this.Area != null
+                ? L10n.LocationOverrides.AreaName(this.LocationName, this.Area)
                 : L10n.LocationOverrides.LocationName(this.LocationName);
         }
     }

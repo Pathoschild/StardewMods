@@ -159,6 +159,7 @@
     // TODO
     "location.backwoods": "backwoods",
     "location.beach": "beach",
+    "location.beach.east-pier": "beach (eastern pier)",
     "location.bugLand": "mutant bug lair",
     "location.busStop": "bus stop",
     "location.desert": "desert",
@@ -168,11 +169,13 @@
     "location.forest": "forest",
     "location.forest.fish-area-0": "forest river",
     "location.forest.fish-area-1": "forest pond",
+    "location.forest.island-tip": "forest river (south tip of large island)",
     "location.mountain": "mountain",
     "location.railroad": "railroad",
     "location.sewer": "sewers",
     "location.submarine": "Night Market submarine",
     "location.town": "town",
+    "location.town.northmost-bridge": "town (northmost bridge)",
     "location.tunnel": "bus tunnel",
     "location.undergroundMine": "mines",
     "location.undergroundMine.level": "mine level {{level}}",
@@ -411,6 +414,7 @@
     // values
     // TODO
     "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
     "item.fish-spawn-rules.locations": "locations: {{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "locations:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",

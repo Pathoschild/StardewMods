@@ -49,6 +49,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             if (spawnRules == null || !spawnRules.Locations.Any())
                 yield break;
 
+            // not caught uet
+            if (spawnRules.IsUnique)
+                yield return this.GetCondition(L10n.Item.FishSpawnRulesNotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fishID));
+
             // fishing level
             if (spawnRules.MinFishingLevel > 0)
                 yield return this.GetCondition(L10n.Item.FishSpawnRulesMinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);

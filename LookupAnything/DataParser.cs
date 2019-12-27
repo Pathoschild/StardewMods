@@ -140,28 +140,6 @@ namespace Pathoschild.Stardew.LookupAnything
                     return null;
             }
 
-            // parse raw data
-            var timesOfDay = new List<FishSpawnTimeOfDayData>();
-            FishSpawnWeather weather;
-            int minFishingLevel;
-            {
-                // times of day
-                string[] timeFields = fishFields[5].Split(' ');
-                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
-                {
-                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
-                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
-                }
-
-                // weather
-                if (!Enum.TryParse(fishFields[7], true, out weather))
-                    weather = FishSpawnWeather.Both;
-
-                // min fishing level
-                if (!int.TryParse(fishFields[12], out minFishingLevel))
-                    minFishingLevel = 0;
-            }
-
             // parse location data
             var locations = new List<FishSpawnLocationData>();
             foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
@@ -203,9 +181,29 @@ namespace Pathoschild.Stardew.LookupAnything
                 );
             }
 
-            // ignore times of day if the fish doesn't spawn naturally (so we don't have duplicate times from custom data)
-            if (!locations.Any())
-                timesOfDay.Clear();
+            // parse fish data
+            var timesOfDay = new List<FishSpawnTimeOfDayData>();
+            FishSpawnWeather weather = FishSpawnWeather.Both;
+            int minFishingLevel = 0;
+            bool isUnique = false;
+            if (locations.Any()) // ignore default spawn criteria if the fish doesn't spawn naturally; in that case it should be specified explicitly in custom data below (if any)
+            {
+                // times of day
+                string[] timeFields = fishFields[5].Split(' ');
+                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                {
+                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
+                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                }
+
+                // weather
+                if (!Enum.TryParse(fishFields[7], true, out weather))
+                    weather = FishSpawnWeather.Both;
+
+                // min fishing level
+                if (!int.TryParse(fishFields[12], out minFishingLevel))
+                    minFishingLevel = 0;
+            }
 
             // read custom data
             if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData customRules))
@@ -215,6 +213,8 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 if (customRules.Weather != FishSpawnWeather.Unknown)
                     weather = customRules.Weather;
+
+                isUnique = isUnique || customRules.IsUnique;
 
                 if (customRules.TimesOfDay != null)
                     timesOfDay.AddRange(customRules.TimesOfDay);
@@ -230,7 +230,8 @@ namespace Pathoschild.Stardew.LookupAnything
                 locations: locations.ToArray(),
                 timesOfDay: timesOfDay.ToArray(),
                 weather: weather,
-                minFishingLevel: minFishingLevel
+                minFishingLevel: minFishingLevel,
+                isUnique: isUnique
             );
         }
 

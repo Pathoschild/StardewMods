@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         /// <summary>The minimum fishing level.</summary>
         public int MinFishingLevel { get; }
 
+        /// <summary>Whether the fish can only be caught once.</summary>
+        public bool IsUnique { get; }
+
 
         /*********
         ** Public methods
@@ -31,13 +34,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         /// <param name="timesOfDay">When the fish will spawn.</param>
         /// <param name="weather">The weather in which the fish will spawn.</param>
         /// <param name="minFishingLevel">The minimum fishing level.</param>
-        public FishSpawnData(int fishID, FishSpawnLocationData[] locations, FishSpawnTimeOfDayData[] timesOfDay, FishSpawnWeather weather, int minFishingLevel)
+        /// <param name="isUnique">Whether the fish can only be caught once.</param>
+        public FishSpawnData(int fishID, FishSpawnLocationData[] locations, FishSpawnTimeOfDayData[] timesOfDay, FishSpawnWeather weather, int minFishingLevel, bool isUnique)
         {
             this.FishID = fishID;
             this.Locations = locations;
             this.TimesOfDay = timesOfDay;
             this.Weather = weather;
             this.MinFishingLevel = minFishingLevel;
+            this.IsUnique = isUnique;
         }
     }
 }
