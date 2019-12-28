@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
+
 ## 1.24
 Released 27 December 2019.
 
