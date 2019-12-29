@@ -74,7 +74,6 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    where !string.IsNullOrWhiteSpace(token.Text) // ignore whitespace-only tokens
                     select new TokenStringPart
                     {
                         LexToken = token,
