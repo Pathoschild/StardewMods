@@ -9,7 +9,7 @@
     // date names
     "generic.now": "现在",
     "generic.tomorrow": "明天",
-    "generic.yesterday": "昨天", 
+    "generic.yesterday": "昨天",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -24,14 +24,14 @@
     "generic.hours": "{{count}}小时",
     "generic.days": "{{count}}天",
     "generic.in-x-days": "在{{count}}天内",
-    "generic.x-days-ago": "{{count}}天前", 
+    "generic.x-days-ago": "{{count}}天前",
     "generic.price": "{{price}}G",
     "generic.price-for-quality": "{{price}}G({{quality}})",
     "generic.price-for-stack": "{{count}}个，总共价值{{price}}G",
 
     // types
     "type.building": "建筑",
-    "type.bush": "灌木丛", 
+    "type.bush": "灌木丛",
     "type.fruit-tree": "果树",
     "type.map-tile": "地格",
     "type.monster": "怪物",
@@ -52,7 +52,7 @@
     "friendship-status.engaged": "已订婚",
     "friendship-status.married": "已结婚",
     "friendship-status.divorced": "已离婚",
-    "friendship-status.kicked-out": "关系解除", 
+    "friendship-status.kicked-out": "关系解除",
 
 
     /*********
@@ -83,7 +83,7 @@
     "data.npc.pet.description": "对你忠心耿耿的宠物。",
     "data.npc.horse.description": "对你忠心耿耿的坐骑。",
     "data.npc.junimo.description": "来自精神世界的森林精灵。人类对它们知之甚少。",
-    "data.npc.trashbear.description": "清理垃圾的友好精灵。", 
+    "data.npc.trashbear.description": "清理垃圾的友好精灵。",
 
     // item types
     "data.type.debris": "残骸",
@@ -180,7 +180,7 @@
     "location.undergroundMine.level": "矿井层数：{{level}}",
     "location.witchSwamp": "女巫的沼泽",
     "location.woods": "秘密森林",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})", // TODO
 
 
     /*********
@@ -248,13 +248,11 @@
     ** Building > fish pond lookups
     *********/
     // labels
-    
     "building.fish-pond.population": "鱼群数量",
     "building.fish-pond.drops": "鱼塘产出",
     "building.fish-pond.quests": "鱼塘扩充任务",
 
     // values
-    
     "building.fish-pond.population.empty": "往池塘里加一条鱼以开始养殖。",
     "building.fish-pond.population.next-spawn": "{{relativeDate}}会繁殖新鱼",
     "building.fish-pond.drops.preface": "当满足以下列表条件时每天有{{chance}}%的机会收获水产品：",
@@ -335,8 +333,8 @@
     "item.loves-this": "最爱",
     "item.likes-this": "喜欢",
     "item.neutral-about-this": "中性",
-    "item.dislikes-this": "不喜欢", 
-    "item.hates-this": "讨厌", 
+    "item.dislikes-this": "不喜欢",
+    "item.hates-this": "讨厌",
     "item.needed-for": "用于",
     "item.number-owned": "拥有",
     "item.number-cooked": "已烹饪",
@@ -345,15 +343,15 @@
     "item.see-also": "另请参阅",
     "item.sells-for": "售价为",
     "item.sells-to": "卖给",
-    "item.can-be-dyed": "可以染色", 
+    "item.can-be-dyed": "可以染色",
     "item.produces-dye": "产生染料",
 
     // values
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
     "item.contents.partial": "{{name}}在{{time}}后完成",
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", 
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", 
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
     "item.needed-for.community-center": "社区中心({{bundles}})",
     "item.needed-for.full-shipment": "全部货物成就(出货一个)",
     "item.needed-for.polyculture": "混合栽培成就(再出货{{count}}个)",
@@ -405,12 +403,11 @@
     ** Item > fish lookups
     *********/
     // labels
-    
     "item.fish-pond-drops": "鱼塘产物",
     "item.fish-spawn-rules": "繁殖规则",
 
     // values
-    
+
     "item.fish-spawn-rules.min-fishing-level": "最低钓鱼等级：{{level}}",
     "item.fish-spawn-rules.not-caught-yet": "尚未被抓住(只能被抓住一次)",
     "item.fish-spawn-rules.locations": "地点：{{locations}}",
@@ -427,7 +424,6 @@
     ** Item > movie lookups
     *********/
     // labels
-    // TODO
     "item.movie-snack-preference": "喜好",
     "item.movie-ticket.movie-this-week": "本周电影",
     "item.movie-ticket.loves-movie": "热爱电影",
@@ -470,8 +466,8 @@
     "npc.talked-today": "今天已交谈",
     "npc.gifted-today": "今天已送礼",
     "npc.gifted-this-week": "本周送礼",
-    "npc.kissed-today": "今日已接吻", 
-    "npc.hugged-today": "今日已拥抱", 
+    "npc.kissed-today": "今日已接吻",
+    "npc.hugged-today": "今日已拥抱",
     "npc.loves-gifts": "最爱",
     "npc.likes-gifts": "喜欢",
     "npc.neutral-gifts": "普通",
@@ -509,11 +505,10 @@
     // labels
     "pet.love": "友好度",
     "pet.petted-today": "今日已抚摸",
-    "pet.last-petted": "最后一次抚摸", 
-    "pet.water-bowl": "是否给水碗添水", 
+    "pet.last-petted": "最后一次抚摸",
+    "pet.water-bowl": "是否给水碗添水",
 
     // values
-    
     "pet.last-petted.yes": "是的(+12友好度)",
     "pet.last-petted.days-ago": "{{days}}天前",
     "pet.last-petted.never": "还没有抚摸",
@@ -529,16 +524,16 @@
     "player.farm-map": "农场地图",
     "player.favorite-thing": "兴趣",
     "player.gender": "性别",
-    "player.housemate": "室友", 
+    "player.housemate": "室友",
     "player.spouse": "配偶",
-    "player.watched-movie-this-week": "本周看电影", 
+    "player.watched-movie-this-week": "本周看电影",
     "player.combat-skill": "战斗",
     "player.farming-skill": "耕种",
     "player.fishing-skill": "钓鱼",
     "player.foraging-skill": "觅食",
     "player.mining-skill": "采矿",
     "player.luck": "运气",
-    "player.save-format": "保存格式", 
+    "player.save-format": "保存格式",
 
     // values
     "player.farm-map.custom": "自定义",
@@ -559,8 +554,8 @@
     "tile.tile-index": "{{layerName}}：地格号",
     "tile.tilesheet": "{{layerName}}: 地格层",
     "tile.blend-mode": "{{layerName}}: 混合模式",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",//TODO
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",//TODO
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
 
     // values
     "tile.tile.none-here": "此处无地格",
@@ -570,7 +565,6 @@
     ** Trash bear lookups
     *********/
     // labels
-    
     "trash-bear.item-wanted": "想要的东西",
     "trash-bear.quest-progress": "任务进度",
 
@@ -582,7 +576,7 @@
     "tree.stage": "生长阶段",
     "tree.next-growth": "下次生长",
     "tree.has-seed": "产出种子",
-    "tree.is-fertilized": "播洒树肥", 
+    "tree.is-fertilized": "播洒树肥",
 
     // values
     "tree.name.maple": "枫树",
