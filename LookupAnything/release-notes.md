@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
+* Fixed a missing translation for non-English players.
 * Improved translations. Thanks to asqwedcxz741 (updated Chinese)!
 
 ## 1.24

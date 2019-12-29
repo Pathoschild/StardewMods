@@ -592,7 +592,7 @@
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
     "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros árboles estan muy cerca",
-    "tree.next-growth.random": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
+    "tree.next-growth.chance": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
     "tree.is-fertilized.effects": "asegura el crecimiento diario, incluso en invierno",
 
     // growth stages

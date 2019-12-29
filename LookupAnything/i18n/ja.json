@@ -595,7 +595,7 @@
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
     "tree.next-growth.winter": "温室の外では冬に育たない",
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
-    "tree.next-growth.random": "{{chance}}%の確率で明日{{stage}}に成長する",
+    "tree.next-growth.chance": "{{chance}}%の確率で明日{{stage}}に成長する",
     "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // growth stages
