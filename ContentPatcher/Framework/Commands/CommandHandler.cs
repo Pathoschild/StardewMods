@@ -631,7 +631,7 @@ namespace ContentPatcher.Framework.Commands
                 if (pixel.A == 0)
                     continue;
 
-                // Don't use named parameters, they are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a').
+                // Don't use named parameters. They are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a').
                 data[i] = new Color(
                     (byte)((pixel.R * 255) / pixel.A),
                     (byte)((pixel.G * 255) / pixel.A),
