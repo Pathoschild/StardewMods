@@ -632,11 +632,11 @@ namespace ContentPatcher.Framework.Commands
                     continue;
 
                 data[i] = new Color(
-                    r: (byte)((pixel.R * 255) / pixel.A),
-                    g: (byte)((pixel.G * 255) / pixel.A),
-                    b: (byte)((pixel.B * 255) / pixel.A),
-                    a: pixel.A
-                );
+                    (byte)((pixel.R * 255) / pixel.A),
+                    (byte)((pixel.G * 255) / pixel.A),
+                    (byte)((pixel.B * 255) / pixel.A),
+                    pixel.A
+                ); // don't use named parameters, which are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a')
             }
 
             Texture2D result = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height);
