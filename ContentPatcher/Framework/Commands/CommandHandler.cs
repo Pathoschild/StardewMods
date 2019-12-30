@@ -631,12 +631,13 @@ namespace ContentPatcher.Framework.Commands
                 if (pixel.A == 0)
                     continue;
 
+                // Don't use named parameters, they are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a').
                 data[i] = new Color(
                     (byte)((pixel.R * 255) / pixel.A),
                     (byte)((pixel.G * 255) / pixel.A),
                     (byte)((pixel.B * 255) / pixel.A),
                     pixel.A
-                ); // don't use named parameters, which are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a')
+                );
             }
 
             Texture2D result = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height);
