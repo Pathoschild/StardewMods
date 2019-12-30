@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw token input argument.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInputArg? raw, IContext context)
+        public TokenString(LexTokenInputArg raw, IContext context)
             : this(lexTokens: raw?.Parts, context: context) { }
 
         /// <summary>Construct an instance.</summary>
