@@ -214,6 +214,15 @@ Automate is compatible with...
 * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
 
 ## FAQs
+### Why did my chests/machines disappear?
+Some common reasons:
+* NPCs remove items placed in their path, so you shouldn't place anything where they walk. (You can
+  use [path connectors](#connectors) to connect town trash cans to an out-of-the-way chest.)
+* Festivals and the Night Market use temporary maps, so items placed there may disappear when the
+  map is switched back to normal.
+
+Automate doesn't remove placed objects, so it's never at fault for disappearing chests or machines.
+
 ### What's the order of processed machines?
 The order that machines are processed is essentially unpredictable for players. It depends on the
 internal algorithm for finding machines, which is subject to change.
