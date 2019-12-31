@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Improved error-handling when a machine or chest has invalid items.
+* Machines with invalid output are now paused for 30 seconds.
 * Fixed infinite garbage hats.
 
 ## 1.14.2
