@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed infinite garbage hats.
+
 ## 1.14.2
 Released 27 December 2019.
 
