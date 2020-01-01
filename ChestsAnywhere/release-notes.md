@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Avisend (updated French)!
+
 ## 1.17.2
 Released 15 December 2019.
 

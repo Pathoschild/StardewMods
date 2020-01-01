@@ -7,7 +7,7 @@
     "default-name.shipping-bin": "Bac d'expédition",
 
     // default category names
-    "default-category.owned-cabin": "Cabane de ({{owner}})",
+    "default-category.owned-cabin": "Cabane de {{owner}}",
     "default-category.unowned-cabin": "Cabane (vide)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
