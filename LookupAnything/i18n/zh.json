@@ -404,7 +404,7 @@
     *********/
     // labels
     "item.fish-pond-drops": "鱼塘产物",
-    "item.fish-spawn-rules": "繁殖规则",
+    "item.fish-spawn-rules": "捕获条件",
 
     // values
 
