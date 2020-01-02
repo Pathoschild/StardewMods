@@ -61,7 +61,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public bool IsValidCrop(ITrackedStack item)
         {
             return
-                item.Sample.ParentSheetIndex != 433 // seed maker doesn't allow coffee beans
+                item.Type == ItemType.Object
+                && item.Sample.ParentSheetIndex != 433 // seed maker doesn't allow coffee beans
                 && SeedMakerMachine.CropSeedIDs.ContainsKey(item.Sample.ParentSheetIndex);
         }
 

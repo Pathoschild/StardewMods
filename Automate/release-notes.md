@@ -5,6 +5,7 @@
 * Improved error-handling when a machine or chest has invalid items.
 * Machines with invalid output are now paused for 30 seconds.
 * Fixed infinite garbage hats.
+* Fixed some machines allowing wrong item types as input.
 
 ## 1.14.2
 Released 27 December 2019.

@@ -72,10 +72,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="id">The item or category ID.</param>
         /// <param name="count">The number of items to find.</param>
         /// <param name="consumable">The matching consumables.</param>
+        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        public bool TryGetIngredient(int id, int count, out IConsumable consumable)
+        public bool TryGetIngredient(int id, int count, out IConsumable consumable, ItemType? type = ItemType.Object)
         {
-            return this.TryGetIngredient(item => item.Sample.ParentSheetIndex == id || item.Sample.Category == id, count, out consumable);
+            return this.TryGetIngredient(item => (type == null || item.Type == type) && (item.Sample.ParentSheetIndex == id || item.Sample.Category == id), count, out consumable);
         }
 
         /// <summary>Get an ingredient needed for a recipe.</summary>
@@ -131,10 +132,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Consume an ingredient needed for a recipe.</summary>
         /// <param name="itemID">The item ID.</param>
         /// <param name="count">The number of items to find.</param>
+        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
         /// <returns>Returns whether the item was consumed.</returns>
-        public bool TryConsume(int itemID, int count)
+        public bool TryConsume(int itemID, int count, ItemType? type = ItemType.Object)
         {
-            return this.TryConsume(item => item.Sample.ParentSheetIndex == itemID, count);
+            return this.TryConsume(item => (type == null || item.Type == type) && item.Sample.ParentSheetIndex == itemID, count);
         }
 
         /****

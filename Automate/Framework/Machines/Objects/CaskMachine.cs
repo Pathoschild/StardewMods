@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            if (input.TryGetIngredient(match => (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
+            if (input.TryGetIngredient(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
             {
                 SObject ingredient = (SObject)consumable.Take();
 

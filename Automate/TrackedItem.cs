@@ -1,4 +1,5 @@
 using System;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
@@ -29,6 +30,9 @@ namespace Pathoschild.Stardew.Automate
         /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
         public Item Sample { get; }
 
+        /// <summary>The underlying item type.</summary>
+        public ItemType Type { get; }
+
         /// <summary>The number of items in the stack.</summary>
         public int Count { get; private set; }
 
@@ -43,6 +47,7 @@ namespace Pathoschild.Stardew.Automate
         public TrackedItem(Item item, Action<Item> onReduced = null, Action<Item> onEmpty = null)
         {
             this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
+            this.Type = (ItemType)item.GetItemType();
             this.Sample = this.GetNewStack(item);
             this.OnReduced = onReduced;
             this.OnEmpty = onEmpty;

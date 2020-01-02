@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
             // fill input with wheat (262), beets (284), and rice (271)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.ParentSheetIndex == 262 || i.Sample.ParentSheetIndex == 284 || i.Sample.ParentSheetIndex == 271))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Type == ItemType.Object && (i.Sample.ParentSheetIndex == 262 || i.Sample.ParentSheetIndex == 284 || i.Sample.ParentSheetIndex == 271)))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);
