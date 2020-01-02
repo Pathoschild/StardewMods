@@ -27,6 +27,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>The legend entry for non-tillable tiles.</summary>
         private readonly LegendEntry NonTillable;
 
+        /// <summary>The legend entry for tiles already tilled but not planted.</summary>
+        private readonly LegendEntry TilledAndNotPlanted;
 
         /*********
         ** Public methods
@@ -41,6 +43,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             {
                 this.Tillable = new LegendEntry(translations, "tillable.tillable", Color.Green),
                 this.Occupied = new LegendEntry(translations, "tillable.occupied", Color.Orange),
+                this.TilledAndNotPlanted = new LegendEntry(translations, "tillable.not-planted", Color.Magenta),
                 this.NonTillable = new LegendEntry(translations, "tillable.not-tillable", Color.Red)
             };
         }
@@ -54,11 +57,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
             TileData[] tillableTiles = tiles.Where(p => p.Type.Id == this.Tillable.Id).ToArray();
+            TileData[] plantableTiles = tiles.Where(p => p.Type.Id == this.TilledAndNotPlanted.Id).ToArray();
 
             return new[]
             {
                 new TileGroup(tillableTiles, outerBorderColor: this.Tillable.Color),
-                new TileGroup(tiles.Except(tillableTiles))
+                new TileGroup(plantableTiles, this.TilledAndNotPlanted.Color),
+                new TileGroup(tiles.Except(tillableTiles).Except(plantableTiles))
             };
         }
 
@@ -76,7 +81,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 // get color
                 LegendEntry type;
                 if (this.IsTillable(location, tile))
+                {
                     type = this.IsOccupied(location, tile) ? this.Occupied : this.Tillable;
+
+                    if (this.GetDirt(location, tile) != null && !location.isCropAtTile((int) tile.X, (int) tile.Y))
+                        type = this.TilledAndNotPlanted;
+                }
                 else
                     type = this.NonTillable;
 
