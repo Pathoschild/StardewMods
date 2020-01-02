@@ -177,10 +177,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            switch (item.GetSpriteType())
+            switch (item.GetItemType())
             {
                 // for ingredient
-                case ItemSpriteType.Object:
+                case ItemType.Object:
                     {
                         RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                         if (recipes.Any())
@@ -189,7 +189,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     break;
 
                 // for machine
-                case ItemSpriteType.BigCraftable:
+                case ItemType.BigCraftable:
                     {
                         RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
                         if (recipes.Any())
@@ -720,7 +720,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
                 [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
-            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
+            if (item.GetItemType() == ItemType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
                 prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }

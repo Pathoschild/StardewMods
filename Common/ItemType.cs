@@ -1,30 +1,33 @@
 namespace Pathoschild.Stardew.Common
 {
     /// <summary>The general item type, to disambiguate IDs which can be duplicated between two sprite sheets.</summary>
-    internal enum ItemSpriteType
+    internal enum ItemType
     {
         /// <summary>The item isn't covered by one of the known types.</summary>
         Unknown,
 
-        /// <summary>The <c>Data\ObjectInformation</c> (<see cref="StardewValley.Game1.objectSpriteSheet"/>) sprite sheet used to draw most inventory items and some placeable objects.</summary>
+        /// <summary>A generic inventory or placeable object from <c>Data\ObjectInformation</c>.</summary>
         Object,
 
-        /// <summary>The <c>Data\BigCraftablesInformation.xnb</c> (<see cref="StardewValley.Game1.bigCraftableSpriteSheet"/>) sprite sheet used to draw furniture, scarecrows, tappers, crafting stations, and similar placeable objects.</summary>
+        /// <summary>A scarecrow, tapper, crafting station, or similar placeable object from <c>Data\BigCraftablesInformation</c>.</summary>
         BigCraftable,
 
-        /// <summary>The <c>Data\Boots.xnb</c> sprite sheet used to draw boot equipment.</summary>
+        /// <summary>Boot equipment from <c>Data\Boots</c>.</summary>
         Boots,
 
-        /// <summary>The <c>Data\hats.xnb</c> sprite sheet used to draw boot equipment.</summary>
+        /// <summary>Clothing equipment from <c>Data\Clothing</c>.</summary>
+        Clothing,
+
+        /// <summary>Hat equipment from <c>Data\Hats</c>.</summary>
         Hat,
 
-        /// <summary>The <c>TileSheets\furniture.xnb</c> sprite sheet used to draw furniture.</summary>
+        /// <summary>A furniture item from <c>Data\Furniture</c>.</summary>
         Furniture,
 
-        /// <summary>The <c>TileSheets\weapons.xnb</c> sprite sheet used to draw tools and weapons.</summary>
+        /// <summary>A tool or weapon from <c>Data\Weapons</c>.</summary>
         Tool,
 
-        /// <summary>The <c>Maps\walls_and_floors</c> sprite sheet used to draw wallpapers and flooring.</summary>
+        /// <summary>A wallpaper or flooring item. These have no data, but are drawn using <c>Maps\walls_and_floors</c>.</summary>
         Wallpaper
     }
 }

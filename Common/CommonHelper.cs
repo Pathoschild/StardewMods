@@ -56,28 +56,35 @@ namespace Pathoschild.Stardew.Common
                 );
         }
 
-        /// <summary>Get the sprite sheet to which the item's <see cref="Item.parentSheetIndex"/> refers.</summary>
+        /// <summary>Get the item type for an item to disambiguate IDs.</summary>
         /// <param name="item">The item to check.</param>
-        public static ItemSpriteType GetSpriteType(this Item item)
+        public static ItemType GetItemType(this Item item)
         {
-            if (item is SObject obj)
+            switch (item)
             {
-                if (obj is Furniture)
-                    return ItemSpriteType.Furniture;
-                if (obj is Wallpaper)
-                    return ItemSpriteType.Wallpaper;
-                return obj.bigCraftable.Value
-                    ? ItemSpriteType.BigCraftable
-                    : ItemSpriteType.Object;
-            }
-            if (item is Boots)
-                return ItemSpriteType.Boots;
-            if (item is Hat)
-                return ItemSpriteType.Hat;
-            if (item is Tool)
-                return ItemSpriteType.Tool;
+                case Boots _:
+                    return ItemType.Boots;
 
-            return ItemSpriteType.Unknown;
+                case Furniture _:
+                    return ItemType.Furniture;
+
+                case Hat _:
+                    return ItemType.Hat;
+
+                case Tool _:
+                    return ItemType.Tool;
+
+                case Wallpaper _:
+                    return ItemType.Wallpaper;
+
+                case SObject obj:
+                    return obj.bigCraftable.Value
+                        ? ItemType.BigCraftable
+                        : ItemType.Object;
+
+                default:
+                    return ItemType.Unknown;
+            }
         }
 
         /****

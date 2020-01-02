@@ -247,7 +247,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 && a.ParentSheetIndex == b.ParentSheetIndex
 
                 // same discriminators
-                && a.GetSpriteType() == b.GetSpriteType()
+                && a.GetItemType() == b.GetItemType()
                 && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
                 && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
                 && (a as Fence)?.isGate == (b as Fence)?.isGate
