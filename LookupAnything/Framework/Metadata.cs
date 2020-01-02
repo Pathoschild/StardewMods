@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;

@@ -1,4 +1,4 @@
-﻿using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {

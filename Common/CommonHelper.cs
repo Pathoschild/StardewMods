@@ -8,6 +8,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -52,6 +54,30 @@ namespace Pathoschild.Stardew.Common
                     where building.indoors.Value != null
                     select building.indoors.Value
                 );
+        }
+
+        /// <summary>Get the sprite sheet to which the item's <see cref="Item.parentSheetIndex"/> refers.</summary>
+        /// <param name="item">The item to check.</param>
+        public static ItemSpriteType GetSpriteType(this Item item)
+        {
+            if (item is SObject obj)
+            {
+                if (obj is Furniture)
+                    return ItemSpriteType.Furniture;
+                if (obj is Wallpaper)
+                    return ItemSpriteType.Wallpaper;
+                return obj.bigCraftable.Value
+                    ? ItemSpriteType.BigCraftable
+                    : ItemSpriteType.Object;
+            }
+            if (item is Boots)
+                return ItemSpriteType.Boots;
+            if (item is Hat)
+                return ItemSpriteType.Hat;
+            if (item is Tool)
+                return ItemSpriteType.Tool;
+
+            return ItemSpriteType.Unknown;
         }
 
         /****
