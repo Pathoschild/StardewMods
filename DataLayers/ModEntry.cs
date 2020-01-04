@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -69,6 +68,11 @@ namespace Pathoschild.Stardew.DataLayers
             // init
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
             this.Layers = this.GetLayers(this.Config, this.Helper.Translation, this.Mods).ToArray();
+
+            foreach (ILayer layer in this.Layers)
+            {
+                layer.ParseShortcuts(this.Monitor);
+            }
         }
 
         /// <summary>Get the enabled data layers.</summary>
@@ -151,6 +155,33 @@ namespace Pathoschild.Stardew.DataLayers
                 {
                     this.CurrentOverlay.PrevLayer();
                     this.Helper.Input.Suppress(e.Button);
+                }
+                else
+                {
+                    if (this.Config.ActivateOverlayOnShortcut && !overlayVisible)
+                    {
+                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                        overlayVisible = this.CurrentOverlay != null;
+                    }
+
+                    if (overlayVisible)
+                    {
+                        ILayer layer = this.CurrentOverlay.GetLayerForButton(e.Button);
+
+                        if (layer != null)
+                        {
+                            if (this.CurrentOverlay.CurrentLayer == layer && this.Config.ToggleOverlayViaShortcut)
+                            {
+                                this.CurrentOverlay.Dispose();
+                                this.CurrentOverlay = null;
+                            }
+                            else
+                            {
+                                this.CurrentOverlay.ActivateLayer(layer);
+                                this.Helper.Input.Suppress(e.Button);
+                            }
+                        }
+                    }
                 }
             });
         }

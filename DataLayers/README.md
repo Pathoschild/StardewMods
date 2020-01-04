@@ -92,9 +92,11 @@ These are the available settings:
 setting    | what it affects
 ---------- | -------------------
 `Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous layer, and right `CTRL` or right controller shoulder for the next one.
-`Layers`   | For each data layer, configure... <ul><li>`Enabled`: whether it should be available in-game.</li><li>`UpdatesPerSecond`: how often the layer should update. The maximum is 60 per seconds, but can be less than 1 to update less than once per second (or zero to disable the data layer entirely).</li><li>`UpdateWhenViewChange`: Whether to update when your viewpoint in the game changes, regardless of the `UpdatesPerSecond` value.</li></ul>
+`Layers`   | For each data layer, configure... <ul><li>`Enabled`: whether it should be available in-game.</li><li>`UpdatesPerSecond`: how often the layer should update. The maximum is 60 per seconds, but can be less than 1 to update less than once per second (or zero to disable the data layer entirely).</li><li>`UpdateWhenViewChange`: Whether to update when your viewpoint in the game changes, regardless of the `UpdatesPerSecond` value.</li><li>`LayerShortcutButtons`: The buttons which should navigate to this layer</li></ul>
 `ShowGrid` | Default `false`. Whether to show a tile grid when a layer is open.
 `CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
+`ActivateOverlayOnShortcut` | Default `false`. If `true`, a layer shortcut also activates the overlay. If `false` the overlay has to be activated first
+`ToggleOverlayViaShortcut` | Default `false`. If `true`, the configured layer shortcut toggles the overlay and activates the configured shortcut layer
 
 ## Compatibility
 Data Layers is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and

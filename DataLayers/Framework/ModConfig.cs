@@ -12,6 +12,12 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Whether to show a tile grid when a layer is open.</summary>
         public bool ShowGrid { get; set; }
 
+        /// <summary>Whether to activate the overlay when a shortcut button is pressed.</summary>
+        public bool ActivateOverlayOnShortcut { get; set; } = false;
+
+        /// <summary>Whether to toggle the overlay when using a shortcut button</summary>
+        public bool ToggleOverlayViaShortcut { get; set; } = false;
+
         /// <summary>The key bindings.</summary>
         public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
 

@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -21,6 +23,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Whether to update the layer when the set of visible tiles changes.</summary>
         public bool UpdateWhenVisibleTilesChange { get; }
 
+        /// <summary>The buttons to activate the layer.</summary>
+        public SButton[] LayerButtons { get; private set; }
+
+        /// <summary>The raw buttons to activate the layer.</summary>
+        public string RawLayerButtons { get; }
+
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; protected set; }
 
@@ -35,7 +43,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public abstract TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile);
 
-
+        /// <summary>Parses the shortcuts from the config.</summary>
+        /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
+        public void ParseShortcuts(IMonitor monitor)
+        {
+            this.LayerButtons =CommonHelper.ParseButtons(this.RawLayerButtons, monitor, this.Name);
+        }
         /*********
         ** Protected methods
         *********/
@@ -47,6 +60,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
+            this.RawLayerButtons = config.LayerShortcutButtons;
         }
 
         /// <summary>Get the dirt instance for a tile, if any.</summary>

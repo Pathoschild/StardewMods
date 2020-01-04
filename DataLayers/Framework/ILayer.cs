@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
@@ -21,6 +22,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The legend entries to display.</summary>
         LegendEntry[] Legend { get; }
 
+        /// <summary>The buttons to activate the layer.</summary>
+        SButton[] LayerButtons { get; }
+
 
         /*********
         ** Methods
@@ -31,5 +35,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
         TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile);
+
+        /// <summary>Parses the shortcuts from the config.</summary>
+        /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
+        void ParseShortcuts(IMonitor monitor);
     }
 }
