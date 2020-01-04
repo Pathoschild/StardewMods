@@ -126,22 +126,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.SetLayer(this.Layers[index]);
         }
 
-        /// <summary>Retrieves a layer by it's configured shortcut button.</summary>
-        /// <param name="button">The button the game received.</param>
-        /// <returns>The found layer or null.</returns>
-        public ILayer GetLayerForButton(SButton button)
-        {
-            foreach (var layer in this.Layers)
-            {
-                if (layer.LayerButtons != null && layer.LayerButtons.Contains(button))
-                {
-                    return layer;
-                }
-            }
-
-            return null;
-        }
-
         /// <summary>Activates a specific layer.</summary>
         /// <param name="layer">The layer to activate.</param>
         public void ActivateLayer(ILayer layer)

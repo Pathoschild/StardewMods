@@ -158,33 +158,51 @@ namespace Pathoschild.Stardew.DataLayers
                 }
                 else
                 {
-                    if (this.Config.ActivateOverlayOnShortcut && !overlayVisible)
-                    {
-                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
-                        overlayVisible = this.CurrentOverlay != null;
-                    }
 
-                    if (overlayVisible)
-                    {
-                        ILayer layer = this.CurrentOverlay.GetLayerForButton(e.Button);
+                    ILayer layerForButton = this.GetLayerForButton(e.Button);
 
-                        if (layer != null)
+                    if (layerForButton != null)
+                    {
+                        if (this.Config.ActivateOverlayOnShortcut && !overlayVisible)
                         {
-                            if (this.CurrentOverlay.CurrentLayer == layer && this.Config.ToggleOverlayViaShortcut)
-                            {
-                                this.CurrentOverlay.Dispose();
-                                this.CurrentOverlay = null;
-                                this.Helper.Input.Suppress(e.Button);
-                            }
-                            else
-                            {
-                                this.CurrentOverlay.ActivateLayer(layer);
-                                this.Helper.Input.Suppress(e.Button);
-                            }
+                            this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                            overlayVisible = this.CurrentOverlay != null;
+                        }
+
+                        if (overlayVisible)
+                        {
+                                if (this.CurrentOverlay.CurrentLayer == layerForButton && this.Config.ToggleOverlayViaShortcut)
+                                {
+                                    this.CurrentOverlay.Dispose();
+                                    this.CurrentOverlay = null;
+                                    this.Helper.Input.Suppress(e.Button);
+                                }
+                                else
+                                {
+                                    this.CurrentOverlay.ActivateLayer(layerForButton);
+                                    this.Helper.Input.Suppress(e.Button);
+                                }
+
                         }
                     }
                 }
             });
+        }
+
+        /// <summary>Retrieves a layer by it's configured shortcut button.</summary>
+        /// <param name="button">The button the game received.</param>
+        /// <returns>The found layer or null.</returns>
+        private ILayer GetLayerForButton(SButton button)
+        {
+            foreach (var layer in this.Layers)
+            {
+                if (layer.LayerButtons != null && layer.LayerButtons.Contains(button))
+                {
+                    return layer;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>Receive an update tick.</summary>
