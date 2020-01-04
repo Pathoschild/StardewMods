@@ -27,8 +27,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="id">The item or category ID.</param>
         /// <param name="count">The number of items to find.</param>
         /// <param name="consumable">The matching consumables.</param>
+        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
         /// <returns>Returns whether the requirement is met.</returns>
-        bool TryGetIngredient(int id, int count, out IConsumable consumable);
+        bool TryGetIngredient(int id, int count, out IConsumable consumable, ItemType? type = ItemType.Object);
 
         /// <summary>Get an ingredient needed for a recipe.</summary>
         /// <param name="recipes">The items to match.</param>
@@ -49,8 +50,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Consume an ingredient needed for a recipe.</summary>
         /// <param name="itemID">The item ID.</param>
         /// <param name="count">The number of items to find.</param>
+        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
         /// <returns>Returns whether the item was consumed.</returns>
-        bool TryConsume(int itemID, int count);
+        bool TryConsume(int itemID, int count, ItemType? type = ItemType.Object);
 
         /****
         ** TryPush

@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.NoclipMode
         /// <summary>The key which toggles noclip mode.</summary>
         private SButton[] ToggleKey;
 
+        /// <summary>An arbitrary number which identifies messages from Noclip Mode.</summary>
+        private const int MessageID = 91871825;
+
 
         /*********
         ** Public methods
@@ -46,10 +49,26 @@ namespace Pathoschild.Stardew.NoclipMode
         {
             if (Context.IsPlayerFree && this.ToggleKey.Contains(e.Button))
             {
-                Game1.player.ignoreCollisions = !Game1.player.ignoreCollisions;
-                if (Game1.player.ignoreCollisions)
-                    CommonHelper.ShowInfoMessage(this.Helper.Translation.Get("enabled-message", new { button = e.Button }));
+                bool enabled = Game1.player.ignoreCollisions = !Game1.player.ignoreCollisions;
+                this.ShowConfirmationMessage(enabled, e.Button);
             }
+        }
+
+        /// <summary>Show a confirmation message for the given noclip mode, if enabled.</summary>
+        /// <param name="noclipEnabled">Whether noclip was enabled; else noclip was disabled.</param>
+        /// <param name="button">The toggle button that was pressed.</param>
+        private void ShowConfirmationMessage(bool noclipEnabled, SButton button)
+        {
+            // skip if message not enabled
+            if (noclipEnabled && !this.Config.ShowEnabledMessage)
+                return;
+            if (!noclipEnabled && !this.Config.ShowDisabledMessage)
+                return;
+
+            // show message
+            Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageID);
+            string text = this.Helper.Translation.Get(noclipEnabled ? "enabled-message" : "disabled-message", new { button = button });
+            Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageID });
         }
     }
 }

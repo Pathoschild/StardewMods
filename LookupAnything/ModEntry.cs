@@ -116,8 +116,8 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // initialize functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
-            this.GameHelper = new GameHelper(customFarming);
-            this.TargetFactory = new TargetFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, jsonAssets, this.Config);
+            this.GameHelper = new GameHelper(customFarming, this.Metadata);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config));
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -127,7 +127,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
-            this.GameHelper.ResetCache(this.Metadata, this.Helper.Reflection, this.Helper.Translation, this.Monitor);
+            this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
         }
 
         /// <summary>The method invoked when the player presses a button.</summary>
@@ -248,7 +248,7 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
 
-                LookupMenu lookupMenu = new LookupMenu(this.GameHelper, subject, this.Metadata, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
+                LookupMenu lookupMenu = new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
                 if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
                 {
                     this.PreviousMenus.Push(Game1.activeClickableMenu);

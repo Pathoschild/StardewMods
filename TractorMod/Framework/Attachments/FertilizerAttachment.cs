@@ -52,18 +52,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (item == null || item.Stack <= 0)
                 return false;
 
-            // get unfertilised dirt
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
-                return false;
+            switch (item.ParentSheetIndex)
+            {
+                // tree fertilizer
+                case 805:
+                    if (tileFeature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize(location))
+                    {
+                        this.ConsumeItem(player, item);
+                        return true;
+                    }
+                    return false;
 
-            // ignore if there's a giant crop, meteorite, etc covering the tile
-            if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
-                return false;
+                // crop fertilizer
+                default:
+                    // get unfertilised dirt
+                    if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
+                        return false;
 
-            // apply fertilizer
-            dirt.fertilizer.Value = item.ParentSheetIndex;
-            this.ConsumeItem(player, item);
-            return true;
+                    // ignore if there's a giant crop, meteorite, etc covering the tile
+                    if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
+                        return false;
+
+                    // apply fertilizer
+                    dirt.fertilizer.Value = item.ParentSheetIndex;
+                    this.ConsumeItem(player, item);
+                    return true;
+            }
         }
     }
 }

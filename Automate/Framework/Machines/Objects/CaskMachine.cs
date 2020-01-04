@@ -50,15 +50,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override ITrackedStack GetOutput()
         {
             Cask cask = this.Machine;
-            SObject heldObject = this.Machine.heldObject.Value;
-            return new TrackedItem(heldObject.getOne(), item =>
-            {
-                cask.heldObject.Value = null;
-                cask.MinutesUntilReady = 0;
-                cask.readyForHarvest.Value = false;
-                cask.agingRate.Value = 0;
-                cask.daysToMature.Value = 0;
-            });
+
+            SObject heldObject = cask.heldObject.Value;
+            return new TrackedItem(heldObject.getOne(), this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -68,7 +62,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            if (input.TryGetIngredient(match => (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
+            if (input.TryGetIngredient(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
             {
                 SObject ingredient = (SObject)consumable.Take();
 
@@ -94,6 +88,22 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             }
 
             return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
+        /// <param name="item">The output item that was taken.</param>
+        private void Reset(Item item)
+        {
+            Cask cask = this.Machine;
+
+            this.GenericReset(item);
+            cask.MinutesUntilReady = 0;
+            cask.agingRate.Value = 0;
+            cask.daysToMature.Value = 0;
         }
     }
 }

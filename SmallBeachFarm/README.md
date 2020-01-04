@@ -45,14 +45,17 @@ setting         | default | what it affects
 
 ## FAQs
 ### Compatibility
-This is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+This is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. It can't be combined with other mods that replace the riverlands farm.
 
-It should work with most map recolors (notably A Wittily Named Recolor, Eemie's Just Another Map
-Recolor, and Starblue Valley). To add support for a new recolor, create a folder in
-`assets/recolors` matching its ID (from its `manifest.json` folder) and drop the modified
-`{season}_smallBeachFarm.png` files into it. (Consider sending me the files, so I can add
-official support for the recolor!)
+The farm map will recolor automatically if you have one of these installed:
+* A Wittily Named Recolor;
+* Eemie's Just Another Map Recolor;
+* Starblue Valley.
+
+To add support for a new recolor, create a folder in `assets/recolors` matching the recolor mod's
+ID (from its `manifest.json` file) and drop the modified `{season}_smallBeachFarm.png` files into it.
+(If you send me the files, I'll add official support for the recolor!)
 
 ### Can I use this with an existing save?
 Yep! If you have things in the water due to the smaller map, see

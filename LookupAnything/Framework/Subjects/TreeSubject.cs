@@ -29,21 +29,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public TreeSubject(GameHelper gameHelper, Tree tree, Vector2 tile, ITranslationHelper translations)
-            : base(gameHelper, TreeSubject.GetName(tree), null, L10n.Types.Tree(), translations)
+        public TreeSubject(SubjectFactory codex, GameHelper gameHelper, Tree tree, Vector2 tile, ITranslationHelper translations)
+            : base(codex, gameHelper, TreeSubject.GetName(tree), null, L10n.Types.Tree(), translations)
         {
             this.Target = tree;
             this.Tile = tile;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.Tree.dayUpdate"/>.</remarks>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
 
@@ -78,8 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Tree target = this.Target;
 

@@ -48,7 +48,7 @@ setting             | what it affects
 `DisableInLocations`| The locations in which to disable remote chest lookups. You can use the [Debug Mode mod](https://www.nexusmods.com/stardewvalley/mods/679) to see the name of any in-game location, or get the location name for a chest from its edit screen. You can use `"UndergroundMine"` to match any level of the mines or skull caverns (except the entrance itself).
 
 ## Compatibility
-Chests Anywhere is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Chests Anywhere is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 Multiplayer notes:

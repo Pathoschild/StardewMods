@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Conditions
         public string Raw { get; }
 
         /// <summary>The lexical tokens parsed from the raw string.</summary>
-        public ILexToken[] LexTokens { get; }
+        public IEnumerable<ILexToken> LexTokens { get; }
 
         /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
         public bool HasAnyTokens { get; } = false;

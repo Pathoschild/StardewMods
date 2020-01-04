@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>The underlying tree texture.</summary>
         private readonly Texture2D Texture;
 
-        /// <summary>The source rectangle containing the tree sprites in the <see cref="Texture"/>.</summary>
+        /// <summary>The source rectangle containing the current crop sprite in the <see cref="Texture"/>.</summary>
         private readonly Rectangle SourceRect;
 
 
@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()
         {
-            return this.Reflection.GetMethod(this.Value.crop, "getSourceRect").Invoke<Rectangle>(this.Value.crop.rowInSpriteSheet.Value);
+            return this.SourceRect;
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -68,15 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
 
             // crop in last phase (may have fruit, be identical to base crop, or be blank)
             if (crop.tintColor.Value != Color.White && crop.currentPhase.Value == crop.phaseDays.Count - 1 && !crop.dead.Value)
-            {
-                var sourceRectangle = new Rectangle(
-                    x: this.SourceRect.X + ((crop.fullyGrown.Value ? (crop.dayOfCurrentPhase.Value <= 0 ? 6 : 7) : crop.currentPhase.Value + 1 + 1) * 16),
-                    y: this.SourceRect.Y,
-                    width: 16,
-                    height: 32
-                );
-                return this.SpriteIntersectsPixel(tile, position, spriteArea, this.Texture, sourceRectangle, spriteEffects);
-            }
+                return this.SpriteIntersectsPixel(tile, position, spriteArea, this.Texture, this.SourceRect, spriteEffects);
 
             return false;
         }
@@ -91,15 +83,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
-        public void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
+        private void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
         {
             // get from Json Assets
-            if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect))
+            if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect, currentSpriteOnly: true))
                 return;
 
             // use vanilla logic
             texture = Game1.cropSpriteSheet;
-            sourceRect = new Rectangle(x: target.rowInSpriteSheet.Value % 2 * 128, y: target.rowInSpriteSheet.Value / 2 * 16 * 2, width: 128, height: 32);
+            sourceRect = this.Reflection.GetMethod(target, "getSourceRect").Invoke<Rectangle>(target.rowInSpriteSheet.Value);
         }
     }
 }

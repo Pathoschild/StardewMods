@@ -1,4 +1,19 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to jahangmar (updated German) and shirutan (updated Japanese)!
+
+## 1.9.1
+Released 27 December 2019.
+
+* Improved translations. Thanks to L30Bola (updated Portuguese) and PlussRolf (updated Spanish)!
+
+## 1.9
+Released 15 December 2019.
+
+* Added grid feature (disabled by default).
+* Fixed the `export` console command not exporting the full map.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 1.8
 Released 26 November 2019.
 

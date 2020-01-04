@@ -8,6 +8,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -52,6 +54,37 @@ namespace Pathoschild.Stardew.Common
                     where building.indoors.Value != null
                     select building.indoors.Value
                 );
+        }
+
+        /// <summary>Get the item type for an item to disambiguate IDs.</summary>
+        /// <param name="item">The item to check.</param>
+        public static ItemType GetItemType(this Item item)
+        {
+            switch (item)
+            {
+                case Boots _:
+                    return ItemType.Boots;
+
+                case Furniture _:
+                    return ItemType.Furniture;
+
+                case Hat _:
+                    return ItemType.Hat;
+
+                case Tool _:
+                    return ItemType.Tool;
+
+                case Wallpaper _:
+                    return ItemType.Wallpaper;
+
+                case SObject obj:
+                    return obj.bigCraftable.Value
+                        ? ItemType.BigCraftable
+                        : ItemType.Object;
+
+                default:
+                    return ItemType.Unknown;
+            }
         }
 
         /****
@@ -226,14 +259,14 @@ namespace Pathoschild.Stardew.Common
         /// <param name="duration">The number of milliseconds during which to keep the message on the screen before it fades (or <c>null</c> for the default time).</param>
         public static void ShowInfoMessage(string message, int? duration = null)
         {
-            Game1.addHUDMessage(new HUDMessage(message, 3) { noIcon = true, timeLeft = duration ?? HUDMessage.defaultTime });
+            Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type) { noIcon = true, timeLeft = duration ?? HUDMessage.defaultTime });
         }
 
         /// <summary>Show an error message to the player.</summary>
         /// <param name="message">The message to show.</param>
         public static void ShowErrorMessage(string message)
         {
-            Game1.addHUDMessage(new HUDMessage(message, 3));
+            Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type));
         }
 
         /****

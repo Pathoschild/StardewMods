@@ -26,42 +26,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The lookup target.</summary>
         private readonly Building Target;
 
         /// <summary>The building's source rectangle in its spritesheet.</summary>
         private readonly Rectangle SourceRectangle;
 
-        /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private readonly Metadata Metadata;
-
-        /// <summary>Whether to only show content once the player discovers it.</summary>
-        private readonly bool ProgressionMode;
-
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="building">The lookup target.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
         /// <param name="translations">Provides translations stored in the mod folder.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
-        public BuildingSubject(GameHelper gameHelper, Metadata metadata, Building building, Rectangle sourceRectangle, ITranslationHelper translations, IReflectionHelper reflectionHelper, bool progressionMode)
-            : base(gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
+        public BuildingSubject(SubjectFactory codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle, ITranslationHelper translations)
+            : base(codex, gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
         {
             // init
-            this.Metadata = metadata;
-            this.Reflection = reflectionHelper;
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
-            this.ProgressionMode = progressionMode;
 
             // get name/description from blueprint if available
             try
@@ -77,8 +63,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             var text = this.Text;
 
@@ -98,7 +83,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => new FarmerSubject(this.GameHelper, owner, text));
+                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => this.Codex.GetPlayer(owner));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(this.GameHelper, L10n.Building.Owner(), L10n.Building.OwnerNone());
 
@@ -108,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => new CharacterSubject(this.GameHelper, horse, TargetType.Horse, this.Metadata, text, this.Reflection, this.ProgressionMode));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => this.Codex.GetCharacter(horse, TargetType.Horse));
                     yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
@@ -181,7 +166,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // drops
                             int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                            yield return new ItemDropListField(this.GameHelper, L10n.Building.FishPondDrops(), this.GetPossibleDrops(pond, pondData), sort: false, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop));
+                            yield return new FishPondDropsField(this.GameHelper, L10n.Building.FishPondDrops(), pond.currentOccupants.Value, pondData, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop.ToString()));
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
@@ -223,8 +208,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<IDebugField> GetDebugFields(Metadata metadata)
+        public override IEnumerable<IDebugField> GetDebugFields()
         {
             Building target = this.Target;
 
@@ -379,13 +363,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="data">The fish pond data.</param>
         private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetPopulationGates(FishPond pond, FishPondData data)
         {
-            int nextQuest = -1;
-            foreach (var gate in data.PopulationGates)
+            bool foundNextQuest = false;
+            foreach (FishPondPopulationGateData gate in this.GameHelper.GetFishPondPopulationGates(data))
             {
-                int newPopulation = gate.Key + 1;
+                int newPopulation = gate.NewPopulation;
 
                 // done
-                if (pond.lastUnlockedPopulationGate.Value >= gate.Key)
+                if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
                 {
                     yield return new KeyValuePair<IFormattedText[], bool>(
                         key: new IFormattedText[] { new FormattedText(L10n.Building.FishPondQuestsDone(count: newPopulation)) },
@@ -395,76 +379,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 }
 
                 // get required items
-                if (nextQuest == -1)
-                    nextQuest = gate.Key;
-                List<string> requiredItems = new List<string>();
-                foreach (string entry in gate.Value)
-                {
-                    // parse requirement
-                    string[] parts = entry.Split(' ');
-                    int id = -1;
-                    int minCount = 1;
-                    int maxCount = 1;
-                    if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out int itemID))
+                string[] requiredItems = gate.RequiredItems
+                    .Select(drop =>
                     {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
-                    if (parts.Length >= 2 && !int.TryParse(parts[1], out minCount))
-                    {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
-                    if (parts.Length >= 3 && !int.TryParse(parts[1], out maxCount))
-                    {
-                        requiredItems.Add(entry);
-                        continue;
-                    }
+                        // build display string
+                        SObject obj = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                        string summary = obj.DisplayName;
+                        if (drop.MinCount != drop.MaxCount)
+                            summary += $" ({L10n.Generic.Range(min: drop.MinCount, max: drop.MaxCount)})";
+                        else if (drop.MinCount > 1)
+                            summary += $" ({drop.MinCount})";
 
-                    // build display string
-                    if (maxCount < minCount)
-                        maxCount = minCount;
-                    SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
-                    string summary = obj.DisplayName;
-                    if (minCount != maxCount)
-                        summary += $" ({L10n.Generic.Range(min: minCount, max: maxCount)})";
-                    else if (minCount > 1)
-                        summary += $" ({minCount})";
-
-                    // track requirement
-                    requiredItems.Add(summary);
-                }
+                        // track requirement
+                        return summary;
+                    })
+                    .ToArray();
 
                 // display requirements
                 string itemList = string.Join(", ", requiredItems);
-                string result = requiredItems.Count > 1
+                string result = requiredItems.Length > 1
                     ? L10n.Building.FishPondQuestsIncompleteRandom(newPopulation, itemList)
                     : L10n.Building.FishPondQuestsIncompleteOne(newPopulation, requiredItems[0]);
-                if (nextQuest == gate.Key)
+
+                // show next quest
+                if (!foundNextQuest)
                 {
+                    foundNextQuest = true;
+
                     int nextQuestDays = data.SpawnTime
                         + (data.SpawnTime * (pond.maxOccupants.Value - pond.currentOccupants.Value))
                         - pond.daysSinceSpawn.Value;
                     result += $"; {L10n.Building.FishPondQuestsAvailable(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
                 }
                 yield return new KeyValuePair<IFormattedText[], bool>(key: new IFormattedText[] { new FormattedText(result) }, value: false);
-            }
-        }
-
-        /// <summary>Get a fish pond's possible drops.</summary>
-        /// <param name="pond">The fish pond.</param>
-        /// <param name="data">The fish pond data.</param>
-        /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
-        private IEnumerable<ItemDropData> GetPossibleDrops(FishPond pond, FishPondData data)
-        {
-            foreach (FishPondReward drop in data.ProducedItems)
-            {
-                if (pond.currentOccupants.Value < drop.RequiredPopulation)
-                    continue;
-
-                yield return new ItemDropData(drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
-                if (drop.Chance >= 1)
-                    break; // guaranteed drop, any further drops will be ignored
             }
         }
     }

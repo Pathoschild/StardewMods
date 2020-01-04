@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Storage
 {
@@ -104,7 +105,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             foreach (Item item in this.Chest.items.ToArray())
             {
                 if (item != null)
-                    yield return this.GetTrackedItem(item);
+                {
+                    ITrackedStack stack = null;
+                    try
+                    {
+                        stack = this.GetTrackedItem(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        string error = $"Failed to retrieve item #{item.ParentSheetIndex} ('{item.Name}'";
+                        if (item is SObject obj && obj.preservedParentSheetIndex.Value >= 0)
+                            error += $", preserved item #{obj.preservedParentSheetIndex.Value}";
+                        error += $") from container '{this.Chest.Name}' at {this.Location.Name} (tile: {this.TileArea.X}, {this.TileArea.Y}).";
+
+                        throw new InvalidOperationException(error, ex);
+                    }
+
+                    if (stack != null)
+                        yield return stack;
+                }
             }
         }
 

@@ -81,7 +81,7 @@ setting           | what it affects
 `AllowDangerousCommands` | Default `false`. This allows game debug commands which end the current day/season & save, randomize your player or farmhouse decorations, or crash the game. Only change this if you're aware of the consequences.
 
 ## Compatibility
-Debug Mode is compatible with Stardew Valley 1.3+ on Linux/Mac/Windows, both single-player and
+Debug Mode is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. Commands may have different effects in multiplayer; see multiplayer notes for each
 command.
 

@@ -37,6 +37,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
 
+        /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily means it succeeded (e.g. the file may not have existed).</summary>
+        private bool AttemptedDataLoad;
+
 
         /*********
         ** Accessors
@@ -90,43 +93,46 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the patch data changed.</returns>
         public override bool UpdateContext(IContext context)
         {
-            // update loaded entries
-            bool fromFileChanged = false;
-            if (this.RawFromAsset != null)
+            // skip: don't need to handle a data file
+            if (this.RawFromAsset == null)
+                return base.UpdateContext(context);
+
+            // skip: file already loaded and target didn't change
+            if (!this.RawFromAsset.UpdateContext(context) && this.AttemptedDataLoad)
+                return base.UpdateContext(context);
+
+            // reload non-data changes
+            this.Contextuals
+                .Remove(this.Records)
+                .Remove(this.Fields)
+                .Remove(this.MoveRecords);
+            base.UpdateContext(context);
+
+            // reload data
+            this.Records = new EditDataPatchRecord[0];
+            this.Fields = new EditDataPatchField[0];
+            this.MoveRecords = new EditDataPatchMoveRecord[0];
+            if (this.IsReady)
             {
-                fromFileChanged = this.RawFromAsset.UpdateContext(context) || this.Records == null;
-
-                if (fromFileChanged)
+                if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
                 {
-                    this.Contextuals
-                        .Remove(this.Records)
-                        .Remove(this.Fields)
-                        .Remove(this.MoveRecords);
-
-                    this.Records = new EditDataPatchRecord[0];
-                    this.Fields = new EditDataPatchField[0];
-                    this.MoveRecords = new EditDataPatchMoveRecord[0];
-
-                    if (this.RawFromAsset.IsReady)
-                    {
-                        if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
-                        {
-                            this.Records = records.ToArray();
-                            this.Fields = fields.ToArray();
-                            this.MoveRecords = moveEntries.ToArray();
-                        }
-                        else
-                            this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
-                    }
-
-                    this.Contextuals
-                        .Add(this.Records)
-                        .Add(this.Fields)
-                        .Add(this.MoveRecords);
+                    this.Records = records.ToArray();
+                    this.Fields = fields.ToArray();
+                    this.MoveRecords = moveEntries.ToArray();
                 }
+                else
+                    this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
+
+                this.AttemptedDataLoad = true;
             }
 
-            return base.UpdateContext(context) || fromFileChanged;
+            this.Contextuals
+                .Add(this.Records)
+                .Add(this.Fields)
+                .Add(this.MoveRecords);
+            this.IsReady = this.IsReady && this.Contextuals.IsReady;
+
+            return true;
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>

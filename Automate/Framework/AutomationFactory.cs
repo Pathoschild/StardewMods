@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
-            // chest container
+            // chest container 
             if (obj is Chest chest)
                 return new ChestContainer(chest, location, tile);
 

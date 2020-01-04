@@ -19,8 +19,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
-        public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
-            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste, onlyRevealed)) { }
+        /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
+        public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
+            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
 
 
         /*********
@@ -31,7 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="giftTastes">The items by how much this NPC likes receiving them.</param>
         /// <param name="showTaste">The gift taste to show.</param>
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
-        private static IEnumerable<IFormattedText> GetText(GameHelper gameHelper, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
+        /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
+        private static IEnumerable<IFormattedText> GetText(GameHelper gameHelper, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
@@ -47,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     let isOwned = ownedItems.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
                     where !onlyRevealed || entry.IsRevealed
                     orderby isInventory descending, isOwned descending, item.DisplayName
-                    select new { Item = item, IsInventory = isInventory, IsOwned = isOwned }
+                    select new { Item = item, IsInventory = isInventory, IsOwned = isOwned, isRevealed = entry.IsRevealed }
                 )
                 .ToArray();
             int unrevealed = onlyRevealed
@@ -61,15 +63,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 {
                     var entry = items[i];
                     string text = i != last
-                        ? entry.Item.DisplayName + ","
+                        ? entry.Item.DisplayName + ", "
                         : entry.Item.DisplayName;
+                    bool bold = highlightUnrevealed && !entry.isRevealed;
 
                     if (entry.IsInventory)
-                        yield return new FormattedText(text, Color.Green);
+                        yield return new FormattedText(text, Color.Green, bold);
                     else if (entry.IsOwned)
-                        yield return new FormattedText(text, Color.Black);
+                        yield return new FormattedText(text, Color.Black, bold);
                     else
-                        yield return new FormattedText(text, Color.Gray);
+                        yield return new FormattedText(text, Color.Gray, bold);
                 }
 
                 if (unrevealed > 0)

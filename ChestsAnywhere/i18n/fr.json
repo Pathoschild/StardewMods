@@ -7,8 +7,8 @@
     "default-name.shipping-bin": "Bac d'expédition",
 
     // default category names
-    "default-category.owned-cabin": "Cabin ({{owner}})", // TODO
-    "default-category.unowned-cabin": "Cabin (empty)", // TODO
+    "default-category.owned-cabin": "Cabane de {{owner}}",
+    "default-category.unowned-cabin": "Cabane (vide)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
@@ -20,8 +20,8 @@
     "label.hide-chest": "Cacher ce coffre",
     "label.hide-chest-hidden": "Cacher ce coffre (vous devrez trouver ce coffre pour modifier cela !)",
     "label.automate-prefer-output": "(Automatisation) Mettre les objets dans ce coffre d'abord",
-    "label.automate-no-input": "(Automatisation) Don't put items in this chest", // TODO
-    "label.automate-no-output": "(Automatisation) Don't get items from this chest", // TODO
+    "label.automate-no-input": "(Automatisation) Ne pas mettre les objets dans ce coffre",
+    "label.automate-no-output": "(Automatisation) Ne pas obtenir les objets dans ce coffre",
     "label.automate-ignore": "(Automatisation) Ne pas utiliser ce coffre pour l'automatisation",
 
     // button labels

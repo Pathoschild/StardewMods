@@ -1,0 +1,4 @@
+{
+    "enabled-message": "noclipモード 有効; もう一度 {{button}} を押してオフにします。",
+    "disabled-message": "noclipモード 無効; もう一度 {{button}} を押してオンにします。"
+}

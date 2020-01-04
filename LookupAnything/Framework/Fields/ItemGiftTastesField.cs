@@ -15,12 +15,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
-        /// <param name="itemID">The item ID for which to show gift tastes.</param>
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTaste">The gift taste to show.</param>
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
-        public ItemGiftTastesField(GameHelper gameHelper, string label, int itemID, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
-            : base(gameHelper, label, ItemGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed)) { }
+        /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
+        public ItemGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
+            : base(gameHelper, label, ItemGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
 
 
         /*********
@@ -30,18 +30,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTaste">The gift taste to show.</param>
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
-        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed)
+        /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
+        private static IEnumerable<IFormattedText> GetText(IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 yield break;
 
             // get data
-            string[] names =
+            GiftTasteModel[] visibleEntries =
                 (
                     from entry in giftTastes[showTaste]
                     orderby entry.Villager.Name ascending
                     where !onlyRevealed || entry.IsRevealed
-                    select entry.Villager.Name
+                    select entry
                 )
                 .ToArray();
             int unrevealed = onlyRevealed
@@ -49,9 +50,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 : 0;
 
             // build result
-            if (names.Any())
+            if (visibleEntries.Any())
             {
-                yield return new FormattedText(string.Join(", ", names));
+                for (int i = 0, last = visibleEntries.Length - 1; i <= last; i++)
+                {
+                    GiftTasteModel entry = visibleEntries[i];
+
+                    yield return new FormattedText(
+                        text: entry.Villager.Name + (i != last ? ", " : ""),
+                        bold: highlightUnrevealed && !entry.IsRevealed
+                    );
+                }
+
                 if (unrevealed > 0)
                     yield return new FormattedText(L10n.Item.UndiscoveredVillagersAppend(count: unrevealed), Color.Gray);
             }

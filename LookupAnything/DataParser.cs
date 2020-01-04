@@ -6,10 +6,12 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.FishPond;
 using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
@@ -71,6 +73,166 @@ namespace Pathoschild.Stardew.LookupAnything
                 // create bundle
                 yield return new BundleModel(id, name, displayName, area, reward, ingredients);
             }
+        }
+
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            foreach (var gate in data.PopulationGates)
+            {
+                // get required items
+                FishPondPopulationGateQuestItemData[] questItems = gate.Value
+                    .Select(entry =>
+                    {
+                        // parse ID
+                        string[] parts = entry.Split(' ');
+                        int id;
+                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out id))
+                            return null;
+
+                        // parse counts
+                        int minCount = 1;
+                        int maxCount = 1;
+                        if (parts.Length >= 2)
+                            int.TryParse(parts[1], out minCount);
+                        if (parts.Length >= 3)
+                            int.TryParse(parts[1], out maxCount);
+
+                        // normalize counts
+                        minCount = Math.Max(1, minCount);
+                        maxCount = Math.Max(1, maxCount);
+                        if (maxCount < minCount)
+                            maxCount = minCount;
+
+                        // build entry
+                        return new FishPondPopulationGateQuestItemData(id, minCount, maxCount);
+                    })
+                    .Where(p => p != null)
+                    .ToArray();
+
+                // build entry
+                yield return new FishPondPopulationGateData(gate.Key, questItems);
+            }
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            foreach (FishPondReward drop in data.ProducedItems)
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID, Metadata metadata)
+        {
+            // get raw fish data
+            string[] fishFields;
+            {
+                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string rawData))
+                    return null;
+                fishFields = rawData.Split('/');
+                if (fishFields.Length < 13)
+                    return null;
+            }
+
+            // parse location data
+            var locations = new List<FishSpawnLocationData>();
+            foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
+            {
+                if (entry.Key == "Temp" || entry.Key == "fishingGame")
+                    continue; // ignore event data
+
+                string locationName = entry.Key;
+                List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
+
+                // get locations
+                string[] locationFields = entry.Value.Split('/');
+                for (int s = 4; s <= 7; s++)
+                {
+                    string[] seasonFields = locationFields[s].Split(' ');
+                    string season = s switch
+                    {
+                        4 => "spring",
+                        5 => "summer",
+                        6 => "fall",
+                        7 => "winter",
+                        _ => throw new NotSupportedException() // should never happen
+                    };
+
+                    for (int i = 0, last = seasonFields.Length + 1; i + 1 < last; i += 2)
+                    {
+                        if (!int.TryParse(seasonFields[i], out int curFishID) || curFishID != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
+                            continue;
+
+                        curLocations.Add(new FishSpawnLocationData(locationName, areaID, new[] { season }));
+                    }
+                }
+
+                // combine seasons for same area
+                locations.AddRange(
+                    from areaGroup in curLocations.GroupBy(p => p.Area)
+                    let seasons = areaGroup.SelectMany(p => p.Seasons).Distinct().ToArray()
+                    select new FishSpawnLocationData(locationName, areaGroup.Key, seasons)
+                );
+            }
+
+            // parse fish data
+            var timesOfDay = new List<FishSpawnTimeOfDayData>();
+            FishSpawnWeather weather = FishSpawnWeather.Both;
+            int minFishingLevel = 0;
+            bool isUnique = false;
+            if (locations.Any()) // ignore default spawn criteria if the fish doesn't spawn naturally; in that case it should be specified explicitly in custom data below (if any)
+            {
+                // times of day
+                string[] timeFields = fishFields[5].Split(' ');
+                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                {
+                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
+                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                }
+
+                // weather
+                if (!Enum.TryParse(fishFields[7], true, out weather))
+                    weather = FishSpawnWeather.Both;
+
+                // min fishing level
+                if (!int.TryParse(fishFields[12], out minFishingLevel))
+                    minFishingLevel = 0;
+            }
+
+            // read custom data
+            if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData customRules))
+            {
+                if (customRules.MinFishingLevel > minFishingLevel)
+                    minFishingLevel = customRules.MinFishingLevel;
+
+                if (customRules.Weather != FishSpawnWeather.Unknown)
+                    weather = customRules.Weather;
+
+                isUnique = isUnique || customRules.IsUnique;
+
+                if (customRules.TimesOfDay != null)
+                    timesOfDay.AddRange(customRules.TimesOfDay);
+
+                if (customRules.Locations != null)
+                    locations.AddRange(customRules.Locations);
+            }
+
+
+            // build model
+            return new FishSpawnData(
+                fishID: fishID,
+                locations: locations.ToArray(),
+                timesOfDay: timesOfDay.ToArray(),
+                weather: weather,
+                minFishingLevel: minFishingLevel,
+                isUnique: isUnique
+            );
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>

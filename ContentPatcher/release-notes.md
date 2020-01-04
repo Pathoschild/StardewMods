@@ -1,6 +1,31 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed whitespace between tokens being ignored (e.g. `{{season}} {{day}}` now outputs `Summer 14` instead of `Summer14`).
+
+## 1.11.1
+Released 27 December 2019.
+
+* Mitigated `OutOfMemoryException` issue for some players. (The underlying issue in SMAPI is still being investigated.)
+* Reduced performance impact in some cases when warping with content packs which have a large number of seasonal changes.
+* Fixed patches being reapplied unnecessarily in some cases.
+* Fixed token validation not applied to the entire token string in some cases.
+* Fixed `Random` tokens being rerolled when warping if the patch is location-dependent.
+* Fixed error when married to an NPC that's not loaded.
+
+## 1.11
+Released 15 December 2019.
+
+* Added `Lowercase` and `Uppercase` tokens.
+* `Random` tokens can have 'pinned keys' to support many new scenarios (see readme).
+* `Random` tokens are now bounded for immutable choices (e.g. you can use them in numeric fields if all their choices are numeric).
+* `FromArea` and `ToArea` fields can now use tokens (thanks to spacechase0!).
+* Optimized asset loading/editing a bit.
+* Fixed warning when an `EditData` patch references a file that doesn't exist when that's checked with a `HasFile` condition.
+* Fixed `HasFile` token being case-sensitive on Linux/Mac.
+* Fixed error if a content pack has a null patch.
+
 ## 1.10.1
 Released 02 December 2019.
 

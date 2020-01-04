@@ -54,6 +54,7 @@
     "friendship-status.divorced": "Divorced",
     "friendship-status.kicked-out": "Kicked out",
 
+
     /*********
     ** Data translations
     *********/
@@ -78,23 +79,18 @@
     "recipe-type.cooking": "Cooking",
     "recipe-type.crafting": "Crafting",
 
-    /*********
-    ** NPC overrides
-    *********/
+    // NPC descriptions
     "data.npc.pet.description": "Your loyal pet.",
     "data.npc.horse.description": "Your loyal steed.",
     "data.npc.junimo.description": "A forest spirit from the spirit world. Very little is known about them.",
     "data.npc.trashbear.description": "A friendly spirit who cleans up trash.",
 
-    /*********
-    ** Item overrides
-    *********/
     // item types
     "data.type.debris": "Debris",
     "data.type.stone": "Stone",
     "data.type.container": "Container",
 
-    // farm
+    // farm items
     "data.item.egg-incubator.description": "Hatches eggs into baby chickens and ducks.",
     "data.item.broken-branch.name": "Broken Branch",
     "data.item.broken-branch.description": "A broken branch. Chop with an axe to obtain wood.",
@@ -159,10 +155,38 @@
     "data.item.box.name": "Box",
     "data.item.box.description": "Break apart to obtain sundry goods.",
 
+    // location names
+    "location.backwoods": "backwoods",
+    "location.beach": "beach",
+    "location.beach.east-pier": "beach (eastern pier)",
+    "location.bugLand": "mutant bug lair",
+    "location.busStop": "bus stop",
+    "location.desert": "desert",
+    "location.farm": "farm",
+    "location.farmCave": "farm cave",
+    "location.farmHouse": "farmhouse",
+    "location.forest": "forest",
+    "location.forest.fish-area-0": "forest river",
+    "location.forest.fish-area-1": "forest pond",
+    "location.forest.island-tip": "forest river (south tip of large island)", 
+    "location.mountain": "mountain",
+    "location.railroad": "railroad",
+    "location.sewer": "sewers",
+    "location.submarine": "Night Market submarine",
+    "location.town": "town",
+    "location.town.northmost-bridge": "town (northmost bridge)",
+    "location.tunnel": "bus tunnel",
+    "location.undergroundMine": "mines",
+    "location.undergroundMine.level": "mine level {{level}}",
+    "location.witchSwamp": "witch's swamp",
+    "location.woods": "secret woods",
+    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+
+
     /*********
-    ** Specific lookups
+    ** Animal lookups
     *********/
-    // animal lookup labels
+    // labels
     "animal.love": "Love",
     "animal.happiness": "Happiness",
     "animal.mood": "Mood today",
@@ -171,7 +195,7 @@
     "animal.growth": "Growth",
     "animal.sells-for": "Sells for",
 
-    // animal lookup values
+    // values
     "animal.complaints.hungry": "wasn't fed yesterday",
     "animal.complaints.left-out": "was left outside last night",
     "animal.complaints.new-home": "moved into new home",
@@ -179,7 +203,11 @@
     "animal.complaints.not-petted": "hasn't been petted today",
     "animal.complaints.wild-animal-attack": "attacked by wild animals during the night",
 
-    // building lookup labels
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
     "building.animals": "Animals",
     "building.construction": "Construction",
     "building.feed-trough": "Feed trough",
@@ -191,11 +219,7 @@
     "building.upgrades": "Upgrades",
     "building.water-trough": "Water trough",
 
-    "building.fish-pond.population": "Population",
-    "building.fish-pond.drops": "Drops",
-    "building.fish-pond.quests": "Quests",
-
-    // building lookup values
+    // values
     "building.animals.summary": "{{count}} of max {{max}} animals",
     "building.construction.summary": "ready on {{date}}",
     "building.feed-trough.automated": "automated",
@@ -219,15 +243,30 @@
     "building.upgrades.coop.2": "up to 12 animals; add autofeed and rabbits",
     "building.water-trough.summary": "{{filled}} of {{max}} water troughs filled",
 
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Population",
+    "building.fish-pond.drops": "Drops",
+    "building.fish-pond.quests": "Quests",
+
+    // values
     "building.fish-pond.population.empty": "Add a fish to start this pond",
     "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing one of these:",
+    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:",
+    "building.fish-pond.drops.min-fish": "With {{count}} fish:",
     "building.fish-pond.quests.done": "{{count}} fish",
     "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
     "building.fish-pond.quests.available": "available {{relativeDate}}",
 
-    // bush lookup labels
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
     "bush.name.berry": "Berry Bush",
     "bush.name.plain": "Plain Bush",
     "bush.name.tea": "Tea Bush",
@@ -238,12 +277,16 @@
     "bush.growth": "Growth",
     "bush.next-harvest": "Next harvest",
 
-    // bush lookup values
+    // values
     "bush.growth.summary": "mature on {{date}}",
     "bush.schedule.berry": "20% chance of salmonberries in spring 15-18 and blackberries in fall 8-11.",
     "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
 
-    // fruit tree lookup labels
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
     "fruit-tree.complaints": "Complaints",
     "fruit-tree.name": "{{fruitName}} Tree",
     "fruit-tree.growth": "Growth",
@@ -251,7 +294,7 @@
     "fruit-tree.season": "Season",
     "fruit-tree.quality": "Quality",
 
-    // fruit tree lookup values
+    // values
     "fruit-tree.complaints.adjacent-objects": "can't grow because there are adjacent objects",
     "fruit-tree.growth.summary": "mature on {{date}}",
     "fruit-tree.next-fruit.struck-by-lighting": "struck by lightning! Will recover in {{count}} days.",
@@ -263,11 +306,15 @@
     "fruit-tree.quality.on-date-next-year": "{{quality}} on {{date}} next year",
     "fruit-tree.season.summary": "{{season}} (or anytime in greenhouse)",
 
-    // crop lookup labels
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
     "crop.summary": "Crop",
     "crop.harvest": "Harvest",
 
-    // crop lookup values
+    // values
     "crop.summary.dead": "This crop is dead.",
     "crop.summary.drops-X": "drops {{count}}",
     "crop.summary.drops-X-to-Y": "drops {{min}} to {{max}} ({{percent}}% chance of extra crops)",
@@ -277,25 +324,11 @@
     "crop.summary.sells-for": "sells for {{price}}",
     "crop.harvest.too-late": "too late in the season for the next harvest (would be on {{date}})",
 
-    // item lookup labels
-    "item.can-be-dyed": "Can be dyed",
-    "item.produces-dye": "Produces dye",
 
-    "item.cask-contents": "Contents",
-    "item.cask-schedule": "Aging",
-
-    "item.crabpot-bait": "Bait",
-    "item.crabpot-bait-needed": "Needs bait!",
-    "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.",
-
-    "item.fence-health": "Health",
-
-    "item.movie-snack-preference": "Preference",
-    "item.movie-ticket.movie-this-week": "Movie this week",
-    "item.movie-ticket.loves-movie": "Loves movie",
-    "item.movie-ticket.likes-movie": "Likes movie",
-    "item.movie-ticket.dislikes-movie": "Dislikes movie",
-
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
     "item.contents": "Contents",
     "item.loves-this": "Loves this",
     "item.likes-this": "Likes this",
@@ -310,27 +343,15 @@
     "item.see-also": "See also",
     "item.sells-for": "Sells for",
     "item.sells-to": "Sells to",
+    "item.can-be-dyed": "Can be dyed",
+    "item.produces-dye": "Produces dye",
 
-    // item lookup values
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers",
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers",
-
-    "item.cask-schedule.now": "{{quality}} ready now",
-    "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
-    "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
-    "item.cask-schedule.in-x-days": "{{quality}} in {{count}} days ({{date}})",
-
-    "item.fence-health.gold-clock": "no decay with Gold Clock",
-    "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
-
-    "item.movie-snack-preference.love": "{{name}} loves this",
-    "item.movie-snack-preference.like": "{{name}} likes this",
-    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
-    "item.movie-ticket.movie-this-week.none": "No movie this week",
-
+    // values
     "item.contents.placed": "{{name}} placed",
     "item.contents.ready": "{{name}} ready",
     "item.contents.partial": "{{name}} in {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers",
+    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers",
     "item.needed-for.community-center": "community center ({{bundles}})",
     "item.needed-for.full-shipment": "full shipment achievement (ship one)",
     "item.needed-for.polyculture": "polyculture achievement (ship {{count}} more)",
@@ -343,7 +364,82 @@
     "item.number-owned.summary": "you own {{count}} of these",
     "item.number-crafted.summary": "you made {{count}} of these",
 
-    // monster lookup labels
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Contents",
+    "item.cask-schedule": "Aging",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} ready now",
+    "item.cask-schedule.now-partial": "{{quality}} now (use pickaxe to stop aging)",
+    "item.cask-schedule.tomorrow": "{{quality}} tomorrow",
+    "item.cask-schedule.in-x-days": "{{quality}} in {{count}} days ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Bait",
+    "item.crabpot-bait-needed": "Needs bait!",
+    "item.crabpot-bait-not-needed": "Not needed due to Luremaster profession.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Health",
+
+    // values
+    "item.fence-health.gold-clock": "no decay with Gold Clock",
+    "item.fence-health.summary": "{{percent}}% (roughly {{count}} days left)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Fish pond drops",
+    "item.fish-spawn-rules": "Spawn rules",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
+    "item.fish-spawn-rules.locations": "locations: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "any season",
+    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
+    "item.fish-spawn-rules.time": "time of day: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
+    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Preference",
+    "item.movie-ticket.movie-this-week": "Movie this week",
+    "item.movie-ticket.loves-movie": "Loves movie",
+    "item.movie-ticket.likes-movie": "Likes movie",
+    "item.movie-ticket.dislikes-movie": "Dislikes movie",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} loves this",
+    "item.movie-snack-preference.like": "{{name}} likes this",
+    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
+    "item.movie-ticket.movie-this-week.none": "No movie this week",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
     "monster.invincible": "Invincible",
     "monster.health": "Health",
     "monster.drops": "Drops",
@@ -352,13 +448,17 @@
     "monster.attack": "Attack",
     "monster.adventure-guild": "Adventure Guild",
 
-    // monster lookup values
+    // values
     "monster.drops.nothing": "nothing",
     "monster.adventure-guild.complete": "complete",
     "monster.adventure-guild.incomplete": "in progress",
     "monster.adventure-guild.progress": "killed {{count}} of {{requiredCount}}",
 
-    // NPC lookup labels
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
     "npc.birthday": "Birthday",
     "npc.can-romance": "Can romance",
     "npc.friendship": "Friendship",
@@ -373,7 +473,7 @@
     "npc.dislikes-gifts": "Dislikes gifts",
     "npc.hates-gifts": "Hates gifts",
 
-    // NPC lookup values
+    // values
     "npc.can-romance.married": "You're married! <", // < turns into a heart
     "npc.can-romance.housemate": "You're housemates!",
     "npc.friendship.not-met": "You haven't met them yet.",
@@ -382,10 +482,14 @@
     "npc.undiscovered-gift-taste": "{{count}} unrevealed items",
     "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items",
 
-    // NPC child lookup labels
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
     "npc.child.age": "Age",
 
-    // NPC child lookup values
+    // values
     "npc.child.age.description-partial": "{{label}} ({{count}} days to {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "newborn",
@@ -393,20 +497,28 @@
     "npc.child.age.crawler": "crawler",
     "npc.child.age.toddler": "toddler",
 
-    // pet lookup labels
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
     "pet.love": "Love",
     "pet.petted-today": "Petted today",
     "pet.last-petted": "Last petted",
     "pet.water-bowl": "Water bowl",
 
-    // pet lookup values
+    // values
     "pet.last-petted.yes": "yes (+12 love)",
     "pet.last-petted.days-ago": "{{days}} days ago",
     "pet.last-petted.never": "never",
     "pet.water-bowl.empty": "empty",
     "pet.water-bowl.filled": "filled (+6 love)",
 
-    // player lookup labels
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
     "player.farm-name": "Farm name",
     "player.farm-map": "Farm map",
     "player.favorite-thing": "Favorite thing",
@@ -422,7 +534,7 @@
     "player.luck": "Luck",
     "player.save-format": "Save format",
 
-    // player lookup values
+    // values
     "player.farm-map.custom": "Custom",
     "player.gender.male": "male",
     "player.gender.female": "female",
@@ -430,7 +542,11 @@
     "player.skill.progress": "level {{level}} ({{expNeeded}} XP to next)",
     "player.skill.progress-last": "level {{level}}",
 
-    // tile lookup labels
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
     "tile.map-name": "Map name",
     "tile.tile": "Tile",
@@ -440,20 +556,28 @@
     "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
     "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
 
-    // tile lookup values
+    // values
     "tile.tile.none-here": "no tile here",
 
-    // trash bear lookup labels
+
+    /*********
+    ** Trash bear lookups
+    *********/
+    // labels
     "trash-bear.item-wanted": "Item wanted",
     "trash-bear.quest-progress": "Quest progress",
 
-    // tree lookup labels
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
     "tree.stage": "Growth stage",
     "tree.next-growth": "Next growth",
     "tree.has-seed": "Has seed",
     "tree.is-fertilized": "Is fertilized",
 
-    // non-fruit tree lookup values
+    // values
     "tree.name.maple": "Maple Tree",
     "tree.name.oak": "Oak Tree",
     "tree.name.pine": "Pine Tree",
@@ -467,7 +591,7 @@
     "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
     "tree.is-fertilized.effects": "guarantees daily growth, even in winter",
 
-    // tree stages
+    // growth stages
     "tree.stages.seed": "seed",
     "tree.stages.sprout": "sprout",
     "tree.stages.sapling": "sapling",

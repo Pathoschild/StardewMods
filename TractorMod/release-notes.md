@@ -1,4 +1,10 @@
 # Release notes
+## 4.9.1
+Released 15 December 2019.
+
+* Added tree fertilizer support.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 4.9
 Released 26 November 2019.
 

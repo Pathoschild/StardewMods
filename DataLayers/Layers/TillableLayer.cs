@@ -47,18 +47,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
-
-            // tillable tiles
             TileData[] tillableTiles = tiles.Where(p => p.Type.Id == this.Tillable.Id).ToArray();
-            yield return new TileGroup(tillableTiles, outerBorderColor: this.Tillable.Color);
 
-            // other tiles
-            yield return new TileGroup(tiles.Except(tillableTiles).ToArray());
+            return new[]
+            {
+                new TileGroup(tillableTiles, outerBorderColor: this.Tillable.Color),
+                new TileGroup(tiles.Except(tillableTiles))
+            };
         }
 
 

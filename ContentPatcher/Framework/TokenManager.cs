@@ -60,15 +60,15 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
-        /// <param name="contentPack">The content pack to manage.</param>
-        public ModTokenContext TrackLocalTokens(IContentPack contentPack)
+        /// <param name="pack">The content pack to manage.</param>
+        public ModTokenContext TrackLocalTokens(ManagedContentPack pack)
         {
-            string scope = contentPack.Manifest.UniqueID;
+            string scope = pack.Manifest.UniqueID;
 
-            if (!this.LocalTokens.TryGetValue(contentPack, out ModTokenContext localTokens))
+            if (!this.LocalTokens.TryGetValue(pack.Pack, out ModTokenContext localTokens))
             {
-                this.LocalTokens[contentPack] = localTokens = new ModTokenContext(scope, this);
-                foreach (IValueProvider valueProvider in this.GetLocalValueProviders(contentPack))
+                this.LocalTokens[pack.Pack] = localTokens = new ModTokenContext(scope, this);
+                foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
                     localTokens.Add(new GenericToken(valueProvider, scope));
             }
 
@@ -202,6 +202,8 @@ namespace ContentPatcher.Framework
 
             // string manipulation
             yield return new RangeValueProvider();
+            yield return new LetterCaseValueProvider(ConditionType.Lowercase);
+            yield return new LetterCaseValueProvider(ConditionType.Uppercase);
 
             // other
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
@@ -211,9 +213,9 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the local value providers with which to initialize a local context.</summary>
         /// <param name="contentPack">The content pack for which to get tokens.</param>
-        private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
+        private IEnumerable<IValueProvider> GetLocalValueProviders(ManagedContentPack contentPack)
         {
-            yield return new HasFileValueProvider(contentPack.DirectoryPath);
+            yield return new HasFileValueProvider(contentPack.HasFile);
             yield return new RandomValueProvider(); // per-pack for more reproducible selection when troubleshooting
         }
 

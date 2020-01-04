@@ -1,0 +1,67 @@
+{
+    // accessible
+    "accessible.name": "Accessibilità",
+    "accessible.clear": "Libera",
+    "accessible.occupied": "Occupata",
+    "accessible.impassable": "Non passabile",
+    "accessible.warp": "Spostamento zona",
+
+    // buildable
+    "buildable.name": "Edificabile",
+    "buildable.buildable": "Puoi edificare qui",
+    "buildable.occupied": "Area occupata",
+    "buildable.not-buildable": "Non puoi edificare qui",
+
+    // coverage: bee houses
+    "bee-houses.name": "Copertura: Arnie",
+    "bee-houses.range": "Raggio fiori",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Copertura: Capanne dei Junimo",
+    "junimo-huts.can-harvest": "Puoi raccogliere",
+    "junimo-huts.cannot-harvest": "Non puoi raccogliere",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Copertura: Spaventapasseri",
+    "scarecrows.protected": "Area protetta",
+    "scarecrows.exposed": "Area esposta",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Copertura: Irrigatori",
+    "sprinklers.covered": "Area coperta",
+    "sprinklers.dry-crops": "Raccolto secco",
+
+    // crops: harvest
+    "crop-harvest.name": "Raccolti: Pronti per essere estratti",
+    "crop-harvest.ready": "Pronto",
+    "crop-harvest.not-ready": "Non Pronto",
+    "crop-harvest.not-enough-time": "Non crescerà in tempo",
+
+    // crops: watered
+    "crop-water.name": "Raccolti: Bagnati",
+    "crop-water.watered": "Raccolto bagnato",
+    "crop-water.dry": "Raccolto secco",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Raccolti: Acqua per le risaie",
+    "crop-paddy-water.in-range": "Vicino all'acqua",
+    "crop-paddy-water.not-in-range": "Terra secca",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Raccolti: Fertilizzati",
+    "crop-fertilizer.fertilizer": "Fertilizzante",
+    "crop-fertilizer.retaining-soil": "Terriccio rattenente",
+    "crop-fertilizer.speed-gro": "Crescipresto",
+
+    // machine processing
+    "machines.name": "Processo macchinario",
+    "machines.empty": "Vuoto",
+    "machines.processing": "Processando",
+    "machines.finished": "Finito",
+
+    // tillable
+    "tillable.name": "Coltivabile",
+    "tillable.tillable": "Coltivabile",
+    "tillable.occupied": "Occupata",
+    "tillable.not-tillable": "Non Coltivabile"
+}

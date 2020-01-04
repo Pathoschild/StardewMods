@@ -118,8 +118,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             }
 
             // reset pot
-            pot.readyForHarvest.Value = false;
-            pot.heldObject.Value = null;
+            this.GenericReset(item);
             pot.tileIndexToShow = 710;
             pot.bait.Value = null;
             this.Reflection.GetField<bool>(pot, "lidFlapping").SetValue(true);

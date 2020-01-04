@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="lexToken">The lexical token to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        public virtual bool TryMigrate(ref ILexToken lexToken, out string error)
+        public virtual bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (lexToken is LexTokenToken token)
             {
@@ -54,9 +54,9 @@ namespace ContentPatcher.Framework.Migrations
                 // check input arguments
                 if (token.InputArg != null)
                 {
-                    for (int i = 0; i < token.InputArg.Value.Parts.Length; i++)
+                    foreach (ILexToken part in token.InputArg.Parts)
                     {
-                        if (!this.TryMigrate(ref token.InputArg.Value.Parts[i], out error))
+                        if (!this.TryMigrate(part, out error))
                             return false;
                     }
                 }
@@ -74,9 +74,9 @@ namespace ContentPatcher.Framework.Migrations
         public virtual bool TryMigrate(IParsedTokenString tokenStr, out string error)
         {
             // tokens which need a higher version
-            for (int i = 0; i < tokenStr.LexTokens.Length; i++)
+            foreach (ILexToken token in tokenStr.LexTokens)
             {
-                if (!this.TryMigrate(ref tokenStr.LexTokens[i], out error))
+                if (!this.TryMigrate(token, out error))
                     return false;
             }
 

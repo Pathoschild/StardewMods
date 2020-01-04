@@ -1,6 +1,34 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
+* Fixed a missing translation for non-English players.
+* Improved translations. Thanks to asqwedcxz741 (updated Chinese)!
+
+## 1.24
+Released 27 December 2019.
+
+* Added fish spawn rules to fish lookups.
+* Added fish pond drops to fish lookups.
+* Added option to highlight item gift tastes that haven't been revealed in the NPC profile yet.
+* Revamped fish pond lookups to show locked drops and make the selection process more clear.
+* Fixed pet lookups showing untranslated 'cat' or 'dog' type.
+* Fixed hay in silos not counted towards number owned or when highlighting owned gifts.
+* Fixed lookup on Caroline's tea bush showing wrong "days ago" value for date planted.
+* Fixed item lookups sometimes showing wrong tailoring recipes.
+* Fixed missing/partial shirt icons in some cases.
+* Improved translations. Thanks to jahangmar (updated German), L30Bola (updated Portuguese), and PlussRolf (updated Spanish)!
+
+## 1.23.1
+Released 15 December 2019.
+
+* Updated for recent versions of Json Assets.
+* Fixed lookup on Haunted Skulls.
+* Fixed lookup on Caroline's tea bush.
+* Fixed rare issue where the HUD isn't restored when the lookup menu is force-replaced by another menu.
+* Improved translations. Thanks to LeecanIt (added Italian)!
+
 ## 1.23
 Released 26 November 2019.
 

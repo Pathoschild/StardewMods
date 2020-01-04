@@ -43,10 +43,9 @@
     "crop-water.dry": "Trocken",
 
     // crops: water for paddy crops
-    // TODO
-    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
-    "crop-paddy-water.in-range": "Near Water",
-    "crop-paddy-water.not-in-range": "Dry Land",
+    "crop-paddy-water.name": "Saat: Wasser für Nassfeldbau",
+    "crop-paddy-water.in-range": "Nahe Wasser",
+    "crop-paddy-water.not-in-range": "Trockenes Land",
 
     // crops: fertilized
     "crop-fertilizer.name": "Düngemitteleinsatz",

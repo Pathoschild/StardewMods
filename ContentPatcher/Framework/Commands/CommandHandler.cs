@@ -248,7 +248,7 @@ namespace ContentPatcher.Framework.Commands
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
             {
-                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack.Pack);
+                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack);
                 output.AppendLine($"{patchGroup.Key}:");
                 output.AppendLine("".PadRight(patchGroup.Key.Length + 1, '-'));
 
@@ -630,14 +630,13 @@ namespace ContentPatcher.Framework.Commands
                 Color pixel = data[i];
                 if (pixel.A == 0)
                     continue;
-
-                // avoid named arguments since they differ between Microsoft XNA and MonoGame
+                
                 data[i] = new Color(
                     (byte)((pixel.R * 255) / pixel.A),
                     (byte)((pixel.G * 255) / pixel.A),
                     (byte)((pixel.B * 255) / pixel.A),
                     pixel.A
-                );
+                ); // don't use named parameters, which are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a')
             }
 
             Texture2D result = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height);

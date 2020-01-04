@@ -4,7 +4,7 @@ using System.Text;
 namespace ContentPatcher.Framework.Lexing.LexTokens
 {
     /// <summary>A lexical token representing a Content Patcher token.</summary>
-    internal readonly struct LexTokenToken : ILexToken
+    internal class LexTokenToken : ILexToken
     {
         /*********
         ** Accessors
@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         public string Name { get; }
 
         /// <summary>The input argument passed to the Content Patcher token.</summary>
-        public LexTokenInputArg? InputArg { get; }
+        public LexTokenInputArg InputArg { get; }
 
         /// <summary>Whether the token omits the start/end character patterns because it's in a token-only context.</summary>
         public bool ImpliedBraces { get; }
@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="inputArg">The input argument passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        public LexTokenToken(string name, LexTokenInputArg? inputArg, bool impliedBraces)
+        public LexTokenToken(string name, LexTokenInputArg inputArg, bool impliedBraces)
         {
             this.Type = LexTokenType.Token;
             this.Text = LexTokenToken.GetRawText(name, inputArg, impliedBraces);
@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="tokenInputArgArgument">The input argument passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        private static string GetRawText(string name, LexTokenInputArg? tokenInputArgArgument, bool impliedBraces)
+        private static string GetRawText(string name, LexTokenInputArg tokenInputArgArgument, bool impliedBraces)
         {
             StringBuilder str = new StringBuilder();
             if (!impliedBraces)
@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
             if (tokenInputArgArgument != null)
             {
                 str.Append(InternalConstants.InputArgSeparator);
-                str.Append(tokenInputArgArgument.Value.Text);
+                str.Append(tokenInputArgArgument.Text);
             }
             if (!impliedBraces)
                 str.Append("}}");

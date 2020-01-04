@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -60,18 +59,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>Get the updated data layer tiles.</summary>
         /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tiles currently visible on the screen.</param>
+        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
+        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
         /// <param name="cursorTile">The tile position under the cursor.</param>
-        public override IEnumerable<TileGroup> Update(GameLocation location, Rectangle visibleArea, Vector2 cursorTile)
+        public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            TileData[] tiles = this.GetTiles(location, visibleArea.GetTiles()).ToArray();
-
-            // passable tiles
+            TileData[] tiles = this.GetTiles(location, visibleTiles).ToArray();
             TileData[] passableTiles = tiles.Where(p => p.Type.Id == this.Clear.Id).ToArray();
-            yield return new TileGroup(passableTiles, outerBorderColor: this.Clear.Color);
 
-            // other tiles
-            yield return new TileGroup(tiles.Except(passableTiles).ToArray());
+            return new[]
+            {
+                new TileGroup(passableTiles, outerBorderColor: this.Clear.Color),
+                new TileGroup(tiles.Except(passableTiles))
+            };
         }
 
 
