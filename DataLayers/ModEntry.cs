@@ -174,6 +174,7 @@ namespace Pathoschild.Stardew.DataLayers
                             {
                                 this.CurrentOverlay.Dispose();
                                 this.CurrentOverlay = null;
+                                this.Helper.Input.Suppress(e.Button);
                             }
                             else
                             {
