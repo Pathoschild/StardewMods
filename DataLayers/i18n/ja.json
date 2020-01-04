@@ -43,10 +43,9 @@
     "crop-water.dry": "乾いた作物",
 
     // crops: water for paddy crops
-    // TODO
-    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
-    "crop-paddy-water.in-range": "Near Water",
-    "crop-paddy-water.not-in-range": "Dry Land",
+    "crop-paddy-water.name": "作物: 水田の栽培処理",
+    "crop-paddy-water.in-range": "かんがい栽培",
+    "crop-paddy-water.not-in-range": "通常栽培",
 
     // crops: fertilized
     "crop-fertilizer.name": "作物: 肥料",
