@@ -267,7 +267,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new ColorField(this.GameHelper, L10n.Item.ProducesDye(), item);
 
             // owned and times cooked/crafted
-            if (showInventoryFields && !isCrop && !(item is Tool))
+            if (showInventoryFields && !isCrop)
             {
                 // owned
                 yield return new GenericField(this.GameHelper, L10n.Item.Owned(), L10n.Item.OwnedSummary(count: this.GameHelper.CountOwnedItems(item)));
