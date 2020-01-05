@@ -45,9 +45,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.GetNextOutput() != null)
-                return MachineState.Done;
-            return MachineState.Processing;
+            if (this.Machine.isUnderConstruction())
+                return MachineState.Disabled;
+
+            return this.GetNextOutput() != null
+                ? MachineState.Done
+                : MachineState.Processing;
         }
 
         /// <summary>Get the machine output.</summary>

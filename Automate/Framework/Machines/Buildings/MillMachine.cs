@@ -43,8 +43,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
+            if (this.Machine.isUnderConstruction())
+                return MachineState.Disabled;
+
             if (this.Output.items.Any(item => item != null))
                 return MachineState.Done;
+
             return this.InputFull()
                 ? MachineState.Processing
                 : MachineState.Empty; // 'empty' insofar as it will accept more input, not necessarily empty
