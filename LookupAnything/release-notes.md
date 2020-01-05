@@ -5,6 +5,7 @@
 * When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
 * Fixed fruit trees showing next fruit tomorrow on the last day of their season.
 * Fixed a missing translation for non-English players.
+* Fixed 'owned items' not counting child/horse hats, items in dressers, and equipped items.
 * Improved translations. Thanks to asqwedcxz741 (updated Chinese)!
 
 ## 1.24

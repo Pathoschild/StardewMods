@@ -121,17 +121,57 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Get all items owned by the player.</summary>
-        /// <remarks>Derived from <see cref="Utility.doesItemWithThisIndexExistAnywhere"/>, with extra logic for hay.</remarks>
+        /// <remarks>
+        /// Derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
+        ///   * added hay in silos.
+        /// </remarks>
         public IEnumerable<Item> GetAllOwnedItems()
         {
             List<Item> items = new List<Item>();
 
-            // inventory
-            items.AddRange(Game1.player.Items);
-
             // in locations
             foreach (GameLocation location in CommonHelper.GetLocations())
             {
+                // furniture
+                if (location is DecoratableLocation decorableLocation)
+                {
+                    foreach (Furniture furniture in decorableLocation.furniture)
+                    {
+                        items.Add(furniture);
+
+                        if (furniture is StorageFurniture dresser)
+                            items.AddRange(dresser.heldItems);
+                        else
+                            items.Add(furniture.heldObject.Value);
+                    }
+                }
+
+                // farmhouse fridge
+                if (location is FarmHouse house)
+                    items.AddRange(house.fridge.Value.items);
+
+                // character hats
+                foreach (NPC npc in location.characters)
+                {
+                    items.Add(
+                        (npc as Child)?.hat.Value
+                        ?? (npc as Horse)?.hat.Value
+                    );
+                }
+
+                // building output
+                if (location is BuildableGameLocation buildableLocation)
+                {
+                    foreach (var building in buildableLocation.buildings)
+                    {
+                        if (building is Mill mill)
+                            items.AddRange(mill.output.Value.items);
+                        else if (building is JunimoHut hut)
+                            items.AddRange(hut.output.Value.items);
+                    }
+                }
+
                 // map objects
                 foreach (SObject item in location.objects.Values)
                 {
@@ -152,18 +192,11 @@ namespace Pathoschild.Stardew.LookupAnything
                         items.AddRange(grabberChest.items);
                     }
 
-                    // cask
-                    else if (item is Cask)
-                    {
-                        items.Add(item);
-                        items.Add(item.heldObject.Value); // cask contents can be retrieved anytime
-                    }
-
                     // craftable
                     else if (item.bigCraftable.Value)
                     {
                         items.Add(item);
-                        if (item.MinutesUntilReady == 0)
+                        if (item.MinutesUntilReady == 0 || item is Cask) // cask output can be retrieved anytime
                             items.Add(item.heldObject.Value);
                     }
 
@@ -174,33 +207,19 @@ namespace Pathoschild.Stardew.LookupAnything
                         items.Add(item.heldObject.Value);
                     }
                 }
-
-                // furniture
-                if (location is DecoratableLocation decorableLocation)
-                {
-                    foreach (Furniture furniture in decorableLocation.furniture)
-                    {
-                        items.Add(furniture);
-                        items.Add(furniture.heldObject.Value);
-                    }
-                }
-
-                // building output
-                if (location is Farm farm)
-                {
-                    foreach (var building in farm.buildings)
-                    {
-                        if (building is Mill mill)
-                            items.AddRange(mill.output.Value.items);
-                        else if (building is JunimoHut hut)
-                            items.AddRange(hut.output.Value.items);
-                    }
-                }
-
-                // farmhouse fridge
-                if (location is FarmHouse house)
-                    items.AddRange(house.fridge.Value.items);
             }
+
+            // inventory
+            items.AddRange(Game1.player.Items);
+            items.AddRange(new Item[]
+            {
+                Game1.player.shirtItem.Value,
+                Game1.player.pantsItem.Value,
+                Game1.player.boots.Value,
+                Game1.player.hat.Value,
+                Game1.player.leftRing.Value,
+                Game1.player.rightRing.Value
+            });
 
             // hay in silos
             int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
