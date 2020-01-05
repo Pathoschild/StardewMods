@@ -56,10 +56,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // show next fruit
             if (isMature && !isDead)
             {
+                SDate nextFruit = SDate.Now().AddDays(1);
+
                 string label = L10n.FruitTree.NextFruit();
                 if (isStruckByLightning)
                     yield return new GenericField(this.GameHelper, label, L10n.FruitTree.NextFruitStruckByLightning(count: tree.struckByLightningCountdown.Value));
-                else if (Game1.currentSeason != tree.fruitSeason.Value && !tree.GreenHouseTree)
+                else if (!tree.GreenHouseTree && nextFruit.Season != tree.fruitSeason.Value)
                     yield return new GenericField(this.GameHelper, label, L10n.FruitTree.NextFruitOutOfSeason());
                 else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
                     yield return new GenericField(this.GameHelper, label, L10n.FruitTree.NextFruitMaxFruit());
