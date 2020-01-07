@@ -213,40 +213,40 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 378, "Count": 5 } // copper ore
+                { "ID": 378, "Count": 5 }, // copper ore
+                { "ID": 382 }              // coal
             ],
             "Output": 334 // copper bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 380, "Count": 5 } // iron ore
+                { "ID": 380, "Count": 5 }, // iron ore
+                { "ID": 382 }              // coal
             ],
             "Output": 335 // iron bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 384, "Count": 5 } // gold ore
+                { "ID": 384, "Count": 5 }, // gold ore
+                { "ID": 382 }              // coal
             ],
             "Output": 336 // gold bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 386, "Count": 5 } // gold ore
+                { "ID": 386, "Count": 5 }, // gold ore
+                { "ID": 382 }              // coal
             ],
             "Output": 337 // iridium bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 }, // coal
-                { "ID": 82 }   // fire quartz
+                { "ID": 82 },   // fire quartz
+                { "ID": 382 }   // coal
             ],
             "Output": 338, // refined quartz
             "MaxOutput": 3
@@ -254,8 +254,8 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 }, // coal
-                { "ID": 80 }   // quartz
+                { "ID": 80 },   // quartz
+                { "ID": 382 }   // coal
             ],
             "Output": 338 // refined quartz
         },
