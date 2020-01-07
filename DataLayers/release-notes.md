@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to jahangmar (updated German) and shirutan (updated Japanese)!
+* Improved translations. Thanks to jahangmar (updated German), kchapelier (updated French), and shirutan (updated Japanese)!
 
 ## 1.9.1
 Released 27 December 2019.
