@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed missing warp tile.
+
 ## 1.4.3
 Released 27 December 2019.
 
