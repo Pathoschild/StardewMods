@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady => this.Contextuals.IsReady;
 
+        /// <summary>Whether the tokenizable token represents a string value, instead of an object or array.</summary>
+        public bool IsString => this.Value is JValue;
+
 
         /*********
         ** Public methods

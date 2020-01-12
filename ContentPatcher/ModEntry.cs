@@ -754,7 +754,7 @@ namespace ContentPatcher
                         // parse value
                         if (!tokenParser.TryParseJsonTokens(fieldPair.Value, assumeModIds, out string valueError, out TokenizableJToken value))
                             return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
-                        if (value?.Value is JValue jValue && jValue.Value<string>()?.Contains("/") == true)
+                        if (value?.IsString == true && value.GetTokenStrings().SelectMany(p => p.LexTokens).Any(p => p.Type == LexTokenType.Literal && p.Text.Contains("/")))
                             return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
 
                         fields.Add(new EditDataPatchField(key, fieldKey, value));
