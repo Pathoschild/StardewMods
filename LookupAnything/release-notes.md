@@ -4,7 +4,7 @@
 ## Upcoming release
 * When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
 * Added number owned to tool/weapon lookups.
-* Fixed fruit trees showing next fruit tomorrow on the last day of their season.
+* Fixed bushes & fruit trees showing next fruit tomorrow on the last day of their season.
 * Fixed items owned count not including child/horse hats, items in dressers, and equipped items.
 * Fixed a missing translation for non-English players.
 * Improved translations. Thanks to asqwedcxz741 (updated Chinese)!
