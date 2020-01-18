@@ -74,9 +74,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         return false;
 
                     // apply fertilizer
-                    dirt.fertilizer.Value = item.ParentSheetIndex;
-                    this.ConsumeItem(player, item);
-                    return true;
+                    bool fertilized = dirt.plant(item.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, isFertilizer: true, location);
+                    if (fertilized)
+                        this.ConsumeItem(player, item);
+                    return fertilized;
             }
         }
     }

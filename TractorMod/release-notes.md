@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed fertilizer not working if applied to crops after planting.
+
 ## 4.9.1
 Released 15 December 2019.
 
