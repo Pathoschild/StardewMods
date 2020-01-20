@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the <see cref="FromAsset"/> file exists.</summary>
         private bool FromAssetExistsImpl;
 
+        /// <summary>The <see cref="RawFromAsset"/> with support for managing its state.</summary>
+        protected IManagedTokenString RawManagedTargetAsset { get; }
+
 
         /*********
         ** Accessors
@@ -61,7 +64,7 @@ namespace ContentPatcher.Framework.Patches
         public string TargetAsset { get; private set; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
-        public ITokenString RawTargetAsset { get; }
+        public ITokenString RawTargetAsset => this.RawManagedTargetAsset;
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         public Condition[] Conditions { get; }
@@ -84,7 +87,7 @@ namespace ContentPatcher.Framework.Patches
             bool changed;
 
             // update target asset
-            changed = this.RawTargetAsset.UpdateContext(context);
+            changed = this.RawManagedTargetAsset.UpdateContext(context);
             this.TargetAsset = this.RawTargetAsset.IsReady ? this.NormalizeAssetNameImpl(this.RawTargetAsset.Value) : "";
 
             // update local tokens
@@ -179,12 +182,12 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, ITokenString fromAsset = null)
+        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
         {
             this.LogName = logName;
             this.Type = type;
             this.ContentPack = contentPack;
-            this.RawTargetAsset = assetName;
+            this.RawManagedTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
             this.NormalizeAssetNameImpl = normalizeAssetName;
             this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
@@ -192,8 +195,8 @@ namespace ContentPatcher.Framework.Patches
 
             this.Contextuals
                 .Add(this.Conditions)
-                .Add(this.RawTargetAsset)
-                .Add(this.RawFromAsset);
+                .Add(assetName)
+                .Add(fromAsset);
         }
 
         /// <summary>Get a normalized file path relative to the content pack folder.</summary>

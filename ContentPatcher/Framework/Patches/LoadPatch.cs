@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public LoadPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, ITokenString localAsset, Func<string, string> normalizeAssetName)
+        public LoadPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString localAsset, Func<string, string> normalizeAssetName)
             : base(logName, PatchType.Load, contentPack, assetName, conditions, normalizeAssetName, fromAsset: localAsset) { }
 
         /// <summary>Load the initial version of the asset.</summary>

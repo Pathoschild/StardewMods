@@ -64,11 +64,11 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <summary>Get the token strings contained in the JSON structure.</summary>
-        public IEnumerable<IParsedTokenString> GetTokenStrings()
+        public IEnumerable<IManagedTokenString> GetTokenStrings()
         {
             foreach (IContextual contextual in this.Contextuals.Values)
             {
-                if (contextual is IParsedTokenString tokenStr)
+                if (contextual is IManagedTokenString tokenStr)
                     yield return tokenStr;
                 if (contextual is TokenizableProxy proxy)
                     yield return proxy.TokenString;
@@ -137,7 +137,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <param name="setValue">Update the source with a new value.</param>
         private TokenizableProxy TryResolveTokenizableFields(string str, IContext context, Action<string> setValue)
         {
-            IParsedTokenString tokenStr = new TokenString(str, context);
+            IManagedTokenString tokenStr = new TokenString(str, context);
 
             // handle mutable token
             if (tokenStr.IsMutable)

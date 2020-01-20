@@ -50,7 +50,7 @@ namespace ContentPatcher.Framework
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        public bool TryParseStringTokens(string rawValue, InvariantHashSet assumeModIds, out string error, out IParsedTokenString parsed)
+        public bool TryParseStringTokens(string rawValue, InvariantHashSet assumeModIds, out string error, out IManagedTokenString parsed)
         {
             // parse
             parsed = new TokenString(rawValue, this.Context);
