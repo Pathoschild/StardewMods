@@ -953,13 +953,12 @@ namespace ContentPatcher
                 ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
 
                 // check token options
-                InvariantHashSet allowedValues = token?.GetAllowedValues(input);
                 if (token == null || token.IsMutable || !token.IsReady)
                 {
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                if (allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
+                if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
                 {
                     error = "that token isn't restricted to 'true' or 'false'.";
                     return false;
@@ -1045,8 +1044,15 @@ namespace ContentPatcher
                 ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
 
                 // check token options
-                InvariantHashSet allowedValues = token?.GetAllowedValues(input);
-                if (allowedValues == null || !allowedValues.All(p => int.TryParse(p, out _)))
+                bool isIntegerBounded =
+                    token.HasBoundedRangeValues(input, out _, out _)
+                    || (
+                        token.HasBoundedValues(input, out InvariantHashSet allowedValues)
+                        && allowedValues != null
+                        && allowedValues.All(p => int.TryParse(p, out _))
+                    );
+
+                if (!isIntegerBounded)
                 {
                     error = "that token isn't restricted to integers.";
                     return false;

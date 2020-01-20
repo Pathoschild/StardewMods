@@ -43,10 +43,18 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         InvariantHashSet GetValidInputs();
 
-        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        InvariantHashSet GetAllowedValues(ITokenString input);
+        bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues);
+
+        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
+        /// <param name="input">The input argument, if any.</param>
+        /// <param name="min">The minimum value this token may return.</param>
+        /// <param name="max">The maximum value this token may return.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
+        bool HasBoundedRangeValues(ITokenString input, out int min, out int max);
 
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input argument, if applicable.</param>
