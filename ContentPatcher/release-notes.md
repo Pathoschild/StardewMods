@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added advanced API to let other mods add more flexible tokens.
+* Reduced trace logs when another mod adds a custom token.
 * Fixed whitespace between tokens being ignored (e.g. `{{season}} {{day}}` now outputs `Summer 14` instead of `Summer14`).
 * Fixed mod-provided tokens not allowed in `EditData` fields.
 

@@ -100,7 +100,7 @@ namespace ContentPatcher
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
         public override object GetApi()
         {
-            return new ContentPatcherAPI(this.ModManifest.UniqueID, this.Monitor, this.AddModToken);
+            return new ContentPatcherAPI(this.ModManifest.UniqueID, this.Monitor, this.Helper.Reflection, this.AddModToken);
         }
 
 
@@ -259,7 +259,6 @@ namespace ContentPatcher
                 return;
             }
 
-            this.Monitor.Log($"{token.Mod.Name} added custom token: {token.Name}", LogLevel.Trace);
             this.QueuedModTokens.Add(token);
         }
 

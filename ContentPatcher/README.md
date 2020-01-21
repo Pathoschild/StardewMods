@@ -31,7 +31,8 @@ that change the game's images and data without replacing XNB files.
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
-* [Extensibility for modders](#extensibility-for-modders)
+* [Basic extensibility for modders](#basic-extensibility-for-modders)
+* [Advanced extensibility for modders](#advanced-extensibility-for-modders)
 * [See also](#see-also)
 
 ## Install
@@ -1797,14 +1798,10 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
 
-## Extensibility for modders
+## Basic extensibility for modders
 Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
 you can use to add custom tokens. Custom tokens are always prefixed with the ID of the mod that
 created them, like `your-mod-id/SomeTokenName`.
-
-
-<big><strong>The Content Patcher API is experimental and may change at any time.</strong></big>
-
 
 ### Access the API
 To access the API:
@@ -1817,8 +1814,8 @@ To access the API:
    ]
    ```
 
-2. Copy [`IContentPatcherAPI`](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/IContentPatcherAPI.cs)
-   into your mod code, and delete any methods you won't need for best future compatibility.
+2. Copy [`IContentPatcherAPI`](IContentPatcherAPI.cs)
+   into your mod code, and **delete any methods you won't need for future compatibility**.
 3. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#
@@ -1826,7 +1823,7 @@ To access the API:
    ```
 4. Use the API to extend Content Patcher (see below).
 
-### Add a simple custom token
+### Add a simple token
 You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
 _Access the API_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
 current player's name:
@@ -1865,22 +1862,104 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 }
 ```
 
+## Advanced extensibility for modders
+The _basic extensibility_ section above is strongly recommended for most tokens, since Content
+Patcher will handle details like context updates and change tracking for you, it's easier to
+troubleshoot, and it's guaranteed not to break without a major-version update.
+
+If you really need it, the advanced API gives you full control (almost equivalent to a token in the
+Content Patcher core). However:
+
+* <strong>This is experimental. There's no guarantee that future versions will be backwards
+  compatible, or that you'll get any warning before it changes.</strong>
+* <strong>This is low-level. You must account for the token design considerations documented below,
+  unlike the basic API above which handles them for you.</strong>
+
+### Token concepts
+When registering a token through the advanced API, here are some design considerations to avoid
+problems.
+
+<dl>
+<dt>Context updates</dt>
+<dd>
+
+Token values are a cached view of the game state, updated at specific points (e.g. on day start).
+The combination of all tokens is called the 'context'; a 'context update' is when Content Patcher
+refreshes all tokens, rebuilds caches, rechecks patch conditions, reloads assets if needed, etc.
+
+**Tokens must not change value outside of the `UpdateContext` method**. Doing so may have severe
+and undocumented effects, from graphical glitches to outright game crashes.
+
+That doesn't preclude tokens that calculate their value dynamically (e.g. `FileExists`), so long
+as this calculation does not change. If a token may change dynamically between context updates
+(e.g. `Random`), it must implement caching to ensure it does not.
+
+</dd>
+
+<dt>Bounded values</dt>
+<dd>
+
+A token is _bounded_ if its values are guaranteed to match a set of known values; otherwise it's
+_unrestricted_.
+
+This affects two things:
+* Where the token can be used. For example, a token not guaranteed to return integer values can't
+  be used in a number field, even if it _currently_ returns a number.
+* Validation when the token is used as part of a `When` condition. For example, this will show a
+  warning since it's guaranteed to always be false:
+  ```js
+  "When": {
+     "Season": "totally not a valid season"
+  }
+   ```
+
+Note that boundedness is _per-input_. For example, your token might be bounded if it receives an
+input argument, but unrestricted without one:
+```js
+"When": {
+   "Spouse": "John", // unrestricted: '{{spouse}}' may return any value
+   "Spouse:John": "true" // bounded: '{{spouse:John}}' can only return true or false
+}
+```
+
+When registering a token, a token is bounded if you implement `HasBoundedValues` or
+`HasBoundedRangeValues`. Implementing `TryValidateValues` lets you add custom validation, but does
+_not_ make the token bounded since Content Patcher can't get a list of possible values.
+
+</dd>
+<dt>Immutable values</dt>
+<dd>
+
+A token is _immutable_ if its value for a given input will never change for the entire lifetime of
+the current game instance (from game launch to full exit). Most tokens are _mutable_, meaning their
+value may change.
+
+Immutability enables several optimizations. For example, since Content Patcher doesn't need to
+update their value, it also doesn't need to update dependent tokens/patches (and theirs dependents,
+etc).
+
+Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise
+prohibited.
+
+</dd>
+</dl>
+
 ### Add a complex custom token
-The previous section is recommended for most tokens, since Content Patcher will handle details like
-context updates and change tracking for you. With a bit more work though, you can add more complex
-tokens with features like input arguments.
+To register a custom token using the advanced API:
 
-Let's say we want an 'initials' token with this behavior:
+<ol>
+<li>
 
-* If called with no input, it returns the player's initials (like `JS` if the player is John Smith).
-* If called with an input argument, it returns the initials of that input (like `A` if the player
-  is married to Abigail and you pass in `{{spouse}}`).
+Create a token class with any combination of [the methods listed in this file](Framework/Tokens/ValueProviders/ModConvention/ConventionDelegates.cs).
+Note that the methods in your class must exactly match the names, return values, and arguments. If
+Content Patcher files a non-matching or unrecognized public method, it'll show an error and reject
+the token.
 
-First, let's define our token logic. You don't actually need a class here, that's just a convenient
-way to encapsulate the functions we'll be sending to Content Patcher below. For example:
-
+For example, let's say we want a token which returns the initials for the given name (like
+`{{Initials:John Smith}}` → `JS`), or the player's name if called with no input. Here's a token
+class to do that:
 ```c#
-/// <summary>An arbitrary class to handle token logic.</summary>
+/// <summary>A token which returns the player's initials, or the initials of the input name.</summary>
 internal class InitialsToken
 {
     /*********
@@ -1893,87 +1972,67 @@ internal class InitialsToken
     /*********
     ** Public methods
     *********/
-    /// <summary>Get whether the token is ready to use.</summary>
+    /****
+    ** Metadata
+    ****/
+    /// <summary>Get whether the token allows an input argument (e.g. an NPC name for a relationship token).</summary>
+    public bool AllowsInput()
+    {
+        return true;
+    }
+
+    /// <summary>Whether the token may return multiple values for the given input.</summary>
+    /// <param name="input">The input argument, if applicable.</param>
+    public bool CanHaveMultipleValues(string input = null)
+    {
+        return false;
+    }
+
+    /****
+    ** State
+    ****/
+    /// <summary>Update the values when the context changes.</summary>
+    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
+    public bool UpdateContext()
+    {
+        string oldName = this.PlayerName;
+        this.PlayerName = Game1.player?.Name ?? SaveGame.loaded?.player?.Name; // tokens may update while the save is still being loaded
+        return this.PlayerName != oldName;
+    }
+
+    /// <summary>Get whether the token is available for use.</summary>
     public bool IsReady()
     {
         return this.PlayerName != null;
     }
 
-    /// <summary>Update the token value.</summary>
-    /// <returns>Returns whether the value changed, which may trigger patch updates.</returns>
-    public bool UpdateContext()
+    /// <summary>Get the current values.</summary>
+    /// <param name="input">The input argument, if applicable.</param>
+    public IEnumerable<string> GetValues(string input)
     {
-        string oldName = this.PlayerName;
-        this.PlayerName = this.GetPlayerName();
-        return this.PlayerName != oldName;
-    }
-
-    /// <summary>Get the token value.</summary>
-    /// <param name="input">The input argument passed to the token, if any.</param>
-    public IEnumerable<string> GetValue(string input)
-    {
-        // get initials of input argument (if any), else initials of player name
-        yield return this.GetInitials(input ?? this.PlayerName);
-    }
-
-
-    /*********
-    ** Private methods
-    *********/
-    /// <summary>Get the current player name.</summary>
-    private string GetPlayerName()
-    {
-        // Tokens may update while the save is still being loaded; we can make our token available
-        // by checking SaveGame.loaded here.
-        if (Context.IsWorldReady)
-            return Game1.player.Name;
-
-        if (SaveGame.loaded?.player != null)
-            return SaveGame.loaded.player.Name;
-
-        return null;
-    }
-
-    /// <summary>Recalculate the current token value.</summary>
-    /// <param name="name">The name for which to get initials.</param>
-    private string GetInitials(string name)
-    {
+        // get name
+        string name = input ?? this.PlayerName;
         if (string.IsNullOrWhiteSpace(name))
-            return null;
-        return string.Join("", name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
+            yield break;
+
+        // get initials
+        yield return string.Join("", name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
     }
 }
 ```
 
-Next let's register it with Content Patcher in the `GameLaunched` event (see _Access the API_ above).
-Note that we're not passing the actual `InitialsToken` instance to Content Patcher, that's
-just a class we created to contain our token logic.
+</li>
+<li>
 
-```c#
-InitialsToken token = new InitialsToken();
-api.RegisterToken(
-    mod: this.ModManifest,
-    name: "Initials",
-    updateContext: token.UpdateContext,
-    isReady: token.IsReady,
-    getValue: token.GetValue,
-    allowsInput: false,
-    requiresInput: false
-);
+Next let's register it with Content Patcher in the `GameLaunched` event (see [_Access the API_](#access-the-api)
+above):
+
+```cs
+api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 ```
 
-Content Patcher tokens are flexible, so there's a lot to unpack in that method call. Here's a
-summary of each field:
-
-field | type | purpose
------ | ---- | -------
-`mod` | `IManifest` | The manifest of the mod defining the token. You can just pass in `this.ModManifest` from your entry class.
-`name` | `string` | The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, so `Initials` in the above example will become `your-mod-id/Initials`.
-`updateContext` | `Func<bool>` | A function which updates the token value (if needed), and returns whether the token changed. Content Patcher will call this method once when it's updating the context (e.g. when a new day starts). The token is 'changed' if it may return a different value _for the same inputs_ than before; it's important to report a change correctly, since Content Patcher will use this to decide whether patches need to be rechecked.
-`isReady` | `Func<bool>` | A function which returns whether the token is available for use. This is always called after `updateContext`. If this returns false, any patches or dynamic tokens using this token will be disabled. (A token may return true and still have no value, in which case the token value is simply blank.)
-`getValue` | `Func<string, IEnumerable<string>>` | A function which returns the current value for a given input argument (if any). For example, `{{your-mod-id/Initials}}` would result in a null input argument; `{{your-mod-id/Initials:{{spouse}}}}` would pass in the parsed string after token substitution, like `"Abigail"`. If the token doesn't use input arguments, you can simply ignore the input.
-`allowsInput` | `bool` | Whether the player can provide an input argument (see `getValue`).
-`requiresInput` | `bool` | Whether the token can _only_ be used with an input argument (see `getValue`).
+</li>
+</ul>
 
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js

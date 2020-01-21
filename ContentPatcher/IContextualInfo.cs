@@ -14,6 +14,7 @@ namespace ContentPatcher
         /// <summary>Whether the instance is valid for the current context.</summary>
         bool IsReady { get; }
 
+
         /*********
         ** Methods
         *********/
