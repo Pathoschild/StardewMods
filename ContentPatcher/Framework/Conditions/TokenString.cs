@@ -111,6 +111,8 @@ namespace ContentPatcher.Framework.Conditions
                         this.State.AddUnavailableModTokens(requiredModId);
                     else
                         this.State.AddInvalidTokens(lexToken.Name);
+
+                    isMutable = true; // can't optimize away the token value if it's invalid
                 }
             }
 
