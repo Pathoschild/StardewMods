@@ -43,5 +43,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         {
             return container.HasTag("automate:output");
         }
+
+        public static bool PreferForInput(this IContainer container)
+        {
+            return container.HasTag("automate:input");
+        }
     }
 }

@@ -33,6 +33,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether Automate should prefer this container for output.</summary>
         public bool ShouldAutomatePreferForOutput { get; set; }
 
+        /// <summary>Whether Automate should prefer this container for input.</summary>
+        public bool ShouldAutomatePreferForInput { get; set; }
+
         /// <summary>Whether Automate should allow getting items from this container.</summary>
         public bool ShouldAutomateNoInput { get; set; }
 
@@ -88,6 +91,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     data.ShouldAutomateIgnore = true;
                 else if (tag.ToLower() == "automate:output")
                     data.ShouldAutomatePreferForOutput = true;
+                else if (tag.ToLower() == "automate:input")
+                    data.ShouldAutomatePreferForInput = true;
                 else if (tag.ToLower() == "automate:noinput")
                     data.ShouldAutomateNoInput = true;
                 else if (tag.ToLower() == "automate:nooutput")
@@ -117,6 +122,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 internalName += " |automate:ignore|";
             if (this.ShouldAutomatePreferForOutput)
                 internalName += " |automate:output|";
+            if (this.ShouldAutomatePreferForInput)
+                internalName += " |automate:input|";
             if (this.ShouldAutomateNoInput)
                 internalName += " |automate:noinput|";
             if (this.ShouldAutomateNoOutput)
@@ -141,6 +148,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 || !string.IsNullOrWhiteSpace(this.Category)
                 || this.ShouldAutomateIgnore
                 || this.ShouldAutomatePreferForOutput
+                || this.ShouldAutomatePreferForInput
                 || this.ShouldAutomateNoInput
                 || this.ShouldAutomateNoOutput;
         }
@@ -154,6 +162,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.Category = null;
             this.ShouldAutomateIgnore = false;
             this.ShouldAutomatePreferForOutput = false;
+            this.ShouldAutomatePreferForInput = false;
             this.ShouldAutomateNoInput = false;
             this.ShouldAutomateNoOutput = false;
         }

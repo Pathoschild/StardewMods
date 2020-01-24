@@ -121,6 +121,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>A checkbox which indicates whether Automate should should put output in this chest first.</summary>
         private Checkbox EditAutomateOutput;
 
+        /// <summary>A checkbox which indicates whether Automate should should put output in this chest first.</summary>
+        private Checkbox EditAutomateInput;
+
         /// <summary>A checkbox which indicates whether Automate should allow getting items form this chest.</summary>
         private Checkbox EditAutomateNoInput;
 
@@ -295,6 +298,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 if (this.ShowAutomateOptions)
                 {
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-prefer-output").Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateInput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-prefer-input").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoInput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-input").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-output").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateIgnore, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-ignore").Y;
@@ -446,6 +450,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.EditHideChestField.Toggle();
                     else if (this.EditAutomateOutput.GetBounds().Contains(x, y))
                         this.EditAutomateOutput.Toggle();
+                    else if (this.EditAutomateInput.GetBounds().Contains(x, y))
+                        this.EditAutomateInput.Toggle();
                     else if (this.EditAutomateNoInput.GetBounds().Contains(x, y))
                         this.EditAutomateNoInput.Toggle();
                     else if (this.EditAutomateNoOutput.GetBounds().Contains(x, y))
@@ -593,6 +599,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
             this.EditAutomateOutput = new Checkbox();
+            this.EditAutomateInput = new Checkbox();
             this.EditAutomateNoInput = new Checkbox();
             this.EditAutomateNoOutput = new Checkbox();
             this.EditAutomateIgnore = new Checkbox();
@@ -611,6 +618,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
             this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
+            this.EditAutomateInput.Value = this.Chest.ShouldAutomatePreferForInput;
             this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
             this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
             this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
@@ -641,6 +649,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 ignored: this.EditHideChestField.Value,
                 shouldAutomateIgnore: this.EditAutomateIgnore.Value,
                 shouldAutomatePreferForOutput: this.EditAutomateOutput.Value,
+                shouldAutomatePreferForInput: this.EditAutomateInput.Value,
                 shouldAutomateNoInput: this.EditAutomateNoInput.Value,
                 shouldAutomateNoOutput: this.EditAutomateNoOutput.Value
             );
@@ -709,6 +718,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
             this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
+            this.EditAutomateInput.Value = this.Chest.ShouldAutomatePreferForInput;
             this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
             this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
             this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
