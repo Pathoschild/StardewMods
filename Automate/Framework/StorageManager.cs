@@ -33,8 +33,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get all items from the given pipes.</summary>
         public IEnumerable<ITrackedStack> GetItems()
         {
-            var preferInputContainers = this.Containers.Where(p => p.AllowsInput() && p.PreferForInput());
-            var otherContainers = this.Containers.Where(p => p.AllowsInput() && !p.PreferForInput());
+            var preferInputContainers = this.Containers.Where(p => p.AllowsOutput() && p.PreferForInput());
+            var otherContainers = this.Containers.Where(p => p.AllowsOutput() && !p.PreferForInput());
 
             foreach (IContainer container in preferInputContainers)
             {
