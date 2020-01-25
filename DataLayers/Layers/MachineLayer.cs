@@ -33,8 +33,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public MachineLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods)
-            : base(translations.Get("machines.name"), config)
+        /// <param name="monitor">Writes messages to the SMAPI log.</param>
+        public MachineLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IMonitor monitor)
+            : base(translations.Get("machines.name"), config, monitor)
         {
             this.Legend = new[]
             {

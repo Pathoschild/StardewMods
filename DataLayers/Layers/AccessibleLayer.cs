@@ -45,8 +45,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
-        public AccessibleLayer(ITranslationHelper translations, LayerConfig config)
-            : base(translations.Get("accessible.name"), config)
+        /// <param name="monitor">Writes messages to the SMAPI log.</param>
+        public AccessibleLayer(ITranslationHelper translations, LayerConfig config, IMonitor monitor)
+            : base(translations.Get("accessible.name"), config, monitor)
         {
             this.Legend = new[]
             {

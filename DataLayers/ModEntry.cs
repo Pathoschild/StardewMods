@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -30,6 +29,9 @@ namespace Pathoschild.Stardew.DataLayers
 
         /// <summary>The available data layers.</summary>
         private ILayer[] Layers;
+
+        /// <summary>Maps button presses to the layer it should activate.</summary>
+        private readonly IDictionary<SButton, ILayer> ShortcutMap = new Dictionary<SButton, ILayer>();
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private ModIntegrations Mods;
@@ -69,6 +71,16 @@ namespace Pathoschild.Stardew.DataLayers
             // init
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
             this.Layers = this.GetLayers(this.Config, this.Helper.Translation, this.Mods).ToArray();
+
+            // cache shortcut keys
+            foreach (ILayer layer in this.Layers)
+            {
+                foreach (SButton button in layer.ShortcutKey)
+                {
+                    if (!this.ShortcutMap.ContainsKey(button))
+                        this.ShortcutMap[button] = layer;
+                }
+            }
         }
 
         /// <summary>Get the enabled data layers.</summary>
@@ -80,29 +92,29 @@ namespace Pathoschild.Stardew.DataLayers
             ModConfig.LayerConfigs layers = config.Layers;
 
             if (layers.Accessible.IsEnabled())
-                yield return new AccessibleLayer(translation, layers.Accessible);
+                yield return new AccessibleLayer(translation, layers.Accessible, this.Monitor);
             if (layers.Buildable.IsEnabled())
-                yield return new BuildableLayer(translation, layers.Buildable);
+                yield return new BuildableLayer(translation, layers.Buildable, this.Monitor);
             if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses);
+                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses, this.Monitor);
             if (layers.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowLayer(translation, layers.CoverageForScarecrows, mods);
+                yield return new ScarecrowLayer(translation, layers.CoverageForScarecrows, mods, this.Monitor);
             if (layers.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerLayer(translation, layers.CoverageForSprinklers, mods);
+                yield return new SprinklerLayer(translation, layers.CoverageForSprinklers, mods, this.Monitor);
             if (layers.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods);
+                yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods, this.Monitor);
             if (layers.CropWater.IsEnabled())
-                yield return new CropWaterLayer(translation, layers.CropWater);
+                yield return new CropWaterLayer(translation, layers.CropWater, this.Monitor);
             if (layers.CropPaddyWater.IsEnabled())
-                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater);
+                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater, this.Monitor);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(translation, layers.CropFertilizer);
+                yield return new CropFertilizerLayer(translation, layers.CropFertilizer, this.Monitor);
             if (layers.CropHarvest.IsEnabled())
-                yield return new CropHarvestLayer(translation, layers.CropHarvest);
+                yield return new CropHarvestLayer(translation, layers.CropHarvest, this.Monitor);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
-                yield return new MachineLayer(translation, layers.Machines, mods);
+                yield return new MachineLayer(translation, layers.Machines, mods, this.Monitor);
             if (layers.Tillable.IsEnabled())
-                yield return new TillableLayer(translation, layers.Tillable);
+                yield return new TillableLayer(translation, layers.Tillable, this.Monitor);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -150,6 +162,13 @@ namespace Pathoschild.Stardew.DataLayers
                 else if (overlayVisible && keys.PrevLayer.Contains(e.Button))
                 {
                     this.CurrentOverlay.PrevLayer();
+                    this.Helper.Input.Suppress(e.Button);
+                }
+
+                // shortcut to layer
+                else if (overlayVisible && this.ShortcutMap.TryGetValue(e.Button, out ILayer layer) && layer != this.CurrentOverlay.CurrentLayer)
+                {
+                    this.CurrentOverlay.SetLayer(layer);
                     this.Helper.Input.Suppress(e.Button);
                 }
             });

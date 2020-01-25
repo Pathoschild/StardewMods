@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added shortcut keys to switch to a specific layer while the overlay is open (thanks to Drachenkaetzchen!).
 * Added tilled group to tillable layer (thanks to Drachenkaetzchen!).
 * Improved translations. Thanks to jahangmar (updated German), kchapelier (updated French), and shirutan (updated Japanese)!
 
