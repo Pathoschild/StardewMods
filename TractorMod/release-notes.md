@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Fixed some custom mod flowers not recognized for `HarvestFlowers` option.
 * Fixed fertilizer not working if applied to crops after planting.
 
 ## 4.9.1
