@@ -27,8 +27,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
-        public CropWaterLayer(ITranslationHelper translations, LayerConfig config)
-            : base(translations.Get("crop-water.name"), config)
+        /// <param name="monitor">Writes messages to the SMAPI log.</param>
+        public CropWaterLayer(ITranslationHelper translations, LayerConfig config, IMonitor monitor)
+            : base(translations.Get("crop-water.name"), config, monitor)
         {
             this.Legend = new[]
             {

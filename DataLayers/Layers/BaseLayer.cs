@@ -24,10 +24,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         public bool UpdateWhenVisibleTilesChange { get; }
 
         /// <summary>The buttons to activate the layer.</summary>
-        public SButton[] LayerButtons { get; private set; }
-
-        /// <summary>The raw buttons to activate the layer.</summary>
-        public string RawLayerButtons { get; }
+        public SButton[] ShortcutKey { get; }
 
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; protected set; }
@@ -43,24 +40,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public abstract TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile);
 
-        /// <summary>Parses the shortcuts from the config.</summary>
-        /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
-        public void ParseShortcuts(IMonitor monitor)
-        {
-            this.LayerButtons =CommonHelper.ParseButtons(this.RawLayerButtons, monitor, this.Name);
-        }
+
         /*********
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The data layer name.</param>
         /// <param name="config">The data layers settings.</param>
-        protected BaseLayer(string name, LayerConfig config)
+        /// <param name="monitor">Writes messages to the SMAPI log.</param>
+        protected BaseLayer(string name, LayerConfig config, IMonitor monitor)
         {
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
-            this.RawLayerButtons = config.LayerShortcutButtons;
+            this.ShortcutKey = CommonHelper.ParseButtons(config.ShortcutKey, monitor, this.Name);
         }
 
         /// <summary>Get the dirt instance for a tile, if any.</summary>

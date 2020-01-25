@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         private Rectangle LastVisibleArea;
 
         /// <summary>The width of grid lines between tiles, if enabled.</summary>
-        private readonly int GridBorderSize = 1;
+        private readonly int GridBorderSize;
 
         /// <summary>The color of grid lines between tiles, if enabled.</summary>
         private readonly Color GridColor = Color.Black;
@@ -126,11 +126,14 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.SetLayer(this.Layers[index]);
         }
 
-        /// <summary>Activates a specific layer.</summary>
-        /// <param name="layer">The layer to activate.</param>
-        public void ActivateLayer(ILayer layer)
+        /// <summary>Switch to the given data layer.</summary>
+        /// <param name="layer">The data layer to select.</param>
+        public void SetLayer(ILayer layer)
         {
-            this.SetLayer(layer);
+            this.CurrentLayer = layer;
+            this.Legend = this.CurrentLayer.Legend.ToArray();
+            this.TileGroups = this.EmptyTileGroups;
+            this.UpdateCountdown = 0;
         }
 
         /// <summary>Update the overlay.</summary>
@@ -368,16 +371,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             }
 
             return tiles;
-        }
-
-        /// <summary>Switch to the given data layer.</summary>
-        /// <param name="layer">The data layer to select.</param>
-        private void SetLayer(ILayer layer)
-        {
-            this.CurrentLayer = layer;
-            this.Legend = this.CurrentLayer.Legend.ToArray();
-            this.TileGroups = this.EmptyTileGroups;
-            this.UpdateCountdown = 0;
         }
 
         /// <summary>Get the tile area currently visible to the player.</summary>
