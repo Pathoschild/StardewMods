@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added advanced API to let other mods add more flexible tokens.
 * Reduced trace logs when another mod adds a custom token.
+* The `patch export` command now exports the asset cached by the game, instead of trying to load it.
 * Fixed error when a data model patch uses an invalid token in its fields.
 * Fixed whitespace between tokens being ignored (e.g. `{{season}} {{day}}` now outputs `Summer 14` instead of `Summer14`).
 * Fixed mod-provided tokens not allowed in `EditData` fields.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
@@ -9,12 +10,10 @@ using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -517,17 +516,35 @@ namespace ContentPatcher.Framework.Commands
             }
             string assetName = args[0];
 
-            // load asset
-            object asset;
-            try
+            // get loaded values
+            object[] loadedValues;
             {
-                asset = Game1.content.Load<object>(assetName);
+                // HACK
+                // Reflecting into the SMAPI internals is strongly discouraged, since they may change at any time without warning or backwards compatibility.
+                // SMAPI and Content Patcher are maintained by the same developer, so Content Patcher is guaranteed to update if SMAPI changes the internals
+                //it depends on. This code also isn't important to the actual functionality of the mod.
+                object coordinator = StardewValley.Program.gamePtr.GetType().GetProperty("ContentCore")?.GetValue(StardewValley.Program.gamePtr);
+                if (coordinator == null)
+                {
+                    this.Monitor.Log("Can't access SMAPI's internal content coordinator.", LogLevel.Error);
+                    return true;
+                }
+
+                MethodInfo getLoadedValues = coordinator.GetType().GetMethod("GetLoadedValues");
+                if (getLoadedValues == null)
+                {
+                    this.Monitor.Log($"Can't access {coordinator.GetType().FullName}.GetLoadedValues.", LogLevel.Error);
+                    return true;
+                }
+
+                loadedValues = ((IEnumerable<object>)getLoadedValues.Invoke(coordinator, new object[] { assetName }))?.ToArray();
             }
-            catch (ContentLoadException ex) when (ex.InnerException is FileNotFoundException)
+            if (loadedValues == null || loadedValues.Length == 0)
             {
-                this.Monitor.Log($"Can't export asset '{assetName}', that asset doesn't exist in the game.", LogLevel.Error);
+                this.Monitor.Log("That asset isn't currently loaded by the game.", LogLevel.Error);
                 return true;
             }
+            object asset = loadedValues.FirstOrDefault();
 
             // init export path
             string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.ExecutionPath, "patch export", string.Join("_", assetName.Split(Path.GetInvalidFileNameChars())));
