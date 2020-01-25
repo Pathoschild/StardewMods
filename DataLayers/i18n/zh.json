@@ -63,6 +63,7 @@
     // tillable
     "tillable.name": "能否耕地",
     "tillable.tillable": "可耕地",
+    "tillable.tilled": "Tilled", // TODO
     "tillable.occupied": "被占用",
     "tillable.not-tillable": "不可耕地"
 }

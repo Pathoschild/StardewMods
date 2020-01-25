@@ -63,6 +63,7 @@
     // tillable
     "tillable.name": "Покрытие: Вспахивание",
     "tillable.tillable": "Возможно",
+    "tillable.tilled": "Tilled", // TODO
     "tillable.occupied": "Есть преграда",
     "tillable.not-tillable": "Не возможно"
 }

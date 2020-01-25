@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added tilled group to tillable layer (thanks to Drachenkaetzchen!).
 * Improved translations. Thanks to jahangmar (updated German), kchapelier (updated French), and shirutan (updated Japanese)!
 
 ## 1.9.1

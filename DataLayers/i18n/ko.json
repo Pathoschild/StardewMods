@@ -63,6 +63,7 @@
     // tillable
     "tillable.name": "경작 가능 여부",
     "tillable.tillable": "경작 가능",
+    "tillable.tilled": "Tilled", // TODO
     "tillable.occupied": "공간 차지중",
     "tillable.not-tillable": "경작 불가능"
 }

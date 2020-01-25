@@ -62,7 +62,7 @@
     // tillable
     "tillable.name": "Anbaubar",
     "tillable.tillable": "Kann angebaut werden",
+    "tillable.tilled": "Bepflanzbar",
     "tillable.occupied": "Besetzt",
-    "tillable.not-planted": "Bepflanzbar",
     "tillable.not-tillable": "Kann nicht angebaut werden"
 }
