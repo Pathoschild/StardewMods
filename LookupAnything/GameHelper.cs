@@ -37,11 +37,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The cached villagers' gift tastes.</summary>
         private Lazy<GiftTasteEntry[]> GiftTastes;
 
-        /// <summary>The cached vanilla recipes.</summary>
-        private Lazy<RecipeModel[]> VanillaRecipes;
-
-        /// <summary>The cached integrated recipes.</summary>
-        private Lazy<RecipeModel[]> IntegratedRecipes;
+        /// <summary>The cached recipes.</summary>
+        private Lazy<RecipeModel[]> Recipes;
 
         /// <summary>The Custom Farming Redux integration.</summary>
         private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
@@ -76,14 +73,13 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public void ResetCache(IReflectionHelper reflectionHelper, IMonitor monitor)
+        public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
-            this.VanillaRecipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(this.Metadata, reflectionHelper, monitor).ToArray());
-            this.IntegratedRecipes = new Lazy<RecipeModel[]>(() => this.GetIntegratedRecipes().ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
         }
 
         /****
@@ -395,51 +391,59 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the recipes for which an item is needed.</summary>
         public IEnumerable<RecipeModel> GetRecipes()
         {
-            return this.IntegratedRecipes.Value;
+            return this.Recipes.Value;
         }
 
-        /// <summary> Integrates vanilla recipes with the ones from producer framework mod.</summary>
-        private RecipeModel[] GetIntegratedRecipes()
+        /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
         {
-            //Copy the vanilla recipe list so the original is not changed
-            List<RecipeModel> integratedRecipes = new List<RecipeModel>(this.VanillaRecipes.Value);
-            List<RecipeModel> pfmRecipes = new List<RecipeModel>();
-            foreach (Dictionary<string, object> recipeData in this.ProducerFrameworkMod.GetRecipes())
-            {
-                // This code remove vanilla recipes that were overriden by a PFM one.
-                // The if not needed now because PFM api is not returning recipes where the input is a context_tag, but will be needed in the future.
-                if (recipeData["InputKey"] is int)
-                {
-                    integratedRecipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == (int)recipeData["InputKey"]);
-                }
-                var machine = new SObject(Vector2.Zero, (int)recipeData["MachineID"]);
+            // get vanilla recipes
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
 
-                pfmRecipes.Add(new RecipeModel(
-                    key: null,
-                    type: RecipeType.MachineInput,
-                    displayType: machine.DisplayName,
-                    ingredients: ((List<Dictionary<string, object>>)recipeData["Ingredients"]).Select(p => new RecipeIngredientModel((int)p["ID"], (int)p["Count"])),
-                    item: ingredient =>
-                    {
-                        SObject output = this.GetObjectBySpriteIndex((int)recipeData["Output"]);
-                        if (ingredient?.ParentSheetIndex != null)
+            // get recipes from Producer Framework Mod
+            if (this.ProducerFrameworkMod.IsLoaded)
+            {
+                List<RecipeModel> customRecipes = new List<RecipeModel>();
+                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
+                {
+                    // remove vanilla recipes overridden by a PFM one
+                    // This is always an integer currently, but the API may return context_tag keys in the future.
+                    if (recipe.InputId.HasValue)
+                        recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
+
+                    // add recipe
+                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
+                    customRecipes.Add(new RecipeModel(
+                        key: null,
+                        type: RecipeType.MachineInput,
+                        displayType: machine.DisplayName,
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                        item: ingredient =>
                         {
-                            output.preservedParentSheetIndex.Value = (ingredient?.ParentSheetIndex).Value;
-                            output.preserve.Value = (SObject.PreserveType?)recipeData["PreserveType"];
-                        }
-                        return output;
-                    },
-                    mustBeLearned: false,
-                    exceptIngredients: ((List<Dictionary<string, object>>)recipeData["ExceptIngredients"]).Select(p => new RecipeIngredientModel((int)p["ID"], 1)),
-                    outputItemIndex: (int)recipeData["Output"],
-                    minOutput: (int)recipeData["MinOutput"],
-                    maxOutput: (int)recipeData["MaxOutput"],
-                    outputChance: Convert.ToDecimal((double)recipeData["OutputChance"]),
-                    isForMachine: p => p is SObject obj && obj.ParentSheetIndex == (int)recipeData["MachineID"]
-                ));
+                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
+                            if (ingredient?.ParentSheetIndex != null)
+                            {
+                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
+                                output.preserve.Value = recipe.PreserveType;
+                            }
+                            return output;
+                        },
+                        mustBeLearned: false,
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id, 1)),
+                        outputItemIndex: recipe.OutputId,
+                        minOutput: recipe.MinOutput,
+                        maxOutput: recipe.MaxOutput,
+                        outputChance: (decimal)recipe.OutputChance,
+                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
+                    ));
+                }
+
+                recipes.AddRange(customRecipes);
             }
-            integratedRecipes.AddRange(pfmRecipes);
-            return integratedRecipes.ToArray();
+
+            return recipes.ToArray();
         }
 
         /// <summary>Get all tailoring recipes which take an item as input.</summary>
@@ -482,28 +486,36 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             // ignore invalid ingredients
-            if (item is Furniture || item is Ring || item is Boots || item is MeleeWeapon || item is Hat || (item as SObject)?.bigCraftable.Value == true)
+            if (item.GetItemType() != ItemType.Object)
                 return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            var recipesForIngredient = new List<RecipeModel>();
-            foreach (var recipe in this.GetRecipes())
+            var recipes = new List<RecipeModel>();
+            foreach (RecipeModel recipe in this.GetRecipes())
             {
                 if (!recipe.Ingredients.Any(p => p.Matches(item)))
                     continue;
                 if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
                     continue;
 
-                recipesForIngredient.Add(recipe);
+                recipes.Add(recipe);
             }
 
-            //Removing recipes defined by category for a machine with a recipe for the index.
-            //This will have to be expanded when there are context_tag recipes. The order of precedence is: Index > Context_Tag > Category
-            recipesForIngredient.RemoveAll(cr => cr.Ingredients[0].ID < 0 && recipesForIngredient.Any(ir => ir.Ingredients[0].ID == item.ParentSheetIndex && ir.DisplayType == cr.DisplayType));
+            // resolve conflicts from mods like Producer Framework Mod: if multiple recipes take the
+            // same item as input, ID takes precedence over category. This only occurs with mod recipes,
+            // since there are no such conflicts in the vanilla recipes.
+            recipes.RemoveAll(recipe =>
+            {
+                RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
+                return
+                    ingredient?.ID < 0
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.ID == item.ParentSheetIndex && other.DisplayType == recipe.DisplayType);
+            });
 
             // from tailor recipes
-            recipesForIngredient.AddRange(this.GetTailorRecipes(item));
-            return recipesForIngredient;
+            recipes.AddRange(this.GetTailorRecipes(item));
+
+            return recipes;
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -524,9 +536,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
-        public SObject GetObjectBySpriteIndex(int index, int stack = 1)
+        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
+        public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
         {
-            return new SObject(index, stack);
+            return bigcraftable
+                ? new SObject(Vector2.Zero, index) { stack = { stack } }
+                : new SObject(index, stack);
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
