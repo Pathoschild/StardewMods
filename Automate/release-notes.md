@@ -2,11 +2,13 @@
 
 # Release notes
 ## Upcoming release
+* Added 'take items from this chest first' option editable through Chests Anywhere (thanks to MadaraUchiha!).
 * Improved error-handling when a machine or chest has invalid items.
 * Machines with invalid output are now paused for 30 seconds.
 * Fixed infinite garbage hats.
 * Fixed some machines allowing wrong item types as input.
 * Fixed buildings automated while still under construction.
+* Internal refactoring.
 
 ## 1.14.2
 Released 27 December 2019.

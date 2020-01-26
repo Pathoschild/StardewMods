@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Added support for Automate's new 'take items from this chest first' option (thanks to MadaraUchiha!).
+* Simplified Automate options.
 * Improved translations. Thanks to Avisend (updated French)!
 
 ## 1.17.2
