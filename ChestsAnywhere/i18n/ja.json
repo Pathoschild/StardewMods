@@ -19,10 +19,10 @@
     "label.order": "順番",
     "label.hide-chest": "このチェストを非表示にする",
     "label.hide-chest-hidden": "このチェストを非表示にする (再び表示するにはチェストを探して下さい!)",
-    "label.automate-store": "(Automate) Put items in this chest", // TODO
-    "label.automate-store-first": "(Automate) Put items in this chest first", // TODO
-    "label.automate-take": "(Automate) Take items from this chest", // TODO
-    "label.automate-take-first": "(Automate) Take items from this chest first", // TODO
+    "label.automate-store": "(Automate) このチェストにはアイテムを入れる",
+    "label.automate-store-first": "(Automate) このチェストに優先的にアイテムを入れる",
+    "label.automate-take": "(Automate) このチェストからはアイテムを取り出す",
+    "label.automate-take-first": "(Automate) このチェストからは優先的にアイテムを取り出す",
 
     // button labels
     "button.edit-chest": "チェストの編集",
