@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -42,6 +43,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The Custom Farming Redux integration.</summary>
         private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
 
+        /// <summary>The Producer Framework Mod integration.</summary>
+        private readonly ProducerFrameworkModIntegration ProducerFrameworkMod;
+
         /// <summary>Parses the raw game data into usable models.</summary>
         private readonly DataParser DataParser;
 
@@ -58,22 +62,24 @@ namespace Pathoschild.Stardew.LookupAnything
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
+        /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, Metadata metadata)
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata)
         {
             this.DataParser = new DataParser(this);
             this.CustomFarmingRedux = customFarmingRedux;
+            this.ProducerFrameworkMod = producerFrameworkMod;
             this.Metadata = metadata;
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public void ResetCache(IReflectionHelper reflectionHelper, IMonitor monitor)
+        public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
             this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.DataParser.GetRecipes(this.Metadata, reflectionHelper, monitor).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
         }
 
         /****
@@ -407,6 +413,58 @@ namespace Pathoschild.Stardew.LookupAnything
             return this.Recipes.Value;
         }
 
+        /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
+        {
+            // get vanilla recipes
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
+
+            // get recipes from Producer Framework Mod
+            if (this.ProducerFrameworkMod.IsLoaded)
+            {
+                List<RecipeModel> customRecipes = new List<RecipeModel>();
+                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
+                {
+                    // remove vanilla recipes overridden by a PFM one
+                    // This is always an integer currently, but the API may return context_tag keys in the future.
+                    if (recipe.InputId.HasValue)
+                        recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
+
+                    // add recipe
+                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
+                    customRecipes.Add(new RecipeModel(
+                        key: null,
+                        type: RecipeType.MachineInput,
+                        displayType: machine.DisplayName,
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                        item: ingredient =>
+                        {
+                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
+                            if (ingredient?.ParentSheetIndex != null)
+                            {
+                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
+                                output.preserve.Value = recipe.PreserveType;
+                            }
+                            return output;
+                        },
+                        mustBeLearned: false,
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id, 1)),
+                        outputItemIndex: recipe.OutputId,
+                        minOutput: recipe.MinOutput,
+                        maxOutput: recipe.MaxOutput,
+                        outputChance: (decimal)recipe.OutputChance,
+                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
+                    ));
+                }
+
+                recipes.AddRange(customRecipes);
+            }
+
+            return recipes.ToArray();
+        }
+
         /// <summary>Get all tailoring recipes which take an item as input.</summary>
         /// <param name="input">The input item.</param>
         /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
@@ -447,23 +505,36 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
             // ignore invalid ingredients
-            if (item is Furniture || item is Ring || item is Boots || item is MeleeWeapon || item is Hat || (item as SObject)?.bigCraftable.Value == true)
-                yield break;
+            if (item.GetItemType() != ItemType.Object)
+                return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            foreach (var recipe in this.GetRecipes())
+            var recipes = new List<RecipeModel>();
+            foreach (RecipeModel recipe in this.GetRecipes())
             {
                 if (!recipe.Ingredients.Any(p => p.Matches(item)))
                     continue;
                 if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
                     continue;
 
-                yield return recipe;
+                recipes.Add(recipe);
             }
 
+            // resolve conflicts from mods like Producer Framework Mod: if multiple recipes take the
+            // same item as input, ID takes precedence over category. This only occurs with mod recipes,
+            // since there are no such conflicts in the vanilla recipes.
+            recipes.RemoveAll(recipe =>
+            {
+                RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
+                return
+                    ingredient?.ID < 0
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.ID == item.ParentSheetIndex && other.DisplayType == recipe.DisplayType);
+            });
+
             // from tailor recipes
-            foreach (var recipe in this.GetTailorRecipes(item))
-                yield return recipe;
+            recipes.AddRange(this.GetTailorRecipes(item));
+
+            return recipes;
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -484,9 +555,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
-        public SObject GetObjectBySpriteIndex(int index, int stack = 1)
+        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
+        public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
         {
-            return new SObject(index, stack);
+            return bigcraftable
+                ? new SObject(Vector2.Zero, index) { stack = { stack } }
+                : new SObject(index, stack);
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
