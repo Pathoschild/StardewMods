@@ -87,7 +87,7 @@ The screenshots below are without progression mode, and may show spoilers.
   > ![](screenshots/crop.png)
 
 * See when a crafting station will be ready, and what recipes it can produce. This works with
-  custom machines too (except recipes currently).
+  most custom machines too.
   > ![](screenshots/crafting.png)
   > ![](screenshots/cask.png)
 

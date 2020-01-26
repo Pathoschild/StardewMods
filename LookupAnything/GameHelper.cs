@@ -260,30 +260,6 @@ namespace Pathoschild.Stardew.LookupAnything
             ).Sum();
         }
 
-        /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
-        /// <param name="a">The first item to compare.</param>
-        /// <param name="b">The second item to compare.</param>
-        private bool AreEquivalent(Item a, Item b)
-        {
-            return
-                // same generic item type
-                a.GetType() == b.GetType()
-                && a.Category == b.Category
-                && a.ParentSheetIndex == b.ParentSheetIndex
-
-                // same discriminators
-                && a.GetItemType() == b.GetItemType()
-                && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
-                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
-                && (a as Fence)?.isGate == (b as Fence)?.isGate
-                && (a as Fence)?.whichType == (b as Fence)?.whichType
-                && (a as Hat)?.which == (b as Hat)?.which
-                && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
-                && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
-                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
-                && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
-        }
-
         /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
         /// <param name="npc">The NPC to check.</param>
         public bool IsSocialVillager(NPC npc)
@@ -411,93 +387,6 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipes()
         {
             return this.Recipes.Value;
-        }
-
-        /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
-        /// <param name="reflection">Simplifies access to private game code.</param>
-        /// <param name="monitor">The monitor with which to log errors.</param>
-        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
-        {
-            // get vanilla recipes
-            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
-
-            // get recipes from Producer Framework Mod
-            if (this.ProducerFrameworkMod.IsLoaded)
-            {
-                List<RecipeModel> customRecipes = new List<RecipeModel>();
-                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
-                {
-                    // remove vanilla recipes overridden by a PFM one
-                    // This is always an integer currently, but the API may return context_tag keys in the future.
-                    if (recipe.InputId.HasValue)
-                        recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
-
-                    // add recipe
-                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
-                    customRecipes.Add(new RecipeModel(
-                        key: null,
-                        type: RecipeType.MachineInput,
-                        displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
-                        item: ingredient =>
-                        {
-                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
-                            if (ingredient?.ParentSheetIndex != null)
-                            {
-                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
-                                output.preserve.Value = recipe.PreserveType;
-                            }
-                            return output;
-                        },
-                        mustBeLearned: false,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id, 1)),
-                        outputItemIndex: recipe.OutputId,
-                        minOutput: recipe.MinOutput,
-                        maxOutput: recipe.MaxOutput,
-                        outputChance: (decimal)recipe.OutputChance,
-                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
-                    ));
-                }
-
-                recipes.AddRange(customRecipes);
-            }
-
-            return recipes.ToArray();
-        }
-
-        /// <summary>Get all tailoring recipes which take an item as input.</summary>
-        /// <param name="input">The input item.</param>
-        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
-        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
-        {
-            HashSet<int> seenRecipes = new HashSet<int>();
-
-            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
-            {
-                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
-                    continue; // needs all tags for one of the recipe slots
-
-                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
-                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
-                    : new[] { recipe.CraftedItemID };
-
-                foreach (int outputId in outputItemIds)
-                {
-                    if (outputId < 0 || !seenRecipes.Add(outputId))
-                        continue;
-
-                    yield return new RecipeModel(
-                        key: null,
-                        type: RecipeType.TailorInput,
-                        displayType: "Tailoring",
-                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
-                        item: input => new Clothing(outputId),
-                        mustBeLearned: false,
-                        outputItemIndex: recipe.CraftedItemID,
-                        isForMachine: _ => false
-                    );
-                }
-            }
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
@@ -748,6 +637,117 @@ namespace Pathoschild.Stardew.LookupAnything
         /*********
         ** Private methods
         *********/
+        /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
+        /// <param name="a">The first item to compare.</param>
+        /// <param name="b">The second item to compare.</param>
+        private bool AreEquivalent(Item a, Item b)
+        {
+            return
+                // same generic item type
+                a.GetType() == b.GetType()
+                && a.Category == b.Category
+                && a.ParentSheetIndex == b.ParentSheetIndex
+
+                // same discriminators
+                && a.GetItemType() == b.GetItemType()
+                && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
+                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
+                && (a as Fence)?.isGate == (b as Fence)?.isGate
+                && (a as Fence)?.whichType == (b as Fence)?.whichType
+                && (a as Hat)?.which == (b as Hat)?.which
+                && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
+                && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
+                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
+                && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
+        }
+
+        /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
+        {
+            // get vanilla recipes
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
+
+            // get recipes from Producer Framework Mod
+            if (this.ProducerFrameworkMod.IsLoaded)
+            {
+                List<RecipeModel> customRecipes = new List<RecipeModel>();
+                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
+                {
+                    // remove vanilla recipes overridden by a PFM one
+                    // This is always an integer currently, but the API may return context_tag keys in the future.
+                    if (recipe.InputId.HasValue)
+                        recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
+
+                    // add recipe
+                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
+                    customRecipes.Add(new RecipeModel(
+                        key: null,
+                        type: RecipeType.MachineInput,
+                        displayType: machine.DisplayName,
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                        item: ingredient =>
+                        {
+                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
+                            if (ingredient?.ParentSheetIndex != null)
+                            {
+                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
+                                output.preserve.Value = recipe.PreserveType;
+                            }
+                            return output;
+                        },
+                        mustBeLearned: false,
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id, 1)),
+                        outputItemIndex: recipe.OutputId,
+                        minOutput: recipe.MinOutput,
+                        maxOutput: recipe.MaxOutput,
+                        outputChance: (decimal)recipe.OutputChance,
+                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
+                    ));
+                }
+
+                recipes.AddRange(customRecipes);
+            }
+
+            return recipes.ToArray();
+        }
+
+        /// <summary>Get all tailoring recipes which take an item as input.</summary>
+        /// <param name="input">The input item.</param>
+        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
+        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
+        {
+            HashSet<int> seenRecipes = new HashSet<int>();
+
+            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
+            {
+                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
+                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
+                    : new[] { recipe.CraftedItemID };
+
+                foreach (int outputId in outputItemIds)
+                {
+                    if (outputId < 0 || !seenRecipes.Add(outputId))
+                        continue;
+
+                    yield return new RecipeModel(
+                        key: null,
+                        type: RecipeType.TailorInput,
+                        displayType: "Tailoring",
+                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
+                        item: input => new Clothing(outputId),
+                        mustBeLearned: false,
+                        outputItemIndex: recipe.CraftedItemID,
+                        isForMachine: _ => false
+                    );
+                }
+            }
+        }
+
         /// <summary>Get an NPC's preference for an item.</summary>
         /// <param name="npc">The NPC whose gift taste to get.</param>
         /// <param name="item">The item to check.</param>

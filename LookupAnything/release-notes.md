@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
-* When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
+* Added support for most custom machine recipes from Producer Framework Mod (thanks to Digus!).
 * Added number owned to tool/weapon lookups.
+* When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.
 * Fixed bushes & fruit trees showing next fruit tomorrow on the last day of their season.
 * Fixed items owned count not including child/horse hats, items in dressers, and equipped items.
 * Fixed a missing translation for non-English players.
@@ -170,7 +171,7 @@ Released 14 February 2018.
 
 * Updated to SMAPI 2.4.
 * Added support for furniture.
-* Added support for custom machines and objects from Custom Farming Redux 2.3.6+.
+* Added support for custom machines and objects from Custom Farming Redux.
 * Fixed debug key working when a menu is open.
 * Fixed typo in debug interface.
 * Improved translations. Thanks to Husky110 (German) and yuwenlan (Chinese)!
