@@ -27,20 +27,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored { get; set; }
 
-        /// <summary>Whether Automate should ignore this container.</summary>
-        public bool ShouldAutomateIgnore { get; set; }
+        /// <summary>Whether Automate should take items from this container.</summary>
+        public ContainerAutomatePreference AutomateTakeItems { get; set; } = ContainerAutomatePreference.Allow;
 
-        /// <summary>Whether Automate should prefer this container for output.</summary>
-        public bool ShouldAutomatePreferForOutput { get; set; }
-
-        /// <summary>Whether Automate should prefer this container for input.</summary>
-        public bool ShouldAutomatePreferForInput { get; set; }
-
-        /// <summary>Whether Automate should allow getting items from this container.</summary>
-        public bool ShouldAutomateNoInput { get; set; }
-
-        /// <summary>Whether Automate should allow outputting items to this container.</summary>
-        public bool ShouldAutomateNoOutput { get; set; }
+        /// <summary>Whether Automate should put items in this container.</summary>
+        public ContainerAutomatePreference AutomateStoreItems { get; set; } = ContainerAutomatePreference.Allow;
 
         /// <summary>The sort value (if any).</summary>
         public int? Order { get; set; }
@@ -87,16 +78,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     data.Order = order;
 
                 // Automate options
-                else if (tag.ToLower() == "automate:ignore")
-                    data.ShouldAutomateIgnore = true;
-                else if (tag.ToLower() == "automate:output")
-                    data.ShouldAutomatePreferForOutput = true;
-                else if (tag.ToLower() == "automate:input")
-                    data.ShouldAutomatePreferForInput = true;
+                else if (tag.ToLower() == "automate:ignore") // legacy tag
+                {
+                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
+                    data.AutomateStoreItems = ContainerAutomatePreference.Disable;
+                }
                 else if (tag.ToLower() == "automate:noinput")
-                    data.ShouldAutomateNoInput = true;
+                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
+                else if (tag.ToLower() == "automate:input")
+                    data.AutomateTakeItems = ContainerAutomatePreference.Prefer;
                 else if (tag.ToLower() == "automate:nooutput")
-                    data.ShouldAutomateNoOutput = true;
+                    data.AutomateStoreItems = ContainerAutomatePreference.Disable;
+                else if (tag.ToLower() == "automate:output")
+                    data.AutomateStoreItems = ContainerAutomatePreference.Prefer;
             }
 
             // read display name
@@ -111,23 +105,32 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Get a serialized name representation of the container data.</summary>
         public string ToName()
         {
+            // name
             string internalName = !this.HasDefaultDisplayName() ? this.Name : this.DefaultInternalName;
+
+            // order
             if (this.Order.HasValue && this.Order != 0)
                 internalName += $" |{this.Order}|";
+
+            // ignore
             if (this.IsIgnored)
                 internalName += " |ignore|";
+
+            // category
             if (!string.IsNullOrWhiteSpace(this.Category))
                 internalName += $" |cat:{this.Category}|";
-            if (this.ShouldAutomateIgnore)
-                internalName += " |automate:ignore|";
-            if (this.ShouldAutomatePreferForOutput)
-                internalName += " |automate:output|";
-            if (this.ShouldAutomatePreferForInput)
-                internalName += " |automate:input|";
-            if (this.ShouldAutomateNoInput)
+
+            // Automate input
+            if (!this.AutomateTakeItems.IsAllowed())
                 internalName += " |automate:noinput|";
-            if (this.ShouldAutomateNoOutput)
+            else if (this.AutomateTakeItems.IsPreferred())
+                internalName += " |automate:input|";
+
+            // Automate output
+            if (!this.AutomateStoreItems.IsAllowed())
                 internalName += " |automate:nooutput|";
+            else if (this.AutomateStoreItems.IsPreferred())
+                internalName += " |automate:output|";
 
             return internalName;
         }
@@ -146,11 +149,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 || (this.Order.HasValue && this.Order != 0)
                 || this.IsIgnored
                 || !string.IsNullOrWhiteSpace(this.Category)
-                || this.ShouldAutomateIgnore
-                || this.ShouldAutomatePreferForOutput
-                || this.ShouldAutomatePreferForInput
-                || this.ShouldAutomateNoInput
-                || this.ShouldAutomateNoOutput;
+                || this.AutomateTakeItems != ContainerAutomatePreference.Allow
+                || this.AutomateStoreItems != ContainerAutomatePreference.Allow;
         }
 
         /// <summary>Reset all container data to the default.</summary>
@@ -160,11 +160,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.Order = null;
             this.IsIgnored = false;
             this.Category = null;
-            this.ShouldAutomateIgnore = false;
-            this.ShouldAutomatePreferForOutput = false;
-            this.ShouldAutomatePreferForInput = false;
-            this.ShouldAutomateNoInput = false;
-            this.ShouldAutomateNoOutput = false;
+            this.AutomateTakeItems = ContainerAutomatePreference.Allow;
+            this.AutomateStoreItems = ContainerAutomatePreference.Allow;
         }
     }
 }

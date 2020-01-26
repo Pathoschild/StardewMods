@@ -29,8 +29,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             containers = containers.ToArray();
 
-            this.InputContainers = containers.Where(p => p.AllowsInput()).OrderByDescending(p => p.PrefersInput()).ToArray();
-            this.OutputContainers = containers.Where(p => p.AllowsOutput()).OrderByDescending(p => p.PrefersOutput()).ToArray();
+            this.InputContainers = containers.Where(p => p.StorageAllowed()).OrderByDescending(p => p.StoragePreferred()).ToArray();
+            this.OutputContainers = containers.Where(p => p.TakingItemsAllowed()).OrderByDescending(p => p.TakingItemsPreferred()).ToArray();
         }
 
         /****
@@ -154,7 +154,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             int originalCount = item.Count;
 
-            IContainer[] preferredContainers = this.InputContainers.TakeWhile(p => p.PrefersInput()).ToArray();
+            IContainer[] preferredContainers = this.InputContainers.TakeWhile(p => p.StoragePreferred()).ToArray();
             IContainer[] otherContainers = this.InputContainers.Skip(preferredContainers.Length).ToArray();
 
             // push into 'output' chests

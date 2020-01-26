@@ -118,20 +118,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>A checkbox which indicates whether to hide the chest.</summary>
         private Checkbox EditHideChestField;
 
-        /// <summary>A checkbox which indicates whether Automate should should put output in this chest first.</summary>
-        private Checkbox EditAutomateOutput;
+        /// <summary>A checkbox which indicates whether Automate should store items in this chest.</summary>
+        private Checkbox EditAutomateStoreItems;
 
-        /// <summary>A checkbox which indicates whether Automate should should put output in this chest first.</summary>
-        private Checkbox EditAutomateInput;
+        /// <summary>A checkbox which indicates whether Automate should store items in this chest first.</summary>
+        private Checkbox EditAutomateStoreItemsPreferred;
 
-        /// <summary>A checkbox which indicates whether Automate should allow getting items form this chest.</summary>
-        private Checkbox EditAutomateNoInput;
+        /// <summary>A checkbox which indicates whether Automate should take items from this chest.</summary>
+        private Checkbox EditAutomateTakeItems;
 
-        /// <summary>A checkbox which indicates whether Automate should allow sending items to this chest.</summary>
-        private Checkbox EditAutomateNoOutput;
-
-        /// <summary>A checkbox which indicates whether Automate should ignore this chest.</summary>
-        private Checkbox EditAutomateIgnore;
+        /// <summary>A checkbox which indicates whether Automate should take items from this chest first.</summary>
+        private Checkbox EditAutomateTakeItemsPreferred;
 
         /// <summary>The clickable area which saves the edit form.</summary>
         private ClickableComponent EditSaveButtonArea;
@@ -297,11 +294,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? "label.hide-chest-hidden" : "label.hide-chest").Y;
                 if (this.ShowAutomateOptions)
                 {
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-prefer-output").Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateInput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-prefer-input").Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoInput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-input").Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateNoOutput, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-no-output").Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateIgnore, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-ignore").Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store", defaultValue: true).Y;
+                    if (this.EditAutomateStoreItems.Value)
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take", defaultValue: true).Y;
+                    if (this.EditAutomateTakeItems.Value)
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
                 }
 
                 // buttons
@@ -448,16 +446,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     // checkbox
                     else if (this.EditHideChestField.GetBounds().Contains(x, y))
                         this.EditHideChestField.Toggle();
-                    else if (this.EditAutomateOutput.GetBounds().Contains(x, y))
-                        this.EditAutomateOutput.Toggle();
-                    else if (this.EditAutomateInput.GetBounds().Contains(x, y))
-                        this.EditAutomateInput.Toggle();
-                    else if (this.EditAutomateNoInput.GetBounds().Contains(x, y))
-                        this.EditAutomateNoInput.Toggle();
-                    else if (this.EditAutomateNoOutput.GetBounds().Contains(x, y))
-                        this.EditAutomateNoOutput.Toggle();
-                    else if (this.EditAutomateIgnore.GetBounds().Contains(x, y))
-                        this.EditAutomateIgnore.Toggle();
+                    else if (this.EditAutomateStoreItems.GetBounds().Contains(x, y))
+                        this.EditAutomateStoreItems.Toggle();
+                    else if (this.EditAutomateStoreItems.Value && this.EditAutomateStoreItemsPreferred.GetBounds().Contains(x, y)) // hidden if store items disabled
+                        this.EditAutomateStoreItemsPreferred.Toggle();
+                    else if (this.EditAutomateTakeItems.GetBounds().Contains(x, y))
+                        this.EditAutomateTakeItems.Toggle();
+                    else if (this.EditAutomateTakeItems.Value && this.EditAutomateTakeItemsPreferred.GetBounds().Contains(x, y)) // hidden if take items disabled
+                        this.EditAutomateTakeItemsPreferred.Toggle();
 
                     // save button
                     else if (this.EditSaveButtonArea.containsPoint(x, y))
@@ -598,11 +594,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
-            this.EditAutomateOutput = new Checkbox();
-            this.EditAutomateInput = new Checkbox();
-            this.EditAutomateNoInput = new Checkbox();
-            this.EditAutomateNoOutput = new Checkbox();
-            this.EditAutomateIgnore = new Checkbox();
+            this.EditAutomateStoreItems = new Checkbox();
+            this.EditAutomateStoreItemsPreferred = new Checkbox();
+            this.EditAutomateTakeItems = new Checkbox();
+            this.EditAutomateTakeItemsPreferred = new Checkbox();
             this.FillForm();
 
             this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
@@ -617,11 +612,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
-            this.EditAutomateInput.Value = this.Chest.ShouldAutomatePreferForInput;
-            this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
-            this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
-            this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
+            this.EditAutomateStoreItems.Value = this.Chest.AutomateStoreItems.IsAllowed();
+            this.EditAutomateStoreItemsPreferred.Value = this.Chest.AutomateStoreItems.IsPreferred();
+            this.EditAutomateTakeItems.Value = this.Chest.AutomateTakeItems.IsAllowed();
+            this.EditAutomateTakeItemsPreferred.Value = this.Chest.AutomateTakeItems.IsPreferred();
         }
 
         /// <summary>Reset the edit form to the default values.</summary>
@@ -647,11 +641,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 category: this.EditCategoryField.Text,
                 order: order,
                 ignored: this.EditHideChestField.Value,
-                shouldAutomateIgnore: this.EditAutomateIgnore.Value,
-                shouldAutomatePreferForOutput: this.EditAutomateOutput.Value,
-                shouldAutomatePreferForInput: this.EditAutomateInput.Value,
-                shouldAutomateNoInput: this.EditAutomateNoInput.Value,
-                shouldAutomateNoOutput: this.EditAutomateNoOutput.Value
+                automateStoreItems: this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value),
+                automateTakeItems: this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value)
             );
             this.OnChestSelected?.Invoke(this.Chest);
         }
@@ -717,11 +708,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomateOutput.Value = this.Chest.ShouldAutomatePreferForOutput;
-            this.EditAutomateInput.Value = this.Chest.ShouldAutomatePreferForInput;
-            this.EditAutomateNoInput.Value = this.Chest.ShouldAutomateNoInput;
-            this.EditAutomateNoOutput.Value = this.Chest.ShouldAutomateNoOutput;
-            this.EditAutomateIgnore.Value = this.Chest.ShouldAutomateIgnore;
+            this.EditAutomateStoreItems.Value = this.Chest.AutomateStoreItems.IsAllowed();
+            this.EditAutomateStoreItemsPreferred.Value = this.Chest.AutomateStoreItems.IsPreferred();
+            this.EditAutomateTakeItems.Value = this.Chest.AutomateTakeItems.IsAllowed();
+            this.EditAutomateTakeItemsPreferred.Value = this.Chest.AutomateTakeItems.IsPreferred();
 
             this.ActiveElement = Element.EditForm;
         }
@@ -744,14 +734,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="x">The top-left X position to start drawing from.</param>
         /// <param name="y">The top-left Y position to start drawing from.</param>
         /// <param name="textKey">The translation key for the checkbox label.</param>
-        private Vector2 DrawAndPositionCheckbox(SpriteBatch batch, SpriteFont font, Checkbox checkbox, int x, int y, string textKey)
+        /// <param name="defaultValue">The default value.</param>
+        private Vector2 DrawAndPositionCheckbox(SpriteBatch batch, SpriteFont font, Checkbox checkbox, int x, int y, string textKey, bool defaultValue = false)
         {
             checkbox.X = x;
             checkbox.Y = y;
             checkbox.Width = 24;
             checkbox.Draw(batch);
             string label = this.Translations.Get(textKey);
-            Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(x + 7 + checkbox.Width, y), this.Menu.width, checkbox.Value ? Color.Red : Color.Black);
+            Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(x + 7 + checkbox.Width, y), this.Menu.width, checkbox.Value != defaultValue ? Color.Red : Color.Black);
 
             return new Vector2(checkbox.Width + 7 + checkbox.Width + labelSize.X, Math.Max(checkbox.Width, labelSize.Y));
         }
@@ -780,6 +771,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // return size
             return new Vector2(bounds.Width, bounds.Height);
+        }
+
+        /// <summary>Get an Automate IO preference.</summary>
+        /// <param name="allow">Whether IO is allowed.</param>
+        /// <param name="prefer">Whether IO is preferred.</param>
+        private ContainerAutomatePreference GetAutomatePreference(bool allow, bool prefer)
+        {
+            if (allow && prefer)
+                return ContainerAutomatePreference.Prefer;
+
+            if (allow)
+                return ContainerAutomatePreference.Allow;
+
+            return ContainerAutomatePreference.Disable;
         }
     }
 }

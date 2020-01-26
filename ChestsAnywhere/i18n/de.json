@@ -19,10 +19,10 @@
     "label.order": "Reihenfolge",
     "label.hide-chest": "Kiste ausblenden",
     "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um dies rückgängig zu machen!)",
-    "label.automate-prefer-output": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
-    "label.automate-no-input": "(Automatisieren) Lege keine Gegenstände in diese Kiste",
-    "label.automate-no-output": "(Automatisieren) Nimm keine Gegenstände von dieser Kiste",
-    "label.automate-ignore": "(Automatisieren) Diese Kiste ist nicht für die Automatisierung geeignet",
+    "label.automate-store": "(Automatisieren) Lege Gegenstände in diese Kiste",
+    "label.automate-store-first": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
+    "label.automate-take": "(Automatisieren) Nimm Gegenstände von dieser Kiste",
+    "label.automate-take-first": "(Automatisieren) Nimm zuerst Gegenstände von dieser Kiste",
 
     // button labels
     "button.edit-chest": "Bearbeite Kiste",

@@ -134,7 +134,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return true;
 
                 case IContainer container:
-                    if (!container.ShouldIgnore())
+                    if (container.StorageAllowed() || container.TakingItemsAllowed())
                     {
                         group.Add(container);
                         return true;
