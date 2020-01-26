@@ -19,10 +19,10 @@
     "label.order": "Ordine",
     "label.hide-chest": "Nascondi questo baule",
     "label.hide-chest-hidden": "Nascondi questo baule (per annullare l'azione devi ritrovare il baule!)",
-    "label.automate-prefer-output": "(Automatizza) Metti prima gli oggetti nel baule",
-    "label.automate-no-input": "(Automatizza) Non mettere oggetti in questo baule",
-    "label.automate-no-output": "(Automatizza) Non prendere oggetti da questo baule",
-    "label.automate-ignore": "(Automatizza) Non automatizzare questo baule",
+    "label.automate-store": "(Automatizza) Metti gli oggetti in questo baule",
+    "label.automate-store-first": "(Automatizza) Metti prima gli oggetti nel baule",
+    "label.automate-take": "(Automatizza) Prendi oggetti da questo baule",
+    "label.automate-take-first": "(Automatizza) Prendi prima gli oggetti da questo baule",
 
     // button labels
     "button.edit-chest": "modifica baule",

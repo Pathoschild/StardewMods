@@ -19,10 +19,10 @@
     "label.order": "Order",
     "label.hide-chest": "Hide this chest",
     "label.hide-chest-hidden": "Hide this chest (you'll need to find the chest to undo this!)",
-    "label.automate-prefer-output": "(Automate) Put items in this chest first",
-    "label.automate-no-input": "(Automate) Don't put items in this chest",
-    "label.automate-no-output": "(Automate) Don't get items from this chest",
-    "label.automate-ignore": "(Automate) Don't use this chest for automation",
+    "label.automate-store": "(Automate) Put items in this chest",
+    "label.automate-store-first": "(Automate) Put items in this chest first",
+    "label.automate-take": "(Automate) Take items from this chest",
+    "label.automate-take-first": "(Automate) Take items from this chest first",
 
     // button labels
     "button.edit-chest": "edit chest",

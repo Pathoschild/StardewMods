@@ -45,17 +45,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored => this.Container.Data.IsIgnored;
 
-        /// <summary>Whether Automate should ignore this container.</summary>
-        public bool ShouldAutomateIgnore => this.Container.Data.ShouldAutomateIgnore;
+        /// <summary>Whether Automate should take items from this container.</summary>
+        public ContainerAutomatePreference AutomateTakeItems => this.Container.Data.AutomateTakeItems;
 
-        /// <summary>Whether Automate should prefer this container for output.</summary>
-        public bool ShouldAutomatePreferForOutput => this.Container.Data.ShouldAutomatePreferForOutput;
-
-        /// <summary>Whether Automate should allow getting items to this container.</summary>
-        public bool ShouldAutomateNoInput => this.Container.Data.ShouldAutomateNoInput;
-
-        /// <summary>Whether Automate should allow outputting items to this container.</summary>
-        public bool ShouldAutomateNoOutput => this.Container.Data.ShouldAutomateNoOutput;
+        /// <summary>Whether Automate should put items in this container.</summary>
+        public ContainerAutomatePreference AutomateStoreItems => this.Container.Data.AutomateStoreItems;
 
         /// <summary>The sort value (if any).</summary>
         public int? Order => this.Container.Data.Order;
@@ -90,9 +84,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="category">The category name (if any).</param>
         /// <param name="order">The sort value (if any).</param>
         /// <param name="ignored">Whether the chest should be ignored.</param>
-        /// <param name="shouldAutomateIgnore">Whether Automate should ignore this chest.</param>
-        /// <param name="shouldAutomatePreferForOutput">Whether Automate should prefer this chest for output.</param>
-        public void Update(string name, string category, int? order, bool ignored, bool shouldAutomateIgnore, bool shouldAutomatePreferForOutput, bool shouldAutomateNoInput, bool shouldAutomateNoOutput)
+        /// <param name="automateStoreItems">Whether Automate should take items from this container.</param>
+        /// <param name="automateTakeItems">Whether Automate should put items in this container.</param>
+        public void Update(string name, string category, int? order, bool ignored, ContainerAutomatePreference automateStoreItems, ContainerAutomatePreference automateTakeItems)
         {
             ContainerData data = this.Container.Data;
 
@@ -104,10 +98,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 : null;
             data.Order = order;
             data.IsIgnored = ignored;
-            data.ShouldAutomateIgnore = shouldAutomateIgnore;
-            data.ShouldAutomatePreferForOutput = shouldAutomatePreferForOutput;
-            data.ShouldAutomateNoInput = shouldAutomateNoInput;
-            data.ShouldAutomateNoOutput = shouldAutomateNoOutput;
+            data.AutomateStoreItems = automateStoreItems;
+            data.AutomateTakeItems = automateTakeItems;
 
             this.Container.SaveData();
         }
