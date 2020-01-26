@@ -23,28 +23,30 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             return container.HasTag("automate:ignore");
         }
 
-        /// <summary>Get whether input is enabled for this container.</summary>
+        /// <summary>Get whether items can be stored in this container.</summary>
         /// <param name="container">The container instance.</param>
         public static bool AllowsInput(this IContainer container)
         {
             return !container.ShouldIgnore() && !container.HasTag("automate:noinput");
         }
 
-        /// <summary>Get whether output is enabled for this container.</summary>
+        /// <summary>Get whether items can be retrieved from this container.</summary>
         /// <param name="container">The container instance.</param>
         public static bool AllowsOutput(this IContainer container)
         {
             return !container.ShouldIgnore() && !container.HasTag("automate:nooutput");
         }
 
-        /// <summary>Get whether this container should be preferred for output when possible.</summary>
+        /// <summary>Get whether this container should be preferred when choosing where to store items.</summary>
         /// <param name="container">The container instance.</param>
-        public static bool PreferForOutput(this IContainer container)
+        public static bool PrefersInput(this IContainer container)
         {
             return container.HasTag("automate:output");
         }
 
-        public static bool PreferForInput(this IContainer container)
+        /// <summary>Get whether this container should be preferred when choosing where to retrieve items.</summary>
+        /// <param name="container">The container instance.</param>
+        public static bool PrefersOutput(this IContainer container)
         {
             return container.HasTag("automate:input");
         }

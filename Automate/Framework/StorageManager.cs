@@ -13,8 +13,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>The storage containers.</summary>
-        private readonly IContainer[] Containers;
+        /// <summary>The storage containers that accept input, in priority order.</summary>
+        private readonly IContainer[] InputContainers;
+
+        /// <summary>The storage containers that provide items, in priority order.</summary>
+        private readonly IContainer[] OutputContainers;
 
 
         /*********
@@ -24,7 +27,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="containers">The storage containers.</param>
         public StorageManager(IEnumerable<IContainer> containers)
         {
-            this.Containers = containers.ToArray();
+            containers = containers.ToArray();
+
+            this.InputContainers = containers.Where(p => p.AllowsInput()).OrderByDescending(p => p.PrefersInput()).ToArray();
+            this.OutputContainers = containers.Where(p => p.AllowsOutput()).OrderByDescending(p => p.PrefersOutput()).ToArray();
         }
 
         /****
@@ -33,15 +39,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get all items from the given pipes.</summary>
         public IEnumerable<ITrackedStack> GetItems()
         {
-            var preferInputContainers = this.Containers.Where(p => p.AllowsOutput() && p.PreferForInput());
-            var otherContainers = this.Containers.Where(p => p.AllowsOutput() && !p.PreferForInput());
-
-            foreach (IContainer container in preferInputContainers)
-            {
-                foreach (ITrackedStack item in container)
-                    yield return item;
-            }
-            foreach (IContainer container in otherContainers)
+            foreach (IContainer container in this.OutputContainers)
             {
                 foreach (ITrackedStack item in container)
                     yield return item;
@@ -156,11 +154,11 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             int originalCount = item.Count;
 
-            var preferOutputContainers = this.Containers.Where(p => p.AllowsInput() && p.PreferForOutput());
-            var otherContainers = this.Containers.Where(p => p.AllowsInput() && !p.PreferForOutput());
+            IContainer[] preferredContainers = this.InputContainers.TakeWhile(p => p.PrefersInput()).ToArray();
+            IContainer[] otherContainers = this.InputContainers.Skip(preferredContainers.Length).ToArray();
 
             // push into 'output' chests
-            foreach (IContainer container in preferOutputContainers)
+            foreach (IContainer container in preferredContainers)
             {
                 container.Store(item);
                 if (item.Count <= 0)
