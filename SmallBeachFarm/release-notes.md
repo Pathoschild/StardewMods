@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for other mods patching the custom tilesheet.
+* Added support for overlay compatibility files.
 * Fixed missing warp tile.
 
 ## 1.4.3
