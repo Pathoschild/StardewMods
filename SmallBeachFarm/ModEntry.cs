@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -29,6 +30,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
+        /// <summary>A fake asset key prefix from which to load tilesheets.</summary>
+        private string FakeAssetPrefix => Path.Combine("Mods", this.ModManifest.UniqueID);
+
 
         /*********
         ** Public methods
@@ -53,13 +57,16 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            return asset.AssetNameEquals("Maps/Farm_Fishing");
+            return
+                asset.AssetNameEquals("Maps/Farm_Fishing")
+                || asset.AssetName.StartsWith(this.FakeAssetPrefix);
         }
 
         /// <summary>Load a matched asset.</summary>
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public T Load<T>(IAssetInfo asset)
         {
+            // load map
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
             {
                 // load map
@@ -69,21 +76,35 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 );
 
                 // apply tilesheet recolors
-                DirectoryInfo compatFolder = this.GetCustomTilesheetFolder();
-                if (compatFolder != null)
+                string internalRootKey = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, "_default"));
+                foreach (TileSheet tilesheet in map.TileSheets)
                 {
-                    this.Monitor.Log($"Applying map tilesheets from {Path.Combine(this.TilesheetsPath, compatFolder.Name)}.", LogLevel.Trace);
-                    foreach (TileSheet tilesheet in map.TileSheets)
-                    {
-                        string assetFileName = Path.GetFileName(tilesheet.ImageSource);
-                        if (File.Exists(Path.Combine(compatFolder.FullName, assetFileName)))
-                            tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, compatFolder.Name, assetFileName));
-                    }
+                    if (tilesheet.ImageSource.StartsWith(internalRootKey + Path.DirectorySeparatorChar))
+                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileName(tilesheet.ImageSource)), ContentSource.GameContent);
                 }
 
                 return (T)(object)map;
             }
 
+            // load tilesheet
+            if (asset.AssetName.StartsWith(this.FakeAssetPrefix))
+            {
+                string filename = Path.GetFileName(asset.AssetName);
+
+                // get relative path to load
+                string relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))
+                    .EnumerateDirectories()
+                    .FirstOrDefault(p => p.Name != "_default" && this.Helper.ModRegistry.IsLoaded(p.Name))
+                    ?.Name;
+                relativePath = Path.Combine(this.TilesheetsPath, relativePath ?? "_default", filename);
+
+                // load asset
+                Texture2D tilesheet = this.Helper.Content.Load<Texture2D>(relativePath);
+
+                return (T)(object)tilesheet;
+            }
+
+            // unknown asset
             throw new NotSupportedException($"Unexpected asset '{asset.AssetName}'.");
         }
 
@@ -123,22 +144,11 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             }
         }
 
-        /// <summary>Get the folder from which to load tilesheets for compatibility with another mod, if applicable.</summary>
-        private DirectoryInfo GetCustomTilesheetFolder()
+        /// <summary>Get the full path for a relative path.</summary>
+        /// <param name="relative">The relative path.</param>
+        private string GetFullPath(string relative)
         {
-            // get root compatibility folder
-            DirectoryInfo compatFolder = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, this.TilesheetsPath));
-            if (!compatFolder.Exists)
-                return null;
-
-            // get first folder matching an installed mod
-            foreach (DirectoryInfo folder in compatFolder.GetDirectories())
-            {
-                if (folder.Name != "_default" && this.Helper.ModRegistry.IsLoaded(folder.Name))
-                    return folder;
-            }
-
-            return null;
+            return Path.Combine(this.Helper.DirectoryPath, relative);
         }
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
