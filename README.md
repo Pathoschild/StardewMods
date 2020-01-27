@@ -83,7 +83,7 @@ Japanese   | [✓](ChestsAnywhere/i18n/ja.json)        | [↻ partial](DataLayer
 Korean     | [↻ partial](ChestsAnywhere/i18n/ko.json) | [↻ partial](DataLayers/i18n/ko.json) | [↻ partial](DebugMode/i18n/ko.json) | [↻ partial](LookupAnything/i18n/ko.json) | ❑                            | [✓](TractorMod/i18n/ko.json)
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [↻ partial](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
 Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json)        | [↻ partial](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
-Spanish    | [✓](ChestsAnywhere/i18n/es.json)        | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [↻ partial](LookupAnything/i18n/es.json) | ❑                            | [✓](TractorMod/i18n/es.json)
+Spanish    | [✓](ChestsAnywhere/i18n/es.json)        | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [✓](LookupAnything/i18n/es.json)        | ❑                            | [✓](TractorMod/i18n/es.json)
 Turkish    | [✓](ChestsAnywhere/i18n/tr.json)        | ❑                                   | ❑                                  | ❑                                       | ❑                            | [✓](TractorMod/i18n/tr.json)
 
 Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)

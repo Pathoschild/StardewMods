@@ -8,7 +8,7 @@
 * Fixed bushes & fruit trees showing next fruit tomorrow on the last day of their season.
 * Fixed items owned count not including child/horse hats, items in dressers, and equipped items.
 * Fixed a missing translation for non-English players.
-* Improved translations. Thanks to asqwedcxz741 (updated Chinese)!
+* Improved translations. Thanks to asqwedcxz741 (updated Chinese) and corrinr (updated Spanish)!
 
 ## 1.24
 Released 27 December 2019.
