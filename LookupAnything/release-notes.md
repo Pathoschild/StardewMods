@@ -8,6 +8,7 @@
 * Fixed bushes & fruit trees showing next fruit tomorrow on the last day of their season.
 * Fixed items owned count not including child/horse hats, items in dressers, and equipped items.
 * Fixed a missing translation for non-English players.
+* Fixed fish spawn location names not being translated.
 * Improved translations. Thanks to asqwedcxz741 (updated Chinese) and corrinr (updated Spanish)!
 
 ## 1.24

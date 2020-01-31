@@ -14,7 +14,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         public string LocationName { get; }
 
         /// <summary>The location's translated name.</summary>
-        public string LocationDisplayName { get; }
+        public string LocationDisplayName => this.Area != null
+            ? L10n.LocationOverrides.AreaName(this.LocationName, this.Area)
+            : L10n.LocationOverrides.LocationName(this.LocationName);
 
         /// <summary>The area ID within the location, if applicable.</summary>
         public string Area { get; }
@@ -42,10 +44,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
             this.LocationName = locationName;
             this.Area = area;
             this.Seasons = new HashSet<string>(seasons, StringComparer.InvariantCultureIgnoreCase);
-
-            this.LocationDisplayName = this.Area != null
-                ? L10n.LocationOverrides.AreaName(this.LocationName, this.Area)
-                : L10n.LocationOverrides.LocationName(this.LocationName);
         }
     }
 }
