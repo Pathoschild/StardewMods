@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to shirutan (added Japanese)!
+* Improved translations. Thanks to cosmogone (added Spanish) and shirutan (added Japanese)!
 
 ## 1.1.1
 Released 27 December 2019.
