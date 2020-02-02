@@ -10,6 +10,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>The item type to accept, or <c>null</c> to accept any.</summary>
+        public ItemType? Type { get; } = ItemType.Object;
+
         /// <summary>The input item or category ID.</summary>
         public int InputID { get; }
 
@@ -51,7 +54,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="stack">The item to check.</param>
         public bool AcceptsInput(ITrackedStack stack)
         {
-            return stack.Sample.ParentSheetIndex == this.InputID || stack.Sample.Category == this.InputID;
+            return
+                (this.Type == null || stack.Type == this.Type)
+                && (stack.Sample.ParentSheetIndex == this.InputID || stack.Sample.Category == this.InputID);
         }
     }
 }

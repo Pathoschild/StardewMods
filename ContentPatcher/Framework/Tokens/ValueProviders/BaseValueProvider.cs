@@ -117,20 +117,31 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryValidateInput(input, out error))
                 return false;
 
-            // default validation
+            // validate bounded values
+            if (this.HasBoundedRangeValues(input, out int min, out int max))
             {
-                InvariantHashSet validValues = this.GetAllowedValues(input);
-                if (validValues?.Any() == true)
+                string[] invalidValues = values
+                    .Where(p => !int.TryParse(p, out int val) || val < min || val > max)
+                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .ToArray();
+
+                if (invalidValues.Any())
                 {
-                    string[] invalidValues = values
-                        .Where(p => !validValues.Contains(p))
-                        .Distinct()
-                        .ToArray();
-                    if (invalidValues.Any())
-                    {
-                        error = $"invalid values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
-                        return false;
-                    }
+                    error = $"invalid values ({string.Join(", ", invalidValues)}); expected an integer between {min} and {max}.";
+                    return false;
+                }
+            }
+            else if (this.HasBoundedValues(input, out InvariantHashSet validValues))
+            {
+                string[] invalidValues = values
+                    .Where(p => !validValues.Contains(p))
+                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .ToArray();
+
+                if (invalidValues.Any())
+                {
+                    error = $"invalid values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
+                    return false;
                 }
             }
 
@@ -152,12 +163,26 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return new InvariantHashSet();
         }
 
-        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
+        public virtual bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
         {
-            return null;
+            allowedValues = null;
+            return false;
+        }
+
+        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedValues"/>.</summary>
+        /// <param name="input">The input argument, if any.</param>
+        /// <param name="min">The minimum value this token may return.</param>
+        /// <param name="max">The maximum value this token may return.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public virtual bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        {
+            min = 0;
+            max = 0;
+            return false;
         }
 
         /// <summary>Get the current values.</summary>

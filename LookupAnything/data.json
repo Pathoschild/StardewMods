@@ -213,40 +213,40 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 378, "Count": 5 } // copper ore
+                { "ID": 378, "Count": 5 }, // copper ore
+                { "ID": 382 }              // coal
             ],
             "Output": 334 // copper bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 380, "Count": 5 } // iron ore
+                { "ID": 380, "Count": 5 }, // iron ore
+                { "ID": 382 }              // coal
             ],
             "Output": 335 // iron bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 384, "Count": 5 } // gold ore
+                { "ID": 384, "Count": 5 }, // gold ore
+                { "ID": 382 }              // coal
             ],
             "Output": 336 // gold bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 },            // coal
-                { "ID": 386, "Count": 5 } // gold ore
+                { "ID": 386, "Count": 5 }, // gold ore
+                { "ID": 382 }              // coal
             ],
             "Output": 337 // iridium bar
         },
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 }, // coal
-                { "ID": 82 }   // fire quartz
+                { "ID": 82 },   // fire quartz
+                { "ID": 382 }   // coal
             ],
             "Output": 338, // refined quartz
             "MaxOutput": 3
@@ -254,8 +254,8 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 13,
             "Ingredients": [
-                { "ID": 382 }, // coal
-                { "ID": 80 }   // quartz
+                { "ID": 80 },   // quartz
+                { "ID": 382 }   // coal
             ],
             "Output": 338 // refined quartz
         },
@@ -831,7 +831,7 @@ You shouldn't change this file unless you know what you're doing.
         ** Farm
         ****/
         {
-            "SpriteSheet": "BigCraftable",
+            "Type": "BigCraftable",
             "SpriteID": [ 102 /*duck or white egg*/, 103 /*brown or void egg*/ ],
             "Context": "World",
             "DescriptionKey": "data.item.egg-incubator.description" // no description when it contains an egg
@@ -1030,7 +1030,7 @@ You shouldn't change this file unless you know what you're doing.
         ** Mine containers (all identified as "Barrel" with no meaningful description)
         ****/
         {
-            "SpriteSheet": "BigCraftable",
+            "Type": "BigCraftable",
             "SpriteID": [ 118 /*barrel*/, 120 /*frost barrel*/, 122 /*dark barrel*/, 124 /*desert barrel*/ ],
             "Context": "World",
             "NameKey": "data.item.barrel.name",
@@ -1038,7 +1038,7 @@ You shouldn't change this file unless you know what you're doing.
             "DescriptionKey": "data.item.barrel.description"
         },
         {
-            "SpriteSheet": "BigCraftable",
+            "Type": "BigCraftable",
             "SpriteID": [ 119 /*box*/, 121 /*frost box*/, 123 /*dark box*/, 125 /*desert box*/ ],
             "Context": "World",
             "NameKey": "data.item.box.name",

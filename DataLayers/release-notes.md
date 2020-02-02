@@ -1,4 +1,11 @@
 # Release notes
+## 1.10
+Released 01 February 2020.
+
+* Added shortcut keys to switch to a specific layer while the overlay is open (thanks to Drachenkaetzchen!).
+* Added tilled group to tillable layer (thanks to Drachenkätzchen!).
+* Improved translations. Thanks to jahangmar (updated German), kchapelier (updated French), shirutan (updated Japanese), and VengelmBjorn (updated Russian)!
+
 ## 1.9.1
 Released 27 December 2019.
 

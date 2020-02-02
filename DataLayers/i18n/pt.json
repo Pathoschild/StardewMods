@@ -62,6 +62,7 @@
     // tillable
     "tillable.name": "Arabilidade",
     "tillable.tillable": "Arável",
+    "tillable.tilled": "Tilled", // TODO
     "tillable.occupied": "Ocupado",
     "tillable.not-tillable": "Não Arável"
 }

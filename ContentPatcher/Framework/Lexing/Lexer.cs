@@ -222,7 +222,7 @@ namespace ContentPatcher.Framework.Lexing
                 throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
             // extract input argument if present
-            LexTokenInputArg? inputArg = null;
+            LexTokenInputArg inputArg = null;
             if (input.Any() && input.Peek().Type == LexBitType.InputArgSeparator)
             {
                 input.Dequeue();

@@ -36,7 +36,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The unique key for the entry in the data file.</param>
         /// <param name="value">The entry value to set.</param>
-        public EditDataPatchRecord(ITokenString key, TokenizableJToken value)
+        public EditDataPatchRecord(IManagedTokenString key, TokenizableJToken value)
         {
             this.Key = key;
             this.Value = value;

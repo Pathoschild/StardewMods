@@ -19,10 +19,10 @@
     "label.order": "Sıra",
     "label.hide-chest": "Bu kutuyu gizle",
     "label.hide-chest-hidden": "Bu kutuyu gizle (bunu geri almak için kutuyu bulmanız gerekecek!)",
-    "label.automate-prefer-output": "(Automate) Nesneleri ilk önce bu kutuya koy",
-    "label.automate-no-input": "(Automate) Bu kutuya nesne koyma",
-    "label.automate-no-output": "(Automate) Bu kutudan nesne alma",
-    "label.automate-ignore": "(Automate) Bu kutuyu otomasyon için kullanma",
+    "label.automate-store": "(Automate) Kutuya nesne koyma",
+    "label.automate-store-first": "(Automate) Nesneleri ilk önce bu kutuya koy",
+    "label.automate-take": "(Automate) Bu kutudan nesne alma",
+    "label.automate-take-first": "(Automate) Bu kutudan ilk önce bir nesne alın",
 
     // button labels
     "button.edit-chest": "kutuyu düzenle",

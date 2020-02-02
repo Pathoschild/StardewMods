@@ -179,27 +179,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private SDate GetNextHarvestDate(Bush bush)
         {
             SDate today = SDate.Now();
+            var tomorrow = today.AddDays(1);
 
             // currently has produce
             if (bush.tileSheetOffset.Value == 1)
                 return today;
 
-            // tea bushes take 20 days to grow, then produce leaves on day 22+ of each season (except winter if not in the greenhouse).
+            // tea bushes take 20 days to grow, then produce leaves on day 22+ of each season (except winter if not in the greenhouse)
             if (this.IsTeaBush(bush))
             {
-                SDate fromDate = this.GetDateFullyGrown(bush);
-                if (fromDate < SDate.Now())
-                    fromDate = SDate.Now();
+                SDate minDate = this.GetDateFullyGrown(bush);
+                if (minDate < tomorrow)
+                    minDate = tomorrow;
 
-                SDate nextHarvest;
-                if (fromDate.Season == "winter" && !bush.greenhouseBush.Value)
-                    nextHarvest = new SDate(22, "spring", fromDate.Year + 1);
-                else if (fromDate.Day < 22)
-                    nextHarvest = new SDate(22, fromDate.Season);
-                else
-                    nextHarvest = fromDate.AddDays(1);
-
-                return nextHarvest;
+                if (minDate.Season == "winter" && !bush.greenhouseBush.Value)
+                    return new SDate(22, "spring", minDate.Year + 1);
+                if (minDate.Day < 22)
+                    return new SDate(22, minDate.Season);
+                return minDate;
             }
 
             // wild bushes produce salmonberries in spring 15-18, and blackberries in fall 8-11
@@ -207,13 +204,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             SDate springEnd = new SDate(18, "spring");
             SDate fallStart = new SDate(8, "fall");
             SDate fallEnd = new SDate(11, "fall");
-            if (today < springStart)
+
+            if (tomorrow < springStart)
                 return springStart;
-            if (today > springEnd && today < fallStart)
+            if (tomorrow > springEnd && tomorrow < fallStart)
                 return fallStart;
-            if (today > fallEnd)
+            if (tomorrow > fallEnd)
                 return new SDate(springStart.Day, springStart.Season, springStart.Year + 1);
-            return today.AddDays(1);
+            return tomorrow;
         }
     }
 }

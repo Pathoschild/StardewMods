@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
@@ -21,6 +22,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
         /// <summary>A fake pickaxe to use for clearing dead crops.</summary>
         private readonly Pickaxe FakePickaxe = new Pickaxe();
+
+        /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest"/>.</summary>
+        private readonly IDictionary<int, bool> IsFlowerCache = new Dictionary<int, bool>();
 
 
         /*********
@@ -88,10 +92,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return true;
                 }
 
-                bool shouldHarvest = dirt.crop.programColored.Value // from Utility.findCloseFlower
-                    ? this.Config.HarvestFlowers
-                    : this.Config.HarvestCrops;
-                if (shouldHarvest)
+                if (this.ShouldHarvest(dirt.crop))
                 {
                     return dirt.crop.harvestMethod.Value == Crop.sickleHarvest
                         ? dirt.performToolAction(tool, 0, tile, location)
@@ -156,6 +157,41 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             return false;
+        }
+
+        /// <summary>Method called when the tractor attachments have been activated for a location.</summary>
+        /// <param name="location">The current tractor location.</param>
+        public override void OnActivated(GameLocation location)
+        {
+            base.OnActivated(location);
+            this.IsFlowerCache.Clear();
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether a crop should be harvested.</summary>
+        /// <param name="crop">The crop to check.</param>
+        private bool ShouldHarvest(Crop crop)
+        {
+            int cropId = crop.indexOfHarvest.Value;
+            if (!this.IsFlowerCache.TryGetValue(cropId, out bool isFlower))
+            {
+                try
+                {
+                    isFlower = new SObject(cropId, 1).Category == SObject.flowersCategory;
+                }
+                catch
+                {
+                    isFlower = false;
+                }
+                this.IsFlowerCache[cropId] = isFlower;
+            }
+
+            return isFlower
+                ? this.Config.HarvestFlowers
+                : this.Config.HarvestCrops;
         }
     }
 }

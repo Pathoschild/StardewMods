@@ -6,7 +6,7 @@
     "label.submenu": "Untermenü",
     "label.minigame": "Minispiel",
     "label.festival-name": "Fest",
-    "label.event-id": "Event ID",
-    "label.event-script": "Event Skript",
-    "label.song": "song" // TODO
+    "label.event-id": "Event-ID",
+    "label.event-script": "Event-Skript",
+    "label.song": "Lied"
 }

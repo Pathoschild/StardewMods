@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="beforeID">The ID of another entry this one should be inserted before.</param>
         /// <param name="afterID">The ID of another entry this one should be inserted after.</param>
         /// <param name="toPosition">The position to set.</param>
-        public EditDataPatchMoveRecord(ITokenString id, ITokenString beforeID, ITokenString afterID, MoveEntryPosition toPosition)
+        public EditDataPatchMoveRecord(IManagedTokenString id, IManagedTokenString beforeID, IManagedTokenString afterID, MoveEntryPosition toPosition)
         {
             this.ID = id;
             this.BeforeID = beforeID;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
@@ -56,9 +56,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="context">The context for which to get an override.</param>
         public ObjectData GetObject(Item item, ObjectContext context)
         {
-            ItemSpriteType sheet = item.GetSpriteType();
+            ItemType type = item.GetItemType();
             return this.Objects
-                .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.ParentSheetIndex) && obj.Context.HasFlag(context));
+                .FirstOrDefault(obj => obj.Type == type && obj.SpriteID.Contains(item.ParentSheetIndex) && obj.Context.HasFlag(context));
         }
 
         /// <summary>Get overrides for a game object.</summary>

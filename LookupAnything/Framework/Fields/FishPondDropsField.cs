@@ -71,8 +71,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // list drops
             Vector2 iconSize = new Vector2(font.MeasureString("ABC").Y);
             int lastGroup = -1;
+            bool isPrevDropGuaranteed = false;
             foreach (FishPondDrop drop in this.Drops)
             {
+                bool disabled = !drop.IsUnlocked || isPrevDropGuaranteed;
+
                 // draw group checkbox + requirement
                 if (lastGroup != drop.MinPopulation)
                 {
@@ -82,7 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         texture: Sprites.Icons.Sheet,
                         position: new Vector2(position.X + outerIndent, position.Y + height + checkboxOffset),
                         sourceRectangle: drop.IsUnlocked ? Sprites.Icons.FilledCheckbox : Sprites.Icons.EmptyCheckbox,
-                        color: drop.IsUnlocked ? Color.White : Color.White * 0.5f,
+                        color: Color.White * (disabled ? 0.5f : 1f),
                         rotation: 0,
                         origin: Vector2.Zero,
                         scale: checkboxSize / Sprites.Icons.FilledCheckbox.Width,
@@ -94,8 +97,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         text: L10n.Building.FishPondDropsMinFish(count: drop.MinPopulation),
                         position: new Vector2(position.X + outerIndent + checkboxSize + 7, position.Y + height),
                         wrapWidth: wrapWidth - checkboxSize - 7,
-                        color: drop.IsUnlocked ? Color.Black : Color.Gray
+                        color: disabled ? Color.Gray : Color.Black
                     );
+
+                    // cross out if it's guaranteed not to drop
+                    if (isPrevDropGuaranteed)
+                        spriteBatch.DrawLine(position.X + outerIndent + checkboxSize + 7, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), Color.Gray);
+
                     height += Math.Max(checkboxSize, textSize.Y);
                 }
 
@@ -103,22 +111,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 bool isGuaranteed = drop.Probability > .99f;
                 {
                     // draw icon
-                    spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, drop.IsUnlocked ? Color.White : Color.White * 0.5f);
+                    spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, Color.White * (disabled ? 0.5f : 1f));
 
                     // draw text
-                    string text = isGuaranteed ? drop.SampleItem.DisplayName : L10n.Generic.PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
+                    string text = L10n.Generic.PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
                     if (drop.MinDrop != drop.MaxDrop)
                         text += $" ({L10n.Generic.Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                     else if (drop.MinDrop > 1)
                         text += $" ({drop.MinDrop})";
-                    Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, drop.IsUnlocked ? Color.Black : Color.Gray);
+                    Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);
+
+                    // cross out if it's guaranteed not to drop
+                    if (isPrevDropGuaranteed)
+                        spriteBatch.DrawLine(position.X + innerIndent + iconSize.X + 5, position.Y + height + iconSize.Y / 2, new Vector2(textSize.X, 1), Color.Gray);
 
                     height += textSize.Y + 5;
                 }
 
                 // stop if drop is guaranteed
                 if (drop.IsUnlocked && isGuaranteed)
-                    break;
+                    isPrevDropGuaranteed = true;
             }
 
             // return size

@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.11.2
+Released 01 February 2020.
+
+* Improved translations. Thanks to jahangmar (updated German)!
+
 ## 1.11.1
 Released 27 December 2019.
 

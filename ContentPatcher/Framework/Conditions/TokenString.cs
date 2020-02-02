@@ -10,7 +10,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>A string value optionally containing tokens.</summary>
-    internal class TokenString : IParsedTokenString
+    internal class TokenString : IManagedTokenString
     {
         /*********
         ** Fields
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="raw">The raw token input argument.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInputArg? raw, IContext context)
+        public TokenString(LexTokenInputArg raw, IContext context)
             : this(lexTokens: raw?.Parts, context: context) { }
 
         /// <summary>Construct an instance.</summary>
@@ -74,7 +74,6 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    where !string.IsNullOrWhiteSpace(token.Text) // ignore whitespace-only tokens
                     select new TokenStringPart
                     {
                         LexToken = token,
@@ -112,6 +111,8 @@ namespace ContentPatcher.Framework.Conditions
                         this.State.AddUnavailableModTokens(requiredModId);
                     else
                         this.State.AddInvalidTokens(lexToken.Name);
+
+                    isMutable = true; // can't optimize away the token value if it's invalid
                 }
             }
 

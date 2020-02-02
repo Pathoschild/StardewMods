@@ -44,6 +44,11 @@ setting         | default | what it affects
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
 
 ## FAQs
+### Can I use this with an existing save?
+Yep! If you have things in the water due to the smaller map, see
+[Saves#Change farm type](https://stardewvalleywiki.com/Saves#Change_farm_type)
+for suggested fixes (skip the part about editing the save file).
+
 ### Compatibility
 This is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. It can't be combined with other mods that replace the riverlands farm.
@@ -53,14 +58,34 @@ The farm map will recolor automatically if you have one of these installed:
 * Eemie's Just Another Map Recolor;
 * Starblue Valley.
 
-To add support for a new recolor, create a folder in `assets/recolors` matching the recolor mod's
-ID (from its `manifest.json` file) and drop the modified `{season}_smallBeachFarm.png` files into it.
-(If you send me the files, I'll add official support for the recolor!)
+### Can I add compatibility with a recolor mod?
+Yep! There are two main approaches:
 
-### Can I use this with an existing save?
-Yep! If you have things in the water due to the smaller map, see
-[Saves#Change farm type](https://stardewvalleywiki.com/Saves#Change_farm_type)
-for some suggested fixes (skip the part about editing the save file).
+**Option A (recommended):**  
+Other mods can patch Small Beach Farm's tilesheets directly. For example, in a Content Patcher pack:
+```json
+{
+   "Action": "EditImage",
+   "Target": "Mods/Pathoschild.SmallBeachFarm/{{season}}_smallBeachFarm",
+   "FromFile": "assets/your-image.png",
+   "PatchMode": "Overlay"
+}
+```
+
+**Option B:**  
+Compatibility files can be added to the Small Beach Farm folder instead.
+
+1. Choose the compatibility folder you need:
+
+   folder | purpose
+   :----- | :------
+   `assets/tilesheets` | Replace the entire tilesheet. If the player has multiple mods with a matching folder, only the first one alphabetically will be used.
+   `assets/overlays` | Make changes to the tilesheet loaded from `assets/tilesheets` (recommended if you only change some of the colors). If the player has multiple mods with a matching folder, they'll be applied sequentially in alphabetical order. Transparent pixels won't change the tilesheet, so you can leave areas you don't need to change empty.
+
+2. Create a subfolder whose name is the recolor mod's ID (from its `manifest.json`).
+3. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
+
+If you send me the files, I'll add official support for the recolor!
 
 ## Compiling from source
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to

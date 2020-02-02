@@ -8,6 +8,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -52,6 +54,37 @@ namespace Pathoschild.Stardew.Common
                     where building.indoors.Value != null
                     select building.indoors.Value
                 );
+        }
+
+        /// <summary>Get the item type for an item to disambiguate IDs.</summary>
+        /// <param name="item">The item to check.</param>
+        public static ItemType GetItemType(this Item item)
+        {
+            switch (item)
+            {
+                case Boots _:
+                    return ItemType.Boots;
+
+                case Furniture _:
+                    return ItemType.Furniture;
+
+                case Hat _:
+                    return ItemType.Hat;
+
+                case Tool _:
+                    return ItemType.Tool;
+
+                case Wallpaper _:
+                    return ItemType.Wallpaper;
+
+                case SObject obj:
+                    return obj.bigCraftable.Value
+                        ? ItemType.BigCraftable
+                        : ItemType.Object;
+
+                default:
+                    return ItemType.Unknown;
+            }
         }
 
         /****

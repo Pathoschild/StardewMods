@@ -597,7 +597,7 @@
     "tree.stage.partial": "{{stageName}} ({{step}} из {{max}})",
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
-    "tree.next-growth.random": "20% шанс, что завтра вырастит в {{stage}}",
+    "tree.next-growth.chance": "20% шанс, что завтра вырастит в {{stage}}",
     "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
 
     // growth stages

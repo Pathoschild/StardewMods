@@ -72,9 +72,12 @@ namespace Pathoschild.Stardew.SkipIntro
                 }
 
                 // apply skip logic
-                this.CurrentStage = Game1.activeClickableMenu is TitleMenu menu
-                    ? this.Skip(menu, this.CurrentStage)
-                    : Stage.None;
+                if (this.CurrentStage != Stage.None)
+                {
+                    this.CurrentStage = Game1.activeClickableMenu is TitleMenu menu
+                        ? this.Skip(menu, this.CurrentStage)
+                        : Stage.None;
+                }
             }
             catch (Exception ex)
             {

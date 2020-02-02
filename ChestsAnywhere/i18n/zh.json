@@ -19,10 +19,10 @@
     "label.order": "顺序",
     "label.hide-chest": "隐藏此箱子",
     "label.hide-chest-hidden": "隐藏此箱子（你需要亲自找到该箱子撤销隐藏！）",
-    "label.automate-prefer-output": "[Automate] 优先输出到这个箱子",
-    "label.automate-no-input": "[Automate] 禁止发送物品到这个箱子",
-    "label.automate-no-output": "[Automate] 禁止从这个箱子获取物品",
-    "label.automate-ignore": "[Automate] 忽略这个箱子",
+    "label.automate-store": "[Automate] 把物品放在这个箱子里",
+    "label.automate-store-first": "[Automate] 优先输出到这个箱子",
+    "label.automate-take": "[Automate] 从这个箱子里拿取物品",
+    "label.automate-take-first": "[Automate] 优先从这个箱子里拿取物品",
 
     // button labels
     "button.edit-chest": "编辑箱子",

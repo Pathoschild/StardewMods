@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="y">The Y coordinate value of the top-left corner.</param>
         /// <param name="width">The width of the area.</param>
         /// <param name="height">The height of the area.</param>
-        public TokenRectangle(ITokenString x, ITokenString y, ITokenString width, ITokenString height)
+        public TokenRectangle(IManagedTokenString x, IManagedTokenString y, IManagedTokenString width, IManagedTokenString height)
         {
             this.X = x ?? throw new ArgumentNullException(nameof(x));
             this.Y = y ?? throw new ArgumentNullException(nameof(y));

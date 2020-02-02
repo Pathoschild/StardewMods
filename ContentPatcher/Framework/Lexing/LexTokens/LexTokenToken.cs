@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="inputArg">The input argument passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        public LexTokenToken(string name, LexTokenInputArg? inputArg, bool impliedBraces)
+        public LexTokenToken(string name, LexTokenInputArg inputArg, bool impliedBraces)
         {
             this.Type = LexTokenType.Token;
             this.Text = LexTokenToken.GetRawText(name, inputArg, impliedBraces);
@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="tokenInputArgArgument">The input argument passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        private static string GetRawText(string name, LexTokenInputArg? tokenInputArgArgument, bool impliedBraces)
+        private static string GetRawText(string name, LexTokenInputArg tokenInputArgArgument, bool impliedBraces)
         {
             StringBuilder str = new StringBuilder();
             if (!impliedBraces)

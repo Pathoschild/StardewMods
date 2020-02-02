@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -20,6 +22,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>Whether to update the layer when the set of visible tiles changes.</summary>
         public bool UpdateWhenVisibleTilesChange { get; }
+
+        /// <summary>The buttons to activate the layer.</summary>
+        public SButton[] ShortcutKey { get; }
 
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; protected set; }
@@ -42,11 +47,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The data layer name.</param>
         /// <param name="config">The data layers settings.</param>
-        protected BaseLayer(string name, LayerConfig config)
+        /// <param name="monitor">Writes messages to the SMAPI log.</param>
+        protected BaseLayer(string name, LayerConfig config, IMonitor monitor)
         {
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
+            this.ShortcutKey = CommonHelper.ParseButtons(config.ShortcutKey, monitor, this.Name);
         }
 
         /// <summary>Get the dirt instance for a tile, if any.</summary>

@@ -1,4 +1,5 @@
 using System;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate
@@ -19,7 +20,7 @@ namespace Pathoschild.Stardew.Automate
         protected readonly Action<Item> OnEmpty;
 
         /// <summary>The last stack size handlers were notified of.</summary>
-        private int LastStackSize;
+        private int LastCount;
 
 
         /*********
@@ -29,8 +30,11 @@ namespace Pathoschild.Stardew.Automate
         /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
         public Item Sample { get; }
 
+        /// <summary>The underlying item type.</summary>
+        public ItemType Type { get; }
+
         /// <summary>The number of items in the stack.</summary>
-        public int Count => this.Item.Stack;
+        public int Count { get; private set; }
 
 
         /*********
@@ -43,17 +47,24 @@ namespace Pathoschild.Stardew.Automate
         public TrackedItem(Item item, Action<Item> onReduced = null, Action<Item> onEmpty = null)
         {
             this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
+            this.Type = (ItemType)item.GetItemType();
             this.Sample = this.GetNewStack(item);
-            this.LastStackSize = item.Stack;
             this.OnReduced = onReduced;
             this.OnEmpty = onEmpty;
+            this.Count = item.Stack; // we can't trust Item.Stack to reduce correctly (e.g. Hat.Stack always return 1), so we need to track it ourselves
+            this.LastCount = this.Count;
         }
 
         /// <summary>Remove the specified number of this item from the stack.</summary>
         /// <param name="count">The number to consume.</param>
         public void Reduce(int count)
         {
-            this.Item.Stack -= Math.Max(0, count);
+            if (count <= 0)
+                return;
+
+            this.Item.Stack -= count;
+            this.Count -= count;
+
             this.Delegate();
         }
 
@@ -76,13 +87,13 @@ namespace Pathoschild.Stardew.Automate
         private void Delegate()
         {
             // skip if not reduced
-            if (this.Item.Stack >= this.LastStackSize)
+            if (this.Count >= this.LastCount)
                 return;
-            this.LastStackSize = this.Item.Stack;
+            this.LastCount = this.Count;
 
             // notify handlers
             this.OnReduced?.Invoke(this.Item);
-            if (this.Item.Stack <= 0)
+            if (this.Count <= 0)
                 this.OnEmpty?.Invoke(this.Item);
         }
 

@@ -111,12 +111,23 @@ namespace ContentPatcher.Framework.Tokens
             return this.Values.GetValidInputs();
         }
 
-        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
-        /// <param name="input">The input argument, if any.</param>
-        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public virtual InvariantHashSet GetAllowedValues(ITokenString input)
+        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IToken.HasBoundedRangeValues"/>.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="allowedValues">The possible values for the input.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        public bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
         {
-            return this.Values.GetAllowedValues(input);
+            return this.Values.HasBoundedValues(input, out allowedValues);
+        }
+
+        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IToken.HasBoundedValues"/>.</summary>
+        /// <param name="input">The input argument, if any.</param>
+        /// <param name="min">The minimum value this token may return.</param>
+        /// <param name="max">The maximum value this token may return.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        public bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        {
+            return this.Values.HasBoundedRangeValues(input, out min, out max);
         }
 
         /// <summary>Get the current token values.</summary>

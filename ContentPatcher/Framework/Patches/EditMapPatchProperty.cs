@@ -35,7 +35,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="key">The map property name.</param>
         /// <param name="value">The map property value.</param>
-        public EditMapPatchProperty(ITokenString key, ITokenString value)
+        public EditMapPatchProperty(IManagedTokenString key, IManagedTokenString value)
         {
             this.Key = key;
             this.Value = value;

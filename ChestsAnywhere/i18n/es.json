@@ -19,10 +19,10 @@
     "label.order": "Orden",
     "label.hide-chest": "Esconder este cofre",
     "label.hide-chest-hidden": "Esconder este cofre (¡necesitarás encontrar el cofre para deshacer esto!)",
-    "label.automate-prefer-output": "(Automático) Pon primero los objetos en el cofre",
-    "label.automate-no-input": "(Automático) No poner objetos en este cofre",
-    "label.automate-no-output": "(Automático) No sacar objetos de este cofre",
-    "label.automate-ignore": "(Automático) No usar este cofre para automatizaciones",
+    "label.automate-store": "(Automático) Pon objetos en este cofre",
+    "label.automate-store-first": "(Automático) Pon primero los objetos en este cofre",
+    "label.automate-take": "(Automático) Sacar objetos de este cofre",
+    "label.automate-take-first": "(Automático) Sacar primero los objetos de este cofre",
 
     // button labels
     "button.edit-chest": "editar cofre",

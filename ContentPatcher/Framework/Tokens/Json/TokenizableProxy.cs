@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         ** Accessors
         *********/
         /// <summary>The token string which provides the field value.</summary>
-        public IParsedTokenString TokenString { get; }
+        public IManagedTokenString TokenString { get; }
 
         /// <summary>Set the instance value.</summary>
         public Action<string> SetValue { get; }
@@ -28,7 +28,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenString">The token string which provides the field value.</param>
         /// <param name="setValue">Set the instance value.</param>
-        public TokenizableProxy(IParsedTokenString tokenString, Action<string> setValue)
+        public TokenizableProxy(IManagedTokenString tokenString, Action<string> setValue)
         {
             this.TokenString = tokenString;
             this.SetValue = setValue;

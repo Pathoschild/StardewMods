@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, ITokenString assetName, IEnumerable<Condition> conditions, IParsedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
             : base(logName, PatchType.EditData, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromFile)
         {
             // set fields
@@ -98,7 +98,7 @@ namespace ContentPatcher.Framework.Patches
                 return base.UpdateContext(context);
 
             // skip: file already loaded and target didn't change
-            if (!this.RawFromAsset.UpdateContext(context) && this.AttemptedDataLoad)
+            if (!this.RawManagedTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
                 return base.UpdateContext(context);
 
             // reload non-data changes

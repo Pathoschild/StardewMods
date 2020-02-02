@@ -26,12 +26,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return false;
         }
 
-        /// <summary>Get the allowed values for an input argument (or <c>null</c> if any value is allowed).</summary>
+        /// <summary>Get whether the token always chooses from a set of known values for the given input.</summary>
         /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override InvariantHashSet GetAllowedValues(ITokenString input)
+        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
         {
-            return InvariantHashSet.Boolean();
+            allowedValues = InvariantHashSet.Boolean();
+            return true;
         }
 
         /// <summary>Get the current values.</summary>

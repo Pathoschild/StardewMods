@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="name">The token name in the context.</param>
         /// <param name="input">The token input argument, if any.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
-        public Condition(string name, ITokenString input, ITokenString values)
+        public Condition(string name, IManagedTokenString input, IManagedTokenString values)
         {
             // save values
             this.Name = name;

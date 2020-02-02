@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.DataParsers;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -176,10 +177,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            switch (item.GetSpriteType())
+            switch (item.GetItemType())
             {
                 // for ingredient
-                case ItemSpriteType.Object:
+                case ItemType.Object:
                     {
                         RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                         if (recipes.Any())
@@ -188,7 +189,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     break;
 
                 // for machine
-                case ItemSpriteType.BigCraftable:
+                case ItemType.BigCraftable:
                     {
                         RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
                         if (recipes.Any())
@@ -266,7 +267,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             yield return new ColorField(this.GameHelper, L10n.Item.ProducesDye(), item);
 
             // owned and times cooked/crafted
-            if (showInventoryFields && !isCrop && !(item is Tool))
+            if (showInventoryFields && !isCrop)
             {
                 // owned
                 yield return new GenericField(this.GameHelper, L10n.Item.Owned(), L10n.Item.OwnedSummary(count: this.GameHelper.CountOwnedItems(item)));
@@ -719,7 +720,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
                 [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
             };
-            if (item.GetSpriteType() == ItemSpriteType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
+            if (item.GetItemType() == ItemType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
                 prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
             return prices;
         }

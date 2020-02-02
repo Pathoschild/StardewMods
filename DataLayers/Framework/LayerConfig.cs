@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Whether to update the layer when the player's tile view changes.</summary>
         public bool UpdateWhenViewChange { get; set; } = true;
 
+        /// <summary>The key binding which switches to this layer when the overlay is open.</summary>
+        public string ShortcutKey { get; set; }
+
 
         /*********
         ** Public methods

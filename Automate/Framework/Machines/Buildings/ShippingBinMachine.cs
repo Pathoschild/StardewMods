@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>The farm to automate.</summary>
         private readonly Farm Farm;
 
+        /// <summary>The constructed shipping bin, if applicable.</summary>
+        private readonly ShippingBin Bin;
+
 
         /*********
         ** Public methods
@@ -26,6 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             : base(farm, tileArea)
         {
             this.Farm = farm;
+            this.Bin = null;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -36,11 +40,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             : base(location, BaseMachine.GetTileAreaFor(bin))
         {
             this.Farm = farm;
+            this.Bin = bin;
         }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
+            if (this.Bin?.isUnderConstruction() == true)
+                return MachineState.Disabled;
+
             return MachineState.Empty; // always accepts items
         }
 
