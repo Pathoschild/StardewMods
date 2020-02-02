@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Fixed lookup errors when a Producer Framework Mod recipe has duplicate ingredients.
+* Errors in Producer Framework Mod integration can no longer break lookups.
+* Fixed errors reading some Producer Framework Mod recipes.
 
 ## 1.25
 Released 01 February 2020.
