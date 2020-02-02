@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using StardewModdingAPI;
 using SObject = StardewValley.Object;
@@ -57,12 +58,13 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         *********/
         /// <summary>Read the metadata for a recipe provided by <see cref="GetRecipes()"/> or <see cref="GetRecipes(SObject)"/>.</summary>
         /// <param name="raw">The raw recipe data.</param>
+        [SuppressMessage("ReSharper", "UseObjectOrCollectionInitializer", Justification = "Avoid object initializer so it's clear which line failed in stack traces reported by players, since we don't control the format being parsed.")]
         private ProducerFrameworkRecipe ReadRecipe(IDictionary<string, object> raw)
         {
             ProducerFrameworkRecipe recipe = new ProducerFrameworkRecipe();
             recipe.InputId = raw["InputKey"] as int?;
             recipe.MachineId = (int)raw["MachineID"];
-            recipe.Ingredients = ((List<Dictionary<string, object>>)raw["Ingredients"]).ToDictionary(p => (int)p["ID"], p => (int)p["Count"]);
+            recipe.Ingredients = ((List<Dictionary<string, object>>)raw["Ingredients"]).Select(p => new ProducerFrameworkIngredient { InputId = (int)p["ID"], Count = (int)p["Count"] }).ToArray();
             recipe.ExceptIngredients = ((List<Dictionary<string, object>>)raw["ExceptIngredients"]).Select(p => (int)p["ID"]).ToArray();
             recipe.OutputId = (int)raw["Output"];
             recipe.MinOutput = (int)raw["MinOutput"];

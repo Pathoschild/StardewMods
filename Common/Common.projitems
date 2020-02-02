@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\IProducerFrameworkModApi.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkIngredient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkRecipe.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShirtSpriteInfo.cs" />

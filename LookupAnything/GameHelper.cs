@@ -686,7 +686,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.MachineInput,
                         displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId, p.Count)),
                         item: ingredient =>
                         {
                             SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);

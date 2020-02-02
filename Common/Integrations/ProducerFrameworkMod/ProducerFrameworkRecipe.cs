@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         public int MachineId { get; set; }
 
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
-        public IDictionary<int, int> Ingredients { get; set; }
+        public ProducerFrameworkIngredient[] Ingredients { get; set; }
 
         /// <summary>>The ingredients which can't be used in this recipe</summary>
         public int[] ExceptIngredients { get; set; }
