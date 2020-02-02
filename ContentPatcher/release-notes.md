@@ -1,14 +1,16 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.12
+Released 01 February 2020.
+
 * Added advanced API to let other mods add more flexible tokens.
+* Added support for mod-provided tokens in `EditData` fields.
 * Reduced trace logs when another mod adds a custom token.
 * The `patch export` command now exports the asset cached by the game, instead of trying to load it.
 * Fixed dialogue and marriage dialogue changes not applied until the next day (via SMAPI 3.2).
 * Fixed error when a data model patch uses an invalid token in its fields.
 * Fixed whitespace between tokens being ignored (e.g. `{{season}} {{day}}` now outputs `Summer 14` instead of `Summer14`).
-* Fixed mod-provided tokens not allowed in `EditData` fields.
 
 ## 1.11.1
 Released 27 December 2019.

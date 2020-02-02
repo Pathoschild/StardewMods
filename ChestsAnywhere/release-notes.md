@@ -1,9 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17.3
+Released 01 February 2020.
+
 * Added support for Automate's new 'take items from this chest first' option (thanks to MadaraUchiha!).
 * Simplified Automate options.
+* Internal refactoring.
 * Improved translations. Thanks to Avisend (updated French) and two anonymous users (updated Chinese and Japanese)!
 
 ## 1.17.2

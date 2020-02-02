@@ -1,6 +1,8 @@
 # Release notes
-## Upcoming release
-* Fixed some custom mod flowers not recognized for `HarvestFlowers` option.
+## 4.9.2
+Released 01 February 2020.
+
+* Fixed `HarvestFlowers` scythe option not working for some custom mod flowers.
 * Fixed fertilizer not working if applied to crops after planting.
 
 ## 4.9.1

@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.25
+Released 01 February 2020.
+
 * Added support for most custom machine recipes from Producer Framework Mod (thanks to Digus!).
 * Added number owned to tool/weapon lookups.
 * When a fish pond drop is guaranteed, further drops are now crossed out instead of hidden.

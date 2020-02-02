@@ -1,11 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.15
+Released 01 February 2020.
+
 * Added 'take items from this chest first' option editable through Chests Anywhere (thanks to MadaraUchiha!).
-* Improved error-handling when a machine or chest has invalid items.
+* Improved error handling when a machine/chest has invalid items.
 * Machines with invalid output are now paused for 30 seconds.
-* Fixed infinite garbage hats.
+* Fixed infinite garbage hats bug.
 * Fixed some machines allowing wrong item types as input.
 * Fixed buildings automated while still under construction.
 * Internal refactoring.

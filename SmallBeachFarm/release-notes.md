@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.5
+Released 01 February 2020.
+
 * Added support for other mods patching the custom tilesheet.
 * Added support for overlay compatibility files.
 * Added compatibility with Better Water (thanks to laulajatar!).
