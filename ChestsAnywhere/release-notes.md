@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* When you change Automate chest options through Chests Anywhere, automation is now updated immediately (if SMAPI 3.3 is installed).
+
 ## 1.17.3
 Released 01 February 2020.
 

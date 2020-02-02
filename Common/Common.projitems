@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkIngredient.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\ProducerFrameworkMod\ProducerFrameworkRecipe.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Messages\AutomateUpdateChestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShirtSpriteInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataParsers\CropDataParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawHelper.cs" />
