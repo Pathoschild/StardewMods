@@ -191,16 +191,22 @@ per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
 This adds four options for automate:
-* **Put items in this chest first:** Automate will only push machine output into this chest (until
-  it's full).
-* **Don't put items in this chest:** Automate won't push any machine output into this chest.
-* **Don't take items from this chest:** Automate won't take machine input from this chest.
-* **Don't use this chest for automation:** Automate will completely ignore the chest, so it won't
-  be connected to any machines.
+* **Store items in this chest:** Automate will push machine output into this chest.
+* **Store items in this chest first:** Automate will push machine output into this chest first, and
+  only try other chests if it's full.
+* **Take items from this chest:** Automate will take machine input from this chest.
+* **Take items from this chest first:** Automate will take machine input from this chest first, and
+  only try other chests if it doesn't have any input for a machine.
 
-If you don't have Chests Anywhere installed, you can edit the chest names a different way and use
-these substrings: `|automate:output|` (put items in this chest first) or `|automate:ignore|` (don't
-use this chest in automation).
+If you don't have Chests Anywhere installed, you can edit the chest names a different way and add
+these substrings:
+
+tag | meaning
+--- | -------
+`|automate:no-store|` | **don't** store items in this chest.
+`|automate:no-take|` | **don't** take items from this chest.
+`|automate:prefer-store|` | store items in this chest first.
+`|automate:prefer-take|` | take items from this chest first.
 
 ## Compatibility
 Automate is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and

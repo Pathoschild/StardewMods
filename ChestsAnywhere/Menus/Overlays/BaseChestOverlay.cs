@@ -258,6 +258,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 SpriteFont font = Game1.smallFont;
                 const int gutter = 10;
                 int padding = Game1.pixelZoom * 10;
+                int indent = Game1.pixelZoom * 3;
                 float topOffset = padding;
                 int maxLabelWidth = (int)new[] { locationLabel, nameLabel, categoryLabel, orderLabel }.Select(p => font.MeasureString(p).X).Max();
 
@@ -299,10 +300,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store", defaultValue: true).Y;
                     if (this.EditAutomateStoreItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take", defaultValue: true).Y;
                     if (this.EditAutomateTakeItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
                 }
 
                 // buttons

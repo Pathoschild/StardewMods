@@ -2,7 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* When you change Automate chest options through Chests Anywhere, automation is now updated immediately (if SMAPI 3.3 is installed).
+* Automate chest options are now applied immediately (if SMAPI 3.3 is installed).
+* Fixed reversed Automate options in the last update.
+
+**Breaking change:** if you already installed the previous update _and_ changed Automate options through Chests Anywhere after updating, this may reverse the ones you changed. If you didn't change any options after updating, your options will be back to normal.
 
 ## 1.17.3
 Released 01 February 2020.

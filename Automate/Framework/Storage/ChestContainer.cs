@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
@@ -23,7 +24,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         ** Accessors
         *********/
         /// <summary>The container name (if any).</summary>
-        public string Name => this.Chest.Name;
+        public string Name
+        {
+            get => this.Chest.Name;
+            private set => this.Chest.Name = value;
+        }
 
         /// <summary>The location which contains the container.</summary>
         public GameLocation Location { get; }
@@ -44,6 +49,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             this.Chest = chest;
             this.Location = location;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+
+            this.Name = this.MigrateLegacyOptions(this.Name);
         }
 
         /// <summary>Store an item stack.</summary>
@@ -162,6 +169,38 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         private ITrackedStack GetTrackedItem(Item item)
         {
             return new TrackedItem(item, onEmpty: i => this.Chest.items.Remove(i));
+        }
+
+        /// <summary>Migrate legacy options stored in a chest name.</summary>
+        /// <param name="name">The chest name to migrate.</param>
+        private string MigrateLegacyOptions(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name) || !Regex.IsMatch(name, @"\|automate:(?:ignore|input|output|noinput|nooutput)\|"))
+                return name;
+
+            // migrate renamed tags
+            name = name
+                .Replace("|automate:noinput|", "|automate:no-store|")
+                .Replace("|automate:output|", "|automate:prefer-store|")
+                .Replace("|automate:nooutput|", "|automate:no-take|")
+                .Replace("|automate:input|", "|automate:prefer-take|");
+
+            // migrate removed tags
+            if (name.Contains("|automate:ignore|"))
+            {
+                string newTag = "";
+                foreach (string tag in new[] { "|automate:no-store|", "|automate:no-take|" })
+                {
+                    if (!name.Contains(tag))
+                        newTag = $"{newTag} {tag}".Trim();
+                }
+
+                name = name.Replace("|automate:ignore|", newTag);
+            }
+
+            // normalize
+            name = Regex.Replace(name, @"\| +\|", "| |");
+            return name.Trim();
         }
     }
 }

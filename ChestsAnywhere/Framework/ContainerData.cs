@@ -78,19 +78,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     data.Order = order;
 
                 // Automate options
-                else if (tag.ToLower() == "automate:ignore") // legacy tag
-                {
-                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
+                else if (tag.ToLower() == "automate:no-store")
                     data.AutomateStoreItems = ContainerAutomatePreference.Disable;
-                }
-                else if (tag.ToLower() == "automate:noinput")
-                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
-                else if (tag.ToLower() == "automate:input")
-                    data.AutomateTakeItems = ContainerAutomatePreference.Prefer;
-                else if (tag.ToLower() == "automate:nooutput")
-                    data.AutomateStoreItems = ContainerAutomatePreference.Disable;
-                else if (tag.ToLower() == "automate:output")
+                else if (tag.ToLower() == "automate:prefer-store")
                     data.AutomateStoreItems = ContainerAutomatePreference.Prefer;
+                else if (tag.ToLower() == "automate:no-take")
+                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
+                else if (tag.ToLower() == "automate:prefer-take")
+                    data.AutomateTakeItems = ContainerAutomatePreference.Prefer;
             }
 
             // read display name
@@ -121,16 +116,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 internalName += $" |cat:{this.Category}|";
 
             // Automate input
-            if (!this.AutomateTakeItems.IsAllowed())
-                internalName += " |automate:noinput|";
-            else if (this.AutomateTakeItems.IsPreferred())
-                internalName += " |automate:input|";
+            if (!this.AutomateStoreItems.IsAllowed())
+                internalName += " |automate:no-store|";
+            else if (this.AutomateStoreItems.IsPreferred())
+                internalName += " |automate:prefer-store|";
 
             // Automate output
-            if (!this.AutomateStoreItems.IsAllowed())
-                internalName += " |automate:nooutput|";
-            else if (this.AutomateStoreItems.IsPreferred())
-                internalName += " |automate:output|";
+            if (!this.AutomateTakeItems.IsAllowed())
+                internalName += " |automate:no-take|";
+            else if (this.AutomateTakeItems.IsPreferred())
+                internalName += " |automate:prefer-take|";
 
             return internalName;
         }
