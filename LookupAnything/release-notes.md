@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.25.1
 * Errors in Producer Framework Mod integration can no longer break lookups.
 * Fixed errors reading some Producer Framework Mod recipes.
 

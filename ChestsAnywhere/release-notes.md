@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17.4
+Released 02 February 2020.
+
 * Automate chest options are now applied immediately (if SMAPI 3.3 is installed).
 * Fixed reversed Automate options in the last update.
 

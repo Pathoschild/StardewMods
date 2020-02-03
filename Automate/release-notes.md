@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.15.1
+Released 02 February 2020.
+
 * Chest options set through Chests Anywhere are now applied immediately (if SMAPI 3.3 is installed).
 * Fixed reversed options set through Chests Anywhere in the last update.
 * Internal refactoring.
