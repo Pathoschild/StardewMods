@@ -1,7 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed Producer Framework Mod recipes not shown correctly.
+
 ## 1.25.1
+Released 02 February 2020.
+
 * Errors in Producer Framework Mod integration can no longer break lookups.
 * Fixed errors reading some Producer Framework Mod recipes.
 
