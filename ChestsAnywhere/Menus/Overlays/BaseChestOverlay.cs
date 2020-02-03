@@ -149,6 +149,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>An event raised when the player selects a chest.</summary>
         public event Action<ManagedChest> OnChestSelected;
 
+        /// <summary>An event raised when the Automate options for a chest change.</summary>
+        public event Action<ManagedChest> OnAutomateOptionsChanged;
+
 
         /*********
         ** Public methods
@@ -255,6 +258,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 SpriteFont font = Game1.smallFont;
                 const int gutter = 10;
                 int padding = Game1.pixelZoom * 10;
+                int indent = Game1.pixelZoom * 3;
                 float topOffset = padding;
                 int maxLabelWidth = (int)new[] { locationLabel, nameLabel, categoryLabel, orderLabel }.Select(p => font.MeasureString(p).X).Max();
 
@@ -296,10 +300,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store", defaultValue: true).Y;
                     if (this.EditAutomateStoreItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
                     topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take", defaultValue: true).Y;
                     if (this.EditAutomateTakeItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
                 }
 
                 // buttons
@@ -636,15 +640,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // update chest
+            ContainerAutomatePreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
+            ContainerAutomatePreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
+            bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
             this.Chest.Update(
                 name: this.EditNameField.Text,
                 category: this.EditCategoryField.Text,
                 order: order,
                 ignored: this.EditHideChestField.Value,
-                automateStoreItems: this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value),
-                automateTakeItems: this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value)
+                automateStoreItems: automateStore,
+                automateTakeItems: automateTake
             );
             this.OnChestSelected?.Invoke(this.Chest);
+            if (automateChanged)
+                this.OnAutomateOptionsChanged?.Invoke(this.Chest);
         }
 
         /// <summary>Exit the chest menu.</summary>

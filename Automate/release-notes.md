@@ -1,6 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.15.1
+Released 02 February 2020.
+
+* Chest options set through Chests Anywhere are now applied immediately (if SMAPI 3.3 is installed).
+* Fixed reversed options set through Chests Anywhere in the last update.
+* Internal refactoring.
+
+**Breaking change:** if you already installed the previous update _and_ changed Automate options through Chests Anywhere after updating, this may reverse the ones you changed. If you didn't change any options after updating, your options will be back to normal.
+
 ## 1.15
 Released 01 February 2020.
 
@@ -124,7 +133,6 @@ Released 01 August 2018.
 * Added optional connectors (e.g. connect machines using paths).
 * Added support for ignoring specific chests.
 * Fixed various bugs related to multi-tile machines (e.g. buildings).
-* **Breaking change:** to prefer a chest for output, add `|automate:output|` to the chest name instead of just `output`.
 
 ## 1.9.1
 Released 14 February 2018.

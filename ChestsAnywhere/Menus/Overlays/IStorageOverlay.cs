@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>An event raised when the player selects a chest.</summary>
         event Action<ManagedChest> OnChestSelected;
 
+        /// <summary>An event raised when the Automate options for a chest change.</summary>
+        event Action<ManagedChest> OnAutomateOptionsChanged;
+
 
         /*********
         ** Methods

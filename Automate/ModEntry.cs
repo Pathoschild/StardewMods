@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Messages;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -91,6 +92,7 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.World.TerrainFeatureListChanged += this.OnTerrainFeatureListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
@@ -265,6 +267,32 @@ namespace Pathoschild.Stardew.Automate
             catch (Exception ex)
             {
                 this.HandleError(ex, "handling key input");
+            }
+        }
+
+        /// <summary>Raised after a mod message is received over the network.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
+        {
+            // update automation if chest options changed
+            if (Context.IsMainPlayer && e.FromModID == "Pathoschild.ChestsAnywhere" && e.Type == nameof(AutomateUpdateChestMessage))
+            {
+                var message = e.ReadAs<AutomateUpdateChestMessage>();
+                var location = Game1.getLocationFromName(message.LocationName);
+                var player = Game1.getFarmer(e.FromPlayerID);
+
+                string label = player != Game1.MasterPlayer
+                    ? $"{player.Name}/{e.FromModID}"
+                    : e.FromModID;
+
+                if (location != null)
+                {
+                    this.Monitor.Log($"Received chest update from {label} for chest at {message.LocationName} ({message.Tile}), updating machines.");
+                    this.ReloadQueue.Add(location);
+                }
+                else
+                    this.Monitor.Log($"Received chest update from {label} for chest at {message.LocationName} ({message.Tile}), but no such location was found.");
             }
         }
 
