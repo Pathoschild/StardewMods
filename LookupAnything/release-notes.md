@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed 'needed for' shown for the wrong item types in some cases.
 * Fixed Producer Framework Mod recipes not shown correctly.
 
 ## 1.25.1

@@ -568,7 +568,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="obj">The machine whose output to represent.</param>
         private IEnumerable<ICustomField> GetNeededForFields(SObject obj)
         {
-            if (obj == null)
+            if (obj == null || obj.GetItemType() != ItemType.Object)
                 yield break;
 
             List<string> neededFor = new List<string>();
