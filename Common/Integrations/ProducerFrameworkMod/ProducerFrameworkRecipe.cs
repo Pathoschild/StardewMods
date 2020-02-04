@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         public bool HasContextTags()
         {
             return
-                this.InputId != null
+                this.InputId == null
                 || this.Ingredients.Any(p => p.InputId == null)
                 || this.ExceptIngredients.Any(p => p == null);
         }

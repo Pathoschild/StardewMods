@@ -1,7 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.25.2
+Released 03 February 2020.
+
+* Fixed 'needed for' shown for incorrect item types in some cases.
+* Fixed some Producer Framework Mod recipes not shown correctly.
+
 ## 1.25.1
+Released 02 February 2020.
+
 * Errors in Producer Framework Mod integration can no longer break lookups.
 * Fixed errors reading some Producer Framework Mod recipes.
 
