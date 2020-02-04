@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed incorrect warning when using `HasWalletItem` token in 1.12.
+
 ## 1.12
 Released 01 February 2020.
 
