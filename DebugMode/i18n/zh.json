@@ -8,5 +8,5 @@
     "label.festival-name": "节日",
     "label.event-id": "事件标识",
     "label.event-script": "事件脚本",
-    "label.song": "song" // TODO
+    "label.song": "歌"
 }
