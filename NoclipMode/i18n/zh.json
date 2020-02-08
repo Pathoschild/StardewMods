@@ -1,0 +1,4 @@
+{
+    "enabled-message": "启用穿墙模式; 再次按下{{button}}可以关闭穿墙。",
+    "disabled-message": "禁用穿墙模式; 再次按下{{button}}可以开启穿墙。"
+}
