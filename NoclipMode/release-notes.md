@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to asqwedcxz741 (added Chinese)!
+
 ## 1.1.2
 Released 01 February 2020.
 

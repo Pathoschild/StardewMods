@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Enaium (updated Chinese)!
+
 ## 1.11.2
 Released 01 February 2020.
 
