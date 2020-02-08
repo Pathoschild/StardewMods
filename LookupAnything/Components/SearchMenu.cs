@@ -112,20 +112,6 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /****
         ** Methods
         ****/
-        /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The number of pixels to scroll.</param>
-        public void ScrollUp(int amount)
-        {
-            this.CurrentScroll -= amount;
-        }
-
-        /// <summary>Scroll down the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The number of pixels to scroll.</param>
-        public void ScrollDown(int amount)
-        {
-            this.CurrentScroll += amount;
-        }
-
         /// <summary>Render the UI.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         public override void draw(SpriteBatch spriteBatch)
@@ -228,83 +214,24 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="search">The new search text.</param>
         private void ReceiveSearchTextboxChanged(string search)
         {
-            // nothing to search
-            if (string.IsNullOrWhiteSpace(search))
+            // get search words
+            string[] words = (search ?? "").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (!words.Any())
             {
                 this.SearchResults = Enumerable.Empty<SearchResultComponent>();
                 return;
             }
 
-            // get search results
+            // get matches
             this.SearchResults =
                 (
                     from entry in this.SearchLookup
-                    let name = entry.Key
-                    let score = this.GetSearchScore(name, search, 5)
-                    where score < 3 // since the corpus is small, low values usually have little relevance
-                    orderby score ascending
-                    select new SearchResultComponent(entry.First()) // get first result for each name
+                    where words.All(word => entry.Key.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    orderby entry.Key
+                    select new SearchResultComponent(entry.First()) // first result for each name
                 )
-                .Take(20) // the above filter should be aggressive, if there are many results, most probably come from the pre-sifted constants (e.g. 'ore' and we want to include them)
+                .Take(50)
                 .ToArray();
-        }
-
-        /// <summary>Get a value indicating how closely two values match (higher is better).</summary>
-        /// <param name="target">The potential search result.</param>
-        /// <param name="search">The search string.</param>
-        /// <param name="maxSiftOffset">The maximum number of characters to compare when sifting.</param>
-        private double GetSearchScore(string target, string search, int maxSiftOffset)
-        {
-            // normalise
-            search = search?.ToLowerInvariant();
-            target = target?.ToLowerInvariant();
-
-            // handle empty values
-            if (string.IsNullOrEmpty(target))
-                return string.IsNullOrEmpty(search) ? 0 : search.Length;
-            if (string.IsNullOrEmpty(search))
-                return target.Length;
-
-            // exact match
-            if (target == search)
-                return 0;
-
-            // prefer initial match (e.g. "brea" yields "bread" before "complete breakfast")
-            if (target.StartsWith(search))
-                return 0.5;
-            if (target.Contains(search))
-                return 1.5;
-
-            // get fuzzy search score
-            // This is an implementation of the Sift3 compare algorithm by Siderite; see https://siderite.blogspot.com/2007/04/super-fast-and-accurate-string-distance.html.
-            {
-                int indexA = 0, indexB = 0, longestCommonSubstring = 0;
-                while (indexA < target.Length && indexB < search.Length)
-                {
-                    if (target[indexA] == search[indexB])
-                        longestCommonSubstring++;
-                    else
-                    {
-                        for (int i = 1; i < maxSiftOffset; i++)
-                        {
-                            if ((indexA + i < target.Length) && (target[indexA + i] == search[indexB]))
-                            {
-                                indexA += i;
-                                break;
-                            }
-
-                            if ((indexB + i < search.Length) && (target[indexA] == search[indexB + i]))
-                            {
-                                indexB += i;
-                                break;
-                            }
-                        }
-                    }
-                    indexA++;
-                    indexB++;
-                }
-                return (target.Length + search.Length) / 2 - longestCommonSubstring;
-            }
         }
 
         /// <summary>Calculate the rendered dimensions based on the current game scale.</summary>
