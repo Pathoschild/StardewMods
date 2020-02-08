@@ -205,7 +205,7 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /****
-        ** Helpers
+        ** Lookup menu helpers
         ****/
         /// <summary>Show the lookup UI for the current target.</summary>
         /// <param name="lookupMode">The lookup target mode.</param>
@@ -273,6 +273,49 @@ namespace Pathoschild.Stardew.LookupAnything
             });
         }
 
+        /// <summary>Hide the lookup UI for the current target.</summary>
+        private void HideLookup()
+        {
+            this.Monitor.InterceptErrors("closing the menu", () =>
+            {
+                if (Game1.activeClickableMenu is LookupMenu menu)
+                    menu.QueueExit();
+            });
+        }
+
+        /****
+        ** Search menu helpers
+        ****/
+        /// <summary>Toggle the search UI.</summary>
+        private void ToggleSearch()
+        {
+            if (Game1.activeClickableMenu is SearchMenu)
+                this.HideSearch();
+            else
+                this.ShowSearch();
+        }
+
+        /// <summary>Show the search UI.</summary>
+        private void ShowSearch()
+        {
+            if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
+                this.PreviousMenus.Push(Game1.activeClickableMenu);
+            Game1.activeClickableMenu = new SearchMenu(this.SubjectFactory, this.ShowLookupFor);
+        }
+
+        /// <summary>Hide the search UI.</summary>
+        private void HideSearch()
+        {
+            if (Game1.activeClickableMenu is SearchMenu)
+            {
+                Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
+                Game1.activeClickableMenu = null;
+            }
+        }
+
+        /****
+        ** Generic helpers
+        ****/
         /// <summary>Get the most relevant subject under the player's cursor.</summary>
         /// <param name="logMessage">The log message to which to append search details.</param>
         /// <param name="lookupMode">The lookup target mode.</param>
@@ -310,43 +353,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // not found
             return null;
-        }
-
-        /// <summary>Show the lookup UI for the current target.</summary>
-        private void HideLookup()
-        {
-            this.Monitor.InterceptErrors("closing the menu", () =>
-            {
-                if (Game1.activeClickableMenu is LookupMenu menu)
-                    menu.QueueExit();
-            });
-        }
-
-        /// <summary>Toggle the search UI.</summary>
-        private void ToggleSearch()
-        {
-            if (Game1.activeClickableMenu is SearchMenu)
-                this.HideSearch();
-            else
-                this.ShowSearch();
-        }
-
-        /// <summary>Show the search UI.</summary>
-        private void ShowSearch()
-        {
-            if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
-                this.PreviousMenus.Push(Game1.activeClickableMenu);
-            Game1.activeClickableMenu = new SearchMenu(this.SubjectFactory, this.ShowLookupFor);
-        }
-
-        /// <summary>Show the lookup UI for the current target.</summary>
-        private void HideSearch()
-        {
-            if (Game1.activeClickableMenu is SearchMenu)
-            {
-                Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
-                Game1.activeClickableMenu = null;
-            }
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
