@@ -143,13 +143,3 @@ multiplayer. There are no known issues in multiplayer (even if other players don
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
-* [Discussion thread](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/)
-* Useful tools when working on this mod:
-  * Windows:
-    * [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
-  project.
-    * [ReSharper](https://www.jetbrains.com/resharper/) to analyze the game code (e.g. find usages).
-    * [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
-  to extract the game's assets and data.
-  * [YAML Analyzer](http://catox.free.fr/StardewTools/yaml_analyzer.html) to help figure out data
-  files.

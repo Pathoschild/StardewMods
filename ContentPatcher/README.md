@@ -2053,5 +2053,4 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
-* [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)
-* [Ask for help in #modding on Discord](https://stardewvalleywiki.com/Modding:Community#Discord)
+* [Ask for help](https://stardewvalleywiki.com/Modding:Help)

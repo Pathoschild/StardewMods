@@ -482,5 +482,4 @@ won't see the tractor/garage textures or be able to use its features.
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
-* [Discussion thread](http://community.playstarbound.com/threads/tractor-mod.136649/)
 * Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.

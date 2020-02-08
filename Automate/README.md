@@ -488,4 +488,3 @@ your custom machine to its normal automation.
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1063)
-* [Discussion thread](http://community.playstarbound.com/threads/automate.131913)
