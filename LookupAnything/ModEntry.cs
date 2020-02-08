@@ -100,8 +100,6 @@ namespace Pathoschild.Stardew.LookupAnything
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             if (this.Config.HideOnKeyUp)
                 helper.Events.Input.ButtonReleased += this.OnButtonReleased;
-            if (this.Config.SuppressGameDebug)
-                helper.Events.GameLoop.UpdateTicked += (sender, e) => this.SuppressGameDebug();
         }
 
 
@@ -358,16 +356,6 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Metadata = this.Helper.Data.ReadJsonFile<Metadata>(this.DatabaseFileName);
             });
-        }
-
-        /// <summary>Immediately suppress the game's debug mode if it's enabled.</summary>
-        private void SuppressGameDebug()
-        {
-            if (Game1.debugMode)
-            {
-                Game1.debugMode = false;
-                Game1.addHUDMessage(new HUDMessage("Suppressed SMAPI F2 debug mode. (You can disable this in LookupAnything's config.json.)", 2) { timeLeft = 1000, transparency = 0.75f, color = Color.Gray });
-            }
         }
 
         /// <summary>Get whether a given menu should be restored when the lookup ends.</summary>

@@ -24,9 +24,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to include map tiles as lookup targets.</summary>
         public bool EnableTileLookups { get; set; }
 
-        /// <summary>Whether to suppress the game's debug mode (enabled by SMAPI when you press <c>F2</c>) to prevent accidental use, which may cause unintended consequences like skipping a season.</summary>
-        public bool SuppressGameDebug { get; set; }
-
         /// <summary>The key bindings.</summary>
         public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
     }

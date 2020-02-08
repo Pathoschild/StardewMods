@@ -388,10 +388,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 return null; // e.g. incubator
             }
-            catch (IndexOutOfRangeException)
-            {
-                return null; //TODO: Ring of Yorba, not sure why
-            }
         }
 
         /// <summary>Get the item type.</summary>
