@@ -24,6 +24,8 @@ what the game is doing.
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
 You can do this in the world, your inventory, the calendar, or a shop.
 
+You can also press `F2` to search for something by name.
+
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.

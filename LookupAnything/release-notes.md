@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added search feature (thanks to collaboration with mattfeldman!).
+
 ## 1.25.2
 Released 03 February 2020.
 
