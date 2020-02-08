@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => this.Codex.GetCharacter(horse, TargetType.Horse));
+                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => this.Codex.GetCharacter(horse));
                     yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }

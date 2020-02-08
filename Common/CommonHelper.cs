@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
@@ -65,17 +67,29 @@ namespace Pathoschild.Stardew.Common
                 case Boots _:
                     return ItemType.Boots;
 
+                case Clothing _:
+                    return ItemType.Clothing;
+
                 case Furniture _:
                     return ItemType.Furniture;
 
                 case Hat _:
                     return ItemType.Hat;
 
+                case MeleeWeapon _:
+                case Slingshot _:
+                    return ItemType.Weapon;
+
+                case Ring _:
+                    return ItemType.Ring;
+
                 case Tool _:
                     return ItemType.Tool;
 
-                case Wallpaper _:
-                    return ItemType.Wallpaper;
+                case Wallpaper wallpaper:
+                    return wallpaper.isFloor.Value
+                        ? ItemType.Flooring
+                        : ItemType.Wallpaper;
 
                 case SObject obj:
                     return obj.bigCraftable.Value

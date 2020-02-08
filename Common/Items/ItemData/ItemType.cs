@@ -1,44 +1,43 @@
-using CommonType = Pathoschild.Stardew.Common.Items.ItemData.ItemType;
-
-namespace Pathoschild.Stardew.Automate
+namespace Pathoschild.Stardew.Common.Items.ItemData
 {
-    /// <summary>The general item type, to disambiguate IDs which can be duplicated between two sprite sheets.</summary>
-    public enum ItemType
+    /// <summary>An item type that can be searched and added to the player through the console.</summary>
+    /// <remarks>This is copied from the SMAPI source code and should be kept in sync with it.</remarks>
+    internal enum ItemType
     {
         /// <summary>The item isn't covered by one of the known types.</summary>
-        Unknown = CommonType.Unknown,
+        Unknown,
 
         /// <summary>A big craftable object in <see cref="StardewValley.Game1.bigCraftablesInformation"/></summary>
-        BigCraftable = CommonType.BigCraftable,
+        BigCraftable,
 
         /// <summary>A <see cref="StardewValley.Objects.Boots"/> item.</summary>
-        Boots = CommonType.Boots,
+        Boots,
 
         /// <summary>A <see cref="StardewValley.Objects.Clothing"/> item.</summary>
-        Clothing = CommonType.Clothing,
+        Clothing,
 
         /// <summary>A <see cref="StardewValley.Objects.Wallpaper"/> flooring item.</summary>
-        Flooring = CommonType.Flooring,
+        Flooring,
 
         /// <summary>A <see cref="StardewValley.Objects.Furniture"/> item.</summary>
-        Furniture = CommonType.Furniture,
+        Furniture,
 
         /// <summary>A <see cref="StardewValley.Objects.Hat"/> item.</summary>
-        Hat = CommonType.Hat,
+        Hat,
 
         /// <summary>Any object in <see cref="StardewValley.Game1.objectInformation"/> (except rings).</summary>
-        Object = CommonType.Object,
+        Object,
 
         /// <summary>A <see cref="StardewValley.Objects.Ring"/> item.</summary>
-        Ring = CommonType.Ring,
+        Ring,
 
         /// <summary>A <see cref="StardewValley.Tool"/> tool.</summary>
-        Tool = CommonType.Tool,
+        Tool,
 
         /// <summary>A <see cref="StardewValley.Objects.Wallpaper"/> wall item.</summary>
-        Wallpaper = CommonType.Wallpaper,
+        Wallpaper,
 
         /// <summary>A <see cref="StardewValley.Tools.MeleeWeapon"/> or <see cref="StardewValley.Tools.Slingshot"/> item.</summary>
-        Weapon = CommonType.Weapon
+        Weapon
     }
 }

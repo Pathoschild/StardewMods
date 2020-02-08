@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         public FarmAnimalTarget(GameHelper gameHelper, FarmAnimal value, Vector2? tilePosition = null)
-            : base(gameHelper, TargetType.FarmAnimal, value, tilePosition) { }
+            : base(gameHelper, SubjectType.FarmAnimal, value, tilePosition) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

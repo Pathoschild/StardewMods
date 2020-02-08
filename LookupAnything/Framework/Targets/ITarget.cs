@@ -8,8 +8,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /*********
         ** Accessors
         *********/
-        /// <summary>The target type.</summary>
-        TargetType Type { get; set; }
+        /// <summary>The subject type.</summary>
+        SubjectType Type { get; set; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
         Vector2? Tile { get; set; }

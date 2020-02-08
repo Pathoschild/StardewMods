@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         public BushTarget(GameHelper gameHelper, Bush value, IReflectionHelper reflectionHelper)
-            : base(gameHelper, TargetType.Bush, value, value.tilePosition.Value)
+            : base(gameHelper, SubjectType.Bush, value, value.tilePosition.Value)
         {
             this.Reflection = reflectionHelper;
         }

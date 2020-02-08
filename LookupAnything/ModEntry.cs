@@ -53,6 +53,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
 
+        /// <summary>Provides subject entries for target values.</summary>
+        private SubjectFactory SubjectFactory;
+
         /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
 
@@ -119,7 +122,8 @@ namespace Pathoschild.Stardew.LookupAnything
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config));
+            this.SubjectFactory = new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -151,6 +155,8 @@ namespace Pathoschild.Stardew.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
                 else if (keys.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+                else if (keys.ToggleSearch.Contains(e.Button))
+                    this.ToggleSearch();
             });
         }
 
@@ -193,7 +199,7 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /****
-        ** Helpers
+        ** Lookup menu helpers
         ****/
         /// <summary>Show the lookup UI for the current target.</summary>
         /// <param name="lookupMode">The lookup target mode.</param>
@@ -249,18 +255,55 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
-
-                LookupMenu lookupMenu = new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
-                if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
-                {
-                    this.PreviousMenus.Push(Game1.activeClickableMenu);
-                    this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(lookupMenu); // bypass Game1.activeClickableMenu, which disposes the previous menu
-                }
-                else
-                    Game1.activeClickableMenu = lookupMenu;
+                this.PushMenu(
+                    new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
+                );
             });
         }
 
+        /// <summary>Hide the lookup UI for the current target.</summary>
+        private void HideLookup()
+        {
+            this.Monitor.InterceptErrors("closing the menu", () =>
+            {
+                if (Game1.activeClickableMenu is LookupMenu menu)
+                    menu.QueueExit();
+            });
+        }
+
+        /****
+        ** Search menu helpers
+        ****/
+        /// <summary>Toggle the search UI.</summary>
+        private void ToggleSearch()
+        {
+            if (Game1.activeClickableMenu is SearchMenu)
+                this.HideSearch();
+            else
+                this.ShowSearch();
+        }
+
+        /// <summary>Show the search UI.</summary>
+        private void ShowSearch()
+        {
+            this.PushMenu(
+                new SearchMenu(this.SubjectFactory, this.ShowLookupFor)
+            );
+        }
+
+        /// <summary>Hide the search UI.</summary>
+        private void HideSearch()
+        {
+            if (Game1.activeClickableMenu is SearchMenu)
+            {
+                Game1.playSound("bigDeSelect"); // match default behaviour when closing a menu
+                Game1.activeClickableMenu = null;
+            }
+        }
+
+        /****
+        ** Generic helpers
+        ****/
         /// <summary>Get the most relevant subject under the player's cursor.</summary>
         /// <param name="logMessage">The log message to which to append search details.</param>
         /// <param name="lookupMode">The lookup target mode.</param>
@@ -300,14 +343,17 @@ namespace Pathoschild.Stardew.LookupAnything
             return null;
         }
 
-        /// <summary>Show the lookup UI for the current target.</summary>
-        private void HideLookup()
+        /// <summary>Push a new menu onto the display stack, saving the previous menu if needed.</summary>
+        /// <param name="menu">The menu to show.</param>
+        private void PushMenu(IClickableMenu menu)
         {
-            this.Monitor.InterceptErrors("closing the menu", () =>
+            if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
             {
-                if (Game1.activeClickableMenu is LookupMenu menu)
-                    menu.QueueExit();
-            });
+                this.PreviousMenus.Push(Game1.activeClickableMenu);
+                this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(menu); // bypass Game1.activeClickableMenu, which disposes the previous menu
+            }
+            else
+                Game1.activeClickableMenu = menu;
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
