@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
@@ -133,6 +137,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public ISubject GetTile(GameLocation location, Vector2 position)
         {
             return new TileSubject(this, this.GameHelper, location, position, this.Translations);
+        }
+
+        /// <summary>Get the subjects available for searching, indexed case-insensitively by name.</summary>
+        public ILookup<string, SearchResult> GetSearchIndex()
+        {
+            List<SearchResult> results = new List<SearchResult>();
+
+            // NPCs
+            results.AddRange(Utility.getAllCharacters(new List<NPC>()).Select(npc => new SearchResult(this, npc)));
+
+            // objects
+            results.AddRange(this.GameHelper.GetObjectMetadata().Select(obj => new SearchResult(this, this.GameHelper, obj)));
+
+            // farm animals
+            Farm farm = Game1.getFarm();
+            results.AddRange(farm.animals.Values.Select(animal => new SearchResult(this, animal)));
+            results.AddRange(
+                farm.buildings
+                    .Select(building => building.indoors.Value)
+                    .OfType<AnimalHouse>()
+                    .SelectMany(animalHouse => animalHouse.animals.Values)
+                    .Select(animal => new SearchResult(this, animal))
+            );
+
+            // create lookup
+            return results.ToLookup(r => r.DisplayName, StringComparer.InvariantCultureIgnoreCase);
         }
     }
 }

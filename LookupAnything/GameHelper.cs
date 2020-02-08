@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
@@ -57,6 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         public Metadata Metadata { get; }
 
+
         /*********
         ** Public methods
         *********/
@@ -101,33 +101,6 @@ namespace Pathoschild.Stardew.LookupAnything
             return number != -1
                 ? Utility.getSeasonNameFromNumber(number)
                 : season;
-        }
-
-        /// <summary>Get the subjects available for searching indexed case-insensitively by name.</summary>
-        /// <param name="codex">Provides subject entries for target values.</param>
-        public ILookup<string, SearchResult> GetSearchLookup(SubjectFactory codex)
-        {
-            List<SearchResult> results = new List<SearchResult>();
-
-            // NPCs
-            results.AddRange(Utility.getAllCharacters(new List<NPC>()).Select(npc => new SearchResult(codex, npc)));
-
-            // objects
-            results.AddRange(this.Objects.Value.Select(obj => new SearchResult(codex, this, obj)));
-
-            // farm animals
-            Farm farm = Game1.getFarm();
-            results.AddRange(farm.animals.Values.Select(animal => new SearchResult(codex, animal)));
-            results.AddRange(
-                farm.buildings
-                    .Select(building => building.indoors.Value)
-                    .OfType<AnimalHouse>()
-                    .SelectMany(animalHouse => animalHouse.animals.Values)
-                    .Select(animal => new SearchResult(codex, animal))
-            );
-
-            // create lookup
-            return results.ToLookup(r => r.DisplayName, StringComparer.InvariantCultureIgnoreCase);
         }
 
         /****
@@ -485,6 +458,12 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
                 yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
+        }
+
+        /// <summary>Get metadata for all known objects.</summary>
+        public IEnumerable<ObjectModel> GetObjectMetadata()
+        {
+            return this.Objects.Value;
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>

@@ -338,7 +338,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
                 this.PreviousMenus.Push(Game1.activeClickableMenu);
-            Game1.activeClickableMenu = new SearchMenu(this.SubjectFactory, this.GameHelper, this.ShowLookupFor);
+            Game1.activeClickableMenu = new SearchMenu(this.SubjectFactory, this.ShowLookupFor);
         }
 
         /// <summary>Show the lookup UI for the current target.</summary>

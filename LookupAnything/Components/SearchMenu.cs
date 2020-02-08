@@ -47,13 +47,12 @@ namespace Pathoschild.LookupAnything.Components
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="codex">Provides subject entries for target values.</param>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="showLookup">Show a lookup menu.</param>
-        public SearchMenu(SubjectFactory codex, GameHelper gameHelper, Action<ISubject> showLookup)
+        public SearchMenu(SubjectFactory codex, Action<ISubject> showLookup)
         {
             // save data
             this.ShowLookup = showLookup;
-            this.SearchLookup = gameHelper.GetSearchLookup(codex);
+            this.SearchLookup = codex.GetSearchIndex();
 
             // initialise
             this.CalculateDimensions();
