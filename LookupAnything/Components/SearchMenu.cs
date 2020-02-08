@@ -189,12 +189,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
                     contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
 
-                // draw mouse cursor
-                this.drawMouse(contentBatch);
-
                 // end draw
                 contentBatch.End();
             }
+
+            // draw mouse cursor
+            this.drawMouse(Game1.spriteBatch);
         }
 
         /// <summary>Release all resources.</summary>
