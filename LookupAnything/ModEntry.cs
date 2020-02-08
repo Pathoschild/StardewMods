@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -181,10 +180,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="e">The event data.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            // dispose menu
-            if (e.OldMenu is LookupMenu || e.OldMenu is SearchMenu)
-                (e.OldMenu as IDisposable)?.Dispose();
-
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
