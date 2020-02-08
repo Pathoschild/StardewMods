@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
-namespace Pathoschild.LookupAnything.Framework.Data
+namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Constant values hardcoded by the game.</summary>
     internal class ConstantData
@@ -23,6 +23,10 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <summary>The maximum happiness points for a farm animal.</summary>
         /// <remarks>Derived from <see cref="StardewValley.FarmAnimal.dayUpdate"/>.</remarks>
         public int AnimalMaxHappiness { get; set; }
+
+        /// <summary>The number of days until a fruit tree produces a better-quality fruit.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.TerrainFeatures.FruitTree.shake"/>.</remarks>
+        public int FruitTreeQualityGrowthTime { get; set; }
 
         /****
         ** NPCs
@@ -66,5 +70,29 @@ namespace Pathoschild.LookupAnything.Framework.Data
         /// <summary>The age thresholds for casks.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Cask.checkForMaturity"/>.</remarks>
         public IDictionary<ItemQuality, int> CaskAgeSchedule { get; set; }
+
+        /****
+        ** Items
+        ****/
+        /// <summary>Items which can have an iridium quality. This is a list of category IDs (negative) or item IDs (positive).</summary>
+        /// <remarks>
+        /// The following can have iridium quality:
+        /// • animal produce;
+        /// • fruit tree produce;
+        /// • artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
+        /// • forage crops.
+        /// </remarks>
+        public int[] ItemsWithIridiumQuality { get; set; }
+
+        /****
+        ** Achievements
+        ****/
+        /// <summary>The crops that must be shipped for the polyculture achievement.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
+        public int[] PolycultureCrops { get; set; }
+
+        /// <summary>The number of each crop that must be shipped for the polyculture achievement.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
+        public int PolycultureCount { get; set; }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Provides metadata about something in the game.</summary>
     internal interface ISubject
@@ -25,8 +26,10 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        IEnumerable<ICustomField> GetData(Metadata metadata);
+        IEnumerable<ICustomField> GetData();
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        IEnumerable<IDebugField> GetDebugFields();
 
         /// <summary>Draw the subject portrait (if available).</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>

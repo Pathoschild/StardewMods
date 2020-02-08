@@ -1,71 +1,129 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Common;
 using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
+using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using StardewValley.Tools;
+using SObject = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>Provides utility methods for interacting with the game code.</summary>
-    internal static class GameHelper
+    internal class GameHelper
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The cached object data.</summary>
-        private static readonly Lazy<ObjectModel[]> Objects = new Lazy<ObjectModel[]>(() => DataParser.GetObjects().ToArray());
+        private Lazy<ObjectModel[]> Objects;
 
         /// <summary>The cached villagers' gift tastes.</summary>
-        private static Lazy<GiftTasteModel[]> GiftTastes;
+        private Lazy<GiftTasteEntry[]> GiftTastes;
 
         /// <summary>The cached recipes.</summary>
-        private static Lazy<RecipeModel[]> Recipes;
+        private Lazy<RecipeModel[]> Recipes;
+
+        /// <summary>The Custom Farming Redux integration.</summary>
+        private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
+
+        /// <summary>The Producer Framework Mod integration.</summary>
+        private readonly ProducerFrameworkModIntegration ProducerFrameworkMod;
+
+        /// <summary>Parses the raw game data into usable models.</summary>
+        private readonly DataParser DataParser;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Provides metadata that's not available from the game data directly.</summary>
+        public Metadata Metadata { get; }
 
         /*********
         ** Public methods
         *********/
-        /****
-        ** State
-        ****/
-        /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
+        /// <summary>Construct an instance.</summary>
+        /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
+        /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static void ResetCache(Metadata metadata)
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata)
         {
-            GameHelper.GiftTastes = new Lazy<GiftTasteModel[]>(() => DataParser.GetGiftTastes(GameHelper.Objects.Value).ToArray());
-            GameHelper.Recipes = new Lazy<RecipeModel[]>(() => DataParser.GetRecipes(metadata).ToArray());
+            this.DataParser = new DataParser(this);
+            this.CustomFarmingRedux = customFarmingRedux;
+            this.ProducerFrameworkMod = producerFrameworkMod;
+            this.Metadata = metadata;
+        }
+
+        /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
+        {
+            this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
+            this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
+            this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
+        }
+
+        /****
+        ** Text helpers
+        ****/
+        /// <summary>Format a game time in military 24-hour notation.</summary>
+        /// <param name="time">The time to format.</param>
+        public string FormatMilitaryTime(int time)
+        {
+            time %= 2400;
+            return $"{time / 100:00}:{time % 100:00}";
+        }
+
+        /// <summary>Get a translated season name for the current language.</summary>
+        /// <param name="season">The English season name.</param>
+        public string TranslateSeason(string season)
+        {
+            int number = Utility.getSeasonNumber(season);
+            return number != -1
+                ? Utility.getSeasonNameFromNumber(number)
+                : season;
         }
 
         /// <summary>Get the subjects available for searching indexed case-insensitively by name.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static ILookup<string, SearchResult> GetSearchLookup(Metadata metadata)
+        /// <param name="codex">Provides subject entries for target values.</param>
+        public ILookup<string, SearchResult> GetSearchLookup(SubjectFactory codex)
         {
             List<SearchResult> results = new List<SearchResult>();
 
             // NPCs
-            results.AddRange(Utility.getAllCharacters().Select(npc => new SearchResult(npc, metadata)));
+            results.AddRange(Utility.getAllCharacters(new List<NPC>()).Select(npc => new SearchResult(codex, npc)));
 
             // objects
-            results.AddRange(GameHelper.Objects.Value.Select(obj => new SearchResult(obj)));
+            results.AddRange(this.Objects.Value.Select(obj => new SearchResult(codex, this, obj)));
 
             // farm animals
             Farm farm = Game1.getFarm();
-            results.AddRange(farm.animals.Values.Select(animal => new SearchResult(animal)));
+            results.AddRange(farm.animals.Values.Select(animal => new SearchResult(codex, animal)));
             results.AddRange(
                 farm.buildings
-                    .Select(building => building.indoors)
+                    .Select(building => building.indoors.Value)
                     .OfType<AnimalHouse>()
-                    .SelectMany(animalHouse => animalHouse.animals)
-                    .Select(animal => new SearchResult(animal.Value))
+                    .SelectMany(animalHouse => animalHouse.animals.Values)
+                    .Select(animal => new SearchResult(codex, animal))
             );
 
             // create lookup
@@ -75,261 +133,410 @@ namespace Pathoschild.LookupAnything
         /****
         ** Data helpers
         ****/
-        /// <summary>Add a day offset to the current date.</summary>
-        /// <param name="offset">The offset to add in days.</param>
-        /// <param name="daysInSeason">The number of days in a season.</param>
-        /// <returns>Returns the resulting season and day.</returns>
-        public static Tuple<string, int> GetDayOffset(int offset, int daysInSeason)
+        /// <summary>Get the number of times the player has shipped a given item.</summary>
+        /// <param name="itemID">The item's parent sprite index.</param>
+        public int GetShipped(int itemID)
         {
-            // simple case
-            string season = Game1.currentSeason;
-            int day = Game1.dayOfMonth + offset;
+            return Game1.player.basicShipped.ContainsKey(itemID)
+                ? Game1.player.basicShipped[itemID]
+                : 0;
+        }
 
-            // handle season transition
-            if (day > daysInSeason)
+        /// <summary>Get all shippable items.</summary>
+        /// <remarks>Derived from <see cref="Utility.hasFarmerShippedAllItems"/>.</remarks>
+        public IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
+        {
+            return (
+                from obj in this.Objects.Value
+                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && SObject.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
+                select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
+            );
+        }
+
+        /// <summary>Get all items owned by the player.</summary>
+        /// <remarks>
+        /// Derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
+        ///   * added hay in silos.
+        /// </remarks>
+        public IEnumerable<Item> GetAllOwnedItems()
+        {
+            List<Item> items = new List<Item>();
+
+            // in locations
+            foreach (GameLocation location in CommonHelper.GetLocations())
             {
-                string[] seasons = { Constant.SeasonNames.Spring, Constant.SeasonNames.Summer, Constant.SeasonNames.Fall, Constant.SeasonNames.Winter };
-                int curSeasonIndex = Array.IndexOf(seasons, Game1.currentSeason);
-                if (curSeasonIndex == -1)
-                    throw new InvalidOperationException($"The current season '{Game1.currentSeason}' wasn't recognised.");
-                season = seasons[(curSeasonIndex + day / daysInSeason) % seasons.Length];
-                day %= daysInSeason;
+                // furniture
+                if (location is DecoratableLocation decorableLocation)
+                {
+                    foreach (Furniture furniture in decorableLocation.furniture)
+                    {
+                        items.Add(furniture);
+
+                        if (furniture is StorageFurniture dresser)
+                            items.AddRange(dresser.heldItems);
+                        else
+                            items.Add(furniture.heldObject.Value);
+                    }
+                }
+
+                // farmhouse fridge
+                if (location is FarmHouse house)
+                    items.AddRange(house.fridge.Value.items);
+
+                // character hats
+                foreach (NPC npc in location.characters)
+                {
+                    items.Add(
+                        (npc as Child)?.hat.Value
+                        ?? (npc as Horse)?.hat.Value
+                    );
+                }
+
+                // building output
+                if (location is BuildableGameLocation buildableLocation)
+                {
+                    foreach (var building in buildableLocation.buildings)
+                    {
+                        if (building is Mill mill)
+                            items.AddRange(mill.output.Value.items);
+                        else if (building is JunimoHut hut)
+                            items.AddRange(hut.output.Value.items);
+                    }
+                }
+
+                // map objects
+                foreach (SObject item in location.objects.Values)
+                {
+                    // chest
+                    if (item is Chest chest)
+                    {
+                        if (chest.playerChest.Value)
+                        {
+                            items.Add(chest);
+                            items.AddRange(chest.items);
+                        }
+                    }
+
+                    // auto-grabber
+                    else if (item.ParentSheetIndex == 165 && item.heldObject.Value is Chest grabberChest)
+                    {
+                        items.Add(item);
+                        items.AddRange(grabberChest.items);
+                    }
+
+                    // craftable
+                    else if (item.bigCraftable.Value)
+                    {
+                        items.Add(item);
+                        if (item.MinutesUntilReady == 0 || item is Cask) // cask output can be retrieved anytime
+                            items.Add(item.heldObject.Value);
+                    }
+
+                    // anything else
+                    else if (!item.IsSpawnedObject)
+                    {
+                        items.Add(item);
+                        items.Add(item.heldObject.Value);
+                    }
+                }
             }
 
-            return Tuple.Create(season, day);
+            // inventory
+            items.AddRange(Game1.player.Items);
+            items.AddRange(new Item[]
+            {
+                Game1.player.shirtItem.Value,
+                Game1.player.pantsItem.Value,
+                Game1.player.boots.Value,
+                Game1.player.hat.Value,
+                Game1.player.leftRing.Value,
+                Game1.player.rightRing.Value
+            });
+
+            // hay in silos
+            int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
+            while (hayCount > 0)
+            {
+                SObject hay = new SObject(178, 1);
+                hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
+                hayCount -= hay.Stack;
+                items.Add(hay);
+            }
+
+            return items.Where(p => p != null);
+        }
+
+        /// <summary>Get all NPCs currently in the world.</summary>
+        public IEnumerable<NPC> GetAllCharacters()
+        {
+            return Utility
+                .getAllCharacters(new List<NPC>())
+                .Distinct(); // fix rare issue where the game duplicates an NPC (seems to happen when the player's child is born)
+        }
+
+        /// <summary>Count how many of an item the player owns.</summary>
+        /// <param name="item">The item to count.</param>
+        public int CountOwnedItems(Item item)
+        {
+            return (
+                from worldItem in this.GetAllOwnedItems()
+                where this.AreEquivalent(worldItem, item)
+                let canStack = worldItem.canStackWith(worldItem)
+                select canStack ? Math.Max(1, worldItem.Stack) : 1
+            ).Sum();
+        }
+
+        /// <summary>Get whether the specified NPC has social data like a birthday and gift tastes.</summary>
+        /// <param name="npc">The NPC to check.</param>
+        public bool IsSocialVillager(NPC npc)
+        {
+            return npc.isVillager() && !this.Metadata.Constants.AsocialVillagers.Contains(npc.Name);
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
         /// <param name="item">The item to check.</param>
-        public static IDictionary<string, GiftTaste> GetGiftTastes(Item item)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(Item item)
         {
             if (!item.canBeGivenAsGift())
-                return new Dictionary<string, GiftTaste>();
+                yield break;
 
-            return GameHelper.GiftTastes.Value
-                .Where(p => p.ItemID == item.parentSheetIndex)
-                .ToDictionary(p => p.Villager, p => p.Taste);
+            foreach (NPC npc in this.GetAllCharacters())
+            {
+                if (!this.IsSocialVillager(npc))
+                    continue;
+
+                GiftTaste? taste = this.GetGiftTaste(npc, item);
+                if (taste.HasValue)
+                    yield return new GiftTasteModel(npc, item, taste.Value);
+            }
         }
 
         /// <summary>Get the items a specified NPC can receive.</summary>
         /// <param name="npc">The NPC to check.</param>
-        public static IDictionary<Object, GiftTaste> GetGiftTastes(NPC npc)
+        public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc)
         {
-            if (!npc.isVillager())
-                return new Dictionary<Object, GiftTaste>();
+            if (!this.IsSocialVillager(npc))
+                return new GiftTasteModel[0];
 
-            string name = npc.getName();
-            return GameHelper.GiftTastes.Value
-                .Where(p => p.Villager == name)
-                .ToDictionary(p => GameHelper.GetObjectBySpriteIndex(p.ItemID), p => p.Taste);
+            // get giftable items
+            HashSet<int> giftableItemIDs = new HashSet<int>(
+                from int refID in this.GiftTastes.Value.Select(p => p.RefID)
+                from ObjectModel obj in this.Objects.Value
+                where obj.ParentSpriteIndex == refID || obj.Category == refID
+                select obj.ParentSpriteIndex
+            );
+
+            // get gift tastes
+            return
+                (
+                    from int itemID in giftableItemIDs
+                    let item = this.GetObjectBySpriteIndex(itemID)
+                    let taste = this.GetGiftTaste(npc, item)
+                    where taste.HasValue
+                    select new GiftTasteModel(npc, item, taste.Value)
+                );
+        }
+
+        /// <summary>Get how much each NPC likes watching this week's movie.</summary>
+        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes()
+        {
+            foreach (NPC npc in this.GetAllCharacters())
+            {
+                if (!this.IsSocialVillager(npc))
+                    continue;
+
+                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
+                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
+            }
+        }
+
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            return this.DataParser.GetFishPondPopulationGates(data);
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            return this.DataParser.GetFishPondDrops(data);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID)
+        {
+            return this.DataParser.GetFishSpawnRules(fishID, this.Metadata);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="npc">The NPC.</param>
+        /// <param name="friendship">The current friendship data.</param>
+        public FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Friendship friendship)
+        {
+            return this.DataParser.GetFriendshipForVillager(player, npc, friendship, this.Metadata);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="pet">The pet.</param>
+        public FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        {
+            return this.DataParser.GetFriendshipForPet(player, pet);
+        }
+
+        /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
+        /// <param name="player">The player.</param>
+        /// <param name="animal">The farm animal.</param>
+        public FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal)
+        {
+            return this.DataParser.GetFriendshipForAnimal(player, animal, this.Metadata);
+        }
+
+        /// <summary>Parse monster data.</summary>
+        public IEnumerable<MonsterData> GetMonsterData()
+        {
+            return this.DataParser.GetMonsters();
+        }
+
+        /// <summary>Read parsed data about the Community Center bundles.</summary>
+        public IEnumerable<BundleModel> GetBundleData()
+        {
+            return this.DataParser.GetBundles();
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
-        public static IEnumerable<RecipeModel> GetRecipes()
+        public IEnumerable<RecipeModel> GetRecipes()
         {
-            return GameHelper.Recipes.Value;
+            return this.Recipes.Value;
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>
         /// <param name="item">The item.</param>
-        public static IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
+        public IEnumerable<RecipeModel> GetRecipesForIngredient(Item item)
         {
-            return (
-                from recipe in GameHelper.GetRecipes()
-                where
-                    (recipe.Ingredients.ContainsKey(item.parentSheetIndex) || recipe.Ingredients.ContainsKey(item.category))
-                    && recipe.ExceptIngredients?.Contains(item.parentSheetIndex) != true
-                select recipe
-            );
+            // ignore invalid ingredients
+            if (item.GetItemType() != ItemType.Object)
+                return Enumerable.Empty<RecipeModel>();
+
+            // from cached recipes
+            var recipes = new List<RecipeModel>();
+            foreach (RecipeModel recipe in this.GetRecipes())
+            {
+                if (!recipe.Ingredients.Any(p => p.Matches(item)))
+                    continue;
+                if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
+                    continue;
+
+                recipes.Add(recipe);
+            }
+
+            // resolve conflicts from mods like Producer Framework Mod: if multiple recipes take the
+            // same item as input, ID takes precedence over category. This only occurs with mod recipes,
+            // since there are no such conflicts in the vanilla recipes.
+            recipes.RemoveAll(recipe =>
+            {
+                RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
+                return
+                    ingredient?.ID < 0
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.ID == item.ParentSheetIndex && other.DisplayType == recipe.DisplayType);
+            });
+
+            // from tailor recipes
+            recipes.AddRange(this.GetTailorRecipes(item));
+
+            return recipes;
+        }
+
+        /// <summary>Get the recipes for a given machine.</summary>
+        /// <param name="machine">The machine.</param>
+        public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
+        {
+            if (machine == null)
+                yield break;
+
+            // from cached recipes
+            foreach (var recipe in this.GetRecipes())
+            {
+                if (recipe.IsForMachine(machine))
+                    yield return recipe;
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
-        public static Object GetObjectBySpriteIndex(int index, int stack = 1)
+        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
+        public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
         {
-            return new Object(index, stack);
+            return bigcraftable
+                ? new SObject(Vector2.Zero, index) { stack = { stack } }
+                : new SObject(index, stack);
         }
 
-        /// <summary>Get all objects matching the reference ID.</summary>
-        /// <param name="refID">The reference ID. This can be a category (negative value) or parent sprite index (positive value).</param>
-        public static IEnumerable<Object> GetObjectsByReferenceID(int refID)
+        /// <summary>Get an object by its parent sprite index.</summary>
+        /// <param name="category">The category number.</param>
+        public IEnumerable<SObject> GetObjectsByCategory(int category)
         {
-            // category
-            if (refID < 0)
-            {
-                return (
-                    from pair in Game1.objectInformation
-                    where Regex.IsMatch(pair.Value, $"\b{refID}\b")
-                    select GameHelper.GetObjectBySpriteIndex(pair.Key)
-                );
-            }
-
-            // parent sprite index
-            return new[] { GameHelper.GetObjectBySpriteIndex(refID) };
+            foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
+                yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
         /// <param name="item">The item.</param>
-        public static bool CanHaveQuality(Item item)
+        public bool CanHaveQuality(Item item)
         {
             // check category
             if (new[] { "Artifact", "Trash", "Crafting", "Seed", "Decor", "Resource", "Fertilizer", "Bait", "Fishing Tackle" }.Contains(item.getCategoryName()))
                 return false;
 
             // check type
-            if (new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains((item as Object)?.Type))
+            if (new[] { "Crafting", "asdf" /*dig spots*/, "Quest" }.Contains((item as SObject)?.Type))
                 return false;
 
             return true;
         }
 
         /****
-        ** Reflection
-        ****/
-        /// <summary>Get a private field value.</summary>
-        /// <typeparam name="T">The field type.</typeparam>
-        /// <param name="parent">The parent object.</param>
-        /// <param name="name">The field name.</param>
-        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
-        public static T GetPrivateField<T>(object parent, string name, bool required = true)
-        {
-            if (parent == null)
-                return default(T);
-
-            // get field from hierarchy
-            FieldInfo field = null;
-            for (Type type = parent.GetType(); type != null && field == null; type = type.BaseType)
-                field = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // validate
-            if (field == null)
-            {
-                if (required)
-                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' field.");
-                return default(T);
-            }
-
-            // get value
-            return (T)field.GetValue(parent);
-        }
-
-        /// <summary>Get a private method.</summary>
-        /// <param name="parent">The parent object.</param>
-        /// <param name="name">The field name.</param>
-        /// <param name="required">Whether to throw an exception if the private field is not found.</param>
-        public static MethodInfo GetPrivateMethod(object parent, string name, bool required = true)
-        {
-            if (parent == null)
-                throw new InvalidOperationException($"Can't get private method '{name}' on null instance.");
-
-            // get method from hierarchy
-            MethodInfo method = null;
-            for (Type type = parent.GetType(); type != null && method == null; type = type.BaseType)
-                method = type.GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic);
-
-            // validate
-            if (method == null)
-            {
-                if (required)
-                    throw new InvalidOperationException($"The {parent.GetType().Name} object doesn't have a private '{name}' method.");
-                return null;
-            }
-
-            // get value
-            return method;
-        }
-
-        /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
-        public static string ValidateGameVersion()
-        {
-            string gameVersion = Regex.Replace(Game1.version, "^([0-9.]+).*", "$1");
-            string apiVersion = Constants.Version.VersionString;
-
-            if (string.Compare(gameVersion, Constant.MinimumGameVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
-                return $"The LookupAnything mod requires the latest version of the game. Please update Stardew Valley from {gameVersion} to {Constant.MinimumGameVersion}.";
-            if (string.Compare(apiVersion, Constant.MinimumApiVersion, StringComparison.InvariantCultureIgnoreCase) == -1)
-                return $"The LookupAnything mod requires the latest version of SMAPI. Please update SMAPI from {apiVersion} to {Constant.MinimumApiVersion}.";
-
-            return null;
-        }
-
-        /****
-        ** Error handling
-        ****/
-        /// <summary>Intercept errors thrown by the action.</summary>
-        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
-        /// <param name="action">The action to invoke.</param>
-        /// <param name="onError">A callback invoked if an error is intercepted.</param>
-        public static void InterceptErrors(string verb, Action action, Action<Exception> onError = null)
-        {
-            GameHelper.InterceptErrors(verb, null, action, onError);
-        }
-
-        /// <summary>Intercept errors thrown by the action.</summary>
-        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
-        /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
-        /// <param name="action">The action to invoke.</param>
-        /// <param name="onError">A callback invoked if an error is intercepted.</param>
-        public static void InterceptErrors(string verb, string detailedVerb, Action action, Action<Exception> onError = null)
-        {
-            try
-            {
-                action();
-            }
-            catch (Exception ex)
-            {
-                GameHelper.HandleError(ex, verb, detailedVerb);
-                onError?.Invoke(ex);
-            }
-        }
-
-        /****
-        ** Formatting
-        ****/
-        /// <summary>Select the correct plural form for a word.</summary>
-        /// <param name="count">The number.</param>
-        /// <param name="single">The singular form.</param>
-        /// <param name="plural">The plural form.</param>
-        public static string Pluralise(int count, string single, string plural = null)
-        {
-            return count == 1 ? single : (plural ?? single + "s");
-        }
-
-        /****
         ** Coordinates
         ****/
         /// <summary>Get the viewport coordinates from the current cursor position.</summary>
-        public static Vector2 GetScreenCoordinatesFromCursor()
+        public Vector2 GetScreenCoordinatesFromCursor()
         {
             return new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="coordinates">The absolute coordinates.</param>
-        public static Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
+        public Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
         {
             return coordinates - new Vector2(Game1.viewport.X, Game1.viewport.Y);
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="tile">The tile position.</param>
-        public static Rectangle GetScreenCoordinatesFromTile(Vector2 tile)
+        public Rectangle GetScreenCoordinatesFromTile(Vector2 tile)
         {
-            Vector2 position = GameHelper.GetScreenCoordinatesFromAbsolute(tile * new Vector2(Game1.tileSize));
+            Vector2 position = this.GetScreenCoordinatesFromAbsolute(tile * new Vector2(Game1.tileSize));
             return new Rectangle((int)position.X, (int)position.Y, Game1.tileSize, Game1.tileSize);
         }
 
         /// <summary>Get whether a sprite on a given tile could occlude a specified tile position.</summary>
         /// <param name="spriteTile">The tile of the possible sprite.</param>
         /// <param name="occludeTile">The tile to check for possible occlusion.</param>
-        public static bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile)
+        /// <param name="spriteSize">The largest expected sprite size (measured in tiles).</param>
+        public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile, Vector2? spriteSize = null)
         {
-            Vector2 spriteSize = Constant.MaxTargetSpriteSize;
+            spriteSize = spriteSize ?? Constant.MaxTargetSpriteSize;
             return
-                spriteTile.Y >= occludeTile.Y // sprites never extend downard from their tile
-                && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.X
-                && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Y;
+                spriteTile.Y >= occludeTile.Y // sprites never extend downward from their tile
+                && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.Value.X
+                && Math.Abs(spriteTile.Y - occludeTile.Y) <= spriteSize.Value.Y;
         }
 
         /// <summary>Get the pixel coordinates within a sprite sheet corresponding to a sprite displayed in the world.</summary>
@@ -337,7 +544,7 @@ namespace Pathoschild.LookupAnything
         /// <param name="worldRectangle">The sprite rectangle in the world.</param>
         /// <param name="spriteRectangle">The sprite rectangle in the sprite sheet.</param>
         /// <param name="spriteEffects">The transformation to apply on the sprite.</param>
-        public static Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
+        public Vector2 GetSpriteSheetCoordinates(Vector2 worldPosition, Rectangle worldRectangle, Rectangle spriteRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
             // get position within sprite rectangle
             float x = (worldPosition.X - worldRectangle.X) / Game1.pixelZoom;
@@ -361,7 +568,7 @@ namespace Pathoschild.LookupAnything
         /// <typeparam name="TPixel">The pixel value type.</typeparam>
         /// <param name="spriteSheet">The sprite sheet.</param>
         /// <param name="position">The position of the pixel within the sprite sheet.</param>
-        public static TPixel GetSpriteSheetPixel<TPixel>(Texture2D spriteSheet, Vector2 position) where TPixel : struct
+        public TPixel GetSpriteSheetPixel<TPixel>(Texture2D spriteSheet, Vector2 position) where TPixel : struct
         {
             // get pixel index
             int x = (int)position.X;
@@ -376,23 +583,49 @@ namespace Pathoschild.LookupAnything
 
         /// <summary>Get the sprite for an item.</summary>
         /// <param name="item">The item.</param>
+        /// <param name="onlyCustom">Only return the sprite info if it's custom.</param>
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
-        public static Tuple<Texture2D, Rectangle> GetSprite(Item item)
+        public SpriteInfo GetSprite(Item item, bool onlyCustom = false)
         {
-            // stardard object
-            if (item is Object)
+            SObject obj = item as SObject;
+
+            // Custom Farming Redux
+            if (obj != null && this.CustomFarmingRedux.IsLoaded)
             {
-                Object obj = (Object)item;
-                return obj.bigCraftable
-                    ? Tuple.Create(Game1.bigCraftableSpriteSheet, Object.getSourceRectForBigCraftable(obj.ParentSheetIndex))
-                    : Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+                SpriteInfo data = this.CustomFarmingRedux.GetSprite(obj);
+                if (data != null)
+                    return data;
+            }
+
+            if (onlyCustom)
+                return null;
+
+            // standard object
+            if (obj != null)
+            {
+                return obj.bigCraftable.Value
+                    ? new SpriteInfo(Game1.bigCraftableSpriteSheet, SObject.getSourceRectForBigCraftable(obj.ParentSheetIndex))
+                    : new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
             }
 
             // boots or ring
             if (item is Boots || item is Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
-                return Tuple.Create(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, Object.spriteSheetTileSize, Object.spriteSheetTileSize));
+                return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
+            }
+
+            // clothing
+            if (item is Clothing clothing)
+            {
+                switch (clothing.clothesType.Value)
+                {
+                    case (int)Clothing.ClothesType.SHIRT:
+                        return new ShirtSpriteInfo(clothing);
+
+                    case (int)Clothing.ClothesType.PANTS:
+                        return new SpriteInfo(FarmerRenderer.pantsTexture, new Rectangle(192 * (clothing.indexInTileSheetMale.Value % (FarmerRenderer.pantsTexture.Width / 192)), 688 * (clothing.indexInTileSheetMale.Value / (FarmerRenderer.pantsTexture.Width / 192)) + 672, 16, 16));
+                }
             }
 
             // unknown item
@@ -408,21 +641,21 @@ namespace Pathoschild.LookupAnything
         /// <param name="label">The text to display.</param>
         /// <param name="position">The position at which to draw the text.</param>
         /// <param name="wrapWidth">The maximum width to display.</param>
-        public static Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
+        public Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
         {
             return CommonHelper.DrawHoverBox(spriteBatch, label, position, wrapWidth);
         }
 
         /// <summary>Show an informational message to the player.</summary>
         /// <param name="message">The message to show.</param>
-        public static void ShowInfoMessage(string message)
+        public void ShowInfoMessage(string message)
         {
             CommonHelper.ShowInfoMessage(message);
         }
 
         /// <summary>Show an error message to the player.</summary>
         /// <param name="message">The message to show.</param>
-        public static void ShowErrorMessage(string message)
+        public void ShowErrorMessage(string message)
         {
             CommonHelper.ShowErrorMessage(message);
         }
@@ -431,15 +664,134 @@ namespace Pathoschild.LookupAnything
         /*********
         ** Private methods
         *********/
-        /// <summary>Log an error and warn the user.</summary>
-        /// <param name="ex">The exception to handle.</param>
-        /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
-        /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
-        private static void HandleError(Exception ex, string verb, string detailedVerb = null)
+        /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
+        /// <param name="a">The first item to compare.</param>
+        /// <param name="b">The second item to compare.</param>
+        private bool AreEquivalent(Item a, Item b)
         {
-            detailedVerb = detailedVerb ?? verb;
-            Log.Error($"[Lookup Anything] Something went wrong {detailedVerb}:{Environment.NewLine}{ex}");
-            GameHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The game error log has the technical details.");
+            return
+                // same generic item type
+                a.GetType() == b.GetType()
+                && a.Category == b.Category
+                && a.ParentSheetIndex == b.ParentSheetIndex
+
+                // same discriminators
+                && a.GetItemType() == b.GetItemType()
+                && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
+                && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
+                && (a as Fence)?.isGate == (b as Fence)?.isGate
+                && (a as Fence)?.whichType == (b as Fence)?.whichType
+                && (a as Hat)?.which == (b as Hat)?.which
+                && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
+                && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
+                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
+                && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
+        }
+
+        /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        private RecipeModel[] GetAllRecipes(IReflectionHelper reflection, IMonitor monitor)
+        {
+            // get vanilla recipes
+            List<RecipeModel> recipes = this.DataParser.GetRecipes(this.Metadata, reflection, monitor).ToList();
+
+            // get recipes from Producer Framework Mod
+            if (this.ProducerFrameworkMod.IsLoaded)
+            {
+                List<RecipeModel> customRecipes = new List<RecipeModel>();
+                foreach (ProducerFrameworkRecipe recipe in this.ProducerFrameworkMod.GetRecipes())
+                {
+                    if (recipe.HasContextTags())
+                        continue;
+
+                    // remove vanilla recipes overridden by a PFM one
+                    // This is always an integer currently, but the API may return context_tag keys in the future.
+                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
+
+                    // add recipe
+                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
+                    customRecipes.Add(new RecipeModel(
+                        key: null,
+                        type: RecipeType.MachineInput,
+                        displayType: machine.DisplayName,
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId.Value, p.Count)),
+                        item: ingredient =>
+                        {
+                            SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
+                            if (ingredient?.ParentSheetIndex != null)
+                            {
+                                output.preservedParentSheetIndex.Value = ingredient.ParentSheetIndex;
+                                output.preserve.Value = recipe.PreserveType;
+                            }
+                            return output;
+                        },
+                        mustBeLearned: false,
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id.Value, 1)),
+                        outputItemIndex: recipe.OutputId,
+                        minOutput: recipe.MinOutput,
+                        maxOutput: recipe.MaxOutput,
+                        outputChance: (decimal)recipe.OutputChance,
+                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
+                    ));
+                }
+
+                recipes.AddRange(customRecipes);
+            }
+
+            return recipes.ToArray();
+        }
+
+        /// <summary>Get all tailoring recipes which take an item as input.</summary>
+        /// <param name="input">The input item.</param>
+        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
+        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
+        {
+            HashSet<int> seenRecipes = new HashSet<int>();
+
+            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
+            {
+                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
+                    continue; // needs all tags for one of the recipe slots
+
+                int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
+                    ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
+                    : new[] { recipe.CraftedItemID };
+
+                foreach (int outputId in outputItemIds)
+                {
+                    if (outputId < 0 || !seenRecipes.Add(outputId))
+                        continue;
+
+                    yield return new RecipeModel(
+                        key: null,
+                        type: RecipeType.TailorInput,
+                        displayType: "Tailoring",
+                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
+                        item: input => new Clothing(outputId),
+                        mustBeLearned: false,
+                        outputItemIndex: recipe.CraftedItemID,
+                        isForMachine: _ => false
+                    );
+                }
+            }
+        }
+
+        /// <summary>Get an NPC's preference for an item.</summary>
+        /// <param name="npc">The NPC whose gift taste to get.</param>
+        /// <param name="item">The item to check.</param>
+        /// <returns>Returns the NPC's gift taste if applicable, else <c>null</c>.</returns>
+        private GiftTaste? GetGiftTaste(NPC npc, Item item)
+        {
+            try
+            {
+                return (GiftTaste)npc.getGiftTasteForThisItem(item);
+            }
+            catch
+            {
+                // fails for non-social NPCs
+                return null;
+            }
         }
     }
 }

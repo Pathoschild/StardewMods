@@ -1,0 +1,38 @@
+{
+    // default chest names
+    "default-name.auto-grabber": "Auto-Recolhedora #{{number}}",
+    "default-name.chest": "Baú #{{number}}",
+    "default-name.fridge": "Geladeira",
+    "default-name.junimo-hut": "Cabana dos junimos #{{number}}",
+    "default-name.shipping-bin": "Caixa de Remessas",
+
+    // default category names
+    "default-category.owned-cabin": "Cabana ({{owner}})",
+    "default-category.unowned-cabin": "Cabana (vazia)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Local",
+    "label.location.tile": "posição {{x}}, {{y}}",
+    "label.name": "Nome",
+    "label.category": "Categoria",
+    "label.order": "Ordem",
+    "label.hide-chest": "Esconder esse baú",
+    "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
+    "label.automate-store": "(Automate) Coloque itens neste baú",
+    "label.automate-store-first": "(Automate) Primeiro coloque itens neste baú",
+    "label.automate-take": "(Automate) Pegue itens deste baú",
+    "label.automate-take-first": "(Automate) Primeiro pegue itens deste baú",
+
+    // button labels
+    "button.edit-chest": "editar baú",
+    "button.sort-inventory": "arrumar inventário",
+    "button.save": "salvar",
+    "button.reset": "resetar",
+
+    // errors
+    "errors.disabled-from-here": "Você não pode acessar baús daqui.",
+    "errors.no-chests": "Você não possui baús ainda.",
+    "errors.no-chests-in-location": "Você não possui nenhum baú nesta área.",
+    "errors.no-chests-in-range": "Você não possui baús ao seu alcance."
+}

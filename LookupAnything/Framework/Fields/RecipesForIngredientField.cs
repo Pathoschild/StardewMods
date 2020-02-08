@@ -1,18 +1,20 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a list of recipes containing an ingredient.</summary>
     internal class RecipesForIngredientField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>Metadata needed to draw a recipe.</summary>
         private struct Entry
@@ -29,8 +31,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             /// <summary>The number of the item required for the recipe.</summary>
             public int NumberRequired;
 
-            /// <summary>The resulting item.</summary>
-            public Item Item;
+            /// <summary>The sprite to display.</summary>
+            public SpriteInfo Sprite;
         }
 
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
@@ -41,26 +43,14 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
-        /// <param name="item">The ingredient item.</param>
+        /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        public RecipesForIngredientField(string label, Item item, RecipeModel[] recipes)
-            : base(label, null, hasValue: true)
+        public RecipesForIngredientField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes)
+            : base(gameHelper, label, hasValue: true)
         {
-            this.Recipes =
-                (
-                    from recipe in recipes
-                    orderby recipe.Type.ToString(), recipe.Name
-                    select new Entry
-                    {
-                        Name = recipe.Name.Replace("$ingredient", item.Name),
-                        Type = Regex.Replace(recipe.Type.ToString(), @"(\B[A-Z])", " $1"), // e.g. "OilMaker" => "Oil Maker"
-                        IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                        NumberRequired = recipe.Ingredients.ContainsKey(item.parentSheetIndex) ? recipe.Ingredients[item.parentSheetIndex] : recipe.Ingredients[item.category],
-                        Item = recipe.CreateItem()
-                    }
-                )
-                .ToArray();
+            this.Recipes = this.GetRecipeEntries(this.GameHelper, ingredient, recipes).OrderBy(p => p.Type).ThenBy(p => p.Name).ToArray();
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -91,16 +81,46 @@ namespace Pathoschild.LookupAnything.Framework.Fields
 
                 // draw icon
                 Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                spriteBatch.DrawIcon(entry.Item, position.X + leftIndent, position.Y + height, iconSize, iconColor);
+                if (entry.Sprite != null)
+                    spriteBatch.DrawSpriteWithin(entry.Sprite, position.X + leftIndent, position.Y + height, iconSize, iconColor);
 
                 // draw text
                 Color color = entry.IsKnown ? Color.Black : Color.Gray;
-                Vector2 textSize = spriteBatch.DrawTextBlock(font, $"{entry.Name} (needs {entry.NumberRequired})", position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, L10n.Item.RecipesForIngredientEntry(name: entry.Name, count: entry.NumberRequired), position + new Vector2(leftIndent + iconSize.X + 3, height + 5), wrapWidth - iconSize.X, color);
 
                 height += Math.Max(iconSize.Y, textSize.Y) + 5;
             }
 
             return new Vector2(wrapWidth, height);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the recipe entries.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="inputItem">The input ingredient item.</param>
+        /// <param name="recipes">The recipe to list.</param>
+        private IEnumerable<Entry> GetRecipeEntries(GameHelper gameHelper, Item inputItem, IEnumerable<RecipeModel> recipes)
+        {
+            foreach (RecipeModel recipe in recipes)
+            {
+                Item output = recipe.CreateItem(inputItem);
+                SpriteInfo customSprite = gameHelper.GetSprite(output);
+                RecipeIngredientModel ingredient =
+                    recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.ParentSheetIndex && p.Matches(inputItem))
+                    ?? recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.Category && p.Matches(inputItem));
+
+                yield return new Entry
+                {
+                    Name = output.DisplayName,
+                    Type = recipe.DisplayType,
+                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                    NumberRequired = ingredient?.Count ?? 1,
+                    Sprite = customSprite
+                };
+            }
         }
     }
 }

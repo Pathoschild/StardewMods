@@ -1,0 +1,68 @@
+{
+    // accessible
+    "accessible.name": "Проходимость",
+    "accessible.clear": "Возможно",
+    "accessible.occupied": "Есть преграда",
+    "accessible.impassable": "Не возможно",
+    "accessible.warp": "Переход на локацию",
+
+    // buildable
+    "buildable.name": "Строительство",
+    "buildable.buildable": "Возможно",
+    "buildable.occupied": "Есть преграда",
+    "buildable.not-buildable": "Не возможно",
+
+    // coverage: bee houses
+    "bee-houses.name": "Радиус: Ульи",
+    "bee-houses.range": "Радиус для цветка",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Радиус: Домики Джунимо",
+    "junimo-huts.can-harvest": "Могут собрать",
+    "junimo-huts.cannot-harvest": "Не могут собрать",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Радиус: Пугала",
+    "scarecrows.protected": "Защищено",
+    "scarecrows.exposed": "Уязвимо",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Радиус: Спринклеры",
+    "sprinklers.covered": "Поливается",
+    "sprinklers.dry-crops": "Не поливается",
+
+    // crops: harvest
+    "crop-harvest.name": "Посевы: Готовность к сбору",
+    "crop-harvest.ready": "Готовы",
+    "crop-harvest.not-ready": "Не готовы",
+    "crop-harvest.not-enough-time": "Не хватает времени",
+
+    // crops: watered
+    "crop-water.name": "Посевы: Увлажнённость",
+    "crop-water.watered": "Увлажненные посевы",
+    "crop-water.dry": "Сухие посевы",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Радиус: Орошения рисовых посевов",
+    "crop-paddy-water.in-range": "Увлажненная почва",
+    "crop-paddy-water.not-in-range": "Сухая почва",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Посевы: Удобренные",
+    "crop-fertilizer.fertilizer": "Удобрением",
+    "crop-fertilizer.retaining-soil": "Влагосохраняющей почвой",
+    "crop-fertilizer.speed-gro": "СкороРостом",
+
+    // machine processing
+    "machines.name": "Статус оборудования",
+    "machines.empty": "Пусто",
+    "machines.processing": "В процесе",
+    "machines.finished": "Готово",
+
+    // tillable
+    "tillable.name": "Вспахивание",
+    "tillable.tillable": "Возможно",
+    "tillable.tilled": "Уже вспахано",
+    "tillable.occupied": "Есть преграда",
+    "tillable.not-tillable": "Не возможно"
+}

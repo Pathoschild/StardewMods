@@ -1,6 +1,6 @@
-using StardewValley.TerrainFeatures;
+﻿using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.LookupAnything.Framework.Constants
+namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
 {
     /// <summary>Indicates a tree's growth stage.</summary>
     internal enum FruitTreeGrowthStage

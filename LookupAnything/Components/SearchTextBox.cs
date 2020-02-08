@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.LookupAnything.Components;
 using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.LookupAnything.Components
 {
     /// <summary>A textbox fires events while searching.</summary>
-    internal class SearchTextBox : IKeyboardSubscriber, IDisposable
+    internal class SearchTextBox : IDisposable
     {
         /*********
         ** Properties
@@ -84,46 +84,13 @@ namespace Pathoschild.LookupAnything.Components
         public void Select()
         {
             this.Textbox.Selected = true;
-            this.Textbox.Highlighted = true;
-            Game1.keyboardDispatcher.Subscriber = this;
-        }
-
-        /// <summary>Receive input from the user.</summary>
-        /// <param name="inputChar">The input character.</param>
-        public void RecieveTextInput(char inputChar)
-        {
-            this.Textbox.RecieveTextInput(inputChar);
-            this.NotifyChange();
-        }
-
-        /// <summary>Receive input from the user.</summary>
-        /// <param name="text">The input text.</param>
-        public void RecieveTextInput(string text)
-        {
-            this.Textbox.RecieveTextInput(text);
-            this.NotifyChange();
-        }
-
-        /// <summary>Receive input from the user.</summary>
-        /// <param name="command">The input command.</param>
-        public void RecieveCommandInput(char command)
-        {
-            this.Textbox.RecieveCommandInput(command);
-            this.NotifyChange();
-        }
-
-        /// <summary>Receive input from the user.</summary>
-        /// <param name="key">The input key.</param>
-        public void RecieveSpecialInput(Keys key)
-        {
-            this.Textbox.RecieveSpecialInput(key);
-            this.NotifyChange();
         }
 
         /// <summary>Draw the textbox.</summary>
         /// <param name="batch">The sprite batch.</param>
         public void Draw(SpriteBatch batch)
         {
+            this.NotifyChange();
             this.Textbox.Draw(batch);
         }
 

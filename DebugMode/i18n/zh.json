@@ -1,0 +1,12 @@
+{
+    // labels shown on the debug screen
+    "label.tile": "地格",
+    "label.map": "地图",
+    "label.menu": "菜单",
+    "label.submenu": "子菜单",
+    "label.minigame": "迷你游戏",
+    "label.festival-name": "节日",
+    "label.event-id": "事件标识",
+    "label.event-script": "事件脚本",
+    "label.song": "song" // TODO
+}

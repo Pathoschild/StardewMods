@@ -1,151 +1,113 @@
-﻿**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
-whatever's under your cursor when you press `F1`. Learn a villager's favourite gifts, when a crop
-will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
+This repository contains my SMAPI mods for Stardew Valley. See the individual mods for
+documentation and release notes.
 
-![](screenshots/animated.gif)
+## Mods
+Active mods:
+* **[Automate](http://www.nexusmods.com/stardewvalley/mods/1063)** <small>([source](Automate))</small>  
+  _Place a chest next to a machine (like a furnace or crystalarium), and the machine will
+  automatically pull raw items from the chest and push processed items into it. Connect multiple
+  machines with a chest to create factories._
 
-## Contents
-* [Installation](#installation)
-* [Usage](#usage)
-* [Examples](#examples)
-* [Configuration](#configuration)
-* [Versions](#versions)
-* [Compiling the mod](#compiling-the-mod)
-* [See also](#see-also)
+* **[Chests Anywhere](http://www.nexusmods.com/stardewvalley/mods/518)** <small>([source](ChestsAnywhere))</small>  
+  _Access your chests from anywhere and organize them your way. Transfer items without having to
+  run around, from the comfort of your bed to the deepest mine level._
 
-## Installation
-1. Install [SMAPI](https://github.com/ClxS/SMAPI) (0.40+).
-2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
-3. Run the game using SMAPI.
+* **[Content Patcher](https://www.nexusmods.com/stardewvalley/mods/1915)** <small>([source](ContentPatcher))</small>  
+  _Load content packs that change the game's images and data without replacing XNB files. Unlike
+  XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
+  install and uninstall, and are less likely to break due to game updates._
 
-## Usage
-Just point your cursor at something and press `F1`. The mod will show live info about that object.
-You can do this to things you see in the world, in your inventory, or in the calendar.
+* **[Crops Anytime Anywhere](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsAnytimeAnywhere))</small>  
+  _Lets you grow crops in any season and location, including on grass/dirt tiles you normally
+  couldn't till._
 
-## Examples
-Here are some representative screenshots (layout and values will change dynamically as needed).
+* **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
+  _Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage,
+  etc. It automatically includes data from other mods if applicable._
 
-### Items
-| item        | screenshots |
-| ----------- | ----------- |
-| crop        | ![](screenshots/crop.png) |
-| seeds       | ![](screenshots/seeds.png) |
-| inventory   | ![](screenshots/item.png) |
+* **[Debug Mode](http://www.nexusmods.com/stardewvalley/mods/679)** <small>([source](DebugMode))</small>  
+  _Press a button to view debug information and unlock the game's built-in debug commands
+  (including teleportation and time manipulation)._
 
-### Characters
-| character   | screenshots |
-| ----------- | ----------- |
-| villager    | ![](screenshots/villager.png) |
-| pet         | ![](screenshots/pet.png) |
-| farm animal | ![](screenshots/farm-animal.png) |
-| monster     | ![](screenshots/monster.png) |
-| player      | ![](screenshots/player.png) |
+* **[Fast Animations](http://www.nexusmods.com/stardewvalley/mods/1089)** <small>([source](FastAnimations))</small>  
+  _Speed up many animations in the game (currently eating, drinking, milking, shearing, and
+  breaking geodes). Optionally configure the speed for each animation._
 
-### Map objects
-| object          | screenshots |
-| --------------- | ----------- |
-| crafting object | ![](screenshots/crafting.png) |
-| cask            | ![](screenshots/cask.png) |
-| fence           | ![](screenshots/fence.png) |
-| fruit tree      | ![](screenshots/fruit-tree.png) |
-| wild tree       | ![](screenshots/wild-tree.png) |
+* **[Lookup Anything](http://www.nexusmods.com/stardewvalley/mods/541)** <small>([source](LookupAnything))</small>  
+  _See live info about whatever's under your cursor when you press F1. Learn a villager's favorite
+  gifts, when a crop will be ready to harvest, how long a fence will last, why your farm animals
+  are unhappy, and more._
 
-### Mine objects
-| object  | screenshots |
-| ------- | ----------- |
-| gem     | ![](screenshots/mine-gem.png) |
-| ore     | ![](screenshots/mine-ore.png) |
-| stone   | ![](screenshots/mine-stone.png) |
-| ice     | ![](screenshots/mine-ice.png) |
+* **Noclip Mode** <small>([source](NoclipMode))</small>  
+  _Toggle [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button,
+  letting you walk through anything (even map boundaries)._
 
-## Configuration
-The mod will work fine out of the box, but you can tweak its settings by editing the `config.json`
-file if you want. These are the available settings:
+* **[Skip Intro](http://www.nexusmods.com/stardewvalley/mods/533)** <small>([source](SkipIntro))</small>  
+  _Skip straight to the title screen or load screen (configurable) when you start the game. It also
+  skips the screen transitions, so starting the game is much faster._
 
-| setting           | what it affects
-| ----------------- | -------------------
-| `Keyboard`        | Set keyboard bindings. The default values are `F1` to lookup, and `Up`/`Down` to scroll. See [valid keys](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.keys.aspx).
-| `Controller`      | Set controller bindings. No buttons configured by default. See [valid buttons](https://msdn.microsoft.com/en-us/library/microsoft.xna.framework.input.buttons.aspx).
-| `CheckForUpdates` | Default `true`. Whether the mod should check for a newer version when you load the game. If a new version is available, you'll [see a small message at the bottom of the screen for a few seconds](screenshots/new-version-message.png). This doesn't affect the load time even if your connection is offline or slow, because it happens in the background.
-| `HideOnKeyUp`     | Default `false`. If enabled, the lookup window will be shown while you hold `F1` and disappear when you release it.
-| `DebugLog`        | Default `true`. Whether to log information to the console useful for troubleshooting issues.
-| `SuppressGameDebug` | Default `true`. Disables SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls. See [SMAPI issue #120](https://github.com/cjsu/SMAPI/issues/120).
+* **[Small Beach Farm](http://www.nexusmods.com/stardewvalley/mods/3750)** <small>([source](SmallBeachFarm))</small>  
+  _Replaces the riverlands farm with a fertile pocket beach, suitable for slower or challenge runs._
 
-## Versions
-1.0:
-* Initial version.
-* Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
-   inventory), and map objects (crafting objects, fences, trees, and mine objects).
-* Added controller support and configurable bindings.
-* Added hidden debug mode.
-* Added version check on load.
-* Let players lookup a target from any visible part of its sprite.
+* **[Tractor Mod](http://www.nexusmods.com/stardewvalley/mods/1401)** <small>([source](TractorMod))</small>  
+  _Lets you buy a tractor to more efficiently till/fertilize/seed/water/harvest crops, clear rocks, etc._
 
-1.1:
-* On item lookup:
-  * removed crafting recipe;
-  * added crafting, cooking, and furnace recipes which use this item as an ingredient.
-* Added error if game or SMAPI are out of date.
+Inactive mods:
+* ~~No Debug Mode~~  
+  _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
+  entire season or teleporting into walls. No longer needed after SMAPI 1.0._
 
-1.2:
-* On item lookup:
-  * added crop info for seeds;
-  * added recipes for the charcoal kiln, cheese press, keg, loom, mayonnaise machine, oil maker,
-    preserves jar, recycling machine, and slime egg-press;
-  * merged recipe fields;
-  * fixed an error when displaying certain recipes.
-* Added optional mode which hides the lookup UI when you release the button.
-* `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
+* ~~[The Long Night](http://www.nexusmods.com/stardewvalley/mods/1369)~~ <small>([source](LongNight))</small>  
+  _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).
+  Broke permanently in Stardew Valley 1.3.20._
 
-1.3:
-* Added possible drops and their probability to monster lookup.
-* Added item icons to crafting output, farm animal produce, and monster drops.
-* Fixed item gift tastes being wrong in some cases.
-* Fixed monster drops showing 'error item' in rare cases.
-* Fixed fields being shown for dead crops.
-* Internal refactoring.
+* ~~[Rotate Toolbar](http://www.nexusmods.com/stardewvalley/mods/1100)~~ <small>([source](RotateToolbar))</small>  
+  _Rotate the top inventory row for the toolbar by pressing Tab (configurable). Added to the game
+  in Stardew Valley 1.4.0._
 
-1.4:
-* Updated for Stardew Valley 1.1:
-  * added new fertile weeds (forest farm) and geode stones (hilltop farm);
-  * added new recipes for coffee, mead, sugar, void mayonnaise, and wheat flour;
-  * updated for Gold Clock preventing fence decay;
-  * updated to latest binaries & increased minimum versions.
-* Fixed a few missing stones & weeds.
 
-1.5:
-* You can now lookup a villager from the calendar.
-* You can now lookup items from an open chest.
-* Added cask aging schedule.
-* Added better NPC friendship fields which account for dating and marriage.
-* Added marriage stardrop to heart meter.
-* Added support for new iridium quality.
-* Added debug log.
-* Added option to suppress SMAPI's `F2` debug hotkey, which can have unintended consequences like skipping an entire season or teleporting into walls.
-* Fixed gift tastes not handling precedence when NPCs are conflicted about how they feel.
-* Fixed error when screen resolution is too small to display lookup UI.
-* Fixed error when calculating a day offset that wraps into the next year.
-* Fixed errors crashing the game in rare cases.
+## Translating the mods
+The mods can be translated into any language supported by the game, and SMAPI will automatically
+use the right translations.
 
-1.6 (upcoming):
-* Fixed new error looking up a villager you haven't met yet
+(❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
-## Compiling the mod
-[Installing a stable release from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/541/) is
-recommended. If you really want to compile the mod yourself, just edit `LookupAnything.csproj` and
-set the `<GamePath>` setting to your Stardew Valley directory path. Launching the project in Visual
-Studio will compile the code, package it into the mod directory, and start the game.
+&nbsp;     | Chests Anywhere                          | Data Layers                          | Debug Mode                          | Lookup Anything                          | Noclip Mode                   | Tractor Mod
+---------- | :--------------------------------------- | :----------------------------------- | :---------------------------------- | :--------------------------------------- | :---------------------------- | :----------------------------
+Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [↻ partial](DataLayers/i18n/zh.json) | [↻ partial](DebugMode/i18n/zh.json) | [↻ partial](LookupAnything/i18n/zh.json) | ❑                            | [✓](TractorMod/i18n/zh.json)
+French     | [✓](ChestsAnywhere/i18n/fr.json)        | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json)        | [↻ partial](LookupAnything/i18n/fr.json) | ❑                            | [✓](TractorMod/i18n/fr.json)
+German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataLayers/i18n/de.json)        | [↻ partial](DebugMode/i18n/de.json) | [↻ partial](LookupAnything/i18n/de.json) | [✓](NoclipMode/i18n/de.json) | [✓](TractorMod/i18n/de.json)
+Hungarian  | ❑                                       | ❑                                   | ❑                                  | ❑                                       | ❑                            | ❑
+Italian    | [✓](ChestsAnywhere/i18n/it.json)        | [↻ partial](DataLayers/i18n/it.json) | [✓](DebugMode/i18n/it.json)        | [↻ partial](LookupAnything/i18n/it.json) | [✓](NoclipMode/i18n/it.json) | [✓](TractorMod/i18n/it.json)
+Japanese   | [✓](ChestsAnywhere/i18n/ja.json)        | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json)        | [↻ partial](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
+Korean     | [↻ partial](ChestsAnywhere/i18n/ko.json) | [↻ partial](DataLayers/i18n/ko.json) | [↻ partial](DebugMode/i18n/ko.json) | [↻ partial](LookupAnything/i18n/ko.json) | ❑                            | [✓](TractorMod/i18n/ko.json)
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [↻ partial](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json)        | [↻ partial](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
+Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json)        | [↻ partial](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
+Spanish    | [✓](ChestsAnywhere/i18n/es.json)        | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json)        | [✓](LookupAnything/i18n/es.json)        | [✓](NoclipMode/i18n/es.json) | [✓](TractorMod/i18n/es.json)
+Turkish    | [✓](ChestsAnywhere/i18n/tr.json)        | ❑                                   | ❑                                  | ❑                                       | ❑                            | [✓](TractorMod/i18n/tr.json)
 
-Useful tools when working on this mod:
-* [dotPeek](https://www.jetbrains.com/decompiler/) to decompile the game into a Visual Studio
-  project.
-* [ReSharper](https://www.jetbrains.com/resharper/) to analyse the game code (e.g. find usages).
-* [XNB Extract](http://community.playstarbound.com/threads/modding-guides-and-general-modding-discussion-redux.109131/)
-  to extract the game's assets and data.
-* [YAML Analyzer](http://catox.free.fr/StardewTools/yaml_analyzer.html) to help figure out data
-  files.
+Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
+on the wiki for help contributing translations.
 
-## See also
-* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
-* [Discussion thread](http://community.playstarbound.com/threads/smapi-lookup-anything.122929/)
-* My other Stardew Valley mods: [Chests Anywhere](https://github.com/Pathoschild/ChestsAnywhere) and [Skip Intro](https://github.com/Pathoschild/StardewValley.SkipIntro)
+## Compiling the mods
+Installing stable releases from Nexus Mods is recommended for most users. If you really want to
+compile the mod yourself, read on.
+
+These mods use the [crossplatform build config](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
+so they can be built on Linux, Mac, and Windows without changes. See [the build config documentation](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
+for troubleshooting.
+
+### Compiling a mod for testing
+To compile a mod and add it to your game's `Mods` directory:
+
+1. Rebuild the project in [Visual Studio](https://www.visualstudio.com/vs/community/) or [MonoDevelop](http://www.monodevelop.com/).  
+   <small>This will compile the code and package it into the mod directory.</small>
+2. Launch the project with debugging.  
+   <small>This will start the game through SMAPI and attach the Visual Studio debugger.</small>
+
+### Compiling a mod for release
+To package a mod for release:
+
+1. Switch to `Release` build configuration.
+2. Recompile the mod per the previous section.
+3. Upload the generated `bin/Release/<mod name>-<version>.zip` file from the project folder.

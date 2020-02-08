@@ -1,0 +1,10 @@
+{
+    "Name": "Crops Anytime Anywhere",
+    "Author": "Pathoschild",
+    "Version": "1.1.0",
+    "MinimumApiVersion": "2.10.1",
+    "Description": "Lets you grow crops in any season and location (configurable).",
+    "UniqueID": "Pathoschild.CropsAnytimeAnywhere",
+    "EntryDll": "CropsAnytimeAnywhere.dll",
+    "UpdateKeys": [ "Nexus:3000" ]
+}

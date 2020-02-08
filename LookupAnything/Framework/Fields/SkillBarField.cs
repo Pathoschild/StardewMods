@@ -2,15 +2,16 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows experience points for a skill.</summary>
     /// <remarks>Skill calculations reverse-engineered from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>
     internal class SkillBarField : PercentageBarField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The experience points needed for each skill level.</summary>
         private readonly int[] SkillPointsPerLevel;
@@ -20,12 +21,13 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="experience">The current progress value.</param>
         /// <param name="maxSkillPoints">The maximum experience points for a skill.</param>
         /// <param name="skillPointsPerLevel">The experience points needed for each skill level.</param>
-        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
-            : base(label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
+        public SkillBarField(GameHelper gameHelper, string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
+            : base(gameHelper, label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
         {
             this.SkillPointsPerLevel = skillPointsPerLevel;
         }
@@ -45,8 +47,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
             int currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
             string text = pointsForNextLevel > 0
-                ? $"level {currentLevel} ({pointsForNextLevel} exp to next)"
-                : $"level {currentLevel}";
+                ? L10n.Player.SkillProgress(level: currentLevel, expNeeded: pointsForNextLevel)
+                : L10n.Player.SkillProgressLast(level: currentLevel);
 
             // draw bars
             const int barWidth = 25;

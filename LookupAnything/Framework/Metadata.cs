@@ -1,8 +1,11 @@
-﻿using System.Linq;
-using Pathoschild.LookupAnything.Framework.Data;
+using System.Collections.Generic;
+using System.Linq;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Provides metadata that's not available from the game data directly (e.g. because it's buried in the logic).</summary>
     internal class Metadata
@@ -23,22 +26,39 @@ namespace Pathoschild.LookupAnything.Framework
         /// <remarks>Derived from <see cref="StardewValley.Locations.AdventureGuild.showMonsterKillList"/>.</remarks>
         public AdventureGuildQuestData[] AdventureGuildQuests { get; set; }
 
-        /// <summary>The recipes not available from the game data directly.</summary>
+        /// <summary>The building recipes.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Buildings.Mill.dayUpdate"/>.</remarks>
+        public BuildingRecipeData[] BuildingRecipes { get; set; }
+
+        /// <summary>The machine recipes.</summary>
         /// <remarks>Derived from <see cref="Object.performObjectDropInAction"/>.</remarks>
-        public RecipeData[] Recipes { get; set; }
+        public MachineRecipeData[] MachineRecipes { get; set; }
+
+        /// <summary>The shops that buy items from the player.</summary>
+        /// <remarks>Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</remarks>
+        public ShopData[] Shops { get; set; }
+
+        /// <summary>Added fish spawn rules.</summary>
+        public IDictionary<int, FishSpawnData> CustomFishSpawnRules { get; set; }
 
 
         /*********
         ** Public methods
         *********/
+        /// <summary>Get whether the metadata seems to be basically valid.</summary>
+        public bool LooksValid()
+        {
+            return new object[] { this.Constants, this.Objects, this.Characters, this.AdventureGuildQuests, this.BuildingRecipes, this.MachineRecipes, this.Shops }.All(p => p != null);
+        }
+
         /// <summary>Get overrides for a game object.</summary>
         /// <param name="item">The item for which to get overrides.</param>
         /// <param name="context">The context for which to get an override.</param>
         public ObjectData GetObject(Item item, ObjectContext context)
         {
-            ObjectSpriteSheet sheet = (item as Object)?.bigCraftable == true ? ObjectSpriteSheet.BigCraftable : ObjectSpriteSheet.Object;
-            return this?.Objects
-                .FirstOrDefault(obj => obj.SpriteSheet == sheet && obj.SpriteID.Contains(item.parentSheetIndex) && obj.Context.HasFlag(context));
+            ItemType type = item.GetItemType();
+            return this.Objects
+                .FirstOrDefault(obj => obj.Type == type && obj.SpriteID.Contains(item.ParentSheetIndex) && obj.Context.HasFlag(context));
         }
 
         /// <summary>Get overrides for a game object.</summary>
@@ -46,10 +66,8 @@ namespace Pathoschild.LookupAnything.Framework
         /// <param name="type">The character type.</param>
         public CharacterData GetCharacter(NPC character, TargetType type)
         {
-            string name = character.getName();
-
             return
-                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{name}") // override by type + name
+                this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.Name}") // override by type + name
                 ?? this.Characters?.FirstOrDefault(p => p.ID == type.ToString()); // override by type
         }
 

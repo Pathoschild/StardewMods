@@ -1,9 +1,9 @@
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The type of an in-game object for the mod's purposes.</summary>
     internal enum TargetType
     {
-        /// <summary>The target type isn't recognised by the mod.</summary>
+        /// <summary>The target type isn't recognized by the mod.</summary>
         Unknown,
 
         /****
@@ -14,7 +14,7 @@ namespace Pathoschild.LookupAnything.Framework
 
         /// <summary>A player's horse.</summary>
         Horse,
-        
+
         /// <summary>A forest spirit.</summary>
         Junimo,
 
@@ -52,6 +52,21 @@ namespace Pathoschild.LookupAnything.Framework
         Crop,
 
         /// <summary>A generic terrain feature.</summary>
-        TerrainFeature
+        TerrainFeature,
+
+        /****
+        ** Terrain features
+        ****/
+        /// <summary>A bush.</summary>
+        Bush,
+
+        /****
+        ** Other
+        ****/
+        /// <summary>A constructed building.</summary>
+        Building,
+
+        /// <summary>A map tile.</summary>
+        Tile
     }
 }

@@ -1,7 +1,9 @@
 using System;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Models;
-using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Monsters;
 
@@ -27,42 +29,52 @@ namespace Pathoschild.LookupAnything.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="npc">The subject.</param>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public SearchResult(NPC npc, Metadata metadata)
+        public SearchResult(SubjectFactory codex, NPC npc)
         {
             this.DisplayName = npc.getName();
             this.TargetType = npc is Monster
                 ? TargetType.Monster
                 : TargetType.Villager;
-            this.Subject = new Lazy<ISubject>(() => new CharacterSubject(npc, this.TargetType, metadata));
+            this.Subject = new Lazy<ISubject>(() => codex.GetCharacter(npc, this.TargetType));
         }
 
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="objectModel">The subject.</param>
-        public SearchResult(ObjectModel objectModel)
+        public SearchResult(SubjectFactory codex, GameHelper gameHelper, ObjectModel objectModel)
         {
             this.DisplayName = objectModel.Name;
             this.TargetType = TargetType.Object;
-            this.Subject = new Lazy<ISubject>(() => new ItemSubject(GameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex), ObjectContext.World, knownQuality: false));
+            this.Subject = new Lazy<ISubject>(() => codex.GetItem(gameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex), ObjectContext.World, knownQuality: false));
         }
 
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="animal">The subject.</param>
-        public SearchResult(FarmAnimal animal)
+        public SearchResult(SubjectFactory codex, FarmAnimal animal)
         {
-            this.DisplayName = animal.name;
+            this.DisplayName = animal.Name;
             this.TargetType = TargetType.FarmAnimal;
-            this.Subject = new Lazy<ISubject>(() => new FarmAnimalSubject(animal));
+            this.Subject = new Lazy<ISubject>(() => codex.GetFarmAnimal(animal));
         }
 
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="recipe">The subject.</param>
-        public SearchResult(RecipeModel recipe)
+        public SearchResult(SubjectFactory codex, GameHelper gameHelper, RecipeModel recipe)
         {
-            this.DisplayName = recipe.Name;
+            if (recipe.Type != RecipeType.Cooking && recipe.Type != RecipeType.Crafting)
+                throw new InvalidOperationException("Unsupported recipe type.");
+
+            var item = gameHelper.GetObjectBySpriteIndex(recipe.OutputItemIndex.Value);
+
+            this.DisplayName = item.Name;
             this.TargetType = TargetType.InventoryItem;
-            this.Subject = new Lazy<ISubject>(() => new ItemSubject(recipe.CreateItem(), ObjectContext.Inventory, false));
+            this.Subject = new Lazy<ISubject>(() => codex.GetItem(item, ObjectContext.Inventory, false));
         }
     }
 }

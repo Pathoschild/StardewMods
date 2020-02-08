@@ -1,11 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything;
+using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -17,8 +20,8 @@ namespace Pathoschild.LookupAnything.Components
         /*********
         ** Properties
         *********/
-        /// <summary>The  metadata.</summary>
-        private readonly Metadata Metadata;
+        /// <summary>Show a lookup menu.</summary>
+        private readonly Action<ISubject> ShowLookup;
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
@@ -43,12 +46,14 @@ namespace Pathoschild.LookupAnything.Components
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public SearchMenu(Metadata metadata)
+        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="showLookup">Show a lookup menu.</param>
+        public SearchMenu(SubjectFactory codex, GameHelper gameHelper, Action<ISubject> showLookup)
         {
             // save data
-            this.Metadata = metadata;
-            this.SearchLookup = GameHelper.GetSearchLookup(this.Metadata);
+            this.ShowLookup = showLookup;
+            this.SearchLookup = gameHelper.GetSearchLookup(codex);
 
             // initialise
             this.CalculateDimensions();
@@ -74,7 +79,7 @@ namespace Pathoschild.LookupAnything.Components
 
                 // open lookup menu
                 ISubject subject = match.Result.Subject.Value;
-                Game1.activeClickableMenu = new LookupMenu(subject, this.Metadata);
+                this.ShowLookup(subject);
                 Game1.playSound("coin");
             }
         }

@@ -1,32 +1,40 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Components;
-using Pathoschild.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using StardewModdingAPI;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows friendship points.</summary>
     internal class CharacterFriendshipField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The player's current friendship data with the NPC.</summary>
         private readonly FriendshipModel Friendship;
+
+        /// <summary>Provides translations stored in the mod folder.</summary>
+        private readonly ITranslationHelper Translations;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="friendship">The player's current friendship data with the NPC.</param>
-        public CharacterFriendshipField(string label, FriendshipModel friendship)
-            : base(label, null, hasValue: true)
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public CharacterFriendshipField(GameHelper gameHelper, string label, FriendshipModel friendship, ITranslationHelper translations)
+            : base(gameHelper, label, hasValue: true)
         {
             this.Friendship = friendship;
+            this.Translations = translations;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -39,8 +47,15 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         {
             FriendshipModel friendship = this.Friendship;
 
-            // draw hearts
+            // draw status
             float leftOffset = 0;
+            {
+                string statusText = L10n.For(friendship.Status, friendship.CanHousemate);
+                Vector2 textSize = spriteBatch.DrawTextBlock(font, statusText, new Vector2(position.X + leftOffset, position.Y), wrapWidth - leftOffset);
+                leftOffset += textSize.X + DrawHelper.GetSpaceWidth(font);
+            }
+
+            // draw hearts
             for (int i = 0; i < friendship.TotalHearts; i++)
             {
                 // get icon
@@ -79,21 +94,23 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             // get caption text
             string caption = null;
             if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
-                caption = "(need bouquet for next)";
+                caption = $"({L10n.Npc.FriendshipNeedBouquet()})";
             else
             {
                 int pointsToNext = this.Friendship.GetPointsToNext();
                 if (pointsToNext > 0)
-                    caption = $"(next in {pointsToNext} pts)";
+                    caption = $"({L10n.Npc.FriendshipNeedPoints(pointsToNext)})";
             }
 
             // draw caption
-            float spaceSize = DrawHelper.GetSpaceWidth(font);
-            Vector2 textSize = Vector2.Zero;
-            if (caption != null)
-                textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
+            {
+                float spaceSize = DrawHelper.GetSpaceWidth(font);
+                Vector2 textSize = Vector2.Zero;
+                if (caption != null)
+                    textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
 
-            return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+                return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+            }
         }
     }
 }

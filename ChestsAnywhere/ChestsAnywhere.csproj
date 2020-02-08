@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>ChestsAnywhere</AssemblyName>
+    <Version>1.17.4</Version>
+    <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="$(SolutionDir)\common.targets" />
+
+</Project>

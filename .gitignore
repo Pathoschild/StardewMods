@@ -1,16 +1,16 @@
-# User-specific files
+# user-specific files
 *.suo
 *.user
 *.userosscache
 *.sln.docstates
 
-# Build results
+# build results
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
 [Oo]bj/
 
-# Visual Studio 2015 cache/options directory
+# Visual Studio cache/options
 .vs/
 
 # ReSharper
@@ -18,8 +18,14 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
-# NuGet Packages
+# NuGet packages
 *.nupkg
 **/packages/*
 *.nuget.props
 *.nuget.targets
+
+# vanilla map tilesheets
+SmallBeachFarm/assets/paths.png
+SmallBeachFarm/assets/spring_beach.png
+SmallBeachFarm/assets/spring_outdoorsTileSheet.png
+SmallBeachFarm/assets/spring_town.png

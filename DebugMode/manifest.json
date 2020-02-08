@@ -1,0 +1,10 @@
+{
+    "Name": "Debug Mode",
+    "Author": "Pathoschild",
+    "Version": "1.11.2",
+    "MinimumApiVersion": "3.2.0",
+    "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
+    "UniqueID": "Pathoschild.DebugMode",
+    "EntryDll": "DebugMode.dll",
+    "UpdateKeys": [ "Nexus:679" ]
+}

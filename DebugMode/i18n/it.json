@@ -1,0 +1,12 @@
+{
+    // labels shown on the debug screen
+    "label.tile": "piastrella",
+    "label.map": "mappa",
+    "label.menu": "menu",
+    "label.submenu": "sottomenu",
+    "label.minigame": "minigioco",
+    "label.festival-name": "festa",
+    "label.event-id": "ID evento",
+    "label.event-script": "script di eventi",
+    "label.song": "canzone"
+}

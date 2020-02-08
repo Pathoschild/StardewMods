@@ -1,4 +1,4 @@
-namespace Pathoschild.LookupAnything.Framework.Models
+﻿namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>An object entry parsed from the game's data files.</summary>
     internal class ObjectModel

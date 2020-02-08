@@ -1,0 +1,38 @@
+{
+    // default chest names
+    "default-name.auto-grabber": "Recolector automático #{{number}}",
+    "default-name.chest": "Cofre #{{number}}",
+    "default-name.fridge": "Nevera",
+    "default-name.junimo-hut": "Cabaña junimo #{{number}}",
+    "default-name.shipping-bin": "Contenedor de envío",
+
+    // default category names
+    "default-category.owned-cabin": "Cabaña ({{owner}})",
+    "default-category.unowned-cabin": "Cabaña (vacía)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Localización",
+    "label.location.tile": "casilla {{x}}, {{y}}",
+    "label.name": "Nombre",
+    "label.category": "Categoría",
+    "label.order": "Orden",
+    "label.hide-chest": "Esconder este cofre",
+    "label.hide-chest-hidden": "Esconder este cofre (¡necesitarás encontrar el cofre para deshacer esto!)",
+    "label.automate-store": "(Automático) Pon objetos en este cofre",
+    "label.automate-store-first": "(Automático) Pon primero los objetos en este cofre",
+    "label.automate-take": "(Automático) Sacar objetos de este cofre",
+    "label.automate-take-first": "(Automático) Sacar primero los objetos de este cofre",
+
+    // button labels
+    "button.edit-chest": "editar cofre",
+    "button.sort-inventory": "ordenar inventario",
+    "button.save": "guardar",
+    "button.reset": "reiniciar",
+
+    // errors
+    "errors.disabled-from-here": "No puedes acceder a tus cofres desde aquí.",
+    "errors.no-chests": "Todavía no tienes ningún cofre.",
+    "errors.no-chests-in-location": "No tienes ningún cofre en este área.",
+    "errors.no-chests-in-range": "No tienes ningún cofre a tu alcance."
+}

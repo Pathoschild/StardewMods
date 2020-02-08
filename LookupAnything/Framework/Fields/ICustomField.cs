@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field shown as an extended property in the lookup UI.</summary>
     internal interface ICustomField
@@ -13,7 +13,7 @@ namespace Pathoschild.LookupAnything.Framework.Fields
         string Label { get; }
 
         /// <summary>The field value.</summary>
-        string Value { get; }
+        IFormattedText[] Value { get; }
 
         /// <summary>Whether the field should be displayed.</summary>
         bool HasValue { get; }

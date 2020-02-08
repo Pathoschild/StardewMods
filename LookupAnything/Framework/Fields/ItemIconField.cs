@@ -1,30 +1,38 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Fields
+namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows an item icon.</summary>
     internal class ItemIconField : GenericField
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
-        /// <summary>The item for which to display an icon.</summary>
-        private readonly Item Item;
+        /// <summary>The item icon to draw.</summary>
+        private readonly SpriteInfo Sprite;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="item">The item for which to display an icon.</param>
         /// <param name="text">The text to display (if not the item name).</param>
-        public ItemIconField(string label, Item item, string text = null)
-            : base(label, text, hasValue: item != null)
+        public ItemIconField(GameHelper gameHelper, string label, Item item, string text = null)
+            : base(gameHelper, label, hasValue: item != null)
         {
-            this.Item = item;
+            this.Sprite = gameHelper.GetSprite(item);
+            if (item != null)
+            {
+                this.Value = !string.IsNullOrWhiteSpace(text)
+                    ? this.FormatValue(text)
+                    : this.FormatValue(item.DisplayName);
+            }
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -40,8 +48,8 @@ namespace Pathoschild.LookupAnything.Framework.Fields
             Vector2 iconSize = new Vector2(textHeight);
 
             // draw icon & text
-            spriteBatch.DrawIcon(this.Item, position.X, position.Y, iconSize);
-            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value ?? this.Item.Name, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
+            spriteBatch.DrawSpriteWithin(this.Sprite, position.X, position.Y, iconSize);
+            Vector2 textSize = spriteBatch.DrawTextBlock(font, this.Value, position + new Vector2(iconSize.X + 5, 5), wrapWidth);
 
             // return size
             return new Vector2(wrapWidth, textSize.Y + 5);

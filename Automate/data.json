@@ -1,0 +1,15 @@
+{
+    "FloorNames": {
+        "0": "Wood Floor",
+        "1": "Stone Floor",
+        "2": "Weathered Floor",
+        "3": "Crystal Floor",
+        "4": "Straw Floor",
+        "5": "Gravel Path",
+        "6": "Wood Path",
+        "7": "Crystal Path",
+        "8": "Cobblestone Path",
+        "9": "Stepping Stone Path",
+        "10": "Brick Floor" 
+    }
+}

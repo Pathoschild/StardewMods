@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>SmallBeachFarm</AssemblyName>
+    <Version>1.5.0</Version>
+    <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
+
+    <EnableHarmony>true</EnableHarmony>
+    <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)\common.targets" />
+
+</Project>

@@ -1,35 +1,39 @@
-using Pathoschild.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
-    /// <summary>A gift taste entry parsed from the game's data files.</summary>
+    /// <summary>A parsed gift taste model.</summary>
     internal class GiftTasteModel
     {
         /*********
         ** Accessors
         *********/
+        /// <summary>The target villager.</summary>
+        public NPC Villager { get; set; }
+
+        /// <summary>A sample of the item.</summary>
+        public Item Item { get; set; }
+
         /// <summary>How much the target villager likes this item.</summary>
         public GiftTaste Taste { get; }
 
-        /// <summary>The name of the target villager.</summary>
-        public string Villager { get; }
-
-        /// <summary>The item parent sprite index (if positive) or category (if negative).</summary>
-        public int ItemID { get; set; }
+        /// <summary>Whether the player has discovered this gift taste.</summary>
+        public bool IsRevealed => Game1.player.hasGiftTasteBeenRevealed(this.Villager, this.Item.ParentSheetIndex);
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="villager">The target villager.</param>
+        /// <param name="item">A sample of the item.</param>
         /// <param name="taste">How much the target villager likes this item.</param>
-        /// <param name="villager">The name of the target villager.</param>
-        /// <param name="itemID">The item parent sprite index.</param>
-        public GiftTasteModel(GiftTaste taste, string villager, int itemID)
+        public GiftTasteModel(NPC villager, Item item, GiftTaste taste)
         {
-            this.Taste = taste;
             this.Villager = villager;
-            this.ItemID = itemID;
+            this.Item = item;
+            this.Taste = taste;
         }
     }
 }

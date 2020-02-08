@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.LookupAnything.Framework;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Menus;
 

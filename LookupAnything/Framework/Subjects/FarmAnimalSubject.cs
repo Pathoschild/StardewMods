@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a farm animal.</summary>
     internal class FarmAnimalSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The lookup target.</summary>
         private readonly FarmAnimal Target;
@@ -22,39 +25,57 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="animal">The lookup target.</param>
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(FarmAnimal animal)
-            : base(animal.name, null, animal.type)
+        public FarmAnimalSubject(SubjectFactory codex, GameHelper gameHelper, FarmAnimal animal, ITranslationHelper translations)
+            : base(codex, gameHelper, animal.displayName, null, animal.type.Value, translations)
         {
             this.Target = animal;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             FarmAnimal animal = this.Target;
 
             // calculate maturity
-            bool isFullyGrown = animal.age >= animal.ageWhenMature;
+            bool isFullyGrown = animal.age.Value >= animal.ageWhenMature.Value;
             int daysUntilGrown = 0;
-            Tuple<string, int> dayOfMaturity = null;
+            SDate dayOfMaturity = null;
             if (!isFullyGrown)
             {
-                daysUntilGrown = animal.ageWhenMature - animal.age;
-                dayOfMaturity = GameHelper.GetDayOffset(daysUntilGrown, metadata.Constants.DaysInSeason);
+                daysUntilGrown = animal.ageWhenMature.Value - animal.age.Value;
+                dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
             }
 
             // yield fields
-            yield return new CharacterFriendshipField("Love", DataParser.GetFriendshipForAnimal(Game1.player, animal, metadata));
-            yield return new PercentageBarField("Happiness", animal.happiness, byte.MaxValue, Color.Green, Color.Gray, $"{Math.Round(animal.happiness / (metadata.Constants.AnimalMaxHappiness * 1f) * 100)}%");
-            yield return new GenericField("Mood today", animal.getMoodMessage());
-            yield return new GenericField("Complaints", this.GetMoodReason(animal));
-            yield return new ItemIconField("Produce ready", animal.currentProduce > 0 ? new StardewValley.Object(animal.currentProduce, 1) : null);
+            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal.Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal), this.Text);
+            yield return new PercentageBarField(this.GameHelper, L10n.Animal.Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic.Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new GenericField(this.GameHelper, L10n.Animal.Mood(), animal.getMoodMessage());
+            yield return new GenericField(this.GameHelper, L10n.Animal.Complaints(), this.GetMoodReason(animal));
+            yield return new ItemIconField(this.GameHelper, L10n.Animal.ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
-                yield return new GenericField("Growth", $"{daysUntilGrown} {GameHelper.Pluralise(daysUntilGrown, "day")} (on {dayOfMaturity.Item1} {dayOfMaturity.Item2})");
-            yield return new SaleValueField("Sells for", animal.getSellPrice(), 1);
+                yield return new GenericField(this.GameHelper, L10n.Animal.Growth(), $"{L10n.Generic.Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+            yield return new GenericField(this.GameHelper, L10n.Animal.SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));
+        }
+
+        /// <summary>Get raw debug data to display for this subject.</summary>
+        public override IEnumerable<IDebugField> GetDebugFields()
+        {
+            FarmAnimal target = this.Target;
+
+            // pinned fields
+            yield return new GenericDebugField("age", $"{target.age} days", pinned: true);
+            yield return new GenericDebugField("friendship", $"{target.friendshipTowardFarmer} (max {this.Constants.AnimalMaxHappiness})", pinned: true);
+            yield return new GenericDebugField("fullness", this.Stringify(target.fullness.Value), pinned: true);
+            yield return new GenericDebugField("happiness", this.Stringify(target.happiness.Value), pinned: true);
+
+            // raw fields
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+                yield return field;
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
@@ -81,28 +102,28 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
 
             // winter without heat
             if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)
-                factors.Add("no heater in winter");
+                factors.Add(L10n.Animal.ComplaintsNoHeater());
 
             // mood
-            switch (animal.moodMessage)
+            switch (animal.moodMessage.Value)
             {
                 case FarmAnimal.newHome:
-                    factors.Add("moved into new home");
+                    factors.Add(L10n.Animal.ComplaintsNewHome());
                     break;
                 case FarmAnimal.hungry:
-                    factors.Add("wasn't fed yesterday");
+                    factors.Add(L10n.Animal.ComplaintsHungry());
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add($"was disturbed by {Game1.player.getPetName()}");
+                    factors.Add(L10n.Animal.ComplaintsWildAnimalAttack());
                     break;
                 case FarmAnimal.leftOutAtNight:
-                    factors.Add("was left outside last night");
+                    factors.Add(L10n.Animal.ComplaintsLeftOut());
                     break;
             }
 
             // not pet
-            if (!animal.wasPet)
-                factors.Add("hasn't been petted today");
+            if (!animal.wasPet.Value)
+                factors.Add(L10n.Animal.ComplaintsNotPetted());
 
             // return factors
             return string.Join(", ", factors);

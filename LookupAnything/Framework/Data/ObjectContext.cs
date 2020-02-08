@@ -1,6 +1,6 @@
-using System;
+﻿using System;
 
-namespace Pathoschild.LookupAnything.Framework.Data
+namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>The context in which to override an object.</summary>
     [Flags]

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>TestMod</AssemblyName>
+    <Version>1.0.0</Version>
+    <RootNamespace>Pathoschild.Stardew.TestMod</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)\common.targets" />
+
+</Project>

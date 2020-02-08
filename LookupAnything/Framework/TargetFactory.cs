@@ -1,25 +1,41 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Subjects;
-using Pathoschild.LookupAnything.Framework.Targets;
+using Pathoschild.Stardew.Common.Integrations.JsonAssets;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Targets;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
-    /// <summary>Finds and analyses lookup targets in the world.</summary>
+    /// <summary>Finds and analyzes lookup targets in the world.</summary>
     internal class TargetFactory
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
-        /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private readonly Metadata Metadata;
+        /// <summary>Simplifies access to private game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        private readonly GameHelper GameHelper;
+
+        /// <summary>The Json Assets API.</summary>
+        private readonly JsonAssetsIntegration JsonAssets;
+
+        /// <summary>Constructs subjects for target values.</summary>
+        private readonly SubjectFactory Codex;
 
 
         /*********
@@ -29,10 +45,17 @@ namespace Pathoschild.LookupAnything.Framework
         ** Constructors
         ****/
         /// <summary>Construct an instance.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public TargetFactory(Metadata metadata)
+        /// <param name="reflection">Simplifies access to private game code.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="jsonAssets">The Json Assets API.</param>
+        /// <param name="codex">Constructs subjects for target values.</param>
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets, SubjectFactory codex)
         {
-            this.Metadata = metadata;
+            this.Reflection = reflection;
+            this.GameHelper = gameHelper;
+            this.JsonAssets = jsonAssets;
+            this.GameHelper = gameHelper;
+            this.Codex = codex;
         }
 
         /****
@@ -41,16 +64,17 @@ namespace Pathoschild.LookupAnything.Framework
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="originTile">The tile from which to search for targets.</param>
-        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile)
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool includeMapTile)
         {
             // NPCs
             foreach (NPC npc in location.characters)
             {
-                if (!GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
+                if (!this.GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
                     continue;
 
                 TargetType type = TargetType.Unknown;
-                if (npc.isVillager())
+                if (npc is Child || npc.isVillager())
                     type = TargetType.Villager;
                 else if (npc is Horse)
                     type = TargetType.Horse;
@@ -61,96 +85,191 @@ namespace Pathoschild.LookupAnything.Framework
                 else if (npc is Monster)
                     type = TargetType.Monster;
 
-                yield return new CharacterTarget(type, npc, npc.getTileLocation());
+                yield return new CharacterTarget(this.GameHelper, type, npc, npc.getTileLocation(), this.Reflection);
             }
 
             // animals
             foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
             {
-                if (!GameHelper.CouldSpriteOccludeTile(animal.getTileLocation(), originTile))
+                if (!this.GameHelper.CouldSpriteOccludeTile(animal.getTileLocation(), originTile))
                     continue;
 
-                yield return new FarmAnimalTarget(animal, animal.getTileLocation());
+                yield return new FarmAnimalTarget(this.GameHelper, animal, animal.getTileLocation());
             }
 
             // map objects
-            foreach (var pair in location.objects)
+            foreach (KeyValuePair<Vector2, SObject> pair in location.objects.Pairs)
             {
                 Vector2 spriteTile = pair.Key;
-                Object obj = pair.Value;
+                SObject obj = pair.Value;
 
-                if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
+                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                yield return new ObjectTarget(obj, spriteTile);
+                yield return new ObjectTarget(this.GameHelper, obj, spriteTile, this.Reflection);
+            }
+
+            // furniture
+            if (location is DecoratableLocation decoratableLocation)
+            {
+                foreach (var furniture in decoratableLocation.furniture)
+                    yield return new ObjectTarget(this.GameHelper, furniture, furniture.TileLocation, this.Reflection);
             }
 
             // terrain features
-            foreach (var pair in location.terrainFeatures)
+            foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures.Pairs)
             {
                 Vector2 spriteTile = pair.Key;
                 TerrainFeature feature = pair.Value;
 
-                if (!GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
+                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
                     continue;
 
-                if ((feature as HoeDirt)?.crop != null)
-                    yield return new CropTarget(feature, spriteTile);
-                else if (feature is FruitTree)
-                    yield return new FruitTreeTarget((FruitTree)feature, spriteTile);
-                else if (feature is Tree)
-                    yield return new TreeTarget((Tree)feature, spriteTile);
-                else
-                    yield return new UnknownTarget(feature, spriteTile);
+                switch (feature)
+                {
+                    case Bush bush: // planted bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
+
+                    case HoeDirt dirt when dirt.crop != null:
+                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection, this.JsonAssets);
+                        break;
+
+                    case FruitTree fruitTree:
+                        if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, spriteTile);
+                        break;
+
+                    case Tree wildTree:
+                        if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
+                            continue; // ignore when tree is faded out (so player can lookup things behind it)
+                        yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
+                        break;
+
+                    default:
+                        yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
+                        break;
+                }
+            }
+
+            // large terrain features
+            foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+            {
+                Vector2 spriteTile = feature.tilePosition.Value;
+
+                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
+                    continue;
+
+                switch (feature)
+                {
+                    case Bush bush: // wild bush
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        break;
+                }
             }
 
             // players
-            foreach (var farmer in new[] { Game1.player }.Union(location.farmers))
+            foreach (Farmer farmer in location.farmers)
             {
-                if (!GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
+                if (!this.GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
                     continue;
 
-                yield return new FarmerTarget(farmer);
+                yield return new FarmerTarget(this.GameHelper, farmer);
             }
+
+            // buildings
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (Building building in buildableLocation.buildings)
+                {
+                    if (!this.GameHelper.CouldSpriteOccludeTile(new Vector2(building.tileX.Value, building.tileY.Value + building.tilesHigh.Value), originTile, Constant.MaxBuildingTargetSpriteSize))
+                        continue;
+
+                    yield return new BuildingTarget(this.GameHelper, building);
+                }
+            }
+
+            // tiles
+            if (includeMapTile)
+                yield return new TileTarget(this.GameHelper, originTile);
+        }
+
+        /// <summary>Get the target on the specified tile.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to search.</param>
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile, bool includeMapTile)
+        {
+            return (
+                from target in this.GetNearbyTargets(location, tile, includeMapTile)
+                where
+                    target.Type != TargetType.Unknown
+                    && target.IsAtTile(tile)
+                select target
+            ).FirstOrDefault();
         }
 
         /// <summary>Get the target at the specified coordinate.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="position">The viewport-relative coordinates to search.</param>
-        public ITarget GetTargetFrom(GameLocation location, Vector2 tile, Vector2 position)
+        /// <param name="position">The viewport-relative pixel coordinate to search.</param>
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool includeMapTile)
         {
-            // get target sprites overlapping cursor position
-            Rectangle tileArea = GameHelper.GetScreenCoordinatesFromTile(tile);
-            return (
-                // select targets whose sprites may overlap the cursor position
-                from target in this.GetNearbyTargets(location, tile)
-                let spriteArea = target.GetSpriteArea()
-                where target.Type != TargetType.Unknown
-                where target.IsAtTile(tile) || spriteArea.Intersects(tileArea)
+            // get target sprites which might overlap cursor position (first approximation)
+            Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
+            var candidates = (
+                from target in this.GetNearbyTargets(location, tile, includeMapTile)
+                let spriteArea = target.GetWorldArea()
+                let isAtTile = target.IsAtTile(tile)
+                where
+                    target.Type != TargetType.Unknown
+                    && (isAtTile || spriteArea.Intersects(tileArea))
+                orderby
+                    target.Type != TargetType.Tile ? 0 : 1, // Tiles are always under anything else.
+                    spriteArea.Y descending,                // A higher Y value is closer to the foreground, and will occlude any sprites behind it.
+                    spriteArea.X ascending                  // If two sprites at the same Y coordinate overlap, assume the left sprite occludes the right.
 
-                // sort targets by layer
-                // (A higher Y value is closer to the foreground, and will occlude any sprites
-                // behind it. If two sprites at the same Y coordinate overlap, assume the left
-                // sprite occludes the right.)
-                orderby spriteArea.Y descending, spriteArea.X ascending
+                select new { target, spriteArea, isAtTile }
+            ).ToArray();
 
-                where target.SpriteIntersectsPixel(tile, position, spriteArea)
-
-                select target
-            ).FirstOrDefault();
+            // choose best match
+            return
+                candidates.FirstOrDefault(p => p.target.SpriteIntersectsPixel(tile, position, p.spriteArea))?.target // sprite pixel under cursor
+                ?? candidates.FirstOrDefault(p => p.isAtTile)?.target; // tile under cursor
         }
 
         /****
         ** Subjects
         ****/
         /// <summary>Get metadata for a Stardew object at the specified position.</summary>
+        /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to search.</param>
-        /// <param name="position">The viewport-relative coordinates to search.</param>
-        public ISubject GetSubjectFrom(GameLocation location, Vector2 tile, Vector2 position)
+        /// <param name="lookupMode">The lookup target mode.</param>
+        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
         {
-            ITarget target = this.GetTargetFrom(location, tile, position);
+            // get target
+            ITarget target;
+            switch (lookupMode)
+            {
+                // under cursor
+                case LookupMode.Cursor:
+                    target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), includeMapTile);
+                    break;
+
+                // in front of player
+                case LookupMode.FacingPlayer:
+                    Vector2 tile = this.GetFacingTile(player);
+                    target = this.GetTargetFromTile(location, tile, includeMapTile);
+                    break;
+
+                default:
+                    throw new NotSupportedException($"Unknown lookup mode '{lookupMode}'.");
+            }
+
+            // get subject
             return target != null
                 ? this.GetSubjectFrom(target)
                 : null;
@@ -168,32 +287,43 @@ namespace Pathoschild.LookupAnything.Framework
                 case TargetType.Pet:
                 case TargetType.Monster:
                 case TargetType.Villager:
-                    return new CharacterSubject(target.GetValue<NPC>(), target.Type, this.Metadata);
+                    return this.Codex.GetCharacter(target.GetValue<NPC>(), target.Type);
 
                 // player
                 case TargetType.Farmer:
-                    return new FarmerSubject(target.GetValue<Farmer>());
+                    return this.Codex.GetPlayer(target.GetValue<Farmer>());
 
                 // animal
                 case TargetType.FarmAnimal:
-                    return new FarmAnimalSubject(target.GetValue<FarmAnimal>());
+                    return this.Codex.GetFarmAnimal(target.GetValue<FarmAnimal>());
 
                 // crop
                 case TargetType.Crop:
-                    Crop crop = target.GetValue<HoeDirt>().crop;
-                    return new ItemSubject(GameHelper.GetObjectBySpriteIndex(crop.indexOfHarvest), ObjectContext.World, knownQuality: false, fromCrop: crop);
+                    return this.Codex.GetCrop(target.GetValue<HoeDirt>().crop, ObjectContext.World);
 
-                // tree
+                // fruit tree
                 case TargetType.FruitTree:
-                    return new FruitTreeSubject(target.GetValue<FruitTree>(), target.GetTile());
-                case TargetType.WildTree:
-                    return new TreeSubject(target.GetValue<Tree>(), target.GetTile());
+                    return this.Codex.GetFruitTree(target.GetValue<FruitTree>(), target.GetTile());
 
-                // object
+                // wild tree
+                case TargetType.WildTree:
+                    return this.Codex.GetWildTree(target.GetValue<Tree>(), target.GetTile());
+
+                // inventory item
                 case TargetType.InventoryItem:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.Inventory, knownQuality: false);
                 case TargetType.Object:
-                    return new ItemSubject(target.GetValue<Item>(), ObjectContext.World, knownQuality: false);
+                    return this.Codex.GetItem(target.GetValue<Item>(), target.Type == TargetType.InventoryItem ? ObjectContext.Inventory : ObjectContext.World, knownQuality: false);
+
+                // building
+                case TargetType.Building:
+                    return this.Codex.GetBuilding(target.GetValue<Building>(), target.GetSpritesheetArea());
+
+                case TargetType.Bush:
+                    return this.Codex.GetBush(target.GetValue<Bush>());
+
+                // tile
+                case TargetType.Tile:
+                    return this.Codex.GetTile(Game1.currentLocation, target.GetValue<Vector2>());
             }
 
             return null;
@@ -201,73 +331,248 @@ namespace Pathoschild.LookupAnything.Framework
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
         /// <param name="menu">The active menu.</param>
-        /// <param name="cursorPosition">The cursor's viewport-relative coordinates.</param>
-        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPosition)
+        /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
+        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
-            // calendar
-            if (menu is Billboard)
-            {
-                Billboard billboard = (Billboard)menu;
+            IClickableMenu targetMenu =
+                (menu as GameMenu)?.GetCurrentPage()
+                ?? menu;
 
-                // get target day
-                int selectedDay = -1;
-                {
-                    List<ClickableTextureComponent> calendarDays = GameHelper.GetPrivateField<List<ClickableTextureComponent>>(billboard, "calendarDays");
-                    for (int i = 0; i < calendarDays.Count; i++)
+            switch (targetMenu)
+            {
+                // calendar
+                case Billboard billboard:
                     {
-                        if (calendarDays[i].containsPoint((int)cursorPosition.X, (int)cursorPosition.Y))
+                        // get target day
+                        int selectedDay = -1;
+                        for (int i = 0; i < billboard.calendarDays.Count; i++)
                         {
-                            selectedDay = i + 1;
+                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                selectedDay = i + 1;
+                                break;
+                            }
+                        }
+                        if (selectedDay == -1)
+                            return null;
+
+                        // get villager with a birthday on that date
+                        NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
+                        if (target != null)
+                            return this.Codex.GetCharacter(target, TargetType.Villager);
+                    }
+                    break;
+
+                // chest
+                case MenuWithInventory inventoryMenu:
+                    {
+                        Item item = inventoryMenu.hoveredItem;
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                    }
+                    break;
+
+                // inventory
+                case InventoryPage inventory:
+                    {
+                        Item item = this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                    }
+                    break;
+
+                // collections menu
+                // derived from CollectionsPage::performHoverAction
+                case CollectionsPage collectionsTab:
+                    {
+                        int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
+                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
                             break;
+
+                        int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
+
+                        foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
+                        {
+                            if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
+                                SObject obj = new SObject(itemID, 1);
+                                return this.Codex.GetItem(obj, ObjectContext.Inventory, knownQuality: false);
+                            }
                         }
                     }
-                }
-                if (selectedDay == -1)
-                    return null;
+                    break;
 
-                // get villager with a birthday on that date
-                NPC target = Utility.getAllCharacters().FirstOrDefault(p => p.birthday_Season == Game1.currentSeason && p.birthday_Day == selectedDay);
-                if(target != null)
-                    return new CharacterSubject(target, TargetType.Villager, this.Metadata);
-            }
+                // cooking or crafting menu
+                case CraftingPage crafting:
+                    {
+                        // player inventory item
+                        Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
 
-            // chest
-            else if (menu is MenuWithInventory)
-            {
-                Item item = ((MenuWithInventory)menu).hoveredItem;
-                if(item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-            }
+                        // crafting recipe
+                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
+                        if (recipe != null)
+                            return this.Codex.GetItem(recipe.createItem(), ObjectContext.Inventory);
+                    }
+                    break;
 
-            // inventory
-            else if (menu is GameMenu)
-            {
-                // get current tab
-                List<IClickableMenu> tabs = GameHelper.GetPrivateField<List<IClickableMenu>>(menu, "pages");
-                IClickableMenu curTab = tabs[((GameMenu)menu).currentTab];
-                if (curTab is InventoryPage)
-                {
-                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoveredItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-                else if (curTab is CraftingPage)
-                {
-                    Item item = GameHelper.GetPrivateField<Item>(curTab, "hoverItem");
-                    if (item != null)
-                        return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
-                }
-            }
+                // social tab
+                case SocialPage socialPage:
+                    {
+                        // get villagers on current page
+                        int scrollOffset = this.Reflection.GetField<int>(socialPage, "slotPosition").GetValue();
+                        ClickableTextureComponent[] entries = this.Reflection
+                            .GetField<List<ClickableTextureComponent>>(socialPage, "sprites")
+                            .GetValue()
+                            .Skip(scrollOffset)
+                            .ToArray();
 
-            // by convention (for mod support)
-            else
-            {
-                Item item = GameHelper.GetPrivateField<Item>(menu, "HoveredItem", required: false); // ChestsAnywhere
-                if (item != null)
-                    return new ItemSubject(item, ObjectContext.Inventory, knownQuality: true);
+                        // find hovered villager
+                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (entry != null)
+                        {
+                            int index = Array.IndexOf(entries, entry) + scrollOffset;
+                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[index];
+                            if (socialID is long playerID)
+                            {
+                                Farmer player = Game1.getFarmer(playerID);
+                                return this.Codex.GetPlayer(player);
+                            }
+                            else if (socialID is string villagerName)
+                            {
+                                NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
+                                if (npc != null)
+                                    return this.Codex.GetCharacter(npc, TargetType.Villager);
+                            }
+                        }
+                    }
+                    break;
+
+                case ProfileMenu profileMenu:
+                    {
+                        Item item = profileMenu.hoveredItem;
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                        break;
+                    }
+
+                // Community Center bundle menu
+                case JunimoNoteMenu bundleMenu:
+                    {
+                        // hovered inventory item
+                        {
+                            Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
+                            if (item != null)
+                                return this.Codex.GetItem(item, ObjectContext.Inventory);
+                        }
+
+                        // list of required ingredients
+                        for (int i = 0; i < bundleMenu.ingredientList.Count; i++)
+                        {
+                            if (bundleMenu.ingredientList[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
+                                var ingredient = bundle.ingredients[i];
+                                var item = this.GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
+                                item.Quality = ingredient.quality;
+                                return this.Codex.GetItem(item, ObjectContext.Inventory);
+                            }
+                        }
+
+                        // list of submitted ingredients
+                        foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
+                        {
+                            if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                                return this.Codex.GetItem(slot.item, ObjectContext.Inventory);
+                        }
+                    }
+                    break;
+
+                // load menu
+                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
+                    {
+                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (button != null)
+                        {
+                            int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
+                            var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
+                            LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
+                            if (slot?.Farmer != null)
+                                return this.Codex.GetPlayer(slot.Farmer, isLoadMenu: true);
+                        }
+                    }
+                    break;
+
+                // shop
+                case ShopMenu shopMenu:
+                    {
+                        ISalable entry = shopMenu.hoveredItem;
+                        if (entry is Item item)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                        if (entry is MovieConcession snack)
+                            return this.Codex.GetMovieSnack(snack);
+                    }
+                    break;
+
+                // toolbar
+                case Toolbar _:
+                    {
+                        // find hovered slot
+                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (hoveredSlot == null)
+                            return null;
+
+                        // get inventory index
+                        int index = slots.IndexOf(hoveredSlot);
+                        if (index < 0 || index > Game1.player.Items.Count - 1)
+                            return null;
+
+                        // get hovered item
+                        Item item = Game1.player.Items[index];
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                    }
+                    break;
+
+                // by convention (for mod support)
+                default:
+                    {
+                        Item item = this.Reflection.GetField<Item>(menu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                    }
+                    break;
             }
 
             return null;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the tile the player is facing.</summary>
+        /// <param name="player">The player to check.</param>
+        private Vector2 GetFacingTile(Farmer player)
+        {
+            Vector2 tile = player.getTileLocation();
+            FacingDirection direction = (FacingDirection)player.FacingDirection;
+            switch (direction)
+            {
+                case FacingDirection.Up:
+                    return tile + new Vector2(0, -1);
+                case FacingDirection.Right:
+                    return tile + new Vector2(1, 0);
+                case FacingDirection.Down:
+                    return tile + new Vector2(0, 1);
+                case FacingDirection.Left:
+                    return tile + new Vector2(-1, 0);
+                default:
+                    throw new NotSupportedException($"Unknown facing direction {direction}");
+            }
         }
     }
 }

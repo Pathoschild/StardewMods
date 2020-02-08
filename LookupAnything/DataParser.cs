@@ -1,72 +1,274 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Data;
-using Pathoschild.LookupAnything.Framework.Models;
+using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Models;
+using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.FishPond;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
+using SFarmer = StardewValley.Farmer;
+using SObject = StardewValley.Object;
 
-namespace Pathoschild.LookupAnything
+namespace Pathoschild.Stardew.LookupAnything
 {
     /// <summary>Parses the raw game data into usable models. These may be expensive operations and should be cached.</summary>
     internal class DataParser
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        private readonly GameHelper GameHelper;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        public DataParser(GameHelper gameHelper)
+        {
+            this.GameHelper = gameHelper;
+        }
+
+        /// <summary>Read parsed data about the Community Center bundles.</summary>
+        /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
+        public IEnumerable<BundleModel> GetBundles()
+        {
+            IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Bundles");
+            foreach (var entry in data)
+            {
+                // parse key
+                string[] keyParts = entry.Key.Split('/');
+                string area = keyParts[0];
+                int id = int.Parse(keyParts[1]);
+
+                // parse bundle info
+                string[] valueParts = entry.Value.Split('/');
+                string name = valueParts[0];
+                string reward = valueParts[1];
+                string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
+                    ? name // field isn't present in English
+                    : valueParts.Last(); // number of fields varies, but display name is always last
+
+                // parse ingredients
+                List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
+                string[] ingredientData = valueParts[2].Split(' ');
+                for (int i = 0; i < ingredientData.Length; i += 3)
+                {
+                    int index = i / 3;
+                    int itemID = int.Parse(ingredientData[i]);
+                    int stack = int.Parse(ingredientData[i + 1]);
+                    ItemQuality quality = (ItemQuality)int.Parse(ingredientData[i + 2]);
+                    ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
+                }
+
+                // create bundle
+                yield return new BundleModel(id, name, displayName, area, reward, ingredients);
+            }
+        }
+
+        /// <summary>Read parsed data about a fish pond's population gates for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondPopulationGateData> GetFishPondPopulationGates(FishPondData data)
+        {
+            foreach (var gate in data.PopulationGates)
+            {
+                // get required items
+                FishPondPopulationGateQuestItemData[] questItems = gate.Value
+                    .Select(entry =>
+                    {
+                        // parse ID
+                        string[] parts = entry.Split(' ');
+                        int id;
+                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out id))
+                            return null;
+
+                        // parse counts
+                        int minCount = 1;
+                        int maxCount = 1;
+                        if (parts.Length >= 2)
+                            int.TryParse(parts[1], out minCount);
+                        if (parts.Length >= 3)
+                            int.TryParse(parts[1], out maxCount);
+
+                        // normalize counts
+                        minCount = Math.Max(1, minCount);
+                        maxCount = Math.Max(1, maxCount);
+                        if (maxCount < minCount)
+                            maxCount = minCount;
+
+                        // build entry
+                        return new FishPondPopulationGateQuestItemData(id, minCount, maxCount);
+                    })
+                    .Where(p => p != null)
+                    .ToArray();
+
+                // build entry
+                yield return new FishPondPopulationGateData(gate.Key, questItems);
+            }
+        }
+
+        /// <summary>Read parsed data about a fish pond's item drops for a specific fish.</summary>
+        /// <param name="data">The fish pond data.</param>
+        public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
+        {
+            foreach (FishPondReward drop in data.ProducedItems)
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+        }
+
+        /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
+        /// <param name="fishID">The fish ID.</param>
+        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
+        public FishSpawnData GetFishSpawnRules(int fishID, Metadata metadata)
+        {
+            // get raw fish data
+            string[] fishFields;
+            {
+                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string rawData))
+                    return null;
+                fishFields = rawData.Split('/');
+                if (fishFields.Length < 13)
+                    return null;
+            }
+
+            // parse location data
+            var locations = new List<FishSpawnLocationData>();
+            foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
+            {
+                if (entry.Key == "Temp" || entry.Key == "fishingGame")
+                    continue; // ignore event data
+
+                string locationName = entry.Key;
+                List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
+
+                // get locations
+                string[] locationFields = entry.Value.Split('/');
+                for (int s = 4; s <= 7; s++)
+                {
+                    string[] seasonFields = locationFields[s].Split(' ');
+                    string season = s switch
+                    {
+                        4 => "spring",
+                        5 => "summer",
+                        6 => "fall",
+                        7 => "winter",
+                        _ => throw new NotSupportedException() // should never happen
+                    };
+
+                    for (int i = 0, last = seasonFields.Length + 1; i + 1 < last; i += 2)
+                    {
+                        if (!int.TryParse(seasonFields[i], out int curFishID) || curFishID != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
+                            continue;
+
+                        curLocations.Add(new FishSpawnLocationData(locationName, areaID, new[] { season }));
+                    }
+                }
+
+                // combine seasons for same area
+                locations.AddRange(
+                    from areaGroup in curLocations.GroupBy(p => p.Area)
+                    let seasons = areaGroup.SelectMany(p => p.Seasons).Distinct().ToArray()
+                    select new FishSpawnLocationData(locationName, areaGroup.Key, seasons)
+                );
+            }
+
+            // parse fish data
+            var timesOfDay = new List<FishSpawnTimeOfDayData>();
+            FishSpawnWeather weather = FishSpawnWeather.Both;
+            int minFishingLevel = 0;
+            bool isUnique = false;
+            if (locations.Any()) // ignore default spawn criteria if the fish doesn't spawn naturally; in that case it should be specified explicitly in custom data below (if any)
+            {
+                // times of day
+                string[] timeFields = fishFields[5].Split(' ');
+                for (int i = 0, last = timeFields.Length + 1; i + 1 < last; i += 2)
+                {
+                    if (int.TryParse(timeFields[i], out int minTime) && int.TryParse(timeFields[i + 1], out int maxTime))
+                        timesOfDay.Add(new FishSpawnTimeOfDayData(minTime, maxTime));
+                }
+
+                // weather
+                if (!Enum.TryParse(fishFields[7], true, out weather))
+                    weather = FishSpawnWeather.Both;
+
+                // min fishing level
+                if (!int.TryParse(fishFields[12], out minFishingLevel))
+                    minFishingLevel = 0;
+            }
+
+            // read custom data
+            if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData customRules))
+            {
+                if (customRules.MinFishingLevel > minFishingLevel)
+                    minFishingLevel = customRules.MinFishingLevel;
+
+                if (customRules.Weather != FishSpawnWeather.Unknown)
+                    weather = customRules.Weather;
+
+                isUnique = isUnique || customRules.IsUnique;
+
+                if (customRules.TimesOfDay != null)
+                    timesOfDay.AddRange(customRules.TimesOfDay);
+
+                if (customRules.Locations != null)
+                    locations.AddRange(customRules.Locations);
+            }
+
+
+            // build model
+            return new FishSpawnData(
+                fishID: fishID,
+                locations: locations.ToArray(),
+                timesOfDay: timesOfDay.ToArray(),
+                weather: weather,
+                minFishingLevel: minFishingLevel,
+                isUnique: isUnique
+            );
+        }
+
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
+        /// <param name="friendship">The current friendship data.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForVillager(Farmer player, NPC npc, Metadata metadata)
+        public FriendshipModel GetFriendshipForVillager(SFarmer player, NPC npc, Friendship friendship, Metadata metadata)
         {
-            return new FriendshipModel(player, npc, metadata.Constants);
+            return new FriendshipModel(player, npc, friendship, metadata.Constants);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="pet">The pet.</param>
-        public static FriendshipModel GetFriendshipForPet(Farmer player, Pet pet)
+        public FriendshipModel GetFriendshipForPet(SFarmer player, Pet pet)
         {
-            return new FriendshipModel(pet.friendshipTowardFarmer, Pet.maxFriendship / 10, Pet.maxFriendship);
+            return new FriendshipModel(pet.friendshipTowardFarmer.Value, Pet.maxFriendship / 10, Pet.maxFriendship);
         }
 
         /// <summary>Get parsed data about the friendship between a player and NPC.</summary>
         /// <param name="player">The player.</param>
         /// <param name="animal">The farm animal.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static FriendshipModel GetFriendshipForAnimal(Farmer player, FarmAnimal animal, Metadata metadata)
+        public FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
         {
-            return new FriendshipModel(animal.friendshipTowardFarmer, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
+            return new FriendshipModel(animal.friendshipTowardFarmer.Value, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
         }
 
-        /// <summary>Parse gift tastes.</summary>
+        /// <summary>Get the raw gift tastes from the underlying data.</summary>
         /// <param name="objects">The game's object data.</param>
-        /// <remarks>
-        /// Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.
-        /// The game decides a villager's gift taste using a complicated algorithm which boils down to the first match out of:
-        ///   1. A villager's personal taste by item ID.
-        ///   2. A universal taste by item ID.
-        ///   3. A villager's personal taste by category.
-        ///   4. A universal taste by category (if not neutral).
-        ///   5. If the item's edibility is less than 0 (but not -300), hate.
-        ///   6. If the item's price is less than 20, dislike.
-        ///   7. If the item is an artifact...
-        ///      7a. and the NPC is Penny, like.
-        ///      7b. else neutral.
-        /// 
-        /// For each rule, their tastes are checked in this order: love, hate, like, dislike, or
-        /// neutral. (That is, if an NPC both loves and hates an item, love wins.)
-        /// </remarks>
-        public static IEnumerable<GiftTasteModel> GetGiftTastes(ObjectModel[] objects)
+        /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
+        public IEnumerable<GiftTasteEntry> GetGiftTastes(ObjectModel[] objects)
         {
             // extract raw values
-            string[] giftableVillagers;
-            var tastes = new List<RawGiftTasteModel>();
+            var tastes = new List<GiftTasteEntry>();
             {
                 // define data schema
                 var universal = new Dictionary<string, GiftTaste>
@@ -87,11 +289,8 @@ namespace Pathoschild.LookupAnything
                     [9] = GiftTaste.Neutral
                 };
 
-                // get data
+                // read data
                 IDictionary<string, string> data = Game1.NPCGiftTastes;
-                giftableVillagers = data.Keys.Except(universal.Keys).ToArray();
-
-                // extract raw tastes
                 foreach (string villager in data.Keys)
                 {
                     string tasteStr = data[villager];
@@ -100,8 +299,8 @@ namespace Pathoschild.LookupAnything
                     {
                         GiftTaste taste = universal[villager];
                         tastes.AddRange(
-                            from refID in tasteStr.Split(' ')
-                            select new RawGiftTasteModel(taste, "*", int.Parse(refID), isUniversal: true)
+                            from refID in tasteStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                            select new GiftTasteEntry(taste, "*", int.Parse(refID), isUniversal: true)
                         );
                     }
                     else
@@ -112,116 +311,23 @@ namespace Pathoschild.LookupAnything
                             tastes.AddRange(
                                 from refID in
                                     personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                select new RawGiftTasteModel(taste.Value, villager, int.Parse(refID))
+                                select new GiftTasteEntry(taste.Value, villager, int.Parse(refID))
                             );
                         }
                     }
                 }
             }
 
-            // order by precedence (lower is better)
-            tastes = tastes
-                .OrderBy(entry =>
-                {
-                    bool isPersonal = !entry.IsUniversal;
-                    bool isSpecific = !entry.IsCategory;
-
-                    // precedence between preferences
-                    int precedence;
-                    switch (entry.Taste)
-                    {
-                        case GiftTaste.Love:
-                            precedence = 1;
-                            break;
-                        case GiftTaste.Hate:
-                            precedence = 2;
-                            break;
-                        case GiftTaste.Like:
-                            precedence = 3;
-                            break;
-                        case GiftTaste.Dislike:
-                            precedence = 4;
-                            break;
-                        default:
-                            precedence = 5;
-                            break;
-                    }
-
-                    // personal taste by item ID
-                    if (isPersonal && isSpecific)
-                        return 10 + precedence;
-
-                    // else universal taste by item ID
-                    if (entry.IsUniversal && isSpecific)
-                        return 20 + precedence;
-
-                    // else personal taste by category
-                    if (isPersonal)
-                        return 30 + precedence;
-
-                    // else universal taste by category (if not neutral)
-                    if (entry.IsUniversal && entry.Taste != GiftTaste.Neutral)
-                        return 40 + precedence;
-
-                    // else
-                    return 50 + precedence;
-                })
-                .ToList();
-
-            // get effective tastes
-            {
-                // get item lookups
-                IDictionary<int, ObjectModel> objectsByID = objects.ToDictionary(p => p.ParentSpriteIndex);
-                IDictionary<int, int[]> objectsByCategory =
-                    (
-                        from entry in objects
-                        where entry.Category < 0
-                        group entry by entry.Category into items
-                        select new { Category = items.Key, Items = items.Select(item => item.ParentSpriteIndex).ToArray() }
-                    )
-                    .ToDictionary(p => p.Category, p => p.Items);
-
-                // get tastes by precedence
-                IDictionary<string, HashSet<int>> seenItemIDs = giftableVillagers.ToDictionary(name => name, name => new HashSet<int>());
-                foreach (RawGiftTasteModel entry in tastes)
-                {
-                    // ignore nonexistent items
-                    if (entry.IsCategory && !objectsByCategory.ContainsKey(entry.RefID))
-                        continue;
-                    if (!entry.IsCategory && !objectsByID.ContainsKey(entry.RefID))
-                        continue;
-
-                    // get item IDs
-                    int[] itemIDs = entry.IsCategory
-                        ? objectsByCategory[entry.RefID]
-                        : new[] { entry.RefID };
-
-                    // get affected villagers
-                    string[] villagers = entry.IsUniversal
-                        ? giftableVillagers
-                        : new[] { entry.Villager };
-
-                    // yield if no conflict
-                    foreach (string villager in villagers)
-                    {
-                        foreach (int itemID in itemIDs)
-                        {
-                            // ignore if conflicts with a preceding taste
-                            if (seenItemIDs[villager].Contains(itemID))
-                                continue;
-                            seenItemIDs[villager].Add(itemID);
-
-                            // yield taste
-                            yield return new GiftTasteModel(entry.Taste, villager, itemID);
-                        }
-                    }
-                }
-            }
+            // get sanitized data
+            HashSet<int> validItemIDs = new HashSet<int>(objects.Select(p => p.ParentSpriteIndex));
+            HashSet<int> validCategories = new HashSet<int>(objects.Where(p => p.Category != 0).Select(p => p.Category));
+            return tastes
+                .Where(model => validCategories.Contains(model.RefID) || validItemIDs.Contains(model.RefID)); // ignore invalid entries
         }
 
         /// <summary>Parse monster data.</summary>
         /// <remarks>Reverse engineered from <see cref="StardewValley.Monsters.Monster.parseMonsterInfo"/>, <see cref="GameLocation.monsterDrop"/>, and the <see cref="Debris"/> constructor.</remarks>
-        public static IEnumerable<MonsterData> GetMonsters()
+        public IEnumerable<MonsterData> GetMonsters()
         {
             Dictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Monsters");
 
@@ -262,29 +368,29 @@ namespace Pathoschild.LookupAnything
 
                     // some item IDs have special meaning
                     if (itemID == Debris.copperDebris)
-                        itemID = Object.copper;
+                        itemID = SObject.copper;
                     else if (itemID == Debris.ironDebris)
-                        itemID = Object.iron;
+                        itemID = SObject.iron;
                     else if (itemID == Debris.coalDebris)
-                        itemID = Object.coal;
+                        itemID = SObject.coal;
                     else if (itemID == Debris.goldDebris)
-                        itemID = Object.gold;
+                        itemID = SObject.gold;
                     else if (itemID == Debris.coinsDebris)
                         continue; // no drop
                     else if (itemID == Debris.iridiumDebris)
-                        itemID = Object.iridium;
+                        itemID = SObject.iridium;
                     else if (itemID == Debris.woodDebris)
-                        itemID = Object.wood;
+                        itemID = SObject.wood;
                     else if (itemID == Debris.stoneDebris)
-                        itemID = Object.stone;
+                        itemID = SObject.stone;
 
                     // add drop
-                    drops.Add(new ItemDropData(itemID, maxDrops, chance));
+                    drops.Add(new ItemDropData(itemID, 1, maxDrops, chance));
                 }
                 if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
                 {
-                    drops.Add(new ItemDropData(Object.diamondIndex, 1, 0.008f));
-                    drops.Add(new ItemDropData(Object.prismaticShardIndex, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.diamondIndex, 1, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.prismaticShardIndex, 1, 1, 0.008f));
                 }
 
                 // yield data
@@ -306,77 +412,161 @@ namespace Pathoschild.LookupAnything
         }
 
         /// <summary>Parse gift tastes.</summary>
-        /// <remarks>Derived from the <see cref="StardewValley.CraftingRecipe.createItem"/>.</remarks>
-        public static IEnumerable<ObjectModel> GetObjects()
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        /// <remarks>Derived from the <see cref="CraftingRecipe.createItem"/>.</remarks>
+        public IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
         {
-            Dictionary<int, string> data = Game1.objectInformation;
+            IDictionary<int, string> data = Game1.objectInformation;
 
             foreach (var pair in data)
             {
                 int parentSpriteIndex = pair.Key;
-                string[] fields = pair.Value.Split('/');
 
-                // ring
-                if (parentSpriteIndex >= Ring.ringLowerIndexRange && parentSpriteIndex <= Ring.ringUpperIndexRange)
+                ObjectModel model;
+                try
                 {
-                    yield return new ObjectModel(
-                        parentSpriteIndex: parentSpriteIndex,
-                        name: fields[0],
-                        description: fields[1],
-                        price: int.Parse(fields[2]),
-                        edibility: -300,
-                        type: fields[3],
-                        category: Object.ringCategory
-                    );
-                }
 
-                // any other object
-                else
+                    string[] fields = pair.Value.Split('/');
+
+                    // ring
+                    if (parentSpriteIndex >= Ring.ringLowerIndexRange && parentSpriteIndex <= Ring.ringUpperIndexRange)
+                    {
+                        model = new ObjectModel(
+                            parentSpriteIndex: parentSpriteIndex,
+                            name: fields[0],
+                            description: fields[1],
+                            price: int.Parse(fields[2]),
+                            edibility: -300,
+                            type: fields[3],
+                            category: SObject.ringCategory
+                        );
+                    }
+
+                    // any other object
+                    else
+                    {
+                        string name = fields[SObject.objectInfoNameIndex];
+                        int price = int.Parse(fields[SObject.objectInfoPriceIndex]);
+                        int edibility = int.Parse(fields[SObject.objectInfoEdibilityIndex]);
+                        string description = fields[SObject.objectInfoDescriptionIndex];
+
+                        // type & category
+                        string[] typeParts = fields[SObject.objectInfoTypeIndex].Split(' ');
+                        string typeName = typeParts[0];
+                        int category = 0;
+                        if (typeParts.Length > 1)
+                            category = int.Parse(typeParts[1]);
+
+                        model = new ObjectModel(parentSpriteIndex, name, description, price, edibility, typeName, category);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    string name = fields[Object.objectInfoNameIndex];
-                    int price = int.Parse(fields[Object.objectInfoPriceIndex]);
-                    int edibility = int.Parse(fields[Object.objectInfoEdibilityIndex]);
-                    string description = fields[Object.objectInfoDescriptionIndex];
-
-                    // type & category
-                    string[] typeParts = fields[Object.objectTypeIndex].Split(' ');
-                    string typeName = typeParts[0];
-                    int category = 0;
-                    if (typeParts.Length > 1)
-                        category = int.Parse(typeParts[1]);
-
-                    yield return new ObjectModel(parentSpriteIndex, name, description, price, edibility, typeName, category);
+                    monitor.Log($"Couldn't parse object #{parentSpriteIndex} from Content\\Data\\ObjectInformation.xnb due to an invalid format.\nObject data: {pair.Value}\nError: {ex}", LogLevel.Warn);
+                    continue;
                 }
+                yield return model;
             }
         }
 
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public static RecipeModel[] GetRecipes(Metadata metadata)
+        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
+        /// <param name="monitor">The monitor with which to log errors.</param>
+        public RecipeModel[] GetRecipes(Metadata metadata, IReflectionHelper reflectionHelper, IMonitor monitor)
         {
             List<RecipeModel> recipes = new List<RecipeModel>();
 
-            // cooking recipes
+            // cooking/crafting recipes
+            var craftingRecipes =
+                (from pair in CraftingRecipe.cookingRecipes select new { pair.Key, pair.Value, IsCookingRecipe = true })
+                .Concat(from pair in CraftingRecipe.craftingRecipes select new { pair.Key, pair.Value, IsCookingRecipe = false });
+            foreach (var entry in craftingRecipes)
+            {
+                try
+                {
+                    var recipe = new CraftingRecipe(entry.Key, entry.IsCookingRecipe);
+                    recipes.Add(new RecipeModel(recipe, reflectionHelper));
+                }
+                catch (Exception ex)
+                {
+                    monitor.Log($"Couldn't parse {(entry.IsCookingRecipe ? "cooking" : "crafting")} recipe '{entry.Key}' due to an invalid format.\nRecipe data: '{entry.Value}'\nError: {ex}", LogLevel.Warn);
+                }
+            }
+
+            // machine recipes
             recipes.AddRange(
-                from entry in CraftingRecipe.cookingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: true)
-                select new RecipeModel(recipe)
+                from entry in metadata.MachineRecipes
+                let machine = new SObject(Vector2.Zero, entry.MachineID)
+                select new RecipeModel(
+                    key: null,
+                    type: RecipeType.MachineInput,
+                    displayType: machine.DisplayName,
+                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p)),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
+                    mustBeLearned: false,
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
+                    outputItemIndex: entry.Output,
+                    minOutput: entry.MinOutput,
+                    maxOutput: entry.MaxOutput,
+                    outputChance: entry.OutputChance,
+                    isForMachine: p => p is SObject obj && obj.ParentSheetIndex == entry.MachineID
+                )
             );
 
-            // crafting recipes
+            // building recipes
             recipes.AddRange(
-                from entry in CraftingRecipe.craftingRecipes
-                let recipe = new CraftingRecipe(entry.Key, isCookingRecipe: false)
-                select new RecipeModel(recipe)
+                from entry in metadata.BuildingRecipes
+                let building = new BluePrint(entry.BuildingKey)
+                select new RecipeModel(
+                    key: null,
+                    type: RecipeType.BuildingBlueprint,
+                    displayType: building.displayName,
+                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
+                    mustBeLearned: false,
+                    outputItemIndex: entry.Output,
+                    minOutput: entry.OutputCount ?? 1,
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
+                    isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
+                )
             );
 
-            // recipes not available from game data
-            recipes.AddRange(
-                from entry in metadata.Recipes
-                select new RecipeModel(entry.Name, entry.Type, entry.Ingredients, () => GameHelper.GetObjectBySpriteIndex(entry.Output), false, entry.ExceptIngredients)
-            );
+            return recipes.ToArray();
+        }
 
-            return recipes.OrderBy(p => p.Name).ToArray();
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Create a custom recipe output.</summary>
+        /// <param name="inputID">The input ingredient ID.</param>
+        /// <param name="outputID">The output item ID.</param>
+        private SObject CreateRecipeItem(int? inputID, int outputID)
+        {
+            SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
+            if (inputID != null)
+            {
+                switch (outputID)
+                {
+                    case 342:
+                        item.preserve.Value = SObject.PreserveType.Pickle;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 344:
+                        item.preserve.Value = SObject.PreserveType.Jelly;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 348:
+                        item.preserve.Value = SObject.PreserveType.Wine;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                    case 350:
+                        item.preserve.Value = SObject.PreserveType.Juice;
+                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        break;
+                }
+            }
+            return item;
         }
     }
 }

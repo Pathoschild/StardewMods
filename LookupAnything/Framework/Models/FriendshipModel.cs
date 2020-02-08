@@ -1,9 +1,10 @@
-using Pathoschild.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
+using SFarmer = StardewValley.Farmer;
 
-namespace Pathoschild.LookupAnything.Framework.Models
+namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
-    /// <summary>Summarises details about the friendship between an NPC and a player.</summary>
+    /// <summary>Summarizes details about the friendship between an NPC and a player.</summary>
     internal class FriendshipModel
     {
         /*********
@@ -15,14 +16,35 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <summary>Whether the player can date the NPC.</summary>
         public bool CanDate { get; set; }
 
+        /// <summary>Whether the NPC is eligible to be a housemate, rather than spouse.</summary>
+        public bool CanHousemate { get; set; }
+
         /// <summary>Whether the NPC is dating the player.</summary>
         public bool IsDating { get; set; }
 
         /// <summary>Whether the NPC is married to the player.</summary>
         public bool IsSpouse { get; set; }
 
+        /// <summary>Whether the NPC is the player's housemate.</summary>
+        public bool IsHousemate { get; set; }
+
+        /// <summary>Whether the NPC is divorced from the player.</summary>
+        public bool IsDivorced { get; set; }
+
         /// <summary>Whether the NPC has a stardrop to give to the player once they reach enough points.</summary>
         public bool HasStardrop { get; set; }
+
+        /// <summary>Whether the player talked to them today.</summary>
+        public bool TalkedToday { get; set; }
+
+        /// <summary>The number of gifts the player gave the NPC today.</summary>
+        public int GiftsToday { get; set; }
+
+        /// <summary>The number of gifts the player gave the NPC this week.</summary>
+        public int GiftsThisWeek { get; set; }
+
+        /// <summary>The current friendship status.</summary>
+        public FriendshipStatus Status { get; set; }
 
         /****
         ** Points
@@ -63,21 +85,29 @@ namespace Pathoschild.LookupAnything.Framework.Models
         /// <param name="player">The player.</param>
         /// <param name="npc">The NPC.</param>
         /// <param name="constants">The constant assumptions.</param>
-        public FriendshipModel(Farmer player, NPC npc, ConstantData constants)
+        /// <param name="friendship">The current friendship data.</param>
+        public FriendshipModel(SFarmer player, NPC npc, Friendship friendship, ConstantData constants)
         {
             // flags
-            this.CanDate = npc.datable;
-            this.IsDating = npc.datingFarmer;
-            this.IsSpouse = player.spouse == npc.name;
+            this.CanDate = npc.datable.Value;
+            this.IsDating = friendship.IsDating();
+            this.CanHousemate = npc.Name == "Krobus";
+            this.IsSpouse = friendship.IsMarried() && !this.CanHousemate;
+            this.IsHousemate = friendship.IsMarried() && this.CanHousemate;
+            this.IsDivorced = friendship.IsDivorced();
+            this.Status = friendship.Status;
+            this.TalkedToday = friendship.TalkedToToday;
+            this.GiftsToday = friendship.GiftsToday;
+            this.GiftsThisWeek = friendship.GiftsThisWeek;
 
             // points
-            this.MaxPoints = this.IsSpouse ? constants.SpouseMaxFriendship : NPC.maxFriendshipPoints;
-            this.Points = player.friendships[npc.name][0];
+            this.MaxPoints = this.IsSpouse || this.IsHousemate ? constants.SpouseMaxFriendship : NPC.maxFriendshipPoints;
+            this.Points = friendship.Points;
             this.PointsPerLevel = NPC.friendshipPointsPerHeartLevel;
             this.FilledHearts = this.Points / NPC.friendshipPointsPerHeartLevel;
             this.LockedHearts = this.CanDate && !this.IsDating ? constants.DatingHearts : 0;
             this.EmptyHearts = this.MaxPoints / NPC.friendshipPointsPerHeartLevel - this.FilledHearts - this.LockedHearts;
-            if (this.IsSpouse)
+            if (this.IsSpouse || this.IsHousemate)
             {
                 this.StardropPoints = constants.SpouseFriendshipForStardrop;
                 this.HasStardrop = !player.mailReceived.Contains(Constants.Constant.MailLetters.ReceivedSpouseStardrop);
@@ -97,7 +127,7 @@ namespace Pathoschild.LookupAnything.Framework.Models
             this.EmptyHearts = this.MaxPoints / pointsPerLevel - this.FilledHearts;
         }
 
-        /// <summary>Get the number of points to the next heart level or startdrop.</summary>
+        /// <summary>Get the number of points to the next heart level or stardrop.</summary>
         public int GetPointsToNext()
         {
             if (this.Points < this.MaxPoints)

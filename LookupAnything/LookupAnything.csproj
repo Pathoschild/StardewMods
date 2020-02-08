@@ -1,159 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A9C0811-B2D2-474A-A84C-DDEB16206A62}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Pathoschild.LookupAnything</RootNamespace>
     <AssemblyName>LookupAnything</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <Version>1.25.2</Version>
+    <RootNamespace>Pathoschild.Stardew.LookupAnything</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GamePath>C:\Program Files (x86)\GalaxyClient\Games\Stardew Valley</GamePath>
-    <GamePath Condition="!Exists('$(GamePath)')">C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley</GamePath>
-    <StartAction>Program</StartAction>
-    <StartProgram>$(GamePath)\StardewModdingAPI.exe</StartProgram>
-    <StartWorkingDirectory>$(GamePath)</StartWorkingDirectory>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Stardew Valley">
-      <HintPath>$(GamePath)\Stardew Valley.exe</HintPath>
-    </Reference>
-    <Reference Include="StardewModdingAPI">
-      <HintPath>$(GamePath)\StardewModdingAPI.exe</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="xTile, Version=2.0.4.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(GamePath)\xTile.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Common\CommonHelper.cs" />
-    <Compile Include="Components\DebugInterface.cs" />
-    <Compile Include="Components\SearchMenu.cs" />
-    <Compile Include="Components\SearchResultComponent.cs" />
-    <Compile Include="Components\SearchTextBox.cs" />
-    <Compile Include="Framework\Constants\FenceType.cs" />
-    <Compile Include="Framework\Constants\FruitTreeGrowthStage.cs" />
-    <Compile Include="DataParser.cs" />
-    <Compile Include="Framework\Models\FriendshipModel.cs" />
-    <Compile Include="Framework\Logging\CumulativeLog.cs" />
-    <Compile Include="Framework\Data\ConstantData.cs" />
-    <Compile Include="Framework\Data\ObjectContext.cs" />
-    <Compile Include="Framework\Data\ObjectData.cs" />
-    <Compile Include="Framework\Data\ObjectSpriteSheet.cs" />
-    <Compile Include="Framework\Data\RecipeData.cs" />
-    <Compile Include="Framework\Fields\ItemIconField.cs" />
-    <Compile Include="Framework\Fields\ItemDropListField.cs" />
-    <Compile Include="Framework\Fields\SkillBarField.cs" />
-    <Compile Include="Common\GitVersion.cs" />
-    <Compile Include="Framework\InputMapConfiguration.cs" />
-    <Compile Include="Framework\Logging\DisabledLog.cs" />
-    <Compile Include="Framework\Logging\ICumulativeLog.cs" />
-    <Compile Include="Framework\Models\GiftTasteModel.cs" />
-    <Compile Include="Framework\Models\ObjectModel.cs" />
-    <Compile Include="Framework\Models\RawGiftTasteModel.cs" />
-    <Compile Include="Framework\Subjects\FarmerSubject.cs" />
-    <Compile Include="Framework\Targets\CharacterTarget.cs" />
-    <Compile Include="Framework\Targets\CropTarget.cs" />
-    <Compile Include="Framework\Targets\FarmAnimalTarget.cs" />
-    <Compile Include="Framework\Targets\FruitTreeTarget.cs" />
-    <Compile Include="Framework\Targets\ITarget.cs" />
-    <Compile Include="Framework\RawModConfig.cs" />
-    <Compile Include="Framework\Constants\Constant.cs" />
-    <Compile Include="Framework\Data\AdventureGuildQuestData.cs" />
-    <Compile Include="Framework\Data\CharacterData.cs" />
-    <Compile Include="Framework\Fields\PercentageBarField.cs" />
-    <Compile Include="Framework\Fields\RecipesForIngredientField.cs" />
-    <Compile Include="Framework\Metadata.cs" />
-    <Compile Include="Framework\ModConfig.cs" />
-    <Compile Include="Framework\Subjects\FarmAnimalSubject.cs" />
-    <Compile Include="Framework\Subjects\FruitTreeSubject.cs" />
-    <Compile Include="Framework\Targets\ObjectTarget.cs" />
-    <Compile Include="Framework\Targets\FarmerTarget.cs" />
-    <Compile Include="Framework\Targets\TreeTarget.cs" />
-    <Compile Include="Framework\Targets\UnknownTarget.cs" />
-    <Compile Include="Framework\TargetType.cs" />
-    <Compile Include="Common\UpdateHelper.cs" />
-    <Compile Include="GameHelper.cs" />
-    <Compile Include="Components\LookupMenu.cs" />
-    <Compile Include="Components\Sprites.cs" />
-    <Compile Include="Framework\Constants\ItemQuality.cs" />
-    <Compile Include="Framework\Constants\WildTreeGrowthStage.cs" />
-    <Compile Include="Framework\Constants\TreeType.cs" />
-    <Compile Include="Framework\Fields\GenericField.cs" />
-    <Compile Include="Framework\Fields\CharacterFriendshipField.cs" />
-    <Compile Include="Framework\Fields\CharacterGiftTastesField.cs" />
-    <Compile Include="Framework\Fields\ItemGiftTastesField.cs" />
-    <Compile Include="Framework\Fields\SaleValueField.cs" />
-    <Compile Include="Framework\Constants\GiftTaste.cs" />
-    <Compile Include="Framework\TargetFactory.cs" />
-    <Compile Include="Framework\Subjects\BaseSubject.cs" />
-    <Compile Include="Framework\Subjects\CharacterSubject.cs" />
-    <Compile Include="Framework\Subjects\TreeSubject.cs" />
-    <Compile Include="Framework\Fields\ICustomField.cs" />
-    <Compile Include="Framework\Subjects\ISubject.cs" />
-    <Compile Include="Framework\Subjects\ItemSubject.cs" />
-    <Compile Include="LookupAnythingMod.cs" />
-    <Compile Include="Framework\Data\MonsterData.cs" />
-    <Compile Include="Framework\Data\ItemDropData.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Framework\Targets\GenericTarget.cs" />
-    <Compile Include="Framework\Models\RecipeModel.cs" />
-    <Compile Include="Framework\RecipeType.cs" />
-    <Compile Include="DrawHelper.cs" />
-    <Compile Include="Framework\SearchResult.cs" />
+    <None Update="data.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="data.json" />
-    <None Include="manifest.json" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-      set modDir=$(GamePath)\Mods\LookupAnything
-      if not exist "%modDir%" (mkdir "%modDir%")
-      copy "$(TargetDir)\$(TargetName).dll" "%modDir%\$(TargetName).dll"
-      copy "$(TargetDir)\$(TargetName).pdb" "%modDir%\$(TargetName).pdb"
-      copy "$(ProjectDir)manifest.json" "%modDir%\manifest.json"
-      copy "$(ProjectDir)data.json" "%modDir%\data.json"
-    </PostBuildEvent>
-  </PropertyGroup>
+
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="$(SolutionDir)\common.targets" />
+
 </Project>

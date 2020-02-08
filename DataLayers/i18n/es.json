@@ -1,0 +1,68 @@
+{
+    // accessible
+    "accessible.name": "Accesibilidad",
+    "accessible.clear": "Libre",
+    "accessible.occupied": "Ocupado",
+    "accessible.impassable": "Bloqueado",
+    "accessible.warp": "Portal",
+
+    // buildable
+    "buildable.name": "Construcciones",
+    "buildable.buildable": "Se puede construir aquí",
+    "buildable.occupied": "Ocupado",
+    "buildable.not-buildable": "No se puede construir aquí",
+
+    // coverage: bee houses
+    "bee-houses.name": "Cobertura: Colmenas",
+    "bee-houses.range": "Rango Flores",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Cobertura: Cabaña Junimo",
+    "junimo-huts.can-harvest": "Puede Cosechar",
+    "junimo-huts.cannot-harvest": "No Puede Cosechar",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Cobertura: Espantapájaros",
+    "scarecrows.protected": "Protegido",
+    "scarecrows.exposed": "Expuesto",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Cobertura: Aspersores",
+    "sprinklers.covered": "Cubierto",
+    "sprinklers.dry-crops": "Cultivos Secos",
+
+    // crops: harvest
+    "crop-harvest.name": "Cultivos: Listos para cosechar",
+    "crop-harvest.ready": "Listo",
+    "crop-harvest.not-ready": "No Listo Aún",
+    "crop-harvest.not-enough-time": "Tiempo Insuficiente",
+
+    // crops: watered
+    "crop-water.name": "Cultivos: Regados",
+    "crop-water.watered": "Cultivo Regado",
+    "crop-water.dry": "Cultivo Seco",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Cultivos: Agua para arrozales",
+    "crop-paddy-water.in-range": "Cerca del agua",
+    "crop-paddy-water.not-in-range": "Tierra Seca",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Cultivos: Fertilizados",
+    "crop-fertilizer.fertilizer": "Fertilizante",
+    "crop-fertilizer.retaining-soil": "Hidrogel",
+    "crop-fertilizer.speed-gro": "Acelerador",
+
+    // machine processing
+    "machines.name": "Procesamiento de las máquinas",
+    "machines.empty": "Vacío",
+    "machines.processing": "Procesando",
+    "machines.finished": "Finalizado",
+
+    // tillable
+    "tillable.name": "Tierra Cultivable",
+    "tillable.tillable": "Cultivable",
+    "tillable.tilled": "Tilled", // TODO
+    "tillable.occupied": "Ocupada",
+    "tillable.not-tillable": "No Cultivable"
+}

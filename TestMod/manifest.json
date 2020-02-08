@@ -1,0 +1,10 @@
+{
+    "Name": "Test Mod",
+    "Author": "Pathoschild",
+    "Version": "1.0.0",
+    "MinimumApiVersion": "2.9.1",
+    "Description": "A dev mod used for testing and troubleshooting.",
+    "UniqueID": "Pathoschild.TestMod",
+    "EntryDll": "TestMod.dll",
+    "UpdateKeys": []
+}

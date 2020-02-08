@@ -1,6 +1,4 @@
-using Microsoft.Xna.Framework.Input;
-
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>The parsed mod configuration.</summary>
     internal class ModConfig
@@ -8,25 +6,28 @@ namespace Pathoschild.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The keyboard input map.</summary>
-        public InputMapConfiguration<Keys> Keyboard { get; set; }
-
-        /// <summary>The controller input map.</summary>
-        public InputMapConfiguration<Buttons> Controller { get; set; }
-
         /// <summary>Whether to close the lookup UI when the lookup key is release.</summary>
         public bool HideOnKeyUp { get; set; }
 
-        /// <summary>The amount to scroll long content when pressing a 'scroll up' or 'scroll down' control.</summary>
-        public int ScrollAmount { get; set; }
+        /// <summary>The number of pixels to shift content on each up/down scroll.</summary>
+        public int ScrollAmount { get; set; } = 160;
 
-        /// <summary>Whether to check for updates to the mod.</summary>
-        public bool CheckForUpdates { get; set; }
+        /// <summary>Whether to hide content until the player has discovered it in-game (where applicable).</summary>
+        public bool ProgressionMode { get; set; } = false;
 
-        /// <summary>Whether to log debug metadata useful for troubleshooting.</summary>
-        public bool DebugLog { get; set; }
+        /// <summary>>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        public bool HighlightUnrevealedGiftTastes { get; set; } = false;
+
+        /// <summary>Whether to show advanced data mining fields.</summary>
+        public bool ShowDataMiningFields { get; set; }
+
+        /// <summary>Whether to include map tiles as lookup targets.</summary>
+        public bool EnableTileLookups { get; set; }
 
         /// <summary>Whether to suppress the game's debug mode (enabled by SMAPI when you press <c>F2</c>) to prevent accidental use, which may cause unintended consequences like skipping a season.</summary>
         public bool SuppressGameDebug { get; set; }
+
+        /// <summary>The key bindings.</summary>
+        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
     }
 }

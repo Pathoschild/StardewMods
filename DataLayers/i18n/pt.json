@@ -1,0 +1,68 @@
+{
+    // accessible
+    "accessible.name": "Acessibilidade",
+    "accessible.clear": "Limpo",
+    "accessible.occupied": "Ocupado",
+    "accessible.impassable": "Intransitável",
+    "accessible.warp": "Troca de mapa",
+
+    // buildable
+    "buildable.name": "Construções",
+    "buildable.buildable": "Pode construir",
+    "buildable.occupied": "Lugar ocupado",
+    "buildable.not-buildable": "Não pode construir",
+
+    // coverage: bee houses
+    "bee-houses.name": "Cobertura: Apiários",
+    "bee-houses.range": "Alcance das flores",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Cobertura: Cabana dos Junimos",
+    "junimo-huts.can-harvest": "Conseguem colher",
+    "junimo-huts.cannot-harvest": "Não conseguem colher",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Cobertura: Espantalhos",
+    "scarecrows.protected": "Plantação protegida",
+    "scarecrows.exposed": "Plantação exposta",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Cobertura: Aspersores",
+    "sprinklers.covered": "Plantação coberta",
+    "sprinklers.dry-crops": "Aspersores não cobrem",
+
+    // crops: harvest
+    "crop-harvest.name": "Plantações: Colheita",
+    "crop-harvest.ready": "Pode colher",
+    "crop-harvest.not-ready": "Ainda não cresceu totalmente",
+    "crop-harvest.not-enough-time": "Plantação morta/não cresce à tempo",
+
+    // crops: watered
+    "crop-water.name": "Plantações: Irrigação",
+    "crop-water.watered": "Plantação irrigada",
+    "crop-water.dry": "Plantação seca",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Plantações: Água para Arrozal",
+    "crop-paddy-water.in-range": "Próximo da água",
+    "crop-paddy-water.not-in-range": "Terra seca",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Plantações: Fertilizante Utilizado",
+    "crop-fertilizer.fertilizer": "Fertilizante",
+    "crop-fertilizer.retaining-soil": "Retentor de água",
+    "crop-fertilizer.speed-gro": "Acelerador de crescimento",
+
+    // machine processing
+    "machines.name": "Processamento de Máquina",
+    "machines.empty": "Máquina vazia",
+    "machines.processing": "Máquina processando",
+    "machines.finished": "Processo concluído",
+
+    // tillable
+    "tillable.name": "Arabilidade",
+    "tillable.tillable": "Arável",
+    "tillable.tilled": "Tilled", // TODO
+    "tillable.occupied": "Ocupado",
+    "tillable.not-tillable": "Não Arável"
+}

@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework.Constants;
-using Pathoschild.LookupAnything.Framework.Fields;
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.LookupAnything.Framework.Subjects
+namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 {
     /// <summary>Describes a non-fruit tree.</summary>
     internal class TreeSubject : BaseSubject
     {
         /*********
-        ** Properties
+        ** Fields
         *********/
         /// <summary>The underlying target.</summary>
         private readonly Tree Target;
@@ -27,43 +29,67 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        public TreeSubject(Tree tree, Vector2 tile)
-            : base(TreeSubject.GetName(tree), null, "Tree")
+        /// <param name="translations">Provides translations stored in the mod folder.</param>
+        public TreeSubject(SubjectFactory codex, GameHelper gameHelper, Tree tree, Vector2 tile, ITranslationHelper translations)
+            : base(codex, gameHelper, TreeSubject.GetName(tree), null, L10n.Types.Tree(), translations)
         {
             this.Target = tree;
             this.Tile = tile;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
-        /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Tree growth algorithm reverse engineered from <see cref="StardewValley.TerrainFeatures.Tree.dayUpdate"/>.</remarks>
-        public override IEnumerable<ICustomField> GetData(Metadata metadata)
+        public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
 
             // get growth stage
-            WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage, (int)WildTreeGrowthStage.Tree);
+            WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-            yield return isFullyGrown
-                ? new GenericField("Growth stage", "fully grown")
-                : new GenericField("Growth stage", $"{stage} ({(int)stage} of {(int)WildTreeGrowthStage.Tree})");
+            yield return new GenericField(this.GameHelper, L10n.Tree.Stage(), isFullyGrown
+                ? L10n.Tree.StageDone()
+                : L10n.Tree.StagePartial(stageName: L10n.For(stage), step: (int)stage, max: (int)WildTreeGrowthStage.Tree)
+            );
 
-            // get growth scheduler
+            // get growth schedule
             if (!isFullyGrown)
             {
-                if (Game1.IsWinter && Game1.currentLocation.Name != Constant.LocationNames.Greenhouse)
-                    yield return new GenericField("Next growth", "can't grow in winter outside greenhouse");
+                string label = L10n.Tree.NextGrowth();
+                if (Game1.IsWinter && !Game1.currentLocation.IsGreenhouse)
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthWinter());
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
-                    yield return new GenericField("Next growth", "can't grow because other trees are too close");
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthAdjacentTrees());
                 else
-                    yield return new GenericField("Next growth", $"20% chance to grow into {stage + 1} tomorrow");
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthChance(stage: L10n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
             }
+
+            // get fertilizer
+            if (!isFullyGrown)
+                yield return new GenericField(this.GameHelper, L10n.Tree.IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({L10n.Tree.IsFertilizedEffects()})" : ""));
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField("Has seed", tree.hasSeed);
+                yield return new GenericField(this.GameHelper, L10n.Tree.HasSeed(), this.Stringify(tree.hasSeed.Value));
+
+        }
+
+        /// <summary>Get the data to display for this subject.</summary>
+        public override IEnumerable<IDebugField> GetDebugFields()
+        {
+            Tree target = this.Target;
+
+            // pinned fields
+            yield return new GenericDebugField("has seed", this.Stringify(target.hasSeed.Value), pinned: true);
+            yield return new GenericDebugField("growth stage", target.growthStage.Value, pinned: true);
+            yield return new GenericDebugField("health", target.health.Value, pinned: true);
+
+            // raw fields
+            foreach (IDebugField field in this.GetDebugFieldsFrom(target))
+                yield return field;
         }
 
         /// <summary>Draw the subject portrait (if available).</summary>
@@ -85,22 +111,21 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
         /// <param name="tree">The tree object.</param>
         private static string GetName(Tree tree)
         {
-            TreeType type = (TreeType)tree.treeType;
-
+            TreeType type = (TreeType)tree.treeType.Value;
             switch (type)
             {
                 case TreeType.Maple:
-                    return "Maple Tree";
+                    return L10n.Tree.NameMaple();
                 case TreeType.Oak:
-                    return "Oak Tree";
+                    return L10n.Tree.NameOak();
                 case TreeType.Pine:
-                    return "Pine Tree";
+                    return L10n.Tree.NamePine();
                 case TreeType.Palm:
-                    return "Palm Tree";
+                    return L10n.Tree.NamePalm();
                 case TreeType.BigMushroom:
-                    return "Big Mushroom";
+                    return L10n.Tree.NameBigMushroom();
                 default:
-                    return "(unknown tree)";
+                    return L10n.Tree.NameUnknown();
             }
         }
 
@@ -114,7 +139,7 @@ namespace Pathoschild.LookupAnything.Framework.Subjects
                 let otherTree = location.terrainFeatures.ContainsKey(adjacentTile)
                     ? location.terrainFeatures[adjacentTile] as Tree
                     : null
-                select otherTree != null && otherTree.growthStage >= (int)WildTreeGrowthStage.SmallTree
+                select otherTree != null && otherTree.growthStage.Value >= (int)WildTreeGrowthStage.SmallTree
             ).Any(p => p);
         }
     }

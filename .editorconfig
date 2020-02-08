@@ -1,0 +1,68 @@
+# topmost editorconfig
+root: true
+
+##########
+## General formatting
+## documentation: https://editorconfig.org
+##########
+[*]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+[*.{csproj,nuspec,targets}]
+indent_size = 2
+
+[*.csproj]
+charset = utf-8-bom
+insert_final_newline = false
+
+##########
+## C# formatting
+## documentation: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
+##########
+[*.cs]
+
+#sort 'system' usings first
+dotnet_sort_system_directives_first = true
+
+# use 'this.' qualifier
+dotnet_style_qualification_for_field = true:error
+dotnet_style_qualification_for_property = true:error
+dotnet_style_qualification_for_method = true:error
+dotnet_style_qualification_for_event = true:error
+
+# use language keywords (like int) instead of type (like Int32)
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+dotnet_style_predefined_type_for_member_access = true:error
+
+# don't use 'var' for language keywords
+csharp_style_var_for_built_in_types = false:error
+
+# suggest modern C# features where simpler
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_explicit_tuple_names = true:suggestion
+csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+csharp_style_conditional_delegate_call = true:suggestion
+csharp_prefer_simple_default_expression = true:suggestion
+
+# prefer method block bodies
+csharp_style_expression_bodied_methods = false:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
+
+# prefer property expression bodies
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_indexers = true:suggestion
+csharp_style_expression_bodied_accessors = true:suggestion
+
+# prefer inline out variables
+csharp_style_inlined_variable_declaration = true:warning
+
+# avoid superfluous braces
+csharp_prefer_braces = false:suggestion
