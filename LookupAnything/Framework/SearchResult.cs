@@ -1,13 +1,11 @@
 using System;
-using Pathoschild.Stardew.LookupAnything;
-using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Monsters;
 
-namespace Pathoschild.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Data about a subject which can be searched dynamically.</summary>
     internal class SearchResult

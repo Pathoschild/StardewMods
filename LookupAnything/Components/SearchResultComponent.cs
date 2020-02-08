@@ -1,11 +1,11 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.LookupAnything.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything.Components
+namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A clickable component representing a search result.</summary>
     internal class SearchResultComponent : ClickableComponent

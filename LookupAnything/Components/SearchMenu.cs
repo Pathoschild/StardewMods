@@ -4,15 +4,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything;
-using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything.Components
+namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which lets the player search for subjects.</summary>
     internal class SearchMenu : IClickableMenu, IDisposable

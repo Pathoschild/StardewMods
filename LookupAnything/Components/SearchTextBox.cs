@@ -1,11 +1,10 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Components;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.LookupAnything.Components
+namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A textbox fires events while searching.</summary>
     internal class SearchTextBox : IDisposable
