@@ -63,6 +63,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="originTile">The tile from which to search for targets.</param>
         /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        /// <remarks>Related to <see cref="SubjectFactory.GetSearchSubjects"/>.</remarks>
         public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool includeMapTile)
         {
             // NPCs

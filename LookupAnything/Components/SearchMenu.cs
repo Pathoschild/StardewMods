@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private int CurrentScroll;
 
         /// <summary>The subjects available for searching indexed by name.</summary>
-        private readonly ILookup<string, SearchResult> SearchLookup;
+        private readonly ILookup<string, ISubject> SearchLookup;
 
         /// <summary>The search input box.</summary>
         private readonly SearchTextBox SearchTextbox;
@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             // save data
             this.ShowLookup = showLookup;
-            this.SearchLookup = codex.GetSearchIndex();
+            this.SearchLookup = codex.GetSearchSubjects().ToLookup(p => p.Name, StringComparer.InvariantCultureIgnoreCase);
 
             // initialise
             this.CalculateDimensions();
@@ -74,8 +74,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 this.Dispose();
 
                 // open lookup menu
-                ISubject subject = match.Result.Subject.Value;
-                this.ShowLookup(subject);
+                this.ShowLookup(match.Subject);
                 Game1.playSound("coin");
             }
         }

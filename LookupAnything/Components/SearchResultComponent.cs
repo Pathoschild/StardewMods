@@ -1,7 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework;
+using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -13,19 +12,19 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /*********
         ** Accessors
         *********/
-        /// <summary>The search result.</summary>
-        public SearchResult Result { get; }
+        /// <summary>The subject to display.</summary>
+        public ISubject Subject { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="result">The search result.</param>
-        public SearchResultComponent(SearchResult result)
-            : base(Rectangle.Empty, result.DisplayName)
+        /// <param name="subject">The subject to display.</param>
+        public SearchResultComponent(ISubject subject)
+            : base(Rectangle.Empty, subject.Name)
         {
-            this.Result = result;
+            this.Subject = subject;
         }
 
         /// <summary>Draw the search result to the screen.</summary>
@@ -48,8 +47,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             if (highlight)
                 spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, this.bounds.Height), Color.Beige);
             spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, borderWidth), Color.Black); // border
-            spriteBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.Type}) {this.Result.DisplayName}", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
-            this.Result.Subject.Value.DrawPortrait(spriteBatch, position, new Vector2(iconSize)); // icon
+            spriteBatch.DrawTextBlock(Game1.smallFont, $"({this.Subject.Type}) {this.Subject.Name}", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
+            this.Subject.DrawPortrait(spriteBatch, position, new Vector2(iconSize)); // icon
 
             // return size
             return new Vector2(this.bounds.Width, this.bounds.Height);
