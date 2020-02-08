@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         public FruitTreeTarget(GameHelper gameHelper, FruitTree value, JsonAssetsIntegration jsonAssets, Vector2? tilePosition = null)
-            : base(gameHelper, TargetType.FruitTree, value, tilePosition)
+            : base(gameHelper, SubjectType.FruitTree, value, tilePosition)
         {
             this.GetSpriteSheet(value, jsonAssets, out this.Texture, out this.SourceRect);
         }

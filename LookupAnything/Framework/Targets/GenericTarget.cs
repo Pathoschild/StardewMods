@@ -22,8 +22,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /*********
         ** Accessors
         *********/
-        /// <summary>The target type.</summary>
-        public TargetType Type { get; set; }
+        /// <summary>The subject type.</summary>
+        public SubjectType Type { get; set; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
         public Vector2? Tile { get; set; }
@@ -79,10 +79,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="type">The target type.</param>
+        /// <param name="type">The subject type.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        protected GenericTarget(GameHelper gameHelper, TargetType type, TValue value, Vector2? tilePosition = null)
+        protected GenericTarget(GameHelper gameHelper, SubjectType type, TValue value, Vector2? tilePosition = null)
         {
             this.GameHelper = gameHelper;
             this.Type = type;

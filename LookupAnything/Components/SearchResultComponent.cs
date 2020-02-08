@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             if (highlight)
                 spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, this.bounds.Height), Color.Beige);
             spriteBatch.DrawLine(this.bounds.X, this.bounds.Y, new Vector2(this.bounds.Width, borderWidth), Color.Black); // border
-            spriteBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.TargetType}) {this.Result.DisplayName}", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
+            spriteBatch.DrawTextBlock(Game1.smallFont, $"({this.Result.Type}) {this.Result.DisplayName}", new Vector2(this.bounds.X, this.bounds.Y) + new Vector2(iconSize, topPadding), this.bounds.Width - iconSize); // text
             this.Result.Subject.Value.DrawPortrait(spriteBatch, position, new Vector2(iconSize)); // icon
 
             // return size

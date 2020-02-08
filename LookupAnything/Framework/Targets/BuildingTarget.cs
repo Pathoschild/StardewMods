@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         public BuildingTarget(GameHelper gameHelper, Building value)
-            : base(gameHelper, TargetType.Building, value, new Vector2(value.tileX.Value, value.tileY.Value))
+            : base(gameHelper, SubjectType.Building, value, new Vector2(value.tileX.Value, value.tileY.Value))
         {
             this.TileArea = new Rectangle(value.tileX.Value, value.tileY.Value, value.tilesWide.Value, value.tilesHigh.Value);
         }

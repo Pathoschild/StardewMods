@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get an NPC subject.</summary>
         /// <param name="target">The target instance.</param>
         /// <param name="type">The NPC type.</param>
-        public ISubject GetCharacter(NPC target, TargetType type)
+        public ISubject GetCharacter(NPC target, SubjectType type)
         {
             return new CharacterSubject(this, this.GameHelper, target, type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
         }

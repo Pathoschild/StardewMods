@@ -73,17 +73,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
                     continue;
 
-                TargetType type = TargetType.Unknown;
+                SubjectType type = SubjectType.Unknown;
                 if (npc is Child || npc.isVillager())
-                    type = TargetType.Villager;
+                    type = SubjectType.Villager;
                 else if (npc is Horse)
-                    type = TargetType.Horse;
+                    type = SubjectType.Horse;
                 else if (npc is Junimo)
-                    type = TargetType.Junimo;
+                    type = SubjectType.Junimo;
                 else if (npc is Pet)
-                    type = TargetType.Pet;
+                    type = SubjectType.Pet;
                 else if (npc is Monster)
-                    type = TargetType.Monster;
+                    type = SubjectType.Monster;
 
                 yield return new CharacterTarget(this.GameHelper, type, npc, npc.getTileLocation(), this.Reflection);
             }
@@ -204,7 +204,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return (
                 from target in this.GetNearbyTargets(location, tile, includeMapTile)
                 where
-                    target.Type != TargetType.Unknown
+                    target.Type != SubjectType.Unknown
                     && target.IsAtTile(tile)
                 select target
             ).FirstOrDefault();
@@ -224,10 +224,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 let spriteArea = target.GetWorldArea()
                 let isAtTile = target.IsAtTile(tile)
                 where
-                    target.Type != TargetType.Unknown
+                    target.Type != SubjectType.Unknown
                     && (isAtTile || spriteArea.Intersects(tileArea))
                 orderby
-                    target.Type != TargetType.Tile ? 0 : 1, // Tiles are always under anything else.
+                    target.Type != SubjectType.Tile ? 0 : 1, // Tiles are always under anything else.
                     spriteArea.Y descending,                // A higher Y value is closer to the foreground, and will occlude any sprites behind it.
                     spriteArea.X ascending                  // If two sprites at the same Y coordinate overlap, assume the left sprite occludes the right.
 
@@ -282,47 +282,47 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             switch (target.Type)
             {
                 // NPC
-                case TargetType.Horse:
-                case TargetType.Junimo:
-                case TargetType.Pet:
-                case TargetType.Monster:
-                case TargetType.Villager:
+                case SubjectType.Horse:
+                case SubjectType.Junimo:
+                case SubjectType.Pet:
+                case SubjectType.Monster:
+                case SubjectType.Villager:
                     return this.Codex.GetCharacter(target.GetValue<NPC>(), target.Type);
 
                 // player
-                case TargetType.Farmer:
+                case SubjectType.Farmer:
                     return this.Codex.GetPlayer(target.GetValue<Farmer>());
 
                 // animal
-                case TargetType.FarmAnimal:
+                case SubjectType.FarmAnimal:
                     return this.Codex.GetFarmAnimal(target.GetValue<FarmAnimal>());
 
                 // crop
-                case TargetType.Crop:
+                case SubjectType.Crop:
                     return this.Codex.GetCrop(target.GetValue<HoeDirt>().crop, ObjectContext.World);
 
                 // fruit tree
-                case TargetType.FruitTree:
+                case SubjectType.FruitTree:
                     return this.Codex.GetFruitTree(target.GetValue<FruitTree>(), target.GetTile());
 
                 // wild tree
-                case TargetType.WildTree:
+                case SubjectType.WildTree:
                     return this.Codex.GetWildTree(target.GetValue<Tree>(), target.GetTile());
 
                 // inventory item
-                case TargetType.InventoryItem:
-                case TargetType.Object:
-                    return this.Codex.GetItem(target.GetValue<Item>(), target.Type == TargetType.InventoryItem ? ObjectContext.Inventory : ObjectContext.World, knownQuality: false);
+                case SubjectType.InventoryItem:
+                case SubjectType.Object:
+                    return this.Codex.GetItem(target.GetValue<Item>(), target.Type == SubjectType.InventoryItem ? ObjectContext.Inventory : ObjectContext.World, knownQuality: false);
 
                 // building
-                case TargetType.Building:
+                case SubjectType.Building:
                     return this.Codex.GetBuilding(target.GetValue<Building>(), target.GetSpritesheetArea());
 
-                case TargetType.Bush:
+                case SubjectType.Bush:
                     return this.Codex.GetBush(target.GetValue<Bush>());
 
                 // tile
-                case TargetType.Tile:
+                case SubjectType.Tile:
                     return this.Codex.GetTile(Game1.currentLocation, target.GetValue<Vector2>());
             }
 
@@ -359,7 +359,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get villager with a birthday on that date
                         NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
                         if (target != null)
-                            return this.Codex.GetCharacter(target, TargetType.Villager);
+                            return this.Codex.GetCharacter(target, SubjectType.Villager);
                     }
                     break;
 
@@ -444,7 +444,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             {
                                 NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)
-                                    return this.Codex.GetCharacter(npc, TargetType.Villager);
+                                    return this.Codex.GetCharacter(npc, SubjectType.Villager);
                             }
                         }
                     }

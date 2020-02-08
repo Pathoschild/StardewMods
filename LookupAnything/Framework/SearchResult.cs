@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public string DisplayName { get; }
 
         /// <summary>The subject type.</summary>
-        public TargetType TargetType { get; }
+        public SubjectType Type { get; }
 
         /// <summary>The subject data.</summary>
         public Lazy<ISubject> Subject { get; }
@@ -32,10 +32,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public SearchResult(SubjectFactory codex, NPC npc)
         {
             this.DisplayName = npc.getName();
-            this.TargetType = npc is Monster
-                ? TargetType.Monster
-                : TargetType.Villager;
-            this.Subject = new Lazy<ISubject>(() => codex.GetCharacter(npc, this.TargetType));
+            this.Type = npc is Monster
+                ? SubjectType.Monster
+                : SubjectType.Villager;
+            this.Subject = new Lazy<ISubject>(() => codex.GetCharacter(npc, this.Type));
         }
 
         /// <summary>Construct an instance.</summary>
@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public SearchResult(SubjectFactory codex, GameHelper gameHelper, ObjectModel objectModel)
         {
             this.DisplayName = objectModel.Name;
-            this.TargetType = TargetType.Object;
+            this.Type = SubjectType.Object;
             this.Subject = new Lazy<ISubject>(() => codex.GetItem(gameHelper.GetObjectBySpriteIndex(objectModel.ParentSpriteIndex), ObjectContext.World, knownQuality: false));
         }
 
@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public SearchResult(SubjectFactory codex, FarmAnimal animal)
         {
             this.DisplayName = animal.Name;
-            this.TargetType = TargetType.FarmAnimal;
+            this.Type = SubjectType.FarmAnimal;
             this.Subject = new Lazy<ISubject>(() => codex.GetFarmAnimal(animal));
         }
 
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             var item = gameHelper.GetObjectBySpriteIndex(recipe.OutputItemIndex.Value);
 
             this.DisplayName = item.Name;
-            this.TargetType = TargetType.InventoryItem;
+            this.Type = SubjectType.InventoryItem;
             this.Subject = new Lazy<ISubject>(() => codex.GetItem(item, ObjectContext.Inventory, false));
         }
     }

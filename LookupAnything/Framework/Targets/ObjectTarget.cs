@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         public ObjectTarget(GameHelper gameHelper, SObject value, Vector2? tilePosition, IReflectionHelper reflection)
-            : base(gameHelper, TargetType.Object, value, tilePosition)
+            : base(gameHelper, SubjectType.Object, value, tilePosition)
         {
             this.Reflection = reflection;
             this.CustomSprite = gameHelper.GetSprite(value, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)

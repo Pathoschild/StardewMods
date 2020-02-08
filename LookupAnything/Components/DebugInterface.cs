@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
                 IEnumerable<ITarget> targets = this.TargetFactory
                     .GetNearbyTargets(currentLocation, cursorTile, includeMapTile: false)
-                    .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1);
+                    .OrderBy(p => p.Type == SubjectType.Unknown ? 0 : 1);
                 // if targets overlap, prioritize info on known targets
                 foreach (ITarget target in targets)
                 {
