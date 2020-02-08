@@ -461,12 +461,6 @@ namespace Pathoschild.Stardew.LookupAnything
                 yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
         }
 
-        /// <summary>Get metadata for all known objects.</summary>
-        public IEnumerable<ObjectModel> GetObjectMetadata()
-        {
-            return this.Objects.Value;
-        }
-
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
         /// <param name="item">The item.</param>
         public bool CanHaveQuality(Item item)

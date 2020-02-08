@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
@@ -32,6 +33,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
+
+        /// <summary>Provides methods for searching and constructing items.</summary>
+        private readonly ItemRepository ItemRepository = new ItemRepository();
 
 
         /*********
@@ -174,9 +178,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             foreach (NPC npc in Utility.getAllCharacters())
                 yield return this.GetCharacter(npc);
 
-            // objects
-            foreach (var metadata in this.GameHelper.GetObjectMetadata())
-                yield return this.GetItem(this.GameHelper.GetObjectBySpriteIndex(metadata.ParentSpriteIndex), ObjectContext.World, knownQuality: false);
+            // items
+            foreach (SearchableItem item in this.ItemRepository.GetAll())
+                yield return this.GetItem(item.Item, ObjectContext.World, knownQuality: false);
 
             // farm animals
             Farm farm = Game1.getFarm();
