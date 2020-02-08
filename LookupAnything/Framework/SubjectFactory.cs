@@ -7,6 +7,8 @@ using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -52,11 +54,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.Config = config;
         }
 
+        /****
+        ** Get subjects
+        ****/
         /// <summary>Get an NPC subject.</summary>
         /// <param name="target">The target instance.</param>
-        /// <param name="type">The NPC type.</param>
-        public ISubject GetCharacter(NPC target, SubjectType type)
+        public ISubject GetCharacter(NPC target)
         {
+            SubjectType type = this.GetSubjectType(target);
             return new CharacterSubject(this, this.GameHelper, target, type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
         }
 
@@ -138,6 +143,30 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return new TileSubject(this, this.GameHelper, location, position, this.Translations);
         }
 
+        /****
+        ** Get metadata
+        ****/
+        /// <summary>Get the subject type for an NPC.</summary>
+        /// <param name="npc">The NPC instance.</param>
+        public SubjectType GetSubjectType(NPC npc)
+        {
+            if (npc.isVillager())
+                return SubjectType.Villager;
+
+            return npc switch
+            {
+                Child _ => SubjectType.Villager,
+                Horse _ => SubjectType.Horse,
+                Junimo _ => SubjectType.Junimo,
+                Pet _ => SubjectType.Pet,
+                Monster _ => SubjectType.Monster,
+                _ => SubjectType.Unknown
+            };
+        }
+
+        /****
+        ** Search
+        ****/
         /// <summary>Get the subjects available for searching, indexed case-insensitively by name.</summary>
         public ILookup<string, SearchResult> GetSearchIndex()
         {

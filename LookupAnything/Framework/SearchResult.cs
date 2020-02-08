@@ -32,10 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public SearchResult(SubjectFactory codex, NPC npc)
         {
             this.DisplayName = npc.getName();
-            this.Type = npc is Monster
-                ? SubjectType.Monster
-                : SubjectType.Villager;
-            this.Subject = new Lazy<ISubject>(() => codex.GetCharacter(npc, this.Type));
+            this.Type = codex.GetSubjectType(npc);
+            this.Subject = new Lazy<ISubject>(() => codex.GetCharacter(npc));
         }
 
         /// <summary>Construct an instance.</summary>

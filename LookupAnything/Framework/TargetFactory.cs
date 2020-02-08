@@ -10,10 +10,8 @@ using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -73,19 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (!this.GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
                     continue;
 
-                SubjectType type = SubjectType.Unknown;
-                if (npc is Child || npc.isVillager())
-                    type = SubjectType.Villager;
-                else if (npc is Horse)
-                    type = SubjectType.Horse;
-                else if (npc is Junimo)
-                    type = SubjectType.Junimo;
-                else if (npc is Pet)
-                    type = SubjectType.Pet;
-                else if (npc is Monster)
-                    type = SubjectType.Monster;
-
-                yield return new CharacterTarget(this.GameHelper, type, npc, npc.getTileLocation(), this.Reflection);
+                yield return new CharacterTarget(this.GameHelper, this.Codex.GetSubjectType(npc), npc, npc.getTileLocation(), this.Reflection);
             }
 
             // animals
@@ -287,7 +273,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case SubjectType.Pet:
                 case SubjectType.Monster:
                 case SubjectType.Villager:
-                    return this.Codex.GetCharacter(target.GetValue<NPC>(), target.Type);
+                    return this.Codex.GetCharacter(target.GetValue<NPC>());
 
                 // player
                 case SubjectType.Farmer:
@@ -359,7 +345,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // get villager with a birthday on that date
                         NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
                         if (target != null)
-                            return this.Codex.GetCharacter(target, SubjectType.Villager);
+                            return this.Codex.GetCharacter(target);
                     }
                     break;
 
@@ -444,7 +430,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             {
                                 NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)
-                                    return this.Codex.GetCharacter(npc, SubjectType.Villager);
+                                    return this.Codex.GetCharacter(npc);
                             }
                         }
                     }
