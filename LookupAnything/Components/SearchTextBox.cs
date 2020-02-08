@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
@@ -25,46 +24,32 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The event raised when the search text changes.</summary>
         public event EventHandler<string> OnChanged;
 
-        /// <summary>The input text.</summary>
-        public string Text
-        {
-            get { return this.Textbox.Text; }
-            set { this.Textbox.Text = value; }
-        }
-
-        /// <summary>Whether the focus is in the textbox.</summary>
-        public bool Selected
-        {
-            get { return this.Textbox.Selected; }
-            set { this.Textbox.Selected = value; }
-        }
-
         /// <summary>The X position of the rendered textbox.</summary>
         public int X
         {
-            get { return this.Textbox.X; }
-            set { this.Textbox.X = value; }
+            get => this.Textbox.X;
+            set => this.Textbox.X = value;
         }
 
         /// <summary>The Y position of the rendered textbox.</summary>
         public int Y
         {
-            get { return this.Textbox.Y; }
-            set { this.Textbox.Y = value; }
+            get => this.Textbox.Y;
+            set => this.Textbox.Y = value;
         }
 
         /// <summary>The width of the rendered textbox.</summary>
         public int Width
         {
-            get { return this.Textbox.Width; }
-            set { this.Textbox.Width = value; }
+            get => this.Textbox.Width;
+            set => this.Textbox.Width = value;
         }
 
         /// <summary>The height of the rendered textbox.</summary>
         public int Height
         {
-            get { return this.Textbox.Height; }
-            set { this.Textbox.Height = value; }
+            get => this.Textbox.Height;
+            set => this.Textbox.Height = value;
         }
 
 
@@ -96,10 +81,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Detect updated search text and notify listeners.</summary>
         private void NotifyChange()
         {
-            if (this.Text != this.LastText)
+            if (this.Textbox.Text != this.LastText)
             {
-                this.OnChanged?.Invoke(this, this.Text);
-                this.LastText = this.Text;
+                this.OnChanged?.Invoke(this, this.Textbox.Text);
+                this.LastText = this.Textbox.Text;
             }
         }
 
@@ -107,8 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         public void Dispose()
         {
             this.OnChanged = null;
-            if (Game1.keyboardDispatcher.Subscriber == this)
-                Game1.keyboardDispatcher.Subscriber = null;
+            this.Textbox.Selected = false;
         }
     }
 }
