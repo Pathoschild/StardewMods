@@ -67,23 +67,24 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="playSound">Whether to enable sound.</param>
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            SearchResultComponent match = this.SearchResults.FirstOrDefault(p => p.containsPoint(x, y));
-            if (match != null)
+            // search box
+            if (this.SearchTextbox.Bounds.Contains(x, y))
             {
-                // close search menu
-                this.Dispose();
+                this.SearchTextbox.Select();
+                return;
+            }
 
-                // open lookup menu
-                this.ShowLookup(match.Subject);
-                Game1.playSound("coin");
+            // search matches
+            foreach (SearchResultComponent match in this.SearchResults)
+            {
+                if (match.containsPoint(x, y))
+                {
+                    this.ShowLookup(match.Subject);
+                    Game1.playSound("coin");
+                    return;
+                }
             }
         }
-
-        /// <summary>The method invoked when the player right-clicks on the lookup UI.</summary>
-        /// <param name="x">The X-position of the cursor.</param>
-        /// <param name="y">The Y-position of the cursor.</param>
-        /// <param name="playSound">Whether to enable sound.</param>
-        public override void receiveRightClick(int x, int y, bool playSound = true) { }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
         /// <param name="key">The pressed input.</param>
@@ -158,25 +159,21 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 // draw fields
                 float wrapWidth = this.width - leftOffset - gutter;
                 {
+                    Vector2 nameSize = contentBatch.DrawTextBlock(font, "Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                    Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                    topOffset += Math.Max(nameSize.Y, typeSize.Y);
+
+                    this.SearchTextbox.Bounds = new Rectangle(x: x + (int)leftOffset, y: y + (int)topOffset, width: (int)wrapWidth, height: this.SearchTextbox.Bounds.Height);
+                    this.SearchTextbox.Draw(contentBatch);
+                    topOffset += this.SearchTextbox.Bounds.Height;
+
+                    int mouseX = Game1.getMouseX();
+                    int mouseY = Game1.getMouseY();
+                    foreach (SearchResultComponent result in this.SearchResults)
                     {
-                        Vector2 nameSize = contentBatch.DrawTextBlock(font, "Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                        Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
-                        topOffset += Math.Max(nameSize.Y, typeSize.Y);
-
-                        this.SearchTextbox.X = (int)(x + leftOffset);
-                        this.SearchTextbox.Y = (int)(y + topOffset);
-                        this.SearchTextbox.Width = (int)wrapWidth;
-                        this.SearchTextbox.Draw(contentBatch);
-                        topOffset += this.SearchTextbox.Height;
-
-                        int mouseX = Game1.getMouseX();
-                        int mouseY = Game1.getMouseY();
-                        foreach (SearchResultComponent result in this.SearchResults)
-                        {
-                            bool isHighlighted = result.containsPoint(mouseX, mouseY);
-                            var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
-                            topOffset += objSize.Y;
-                        }
+                        bool isHighlighted = result.containsPoint(mouseX, mouseY);
+                        var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
+                        topOffset += objSize.Y;
                     }
 
                     // draw spacer

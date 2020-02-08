@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The last search text received for change detection.</summary>
         private string LastText = string.Empty;
 
+        /// <summary>The rendered textbox's pixel area on-screen.</summary>
+        private Rectangle BoundsImpl;
+
 
         /*********
         ** Accessors
@@ -24,32 +27,17 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The event raised when the search text changes.</summary>
         public event EventHandler<string> OnChanged;
 
-        /// <summary>The X position of the rendered textbox.</summary>
-        public int X
+        public Rectangle Bounds
         {
-            get => this.Textbox.X;
-            set => this.Textbox.X = value;
-        }
-
-        /// <summary>The Y position of the rendered textbox.</summary>
-        public int Y
-        {
-            get => this.Textbox.Y;
-            set => this.Textbox.Y = value;
-        }
-
-        /// <summary>The width of the rendered textbox.</summary>
-        public int Width
-        {
-            get => this.Textbox.Width;
-            set => this.Textbox.Width = value;
-        }
-
-        /// <summary>The height of the rendered textbox.</summary>
-        public int Height
-        {
-            get => this.Textbox.Height;
-            set => this.Textbox.Height = value;
+            get => this.BoundsImpl;
+            set
+            {
+                this.BoundsImpl = value;
+                this.Textbox.X = value.X;
+                this.Textbox.Y = value.Y;
+                this.Textbox.Width = value.Width;
+                this.Textbox.Height = value.Height;
+            }
         }
 
 
@@ -62,6 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         public SearchTextBox(SpriteFont font, Color textColor)
         {
             this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor);
+            this.Bounds = new Rectangle(this.Textbox.X, this.Textbox.Y, this.Textbox.Width, this.Textbox.Height);
         }
 
         /// <summary>Set the input focus to this control.</summary>
