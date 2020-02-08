@@ -255,15 +255,9 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
-
-                LookupMenu lookupMenu = new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor);
-                if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
-                {
-                    this.PreviousMenus.Push(Game1.activeClickableMenu);
-                    this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(lookupMenu); // bypass Game1.activeClickableMenu, which disposes the previous menu
-                }
-                else
-                    Game1.activeClickableMenu = lookupMenu;
+                this.PushMenu(
+                    new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
+                );
             });
         }
 
@@ -292,9 +286,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Show the search UI.</summary>
         private void ShowSearch()
         {
-            if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
-                this.PreviousMenus.Push(Game1.activeClickableMenu);
-            Game1.activeClickableMenu = new SearchMenu(this.SubjectFactory, this.ShowLookupFor);
+            this.PushMenu(
+                new SearchMenu(this.SubjectFactory, this.ShowLookupFor)
+            );
         }
 
         /// <summary>Hide the search UI.</summary>
@@ -347,6 +341,19 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // not found
             return null;
+        }
+
+        /// <summary>Push a new menu onto the display stack, saving the previous menu if needed.</summary>
+        /// <param name="menu">The menu to show.</param>
+        private void PushMenu(IClickableMenu menu)
+        {
+            if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
+            {
+                this.PreviousMenus.Push(Game1.activeClickableMenu);
+                this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(menu); // bypass Game1.activeClickableMenu, which disposes the previous menu
+            }
+            else
+                Game1.activeClickableMenu = menu;
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
