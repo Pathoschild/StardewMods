@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 
@@ -196,6 +197,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             // items
             foreach (SearchableItem item in this.ItemRepository.GetAll())
                 yield return this.GetItem(item.Item, ObjectContext.World, knownQuality: false);
+
+            // players
+            foreach (Farmer player in Game1.getAllFarmers())
+                yield return this.GetPlayer(player);
+
+            // buildings
+            foreach (var location in CommonHelper.GetLocations().OfType<BuildableGameLocation>())
+            {
+                foreach (var building in location.buildings)
+                    yield return this.GetBuilding(building, building.getSourceRectForMenu());
+            }
         }
     }
 }
