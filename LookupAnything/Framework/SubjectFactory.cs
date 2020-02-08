@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
@@ -178,19 +179,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             foreach (NPC npc in Utility.getAllCharacters())
                 yield return this.GetCharacter(npc);
 
+            // animals
+            foreach (var location in CommonHelper.GetLocations())
+            {
+                IEnumerable<FarmAnimal> animals =
+                    (location as Farm)?.animals.Values
+                    ?? (location as AnimalHouse)?.animals.Values;
+
+                if (animals != null)
+                {
+                    foreach (var animal in animals)
+                        yield return this.GetFarmAnimal(animal);
+                }
+            }
+
             // items
             foreach (SearchableItem item in this.ItemRepository.GetAll())
                 yield return this.GetItem(item.Item, ObjectContext.World, knownQuality: false);
-
-            // farm animals
-            Farm farm = Game1.getFarm();
-            foreach (FarmAnimal animal in farm.animals.Values)
-                yield return this.GetFarmAnimal(animal);
-            foreach (AnimalHouse animalHouse in farm.buildings.Select(p => p.indoors.Value).OfType<AnimalHouse>())
-            {
-                foreach (FarmAnimal animal in animalHouse.animals.Values)
-                    yield return this.GetFarmAnimal(animal);
-            }
         }
     }
 }
