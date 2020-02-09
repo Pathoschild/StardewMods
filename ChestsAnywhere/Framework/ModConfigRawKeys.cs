@@ -9,31 +9,31 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles the chest UI.</summary>
+        /// <summary>The keys which toggle the chest UI.</summary>
         public string Toggle { get; set; } = SButton.B.ToString();
 
-        /// <summary>The key which navigates to the previous chest.</summary>
+        /// <summary>The keys which navigate to the previous chest.</summary>
         public string PrevChest { get; set; } = $"{SButton.Left}, {SButton.LeftShoulder}";
 
-        /// <summary>The key which navigates to the next chest.</summary>
+        /// <summary>The keys which navigate to the next chest.</summary>
         public string NextChest { get; set; } = $"{SButton.Right}, {SButton.RightShoulder}";
 
-        /// <summary>The key which navigates to the previous category.</summary>
+        /// <summary>The keys which navigate to the previous category.</summary>
         public string PrevCategory { get; set; } = $"{SButton.Up}, {SButton.LeftTrigger}";
 
-        /// <summary>The key which navigates to the next category.</summary>
+        /// <summary>The keys which navigate to the next category.</summary>
         public string NextCategory { get; set; } = $"{SButton.Down}, {SButton.RightTrigger}";
 
-        /// <summary>The key which edits the current chest.</summary>
+        /// <summary>The keys which edit the current chest.</summary>
         public string EditChest { get; set; } = "";
 
-        /// <summary>The key which sorts items in the chest.</summary>
+        /// <summary>The keys which sort items in the chest.</summary>
         public string SortItems { get; set; } = "";
 
-        /// <summary>The key which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</summary>
+        /// <summary>The keys which, when held, enable scrolling the chest dropdown with the mouse scroll wheel.</summary>
         public string HoldToMouseWheelScrollChests { get; set; } = SButton.LeftControl.ToString();
 
-        /// <summary>The key which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</summary>
+        /// <summary>The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</summary>
         public string HoldToMouseWheelScrollCategories { get; set; } = SButton.LeftAlt.ToString();
 
 
@@ -41,19 +41,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Public fields
         *********/
         /// <summary>Get a parsed representation of the configured controls.</summary>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
-        public ModConfigKeys ParseControls(IMonitor monitor)
+        public ModConfigKeys ParseControls(IInputHelper input, IMonitor monitor)
         {
             return new ModConfigKeys(
-                toggle: CommonHelper.ParseButtons(this.Toggle, monitor, nameof(this.Toggle)),
-                prevChest: CommonHelper.ParseButtons(this.PrevChest, monitor, nameof(this.PrevChest)),
-                nextChest: CommonHelper.ParseButtons(this.NextChest, monitor, nameof(this.NextChest)),
-                prevCategory: CommonHelper.ParseButtons(this.PrevCategory, monitor, nameof(this.PrevCategory)),
-                nextCategory: CommonHelper.ParseButtons(this.NextCategory, monitor, nameof(this.NextCategory)),
-                editChest: CommonHelper.ParseButtons(this.EditChest, monitor, nameof(this.EditChest)),
-                sortItems: CommonHelper.ParseButtons(this.SortItems, monitor, nameof(this.SortItems)),
-                holdToMouseWheelScrollChests: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollChests, monitor, nameof(this.HoldToMouseWheelScrollChests)),
-                holdToMouseWheelScrollCategories: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollCategories, monitor, nameof(this.HoldToMouseWheelScrollCategories))
+                toggle: CommonHelper.ParseButtons(this.Toggle, input, monitor, nameof(this.Toggle)),
+                prevChest: CommonHelper.ParseButtons(this.PrevChest, input, monitor, nameof(this.PrevChest)),
+                nextChest: CommonHelper.ParseButtons(this.NextChest, input, monitor, nameof(this.NextChest)),
+                prevCategory: CommonHelper.ParseButtons(this.PrevCategory, input, monitor, nameof(this.PrevCategory)),
+                nextCategory: CommonHelper.ParseButtons(this.NextCategory, input, monitor, nameof(this.NextCategory)),
+                editChest: CommonHelper.ParseButtons(this.EditChest, input, monitor, nameof(this.EditChest)),
+                sortItems: CommonHelper.ParseButtons(this.SortItems, input, monitor, nameof(this.SortItems)),
+                holdToMouseWheelScrollChests: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollChests, input, monitor, nameof(this.HoldToMouseWheelScrollChests)),
+                holdToMouseWheelScrollCategories: CommonHelper.ParseButtons(this.HoldToMouseWheelScrollCategories, input, monitor, nameof(this.HoldToMouseWheelScrollCategories))
             );
         }
     }

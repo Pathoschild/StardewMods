@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for multi-key bindings (like `LeftShift + B`).
+
 ## 1.17.4
 Released 02 February 2020.
 

@@ -342,22 +342,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (keys.Toggle.Contains(input) || input == SButton.Escape || input == SButton.ControllerB)
+                    if (keys.Toggle.JustPressedUnique() || input == SButton.Escape || input == SButton.ControllerB)
                     {
                         if (canNavigate)
                             this.Exit();
                     }
-                    else if (keys.PrevChest.Contains(input) && canNavigate)
+                    else if (keys.PrevChest.JustPressedUnique() && canNavigate)
                         this.SelectPreviousChest();
-                    else if (keys.NextChest.Contains(input) && canNavigate)
+                    else if (keys.NextChest.JustPressedUnique() && canNavigate)
                         this.SelectNextChest();
-                    else if (keys.PrevCategory.Contains(input) && canNavigate)
+                    else if (keys.PrevCategory.JustPressedUnique() && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (keys.NextCategory.Contains(input) && canNavigate)
+                    else if (keys.NextCategory.JustPressedUnique() && canNavigate)
                         this.SelectNextCategory();
-                    else if (this.Chest.CanEdit && keys.EditChest.Contains(input) && canNavigate)
+                    else if (this.Chest.CanEdit && keys.EditChest.JustPressedUnique() && canNavigate)
                         this.OpenEdit();
-                    else if (keys.SortItems.Contains(input))
+                    else if (keys.SortItems.JustPressedUnique())
                         this.SortInventory();
                     else
                         return false;
@@ -389,7 +389,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool scrollNext = amount > 0;
 
                     // scroll dropdowns
-                    if (this.Keys.HoldToMouseWheelScrollCategories.Any(p => this.InputHelper.IsDown(p)))
+                    if (this.Keys.HoldToMouseWheelScrollCategories.IsDown())
                     {
                         if (scrollNext)
                             this.SelectNextCategory();
@@ -397,7 +397,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             this.SelectPreviousCategory();
                         return true;
                     }
-                    if (this.Keys.HoldToMouseWheelScrollChests.Any(p => this.InputHelper.IsDown(p)))
+                    if (this.Keys.HoldToMouseWheelScrollChests.IsDown())
                     {
                         if (scrollNext)
                             this.SelectNextChest();

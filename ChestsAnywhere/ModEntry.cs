@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialize
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Data, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
 
@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ModConfigKeys keys = this.Keys;
 
                 // open menu
-                if (keys.Toggle.Contains(e.Button))
+                if (keys.Toggle.JustPressedUnique())
                 {
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)

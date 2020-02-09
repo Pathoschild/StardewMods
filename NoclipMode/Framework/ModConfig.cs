@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.NoclipMode.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles noclip mode.</summary>
+        /// <summary>The keys which toggle noclip mode.</summary>
         public string ToggleKey { get; set; } = SButton.F11.ToString();
 
         /// <summary>Whether to show a confirmation message when noclip is enabled.</summary>

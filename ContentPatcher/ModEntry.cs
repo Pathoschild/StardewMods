@@ -92,7 +92,7 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
@@ -131,7 +131,7 @@ namespace ContentPatcher
             if (this.Config.EnableDebugFeatures)
             {
                 // toggle overlay
-                if (this.Keys.ToggleDebug.Contains(e.Button))
+                if (this.Keys.ToggleDebug.JustPressedUnique())
                 {
                     if (this.DebugOverlay == null)
                         this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
@@ -146,9 +146,9 @@ namespace ContentPatcher
                 // cycle textures
                 if (this.DebugOverlay != null)
                 {
-                    if (this.Keys.DebugPrevTexture.Contains(e.Button))
+                    if (this.Keys.DebugPrevTexture.JustPressedUnique())
                         this.DebugOverlay.PrevTexture();
-                    if (this.Keys.DebugNextTexture.Contains(e.Button))
+                    if (this.Keys.DebugNextTexture.JustPressedUnique())
                         this.DebugOverlay.NextTexture();
                 }
             }

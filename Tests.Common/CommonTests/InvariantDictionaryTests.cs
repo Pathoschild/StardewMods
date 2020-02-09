@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 
-namespace Pathoschild.Stardew.Tests.Common.Common
+namespace Pathoschild.Stardew.Tests.Common.CommonTests
 {
     /// <summary>Unit tests for <see cref="InvariantDictionary{TValue}"/>.</summary>
     [TestFixture]

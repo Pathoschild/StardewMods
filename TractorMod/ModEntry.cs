@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // init tractor logic
             {
@@ -433,9 +433,9 @@ namespace Pathoschild.Stardew.TractorMod
             if (!this.IsEnabled || !Context.IsPlayerFree)
                 return;
 
-            if (this.Keys.SummonTractor.Contains(e.Button) && !Game1.player.isRidingHorse())
+            if (this.Keys.SummonTractor.JustPressedUnique() && !Game1.player.isRidingHorse())
                 this.SummonTractor();
-            else if (this.Keys.DismissTractor.Contains(e.Button) && Game1.player.isRidingHorse())
+            else if (this.Keys.DismissTractor.JustPressedUnique() && Game1.player.isRidingHorse())
                 this.DismissTractor(Game1.player.mount);
         }
 

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for multi-key bindings (like `LeftShift + F11`).
 * Improved translations. Thanks to asqwedcxz741 (added Chinese) and mael-belval (added French)!
 
 ## 1.1.2

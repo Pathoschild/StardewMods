@@ -124,8 +124,10 @@ These are the available settings:
   <td>
 
 The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
-You can separate multiple buttons with commas. The default value is `U` to toggle the automation
-overlay.
+The default value is `U` to toggle the automation overlay.
+
+You can separate bindings with commas (like `U, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + U`).
 
   </td>
 </tr>

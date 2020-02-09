@@ -31,6 +31,7 @@ that change the game's images and data without replacing XNB files.
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
+* [Configure](#configure)
 * [Basic extensibility for modders](#basic-extensibility-for-modders)
 * [Advanced extensibility for modders](#advanced-extensibility-for-modders)
 * [See also](#see-also)
@@ -1797,6 +1798,44 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+
+## Configure
+Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can
+open that file in a text editor to configure the mod.
+
+These are the available settings:
+
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>EnableDebugFeatures</code></td>
+  <td>
+
+Default `false`. Whether to enable [debug features meant for content pack creators](#debug-mode).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default button bindings are...
+
+* `F3` to show the [debug overlay](#debug-mode) (if enabled);
+* `LeftControl` and `RightControl` to switch textures in the debug overlay.
+
+You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + B`).
+
+  </td>
+</tr>
+</table>
 
 ## Basic extensibility for modders
 Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)

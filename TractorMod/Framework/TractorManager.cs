@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
@@ -212,12 +211,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return false;
 
             // automatic mode
-            if (!this.Config.Controls.HoldToActivate.Any())
+            if (!this.Keys.HoldToActivate.HasAny())
                 return true;
 
             // hold-to-activate mode
-            KeyboardState state = Keyboard.GetState();
-            return this.Keys.HoldToActivate.Any(button => button.TryGetKeyboard(out Keys key) && state.IsKeyDown(key));
+            return this.Keys.HoldToActivate.IsDown();
         }
 
         /// <summary>Apply the tractor buff to the current player.</summary>

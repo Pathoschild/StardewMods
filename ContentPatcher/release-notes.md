@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for multi-key bindings (like `LeftShift + F3`).
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.
 
 ## 1.12

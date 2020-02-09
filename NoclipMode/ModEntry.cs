@@ -1,5 +1,5 @@
-using System.Linq;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.NoclipMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -16,8 +16,8 @@ namespace Pathoschild.Stardew.NoclipMode
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The key which toggles noclip mode.</summary>
-        private SButton[] ToggleKey;
+        /// <summary>The keys which toggle noclip mode.</summary>
+        private KeyBinding ToggleKey;
 
         /// <summary>An arbitrary number which identifies messages from Noclip Mode.</summary>
         private const int MessageID = 91871825;
@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.NoclipMode
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.ToggleKey = CommonHelper.ParseButtons(this.Config.ToggleKey, this.Monitor, nameof(this.Config.ToggleKey));
+            this.ToggleKey = CommonHelper.ParseButtons(this.Config.ToggleKey, helper.Input, this.Monitor, nameof(this.Config.ToggleKey));
 
             // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.NoclipMode
         /// <param name="e">The event data.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            if (Context.IsPlayerFree && this.ToggleKey.Contains(e.Button))
+            if (Context.IsPlayerFree && this.ToggleKey.JustPressedUnique())
             {
                 bool enabled = Game1.player.ignoreCollisions = !Game1.player.ignoreCollisions;
                 this.ShowConfirmationMessage(enabled, e.Button);

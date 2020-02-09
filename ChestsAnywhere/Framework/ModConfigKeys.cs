@@ -1,4 +1,4 @@
-using StardewModdingAPI;
+using Pathoschild.Stardew.Common.Input;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -8,48 +8,48 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles the chest UI.</summary>
-        public SButton[] Toggle { get; }
+        /// <summary>The keys which toggle the chest UI.</summary>
+        public KeyBinding Toggle { get; }
 
-        /// <summary>The key which navigates to the previous chest.</summary>
-        public SButton[] PrevChest { get; }
+        /// <summary>The keys which navigate to the previous chest.</summary>
+        public KeyBinding PrevChest { get; }
 
-        /// <summary>The key which navigates to the next chest.</summary>
-        public SButton[] NextChest { get; }
+        /// <summary>The keys which navigate to the next chest.</summary>
+        public KeyBinding NextChest { get; }
 
-        /// <summary>The key which navigates to the previous category.</summary>
-        public SButton[] PrevCategory { get; }
+        /// <summary>The keys which navigate to the previous category.</summary>
+        public KeyBinding PrevCategory { get; }
 
-        /// <summary>The key which navigates to the next category.</summary>
-        public SButton[] NextCategory { get; }
+        /// <summary>The keys which navigate to the next category.</summary>
+        public KeyBinding NextCategory { get; }
 
-        /// <summary>The key which edits the current chest.</summary>
-        public SButton[] EditChest { get; }
+        /// <summary>The keys which edit the current chest.</summary>
+        public KeyBinding EditChest { get; }
 
-        /// <summary>The key which sorts items in the chest.</summary>
-        public SButton[] SortItems { get; }
+        /// <summary>The keys which sort items in the chest.</summary>
+        public KeyBinding SortItems { get; }
 
-        /// <summary>The key which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</summary>
-        public SButton[] HoldToMouseWheelScrollChests { get; }
+        /// <summary>The keys which, when held, enable scrolling the chest dropdown with the mouse scroll wheel.</summary>
+        public KeyBinding HoldToMouseWheelScrollChests { get; }
 
-        /// <summary>The key which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</summary>
-        public SButton[] HoldToMouseWheelScrollCategories { get; }
+        /// <summary>The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</summary>
+        public KeyBinding HoldToMouseWheelScrollCategories { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="toggle">The key which toggles the chest UI.</param>
-        /// <param name="prevChest">The key which navigates to the previous chest.</param>
-        /// <param name="nextChest">The key which navigates to the next chest.</param>
-        /// <param name="prevCategory">The key which navigates to the previous category.</param>
-        /// <param name="nextCategory">The key which navigates to the next category.</param>
-        /// <param name="editChest">The key which edits the current chest.</param>
-        /// <param name="sortItems">The key which sorts items in the chest.</param>
-        /// <param name="holdToMouseWheelScrollChests">The key which, when held, enables scrolling the chest dropdown with the mouse scroll wheel.</param>
-        /// <param name="holdToMouseWheelScrollCategories">The key which, when held, enables scrolling the category dropdown with the mouse scroll wheel.</param>
-        public ModConfigKeys(SButton[] toggle, SButton[] prevChest, SButton[] nextChest, SButton[] prevCategory, SButton[] nextCategory, SButton[] editChest, SButton[] sortItems, SButton[] holdToMouseWheelScrollChests, SButton[] holdToMouseWheelScrollCategories)
+        /// <param name="toggle">The keys which toggle the chest UI.</param>
+        /// <param name="prevChest">The keys which navigate to the previous chest.</param>
+        /// <param name="nextChest">The keys which navigate to the next chest.</param>
+        /// <param name="prevCategory">The keys which navigate to the previous category.</param>
+        /// <param name="nextCategory">The keys which navigate to the next category.</param>
+        /// <param name="editChest">The keys which edit the current chest.</param>
+        /// <param name="sortItems">The keys which sort items in the chest.</param>
+        /// <param name="holdToMouseWheelScrollChests">The keys which, when held, enable scrolling the chest dropdown with the mouse scroll wheel.</param>
+        /// <param name="holdToMouseWheelScrollCategories">The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</param>
+        public ModConfigKeys(KeyBinding toggle, KeyBinding prevChest, KeyBinding nextChest, KeyBinding prevCategory, KeyBinding nextCategory, KeyBinding editChest, KeyBinding sortItems, KeyBinding holdToMouseWheelScrollChests, KeyBinding holdToMouseWheelScrollCategories)
         {
             this.Toggle = toggle;
             this.PrevChest = prevChest;

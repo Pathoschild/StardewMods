@@ -89,12 +89,62 @@ file in a text editor to configure the mod.
 
 These are the available settings:
 
-setting    | what it affects
----------- | -------------------
-`Controls` | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default values are `F2` to toggle the overlay, left `CTRL` or left controller shoulder for the previous layer, and right `CTRL` or right controller shoulder for the next one.
-`Layers`   | For each data layer, configure... <ul><li>`Enabled`: whether it should be available in-game.</li><li>`UpdatesPerSecond`: how often the layer should update. The maximum is 60 per seconds, but can be less than 1 to update less than once per second (or zero to disable the data layer entirely).</li><li>`UpdateWhenViewChange`: Whether to update when your viewpoint in the game changes, regardless of the `UpdatesPerSecond` value.</li><li>`ShortcutKey`: While the overlay is open, press this key to switch to this layer (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).</li></ul>
-`ShowGrid` | Default `false`. Whether to show a tile grid when a layer is open.
-`CombineOverlappingBorders` | Default `true`. When two groups of the same color overlap, draw one border around their edges instead of their individual borders.
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default values are...
+
+* `F2` to toggle the overlay;
+* left CTRL or left controller shoulder for the previous layer;
+* right CTRL or right controller shoulder for the next layer.
+
+You can separate bindings with commas (like `LeftControl, LeftShoulder` for either one), and set
+multi-key bindings with plus signs (like `LeftShift + F2`).
+
+  </td>
+</tr>
+<tr>
+  <td><code>Layers</code></td>
+  <td>
+
+For each data layer, you can configure...
+
+* `Enabled`: whether it should be available in-game.
+* `UpdatesPerSecond`: how often the layer should update. The maximum is 60 per seconds, but can be
+  less than 1 to update less than once per second (or zero to disable the data layer entirely).
+* `UpdateWhenViewChange`: Whether to update when your viewpoint in the game changes, regardless of
+  the `UpdatesPerSecond` value.
+* `ShortcutKey`: While the overlay is open, press this key to switch to this layer (see above notes
+  for `Controls`).
+
+  </td>
+</tr>
+<tr>
+  <td><code>ShowGrid</code></td>
+  <td>
+
+Default `false`. Whether to show a tile grid when a layer is open.
+
+  </td>
+</tr>
+<tr>
+  <td><code>CombineOverlappingBorders</code></td>
+  <td>
+
+Default `true`. When two groups of the same color overlap, draw one border around their edges
+instead of their individual borders.
+
+  </td>
+</tr>
+</table>
 
 ## Compatibility
 Data Layers is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and

@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Added support for multi-key bindings (like `LeftShift + F3`).
 * Improved translations. Thanks to Enaium (updated Chinese) and kchapelier (updated French)!
 
 ## 1.10

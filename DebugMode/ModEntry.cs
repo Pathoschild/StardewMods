@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.DebugMode
             // initialize
             this.Config = helper.ReadConfig<ModConfig>();
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // hook events
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.DebugMode
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // toggle debug menu
-            if (this.Keys.ToggleDebug.Contains(e.Button))
+            if (this.Keys.ToggleDebug.JustPressedUnique())
             {
                 this.ShowOverlay = !this.ShowOverlay;
                 if (this.Config.AllowGameDebug)

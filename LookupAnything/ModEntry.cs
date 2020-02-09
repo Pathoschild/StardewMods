@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // load config
             this.Config = this.Helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // load translations
             L10n.Init(helper.Translation);
@@ -145,17 +145,17 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 ModConfigKeys keys = this.Keys;
 
-                if (keys.ToggleLookup.Contains(e.Button))
+                if (keys.ToggleLookup.JustPressedUnique())
                     this.ToggleLookup(LookupMode.Cursor);
-                else if (keys.ToggleLookupInFrontOfPlayer.Contains(e.Button) && Context.IsWorldReady)
+                else if (keys.ToggleLookupInFrontOfPlayer.JustPressedUnique() && Context.IsWorldReady)
                     this.ToggleLookup(LookupMode.FacingPlayer);
-                else if (keys.ScrollUp.Contains(e.Button))
+                else if (keys.ScrollUp.JustPressedUnique())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
-                else if (keys.ScrollDown.Contains(e.Button))
+                else if (keys.ScrollDown.JustPressedUnique())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (keys.ToggleDebug.Contains(e.Button) && Context.IsPlayerFree)
+                else if (keys.ToggleDebug.JustPressedUnique() && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
-                else if (keys.ToggleSearch.Contains(e.Button))
+                else if (keys.ToggleSearch.JustPressedUnique())
                     this.ToggleSearch();
             });
         }
@@ -170,7 +170,7 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 ModConfigKeys keys = this.Keys;
 
-                if (keys.ToggleLookup.Contains(e.Button) || keys.ToggleLookupInFrontOfPlayer.Contains(e.Button))
+                if (keys.ToggleLookup.JustPressedUnique() || keys.ToggleLookupInFrontOfPlayer.JustPressedUnique())
                     this.HideLookup();
             });
         }
@@ -232,17 +232,17 @@ namespace Pathoschild.Stardew.LookupAnything
                     ISubject subject = this.GetSubject(logMessage, lookupMode);
                     if (subject == null)
                     {
-                        this.Monitor.Log($"{logMessage} no target found.", LogLevel.Trace);
+                        this.Monitor.Log($"{logMessage} no target found.");
                         return;
                     }
 
                     // show lookup UI
-                    this.Monitor.Log(logMessage.ToString(), LogLevel.Trace);
+                    this.Monitor.Log(logMessage.ToString());
                     this.ShowLookupFor(subject);
                 }
                 catch
                 {
-                    this.Monitor.Log($"{logMessage} an error occurred.", LogLevel.Trace);
+                    this.Monitor.Log($"{logMessage} an error occurred.");
                     throw;
                 }
             });
@@ -254,7 +254,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             this.Monitor.InterceptErrors("looking that up", () =>
             {
-                this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.", LogLevel.Trace);
+                this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.");
                 this.PushMenu(
                     new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
                 );

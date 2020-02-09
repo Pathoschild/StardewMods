@@ -1,4 +1,4 @@
-using StardewModdingAPI;
+using Pathoschild.Stardew.Common.Input;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -8,36 +8,36 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles the lookup UI for something under the cursor.</summary>
-        public SButton[] ToggleLookup { get; }
+        /// <summary>The keys which toggle the lookup UI for something under the cursor.</summary>
+        public KeyBinding ToggleLookup { get; }
 
-        /// <summary>The key which toggles the lookup UI for something in front of the player.</summary>
-        public SButton[] ToggleLookupInFrontOfPlayer { get; }
+        /// <summary>The keys which toggle the lookup UI for something in front of the player.</summary>
+        public KeyBinding ToggleLookupInFrontOfPlayer { get; }
 
-        /// <summary>Toggle the display of the search window.</summary>
-        public SButton[] ToggleSearch { get; set; }
+        /// <summary>The keys which toggle the search UI.</summary>
+        public KeyBinding ToggleSearch { get; set; }
 
-        /// <summary>The key which scrolls up long content.</summary>
-        public SButton[] ScrollUp { get; }
+        /// <summary>The keys which scroll up long content.</summary>
+        public KeyBinding ScrollUp { get; }
 
-        /// <summary>The key which scrolls down long content.</summary>
-        public SButton[] ScrollDown { get; }
+        /// <summary>The keys which scroll down long content.</summary>
+        public KeyBinding ScrollDown { get; }
 
-        /// <summary>The key which toggles the display of debug information.</summary>
-        public SButton[] ToggleDebug { get; }
+        /// <summary>The keys which toggle the display of debug information.</summary>
+        public KeyBinding ToggleDebug { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="toggleLookup">The key which toggles the lookup UI for something under the cursor.</param>
-        /// <param name="toggleLookupInFrontOfPlayer">The key which toggles the lookup UI for something in front of the player.</param>
-        /// <param name="toggleSearch">Toggle the display of the search window.</param>
-        /// <param name="scrollUp">The key which scrolls up long content.</param>
-        /// <param name="scrollDown">The key which scrolls down long content.</param>
-        /// <param name="toggleDebug">The key which toggles the display of debug information.</param>
-        public ModConfigKeys(SButton[] toggleLookup, SButton[] toggleLookupInFrontOfPlayer, SButton[] toggleSearch, SButton[] scrollUp, SButton[] scrollDown, SButton[] toggleDebug)
+        /// <param name="toggleLookup">The keys which toggle the lookup UI for something under the cursor.</param>
+        /// <param name="toggleLookupInFrontOfPlayer">The keys which toggle the lookup UI for something in front of the player.</param>
+        /// <param name="toggleSearch">The keys which toggle the search UI.</param>
+        /// <param name="scrollUp">The keys which scroll up long content.</param>
+        /// <param name="scrollDown">The keys which scroll down long content.</param>
+        /// <param name="toggleDebug">The keys which toggle the display of debug information.</param>
+        public ModConfigKeys(KeyBinding toggleLookup, KeyBinding toggleLookupInFrontOfPlayer, KeyBinding toggleSearch, KeyBinding scrollUp, KeyBinding scrollDown, KeyBinding toggleDebug)
         {
             this.ToggleLookup = toggleLookup;
             this.ToggleLookupInFrontOfPlayer = toggleLookupInFrontOfPlayer;

@@ -43,9 +43,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public SprinklerLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IMonitor monitor)
-            : base(translations.Get("sprinklers.name"), config, monitor)
+        public SprinklerLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
+            : base(translations.Get("sprinklers.name"), config, input, monitor)
         {
             // init
             this.Mods = mods;
