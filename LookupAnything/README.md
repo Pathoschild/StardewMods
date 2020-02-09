@@ -24,7 +24,7 @@ what the game is doing.
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
 You can do this in the world, your inventory, the calendar, or a shop.
 
-You can also press `F2` to search for something by name.
+You can also press left shift + `F1` to search for something by name.
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -49,7 +49,7 @@ field | action | default
 ----- | ------ | -------
 `ToggleLookup` | lookup anything under the cursor. | `F1`
 `ToggleLookupInFrontOfPlayer` | lookup anything in front of the player. | _none_
-`ToggleSearch` | show a search UI to find something by name. | `F2`
+`ToggleSearch` | show a search UI to find something by name. | `LeftShift + F1`
 `ScrollUp`, `ScrollDown` | scroll the displayed lookup results. | `Up`, `Down`
 `ToggleDebug` | show information intended for developers. | _none_
 

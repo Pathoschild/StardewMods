@@ -145,6 +145,8 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 ModConfigKeys keys = this.Keys;
 
+                if (keys.ToggleSearch.JustPressedUnique())
+                    this.ToggleSearch();
                 if (keys.ToggleLookup.JustPressedUnique())
                     this.ToggleLookup(LookupMode.Cursor);
                 else if (keys.ToggleLookupInFrontOfPlayer.JustPressedUnique() && Context.IsWorldReady)
@@ -155,8 +157,6 @@ namespace Pathoschild.Stardew.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
                 else if (keys.ToggleDebug.JustPressedUnique() && Context.IsPlayerFree)
                     this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
-                else if (keys.ToggleSearch.JustPressedUnique())
-                    this.ToggleSearch();
             });
         }
 

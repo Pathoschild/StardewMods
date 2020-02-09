@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public string ToggleLookupInFrontOfPlayer { get; set; } = "";
 
         /// <summary>The keys which toggle the search UI.</summary>
-        public string ToggleSearch { get; set; } = SButton.F2.ToString();
+        public string ToggleSearch { get; set; } = $"{SButton.LeftShift} + {SButton.F1}";
 
         /// <summary>The keys which scroll up long content.</summary>
         public string ScrollUp { get; set; } = SButton.Up.ToString();
