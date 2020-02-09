@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to Enaium (updated Chinese)!
+* Improved translations. Thanks to Enaium (updated Chinese) and kchapelier (updated French)!
 
 ## 1.10
 Released 01 February 2020.

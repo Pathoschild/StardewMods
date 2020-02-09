@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to asqwedcxz741 (added Chinese)!
+* Improved translations. Thanks to asqwedcxz741 (added Chinese) and mael-belval (added French)!
 
 ## 1.1.2
 Released 01 February 2020.
