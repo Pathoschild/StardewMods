@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added search feature (thanks to collaboration with mattfeldman!).
 * Added support for multi-key bindings (like `LeftShift + F1`).
+* Improved translations. Thanks to mael-belval (updated French)!
 
 ## 1.25.2
 Released 03 February 2020.
