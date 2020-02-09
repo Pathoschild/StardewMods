@@ -329,7 +329,7 @@
     *********/
     // labels
     "item.contents": "Contenu",
-    "item.loves-this": "Adoré ça",
+    "item.loves-this": "Adore ça",
     "item.likes-this": "Apprécie ça",
     "item.neutral-about-this": "Neutre à propos de ça",
     "item.dislikes-this": "N'apprécie pas ça",
@@ -531,7 +531,7 @@
     "player.foraging-skill": "Cueillette",
     "player.mining-skill": "Ext. minière",
     "player.luck": "Chance",
-    "player.save-format": "Enregistrer le format",
+    "player.save-format": "Format du fichier de sauvegarde",
 
     // values
     "player.farm-map.custom": "Personnalisée",
