@@ -567,7 +567,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 // tab
                 Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedCategory);
-                this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
+                if (Constants.TargetPlatform == GamePlatform.Android)
+                    this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y, true, this.Font);
+                else
+                    this.CategoryTab = new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
                 this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
@@ -577,7 +580,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 // tab
                 Vector2 tabSize = Tab.GetTabSize(this.Font, this.Chest.DisplayName);
-                this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
+                if (Constants.TargetPlatform == GamePlatform.Android)
+                    this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y, true, this.Font);
+                else
+                    this.ChestTab = new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
