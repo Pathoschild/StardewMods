@@ -134,21 +134,12 @@ namespace Pathoschild.Stardew.Common.UI
         {
             if(Constants.TargetPlatform == GamePlatform.Android)
             {
-                System.Reflection.FieldInfo matrixField = Game1.spriteBatch.GetType().GetField("_matrix", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                object originMatrix = matrixField.GetValue(Game1.spriteBatch);
                 float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
                 Game1.spriteBatch.End();
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Microsoft.Xna.Framework.Matrix.CreateScale(NativeZoomLevel));
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(NativeZoomLevel));
                 this.Draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
-                if(originMatrix != null)
-                {
-                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
-                }
-                else
-                {
-                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-                }
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(Game1.options.zoomLevel));
                 return;
             }
             this.Draw(Game1.spriteBatch);
