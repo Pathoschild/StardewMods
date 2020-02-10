@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            if (Constants.TargetPlatform == GamePlatform.Android)
+            if(Constants.TargetPlatform == GamePlatform.Android)
             {
                 return new ItemGrabMenu(
                     inventory: this.Inventory,
@@ -97,7 +97,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                     context: this.Context
                 );
             }
-
             return new ItemGrabMenu(
                 inventory: this.Inventory,
                 reverseGrab: false,
