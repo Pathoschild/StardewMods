@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved compatibility with Better Water (thanks to laulajatar!).
+
 ## 1.5
 Released 01 February 2020.
 
