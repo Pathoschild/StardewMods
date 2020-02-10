@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved compatibility with Better Water (thanks to laulajatar!).
+* Removed files for Eemie's Map Recolor. (Compatibility is now handled by that mod directly.)
 
 ## 1.5
 Released 01 February 2020.
