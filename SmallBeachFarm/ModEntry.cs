@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
                     if (tilesheet.ImageSource.StartsWith(internalRootKey + Path.DirectorySeparatorChar))
-                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileName(tilesheet.ImageSource)), ContentSource.GameContent);
+                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileNameWithoutExtension(tilesheet.ImageSource)), ContentSource.GameContent);
                 }
 
                 return (T)(object)map;
@@ -97,6 +97,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetName.StartsWith(this.FakeAssetPrefix))
             {
                 string filename = Path.GetFileName(asset.AssetName);
+                if (!Path.HasExtension(filename))
+                    filename += ".png";
 
                 // get relative path to load
                 string relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))

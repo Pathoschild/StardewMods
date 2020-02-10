@@ -4,6 +4,7 @@
 ## Upcoming release
 * Improved compatibility with Better Water (thanks to laulajatar!).
 * Removed files for Eemie's Map Recolor. (Compatibility is now handled by that mod directly.)
+* Fixed issue where another mod's compatibility patch for Small Beach Farm wouldn't be applied correctly.
 
 ## 1.5
 Released 01 February 2020.
