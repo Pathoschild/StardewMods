@@ -115,6 +115,12 @@ namespace Pathoschild.Stardew.Common.UI
         {
             if (Game1.options.hardwareCursor)
                 return;
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((int)(Game1.getMouseX() * Game1.options.zoomLevel / NativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / NativeZoomLevel)), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
+                return;
+            }
             Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getMouseX(), Game1.getMouseY()), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
         }
 
@@ -126,6 +132,16 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
+            if(Constants.TargetPlatform == GamePlatform.Android)
+            {
+                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                Game1.spriteBatch.End();
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(NativeZoomLevel));
+                this.Draw(Game1.spriteBatch);
+                Game1.spriteBatch.End();
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(Game1.options.zoomLevel));
+                return;
+            }
             this.Draw(Game1.spriteBatch);
         }
 
@@ -156,9 +172,20 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            bool handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+            bool handled;
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
+                ? this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / NativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / NativeZoomLevel))
                 : this.ReceiveButtonPress(e.Button);
+            }
+            else
+            {
+                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
+                    ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+                    : this.ReceiveButtonPress(e.Button);
+            }
 
             if (handled)
                 this.InputHelper.Suppress(e.Button);
