@@ -5,6 +5,7 @@
 * Added search feature (thanks to collaboration with mattfeldman!).
 * Added support for multi-key bindings (like `LeftShift + F1`).
 * Improved translations. Thanks to mael-belval (updated French)!
+* Fixed some vanilla recipes not shown in lookups when Producer Framework Mod packs are installed.
 
 ## 1.25.2
 Released 03 February 2020.
