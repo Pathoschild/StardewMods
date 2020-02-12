@@ -13,6 +13,9 @@ that change the game's images and data without replacing XNB files.
   * [Edit part of an image](#edit-part-of-an-image)
   * [Edit part of a data file](#edit-part-of-a-data-file)
   * [Edit part of a map](#edit-part-of-a-map)
+    * [Map overlay](#map-overlay)
+    * [Map properties](#map-properties)
+    * [Tiles and tile properties](#tiles-and-tile-properties)
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
@@ -406,12 +409,26 @@ New entries are added at the bottom of the list by default.
 </dl>
 
 ### Edit part of a map
-`"Action": "EditMap"` changes part of an in-game map by copying tiles, properties, and tilesheets
-from a source map. This is essentially a copy & paste from one map into another, replacing whatever
-was in the target area before.
+`"Action": "EditMap"` changes part of an in-game map. This consists of three separate features:
 
-Any number of content packs can edit the same map. If two patches overlap, whichever one is applied
-last will take effect for the overlapping tiles.
+* copy tiles, properties, and tilesheets from a source map into the target;
+* add/edit/remove map properties;
+* add/edit/remove individual tiles and tile properties.
+
+Each patch can use any combination of these features, but must set the required fields for at least
+one of them: map overlay (`FromFile` and `ToArea`), map properties (`MapProperties`), or tiles
+(`MapTiles`). When combined into one patch, the changes are applied in this order: overlay, then
+map properties, then map tiles.
+
+Any number of content packs can edit the same map. If two patches conflict, whichever one is applied
+last will take effect for the overlapping portions.
+
+<dl>
+<dt id="map-overlay">Map overlay</dt>
+<dd>
+
+A 'map overlay' copies tiles, properties, and tilesheets from a source map into the target. The
+target area will be fully overwritten with the source area.
 
 <table>
 <tr>
@@ -476,26 +493,7 @@ coordinates of the top-left corner, and the tile width and height of the area. I
 
 </td>
 </tr>
-
-<tr>
-<td>
-
-`MapProperties`
-
-</td>
-<td>
-
-The map properties (not tile properties) to add, replace, or delete. To add an property, just
-specify a key that doesn't exist; to delete an entry, set the value to `null` (like
-`"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in property keys
-and values.
-
-</td>
-</tr>
-
 </table>
-
-Required fields: at least one of (`FromFile` and `ToArea`) or (`MapProperties`).
 
 For example, this replaces the town square with the one in another map:
 ```js
@@ -513,7 +511,45 @@ For example, this replaces the town square with the one in another map:
 }
 ```
 
-This changes the warp map property for the farm cave:
+</dd>
+
+<dt id="map-properties">Map properties</dt>
+<dd>
+
+The `MapProperties` field lets you add, replace, or remove map-level properties.
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _common fields_ above.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MapProperties`
+
+</td>
+<td>
+
+The map properties (not tile properties) to add, replace, or delete. To add an property, just
+specify a key that doesn't exist; to delete an entry, set the value to `null` (like
+`"some key": null`). This field supports [tokens](#advanced-tokens--conditions) in property keys
+and values.
+
+</td>
+</tr>
+</table>
+
+For example, This changes the warp map property for the farm cave:
 ```js
 {
    "Format": "1.11.0",
@@ -529,13 +565,106 @@ This changes the warp map property for the farm cave:
 }
 ```
 
-(You can patch a map area and change map properties in the same patch.)
+</dd>
+<dt id="tiles-and-tile-properties">Tiles and tile properties</dt>
+<dd>
 
-Known limitations:
-* Patching non-farmhouse-floor tiles into the farmhouse's `Back` layer may cause strange effects,
-  due to the game's floor decorating logic.
-* Conditional map patches may reset the map's seasonal tilesheets to spring. This is a SMAPI bug
-  that will be fixed in SMAPI 3.0.
+The `MapTiles` field lets you add, edit, or remove the map's individual tiles and tile
+properties.
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _common fields_ above.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MapTiles`
+
+</td>
+<td>
+
+The tiles to add, edit, or delete. All of the subfields below support
+[tokens](#advanced-tokens--conditions).
+
+This consists of an array of tiles (see examples below) with these properties:
+
+field | purpose
+----- | -------
+`Layer` | (Required.) The [map layer](https://stardewvalleywiki.com/Modding:Maps#Basic_concepts) to change.
+`Position` | (Required.) The [tile coordinates](https://stardewvalleywiki.com/Modding:Maps#Tile_coordinates) to change. You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see tile coordinates in-game.
+`SetTilesheet` | (Required when adding a tile, else optional.) Sets the tilesheet ID for the tile index.
+`SetIndex` | (Required when adding a tile, else optional.) Sets the tile index in the tilesheet.
+`SetProperties` | The properties to set or remove. This is merged into the existing tile properties, if any. To remove a property, set its value to `null` (not `"null"`!).
+`Remove` | (Optional, default false.) `true` to remove the current tile and all its properties on that layer. If combined with the other fields, a new tile is created from the other fields as if the tile didn't previously exist.
+
+</td>
+</tr>
+</table>
+
+For example, this extends the farm path one extra tile to the shipping bin:
+```js
+{
+   "Format": "1.11.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Farm",
+         "MapTiles": [
+            {
+               "Position": { "X": 72, "Y": 15 },
+               "Layer": "Back",
+               "SetIndex": "622"
+            }
+         ]
+      },
+   ]
+}
+```
+
+You can use tokens in all of the fields. For example, this adds a warp in front of the shipping bin
+that leads to a different location each day:
+```js
+{
+   "Format": "1.11.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Farm",
+         "MapTiles": [
+            {
+               "Position": { "X": 72, "Y": 15 },
+               "Layer": "Back",
+               "SetProperties": {
+                  "TouchAction": "MagicWarp {{Random:BusStop, Farm, Town, Mountain}} 10 11"
+               }
+            }
+         ]
+      },
+   ]
+}
+```
+
+</dd>
+
+<dt>Known limitations</dt>
+<dd>
+
+* Patching the farmhouse's `Back` layer may fail or cause strange effects, due to the game's floor
+  decorating logic. This is a limitation in the game itself, not Content Patcher.
+
+</dd>
+</dl>
 
 ## Advanced: tokens & conditions
 ### Overview

@@ -1,7 +1,7 @@
 namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The input settings for a <see cref="PatchConfig.MoveEntries"/> field.</summary>
-    public class PatchMoveEntryConfig
+    internal class PatchMoveEntryConfig
     {
         /*********
         ** Accessors
