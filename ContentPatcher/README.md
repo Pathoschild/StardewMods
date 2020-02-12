@@ -128,8 +128,8 @@ field      | purpose
 `"Action": "Load"` replaces the entire file with your version. This is useful for mods which
 change the whole file (like pet replacement mods).
 
-Avoid this if you don't need to change the whole file though — each file can only be replaced once,
-so your content pack won't be compatible with other content packs that replace the same file.
+Avoid this if you don't need to change the whole file though — each file can only be replaced by one
+patch, so your content pack won't be compatible with other content packs that replace the same file.
 (It'll work fine with content packs that only edit the file, though.)
 
 field      | purpose
@@ -1212,11 +1212,10 @@ smaller if possible.
 </table>
 </dd>
 
-<dt>Patch-specific tokens:</dt>
+<dt>Meta tokens:</dt>
 
 <dd>
-These tokens provide a value specific to the current patch. They can't be used in dynamic tokens or
-any other field outside a patch block.
+These tokens provide meta info about tokens, patches, and data assets.
 
 <table>
 <tr>
@@ -1239,6 +1238,8 @@ This is mainly useful for patches which specify multiple targets:
 }
 ```
 
+This can only be used in a patch block directly (e.g. it won't work in a dynamic token).
+
 </td>
 </tr>
 
@@ -1256,17 +1257,13 @@ Equivalent to `Target`, but only the part after the last path separator:
 }
 ```
 
+This can only be used in a patch block directly (e.g. it won't work in a dynamic token).
+
 </td>
 </tr>
 </table>
 </dd>
 </dl>
-
-**Special note about `"Action": "Load"`:**  
-Each file can only be loaded by one patch. You can have multiple load patches with different
-conditions, and the correct one will be used when the conditions change. However if multiple
-patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
-and apply none of them.
 
 ### Randomization
 You can randomize values using the `Random` token:
