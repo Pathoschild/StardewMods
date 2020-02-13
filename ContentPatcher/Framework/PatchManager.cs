@@ -184,7 +184,7 @@ namespace ContentPatcher.Framework
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
-            foreach (IPatch patch in patches.OrderByIgnoreCase(p => p.TargetAsset).ThenByIgnoreCase(p => p.LogName))
+            foreach (IPatch patch in patches)
             {
                 // log asset name
                 if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
