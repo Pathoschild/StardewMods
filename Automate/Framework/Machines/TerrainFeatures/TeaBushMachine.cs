@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             // sanity check for green tea bush, even though caller should have verified
             // also it's not a town bush
-            if (this.Machine.size.Value != Bush.greenTeaBush && this.Machine.townBush.Value)
+            if (this.Machine.size.Value != Bush.greenTeaBush || this.Machine.townBush.Value)
                 return MachineState.Disabled;
 
             // based on BushSubject
