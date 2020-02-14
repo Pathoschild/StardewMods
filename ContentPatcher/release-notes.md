@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for editing map tiles and tile properties.
+* Added support for arithmetic expressions.
 * Added support for multi-key bindings (like `LeftShift + F3`).
 * Patches are now always applied in the order listed.
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.

@@ -123,6 +123,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
 
+        /// <summary>A dynamic query expression.</summary>
+        Query,
+
         /****
         ** String manipulation
         ****/

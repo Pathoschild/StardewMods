@@ -201,6 +201,7 @@ namespace ContentPatcher.Framework
             yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
 
             // string manipulation
+            yield return new QueryValueProvider();
             yield return new RangeValueProvider();
             yield return new LetterCaseValueProvider(ConditionType.Lowercase);
             yield return new LetterCaseValueProvider(ConditionType.Uppercase);

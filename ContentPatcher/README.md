@@ -19,6 +19,7 @@ that change the game's images and data without replacing XNB files.
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
+  * [Arithmetic](#arithmetic)
   * [Randomization](#randomization)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
@@ -1393,6 +1394,51 @@ This can only be used in a patch block directly (e.g. it won't work in a dynamic
 </table>
 </dd>
 </dl>
+
+### Arithmetic
+You can calculate mathematical expressions in patches using the `query` token (including over
+tokens which return a number):
+```js
+{
+   "Format": "1.11.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
+         }
+      }
+   ]
+}
+```
+
+This also works in conditions:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-friendly.png",
+   "When": {
+      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
+   }
+}
+```
+
+These operators are supported:
+
+symbol | operation
+------ | ---------
+\+     | addition
+\-     | subtraction
+\*     | multiplication
+/      | division
+%      | modulus
+()     | grouping
+
+**Caution:** the query syntax allows some operations that aren't documented here. These are
+intended for future use, and may change without warning. Undocumented features shouldn't be used to
+avoid breaking changes.
 
 ### Randomization
 You can randomize values using the `Random` token:
