@@ -38,7 +38,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         public override MachineState GetState()
         {
             // sanity check for green tea bush, even though caller should have verified
-            if (this.Machine.size.Value != Bush.greenTeaBush)
+            // also it's not a town bush
+            if (this.Machine.size.Value != Bush.greenTeaBush && this.Machine.townBush.Value)
                 return MachineState.Disabled;
 
             // based on BushSubject
@@ -62,8 +63,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="item">The output item that was taken.</param>
         private void OnOutputReduced(Item item)
         {
-            // simulate use on the tree to reset its state
-            this.Machine.performUseAction(this.Tile, this.Location);
+            this.Machine.tileSheetOffset.Value = 0;
+            this.Machine.setUpSourceRect();
         }
     }
 }
