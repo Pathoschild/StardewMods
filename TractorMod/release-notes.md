@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added support for multi-key bindings (like `LeftShift + BackSpace`).
+* Fixed slingshot enabled by default. (This doesn't affect existing `config.json` files.)
 
 ## 4.9.2
 Released 01 February 2020.

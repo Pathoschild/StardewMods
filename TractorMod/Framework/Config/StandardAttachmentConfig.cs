@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         public GenericAttachmentConfig Shears = new GenericAttachmentConfig();
 
         /// <summary>Configuration for the slingshot attachment.</summary>
-        public GenericAttachmentConfig Slingshot = new GenericAttachmentConfig();
+        public GenericAttachmentConfig Slingshot = new GenericAttachmentConfig { Enable = false };
 
         /// <summary>Configuration for the watering can attachment.</summary>
         public GenericAttachmentConfig WateringCan = new GenericAttachmentConfig();
