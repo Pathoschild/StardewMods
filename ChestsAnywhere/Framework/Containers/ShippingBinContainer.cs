@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.Xna.Framework;
 using Netcode;
-using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -35,6 +31,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
         private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
+
 
         /*********
         ** Accessors
@@ -90,60 +87,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return object.ReferenceEquals(this.Inventory, inventory);
         }
 
-        /// <summary>Create a menu of shipping bin for Android.</summary>
-        /// <param name="state">Set to true to ship mode, or else recall items.</param>
-        private MobileItemGrabMenu CreateMobileShippingBinMenu(bool state)
-        {
-            MobileItemGrabMenu menu;
-            if (state)
-            {
-                menu = new MobileItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: false,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: null,
-                    message: null,
-                    behaviorOnItemGrab: this.GrabItemFromContainer,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    context: this.Farm,
-                    organizeFunction: () =>
-                    {
-                        Game1.activeClickableMenu = this.CreateMobileShippingBinMenu(false);
-                    }
-                );
-                menu.initializeShippingBin();
-            }
-            else
-            {
-                menu = new MobileItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: false,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: null,
-                    message: null,
-                    behaviorOnItemGrab: this.GrabItemFromContainer,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    context: this.Farm,
-                    organizeFunction: () =>
-                    {
-                        Game1.activeClickableMenu = this.CreateMobileShippingBinMenu(true);
-                    }
-                );
-            }
-            return menu;
-        }
-
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                return this.CreateMobileShippingBinMenu(true);
+                return new ItemGrabMenu(
+                    inventory: this.Inventory,
+                    reverseGrab: false,
+                    showReceivingMenu: true,
+                    highlightFunction: this.CanAcceptItem,
+                    behaviorOnItemSelectFunction: null,
+                    message: null,
+                    behaviorOnItemGrab: this.GrabItemFromContainer,
+                    canBeExitedWithKey: true,
+                    showOrganizeButton: true,
+                    context: this.Farm
+                );
             }
             return new ItemGrabMenu(
                 inventory: this.Inventory,
