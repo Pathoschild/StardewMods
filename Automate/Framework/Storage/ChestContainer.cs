@@ -89,7 +89,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
 
             // try add new slot
-            if (inventory.Count < Chest.capacity)
+            object capacity = this.Chest.GetType().GetProperty("Capacity")
+                                  ?.GetValue(this.Chest) ?? Chest.capacity;
+            if (inventory.Count < (int)capacity)
                 inventory.Add(stack.Take(stack.Count));
         }
 
