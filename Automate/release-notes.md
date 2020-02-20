@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added compatibility with Mega Storage (thanks to ImJustMatt!).
+
 ## 1.15.1
 Released 02 February 2020.
 
