@@ -55,6 +55,7 @@ This can be used to automate...
 * [statues of endless fortune](https://stardewvalleywiki.com/Statue_Of_Endless_Fortune);
 * [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [tappers](http://stardewvalleywiki.com/Tapper);
+* [tea bushes](https://stardewvalleywiki.com/Tea_Bush);
 * [wood chippers](http://stardewvalleywiki.com/Wood_Chipper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 

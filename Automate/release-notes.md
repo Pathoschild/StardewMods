@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for tea bushes (thanks to stellarashes!).
 * Added support for multi-key bindings (like `LeftShift + U`).
 * Added compatibility with Mega Storage (thanks to ImJustMatt!).
 

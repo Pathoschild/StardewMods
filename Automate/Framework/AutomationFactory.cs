@@ -162,6 +162,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             // machine
             if (feature is FruitTree fruitTree)
                 return new FruitTreeMachine(fruitTree, location, tile);
+            if (feature is Bush bush && bush.size.Value == Bush.greenTeaBush && !bush.townBush.Value)
+                return new TeaBushMachine(bush, location, tile);
 
             // connector
             if (this.IsConnector(feature))
