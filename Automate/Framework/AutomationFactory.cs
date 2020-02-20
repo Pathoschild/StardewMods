@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             // chest container 
             if (obj is Chest chest)
-                return new ChestContainer(chest, location, tile);
+                return new ChestContainer(chest, location, tile, this.Reflection);
 
             // machine
             if (obj.ParentSheetIndex == 165)

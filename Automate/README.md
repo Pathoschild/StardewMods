@@ -487,6 +487,10 @@ automate.AddFactory(new MyAutomationFactory());
 That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
 your custom machine to its normal automation.
 
+### Custom chest capacity
+If a `Chest` instance has a public `Capacity` property, Automate will use that instead of the
+`Chest.capacity` constant.
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1063)

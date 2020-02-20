@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for multi-key bindings (like `LeftShift + U`).
+* Added compatibility with Mega Storage (thanks to ImJustMatt!).
 
 ## 1.15.1
 Released 02 February 2020.
