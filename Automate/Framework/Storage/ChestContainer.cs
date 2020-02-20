@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             this.Name = this.MigrateLegacyOptions(this.Name);
 
             // get capacity
-            IReflectedProperty<int> capacity = reflection.GetProperty<int>(chest, "Capacity"); // let mods like MegaStorage override capacity
+            IReflectedProperty<int> capacity = reflection.GetProperty<int>(chest, "Capacity", required: false); // let mods like MegaStorage override capacity
             if (capacity != null)
                 this.Capacity = capacity.GetValue;
             else
