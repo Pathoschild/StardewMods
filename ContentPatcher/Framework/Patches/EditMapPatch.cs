@@ -371,13 +371,22 @@ namespace ContentPatcher.Framework.Patches
                     Point sourcePos = new Point(sourceArea.X + x, sourceArea.Y + y);
                     Point targetPos = new Point(targetArea.X + x, targetArea.Y + y);
 
-                    // copy tiles
+                    // copy tiles and add layer if not present in target map
                     foreach (Layer sourceLayer in source.Layers)
                     {
                         Layer targetLayer = layerMap[sourceLayer];
                         if (targetLayer == null)
-                            continue;
+                        {
+                            targetMap.AddLayer(targetLayer = new Layer(sourceLayer.Id, targetMap, targetMap.Layers[0].LayerSize, Layer.m_tileSize));
+                            layerMap[sourceLayer] = targetMap.GetLayer(sourceLayer.Id);
+                        }
 
+                        foreach (var prop in sourceLayer.Properties)
+                            if (!targetLayer.Properties.ContainsKey(prop.Key))
+                                targetLayer.Properties.Add(prop);
+                            else
+                                targetLayer.Properties[prop.Key] = prop.Value;
+                                
                         Tile sourceTile = sourceLayer.Tiles[sourcePos.X, sourcePos.Y];
                         Tile targetTile;
                         switch (sourceTile)
