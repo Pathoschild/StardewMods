@@ -1,8 +1,10 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -84,6 +86,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         {
             this.Textbox.Selected = true;
             Game1.keyboardDispatcher.Subscriber = this;
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                this.Textbox.GetType().GetMethod("ShowAndroidKeyboard", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(this.Textbox, new object[] { });
+            }
         }
 
         /// <summary>Receive input from the user.</summary>
