@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,9 +21,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
 
         /// <summary>A lambda which returns an error message for the text value (if applicable).</summary>
         private readonly Func<char, bool> Validator;
-
-        /// <summary>The method which shows the on-screen keyboard, if applicable.</summary>
-        private readonly IReflectedMethod ShowOnScreenKeyboard;
 
 
         /*********
@@ -70,7 +68,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             set => this.Textbox.Height = value;
         }
 
-
         /*********
         ** Public methods
         *********/
@@ -78,14 +75,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="font">The text font.</param>
         /// <param name="textColor">The text color.</param>
         /// <param name="validate">A lambda which indicates whether the specified character is allowed.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public ValidatedTextBox(SpriteFont font, Color textColor, Func<char, bool> validate, IReflectionHelper reflection)
+        public ValidatedTextBox(SpriteFont font, Color textColor, Func<char, bool> validate)
         {
             this.Validator = validate;
             this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor);
-            this.ShowOnScreenKeyboard = Constants.TargetPlatform == GamePlatform.Android
-                ? reflection.GetMethod(this.Textbox, "ShowAndroidKeyboard")
-                : null;
         }
 
         /// <summary>Set the input focus to this control.</summary>
@@ -93,7 +86,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         {
             this.Textbox.Selected = true;
             Game1.keyboardDispatcher.Subscriber = this;
-            this.ShowOnScreenKeyboard?.Invoke();
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                this.Textbox.GetType().GetMethod("ShowAndroidKeyboard", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(this.Textbox, new object[] { });
+            }
         }
 
         /// <summary>Receive input from the user.</summary>
