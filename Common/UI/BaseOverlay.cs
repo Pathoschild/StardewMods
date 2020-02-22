@@ -141,7 +141,14 @@ namespace Pathoschild.Stardew.Common.UI
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Microsoft.Xna.Framework.Matrix.CreateScale(NativeZoomLevel));
                 this.Draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
+                if(originMatrix != null)
+                {
+                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
+                }
+                else
+                {
+                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
+                }
                 return;
             }
             this.Draw(Game1.spriteBatch);
