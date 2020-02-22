@@ -1,0 +1,4 @@
+{
+    "enabled-message": "클립 없음 모드가 활성화되었습니다, {{button}} 를 다시 눌러 끕니다.",
+    "disabled-message": "클립 없음 모드가 비활성화됩니다, {{button}} 를 다시 눌러 켭니다."
+}
