@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="onInvalidButton">A callback invoked when a button value can't be parsed.</param>
         public static KeyBinding ParseButtons(string raw, IInputHelper input, Action<string> onInvalidButton)
         {
-            KeyBinding binding = new KeyBinding(raw, input.GetStatus, out string[] errors);
+            KeyBinding binding = new KeyBinding(raw, input.GetState, out string[] errors);
             if (errors.Any())
                 onInvalidButton.Invoke(errors[0]);
             return binding;

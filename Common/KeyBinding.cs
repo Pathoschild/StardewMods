@@ -16,13 +16,13 @@ namespace Pathoschild.Stardew.Common.Input
         private readonly SButton[][] ButtonSets;
 
         /// <summary>Get the current state for a button.</summary>
-        private readonly Func<SButton, InputStatus> GetButtonState;
+        private readonly Func<SButton, SButtonState> GetButtonState;
 
         /// <summary>The last game tick when <see cref="JustPressedUnique"/> was called.</summary>
         private int LastUniqueTick;
 
         /// <summary>Whether any keys are bound.</summary>
-        private bool HasAnyImpl;
+        private readonly bool HasAnyImpl;
 
 
         /*********
@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.Common.Input
         /// <param name="input">The key binding string containing button codes, with <c>+</c> between buttons for multi-key bindings and commas between alternative bindings.</param>
         /// <param name="getButtonState">Get the current state for a button.</param>
         /// <param name="errors">The errors that occurred while parsing the input, if any.</param>
-        public KeyBinding(string input, Func<SButton, InputStatus> getButtonState, out string[] errors)
+        public KeyBinding(string input, Func<SButton, SButtonState> getButtonState, out string[] errors)
         {
             this.GetButtonState = getButtonState;
 
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Common.Input
 
         /// <summary>Get the overall state of the input bindings.</summary>
         /// <remarks>States are transitive across sets. For example, if set A is 'released' and set B is 'pressed', the combined state is 'held'.</remarks>
-        public InputStatus GetStatus()
+        public SButtonState GetState()
         {
             bool wasPressed = false;
             bool isPressed = false;
@@ -93,16 +93,16 @@ namespace Pathoschild.Stardew.Common.Input
             {
                 switch (this.GetStateFor(set))
                 {
-                    case InputStatus.Pressed:
+                    case SButtonState.Pressed:
                         isPressed = true;
                         break;
 
-                    case InputStatus.Held:
+                    case SButtonState.Held:
                         wasPressed = true;
                         isPressed = true;
                         break;
 
-                    case InputStatus.Released:
+                    case SButtonState.Released:
                         wasPressed = true;
                         break;
                 }
@@ -111,20 +111,20 @@ namespace Pathoschild.Stardew.Common.Input
             if (wasPressed == isPressed)
             {
                 return wasPressed
-                    ? InputStatus.Held
-                    : InputStatus.None;
+                    ? SButtonState.Held
+                    : SButtonState.None;
             }
 
             return wasPressed
-                ? InputStatus.Released
-                : InputStatus.Pressed;
+                ? SButtonState.Released
+                : SButtonState.Pressed;
         }
 
         /// <summary>Get whether any of the button sets are pressed.</summary>
         public bool IsDown()
         {
-            InputStatus status = this.GetStatus();
-            return status == InputStatus.Pressed || status == InputStatus.Held;
+            SButtonState state = this.GetState();
+            return state == SButtonState.Pressed || state == SButtonState.Held;
         }
 
         /// <summary>Get whether the input binding was just pressed this tick, *and* this method hasn't been called during the same tick yet. This method is only useful if you check input every tick, since otherwise you may miss the tick where it's pressed; otherwise you should cache the result of <see cref="IsDown"/> and compare.</summary>
@@ -134,7 +134,7 @@ namespace Pathoschild.Stardew.Common.Input
                 return false;
             this.LastUniqueTick = Game1.ticks;
 
-            return this.GetStatus() == InputStatus.Pressed;
+            return this.GetState() == SButtonState.Pressed;
         }
 
         /// <summary>Get whether any keys are bound.</summary>
@@ -158,28 +158,28 @@ namespace Pathoschild.Stardew.Common.Input
         *********/
         /// <summary>Get the state for a button set.</summary>
         /// <param name="buttons">The buttons in the set.</param>
-        private InputStatus GetStateFor(SButton[] buttons)
+        private SButtonState GetStateFor(SButton[] buttons)
         {
-            InputStatus[] states = buttons.Select(this.GetButtonState).Distinct().ToArray();
+            SButtonState[] states = buttons.Select(this.GetButtonState).Distinct().ToArray();
 
             // single state
             if (states.Length == 1)
                 return states[0];
 
             // if any key has no state, the whole set wasn't enabled last tick
-            if (states.Contains(InputStatus.None))
-                return InputStatus.None;
+            if (states.Contains(SButtonState.None))
+                return SButtonState.None;
 
             // mix of held + pressed => pressed
-            if (states.All(p => p == InputStatus.Pressed || p == InputStatus.Held))
-                return InputStatus.Pressed;
+            if (states.All(p => p == SButtonState.Pressed || p == SButtonState.Held))
+                return SButtonState.Pressed;
 
             // mix of held + released => released
-            if (states.All(p => p == InputStatus.Held || p == InputStatus.Released))
-                return InputStatus.Released;
+            if (states.All(p => p == SButtonState.Held || p == SButtonState.Released))
+                return SButtonState.Released;
 
             // not down last tick or now
-            return InputStatus.None;
+            return SButtonState.None;
         }
     }
 }

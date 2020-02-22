@@ -8,7 +8,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
 {
     /// <summary>Unit tests for <see cref="KeyBinding"/>.</summary>
     [TestFixture]
-    internal class InputBindingTests
+    internal class KeyBindingTests
     {
         /*********
         ** Unit tests
@@ -17,11 +17,11 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         ** Constructor
         ****/
         /// <summary>Assert the parsed fields when constructed from a simple single-key string.</summary>
-        [TestCaseSource(nameof(InputBindingTests.GetAllButtons))]
+        [TestCaseSource(nameof(KeyBindingTests.GetAllButtons))]
         public void Construct_SimpleValue(SButton button)
         {
             // act
-            KeyBinding binding = new KeyBinding($"{button}", _ => InputStatus.None, out string[] errors);
+            KeyBinding binding = new KeyBinding($"{button}", _ => SButtonState.None, out string[] errors);
 
             // assert
             Assert.AreEqual(binding.ToString(), $"{button}");
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public string Construct_MultiValues(string input)
         {
             // act
-            KeyBinding binding = new KeyBinding(input, _ => InputStatus.None, out string[] errors);
+            KeyBinding binding = new KeyBinding(input, _ => SButtonState.None, out string[] errors);
 
             // assert
             Assert.IsNotNull(errors, message: "The errors should never be null.");
@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Construct_InvalidValues(string input, string expectedOutput, string expectedError)
         {
             // act
-            KeyBinding binding = new KeyBinding(input, _ => InputStatus.None, out string[] errors);
+            KeyBinding binding = new KeyBinding(input, _ => SButtonState.None, out string[] errors);
 
             // assert
             Assert.AreEqual(expectedOutput, binding.ToString(), message: "The key binding result is incorrect.");
@@ -72,32 +72,32 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
 
 
         /****
-        ** GetStatus
+        ** GetState
         ****/
-        /// <summary>Assert that <see cref="KeyBinding.GetStatus"/> returns the expected result for a given input state.</summary>
+        /// <summary>Assert that <see cref="KeyBinding.GetState"/> returns the expected result for a given input state.</summary>
         // single value
-        [TestCase("A", "A:Held", ExpectedResult = InputStatus.Held)]
-        [TestCase("A", "A:Pressed", ExpectedResult = InputStatus.Pressed)]
-        [TestCase("A", "A:Released", ExpectedResult = InputStatus.Released)]
-        [TestCase("A", "A:None", ExpectedResult = InputStatus.None)]
+        [TestCase("A", "A:Held", ExpectedResult = SButtonState.Held)]
+        [TestCase("A", "A:Pressed", ExpectedResult = SButtonState.Pressed)]
+        [TestCase("A", "A:Released", ExpectedResult = SButtonState.Released)]
+        [TestCase("A", "A:None", ExpectedResult = SButtonState.None)]
 
         // multiple values
-        [TestCase("A + B + C, D", "A:Released, B:None, C:None, D:Pressed", ExpectedResult = InputStatus.Pressed)] // right pressed => pressed
-        [TestCase("A + B + C, D", "A:Pressed, B:Held, C:Pressed, D:None", ExpectedResult = InputStatus.Pressed)] // left pressed => pressed
-        [TestCase("A + B + C, D", "A:Pressed, B:Pressed, C:Released, D:None", ExpectedResult = InputStatus.None)] // one key released but other keys weren't down last tick => none
-        [TestCase("A + B + C, D", "A:Held, B:Held, C:Released, D:None", ExpectedResult = InputStatus.Released)] // all three keys were down last tick and now one is released => released
+        [TestCase("A + B + C, D", "A:Released, B:None, C:None, D:Pressed", ExpectedResult = SButtonState.Pressed)] // right pressed => pressed
+        [TestCase("A + B + C, D", "A:Pressed, B:Held, C:Pressed, D:None", ExpectedResult = SButtonState.Pressed)] // left pressed => pressed
+        [TestCase("A + B + C, D", "A:Pressed, B:Pressed, C:Released, D:None", ExpectedResult = SButtonState.None)] // one key released but other keys weren't down last tick => none
+        [TestCase("A + B + C, D", "A:Held, B:Held, C:Released, D:None", ExpectedResult = SButtonState.Released)] // all three keys were down last tick and now one is released => released
 
         // transitive
-        [TestCase("A, B", "A: Released, B: Pressed", ExpectedResult = InputStatus.Held)]
-        public InputStatus GetStatus(string input, string statusMap)
+        [TestCase("A, B", "A: Released, B: Pressed", ExpectedResult = SButtonState.Held)]
+        public SButtonState GetState(string input, string stateMap)
         {
             // act
-            KeyBinding binding = new KeyBinding(input, key => this.GetStatusFromMap(key, statusMap), out string[] errors);
+            KeyBinding binding = new KeyBinding(input, key => this.GetStateFromMap(key, stateMap), out string[] errors);
 
             // assert
             Assert.IsNotNull(errors, message: "The errors should never be null.");
             Assert.IsEmpty(errors, message: "The input bindings incorrectly reported errors.");
-            return binding.GetStatus();
+            return binding.GetState();
         }
 
 
@@ -111,27 +111,27 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
                 yield return button;
         }
 
-        /// <summary>Get the button status defined by a mapping string.</summary>
+        /// <summary>Get the button state defined by a mapping string.</summary>
         /// <param name="button">The button to check.</param>
-        /// <param name="statusMap">The status map.</param>
-        private InputStatus GetStatusFromMap(SButton button, string statusMap)
+        /// <param name="stateMap">The state map.</param>
+        private SButtonState GetStateFromMap(SButton button, string stateMap)
         {
-            foreach (string rawPair in statusMap.Split(','))
+            foreach (string rawPair in stateMap.Split(','))
             {
                 // parse values
                 string[] parts = rawPair.Split(new[] { ':' }, 2);
                 if (!Enum.TryParse(parts[0], ignoreCase: true, out SButton curButton))
-                    Assert.Fail($"The status map is invalid: unknown button value '{parts[0].Trim()}'");
-                if (!Enum.TryParse(parts[1], ignoreCase: true, out InputStatus status))
-                    Assert.Fail($"The status map is invalid: unknown status value '{parts[1].Trim()}'");
+                    Assert.Fail($"The state map is invalid: unknown button value '{parts[0].Trim()}'");
+                if (!Enum.TryParse(parts[1], ignoreCase: true, out SButtonState state))
+                    Assert.Fail($"The state map is invalid: unknown state value '{parts[1].Trim()}'");
 
                 // get state
                 if (curButton == button)
-                    return status;
+                    return state;
             }
 
-            Assert.Fail($"The status map doesn't define button value '{button}'.");
-            return InputStatus.None;
+            Assert.Fail($"The state map doesn't define button value '{button}'.");
+            return SButtonState.None;
         }
     }
 }
