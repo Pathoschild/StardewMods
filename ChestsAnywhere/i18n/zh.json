@@ -5,6 +5,8 @@
     "default-name.fridge": "冰箱",
     "default-name.junimo-hut": "{{number}}座祝尼魔小屋",
     "default-name.shipping-bin": "出货箱",
+    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
+    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
 
     // default category names
     "default-category.owned-cabin": "小屋({{owner}})",

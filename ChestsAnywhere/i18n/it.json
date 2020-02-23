@@ -5,6 +5,8 @@
     "default-name.fridge": "Frigo",
     "default-name.junimo-hut": "Capanno dei Junimo n.{{number}}",
     "default-name.shipping-bin": "Bidone delle consegne",
+    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
+    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
 
     // default category names
     "default-category.owned-cabin": "Cabina ({{owner}})",

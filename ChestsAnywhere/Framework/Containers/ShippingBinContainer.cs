@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.Xna.Framework;
 using Netcode;
-using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -36,6 +33,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The callback to invoke when an item is selected in the storage container.</summary>
         private ItemGrabMenu.behaviorOnItemSelect GrabItemFromContainer => this.GrabItemFromContainerImpl;
 
+
         /*********
         ** Accessors
         *********/
@@ -51,6 +49,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
 
+        /// <summary>The type of shipping bin menu to create.</summary>
+        public ShippingBinMode Mode { get; }
+
 
         /*********
         ** Public methods
@@ -58,7 +59,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="farm">The farm whose shipping bin to manage.</param>
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
-        public ShippingBinContainer(Farm farm, IDataHelper dataHelper)
+        /// <param name="mode">The type of shipping bin menu to create.</param>
+        public ShippingBinContainer(Farm farm, IDataHelper dataHelper, ShippingBinMode mode)
         {
             this.DataHelper = dataHelper;
             this.Farm = farm;
@@ -67,6 +69,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Data = this.IsDataEditable
                 ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
                 : new ContainerData(defaultInternalName: null);
+            this.Mode = mode;
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -90,73 +93,61 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return object.ReferenceEquals(this.Inventory, inventory);
         }
 
-        /// <summary>Create a menu of shipping bin for Android.</summary>
-        /// <param name="state">Set to true to ship mode, or else recall items.</param>
-        private MobileItemGrabMenu CreateMobileShippingBinMenu(bool state)
-        {
-            MobileItemGrabMenu menu;
-            if (state)
-            {
-                menu = new MobileItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: false,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: null,
-                    message: null,
-                    behaviorOnItemGrab: this.GrabItemFromContainer,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    context: this.Farm,
-                    organizeFunction: () =>
-                    {
-                        Game1.activeClickableMenu = this.CreateMobileShippingBinMenu(false);
-                    }
-                );
-                menu.initializeShippingBin();
-            }
-            else
-            {
-                menu = new MobileItemGrabMenu(
-                    inventory: this.Inventory,
-                    reverseGrab: false,
-                    showReceivingMenu: true,
-                    highlightFunction: this.CanAcceptItem,
-                    behaviorOnItemSelectFunction: null,
-                    message: null,
-                    behaviorOnItemGrab: this.GrabItemFromContainer,
-                    canBeExitedWithKey: true,
-                    showOrganizeButton: true,
-                    context: this.Farm,
-                    organizeFunction: () =>
-                    {
-                        Game1.activeClickableMenu = this.CreateMobileShippingBinMenu(true);
-                    }
-                );
-            }
-            return menu;
-        }
-
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            if (Constants.TargetPlatform == GamePlatform.Android)
+            switch (this.Mode)
             {
-                return this.CreateMobileShippingBinMenu(true);
+                case ShippingBinMode.Normal:
+                    return new ItemGrabMenu(
+                        inventory: this.Inventory,
+                        reverseGrab: false,
+                        showReceivingMenu: true,
+                        highlightFunction: this.CanAcceptItem,
+                        behaviorOnItemSelectFunction: this.GrabItemFromInventory,
+                        message: null,
+                        behaviorOnItemGrab: this.GrabItemFromContainer,
+                        canBeExitedWithKey: true,
+                        showOrganizeButton: true,
+                        context: this.Farm
+                    );
+
+                case ShippingBinMode.MobileStore:
+                    {
+                        var menu = new ItemGrabMenu(
+                            inventory: this.Inventory,
+                            reverseGrab: false,
+                            showReceivingMenu: true,
+                            highlightFunction: this.CanAcceptItem,
+                            behaviorOnItemSelectFunction: null,
+                            message: null,
+                            behaviorOnItemGrab: this.GrabItemFromContainer,
+                            canBeExitedWithKey: true,
+                            showOrganizeButton: true,
+                            context: this.Farm
+                        );
+                        menu.initializeShippingBin();
+                        return menu;
+                    }
+
+                case ShippingBinMode.MobileTake:
+                    return new ItemGrabMenu(
+                        inventory: this.Inventory,
+                        reverseGrab: false,
+                        showReceivingMenu: true,
+                        highlightFunction: this.CanAcceptItem,
+                        behaviorOnItemSelectFunction: null,
+                        message: null,
+                        behaviorOnItemGrab: this.GrabItemFromContainer,
+                        canBeExitedWithKey: true,
+                        showOrganizeButton: true,
+                        context: this.Farm
+                    );
+
+                default:
+                    throw new NotSupportedException($"Unknown shipping bin mode '{this.Mode}'.");
             }
-            return new ItemGrabMenu(
-                inventory: this.Inventory,
-                reverseGrab: false,
-                showReceivingMenu: true,
-                highlightFunction: this.CanAcceptItem,
-                behaviorOnItemSelectFunction: this.GrabItemFromInventory,
-                message: null,
-                behaviorOnItemGrab: this.GrabItemFromContainer,
-                canBeExitedWithKey: true,
-                showOrganizeButton: true,
-                context: this.Farm
-            );
         }
 
         /// <summary>Persist the container data.</summary>
