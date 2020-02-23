@@ -5,6 +5,8 @@
     "default-name.fridge": "Холодильник",
     "default-name.junimo-hut": "Хижина джунимо #{{number}}",
     "default-name.shipping-bin": "Отгрузочный ящик",
+    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
+    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
 
     // default category names
     "default-category.owned-cabin": "Домик ({{owner}})",
