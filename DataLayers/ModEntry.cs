@@ -148,7 +148,7 @@ namespace Pathoschild.Stardew.DataLayers
                         this.CurrentOverlay = null;
                     }
                     else
-                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
                     this.Helper.Input.Suppress(e.Button);
                 }
 

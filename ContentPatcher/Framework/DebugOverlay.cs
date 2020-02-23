@@ -43,8 +43,9 @@ namespace ContentPatcher.Framework
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="contentHelper">The content helper from which to read textures.</param>
-        public DebugOverlay(IModEvents events, IInputHelper inputHelper, IContentHelper contentHelper)
-            : base(events, inputHelper)
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public DebugOverlay(IModEvents events, IInputHelper inputHelper, IContentHelper contentHelper, IReflectionHelper reflection)
+            : base(events, inputHelper, reflection)
         {
             this.Content = contentHelper;
             this.TextureNames = this.GetTextureNames(contentHelper).OrderByIgnoreCase(p => p).ToArray();

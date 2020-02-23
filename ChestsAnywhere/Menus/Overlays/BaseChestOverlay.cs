@@ -26,6 +26,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Provides translations stored in the mod's folder.</summary>
         protected readonly ITranslationHelper Translations;
 
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
+
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
 
@@ -189,12 +192,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="keys">The configured key bindings.</param>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="input">An API for checking and changing input state.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
         /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
-        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
-            : base(events, input, keepAlive)
+        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
+            : base(events, input, reflection, keepAlive)
         {
             // data
             this.ForMenuInstance = menu;
@@ -203,6 +207,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // helpers
             this.Translations = translations;
+            this.Reflection = reflection;
 
             // menu
             this.Menu = menu;
@@ -600,9 +605,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // edit form
             int longTextWidth = (int)Game1.smallFont.MeasureString("A sufficiently, reasonably long string").X;
-            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
-            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|') { Width = longTextWidth };
-            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
+            this.EditNameField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
+            this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
+            this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit, this.Reflection) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
             this.EditAutomateStoreItems = new Checkbox();
             this.EditAutomateStoreItemsPreferred = new Checkbox();
