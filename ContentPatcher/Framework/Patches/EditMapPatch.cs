@@ -5,6 +5,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using xTile;
 using xTile.Layers;
@@ -335,7 +336,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 // copy tilesheets
                 TileSheet targetSheet = targetMap.GetTileSheet(sourceSheet.Id);
-                if (targetSheet == null || targetSheet.ImageSource != sourceSheet.ImageSource)
+                if (targetSheet == null || this.NormalizeTilesheetPathForComparison(targetSheet.ImageSource) != this.NormalizeTilesheetPathForComparison(sourceSheet.ImageSource))
                 {
                     // change ID if needed so new tilesheets are added after vanilla ones (to avoid errors in hardcoded game logic)
                     string id = sourceSheet.Id;
@@ -417,6 +418,22 @@ namespace ContentPatcher.Framework.Patches
         {
             outError = inError;
             return false;
+        }
+
+        /// <summary>Normalize a map tilesheet path for comparison. This value should *not* be used as the actual tilesheet path.</summary>
+        /// <param name="path">The path to normalize.</param>
+        private string NormalizeTilesheetPathForComparison(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+                return string.Empty;
+
+            path = PathUtilities.NormalizePathSeparators(path.Trim());
+            if (path.StartsWith($"Maps{PathUtilities.PreferredPathSeparator}", StringComparison.OrdinalIgnoreCase))
+                path = path.Substring($"Maps{PathUtilities.PreferredPathSeparator}".Length);
+            if (path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
+                path = path.Substring(0, path.Length - 4);
+
+            return path;
         }
     }
 }

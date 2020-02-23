@@ -6,6 +6,7 @@
 * Added support for arithmetic expressions.
 * Added support for multi-key bindings (like `LeftShift + F3`).
 * Patches are now always applied in the order listed.
+* Improved logic for matching tilesheets when applying a map patch.
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.
 
 ## 1.12
