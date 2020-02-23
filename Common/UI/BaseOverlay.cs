@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>An API for checking and changing input state.</summary>
         protected readonly IInputHelper InputHelper;
 
+        /// <summary>Simplifies access to private code.</summary>
+        protected readonly IReflectionHelper Reflection;
+
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
@@ -51,11 +54,13 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Construct an instance.</summary>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, Func<bool> keepAlive = null)
+        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool> keepAlive = null)
         {
             this.Events = events;
             this.InputHelper = inputHelper;
+            this.Reflection = reflection;
             this.KeepAliveCheck = keepAlive;
             this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
 
@@ -115,13 +120,12 @@ namespace Pathoschild.Stardew.Common.UI
         {
             if (Game1.options.hardwareCursor)
                 return;
+
+            Vector2 cursorPos = new Vector2(Game1.getMouseX(), Game1.getMouseY());
             if (Constants.TargetPlatform == GamePlatform.Android)
-            {
-                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
-                Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2((int)(Game1.getMouseX() * Game1.options.zoomLevel / NativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / NativeZoomLevel)), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
-                return;
-            }
-            Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getMouseX(), Game1.getMouseY()), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
+                cursorPos *= Game1.options.zoomLevel / this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
+
+            Game1.spriteBatch.Draw(Game1.mouseCursors, cursorPos, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
         }
 
         /****
@@ -132,26 +136,20 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
-            if(Constants.TargetPlatform == GamePlatform.Android)
+            if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                System.Reflection.FieldInfo matrixField = Game1.spriteBatch.GetType().GetField("_matrix", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                object originMatrix = matrixField.GetValue(Game1.spriteBatch);
-                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                object originMatrix = this.Reflection.GetField<object>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
+                float nativeZoomLevel = this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
+
                 Game1.spriteBatch.End();
-                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Microsoft.Xna.Framework.Matrix.CreateScale(NativeZoomLevel));
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(nativeZoomLevel));
                 this.Draw(Game1.spriteBatch);
                 Game1.spriteBatch.End();
-                if(originMatrix != null)
-                {
-                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
-                }
-                else
-                {
-                    Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
-                }
-                return;
+
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
             }
-            this.Draw(Game1.spriteBatch);
+            else
+                this.Draw(Game1.spriteBatch);
         }
 
         /// <summary>The method called once per event tick.</summary>

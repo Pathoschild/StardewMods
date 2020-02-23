@@ -134,7 +134,7 @@ namespace ContentPatcher
                 if (this.Keys.ToggleDebug.JustPressedUnique())
                 {
                     if (this.DebugOverlay == null)
-                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
                     else
                     {
                         this.DebugOverlay.Dispose();
@@ -1065,7 +1065,7 @@ namespace ContentPatcher
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                
+
                 text = token.GetValues(input).First();
             }
 

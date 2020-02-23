@@ -89,12 +89,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="layers">The data layers to render.</param>
         /// <param name="drawOverlay">Get whether the overlay should be drawn.</param>
         /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
         /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
-        public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
-            : base(events, inputHelper)
+        public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
+            : base(events, inputHelper, reflection)
         {
             if (!layers.Any())
                 throw new InvalidOperationException("Can't initialize the data layers overlay with no data layers.");

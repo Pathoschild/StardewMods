@@ -30,9 +30,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="machineGroups">The machine groups to display.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IEnumerable<MachineGroup> machineGroups)
-            : base(events, inputHelper)
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IEnumerable<MachineGroup> machineGroups)
+            : base(events, inputHelper, reflection)
         {
             // init machine groups
             machineGroups = machineGroups.ToArray();
