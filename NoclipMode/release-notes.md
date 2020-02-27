@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for multi-key bindings (like `LeftShift + F11`).
+* Noclip mode can now be enabled during cutscenes.
 * Improved translations. Thanks to asqwedcxz741 (added Chinese), Hesper (added Korean), and mael-belval (added French)!
 
 ## 1.1.2
