@@ -32,7 +32,7 @@
     // types
     "type.building": "Gebäude",
     "type.bush": "Busch",
-    "type.fruit-tree": "Fruchtbaum",
+    "type.fruit-tree": "Obstbaum",
     "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",
     "type.player": "Spieler",
