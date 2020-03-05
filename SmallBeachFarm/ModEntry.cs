@@ -78,8 +78,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             {
                 // load map
                 Map map = this.Helper.Content.Load<Map>(this.Config.EnableIslands
-                    ? "assets/SmallBeachFarmWithIslands.tbin"
-                    : "assets/SmallBeachFarm.tbin"
+                    ? "assets/SmallBeachFarmWithIslands.tmx"
+                    : "assets/SmallBeachFarm.tmx"
                 );
 
                 // apply tilesheet recolors
