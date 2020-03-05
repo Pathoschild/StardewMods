@@ -8,5 +8,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
         /// <summary>Use the beach's background music (i.e. wave sounds) on the beach farm.</summary>
         public bool UseBeachMusic { get; set; } = false;
+
+        /// <summary>Whether to enable the campfire.</summary>
+        public bool AddCampfire { get; set; } = true;
     }
 }
