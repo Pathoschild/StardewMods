@@ -86,12 +86,12 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
             {
                 // load map
-                Map map = this.Helper.Content.Load<Map>("assets/SmallBeachFarm.tmx");
+                Map map = this.Helper.Content.Load<Map>("assets/farm.tmx");
 
                 // add islands
                 if (this.Config.EnableIslands)
                 {
-                    Map islands = this.Helper.Content.Load<Map>("assets/SmallBeachFarmWithIslands.tmx");
+                    Map islands = this.Helper.Content.Load<Map>("assets/islands.tmx");
                     AssetPatchUtilities.ApplyMapOverride(source: islands, target: map, targetArea: new Rectangle(0, 26, 56, 49));
                 }
 
