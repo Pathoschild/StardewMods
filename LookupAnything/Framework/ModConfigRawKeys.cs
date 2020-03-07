@@ -12,9 +12,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The keys which toggle the lookup UI for something under the cursor.</summary>
         public string ToggleLookup { get; set; } = SButton.F1.ToString();
 
-        /// <summary>The keys which toggle the lookup UI for something in front of the player.</summary>
-        public string ToggleLookupInFrontOfPlayer { get; set; } = "";
-
         /// <summary>The keys which toggle the search UI.</summary>
         public string ToggleSearch { get; set; } = $"{SButton.LeftShift} + {SButton.F1}";
 
@@ -38,7 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             return new ModConfigKeys(
                 toggleLookup: CommonHelper.ParseButtons(this.ToggleLookup, input, monitor, nameof(this.ToggleLookup)),
-                toggleLookupInFrontOfPlayer: CommonHelper.ParseButtons(this.ToggleLookupInFrontOfPlayer, input, monitor, nameof(this.ToggleLookupInFrontOfPlayer)),
                 toggleSearch: CommonHelper.ParseButtons(this.ToggleSearch, input, monitor, nameof(this.ToggleSearch)),
                 scrollUp: CommonHelper.ParseButtons(this.ScrollUp, input, monitor, nameof(this.ScrollUp)),
                 scrollDown: CommonHelper.ParseButtons(this.ScrollDown, input, monitor, nameof(this.ScrollDown)),

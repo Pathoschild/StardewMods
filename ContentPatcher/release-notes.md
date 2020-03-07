@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added support for editing map tiles and tile properties.
+* Added support for editing map tiles.
+* Added support for editing map tile properties.
 * Added support for arithmetic expressions.
 * Added support for multi-key bindings (like `LeftShift + F3`).
 * `EditData` patches now also copy layers and layer properties from the source map (thanks to mouse!).

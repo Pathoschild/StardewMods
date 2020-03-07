@@ -11,9 +11,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The keys which toggle the lookup UI for something under the cursor.</summary>
         public KeyBinding ToggleLookup { get; }
 
-        /// <summary>The keys which toggle the lookup UI for something in front of the player.</summary>
-        public KeyBinding ToggleLookupInFrontOfPlayer { get; }
-
         /// <summary>The keys which toggle the search UI.</summary>
         public KeyBinding ToggleSearch { get; set; }
 
@@ -32,15 +29,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="toggleLookup">The keys which toggle the lookup UI for something under the cursor.</param>
-        /// <param name="toggleLookupInFrontOfPlayer">The keys which toggle the lookup UI for something in front of the player.</param>
         /// <param name="toggleSearch">The keys which toggle the search UI.</param>
         /// <param name="scrollUp">The keys which scroll up long content.</param>
         /// <param name="scrollDown">The keys which scroll down long content.</param>
         /// <param name="toggleDebug">The keys which toggle the display of debug information.</param>
-        public ModConfigKeys(KeyBinding toggleLookup, KeyBinding toggleLookupInFrontOfPlayer, KeyBinding toggleSearch, KeyBinding scrollUp, KeyBinding scrollDown, KeyBinding toggleDebug)
+        public ModConfigKeys(KeyBinding toggleLookup, KeyBinding toggleSearch, KeyBinding scrollUp, KeyBinding scrollDown, KeyBinding toggleDebug)
         {
             this.ToggleLookup = toggleLookup;
-            this.ToggleLookupInFrontOfPlayer = toggleLookupInFrontOfPlayer;
             this.ToggleSearch = toggleSearch;
             this.ScrollUp = scrollUp;
             this.ScrollDown = scrollDown;

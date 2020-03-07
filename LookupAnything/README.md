@@ -22,9 +22,13 @@ what the game is doing.
 
 ## Use
 Just point your cursor at something and press `F1`. The mod will show live info about that object.
-You can do this in the world, your inventory, the calendar, or a shop.
+You can do this in the world, your inventory, the calendar, a shop, the social menu, and more.
 
-You can also press left shift + `F1` to search for something by name.
+If there's no cursor (e.g. when playing with a controller or on mobile), the most relevant subject
+is shown instead. That may be something in front of the player, the player on the skills menu, the
+NPC on their profile page, etc.
+
+You can also press `left shift` + `F1` to search for something by name.
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -47,11 +51,10 @@ You can separate multiple buttons with commas. The default bindings are...
 
 field | action | default
 ----- | ------ | -------
-`ToggleLookup` | lookup anything under the cursor. | `F1`
-`ToggleLookupInFrontOfPlayer` | lookup anything in front of the player. | _none_
-`ToggleSearch` | show a search UI to find something by name. | `LeftShift + F1`
-`ScrollUp`, `ScrollDown` | scroll the displayed lookup results. | `Up`, `Down`
-`ToggleDebug` | show information intended for developers. | _none_
+`ToggleLookup` | Look up a subject (see _use_ section). | `F1`
+`ToggleSearch` | Show a search UI to find something by name. | `LeftShift + F1`
+`ScrollUp`, `ScrollDown` | Scroll the displayed lookup results. | `Up`, `Down`
+`ToggleDebug` | Show information intended for developers. | _none_
 
 You can separate bindings with commas (like `F1, LeftShoulder` for either one), and set
 multi-key bindings with plus signs (like `LeftShift + F1`).

@@ -233,27 +233,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get metadata for a Stardew object at the specified position.</summary>
         /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
-        /// <param name="lookupMode">The lookup target mode.</param>
         /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, LookupMode lookupMode, bool includeMapTile)
+        /// <param name="hasCursor">Whether the player has a visible cursor.</param>
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool includeMapTile, bool hasCursor)
         {
             // get target
             ITarget target;
-            switch (lookupMode)
+            if (hasCursor)
+                target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), includeMapTile);
+            else
             {
-                // under cursor
-                case LookupMode.Cursor:
-                    target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), includeMapTile);
-                    break;
-
-                // in front of player
-                case LookupMode.FacingPlayer:
-                    Vector2 tile = this.GetFacingTile(player);
-                    target = this.GetTargetFromTile(location, tile, includeMapTile);
-                    break;
-
-                default:
-                    throw new NotSupportedException($"Unknown lookup mode '{lookupMode}'.");
+                Vector2 tile = this.GetFacingTile(player);
+                target = this.GetTargetFromTile(location, tile, includeMapTile);
             }
 
             // get subject
@@ -353,7 +344,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // chest
                 case MenuWithInventory inventoryMenu:
                     {
-                        Item item = inventoryMenu.hoveredItem;
+                        Item item = Game1.player.CursorSlotItem ?? inventoryMenu.heldItem ?? inventoryMenu.hoveredItem;
                         if (item != null)
                             return this.Codex.GetItem(item, ObjectContext.Inventory);
                     }
@@ -362,7 +353,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // inventory
                 case InventoryPage inventory:
                     {
-                        Item item = this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
+                        Item item = Game1.player.CursorSlotItem ?? this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
                         if (item != null)
                             return this.Codex.GetItem(item, ObjectContext.Inventory);
                     }
@@ -437,13 +428,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
+                // profile tab
                 case ProfileMenu profileMenu:
                     {
+                        // hovered item
                         Item item = profileMenu.hoveredItem;
                         if (item != null)
                             return this.Codex.GetItem(item, ObjectContext.Inventory);
+
+                        // NPC
+                        if (profileMenu.GetCharacter() is NPC npc)
+                            return this.Codex.GetCharacter(npc);
                         break;
                     }
+
+                // skills tab
+                case SkillsPage _:
+                    return this.Codex.GetPlayer(Game1.player);
 
                 // Community Center bundle menu
                 case JunimoNoteMenu bundleMenu:
