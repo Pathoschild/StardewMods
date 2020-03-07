@@ -6,6 +6,7 @@
 * Improved compatibility with Better Water (thanks to laulajatar!).
 * Improved compatibility with Eemie's Map Recolor (now handled by that mod directly).
 * Fixed issue where another mod's compatibility patch for Small Beach Farm wouldn't be applied correctly.
+* Internal changes (migrated to `.tmx` maps, campfire is no longer part of the map itself, islands are now a map patch).
 
 ## 1.5
 Released 01 February 2020.

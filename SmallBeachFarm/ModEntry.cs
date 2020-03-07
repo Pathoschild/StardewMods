@@ -4,6 +4,7 @@ using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,6 +13,7 @@ using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
 using xTile.Tiles;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
@@ -84,10 +86,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
             {
                 // load map
-                Map map = this.Helper.Content.Load<Map>(this.Config.EnableIslands
-                    ? "assets/SmallBeachFarmWithIslands.tmx"
-                    : "assets/SmallBeachFarm.tmx"
-                );
+                Map map = this.Helper.Content.Load<Map>("assets/SmallBeachFarm.tmx");
+
+                // add islands
+                if (this.Config.EnableIslands)
+                {
+                    Map islands = this.Helper.Content.Load<Map>("assets/SmallBeachFarmWithIslands.tmx");
+                    AssetPatchUtilities.ApplyMapOverride(source: islands, target: map, targetArea: new Rectangle(0, 26, 56, 49));
+                }
 
                 // apply tilesheet recolors
                 string internalRootKey = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, "_default"));
