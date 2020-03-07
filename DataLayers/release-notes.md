@@ -1,7 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added support for multi-key bindings (like `LeftShift + F3`).
-* Improved translations. Thanks to Enaium (updated Chinese) and kchapelier (updated French)!
+* Improved translations. Thanks to Enaium (updated Chinese), kchapelier (updated French), and xCarloC (updated Italian)!
 
 ## 1.10
 Released 01 February 2020.

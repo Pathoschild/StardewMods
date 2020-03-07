@@ -4,6 +4,7 @@
 * Fixed slingshot enabled by default. (This doesn't affect existing `config.json` files.)
 * Fixed scythe not harvesting bushes in garden pots.
 * Fixed tea bushes affected by `HarvestForage` option instead of `HarvestCrops`.
+* Improved translations. Thanks to therealmate (added Hungarian)!
 
 ## 4.9.2
 Released 01 February 2020.
