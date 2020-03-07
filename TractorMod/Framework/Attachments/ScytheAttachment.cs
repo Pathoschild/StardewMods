@@ -182,9 +182,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // harvest
             if (this.ShouldHarvest(dirt.crop))
             {
-                return dirt.crop.harvestMethod.Value == Crop.sickleHarvest
-                    ? dirt.performToolAction(tool, 0, tile, location)
-                    : dirt.performUseAction(tile, location);
+                bool uses_scythe = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
+                if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt, null)) {
+                    dirt.destroyCrop(tile, uses_scythe, location);
+                }
             }
 
             return false;
