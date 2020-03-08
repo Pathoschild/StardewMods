@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for multi-key bindings (like `LeftShift + B`).
+* Fixed compatibility with recent Android versions (thanks to ZaneYork!).
 * Updated translations. Thanks to Annosz (added Hungarian) and Hesper (updated Korean)!
 
 ## 1.17.4
