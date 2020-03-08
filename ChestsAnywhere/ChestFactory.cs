@@ -177,13 +177,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // shipping bin
                     if (this.EnableShippingBin && location is Farm farm && object.ReferenceEquals(farm, Game1.getFarm()))
                     {
-                        yield return new ManagedChest(
-                            container: new ShippingBinContainer(farm, this.DataHelper),
-                            location: farm,
-                            tile: Vector2.Zero,
-                            defaultDisplayName: this.Translations.Get("default-name.shipping-bin"),
-                            defaultCategory: category
-                        );
+                        if (Constants.TargetPlatform == GamePlatform.Android)
+                        {
+                            yield return new ManagedChest(
+                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileStore),
+                                location: farm,
+                                tile: Vector2.Zero,
+                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin.store"),
+                                defaultCategory: category
+                            );
+                            yield return new ManagedChest(
+                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileTake),
+                                location: farm,
+                                tile: Vector2.Zero,
+                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin.take"),
+                                defaultCategory: category
+                            );
+                        }
+                        else
+                        {
+                            yield return new ManagedChest(
+                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.Normal),
+                                location: farm,
+                                tile: Vector2.Zero,
+                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin"),
+                                defaultCategory: category
+                            );
+                        }
                     }
                 }
             }
