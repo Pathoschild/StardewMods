@@ -187,7 +187,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 defaultCategory: category
                             );
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileStore),
+                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileTake),
                                 location: farm,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: this.Translations.Get("default-name.shipping-bin.take"),
