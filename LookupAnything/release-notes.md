@@ -1,13 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.26
+Released 09 March 2020.
+
 * Added search feature (thanks to collaboration with mattfeldman!).
 * Added support for multi-key bindings (like `LeftShift + F1`).
 * Added contextual lookups for better controller/mobile support:
   * When there's no cursor (e.g. when playing with a controller or mobile), Lookup Anything automatically finds the most relevant match instead of looking under the cursor. For example, that may be what's in front of the player, the item picked up in a menu, etc.
-  * Added item lookup when holding one in a chest/inventory menu.
-  * Added NPC lookup from their profile page (when cursor isn't over an item).
+  * Added item lookup when holding an item in a chest/inventory menu.
+  * Added NPC lookup from their profile page (when the cursor isn't over an item).
   * Added player lookup from the skills tab.
   * Removed `ToggleLookupInFrontOfPlayer` option in `config.json`. If you edited it, your value will be merged into `ToggleLookup` automatically next time you launch the game.
 * Fixed some vanilla recipes not shown in lookups when Producer Framework Mod packs are installed.

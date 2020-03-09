@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.11
+Released 08 March 2020.
+
 * Added support for multi-key bindings (like `LeftShift + F3`).
 * Improved translations. Thanks to Enaium (updated Chinese), kchapelier (updated French), and xCarloC (updated Italian)!
 

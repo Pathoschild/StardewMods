@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.6
+Released 08 March 2020.
+
 * Added config option for the campfire.
 * Improved compatibility with Better Water (thanks to laulajatar!).
 * Improved compatibility with Eemie's Map Recolor (now handled by that mod directly).

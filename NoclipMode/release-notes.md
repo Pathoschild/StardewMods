@@ -1,9 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.2
+Released 08 March 2020.
+
+* Added support for toggling noclip during cutscenes.
 * Added support for multi-key bindings (like `LeftShift + F11`).
-* Noclip mode can now be enabled during cutscenes.
 * Improved translations. Thanks to Annosz (added Hungarian), asqwedcxz741 (added Chinese), Hesper (added Korean), and mael-belval (added French)!
 
 ## 1.1.2

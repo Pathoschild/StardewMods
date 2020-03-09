@@ -1,13 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.13
+Released 09 March 2020.
+
+* Added support for arithmetic expressions.
 * Added support for editing map tiles.
 * Added support for editing map tile properties.
-* Added support for arithmetic expressions.
 * Added support for multi-key bindings (like `LeftShift + F3`).
-* `EditData` patches now also copy layers and layer properties from the source map (thanks to mouse!).
-* Patches are now always applied in the order listed.
+* `EditMap` patches now also copy layers and layer properties from the source map (thanks to mouse!).
+* Patches are now applied in the order listed more consistently.
 * Improved logic for matching tilesheets when applying a map patch.
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.
 

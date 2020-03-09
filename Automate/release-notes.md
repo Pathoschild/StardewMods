@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.16
+Released 08 March 2020.
+
 * Added support for tea bushes (thanks to stellarashes!).
 * Added support for multi-key bindings (like `LeftShift + U`).
 * Added compatibility with Mega Storage (thanks to ImJustMatt!).

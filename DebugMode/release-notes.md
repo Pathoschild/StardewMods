@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.12
+Released 08 March 2020.
+
 * Added support for multi-key bindings (like `LeftShift + OemTilde`).
 * Improved translations. Thanks to Enaium (updated Chinese) and Hesper (updated Korean)!
 
