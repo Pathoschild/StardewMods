@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed islands always added in 1.6.
+
 ## 1.6
 Released 08 March 2020.
 
