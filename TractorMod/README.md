@@ -67,12 +67,16 @@ file in a text editor to configure the mod.
 <td>
 
 The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
-You can separate multiple buttons with commas. The default keyboard bindings are `Backspace` to
-summon a tractor. Available inputs:
-* `SummonTractor`: warp an available tractor to your position.
-* `DismissTractor`: return the tractor you're riding to its home.
-* `HoldToActivate`: if specified, the tractor will only do something while you're holding this
-  button. If nothing is specified, the tractor will work automatically while you're riding it.
+The available controls are...
+
+field | action | default
+----- | ------ | -------
+`SummonTractor` | warp an available tractor to your position. | `Backspace`
+`DismissTractor` | return the tractor you're riding to its home. | `Backspace`
+`HoldToActivate` | if specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it. | _none_
+
+You can separate bindings with commas (like `Backspace, LeftShoulder` for either one), and set
+multi-key bindings with plus signs (like `LeftShift + Backspace`).
 
 </td>
 </tr>
@@ -482,5 +486,4 @@ won't see the tractor/garage textures or be able to use its features.
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1401)
-* [Discussion thread](http://community.playstarbound.com/threads/tractor-mod.136649/)
 * Derived from [TractorMod](https://github.com/lambui/StardewValleyMod_TractorMod) by PhthaloBlue (@lambui), rewritten with their permission.

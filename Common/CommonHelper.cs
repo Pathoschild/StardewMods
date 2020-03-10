@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Input;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.Tools;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
@@ -65,17 +68,29 @@ namespace Pathoschild.Stardew.Common
                 case Boots _:
                     return ItemType.Boots;
 
+                case Clothing _:
+                    return ItemType.Clothing;
+
                 case Furniture _:
                     return ItemType.Furniture;
 
                 case Hat _:
                     return ItemType.Hat;
 
+                case MeleeWeapon _:
+                case Slingshot _:
+                    return ItemType.Weapon;
+
+                case Ring _:
+                    return ItemType.Ring;
+
                 case Tool _:
                     return ItemType.Tool;
 
-                case Wallpaper _:
-                    return ItemType.Wallpaper;
+                case Wallpaper wallpaper:
+                    return wallpaper.isFloor.Value
+                        ? ItemType.Flooring
+                        : ItemType.Wallpaper;
 
                 case SObject obj:
                     return obj.bigCraftable.Value
@@ -92,30 +107,24 @@ namespace Pathoschild.Stardew.Common
         ****/
         /// <summary>Parse a button configuration string into a buttons array.</summary>
         /// <param name="raw">The raw config string.</param>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="onInvalidButton">A callback invoked when a button value can't be parsed.</param>
-        public static SButton[] ParseButtons(string raw, Action<string> onInvalidButton)
+        public static KeyBinding ParseButtons(string raw, IInputHelper input, Action<string> onInvalidButton)
         {
-            if (string.IsNullOrWhiteSpace(raw))
-                return new SButton[0];
-
-            IList<SButton> buttons = new List<SButton>();
-            foreach (string value in raw.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                if (Enum.TryParse(value, true, out SButton button))
-                    buttons.Add(button);
-                else
-                    onInvalidButton(value);
-            }
-            return buttons.ToArray();
+            KeyBinding binding = new KeyBinding(raw, input.GetState, out string[] errors);
+            if (errors.Any())
+                onInvalidButton.Invoke(errors[0]);
+            return binding;
         }
 
         /// <summary>Parse a button configuration string into a buttons array.</summary>
         /// <param name="raw">The raw config string.</param>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
         /// <param name="field">The field name to report in logged errors.</param>
-        public static SButton[] ParseButtons(string raw, IMonitor monitor, string field)
+        public static KeyBinding ParseButtons(string raw, IInputHelper input, IMonitor monitor, string field)
         {
-            return CommonHelper.ParseButtons(raw, onInvalidButton: value => monitor.Log($"Ignored invalid button '{value}' for {field} in config.json; delete the file to regenerate it, or see http://stardewvalleywiki.com/Modding:Key_bindings for valid keys.", LogLevel.Error));
+            return CommonHelper.ParseButtons(raw, input, onInvalidButton: error => monitor.Log($"Ignored invalid key bindings for {field} in config.json ({error}); delete the file to regenerate it, or see http://stardewvalleywiki.com/Modding:Key_bindings for valid keys.", LogLevel.Error));
         }
 
         /****
@@ -401,7 +410,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
         public static void InterceptError(this IMonitor monitor, Exception ex, string verb, string detailedVerb = null)
         {
-            detailedVerb = detailedVerb ?? verb;
+            detailedVerb ??= verb;
             monitor.Log($"Something went wrong {detailedVerb}:\n{ex}", LogLevel.Error);
             CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
         }

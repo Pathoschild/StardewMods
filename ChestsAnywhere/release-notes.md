@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18
+Released 08 March 2020.
+
+* Added support for multi-key bindings (like `LeftShift + B`).
+* Fixed compatibility with recent Android versions (thanks to ZaneYork!).
+* Updated translations. Thanks to Annosz (added Hungarian) and Hesper (updated Korean)!
+
 ## 1.17.4
 Released 02 February 2020.
 

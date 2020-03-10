@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewValley;
@@ -64,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get overrides for a game object.</summary>
         /// <param name="character">The character for which to get overrides.</param>
         /// <param name="type">The character type.</param>
-        public CharacterData GetCharacter(NPC character, TargetType type)
+        public CharacterData GetCharacter(NPC character, SubjectType type)
         {
             return
                 this.Characters?.FirstOrDefault(p => p.ID == $"{type}::{character.Name}") // override by type + name

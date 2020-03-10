@@ -74,11 +74,45 @@ file in a text editor to configure the mod.
 
 These are the available settings:
 
-setting           | what it affects
-:---------------- | :------------------
-`Controls`        | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default value is `~` to toggle debug mode.
-`AllowGameDebug` | Default `false`. Whether pressing the key also enables the [game's built-in debug mode](#game-debug-mode).
-`AllowDangerousCommands` | Default `false`. This allows game debug commands which end the current day/season & save, randomize your player or farmhouse decorations, or crash the game. Only change this if you're aware of the consequences.
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default value is `OemTilde` (~) to toggle debug mode.
+
+You can separate bindings with commas (like `OemTilde, LeftShoulder` for either one), and set
+multi-key bindings with plus signs (like `LeftShift + OemTilde`).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>AllowGameDebug</code></td>
+  <td>
+
+Default `false`. Whether pressing the key also enables the [game's built-in debug mode](#game-debug-mode).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>AllowDangerousCommands</code></td>
+  <td>
+
+Default `false`. This allows game debug commands which end the current day/season & save, randomize
+your player or farmhouse decorations, or crash the game. Only change this if you're aware of the
+consequences.
+
+  </td>
+</tr>
+</table>
 
 ## Compatibility
 Debug Mode is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and

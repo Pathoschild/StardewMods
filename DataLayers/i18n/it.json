@@ -62,7 +62,7 @@
     // tillable
     "tillable.name": "Coltivabile",
     "tillable.tillable": "Coltivabile",
-    "tillable.tilled": "Tilled", // TODO
+    "tillable.tilled": "Coltivato",
     "tillable.occupied": "Occupata",
     "tillable.not-tillable": "Non Coltivabile"
 }

@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -29,6 +34,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Provides methods for searching and constructing items.</summary>
+        private readonly ItemRepository ItemRepository = new ItemRepository();
+
 
         /*********
         ** Public methods
@@ -49,11 +57,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.Config = config;
         }
 
+        /****
+        ** Get subjects
+        ****/
         /// <summary>Get an NPC subject.</summary>
         /// <param name="target">The target instance.</param>
-        /// <param name="type">The NPC type.</param>
-        public ISubject GetCharacter(NPC target, TargetType type)
+        public ISubject GetCharacter(NPC target)
         {
+            SubjectType type = this.GetSubjectType(target);
             return new CharacterSubject(this, this.GameHelper, target, type, this.Metadata, this.Translations, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
         }
 
@@ -133,6 +144,61 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public ISubject GetTile(GameLocation location, Vector2 position)
         {
             return new TileSubject(this, this.GameHelper, location, position, this.Translations);
+        }
+
+        /****
+        ** Get metadata
+        ****/
+        /// <summary>Get the subject type for an NPC.</summary>
+        /// <param name="npc">The NPC instance.</param>
+        public SubjectType GetSubjectType(NPC npc)
+        {
+            if (npc.isVillager())
+                return SubjectType.Villager;
+
+            return npc switch
+            {
+                Child _ => SubjectType.Villager,
+                Horse _ => SubjectType.Horse,
+                Junimo _ => SubjectType.Junimo,
+                Pet _ => SubjectType.Pet,
+                Monster _ => SubjectType.Monster,
+                _ => SubjectType.Unknown
+            };
+        }
+
+        /****
+        ** Search
+        ****/
+        /// <summary>Get the subjects available for searching.</summary>
+        /// <remarks>Related to <see cref="TargetFactory.GetNearbyTargets"/>.</remarks>
+        public IEnumerable<ISubject> GetSearchSubjects()
+        {
+            // NPCs
+            foreach (NPC npc in Utility.getAllCharacters())
+                yield return this.GetCharacter(npc);
+
+            // animals
+            foreach (var location in CommonHelper.GetLocations())
+            {
+                IEnumerable<FarmAnimal> animals =
+                    (location as Farm)?.animals.Values
+                    ?? (location as AnimalHouse)?.animals.Values;
+
+                if (animals != null)
+                {
+                    foreach (var animal in animals)
+                        yield return this.GetFarmAnimal(animal);
+                }
+            }
+
+            // items
+            foreach (SearchableItem item in this.ItemRepository.GetAll())
+                yield return this.GetItem(item.Item, ObjectContext.World, knownQuality: false);
+
+            // players
+            foreach (Farmer player in Game1.getAllFarmers())
+                yield return this.GetPlayer(player);
         }
     }
 }

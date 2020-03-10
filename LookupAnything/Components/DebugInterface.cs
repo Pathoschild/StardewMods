@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
 using Pathoschild.Stardew.LookupAnything.Framework.Targets;
 using StardewModdingAPI;
@@ -85,7 +84,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
                 IEnumerable<ITarget> targets = this.TargetFactory
                     .GetNearbyTargets(currentLocation, cursorTile, includeMapTile: false)
-                    .OrderBy(p => p.Type == TargetType.Unknown ? 0 : 1);
+                    .OrderBy(p => p.Type == SubjectType.Unknown ? 0 : 1);
                 // if targets overlap, prioritize info on known targets
                 foreach (ITarget target in targets)
                 {
@@ -121,7 +120,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show current target name (if any)
                 {
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, LookupMode.Cursor, includeMapTile: false);
+                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, includeMapTile: false, hasCursor: Game1.wasMouseVisibleThisFrame);
                     if (subject != null)
                         this.GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
                 }

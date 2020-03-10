@@ -4,6 +4,7 @@ using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,6 +13,7 @@ using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
 using xTile.Tiles;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
@@ -57,7 +59,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // hook Harmony patch
             HarmonyInstance harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            FarmPatcher.Hook(harmony, this.Monitor, this.Config.UseBeachMusic, isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _), isOceanTile: this.IsOceanTile);
+            FarmPatcher.Hook(
+                harmony,
+                this.Monitor,
+                addCampfire: this.Config.AddCampfire,
+                useBeachMusic: this.Config.UseBeachMusic,
+                isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
+                isOceanTile: this.IsOceanTile
+            );
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
@@ -77,17 +86,21 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetNameEquals("Maps/Farm_Fishing"))
             {
                 // load map
-                Map map = this.Helper.Content.Load<Map>(this.Config.EnableIslands
-                    ? "assets/SmallBeachFarmWithIslands.tbin"
-                    : "assets/SmallBeachFarm.tbin"
-                );
+                Map map = this.Helper.Content.Load<Map>("assets/farm.tmx");
+
+                // add islands
+                if (this.Config.EnableIslands)
+                {
+                    Map islands = this.Helper.Content.Load<Map>("assets/islands.tmx");
+                    AssetPatchUtilities.ApplyMapOverride(source: islands, target: map, targetArea: new Rectangle(0, 26, 56, 49));
+                }
 
                 // apply tilesheet recolors
                 string internalRootKey = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, "_default"));
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
                     if (tilesheet.ImageSource.StartsWith(internalRootKey + Path.DirectorySeparatorChar))
-                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileName(tilesheet.ImageSource)), ContentSource.GameContent);
+                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileNameWithoutExtension(tilesheet.ImageSource)), ContentSource.GameContent);
                 }
 
                 return (T)(object)map;
@@ -97,6 +110,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (asset.AssetName.StartsWith(this.FakeAssetPrefix))
             {
                 string filename = Path.GetFileName(asset.AssetName);
+                if (!Path.HasExtension(filename))
+                    filename += ".png";
 
                 // get relative path to load
                 string relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))

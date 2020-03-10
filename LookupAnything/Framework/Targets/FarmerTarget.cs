@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         public FarmerTarget(GameHelper gameHelper, Farmer value)
-            : base(gameHelper, TargetType.Farmer, value, value.getTileLocation()) { }
+            : base(gameHelper, SubjectType.Farmer, value, value.getTileLocation()) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

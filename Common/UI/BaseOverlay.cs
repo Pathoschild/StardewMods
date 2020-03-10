@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>An API for checking and changing input state.</summary>
         protected readonly IInputHelper InputHelper;
 
+        /// <summary>Simplifies access to private code.</summary>
+        protected readonly IReflectionHelper Reflection;
+
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
@@ -51,11 +54,13 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Construct an instance.</summary>
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="inputHelper">An API for checking and changing input state.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, Func<bool> keepAlive = null)
+        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool> keepAlive = null)
         {
             this.Events = events;
             this.InputHelper = inputHelper;
+            this.Reflection = reflection;
             this.KeepAliveCheck = keepAlive;
             this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
 
@@ -115,7 +120,12 @@ namespace Pathoschild.Stardew.Common.UI
         {
             if (Game1.options.hardwareCursor)
                 return;
-            Game1.spriteBatch.Draw(Game1.mouseCursors, new Vector2(Game1.getMouseX(), Game1.getMouseY()), Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
+
+            Vector2 cursorPos = new Vector2(Game1.getMouseX(), Game1.getMouseY());
+            if (Constants.TargetPlatform == GamePlatform.Android)
+                cursorPos *= Game1.options.zoomLevel / this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
+
+            Game1.spriteBatch.Draw(Game1.mouseCursors, cursorPos, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, Game1.options.SnappyMenus ? 44 : 0, 16, 16), Color.White * Game1.mouseCursorTransparency, 0.0f, Vector2.Zero, Game1.pixelZoom + Game1.dialogueButtonScale / 150f, SpriteEffects.None, 1f);
         }
 
         /****
@@ -126,7 +136,20 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
-            this.Draw(Game1.spriteBatch);
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                object originMatrix = this.Reflection.GetField<object>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
+                float nativeZoomLevel = this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
+
+                Game1.spriteBatch.End();
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(nativeZoomLevel));
+                this.Draw(Game1.spriteBatch);
+                Game1.spriteBatch.End();
+
+                Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
+            }
+            else
+                this.Draw(Game1.spriteBatch);
         }
 
         /// <summary>The method called once per event tick.</summary>
@@ -156,9 +179,20 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
-            bool handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+            bool handled;
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
+                ? this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / NativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / NativeZoomLevel))
                 : this.ReceiveButtonPress(e.Button);
+            }
+            else
+            {
+                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
+                    ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+                    : this.ReceiveButtonPress(e.Button);
+            }
 
             if (handled)
                 this.InputHelper.Suppress(e.Button);

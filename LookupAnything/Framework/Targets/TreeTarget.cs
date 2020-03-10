@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         public TreeTarget(GameHelper gameHelper, Tree value, Vector2? tilePosition, IReflectionHelper reflectionHelper)
-            : base(gameHelper, TargetType.WildTree, value, tilePosition)
+            : base(gameHelper, SubjectType.WildTree, value, tilePosition)
         {
             this.Reflection = reflectionHelper;
         }

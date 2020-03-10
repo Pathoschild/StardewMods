@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         public UnknownTarget(GameHelper gameHelper, object value, Vector2? tilePosition = null)
-            : base(gameHelper, TargetType.Unknown, value, tilePosition) { }
+            : base(gameHelper, SubjectType.Unknown, value, tilePosition) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

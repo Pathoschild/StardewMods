@@ -6,7 +6,6 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -117,16 +116,7 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // extend tilesheet if needed
-            if (targetArea.Bottom > editor.Data.Height)
-            {
-                Texture2D original = editor.Data;
-                Texture2D texture = new Texture2D(Game1.graphics.GraphicsDevice, original.Width, targetArea.Bottom);
-                editor.ReplaceWith(texture);
-                editor.PatchImage(original);
-                this.ResizedLastImage = true;
-            }
-            else
-                this.ResizedLastImage = false;
+            this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
 
             // apply source image
             editor.PatchImage(source, sourceArea, targetArea, this.PatchMode);

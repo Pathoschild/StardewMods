@@ -9,13 +9,13 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles the data layer overlay.</summary>
+        /// <summary>The keys which toggle the data layer overlay.</summary>
         public string ToggleLayer { get; set; } = SButton.F2.ToString();
 
-        /// <summary>The key which cycles backwards through data layers.</summary>
+        /// <summary>The keys which cycle backwards through data layers.</summary>
         public string PrevLayer { get; set; } = $"{SButton.LeftControl}, {SButton.LeftShoulder}";
 
-        /// <summary>The key which cycles forward through data layers.</summary>
+        /// <summary>The keys which cycle forward through data layers.</summary>
         public string NextLayer { get; set; } = $"{SButton.RightControl}, {SButton.RightShoulder}";
 
 
@@ -23,13 +23,14 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Public fields
         *********/
         /// <summary>Get a parsed representation of the configured controls.</summary>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
-        public ModConfigKeys ParseControls(IMonitor monitor)
+        public ModConfigKeys ParseControls(IInputHelper input, IMonitor monitor)
         {
             return new ModConfigKeys(
-                toggleLayer: CommonHelper.ParseButtons(this.ToggleLayer, monitor, nameof(this.ToggleLayer)),
-                prevLayer: CommonHelper.ParseButtons(this.PrevLayer, monitor, nameof(this.PrevLayer)),
-                nextLayer: CommonHelper.ParseButtons(this.NextLayer, monitor, nameof(this.NextLayer))
+                toggleLayer: CommonHelper.ParseButtons(this.ToggleLayer, input, monitor, nameof(this.ToggleLayer)),
+                prevLayer: CommonHelper.ParseButtons(this.PrevLayer, input, monitor, nameof(this.PrevLayer)),
+                nextLayer: CommonHelper.ParseButtons(this.NextLayer, input, monitor, nameof(this.NextLayer))
             );
         }
     }

@@ -13,9 +13,13 @@ that change the game's images and data without replacing XNB files.
   * [Edit part of an image](#edit-part-of-an-image)
   * [Edit part of a data file](#edit-part-of-a-data-file)
   * [Edit part of a map](#edit-part-of-a-map)
+    * [Map overlay](#map-overlay)
+    * [Map properties](#map-properties)
+    * [Tiles and tile properties](#tiles-and-tile-properties)
 * [Advanced: tokens & conditions](#advanced-tokens--conditions)
   * [Overview](#overview-1)
   * [Global tokens](#global-tokens)
+  * [Arithmetic](#arithmetic)
   * [Randomization](#randomization)
   * [Dynamic tokens](#dynamic-tokens)
   * [Player config](#player-config)
@@ -31,6 +35,7 @@ that change the game's images and data without replacing XNB files.
   * [Multiplayer](#multiplayer)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
+* [Configure](#configure)
 * [Basic extensibility for modders](#basic-extensibility-for-modders)
 * [Advanced extensibility for modders](#advanced-extensibility-for-modders)
 * [See also](#see-also)
@@ -87,7 +92,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.11.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Format`       | The format version. You should always use the latest version (currently `1.13.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player configuration_](#player-config).
 
@@ -95,7 +100,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "Load",
@@ -127,8 +132,8 @@ field      | purpose
 `"Action": "Load"` replaces the entire file with your version. This is useful for mods which
 change the whole file (like pet replacement mods).
 
-Avoid this if you don't need to change the whole file though — each file can only be replaced once,
-so your content pack won't be compatible with other content packs that replace the same file.
+Avoid this if you don't need to change the whole file though — each file can only be replaced by one
+patch, so your content pack won't be compatible with other content packs that replace the same file.
 (It'll work fine with content packs that only edit the file, though.)
 
 field      | purpose
@@ -141,7 +146,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "Load",
@@ -172,7 +177,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -224,7 +229,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -247,7 +252,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -273,7 +278,7 @@ the patch.
 For example, this patch in `content.json`:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -303,7 +308,7 @@ The `FromFile` field can contain tokens, so you can dynamically load a different
 this single patch loads a dialogue file for multiple NPCs:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -326,7 +331,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -383,7 +388,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -405,12 +410,26 @@ New entries are added at the bottom of the list by default.
 </dl>
 
 ### Edit part of a map
-`"Action": "EditMap"` changes part of an in-game map by copying tiles, properties, and tilesheets
-from a source map. This is essentially a copy & paste from one map into another, replacing whatever
-was in the target area before.
+`"Action": "EditMap"` changes part of an in-game map. This consists of three separate features:
 
-Any number of content packs can edit the same map. If two patches overlap, whichever one is applied
-last will take effect for the overlapping tiles.
+* copy tiles, properties, and tilesheets from a source map into the target;
+* add/edit/remove map properties;
+* add/edit/remove individual tiles and tile properties.
+
+Each patch can use any combination of these features, but must set the required fields for at least
+one of them: map overlay (`FromFile` and `ToArea`), map properties (`MapProperties`), or tiles
+(`MapTiles`). When combined into one patch, the changes are applied in this order: overlay, then
+map properties, then map tiles.
+
+Any number of content packs can edit the same map. If two patches conflict, whichever one is applied
+last will take effect for the overlapping portions.
+
+<dl>
+<dt id="map-overlay">Map overlay</dt>
+<dd>
+
+A 'map overlay' copies tiles, properties, and tilesheets from a source map into the target. The
+target area will be fully overwritten with the source area.
 
 <table>
 <tr>
@@ -475,6 +494,44 @@ coordinates of the top-left corner, and the tile width and height of the area. I
 
 </td>
 </tr>
+</table>
+
+For example, this replaces the town square with the one in another map:
+```js
+{
+   "Format": "1.13.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Town",
+         "FromFile": "assets/town.tbin",
+         "FromArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 },
+         "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 }
+      },
+   ]
+}
+```
+
+</dd>
+
+<dt id="map-properties">Map properties</dt>
+<dd>
+
+The `MapProperties` field lets you add, replace, or remove map-level properties.
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _common fields_ above.
+
+</td>
+</tr>
 
 <tr>
 <td>
@@ -491,31 +548,12 @@ and values.
 
 </td>
 </tr>
-
 </table>
 
-Required fields: at least one of (`FromFile` and `ToArea`) or (`MapProperties`).
-
-For example, this replaces the town square with the one in another map:
+For example, This changes the warp map property for the farm cave:
 ```js
 {
-   "Format": "1.11.0",
-   "Changes": [
-      {
-         "Action": "EditMap",
-         "Target": "Maps/Town",
-         "FromFile": "assets/town.tbin",
-         "FromArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 },
-         "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 }
-      },
-   ]
-}
-```
-
-This changes the warp map property for the farm cave:
-```js
-{
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -528,13 +566,106 @@ This changes the warp map property for the farm cave:
 }
 ```
 
-(You can patch a map area and change map properties in the same patch.)
+</dd>
+<dt id="tiles-and-tile-properties">Tiles and tile properties</dt>
+<dd>
 
-Known limitations:
-* Patching non-farmhouse-floor tiles into the farmhouse's `Back` layer may cause strange effects,
-  due to the game's floor decorating logic.
-* Conditional map patches may reset the map's seasonal tilesheets to spring. This is a SMAPI bug
-  that will be fixed in SMAPI 3.0.
+The `MapTiles` field lets you add, edit, or remove the map's individual tiles and tile
+properties.
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _common fields_ above.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`MapTiles`
+
+</td>
+<td>
+
+The tiles to add, edit, or delete. All of the subfields below support
+[tokens](#advanced-tokens--conditions).
+
+This consists of an array of tiles (see examples below) with these properties:
+
+field | purpose
+----- | -------
+`Layer` | (Required.) The [map layer](https://stardewvalleywiki.com/Modding:Maps#Basic_concepts) to change.
+`Position` | (Required.) The [tile coordinates](https://stardewvalleywiki.com/Modding:Maps#Tile_coordinates) to change. You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see tile coordinates in-game.
+`SetTilesheet` | (Required when adding a tile, else optional.) Sets the tilesheet ID for the tile index.
+`SetIndex` | (Required when adding a tile, else optional.) Sets the tile index in the tilesheet.
+`SetProperties` | The properties to set or remove. This is merged into the existing tile properties, if any. To remove a property, set its value to `null` (not `"null"`!).
+`Remove` | (Optional, default false.) `true` to remove the current tile and all its properties on that layer. If combined with the other fields, a new tile is created from the other fields as if the tile didn't previously exist.
+
+</td>
+</tr>
+</table>
+
+For example, this extends the farm path one extra tile to the shipping bin:
+```js
+{
+   "Format": "1.13.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Farm",
+         "MapTiles": [
+            {
+               "Position": { "X": 72, "Y": 15 },
+               "Layer": "Back",
+               "SetIndex": "622"
+            }
+         ]
+      },
+   ]
+}
+```
+
+You can use tokens in all of the fields. For example, this adds a warp in front of the shipping bin
+that leads to a different location each day:
+```js
+{
+   "Format": "1.13.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Farm",
+         "MapTiles": [
+            {
+               "Position": { "X": 72, "Y": 15 },
+               "Layer": "Back",
+               "SetProperties": {
+                  "TouchAction": "MagicWarp {{Random:BusStop, Farm, Town, Mountain}} 10 11"
+               }
+            }
+         ]
+      },
+   ]
+}
+```
+
+</dd>
+
+<dt>Known limitations</dt>
+<dd>
+
+* Patching the farmhouse's `Back` layer may fail or cause strange effects, due to the game's floor
+  decorating logic. This is a limitation in the game itself, not Content Patcher.
+
+</dd>
+</dl>
 
 ## Advanced: tokens & conditions
 ### Overview
@@ -1211,11 +1342,10 @@ smaller if possible.
 </table>
 </dd>
 
-<dt>Patch-specific tokens:</dt>
+<dt>Meta tokens:</dt>
 
 <dd>
-These tokens provide a value specific to the current patch. They can't be used in dynamic tokens or
-any other field outside a patch block.
+These tokens provide meta info about tokens, patches, and data assets.
 
 <table>
 <tr>
@@ -1238,6 +1368,8 @@ This is mainly useful for patches which specify multiple targets:
 }
 ```
 
+This can only be used in a patch block directly (e.g. it won't work in a dynamic token).
+
 </td>
 </tr>
 
@@ -1255,17 +1387,58 @@ Equivalent to `Target`, but only the part after the last path separator:
 }
 ```
 
+This can only be used in a patch block directly (e.g. it won't work in a dynamic token).
+
 </td>
 </tr>
 </table>
 </dd>
 </dl>
 
-**Special note about `"Action": "Load"`:**  
-Each file can only be loaded by one patch. You can have multiple load patches with different
-conditions, and the correct one will be used when the conditions change. However if multiple
-patches can be applied in a given context, Content Patcher will show an error in the SMAPI console
-and apply none of them.
+### Arithmetic
+You can calculate mathematical expressions in patches using the `query` token (including over
+tokens which return a number):
+```js
+{
+   "Format": "1.13.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
+         }
+      }
+   ]
+}
+```
+
+This also works in conditions:
+```js
+{
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-friendly.png",
+   "When": {
+      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
+   }
+}
+```
+
+These operators are supported:
+
+symbol | operation
+------ | ---------
+\+     | addition
+\-     | subtraction
+\*     | multiplication
+/      | division
+%      | modulus
+()     | grouping
+
+**Caution:** the query syntax allows some operations that aren't documented here. These are
+intended for future use, and may change without warning. Undocumented features shouldn't be used to
+avoid breaking changes.
 
 ### Randomization
 You can randomize values using the `Random` token:
@@ -1449,7 +1622,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1494,7 +1667,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1538,7 +1711,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1558,7 +1731,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.11.0",
+     "Format": "1.13.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1798,6 +1971,44 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
 
+## Configure
+Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can
+open that file in a text editor to configure the mod.
+
+These are the available settings:
+
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>EnableDebugFeatures</code></td>
+  <td>
+
+Default `false`. Whether to enable [debug features meant for content pack creators](#debug-mode).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default button bindings are...
+
+* `F3` to show the [debug overlay](#debug-mode) (if enabled);
+* `LeftControl` and `RightControl` to switch textures in the debug overlay.
+
+You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + B`).
+
+  </td>
+</tr>
+</table>
+
 ## Basic extensibility for modders
 Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
 you can use to add custom tokens. Custom tokens are always prefixed with the ID of the mod that
@@ -1849,7 +2060,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -2037,7 +2248,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.11.0",
+   "Format": "1.13.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -2053,5 +2264,4 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)
-* [Discussion thread](https://community.playstarbound.com/threads/content-patcher.141420/)
-* [Ask for help in #modding on Discord](https://stardewvalleywiki.com/Modding:Community#Discord)
+* [Ask for help](https://stardewvalleywiki.com/Modding:Help)

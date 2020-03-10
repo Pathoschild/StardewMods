@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // initialize
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Data, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
 
@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ModConfigKeys keys = this.Keys;
 
                 // open menu
-                if (keys.Toggle.Contains(e.Button))
+                if (keys.Toggle.JustPressedUnique())
                 {
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)
@@ -203,11 +203,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             switch (menu)
             {
                 case ItemGrabMenu chestMenu:
-                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
 
                 case ShopMenu shopMenu:
-                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
             }
             this.CurrentOverlay.OnChestSelected += selected =>

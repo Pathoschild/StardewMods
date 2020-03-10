@@ -1,4 +1,4 @@
-using StardewModdingAPI;
+using Pathoschild.Stardew.Common.Input;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
@@ -8,14 +8,14 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles the data layer overlay.</summary>
-        public SButton[] ToggleLayer { get; }
+        /// <summary>The keys which toggle the data layer overlay.</summary>
+        public KeyBinding ToggleLayer { get; }
 
-        /// <summary>The key which cycles backwards through data layers.</summary>
-        public SButton[] PrevLayer { get; }
+        /// <summary>The keys which cycle backwards through data layers.</summary>
+        public KeyBinding PrevLayer { get; }
 
-        /// <summary>The key which cycles forward through data layers.</summary>
-        public SButton[] NextLayer { get; }
+        /// <summary>The keys which cycle forward through data layers.</summary>
+        public KeyBinding NextLayer { get; }
 
 
 
@@ -23,10 +23,10 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="toggleLayer">The key which toggles the data layer overlay.</param>
-        /// <param name="prevLayer">The key which cycles backwards through data layers.</param>
-        /// <param name="nextLayer">The key which cycles forward through data layers.</param>
-        public ModConfigKeys(SButton[] toggleLayer, SButton[] prevLayer, SButton[] nextLayer)
+        /// <param name="toggleLayer">The keys which toggle the data layer overlay.</param>
+        /// <param name="prevLayer">The keys which cycle backwards through data layers.</param>
+        /// <param name="nextLayer">The keys which cycle forward through data layers.</param>
+        public ModConfigKeys(KeyBinding toggleLayer, KeyBinding prevLayer, KeyBinding nextLayer)
         {
             this.ToggleLayer = toggleLayer;
             this.PrevLayer = prevLayer;

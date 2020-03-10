@@ -181,7 +181,7 @@
     "location.undergroundMine.level": "mine level {{level}}",
     "location.witchSwamp": "witch's swamp",
     "location.woods": "secret woods",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.unknown-fish-area": "{{locationName}} (垂钓点 {{id}})",
 
 
     /*********
@@ -354,8 +354,8 @@
     "item.contents.placed": "{{name}}이/가 들어감",
     "item.contents.ready": "{{name}}이/가 준비됨",
     "item.contents.partial": "{{name}}이/가 준비되기까지 {{time}} 남음.",
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste": "{{count}} 未知的村民",
+    "item.undiscovered-gift-taste-appended": ", 以及 {{count}} 名未知的村民",
     "item.needed-for.community-center": "마을 회관 ({{bundles}})",
     "item.needed-for.full-shipment": "도전과제 '완전 판매' (1개 출하)",
     "item.needed-for.polyculture": "도전과제 '복합 재배' ({{count}}개 더 출하)",
@@ -487,8 +487,8 @@
     "npc.friendship.not-met": "당신은 아직 이 NPC를 만나지 못했다.",
     "npc.friendship.need-bouquet": "다음 호감도 진행을 위해서 꽃다발 필요.",
     "npc.friendship.need-points": "호감도 UP까지 {{count}}점",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste": "{{count}} 未知的喜好",
+    "npc.undiscovered-gift-taste-appended": ", 以及 {{count}} 件未知的喜好",
 
 
     /*********
@@ -562,8 +562,8 @@
     "tile.tile-index": "{{layerName}}: 타일 인덱스",
     "tile.tilesheet": "{{layerName}}: 타일 시트",
     "tile.blend-mode": "{{layerName}}: 혼합 모드",
-    "tile.index-property": "{{layerName}}: 건물 인덱스: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: 건물: {{propertyName}}",
+    "tile.index-property": "{{layerName}}: index 属性: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: 属性: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "타일 없음",

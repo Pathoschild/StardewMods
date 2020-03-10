@@ -1,0 +1,38 @@
+{
+    // default chest names
+    "default-name.auto-grabber": "Auto-gyűjtögető #{{number}}",
+    "default-name.chest": "Láda #{{number}}",
+    "default-name.fridge": "Hűtőszekrény",
+    "default-name.junimo-hut": "Junimo kunyhó #{{number}}",
+    "default-name.shipping-bin": "Szállítmányos láda",
+
+    // default category names
+    "default-category.owned-cabin": "Kunyhó ({{owner}})",
+    "default-category.unowned-cabin": "Kunyhó (empty)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Helyszín",
+    "label.location.tile": "Pozíció {{x}}, {{y}}",
+    "label.name": "Név",
+    "label.category": "Kategória",
+    "label.order": "Sorrend",
+    "label.hide-chest": "Láda elrejtése",
+    "label.hide-chest-hidden": "Láda elrejtése (a visszavonáshoz meg kell majd találnod a ládát!)",
+    "label.automate-store": "(Automate mod) Tegyen tárgyakat ebbe a ládába",
+    "label.automate-store-first": "(Automate mod) Először ebbe a ládába tegyen tárgyakat",
+    "label.automate-take": "(Automate mod) Vegyen ki tárgyakat ebből a ládából",
+    "label.automate-take-first": "(Automate mod) Először ebből a ládából vegyen ki tárgyakat",
+
+    // button labels
+    "button.edit-chest": "Láda szerkesztése",
+    "button.sort-inventory": "Tárgymenü rendezése",
+    "button.save": "Mentés",
+    "button.reset": "Visszaállítás",
+
+    // errors
+    "errors.disabled-from-here": "Innen nem férhetsz hozzá a ládákhoz.",
+    "errors.no-chests": "Nincs még egy ládád sem.",
+    "errors.no-chests-in-location": "Nincs egy ládád sem ezen a területen.",
+    "errors.no-chests-in-range": "Nincs egy ládád sem érvényes távolságon belül."
+}

@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.Automate
 
             // init
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Factory = new MachineGroupFactory();
             this.Factory.Add(new AutomationFactory(
                 connectors: this.Config.ConnectorNames,
@@ -256,7 +256,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 // toggle overlay
-                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.Contains(e.Button))
+                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.JustPressedUnique())
                 {
                     if (this.CurrentOverlay != null)
                         this.DisableOverlay();
@@ -347,7 +347,7 @@ namespace Pathoschild.Stardew.Automate
         private void EnableOverlay()
         {
             if (this.CurrentOverlay == null)
-                this.CurrentOverlay = new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Factory.GetMachineGroups(Game1.currentLocation));
+                this.CurrentOverlay = new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Factory.GetMachineGroups(Game1.currentLocation));
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>

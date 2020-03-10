@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             // chest container 
             if (obj is Chest chest)
-                return new ChestContainer(chest, location, tile);
+                return new ChestContainer(chest, location, tile, this.Reflection);
 
             // machine
             if (obj.ParentSheetIndex == 165)
@@ -162,6 +162,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             // machine
             if (feature is FruitTree fruitTree)
                 return new FruitTreeMachine(fruitTree, location, tile);
+            if (feature is Bush bush && bush.size.Value == Bush.greenTeaBush && !bush.townBush.Value)
+                return new TeaBushMachine(bush, location, tile);
 
             // connector
             if (this.IsConnector(feature))

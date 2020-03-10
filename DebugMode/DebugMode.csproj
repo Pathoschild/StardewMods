@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>DebugMode</AssemblyName>
-    <Version>1.11.2</Version>
+    <Version>1.12.0</Version>
     <RootNamespace>Pathoschild.Stardew.DebugMode</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

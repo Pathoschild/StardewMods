@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -510,7 +512,8 @@ namespace Pathoschild.Stardew.LookupAnything
                     minOutput: entry.MinOutput,
                     maxOutput: entry.MaxOutput,
                     outputChance: entry.OutputChance,
-                    isForMachine: p => p is SObject obj && obj.ParentSheetIndex == entry.MachineID
+                    machineParentSheetIndex: entry.MachineID,
+                    isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == entry.MachineID
                 )
             );
 
@@ -528,6 +531,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
                     exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
+                    machineParentSheetIndex: null,
                     isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
                 )
             );

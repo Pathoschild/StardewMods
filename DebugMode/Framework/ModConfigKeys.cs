@@ -1,4 +1,4 @@
-using StardewModdingAPI;
+using Pathoschild.Stardew.Common.Input;
 
 namespace Pathoschild.Stardew.DebugMode.Framework
 {
@@ -8,16 +8,16 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which toggles debug mode.</summary>
-        public SButton[] ToggleDebug { get; }
+        /// <summary>The keys which toggle debug mode.</summary>
+        public KeyBinding ToggleDebug { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="toggleDebug">The key which toggles debug mode.</param>
-        public ModConfigKeys(SButton[] toggleDebug)
+        /// <param name="toggleDebug">The keys which toggle debug mode.</param>
+        public ModConfigKeys(KeyBinding toggleDebug)
         {
             this.ToggleDebug = toggleDebug;
         }

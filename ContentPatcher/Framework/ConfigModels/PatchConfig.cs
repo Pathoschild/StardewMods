@@ -63,6 +63,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The map properties to edit.</summary>
         public IDictionary<string, string> MapProperties { get; set; }
 
+        /// <summary>The map tiles to edit.</summary>
+        public PatchMapTileConfig[] MapTiles { get; set; }
+
 
         /*********
         ** Public methods
@@ -74,18 +77,27 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="other">The other instance to copy.</param>
         public PatchConfig(PatchConfig other)
         {
+            // all actions
             this.LogName = other.LogName;
             this.Action = other.Action;
             this.Target = other.Target;
+            this.FromFile = other.FromFile;
             this.Enabled = other.Enabled;
             this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
-            this.FromFile = other.FromFile;
+
+            // EditImage
             this.FromArea = other.FromArea != null ? new PatchRectangleConfig(other.FromArea) : null;
             this.ToArea = other.ToArea != null ? new PatchRectangleConfig(other.ToArea) : null;
             this.PatchMode = other.PatchMode;
+
+            // EditData
             this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
             this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
             this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToArray();
+
+            // EditMap
+            this.MapProperties = other.MapProperties?.ToDictionary(p => p.Key, p => p.Value);
+            this.MapTiles = other.MapTiles?.Select(p => new PatchMapTileConfig(p)).ToArray();
         }
     }
 }

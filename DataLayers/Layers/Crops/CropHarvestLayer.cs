@@ -30,9 +30,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>Construct an instance.</summary>
         /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public CropHarvestLayer(ITranslationHelper translations, LayerConfig config, IMonitor monitor)
-            : base(translations.Get("crop-harvest.name"), config, monitor)
+        public CropHarvestLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(translations.Get("crop-harvest.name"), config, input, monitor)
         {
             this.Legend = new[]
             {

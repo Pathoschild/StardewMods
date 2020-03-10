@@ -25,11 +25,43 @@ file in a text editor to configure the mod.
 
 These are the available settings:
 
-setting     | what it affects
------------ | -------------------
-`ToggleKey` | Default `F11`. The controller/keyboard/mouse button which toggles noclip mode (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas.
-`ShowEnabledMessage` | Default `true`. Whether to show a message when noclip is enabled, including the button to turn it back off.
-`ShowDisabledMessage` | Default `false`. Whether to show a message when noclip is disabled, including the button to turn it back on.
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>ToggleKey</code></td>
+  <td>
+
+Default `F11`. The controller/keyboard/mouse button which toggles noclip mode (see
+[key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+
+You can separate bindings with commas (like `F1, LeftShoulder` for either one), and set
+multi-key bindings with plus signs (like `LeftShift + F1`).
+
+  </td>
+</tr>
+<tr>
+  <td><code>ShowEnabledMessage</code></td>
+  <td>
+
+Default `true`. Whether to show a message when noclip is enabled, including the button to turn it
+back off.
+
+  </td>
+</tr>
+<tr>
+  <td><code>ShowDisabledMessage</code>
+  <td>
+
+Default `false`. Whether to show a message when noclip is disabled, including the button to turn it
+back on.
+
+  </td>
+</tr>
+</table>
 
 ## Compatibility
 Noclip Mode is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and

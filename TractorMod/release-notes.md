@@ -1,4 +1,14 @@
 # Release notes
+## 4.10
+Released 09 March 2020.
+
+* Added support for multi-key bindings (like `LeftShift + BackSpace`).
+* Fixed slingshot enabled by default.
+* Fixed scythe not harvesting bushes in garden pots.
+* Fixed tea bushes affected by `HarvestForage` option instead of `HarvestCrops`.
+* Fixed compatibility with Yet Another Harvest With Scythe Mod (thanks to bcmpinc!).
+* Improved translations. Thanks to therealmate (added Hungarian)!
+
 ## 4.9.2
 Released 01 February 2020.
 

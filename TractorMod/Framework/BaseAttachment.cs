@@ -266,12 +266,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="tileObj">The object on the tile.</param>
         /// <param name="dirt">The tilled dirt found, if any.</param>
         /// <param name="isCoveredByObj">Whether there's an object placed over the tilled dirt.</param>
+        /// <param name="pot">The indoor pot containing the dirt, if applicable.</param>
         /// <returns>Returns whether tilled dirt was found.</returns>
-        protected bool TryGetHoeDirt(TerrainFeature tileFeature, SObject tileObj, out HoeDirt dirt, out bool isCoveredByObj)
+        protected bool TryGetHoeDirt(TerrainFeature tileFeature, SObject tileObj, out HoeDirt dirt, out bool isCoveredByObj, out IndoorPot pot)
         {
             // garden pot
-            if (tileObj is IndoorPot pot)
+            if (tileObj is IndoorPot _pot)
             {
+                pot = _pot;
                 dirt = pot.hoeDirt.Value;
                 isCoveredByObj = false;
                 return true;
@@ -280,11 +282,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // regular dirt
             if ((dirt = tileFeature as HoeDirt) != null)
             {
+                pot = null;
                 isCoveredByObj = tileObj != null;
                 return true;
             }
 
             // none found
+            pot = null;
             dirt = null;
             isCoveredByObj = false;
             return false;

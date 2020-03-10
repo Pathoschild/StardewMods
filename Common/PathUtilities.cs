@@ -11,13 +11,13 @@ namespace Pathoschild.Stardew.Common
     internal static class PathUtilities
     {
         /*********
-        ** Fields
+        ** Accessors
         *********/
         /// <summary>The possible directory separator characters in a file path.</summary>
-        private static readonly char[] PossiblePathSeparators = new[] { '/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }.Distinct().ToArray();
+        public static readonly char[] PossiblePathSeparators = new[] { '/', '\\', Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }.Distinct().ToArray();
 
         /// <summary>The preferred directory separator character in an asset key.</summary>
-        private static readonly string PreferredPathSeparator = Path.DirectorySeparatorChar.ToString();
+        public static readonly string PreferredPathSeparator = Path.DirectorySeparatorChar.ToString();
 
 
         /*********

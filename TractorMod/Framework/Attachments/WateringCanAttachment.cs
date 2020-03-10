@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out _) || dirt.state.Value == HoeDirt.watered)
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out _, out _) || dirt.state.Value == HoeDirt.watered)
                 return false;
 
             WateringCan can = (WateringCan)tool;

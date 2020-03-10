@@ -20,6 +20,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The defined wallet items and whether the player has them.</summary>
         private readonly IDictionary<WalletItem, bool> Values = new Dictionary<WalletItem, bool>();
 
+        /// <summary>The valid input arguments.</summary>
+        private readonly InvariantHashSet ValidInputs = new InvariantHashSet(Enum.GetNames(typeof(WalletItem)));
+
 
         /*********
         ** Public methods
@@ -68,7 +71,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         public override InvariantHashSet GetValidInputs()
         {
-            return new InvariantHashSet(this.Values.Keys.Select(p => p.ToString()));
+            return this.ValidInputs;
         }
 
         /// <summary>Get whether the token always chooses from a set of known values for the given input.</summary>

@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
         public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2? tilePosition, IReflectionHelper reflectionHelper, JsonAssetsIntegration jsonAssets)
-            : base(gameHelper, TargetType.Crop, value, tilePosition)
+            : base(gameHelper, SubjectType.Crop, value, tilePosition)
         {
             this.Reflection = reflectionHelper;
 

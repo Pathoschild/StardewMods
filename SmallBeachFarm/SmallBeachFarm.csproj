@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
@@ -13,6 +13,8 @@
   <ItemGroup>
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
   </ItemGroup>
+
+  <Import Project="..\Common\Common.projitems" Label="Shared" />
 
   <Import Project="$(SolutionDir)\common.targets" />
 

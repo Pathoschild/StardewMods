@@ -1,4 +1,4 @@
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using StardewValley;
@@ -48,6 +48,13 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
             /// <summary>A stardrop icon.</summary>
             public static readonly Rectangle Stardrop = new Rectangle(346, 392, 8, 8);
+        }
+
+        /// <summary>Sprites used to draw a textbox.</summary>
+        public static class Textbox
+        {
+            /// <summary>The sprite sheet containing the textbox sprites.</summary>
+            public static Texture2D Sheet => Game1.content.Load<Texture2D>("LooseSprites\\textBox");
         }
 
         /// <summary>A blank pixel which can be colorized and stretched to draw geometric shapes.</summary>

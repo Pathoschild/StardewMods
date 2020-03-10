@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="position">The tile position.</param>
         public TileTarget(GameHelper gameHelper, Vector2 position)
-            : base(gameHelper, TargetType.Tile, position, position) { }
+            : base(gameHelper, SubjectType.Tile, position, position) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

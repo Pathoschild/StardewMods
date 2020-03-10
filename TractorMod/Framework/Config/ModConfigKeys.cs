@@ -1,4 +1,4 @@
-using StardewModdingAPI;
+using Pathoschild.Stardew.Common.Input;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
@@ -8,24 +8,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /*********
         ** Accessors
         *********/
-        /// <summary>The key which summons the tractor.</summary>
-        public SButton[] SummonTractor { get; }
+        /// <summary>The keys which summon the tractor.</summary>
+        public KeyBinding SummonTractor { get; }
 
-        /// <summary>The key which returns the tractor to its home.</summary>
-        public SButton[] DismissTractor { get; }
+        /// <summary>The keys which return the tractor to its home.</summary>
+        public KeyBinding DismissTractor { get; }
 
-        /// <summary>A key which activates the tractor when held, or none to activate automatically.</summary>
-        public SButton[] HoldToActivate { get; }
+        /// <summary>The keys which activate the tractor when held, or none to activate automatically.</summary>
+        public KeyBinding HoldToActivate { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="summonTractor">The key which summons the tractor.</param>
-        /// <param name="dismissTractor">The key which returns the tractor to its home.</param>
-        /// <param name="holdToActivate">A key which activates the tractor when held, or none to activate automatically.</param>
-        public ModConfigKeys(SButton[] summonTractor, SButton[] dismissTractor, SButton[] holdToActivate)
+        /// <param name="summonTractor">The keys which summon the tractor.</param>
+        /// <param name="dismissTractor">The keys which return the tractor to its home.</param>
+        /// <param name="holdToActivate">The keys which activate the tractor when held, or none to activate automatically.</param>
+        public ModConfigKeys(KeyBinding summonTractor, KeyBinding dismissTractor, KeyBinding holdToActivate)
         {
             this.SummonTractor = summonTractor;
             this.DismissTractor = dismissTractor;

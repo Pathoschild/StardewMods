@@ -55,6 +55,7 @@ This can be used to automate...
 * [statues of endless fortune](https://stardewvalleywiki.com/Statue_Of_Endless_Fortune);
 * [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [tappers](http://stardewvalleywiki.com/Tapper);
+* [tea bushes](https://stardewvalleywiki.com/Tea_Bush);
 * [wood chippers](http://stardewvalleywiki.com/Wood_Chipper);
 * and [worm bins](http://stardewvalleywiki.com/Worm_Bin).
 
@@ -124,8 +125,10 @@ These are the available settings:
   <td>
 
 The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
-You can separate multiple buttons with commas. The default value is `U` to toggle the automation
-overlay.
+The default value is `U` to toggle the automation overlay.
+
+You can separate bindings with commas (like `U, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + U`).
 
   </td>
 </tr>
@@ -485,7 +488,10 @@ automate.AddFactory(new MyAutomationFactory());
 That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
 your custom machine to its normal automation.
 
+### Custom chest capacity
+If a `Chest` instance has a public `Capacity` property, Automate will use that instead of the
+`Chest.capacity` constant.
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/1063)
-* [Discussion thread](http://community.playstarbound.com/threads/automate.131913)

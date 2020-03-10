@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // get dirt
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj) || dirt.crop != null)
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj, out _) || dirt.crop != null)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile

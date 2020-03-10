@@ -39,13 +39,76 @@ file in a text editor to configure the mod.
 
 These are the available settings:
 
-setting             | what it affects
-------------------- | -------------------
-`Range`             | Default `Unlimited`. The range at which chests are accessible. The possible options are... <ul><li>Unlimited: all chests.</li><li>CurrentWorldArea: chests in the current world area, based on these areas: beach, bus stop, desert, farm, forest, mine, mountain, railroads, town, witch swamp.</li><li>CurrentLocation: chests in the current location.</li><li>None: can't remotely access any chest.</li></ul>
-`Controls`          | The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)). You can separate multiple buttons with commas. The default keyboard bindings are `B` to toggle the chest UI, `Left`/`Right` (or `Left Control` + scroll mouse wheel) to switch chests, `Up`/`Down` (or `Left Alt` + scroll mouse wheel) to switch categories. The default controller bindings are the shoulder and trigger buttons to navigate chests while the menu is open.
-`ShowHoverTooltips` | Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
-`EnableShippingBin` | Default `true`. Whether to allow access to the shipping bin through Chests Anywhere.
-`DisableInLocations`| The locations in which to disable remote chest lookups. You can use the [Debug Mode mod](https://www.nexusmods.com/stardewvalley/mods/679) to see the name of any in-game location, or get the location name for a chest from its edit screen. You can use `"UndergroundMine"` to match any level of the mines or skull caverns (except the entrance itself).
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>Range</code></td>
+  <td>
+
+Default `Unlimited`. The range at which chests are accessible. The possible options are...
+
+* `Unlimited`: all chests.
+* `CurrentWorldArea`: chests in the current world area, based on these areas: beach, bus stop,
+  desert, farm, forest, mine, mountain, railroads, town, witch swamp.
+* `CurrentLocation`: chests in the current location.
+* `None`: can't remotely access any chest.
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default button bindings are...
+
+action | keyboard | controller
+------ | -------- | ----------
+toggle chest UI | `B` | _none_
+switch chest | `Left`, `Right`<br />or `LeftControl` + scroll mouse wheel | `LeftShoulder`, `RightShoulder`
+switch category | `Up`, `Down`<br />or `LeftAlt` + scroll mouse wheel | `LeftTrigger`, `RightTrigger`
+
+You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + B`).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>ShowHoverTooltips</code></td>
+  <td>
+
+Default `true`. Whether to show the chest name in a tooltip when you point at a chest.
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>EnableShippingBin</code></td>
+  <td>
+
+Default `true`. Whether to allow access to the shipping bin through Chests Anywhere.
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>DisableInLocations</code></td>
+  <td>
+
+The locations in which to disable remote chest lookups. You can use the
+[Debug Mode mod](https://www.nexusmods.com/stardewvalley/mods/679) to see the name of any in-game
+location, or get the location name for a chest from its edit screen. You can use
+`"UndergroundMine"` to match any level of the mines or skull caverns (except the entrance itself).
+
+  </td>
+</tr>
+</table>
 
 ## Compatibility
 Chests Anywhere is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
@@ -58,5 +121,4 @@ Multiplayer notes:
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
-* [Discussion thread](http://community.playstarbound.com/threads/smapi-chests-anywhere.122603/)
 * This is an [open-source fork](https://github.com/VIspReaderUS/AccessChestAnywhere/issues/1) of the inactive [AccessChestAnywhere](https://github.com/VIspReaderUS/AccessChestAnywhere) mod. Versions 1.0 and 1.1 are from that mod.

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -680,7 +681,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     // remove vanilla recipes overridden by a PFM one
                     // This is always an integer currently, but the API may return context_tag keys in the future.
-                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.Ingredients[0].ID == recipe.InputId);
+                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && r.Ingredients[0].ID == recipe.InputId);
 
                     // add recipe
                     SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
@@ -705,7 +706,8 @@ namespace Pathoschild.Stardew.LookupAnything
                         minOutput: recipe.MinOutput,
                         maxOutput: recipe.MaxOutput,
                         outputChance: (decimal)recipe.OutputChance,
-                        isForMachine: p => p is SObject obj && obj.ParentSheetIndex == recipe.MachineId
+                        machineParentSheetIndex: recipe.MachineId,
+                        isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == recipe.MachineId
                     ));
                 }
 
@@ -744,6 +746,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         item: input => new Clothing(outputId),
                         mustBeLearned: false,
                         outputItemIndex: recipe.CraftedItemID,
+                        machineParentSheetIndex: null,
                         isForMachine: _ => false
                     );
                 }

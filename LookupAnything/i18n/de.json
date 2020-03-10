@@ -32,7 +32,7 @@
     // types
     "type.building": "Gebäude",
     "type.bush": "Busch",
-    "type.fruit-tree": "Fruchtbaum",
+    "type.fruit-tree": "Obstbaum",
     "type.map-tile": "Kartenkachel",
     "type.monster": "Monster",
     "type.player": "Spieler",
@@ -156,32 +156,31 @@
     "data.item.box.description": "Zerschlage sie um verschiedenes Gut zu erhalten.",
 
     // location names
-    // TODO
-    "location.backwoods": "backwoods",
-    "location.beach": "beach",
-    "location.beach.east-pier": "beach (eastern pier)",
-    "location.bugLand": "mutant bug lair",
-    "location.busStop": "bus stop",
-    "location.desert": "desert",
-    "location.farm": "farm",
-    "location.farmCave": "farm cave",
-    "location.farmHouse": "farmhouse",
-    "location.forest": "forest",
-    "location.forest.fish-area-0": "forest river",
-    "location.forest.fish-area-1": "forest pond",
-    "location.forest.island-tip": "forest river (south tip of large island)",
-    "location.mountain": "mountain",
-    "location.railroad": "railroad",
-    "location.sewer": "sewers",
-    "location.submarine": "Night Market submarine",
-    "location.town": "town",
-    "location.town.northmost-bridge": "town (northmost bridge)",
-    "location.tunnel": "bus tunnel",
-    "location.undergroundMine": "mines",
-    "location.undergroundMine.level": "mine level {{level}}",
-    "location.witchSwamp": "witch's swamp",
-    "location.woods": "secret woods",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.backwoods": "Unentdeckter Wald",
+    "location.beach": "Strand",
+    "location.beach.east-pier": "Strand (östliches Pier)",
+    "location.bugLand": "Mutantenkäferhöhle",
+    "location.busStop": "Bushaltestelle",
+    "location.desert": "Wüste",
+    "location.farm": "Bauernhof",
+    "location.farmCave": "Bauernhof Höhle",
+    "location.farmHouse": "Bauernhaus",
+    "location.forest": "Wald",
+    "location.forest.fish-area-0": "Waldfluss",
+    "location.forest.fish-area-1": "Waldteich",
+    "location.forest.island-tip": "Waldfluss (Südspitze der großen Insel)",
+    "location.mountain": "Berge",
+    "location.railroad": "Eisenbahn",
+    "location.sewer": "Kanalisation",
+    "location.submarine": "Nachtmarkt Tiefsee-U-boot",
+    "location.town": "Stadt",
+    "location.town.northmost-bridge": "Stadt (Nord-östliche Brücke)",
+    "location.tunnel": "Bus Tunnel",
+    "location.undergroundMine": "Mine",
+    "location.undergroundMine.level": "Minen Level {{level}}",
+    "location.witchSwamp": "Hexensumpf",
+    "location.woods": "Geheimnisvolle Wälder",
+    "location.unknown-fish-area": "{{locationName}} (Angelgebiet {{id}})",
 
 
     /*********
@@ -256,8 +255,8 @@
     // values
     "building.fish-pond.population.empty": "Füge einen Fisch hinzu, um den Teich zu starten",
     "building.fish-pond.population.next-spawn": "Neuer Fisch erscheint {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
-    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% Wahrscheinlichkeit jedes Tages, dass das erste passende Produkt produziert wird",
+    "building.fish-pond.drops.min-fish": "Mit {{count}} Fisch:",
     "building.fish-pond.quests.done": "{{count}} Fische",
     "building.fish-pond.quests.incomplete-one": "{{count}} Fische: benötigt {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} Fische: benötigt eins von {{itemList}}",
@@ -404,22 +403,20 @@
     ** Item > fish lookups
     *********/
     // labels
-    // TODO
-    "item.fish-pond-drops": "Fish pond drops",
-    "item.fish-spawn-rules": "Spawn rules",
+    "item.fish-pond-drops": "Fischteich Items",
+    "item.fish-spawn-rules": "Spawn Regeln",
 
     // values
-    // TODO
-    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
-    "item.fish-spawn-rules.locations": "locations: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.min-fishing-level": "Mindest Angelstufe: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "Noch nicht gefangen (kann nur einmal gefangen werden)",
+    "item.fish-spawn-rules.locations": "Standorte: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "Standorte:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
-    "item.fish-spawn-rules.season-any": "any season",
-    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
-    "item.fish-spawn-rules.time": "time of day: {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
-    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+    "item.fish-spawn-rules.season-any": "Jede Jahreszeit",
+    "item.fish-spawn-rules.season-list": "Jahreszeiten : {{seasons}}",
+    "item.fish-spawn-rules.time": "Uhrzeit: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "Wetter: sonnig",
+    "item.fish-spawn-rules.weather-rainy": "Wetter: regnerisch",
 
 
     /*********

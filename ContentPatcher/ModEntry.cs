@@ -37,7 +37,7 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0", "1.11.0" };
+        private readonly string[] SupportedFormatVersions = { "1.0.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0", "1.11.0", "1.13.0" };
 
         /// <summary>The format version migrations to apply.</summary>
         private readonly Func<IMigration[]> Migrations = () => new IMigration[]
@@ -92,7 +92,7 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(this.Monitor);
+            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
@@ -131,10 +131,10 @@ namespace ContentPatcher
             if (this.Config.EnableDebugFeatures)
             {
                 // toggle overlay
-                if (this.Keys.ToggleDebug.Contains(e.Button))
+                if (this.Keys.ToggleDebug.JustPressedUnique())
                 {
                     if (this.DebugOverlay == null)
-                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content);
+                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
                     else
                     {
                         this.DebugOverlay.Dispose();
@@ -146,9 +146,9 @@ namespace ContentPatcher
                 // cycle textures
                 if (this.DebugOverlay != null)
                 {
-                    if (this.Keys.DebugPrevTexture.Contains(e.Button))
+                    if (this.Keys.DebugPrevTexture.JustPressedUnique())
                         this.DebugOverlay.PrevTexture();
-                    if (this.Keys.DebugNextTexture.Contains(e.Button))
+                    if (this.Keys.DebugNextTexture.JustPressedUnique())
                         this.DebugOverlay.NextTexture();
                 }
             }
@@ -646,10 +646,9 @@ namespace ContentPatcher
                                 return TrackSkip(error);
 
                             // read map properties
-                            List<EditMapPatchProperty> mapProperties = null;
+                            var mapProperties = new List<EditMapPatchProperty>();
                             if (entry.MapProperties?.Any() == true)
                             {
-                                mapProperties = new List<EditMapPatchProperty>();
                                 foreach (var pair in entry.MapProperties)
                                 {
                                     if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out error, out IManagedTokenString key))
@@ -658,6 +657,66 @@ namespace ContentPatcher
                                         return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                                     mapProperties.Add(new EditMapPatchProperty(key, value));
+                                }
+                            }
+
+                            // read map tiles
+                            var mapTiles = new List<EditMapPatchTile>();
+                            if (entry.MapTiles?.Any() == true)
+                            {
+                                for (int i = 0; i < entry.MapTiles.Length; i++)
+                                {
+                                    var tile = entry.MapTiles[i];
+                                    string errorPrefix = $"{nameof(PatchConfig.MapTiles)} > entry #{i + 1}";
+
+                                    // layer
+                                    if (!tokenParser.TryParseStringTokens(tile.Layer, immutableRequiredModIDs, out error, out IManagedTokenString layer))
+                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Layer)} is invalid: {error}");
+
+                                    // position
+                                    if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, out error, out TokenPosition position))
+                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Position)} is invalid: {error}");
+
+                                    // tilesheet
+                                    IManagedTokenString tilesheet = null;
+                                    if (tile.SetTilesheet != null && !tokenParser.TryParseStringTokens(tile.SetTilesheet, immutableRequiredModIDs, out error, out tilesheet))
+                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
+
+                                    // index
+                                    IManagedTokenString index = null;
+                                    if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, out error, out index))
+                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
+
+                                    // properties
+                                    var tileProperties = new Dictionary<IManagedTokenString, IManagedTokenString>();
+                                    if (tile.SetProperties?.Any() == true)
+                                    {
+                                        int p = 0;
+                                        foreach (var pair in tile.SetProperties)
+                                        {
+                                            p++;
+                                            if (!tokenParser.TryParseStringTokens(pair.Key, immutableRequiredModIDs, out error, out IManagedTokenString key))
+                                                return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
+                                            if (!tokenParser.TryParseStringTokens(pair.Value, immutableRequiredModIDs, out error, out IManagedTokenString value))
+                                                return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
+
+                                            tileProperties[key] = value;
+                                        }
+                                    }
+
+                                    // remove
+                                    IManagedTokenString remove = null;
+                                    if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIDs, out error, out remove))
+                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Remove)} is invalid: {error}");
+
+                                    mapTiles.Add(new EditMapPatchTile(
+                                        layer: layer,
+                                        position: position,
+                                        setIndex: index,
+                                        setTilesheet: tilesheet,
+                                        setProperties: tileProperties,
+                                        remove: remove
+                                    ));
                                 }
                             }
 
@@ -670,13 +729,13 @@ namespace ContentPatcher
                                 return TrackSkip(error);
 
                             // validate
-                            if (fromAsset == null && mapProperties == null)
-                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)} or {entry.MapProperties}");
+                            if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any())
+                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, or {nameof(entry.MapTiles)}");
                             if (fromAsset != null && entry.ToArea == null)
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, mapProperties, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -921,6 +980,55 @@ namespace ContentPatcher
             return new InvariantHashSet(values);
         }
 
+        /// <summary>Parse a boolean value from a string which can contain tokens, and validate that it's valid.</summary>
+        /// <param name="rawValue">The raw string which may contain tokens.</param>
+        /// <param name="tokenParser">The  tokens available for this content pack.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParseBoolean(string rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out IManagedTokenString parsed)
+        {
+            // analyze string
+            if (!tokenParser.TryParseStringTokens(rawValue, assumeModIds, out error, out parsed))
+                return false;
+
+            // validate & extract tokens
+            if (parsed.HasAnyTokens)
+            {
+                // only one token allowed
+                if (!parsed.IsSingleTokenOnly)
+                {
+                    error = "can't be treated as a true/false value because it contains multiple tokens.";
+                    return false;
+                }
+
+                // parse token
+                LexTokenToken lexToken = parsed.GetTokenPlaceholders(recursive: false).Single();
+                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                ITokenString input = new TokenString(lexToken.InputArg, tokenParser.Context);
+
+                // check token options
+                if (token == null)
+                {
+                    error = $"unknown token '{lexToken.Name}'.";
+                    return false;
+                }
+                if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
+                {
+                    error = "that token isn't restricted to 'true' or 'false'.";
+                    return false;
+                }
+                if (token.CanHaveMultipleValues(input))
+                {
+                    error = "can't be treated as a true/false value because that token can have multiple values.";
+                    return false;
+                }
+            }
+
+            // parse text
+            return true;
+        }
+
         /// <summary>Parse a boolean <see cref="PatchConfig.Enabled"/> value from a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="tokenParser">The  tokens available for this content pack.</param>
@@ -932,7 +1040,7 @@ namespace ContentPatcher
             parsed = false;
 
             // analyze string
-            if (!tokenParser.TryParseStringTokens(rawValue, assumeModIds, out error, out IManagedTokenString tokenString))
+            if (!this.TryParseBoolean(rawValue, tokenParser, assumeModIds, out error, out IManagedTokenString tokenString))
                 return false;
 
             // validate & extract tokens
@@ -957,16 +1065,6 @@ namespace ContentPatcher
                     error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
                     return false;
                 }
-                if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
-                {
-                    error = "that token isn't restricted to 'true' or 'false'.";
-                    return false;
-                }
-                if (token.CanHaveMultipleValues(input))
-                {
-                    error = "can't be treated as a true/false value because that token can have multiple values.";
-                    return false;
-                }
 
                 text = token.GetValues(input).First();
             }
@@ -977,6 +1075,37 @@ namespace ContentPatcher
                 error = $"can't parse {tokenString.Raw} as a true/false value.";
                 return false;
             }
+            return true;
+        }
+
+        /// <summary>Parse a tokenizable position from its parts, and validate that it's valid.</summary>
+        /// <param name="raw">The raw position to parse.</param>
+        /// <param name="tokenParser">The tokens available for this content pack.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
+        /// <param name="parsed">The parsed value.</param>
+        private bool TryParsePosition(PatchPositionConfig raw, TokenParser tokenParser, InvariantHashSet assumeModIds, out string error, out TokenPosition parsed)
+        {
+            bool TryParseField(string rawField, string name, out IManagedTokenString result, out string parseError)
+            {
+                if (!this.TryParseInt(rawField, tokenParser, assumeModIds, out parseError, out result))
+                {
+                    parseError = $"invalid {name}: {parseError}";
+                    return false;
+                }
+                return true;
+            }
+
+            if (
+                !TryParseField(raw.X, nameof(raw.X), out IManagedTokenString x, out error)
+                || !TryParseField(raw.Y, nameof(raw.Y), out IManagedTokenString y, out error)
+            )
+            {
+                parsed = null;
+                return false;
+            }
+
+            parsed = new TokenPosition(x, y);
             return true;
         }
 
