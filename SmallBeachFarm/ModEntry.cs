@@ -95,6 +95,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                     AssetPatchUtilities.ApplyMapOverride(source: islands, target: map, targetArea: new Rectangle(0, 26, 56, 49));
                 }
 
+                // add campfire
+                if (this.Config.AddCampfire)
+                {
+                    var buildingsLayer = map.GetLayer("Buildings");
+                    buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
+                    buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, map.GetTileSheet("untitled tile sheet"), BlendMode.Alpha, 242); // campfire
+                }
+
                 // apply tilesheet recolors
                 string internalRootKey = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, "_default"));
                 foreach (TileSheet tilesheet in map.TileSheets)

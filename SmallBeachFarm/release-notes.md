@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Disabling the campfire now also removes the driftwood pile next to it.
 * Fixed islands always added in 1.6.
 
 ## 1.6
