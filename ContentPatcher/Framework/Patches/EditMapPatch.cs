@@ -184,6 +184,7 @@ namespace ContentPatcher.Framework.Patches
             // parse tile data
             if (!this.TryReadTile(tilePatch, out string layerName, out Location position, out int? setIndex, out string setTilesheetId, out IDictionary<string, string> setProperties, out bool removeTile, out error))
                 return this.Fail(error, out error);
+            bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Any();
 
             // get layer
             var layer = map.GetLayer(layerName);
@@ -205,7 +206,7 @@ namespace ContentPatcher.Framework.Patches
             Tile original = layer.Tiles[position];
 
             // if adding a new tile, the min tile info is required
-            if ((removeTile || original == null) && (setTilesheet == null || setIndex == null))
+            if (hasEdits && (removeTile || original == null) && (setTilesheet == null || setIndex == null))
                 return this.Fail($"the map has no tile at {layerName} ({position.X}, {position.Y}). To add a tile, the {nameof(PatchMapTileConfig.SetTilesheet)} and {nameof(PatchMapTileConfig.SetIndex)} fields must be set.", out error);
 
             // apply new tile

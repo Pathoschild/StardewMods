@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error when removing a map tile without edits.
+
 ## 1.13
 Released 09 March 2020.
 
