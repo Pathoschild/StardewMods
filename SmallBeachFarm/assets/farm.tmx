@@ -2245,6 +2245,48 @@
     <property name="Type" value="Grass"/>
    </properties>
   </tile>
+  <tile id="64">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="65">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="66">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="67">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="68">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="69">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
+  <tile id="70">
+   <properties>
+    <property name="NoSpawn" value="T"/>
+    <property name="Water" value="T"/>
+   </properties>
+  </tile>
   <tile id="72">
    <properties>
     <property name="Passable" value="T"/>
