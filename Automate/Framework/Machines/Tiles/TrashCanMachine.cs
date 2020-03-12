@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using xTile.Dimensions;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
@@ -90,79 +91,83 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         /// <remarks>Derived from <see cref="Town.checkAction"/>.</remarks>
         private Item GetRandomTrash(int index)
         {
+            // Note: this code must match the exact sequence of random calls to produce the same output as the game code.
             Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + 777 + index * 77);
-            double dailyLuck = Game1.MasterPlayer.DailyLuck;
+            Farmer who = Game1.MasterPlayer;
+            Location tileLocation = new Location((int)this.Tile.X, (int)this.Tile.Y);
 
-            // randomization noise
             {
-                for (int index2 = 0; index2 < random.Next(0, 100); ++index2)
+                int num2 = random.Next(0, 100);
+                for (int index2 = 0; index2 < num2; ++index2)
                     random.NextDouble();
-                for (int index2 = 0; index2 < random.Next(0, 100); ++index2)
+                int num3 = random.Next(0, 100);
+                for (int index2 = 0; index2 < num3; ++index2)
                     random.NextDouble();
             }
 
-            // rare chance of garbage hat
-            if (Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.002)
-                return new Hat(66);
+            bool trashCheck = Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.01; // flag1
+            bool hatCheck = Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.002; // flag2
 
-            // normal loot
-            if ((Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.01) || random.NextDouble() < 0.2 + dailyLuck)
+            if (hatCheck)
+                return new Hat(66); // garbage hat
+
+            if (trashCheck || random.NextDouble() < 0.2 + who.DailyLuck)
             {
-                int itemID = 168;
+                int itemID = 168; // trash
                 switch (random.Next(10))
                 {
                     case 0:
-                        itemID = 168;
+                        itemID = 168; // trash
                         break;
                     case 1:
-                        itemID = 167;
+                        itemID = 167; // Joja Cola
                         break;
                     case 2:
-                        itemID = 170;
+                        itemID = 170; // broken glasses
                         break;
                     case 3:
-                        itemID = 171;
+                        itemID = 171; // broken CD
                         break;
                     case 4:
-                        itemID = 172;
+                        itemID = 172; // soggy newspaper
                         break;
                     case 5:
-                        itemID = 216;
+                        itemID = 216; // bread
                         break;
                     case 6:
-                        itemID = Utility.getRandomItemFromSeason(Game1.currentSeason, ((int)this.Tile.X) * 653 + ((int)this.Tile.Y) * 777, false);
+                        itemID = Utility.getRandomItemFromSeason(Game1.currentSeason, tileLocation.X * 653 + tileLocation.Y * 777, false); // seasonal item
                         break;
                     case 7:
-                        itemID = 403;
+                        itemID = 403; // field snack
                         break;
                     case 8:
-                        itemID = 309 + random.Next(3);
+                        itemID = 309 + random.Next(3); // acorn, maple seed, or pine cone
                         break;
                     case 9:
-                        itemID = 153;
+                        itemID = 153; // green algae
                         break;
                 }
-                if (index == 3 && random.NextDouble() < 0.2 + dailyLuck)
+                if (index == 3 && random.NextDouble() < 0.2 + who.DailyLuck)
                 {
-                    itemID = 535;
+                    itemID = 535; // geode
                     if (random.NextDouble() < 0.05)
-                        itemID = 749;
+                        itemID = 749; // omni geode
                 }
-                if (index == 4 && random.NextDouble() < 0.2 + dailyLuck)
+                if (index == 4 && random.NextDouble() < 0.2 + who.DailyLuck)
                 {
-                    itemID = 378 + random.Next(3) * 2;
+                    itemID = 378 + random.Next(3) * 2; // copper ore, iron ore, coal
                     random.Next(1, 5);
                 }
-                if (index == 5 && random.NextDouble() < 0.2 + dailyLuck && Game1.dishOfTheDay != null)
-                    itemID = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216;
-                if (index == 6 && random.NextDouble() < 0.2 + dailyLuck)
-                    itemID = 223;
+                if (index == 5 && random.NextDouble() < 0.2 + who.DailyLuck && Game1.dishOfTheDay != null)
+                    itemID = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216; // bread
+                if (index == 6 && random.NextDouble() < 0.2 + who.DailyLuck)
+                    itemID = 223; // cookie
                 if (index == 7 && random.NextDouble() < 0.2)
                 {
                     if (!Utility.HasAnyPlayerSeenEvent(191393))
-                        itemID = 167;
+                        itemID = 167; // Joja Cola
                     if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater") && !Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja"))
-                        itemID = random.NextDouble() >= 0.25 ? 270 : 809;
+                        itemID = random.NextDouble() >= 0.25 ? 270 : 809; // corn or movie ticket
                 }
 
                 return new SObject(itemID, 1);

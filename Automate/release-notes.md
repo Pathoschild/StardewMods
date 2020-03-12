@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed automated trash cans producing different output than they would if checked manually in some cases.
+
 ## 1.16
 Released 08 March 2020.
 
