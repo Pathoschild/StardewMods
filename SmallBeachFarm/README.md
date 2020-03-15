@@ -16,21 +16,25 @@ A few highlights:
 
 * The beach is fertile, so you can plant crops in the grass and sand too:  
   > ![](docs/tilled.png)
-* The exit to Marnie's ranch is on the right:
-  > ![](docs/exits.png)
 * You can catch riverlands fish in the river and ocean fish in the ocean (for both fishing and
   crab pots):
   > ![](docs/fish-areas.png)
+* The exit to Marnie's ranch is on the right:
+  > ![](docs/exits.png)
+* The beach has a functional campfire you can use (pairs well with
+  [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking)):  
+  > ![](docs/campfire.gif)
+
+Tips:
+
+* Fish quality depends on how far from shore the bobber is. The bottom-left area of the river
+  mouth is wide enough to catch max-quality river fish:
+  > ![](docs/best-river-spot.png)
+* If you need more space, you can enable ocean islands for extra land area:
+  > ![](docs/farm-islands.png)
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), you can connect chests
   to crab pots all along the beach:
   > ![](docs/automate-crabpots.png)
-* The beach includes a functional campfire you can light or extinguish (pairs well with the
-  [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking) mod):  
-  > ![](docs/campfire.gif)
-
-If you need more space, the alternate _Small Beach With Islands_ adds ocean islands for extra land
-area:
-> ![](docs/farm-islands.png)
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -40,6 +44,7 @@ Here's what you can change:
 
 setting         | default | what it affects
 :-------------- | :------ | :------------------
+`AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
 `EnableIslands` | `false` | Whether to add ocean islands with extra land area.
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
 

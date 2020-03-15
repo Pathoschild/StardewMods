@@ -1,0 +1,13 @@
+{
+    /**
+     * Tile areas in the farm map where both river and ocean fish can be caught.
+     */
+    "MixedFishAreas": [
+        {
+            "X": 11,
+            "Y": 23,
+            "Width": 9,
+            "Height": 7
+        }
+    ]
+}

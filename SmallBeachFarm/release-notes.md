@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now catch both river and ocean fish where the river/ocean meet. The river is wide enough there to catch high-quality river fish.
 * Disabling the campfire now also removes the driftwood pile next to it.
 * Fixed islands always added in 1.6.
 
