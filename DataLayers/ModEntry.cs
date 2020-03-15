@@ -114,6 +114,10 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new MachineLayer(translation, layers.Machines, mods, input, this.Monitor);
             if (layers.Tillable.IsEnabled())
                 yield return new TillableLayer(translation, layers.Tillable, input, this.Monitor);
+
+            // add separate grid layer if grid isn't enabled for all layers
+            if (!config.ShowGrid && layers.TileGrid.IsEnabled())
+                yield return new GridLayer(translation, layers.TileGrid, input, this.Monitor);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

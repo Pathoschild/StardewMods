@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>The legend entries to display.</summary>
         public LegendEntry[] Legend { get; protected set; }
 
+        /// <summary>Whether to always show the tile grid.</summary>
+        public bool AlwaysShowGrid { get; protected set; }
+
 
         /*********
         ** Public methods

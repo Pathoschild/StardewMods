@@ -58,6 +58,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             /// <summary>Settings for the machine processing layer.</summary>
             public LayerConfig Machines { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
 
+            /// <summary>Settings for the tile grid layer.</summary>
+            public LayerConfig TileGrid { get; set; } = new LayerConfig { UpdatesPerSecond = 1 };
+
             /// <summary>Settings for the tillable layer.</summary>
             public LayerConfig Tillable { get; set; } = new LayerConfig { UpdatesPerSecond = 2 };
         }

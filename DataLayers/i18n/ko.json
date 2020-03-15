@@ -60,6 +60,9 @@
     "machines.processing": "처리중",
     "machines.finished": "완료됨",
 
+    // tile grid
+    "grid.name": "Tile Grid", // TODO
+
     // tillable
     "tillable.name": "경작 가능 여부",
     "tillable.tillable": "경작 가능",
