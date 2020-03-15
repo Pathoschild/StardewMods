@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -161,6 +162,13 @@ namespace Pathoschild.Stardew.Automate.Framework
                 IAutomatable entity = this.GetEntityFor(location, tile, obj);
                 if (entity != null)
                     return entity;
+
+                if (obj is IndoorPot pot && pot.bush.Value != null)
+                {
+                    entity = this.GetEntityFor(location, tile, pot.bush.Value);
+                    if (entity != null)
+                        return entity;
+                }
             }
 
             // from terrain feature

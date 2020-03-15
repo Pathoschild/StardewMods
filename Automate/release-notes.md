@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed bushes in garden pots not automated.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.
 
 ## 1.16
