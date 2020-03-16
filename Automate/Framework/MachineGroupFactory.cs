@@ -37,10 +37,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
         {
             MachineGroupBuilder builder = new MachineGroupBuilder(location);
+            LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())
             {
-                this.FloodFillGroup(builder, location, tile, visited);
+                this.FloodFillGroup(builder, location, tile, locationIndex, visited);
                 if (builder.HasTiles())
                 {
                     yield return builder.Build();
@@ -84,8 +85,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machineGroup">The machine group to extend.</param>
         /// <param name="location">The location to search.</param>
         /// <param name="origin">The first tile to check.</param>
+        /// <param name="locationIndex">An indexed view of the location.</param>
         /// <param name="visited">A lookup of visited tiles.</param>
-        private void FloodFillGroup(MachineGroupBuilder machineGroup, GameLocation location, in Vector2 origin, ISet<Vector2> visited)
+        private void FloodFillGroup(MachineGroupBuilder machineGroup, GameLocation location, in Vector2 origin, LocationFloodFillIndex locationIndex, ISet<Vector2> visited)
         {
             // skip if already visited
             if (visited.Contains(origin))
@@ -102,7 +104,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     continue;
 
                 // add machines, containers, or connectors which covers this tile
-                if (this.TryAddEntity(machineGroup, location, tile))
+                if (this.TryAddEntity(machineGroup, location, locationIndex, tile))
                 {
                     foreach (Rectangle tileArea in machineGroup.NewTileAreas)
                     {
@@ -125,10 +127,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Add any machine, container, or connector on the given tile to the machine group.</summary>
         /// <param name="group">The machine group to extend.</param>
         /// <param name="location">The location to search.</param>
+        /// <param name="locationIndex">An indexed view of the location.</param>
         /// <param name="tile">The tile to search.</param>
-        private bool TryAddEntity(MachineGroupBuilder group, GameLocation location, in Vector2 tile)
+        private bool TryAddEntity(MachineGroupBuilder group, GameLocation location, LocationFloodFillIndex locationIndex, in Vector2 tile)
         {
-            switch (this.GetEntity(location, tile))
+            switch (this.GetEntity(location, locationIndex, tile))
             {
                 case IMachine machine:
                     group.Add(machine);
@@ -153,44 +156,45 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get a machine, container, or connector from the given tile, if any.</summary>
         /// <param name="location">The location to search.</param>
+        /// <param name="locationIndex">An indexed view of the location.</param>
         /// <param name="tile">The tile to search.</param>
-        private IAutomatable GetEntity(GameLocation location, Vector2 tile)
+        private IAutomatable GetEntity(GameLocation location, LocationFloodFillIndex locationIndex, Vector2 tile)
         {
-            // from object
-            if (location.objects.TryGetValue(tile, out SObject obj))
+            // from entity
+            foreach (object target in locationIndex.GetEntities(tile))
             {
-                IAutomatable entity = this.GetEntityFor(location, tile, obj);
-                if (entity != null)
-                    return entity;
-
-                if (obj is IndoorPot pot && pot.bush.Value != null)
+                switch (target)
                 {
-                    entity = this.GetEntityFor(location, tile, pot.bush.Value);
-                    if (entity != null)
-                        return entity;
-                }
-            }
+                    case SObject obj:
+                        {
+                            IAutomatable entity = this.GetEntityFor(location, tile, obj);
+                            if (entity != null)
+                                return entity;
 
-            // from terrain feature
-            if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
-            {
-                IAutomatable entity = this.GetEntityFor(location, tile, feature);
-                if (entity != null)
-                    return entity;
-            }
+                            if (obj is IndoorPot pot && pot.bush.Value != null)
+                            {
+                                entity = this.GetEntityFor(location, tile, pot.bush.Value);
+                                if (entity != null)
+                                    return entity;
+                            }
+                        }
+                        break;
 
-            // building machine
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    Rectangle tileArea = new Rectangle(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-                    if (tileArea.Contains((int)tile.X, (int)tile.Y))
-                    {
-                        IAutomatable entity = this.GetEntityFor(buildableLocation, tile, building);
-                        if (entity != null)
-                            return entity;
-                    }
+                    case TerrainFeature feature:
+                        {
+                            IAutomatable entity = this.GetEntityFor(location, tile, feature);
+                            if (entity != null)
+                                return entity;
+                        }
+                        break;
+
+                    case Building building:
+                        {
+                            IAutomatable entity = this.GetEntityFor((BuildableGameLocation)location, tile, building);
+                            if (entity != null)
+                                return entity;
+                        }
+                        break;
                 }
             }
 
