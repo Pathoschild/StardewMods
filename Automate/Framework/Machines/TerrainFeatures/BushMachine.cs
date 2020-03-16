@@ -5,9 +5,9 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 {
-    /// <summary>A tea bush machine that provides output.</summary>
+    /// <summary>A bush machine that provides output.</summary>
     /// <remarks>Derived from <see cref="Bush.shake"/>.</remarks>
-    internal class TeaBushMachine : BaseMachine<Bush>
+    internal class BushMachine : BaseMachine<Bush>
     {
         /*********
         ** Public methods
@@ -15,14 +15,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="bush">The underlying bush.</param>
         /// <param name="location">The machine's in-game location.</param>
-        /// <param name="tile">The bush's tile position.</param>
-        public TeaBushMachine(Bush bush, GameLocation location, Vector2 tile)
-            : base(bush, location, GetTileAreaFor(tile)) { }
+        public BushMachine(Bush bush, GameLocation location)
+            : base(bush, location, GetTileAreaFor(bush)) { }
 
         /// <summary>Get the output item.</summary>
         public override ITrackedStack GetOutput()
         {
-            return new TrackedItem(new SObject(815, 1), onReduced: this.OnOutputReduced);
+            // tea bush
+            if (this.Machine.size.Value == Bush.greenTeaBush)
+                return new TrackedItem(new SObject(815, 1), onReduced: this.OnOutputReduced);
+
+            // berry bush
+            int itemId = Game1.currentSeason == "fall" ? 410 : 296; // blackberry or salmonberry
+            int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
+            return new TrackedItem(new SObject(itemId, 1, quality: quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Get the machine's processing state.</summary>
@@ -44,6 +50,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             return false; // no input required
         }
 
+        /// <summary>Get whether a bush is an automateable type.</summary>
+        /// <param name="bush">The bush to check.</param>
+        public static bool CanAutomate(Bush bush)
+        {
+            return
+                (bush.size.Value == Bush.mediumBush && !bush.townBush.Value) // berry bush
+                || bush.size.Value == Bush.greenTeaBush; // tea bush
+        }
+
 
         /*********
         ** Private methods
@@ -54,6 +69,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             this.Machine.tileSheetOffset.Value = 0;
             this.Machine.setUpSourceRect();
+        }
+
+        /// <summary>Get the tile area covered by a bush.</summary>
+        /// <param name="bush">The bush whose area to get.</param>
+        private static Rectangle GetTileAreaFor(Bush bush)
+        {
+            var box = bush.getBoundingBox();
+            return new Rectangle(
+                x: box.X / Game1.tileSize,
+                y: box.Y / Game1.tileSize,
+                width: box.Width / Game1.tileSize,
+                height: box.Height / Game1.tileSize
+            );
         }
     }
 }

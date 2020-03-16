@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -64,6 +65,14 @@ namespace Pathoschild.Stardew.Automate.Framework
                 Rectangle box = this.AbsoluteToTileArea(pair.Value.getBoundingBox(pair.Key));
                 foreach (Vector2 tile in this.GetTilesIn(box))
                     yield return new KeyValuePair<Vector2, object>(tile, pair.Value);
+            }
+
+            // large terrain features
+            foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+            {
+                Rectangle box = this.AbsoluteToTileArea(feature.getBoundingBox());
+                foreach (Vector2 tile in this.GetTilesIn(box))
+                    yield return new KeyValuePair<Vector2, object>(tile, feature);
             }
 
             // buildings

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for berry bushes.
 * Optimized machine scan when a location changes.
 * Fixed bushes in garden pots not automated.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.
