@@ -21,10 +21,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <summary>A lambda which returns an error message for the text value (if applicable).</summary>
         private readonly Func<char, bool> Validator;
 
-        /// <summary>The method which shows the on-screen keyboard, if applicable.</summary>
-        private readonly IReflectedMethod ShowOnScreenKeyboard;
-
-
         /*********
         ** Accessors
         *********/
@@ -83,9 +79,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         {
             this.Validator = validate;
             this.Textbox = new TextBox(Sprites.Textbox.Sheet, null, font, textColor);
-            this.ShowOnScreenKeyboard = Constants.TargetPlatform == GamePlatform.Android
-                ? reflection.GetMethod(this.Textbox, "ShowAndroidKeyboard")
-                : null;
         }
 
         /// <summary>Set the input focus to this control.</summary>
@@ -93,7 +86,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         {
             this.Textbox.Selected = true;
             Game1.keyboardDispatcher.Subscriber = this;
-            this.ShowOnScreenKeyboard?.Invoke();
         }
 
         /// <summary>Receive input from the user.</summary>
