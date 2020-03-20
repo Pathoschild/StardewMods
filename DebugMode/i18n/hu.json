@@ -1,0 +1,12 @@
+{
+    // labels shown on the debug screen
+    "label.tile": "Pozíció",
+    "label.map": "Térkép",
+    "label.menu": "Menü",
+    "label.submenu": "Almenü",
+    "label.minigame": "Minijáték",
+    "label.festival-name": "Fesztivál",
+    "label.event-id": "Esemény azonosító",
+    "label.event-script": "Esemény szkript",
+    "label.song": "Dal"
+}
