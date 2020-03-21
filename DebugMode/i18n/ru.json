@@ -1,12 +1,12 @@
 {
     // labels shown on the debug screen
-    "label.tile": "тайл",
-    "label.map": "карта",
-    "label.menu": "меню",
-    "label.submenu": "подменю",
-    "label.minigame": "мини-игра",
-    "label.festival-name": "фестиваль",
+    "label.tile": "Клетка",
+    "label.map": "Карта",
+    "label.menu": "Меню",
+    "label.submenu": "Подменю",
+    "label.minigame": "Мини-игра",
+    "label.festival-name": "Фестиваль",
     "label.event-id": "ID события",
-    "label.event-script": "сценарий события",
-    "label.song": "композиция"
+    "label.event-script": "Сценарий события",
+    "label.song": "Композиция"
 }
