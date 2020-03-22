@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated Android support (thanks to ZaneYork!).
+
 ## 1.18
 Released 08 March 2020.
 

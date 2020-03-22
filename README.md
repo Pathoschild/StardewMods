@@ -38,7 +38,7 @@ Active mods:
   gifts, when a crop will be ready to harvest, how long a fence will last, why your farm animals
   are unhappy, and more._
 
-* **Noclip Mode** <small>([source](NoclipMode))</small>  
+* **[Noclip Mode](https://www.nexusmods.com/stardewvalley/mods/3900)** <small>([source](NoclipMode))</small>  
   _Toggle [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button,
   letting you walk through anything (even map boundaries)._
 
@@ -77,7 +77,7 @@ use the right translations.
 Chinese    | [↻ partial](ChestsAnywhere/i18n/zh.json) | [↻ partial](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json) | [↻ partial](LookupAnything/i18n/zh.json) | [✓](NoclipMode/i18n/zh.json) | [✓](TractorMod/i18n/zh.json)
 French     | [↻ partial](ChestsAnywhere/i18n/fr.json) | [↻ partial](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json) | [✓](LookupAnything/i18n/fr.json)        | [✓](NoclipMode/i18n/fr.json) | [✓](TractorMod/i18n/fr.json)
 German     | [↻ partial](ChestsAnywhere/i18n/de.json) | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json) | [✓](LookupAnything/i18n/de.json)        | [✓](NoclipMode/i18n/de.json) | [✓](TractorMod/i18n/de.json)
-Hungarian  | [↻ partial](ChestsAnywhere/i18n/hu.json) | [↻ partial](DataLayers/i18n/hu.json) | ❑                           | ❑                                       | [✓](NoclipMode/i18n/hu.json) | [✓](TractorMod/i18n/hu.json)
+Hungarian  | [↻ partial](ChestsAnywhere/i18n/hu.json) | [↻ partial](DataLayers/i18n/hu.json) | [✓](DebugMode/i18n/hu.json) | ❑                                       | [✓](NoclipMode/i18n/hu.json) | [✓](TractorMod/i18n/hu.json)
 Italian    | [↻ partial](ChestsAnywhere/i18n/it.json) | [↻ partial](DataLayers/i18n/it.json) | [✓](DebugMode/i18n/it.json) | [↻ partial](LookupAnything/i18n/it.json) | [✓](NoclipMode/i18n/it.json) | [✓](TractorMod/i18n/it.json)
 Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [↻ partial](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json) | [↻ partial](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
 Korean     | [↻ partial](ChestsAnywhere/i18n/ko.json) | [↻ partial](DataLayers/i18n/ko.json) | [✓](DebugMode/i18n/ko.json) | [↻ partial](LookupAnything/i18n/ko.json) | [✓](NoclipMode/i18n/ko.json) | [✓](TractorMod/i18n/ko.json)
