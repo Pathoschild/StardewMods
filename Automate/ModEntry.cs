@@ -56,16 +56,17 @@ namespace Pathoschild.Stardew.Automate
         public override void Entry(IModHelper helper)
         {
             // read data file
+            const string dataPath = "assets/data.json";
             DataModel data = null;
             try
             {
-                data = this.Helper.Data.ReadJsonFile<DataModel>("data.json");
+                data = this.Helper.Data.ReadJsonFile<DataModel>(dataPath);
                 if (data?.FloorNames == null)
-                    this.Monitor.Log("The data.json file seems to be missing or invalid. Floor connectors will be disabled.", LogLevel.Error);
+                    this.Monitor.Log($"The {dataPath} file seems to be missing or invalid. Floor connectors will be disabled.", LogLevel.Error);
             }
             catch (Exception ex)
             {
-                this.Monitor.Log($"The data.json file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
+                this.Monitor.Log($"The {dataPath} file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
             }
 
             // init
