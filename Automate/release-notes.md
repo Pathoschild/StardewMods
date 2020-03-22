@@ -8,6 +8,7 @@
 * Fixed furnaces not recognizing bouquets.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.
 * Fixed giftbox being automated as a chest.
+* Fixed search error if you have broken XNB mods.
 * Moved `data.json` into standard `assets` subfolder.
 
 ## 1.16
