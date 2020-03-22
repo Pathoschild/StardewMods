@@ -5,6 +5,7 @@
 * Added support for berry bushes.
 * Optimized machine scan when a location changes.
 * Fixed bushes in garden pots not automated.
+* Fixed furnaces not recognizing bouquets.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.
 * Fixed giftbox being automated as a chest.
 * Moved `data.json` into standard `assets` subfolder.
