@@ -60,7 +60,7 @@
     "machines.finished": "Befejezve",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "Pozíciórács",
 
     // tillable
     "tillable.name": "Megművelhető",
