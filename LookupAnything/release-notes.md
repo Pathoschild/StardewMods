@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed 'number crafted' including some incorrect recipes.
+
 ## 1.26
 Released 09 March 2020.
 
