@@ -657,6 +657,15 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="b">The second item to compare.</param>
         private bool AreEquivalent(Item a, Item b)
         {
+            if (a == null || b == null)
+                return false;
+
+            // equivalent torches
+            // (torches change from SObject to Torch when placed)
+            if (a.ParentSheetIndex == b.ParentSheetIndex && new[] { a, b }.All(p => p is Torch || (p.ParentSheetIndex == 93 && p.GetItemType() == ItemType.Object)))
+                return true;
+
+            // equivalent
             return
                 // same generic item type
                 a.GetType() == b.GetType()
