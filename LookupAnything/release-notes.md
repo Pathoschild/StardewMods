@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed 'number crafted' including some incorrect recipes.
+* Fixed some spawned items incorrectly marked as owned (e.g. weeds and stones).
 
 ## 1.26
 Released 09 March 2020.
