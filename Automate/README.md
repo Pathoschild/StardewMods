@@ -10,7 +10,7 @@ automatically pull raw items from the chest and push processed items into it.
   * [Connectors](#connectors)
   * [Machine priority](#machine-priority)
 * [Configure](#configure)
-  * [config.json](#config.json)
+  * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
 * [Compatibility](#compatibility)
 * [FAQs](#faqs)
@@ -208,7 +208,7 @@ worm bins | `WormBin`
 </dd>
 </dl>
 
-For custom machines added by other mod, see their documentation or ask their mod authors.
+For custom machines added by other mods, see their documentation or ask their mod authors.
 
 ## Configure
 ### config.json
@@ -317,12 +317,28 @@ This adds four options for automate:
 If you don't have Chests Anywhere installed, you can edit the chest names a different way and add
 these substrings:
 
-tag | meaning
---- | -------
-`|automate:no-store|` | **don't** store items in this chest.
-`|automate:no-take|` | **don't** take items from this chest.
-`|automate:prefer-store|` | store items in this chest first.
-`|automate:prefer-take|` | take items from this chest first.
+<table>
+<tr>
+  <th>tag</th>
+  <th>meaning</th>
+</tr>
+<tr>
+  <td><code>|automate:no-store|</code></td>
+  <td><strong>don't</strong> store items in this chest.</td>
+</tr>
+<tr>
+  <td><code>|automate:no-take|</code></td>
+  <td><strong>don't</strong> take items from this chest.</td>
+</tr>
+<tr>
+  <td><code>|automate:prefer-store|</code></td>
+  <td>store items in this chest first.</td>
+</tr>
+<tr>
+  <td><code>|automate:prefer-take|</code></td>
+  <td>take items from this chest first.</td>
+</tr>
+</table>
 
 ## Compatibility
 Automate is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
