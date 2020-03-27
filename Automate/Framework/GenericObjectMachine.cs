@@ -35,8 +35,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The in-game location.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        protected GenericObjectMachine(TMachine machine, GameLocation location, Vector2 tile)
-            : base(machine, location, BaseMachine.GetTileAreaFor(tile)) { }
+        /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
+        protected GenericObjectMachine(TMachine machine, GameLocation location, Vector2 tile, string machineTypeId = null)
+            : base(machine, location, BaseMachine.GetTileAreaFor(tile), machineTypeId) { }
 
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
         /// <param name="item">The output item that was taken.</param>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
 using StardewValley;
@@ -21,10 +22,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The automation factories which construct machines, containers, and connectors.</summary>
         private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();
 
+        /// <summary>The mod configuration.</summary>
+        private readonly ModConfig Config;
+
 
         /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="config">The mod configuration.</param>
+        public MachineGroupFactory(ModConfig config)
+        {
+            this.Config = config;
+        }
+
         /// <summary>Add an automation factory.</summary>
         /// <param name="factory">An automation factory which construct machines, containers, and connectors.</param>
         public void Add(IAutomationFactory factory)
@@ -36,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         public IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
         {
-            MachineGroupBuilder builder = new MachineGroupBuilder(location);
+            MachineGroupBuilder builder = new MachineGroupBuilder(location, this.Config);
             LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())

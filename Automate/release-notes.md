@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Added machine type priority.
 * Added support for berry bushes.
+* Shipping bins now have a lower priority than other machines by default.
 * Optimized machine scan when a location changes.
 * Fixed bushes in garden pots not automated.
 * Fixed furnaces not recognizing bouquets.

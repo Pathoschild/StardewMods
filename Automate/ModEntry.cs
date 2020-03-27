@@ -69,10 +69,13 @@ namespace Pathoschild.Stardew.Automate
                 this.Monitor.Log($"The {dataPath} file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
             }
 
-            // init
+            // read config
             this.Config = helper.ReadConfig<ModConfig>();
+            this.Config.MachinePriority = new Dictionary<string, int>(this.Config.MachinePriority, StringComparer.OrdinalIgnoreCase);
+
+            // init
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
-            this.Factory = new MachineGroupFactory();
+            this.Factory = new MachineGroupFactory(this.Config);
             this.Factory.Add(new AutomationFactory(
                 connectors: this.Config.ConnectorNames,
                 automateShippingBin: this.Config.AutomateShippingBin,

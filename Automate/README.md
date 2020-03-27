@@ -5,7 +5,13 @@ automatically pull raw items from the chest and push processed items into it.
 ## Contents
 * [Install](#install)
 * [Use](#use)
+  * [Basic automation](#basic-automation)
+  * [Factories](#factories)
+  * [Connectors](#connectors)
+  * [Machine priority](#machine-priority)
 * [Configure](#configure)
+  * [config.json](#config.json)
+  * [In-game settings](#in-game-settings)
 * [Compatibility](#compatibility)
 * [FAQs](#faqs)
 * [Extensibility for modders](#extensibility-for-modders)
@@ -23,7 +29,7 @@ Machines connected to a chest will push their output into it, and pull ingredien
 of it. 
 
 This can be used to automate...
-* auto-grabbers;
+* [auto-grabbers](https://stardewvalleywiki.com/Auto-Grabber);
 * [bee houses](http://stardewvalleywiki.com/Bee_House);
 * bushes (including [blackberry](https://stardewvalleywiki.com/Blackberry), [salmonberry](https://stardewvalleywiki.com/Salmonberry), and [tea](https://stardewvalleywiki.com/Tea_Bush) bushes);
 * [casks](http://stardewvalleywiki.com/Cask) (including outside the cellar);
@@ -107,6 +113,103 @@ example, here are wooden paths used as connectors:
 Workbenches are the only connectors by default. You can edit the `config.json` to add connectors
 (see _[configure](#configure)_ below).
 
+### Machine priority
+<dl>
+<dt>overview</dt>
+<dd>
+
+The default order that machines are processed is unpredictable and subject to change, except that
+shipping bins are processed last by default.
+
+You can change that by setting machine priority in [the `config.json`](#configure). All machines
+have a default priority of 0, and higher values are processed first (for both input and output).
+
+</dd>
+
+<dt>example</dt>
+<dd>
+
+For example, let's say you have this machine setup and you place two tomatoes in the chest:
+```
+┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+│  chest   ││   keg    ││   keg    ││ preserves│
+│          ││          ││          ││   jar    │
+└──────────┘└──────────┘└──────────┘└──────────┘
+┌──────────┐
+│ shipping │
+│   bin    │
+└──────────┘
+```
+
+By default, all of the tomatoes will go into the kegs or preserves jar (since the shipping bin has
+a lower priority), but you won't know which ones.
+
+If you wanted kegs to process input before preserves jars, you'd set this in the `config.json`:
+```js
+"MachinePriority": {
+   "Keg": 1,
+   "ShippingBin": -1
+}
+```
+
+Now the two tomatoes would always go into the kegs. If you put five tomatoes at once into the chest,
+the kegs and preserves jar would each get one, and the remaining tomatoes would go into the
+shipping bin.
+
+</dd>
+
+<dt>machine codes</dt>
+<dd>
+
+The `MachinePriority` option needs the unique machine code. Here are the codes for the default
+machines:
+
+<details><summary>expand</summary>
+
+machine type | code
+------------ | ----
+auto-grabbers | `AutoGrabber`
+bee houses | `BeeHouse`
+bushes | `Bush`
+casks | `Cask`
+charcoal kilns | `CharcoalKiln`
+cheese presses | `CheesePress`
+crab pots | `CrabPot`
+crystalariums | `Crystalarium`
+fish ponds | `FishPond`
+fruit trees | `FruitTree`
+furnaces | `Furnace`
+garbage cans | `TrashCan`
+hay hoppers | `FeedHopper`
+Junimo huts | `JunimoHut`
+incubators (for eggs) | `CoopIncubator`
+kegs | `Keg`
+lightning rods | `LightningRod`
+looms | `Loom`
+mayonnaise machines | `MayonnaiseMachine`
+mills | `Mill`
+mushroom boxes | `MushroomBox`
+oil makers | `OilMaker`
+preserves jars | `PreservesJar`
+recycling machines | `RecyclingMachine`
+seed makers | `SeedMaker`
+shipping bins | `ShippingBin`
+silos | `FeedHopper` (same as hay hoppers)
+slime egg-presses | `SlimeEggPress`
+slime incubators | `SlimeIncubator`
+soda machines | `SodaMachine`
+statues of endless fortune | `StatueOfEndlessFortune`
+statues of perfection | `StatueOfPerfection`
+tappers | `Tapper`
+wood chippers | `WoodChipper`
+worm bins | `WormBin`
+
+</details>
+</dd>
+</dl>
+
+For custom machines added by other mod, see their documentation or ask their mod authors.
+
 ## Configure
 ### config.json
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -136,7 +239,7 @@ bindings with plus signs (like `LeftShift + U`).
   <td><code>AutomateShippingBin</code></td>
   <td>
 
-Default `true`. Whether the shipping bin should automatically pull items out of connected chests.
+Whether the shipping bin should automatically pull items out of connected chests. Default `true`.
 
   </td>
 </tr>
@@ -144,7 +247,8 @@ Default `true`. Whether the shipping bin should automatically pull items out of 
   <td><code>PullGemstonesFromJunimoHuts</code></td>
   <td>
 
-Default `false`. Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.
+Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by
+placing gemstones in their hut. Default `false`.
 
   </td>
 </tr>
@@ -152,7 +256,7 @@ Default `false`. Whether to pull gemstones out of Junimo huts. If true, you won'
   <td><code>AutomationInterval</code></td>
   <td>
 
-Default `60`. The number of update ticks between each automation cycle (one second is ≈60 ticks).
+The number of update ticks between each automation cycle (one second is ≈60 ticks). Default `60`.
 
   </td>
 </tr>
@@ -160,9 +264,8 @@ Default `60`. The number of update ticks between each automation cycle (one seco
   <td><code>ConnectorNames</code></td>
   <td>
 
-Default empty. A list of placed item names to treat as [connectors](#connectors) which connect
-adjacent machines together. You must specify the exact _English_ names for any in-game items to
-use. For example:
+A list of placed item names to treat as [connectors](#connectors) which connect adjacent machines
+together. You must specify the exact _English_ names for any in-game items to use. For example:
 
 ```js
 "ConnectorNames": [
@@ -171,6 +274,16 @@ use. For example:
 ]
 ```
 
+Contains `Workbench` by default.
+
+  </td>
+</tr>
+<tr>
+  <td><code>MachinePriority</code></td>
+  <td>
+
+The relative priority with which to process machine inputs and outputs; see
+_[machine priority](#machine-priority)_ for more info. Defaults to `ShippingBin` at -1 priority.
   </td>
 </tr>
 <tr>
@@ -233,8 +346,7 @@ Some common reasons:
 Automate doesn't remove placed objects, so it's never at fault for disappearing chests or machines.
 
 ### What's the order of processed machines?
-The order that machines are processed is essentially unpredictable for players. It depends on the
-internal algorithm for finding machines, which is subject to change.
+See _[machine priority](#machine-priority)_. 
 
 ### What's the order of items taken from chests?
 For each machine, the available chests are combined into one inventory (so items may be taken from
@@ -361,6 +473,10 @@ namespace YourModName
 
         /// <summary>The tile area covered by the machine.</summary>
         public Rectangle TileArea { get; }
+
+        /// <summary>A unique ID for the machine type.</summary>
+        /// <remarks>This value should be identical for two machines if they have the exact same behavior and input logic. For example, if one machine in a group can't process input due to missing items, Automate will skip any other empty machines of that type in the same group since it assumes they need the same inputs.</remarks>
+        string MachineTypeID { get; } = "YourModId/Transmuter";
 
 
         /*********
