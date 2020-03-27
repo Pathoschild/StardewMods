@@ -365,6 +365,11 @@ Automate doesn't remove placed objects, so it's never at fault for disappearing 
 See _[machine priority](#machine-priority)_. 
 
 ### What's the order of items taken from chests?
+This shouldn't matter in most cases and it's subject to change, but expand the details below for
+more info.
+
+<details><summary>expand</summary>
+
 For each machine, the available chests are combined into one inventory (so items may be taken from
 multiple chests simultaneously) and then scanned until Automate finds enough items to fill a recipe
 for that machine. The order is difficult to predict with multiple chests, but fairly easy if there's
@@ -394,6 +399,8 @@ copper bar:
 4. Add `2× copper ore` from fourth stack (one recipe filled):  
    ✓ `coal` + `5× copper ore` = `copper bar`  
    ❑ ~~`coal` + `3 of 5× iron ore` = `iron bar`~~
+
+</details>
 
 ### Which chest will machine output go into?
 The available chests are sorted by discovery order (which isn't predictable), then prioritised in
