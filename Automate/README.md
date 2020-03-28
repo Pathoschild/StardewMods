@@ -302,7 +302,7 @@ field | result
 </table>
 
 ### In-game settings
-Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) too lets you set
+Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) lets you set
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
@@ -347,15 +347,21 @@ keep it installed and use the overlay, their mod just won't automate anything.
 
 Automate is compatible with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertilizer in auto-grabbers will be ignored).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertilizer in Junimo huts will be ignored).
-* [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional 'CFAutomate' download to enable automation).
+* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertilizer in
+  auto-grabbers will be ignored).
+* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertilizer in Junimo
+  huts will be ignored).
+* [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional
+  'CFAutomate' download to enable automation).
+* [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) (with the
+  [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038) addon).
 
 ## FAQs
 ### Why did my chests/machines disappear?
 Some common reasons:
-* NPCs remove items placed in their path, so you shouldn't place anything where they walk. (You can
-  use [path connectors](#connectors) to connect town trash cans to an out-of-the-way chest.)
+* NPCs destroy items placed in their path, so you shouldn't place anything where they can walk.
+  (You can use [path connectors](#connectors) to connect crab pots and trash cans to out-of-the-way
+  chests or machines.)
 * Festivals and the Night Market use temporary maps, so items placed there may disappear when the
   map is switched back to normal.
 
