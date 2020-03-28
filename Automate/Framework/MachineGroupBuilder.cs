@@ -82,8 +82,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Create a group from the saved data.</summary>
         public MachineGroup Build()
         {
-            var machines = this.Machines
+            IMachine[] machines = this.Machines
                 .OrderByDescending(machine => this.GetPriority(machine.MachineTypeID))
+                .Select(machine => (IMachine)new MachineWrapper(machine))
                 .ToArray();
 
             return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray());

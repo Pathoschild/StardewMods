@@ -6,6 +6,7 @@
 * Added support for berry bushes.
 * Shipping bins now have a lower priority than other machines by default.
 * Optimized machine scan when a location changes.
+* Internal change to let certain mods patch Automate behaviour more easily.
 * Fixed bushes in garden pots not automated.
 * Fixed furnaces not recognizing bouquets.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.

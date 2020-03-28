@@ -4,6 +4,9 @@ This document provides technical info about the Automate mod. **For more general
 ## Contents
 * [FAQs](#faqs)
 * [Extensibility for modders](#extensibility-for-modders)
+  * [APIs](#apis)
+  * [Custom chest capacity](#custom-chest-capacity)
+  * [Patch Automate](#patch-automate)
 * [See also](#see-also)
 
 ## FAQs
@@ -85,10 +88,11 @@ name a different way and add these substrings:
 </table>
 
 ## Extensibility for modders
+### APIs
 Automate has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
 you can use to add custom machines, containers, and connectors.
 
-### Basic concepts
+#### Basic concepts
 These basic concepts are core to the Automate API:
 
 <dl>
@@ -117,7 +121,7 @@ A set of machines, containers, and connectors which are chained together. You ca
 </dd>
 </dl>
 
-### Access the API
+#### Access the API
 To access the API:
 
 1. Add a reference to the `Automate.dll` file. Make sure it's [_not_ copied to your build output](https://github.com/Pathoschild/SMAPI/blob/develop/docs/mod-build-config.md#ignore-files).
@@ -128,7 +132,7 @@ To access the API:
    ```
 3. Use the API to extend Automate (see below).
 
-### Add connectors, containers, and machines
+#### Add connectors, containers, and machines
 You can add automatables by implementing an `IAutomationFactory`. Automate will handle the core
 logic (like finding entities, linking automatables into groups, etc); you just need to return the
 automatable for a given entity. You can't change the automation for an existing automatable though;
@@ -296,6 +300,36 @@ your custom machine to its normal automation.
 ### Custom chest capacity
 If a `Chest` instance has a public `Capacity` property, Automate will use that instead of the
 `Chest.capacity` constant.
+
+### Patch Automate
+You can patch Automate's logic [using Harmony](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Harmony).
+To simplify patching, Automate wraps all machines with a [`MachineWrapper`](Framework/MachineWrapper.cs)
+instance, so you can hook one place to change any machine's input, output, or processing logic. For
+example, you can patch `GetOutput` to adjust machine output, `SetInput` to add custom recipes if
+none of the vanilla recipes matched, etc.
+
+**This is strongly discouraged in most cases.** Patching Automate makes both Automate and your mod
+more fragile and likely to break. If you patch Automate, **please**:
+
+1. When your mod starts, log a clear message indicating that your mod patches Automate. This
+   simplifies troubleshooting and avoids confusion. For example:
+
+   ```cs
+   if (helper.ModRegistry.IsLoaded("Pathoschild.Automate"))
+      this.Monitor.Log("This mod patches Automate. If you notice issues with Automate, make sure it happens without this mod before reporting it to the Automate page.", LogLevel.Debug);
+   ```
+
+   It doesn't have to be player-visible, even a `TRACE`-level message is useful when helping a
+   player troubleshoot:
+
+   ```cs
+   if (helper.ModRegistry.IsLoaded("Pathoschild.Automate"))
+      this.Monitor.Log("This mod patches Automate.", LogLevel.Trace);
+   ```
+
+2. Inside your patch methods, wrap the code in a `try..catch` and log your own exception (so
+   players don't report errors on the Automate page). You should also fallback to running the
+   original method, so errors in your code don't break Automate.
 
 ## See also
 * [README](README.md) for general info
