@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to D0n-A (updated Russian)!
+
 ## 4.10
 Released 09 March 2020.
 
