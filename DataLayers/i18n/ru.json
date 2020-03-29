@@ -32,10 +32,10 @@
     "sprinklers.dry-crops": "Спринклер не достаёт до необходимой зоны",
 
     // crops: harvest
-    "crop-harvest.name": "Состояние готовности к сбору культур",
-    "crop-harvest.ready": "Готово к сбору",
-    "crop-harvest.not-ready": "Не готово к сбору",
-    "crop-harvest.not-enough-time": "Необходимо немного больше времени для созревания",
+    "crop-harvest.name": "Состояние готовности урожая к сбору",
+    "crop-harvest.ready": "Культура готова к сбору урожая",
+    "crop-harvest.not-ready": "Культура ещё не готова к сбору урожая",
+    "crop-harvest.not-enough-time": "Вы не успели собрать урожай",
 
     // crops: watered
     "crop-water.name": "Состояние влажности почвы для культур",

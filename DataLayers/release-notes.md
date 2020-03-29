@@ -1,7 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added tile grid layer (when grid isn't enabled for all layers).
-* Updated translations. Thanks to Annosz (added Hungarian)!
+* Updated translations. Thanks to Annosz (added Hungarian) and D0n-A (updated Russian)!
 
 ## 1.11
 Released 08 March 2020.
