@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error when removing a map tile without edits.
+* Fixed token handling in map tile/property fields.
 
 ## 1.13
 Released 09 March 2020.

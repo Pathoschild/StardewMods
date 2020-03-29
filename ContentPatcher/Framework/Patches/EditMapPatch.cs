@@ -67,8 +67,10 @@ namespace ContentPatcher.Framework.Patches
             this.Monitor = monitor;
 
             this.Contextuals
-                .Add(fromArea)
-                .Add(toArea);
+                .Add(this.FromArea)
+                .Add(this.ToArea)
+                .Add(this.MapProperties)
+                .Add(this.MapTiles);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
