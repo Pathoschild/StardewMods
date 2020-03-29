@@ -2091,8 +2091,8 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="2535" name="zbeach_farm" tilewidth="16" tileheight="16" tilecount="76" columns="4">
-  <image source="tilesheets/_default/spring_smallBeachFarm.png" width="64" height="304"/>
+ <tileset firstgid="2535" name="zbeach_farm" tilewidth="16" tileheight="16" tilecount="24" columns="4">
+  <image source="tilesheets/_default/spring_smallBeachFarm.png" width="64" height="96"/>
   <tile id="0">
    <properties>
     <property name="Water" value="T"/>
@@ -2243,66 +2243,6 @@
     <property name="Buildable" type="bool" value="true"/>
     <property name="Diggable" value="T"/>
     <property name="Type" value="Grass"/>
-   </properties>
-  </tile>
-  <tile id="64">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="65">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="66">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="67">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="68">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="69">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="70">
-   <properties>
-    <property name="NoSpawn" value="T"/>
-    <property name="Water" value="T"/>
-   </properties>
-  </tile>
-  <tile id="72">
-   <properties>
-    <property name="Passable" value="T"/>
-    <property name="Type" value="Wood"/>
-   </properties>
-  </tile>
-  <tile id="73">
-   <properties>
-    <property name="Passable" value="T"/>
-    <property name="Type" value="Wood"/>
-   </properties>
-  </tile>
-  <tile id="74">
-   <properties>
-    <property name="Passable" value="T"/>
-    <property name="Type" value="Wood"/>
    </properties>
   </tile>
  </tileset>
