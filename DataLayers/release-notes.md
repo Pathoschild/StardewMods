@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added tile grid layer (when grid isn't enabled for all layers).
+* Fixed translations not updated after changing language until you restart the game.
 * Updated translations. Thanks to Annosz (added Hungarian) and D0n-A (updated Russian)!
 
 ## 1.11
