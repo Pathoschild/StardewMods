@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added datamining field formatter for `npc.currentMarriageDialogue`.
 * Fixed 'number crafted' including some incorrect recipes.
 * Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
 * Fixed placed and held torches counted as different items.

@@ -147,6 +147,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // game types
                 case AnimatedSprite sprite:
                     return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{translations.Stringify(sprite.sourceRect)})";
+                case MarriageDialogueReference dialogue:
+                    return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {translations.Stringify(dialogue.Substitutions)})";
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();
