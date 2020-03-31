@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to D0n-A (updated Russian)!
+* Improved translations. Thanks to BURAKMESE (added Turkish) and D0n-A (updated Russian)!
 
 ## 1.2
 Released 08 March 2020.
