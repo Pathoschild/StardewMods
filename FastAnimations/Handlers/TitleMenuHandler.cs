@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TitleMenuHandler(int multiplier, IReflectionHelper reflection)
+        public TitleMenuHandler(float multiplier, IReflectionHelper reflection)
             : base(multiplier)
         {
             this.Reflection = reflection;
