@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            this.SpeedUpPlayer(this.Multiplier);
+            this.SpeedUpPlayer();
         }
     }
 }

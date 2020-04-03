@@ -44,8 +44,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             LoadGameMenu menu = (LoadGameMenu)this.Reflection.GetField<IClickableMenu>(typeof(TitleMenu), "_subMenu").GetValue();
             IReflectedField<int> timerToLoad = this.GetTimerToLoad(menu);
-            for (int i = 1; i < this.Multiplier && timerToLoad.GetValue() > 0; i++)
-                menu.update(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => menu.update(Game1.currentGameTime),
+                until: () => timerToLoad.GetValue() <= 0
+            );
         }
 
 

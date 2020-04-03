@@ -33,8 +33,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override void Update(int playerAnimationID)
         {
             GameLocation location = Game1.currentLocation;
-            for (int i = 1; i < this.Multiplier && this.IsEnabled(playerAnimationID); i++)
-                location.UpdateWhenCurrentLocation(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => location.UpdateWhenCurrentLocation(Game1.currentGameTime),
+                until: () => !this.IsEnabled(playerAnimationID)
+            );
         }
     }
 }

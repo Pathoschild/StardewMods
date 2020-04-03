@@ -43,8 +43,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             TitleMenu titleMenu = (TitleMenu)Game1.activeClickableMenu;
             var isTransition = this.GetIsTransitionField(titleMenu);
-            for (int i = 1; i < this.Multiplier && isTransition.GetValue(); i++)
-                titleMenu.update(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => titleMenu.update(Game1.currentGameTime),
+                until: () => !isTransition.GetValue()
+            );
         }
 
 

@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for fractional multipliers like 1.5 times faster (thanks to seraku24!).
+
 ## 1.7.5
 Released 27 December 2019.
 

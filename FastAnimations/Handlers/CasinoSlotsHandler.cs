@@ -41,12 +41,10 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             Slots minigame = (Slots)Game1.currentMinigame;
 
-            for (int i = 1; i < this.Multiplier; i++)
-            {
-                if (!this.IsSpinning(minigame))
-                    break;
-                minigame.tick(Game1.currentGameTime);
-            }
+            this.ApplySkips(
+                run: () => minigame.tick(Game1.currentGameTime),
+                until: () => !this.IsSpinning(minigame)
+            );
         }
 
 
