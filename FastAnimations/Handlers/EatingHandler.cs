@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="disableConfirmation">Whether to disable the confirmation dialogue before eating or drinking.</param>
-        public EatingHandler(IReflectionHelper reflection, int multiplier, bool disableConfirmation)
+        public EatingHandler(IReflectionHelper reflection, float multiplier, bool disableConfirmation)
             : base(multiplier)
         {
             this.Reflection = reflection;

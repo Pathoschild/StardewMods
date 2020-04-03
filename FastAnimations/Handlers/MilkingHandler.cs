@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public MilkingHandler(int multiplier)
+        public MilkingHandler(float multiplier)
             : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>

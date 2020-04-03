@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public WeaponSwingHandler(int multiplier)
+        public WeaponSwingHandler(float multiplier)
             : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
