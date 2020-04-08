@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="e">The event arguments.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (e.NewMenu is TitleMenu)
+            if (e.NewMenu is TitleMenu && Constants.TargetPlatform != GamePlatform.Android)
                 this.CurrentStage = Stage.SkipIntro;
         }
 
@@ -106,13 +106,25 @@ namespace Pathoschild.Stardew.SkipIntro
             // main skip logic
             if (currentStage == Stage.SkipIntro)
             {
-                // skip to title screen
-                menu.receiveKeyPress(Keys.Escape);
-                menu.update(Game1.currentGameTime);
+                if (Constants.TargetPlatform == GamePlatform.Android)
+                {
+                    // skip to title screen
+                    menu.skipToTitleButtons ();
 
-                // skip button transition
-                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                    // skip button transition
+                    while (this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons").GetValue())
+                        menu.update(Game1.currentGameTime);
+                }
+                else
+                {
+                    // skip to title screen
+                    menu.receiveKeyPress(Keys.Escape);
                     menu.update(Game1.currentGameTime);
+                    
+                    // skip button transition
+                    while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                        menu.update(Game1.currentGameTime);
+                }
 
                 // skip to next screen
                 switch (this.Config.SkipTo)
@@ -129,6 +141,10 @@ namespace Pathoschild.Stardew.SkipIntro
 
                     case Screen.JoinCoop:
                     case Screen.HostCoop:
+                        // no co-op on Android
+                        if (Constants.TargetPlatform == GamePlatform.Android)
+                            return Stage.None;
+
                         // skip to co-op screen
                         menu.performButtonAction("Co-op");
                         while (TitleMenu.subMenu == null)
