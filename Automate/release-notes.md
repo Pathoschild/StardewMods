@@ -7,6 +7,7 @@
 * Shipping bins now have a lower priority than other machines by default.
 * Optimized machine scan when a location changes.
 * Internal change to let certain mods patch Automate behaviour more easily.
+* Fixed broken custom items in chests causing machines to stop working and spam errors. Automate now ignores broken items.
 * Fixed bushes in garden pots not automated.
 * Fixed furnaces not recognizing bouquets.
 * Fixed automated trash cans producing different output than they would if checked manually in some cases.
