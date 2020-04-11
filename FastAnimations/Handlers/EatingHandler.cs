@@ -104,6 +104,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             }
         }
 
+
         /*********
         ** Private methods
         *********/

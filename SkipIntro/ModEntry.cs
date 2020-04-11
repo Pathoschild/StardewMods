@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            this.Config = helper.ReadConfig<ModConfig>();
+            this.Config = this.LoadConfig();
 
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -50,7 +50,10 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="e">The event arguments.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (e.NewMenu is TitleMenu && Constants.TargetPlatform != GamePlatform.Android)
+            if (Constants.TargetPlatform == GamePlatform.Android)
+                return; // return to title doesn't replay intro on Android
+
+            if (e.NewMenu is TitleMenu)
                 this.CurrentStage = Stage.SkipIntro;
         }
 
@@ -89,6 +92,20 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Methods
         ****/
+        /// <summary>Load the mod configuration.</summary>
+        private ModConfig LoadConfig()
+        {
+            var config = this.Helper.ReadConfig<ModConfig>();
+
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                if (this.Config.SkipTo == Screen.HostCoop || this.Config.SkipTo == Screen.JoinCoop)
+                    this.Config.SkipTo = Screen.Title; // no co-op on Android
+            }
+
+            return config;
+        }
+
         /// <summary>Skip the intro if the game is ready.</summary>
         /// <param name="menu">The title menu whose intro to skip.</param>
         /// <param name="currentStage">The current step in the mod logic.</param>
@@ -109,7 +126,7 @@ namespace Pathoschild.Stardew.SkipIntro
                 if (Constants.TargetPlatform == GamePlatform.Android)
                 {
                     // skip to title screen
-                    menu.skipToTitleButtons ();
+                    menu.skipToTitleButtons();
 
                     // skip button transition
                     while (this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons").GetValue())
@@ -120,7 +137,7 @@ namespace Pathoschild.Stardew.SkipIntro
                     // skip to title screen
                     menu.receiveKeyPress(Keys.Escape);
                     menu.update(Game1.currentGameTime);
-                    
+
                     // skip button transition
                     while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
                         menu.update(Game1.currentGameTime);
@@ -141,10 +158,6 @@ namespace Pathoschild.Stardew.SkipIntro
 
                     case Screen.JoinCoop:
                     case Screen.HostCoop:
-                        // no co-op on Android
-                        if (Constants.TargetPlatform == GamePlatform.Android)
-                            return Stage.None;
-
                         // skip to co-op screen
                         menu.performButtonAction("Co-op");
                         while (TitleMenu.subMenu == null)
