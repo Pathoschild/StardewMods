@@ -180,7 +180,7 @@
     "location.undergroundMine.level": "矿井层数：{{level}}",
     "location.witchSwamp": "女巫的沼泽",
     "location.woods": "秘密森林",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})", // TODO
+    "location.unknown-fish-area": "{{locationName}} (钓鱼区 {{id}})", // TODO
 
 
     /*********
