@@ -200,13 +200,16 @@ namespace ContentPatcher.Framework
             yield return new HavingChildValueProvider(ConditionType.Pregnant, NeedsBasicInfo);
             yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
 
-            // string manipulation
+            // number manipulation
             yield return new QueryValueProvider();
             yield return new RangeValueProvider();
+            yield return new RoundValueProvider();
+
+            // string manipulation
             yield return new LetterCaseValueProvider(ConditionType.Lowercase);
             yield return new LetterCaseValueProvider(ConditionType.Uppercase);
 
-            // other
+            // metadata
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
             yield return new HasValueValueProvider();
             yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));

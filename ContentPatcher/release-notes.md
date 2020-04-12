@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added `Round` token.
 * Fixed error when removing a map tile without edits.
 * Fixed token handling in map tile/property fields.
 

@@ -14,8 +14,9 @@ This document lists the tokens available in Content Patcher packs.
   * [Player](#player)
   * [Relationships](#relationships)
   * [World](#world)
+  * [Number manipulation](#number-manipulation)
   * [String manipulation](#string-manipulation)
-  * [Meta](#meta)
+  * [Metadata](#metadata)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
   * [Overview](#overview)
@@ -540,6 +541,82 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 </tr>
 </table>
 
+### Number manipulation
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+
+<tr valign="top">
+<td>Query</td>
+<td>
+
+Perform arbitrary arithmetic operations; see [_arithmetic_](#arithmetic) for more info.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Range</td>
+<td>
+
+A list of integers between the specified min/max integers (inclusive). This is mainly meant for
+comparing values; for example:
+
+```js
+"When": {
+   "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
+}
+```
+
+You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
+`{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
+
+To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
+smaller if possible.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Round</td>
+<td>
+
+An approximation of the input number with fewer fractional digits.
+
+In its default form, this just rounds to the nearest whole number. For example,
+`{{Round: 2.1 }}` results in `2`, and `{{Round: 2.5555 }}` results in `3`.
+
+The token takes optional arguments to change the rounding logic:
+
+usage | result | description
+----- | ------ | -----------
+`Round(2.5555)` | `3` | Round to the nearest whole number.
+`Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
+`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` to the given number of fractional digits. This overrides the default [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) behavior.
+
+This is mainly useful in combination with the [`Query`](#query) token. For example, monster HP must
+be a whole number, so this rounds the result of a calculation to the nearest whole number:
+```js
+{
+  "Action": "EditData",
+  "Target": "Data/Monsters",
+  "Fields": {
+    "Green Slime": {
+      "0": "{{Round: {{Query: {{multiplier}} * 2.5 }} }}",
+    }
+  }
+}
+```
+
+You can use tokens in the individual fields (like `{{Round: {{value}}, 2}}`) or for multiple fields
+at once (like `{{Round: {{Settings}}}}` where `{{Settings}}` = `2.5, 3, up`), as long as the final
+parsed input matches one of the above forms.
+
+</td>
+</tr>
+</table>
+
 ### String manipulation
 <table>
 <tr>
@@ -566,30 +643,6 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 
 </dd>
 </dl>
-</td>
-</tr>
-
-<tr valign="top">
-<td>Range</td>
-<td>
-
-A list of integers between the specified min/max integers (inclusive). This is mainly meant for
-comparing values; for example:
-
-```js
-"When": {
-   "Hearts:Abigail": "{{Range: 6, 14}}" // equivalent to "6, 7, 8, 9, 10, 11, 12, 13, 14"
-}
-```
-
-You can use tokens for the individual numbers (like `{{Range:6, {{MaxHearts}}}}`) or both (like
-`{{Range:{{FriendshipRange}}}})`, as long as the final parsed input has the form `min, max`.
-
-To minimise the possible performance impact, the range can't exceed 5000 numbers and should be much
-smaller if possible.
-
-</td>
-</tr>
 </td>
 </tr>
 </table>
@@ -719,7 +772,9 @@ token).
 </table>
 </dd>
 
-## Arithmetic
+## <span id="query"></span>Arithmetic
+_See also [number manipulation tokens](#number-manipulation)_.
+
 You can calculate mathematical expressions in patches using the `query` token (including over
 tokens which return a number):
 ```js
