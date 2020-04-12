@@ -6,6 +6,7 @@
 * Fixed 'number crafted' including some incorrect recipes.
 * Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
 * Fixed placed and held torches counted as different items.
+* Improved translations. Thanks to niniack (updated Chinese)!
 
 ## 1.26
 Released 09 March 2020.

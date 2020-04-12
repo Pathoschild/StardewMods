@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated Android support (thanks to ZaneYork!).
-* Improved translations. Thanks to D0n-A (updated Russian)!
+* Improved translations. Thanks to D0n-A (updated Russian) and niniack (updated Chinese)!
 
 ## 1.18
 Released 08 March 2020.
