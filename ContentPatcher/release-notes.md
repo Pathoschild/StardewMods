@@ -5,6 +5,7 @@
 * Added `Round` token.
 * Fixed error when removing a map tile without edits.
 * Fixed token handling in map tile/property fields.
+* Fixed format validation for 1.13 features not applied.
 
 ## 1.13
 Released 09 March 2020.

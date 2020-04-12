@@ -36,12 +36,9 @@ namespace ContentPatcher
         /// <summary>The name of the file which contains player settings.</summary>
         private readonly string ConfigFileName = "config.json";
 
-        /// <summary>The supported format versions.</summary>
-        private readonly string[] SupportedFormatVersions = { "1.0.0", "1.3.0", "1.4.0", "1.5.0", "1.6.0", "1.7.0", "1.8.0", "1.9.0", "1.10.0", "1.11.0", "1.13.0" };
-
-        /// <summary>The format version migrations to apply.</summary>
-        private readonly Func<IMigration[]> Migrations = () => new IMigration[]
-        {
+        /// <summary>The recognized format versions and their migrations.</summary>
+        private readonly Func<IMigration[]> FormatVersions = () => new IMigration[] {
+            new Migration_1_0(),
             new Migration_1_3(),
             new Migration_1_4(),
             new Migration_1_5(),
@@ -50,7 +47,8 @@ namespace ContentPatcher
             new Migration_1_8(),
             new Migration_1_9(),
             new Migration_1_10(),
-            new Migration_1_11()
+            new Migration_1_11(),
+            new Migration_1_13()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -210,7 +208,7 @@ namespace ContentPatcher
             var helper = this.Helper;
 
             // init migrations
-            IMigration[] migrations = this.Migrations();
+            IMigration[] migrations = this.FormatVersions();
 
             // fetch content packs
             RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
@@ -282,6 +280,7 @@ namespace ContentPatcher
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
+            string[] validVersions = migrations.Select(p => p.Version.ToString()).ToArray();
             foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
                 RawContentPack rawContentPack;
@@ -301,7 +300,7 @@ namespace ContentPatcher
                     }
 
                     // apply migrations
-                    IMigration migrator = new AggregateMigration(content.Format, this.SupportedFormatVersions, migrations);
+                    IMigration migrator = new AggregateMigration(content.Format, validVersions, migrations);
                     if (!migrator.TryMigrate(content, out string error))
                     {
                         this.Monitor.Log($"Loading content pack '{contentPack.Manifest.Name}' failed: {error}.", LogLevel.Error);
