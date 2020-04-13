@@ -3,6 +3,9 @@
 # Release notes
 ## Upcoming release
 * Added `Round` token.
+* Added `FromFile` patch token (e.g. so you can do `"HasFile:{{FromFile}}": true`).
+* Fixed validation for `Target` fields containing `{{Target}}` and `{{TargetWithoutPath}}` tokens.
+* Fixed 'file does not exist' error when the `FromFile` path is ready and doesn't exist, but the patch is disabled by a patch-specific condition.
 * Fixed error when removing a map tile without edits.
 * Fixed token handling in map tile/property fields.
 * Fixed format validation for 1.13 features not applied.

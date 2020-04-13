@@ -18,6 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             this.AddedTokens = new InvariantHashSet
             {
+                ConditionType.FromFile.ToString(),
                 ConditionType.Round.ToString()
             };
         }

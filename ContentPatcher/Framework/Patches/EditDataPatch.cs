@@ -95,7 +95,7 @@ namespace ContentPatcher.Framework.Patches
                 return base.UpdateContext(context);
 
             // skip: file already loaded and target didn't change
-            if (!this.RawManagedTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
+            if (!this.ManagedRawTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
                 return base.UpdateContext(context);
 
             // reload non-data changes

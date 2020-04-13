@@ -147,6 +147,13 @@ namespace ContentPatcher.Framework.Conditions
             return this.GetTokenPlaceholders(this.LexTokens, recursive);
         }
 
+        /// <summary>Get whether a token string uses the given token.</summary>
+        /// <param name="tokens">The token to find.</param>
+        public bool UsesTokens(params ConditionType[] tokens)
+        {
+            return tokens.Any(token => this.TokensUsed.Contains(token.ToString()));
+        }
+
         /// <summary>Get diagnostic info about the contextual instance.</summary>
         public IContextualState GetDiagnosticState()
         {

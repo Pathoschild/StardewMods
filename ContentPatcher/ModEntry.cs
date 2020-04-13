@@ -413,6 +413,7 @@ namespace ContentPatcher
 
                     // get fake patch context (so patch tokens are available in patch validation)
                     LocalContext fakePatchContext = new LocalContext(current.Manifest.UniqueID, parentContext: modContext);
+                    fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
                     fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
                     fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "");
                     tokenParser = new TokenParser(fakePatchContext, current.Manifest, current.Migrator, installedMods);
@@ -538,11 +539,11 @@ namespace ContentPatcher
                 }
 
                 // parse target asset
-                IManagedTokenString assetName;
+                IManagedTokenString targetAsset;
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
-                    if (!tokenParser.TryParseStringTokens(entry.Target, immutableRequiredModIDs, out string error, out assetName))
+                    if (!tokenParser.TryParseStringTokens(entry.Target, immutableRequiredModIDs, out string error, out targetAsset))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
@@ -553,6 +554,25 @@ namespace ContentPatcher
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
+                // parse 'from file'
+                IManagedTokenString fromAsset = null;
+                if (entry.FromFile != null)
+                {
+                    if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
+                        return TrackSkip(error);
+                }
+
+                // validate field reference tokens
+                if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath))
+                    return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                if (fromAsset != null)
+                {
+                    if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.FromFile}' token if the {nameof(entry.FromFile)} field uses the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                    if (fromAsset.UsesTokens(ConditionType.FromFile))
+                        return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{ConditionType.FromFile}' token.");
+                }
+
                 // get patch instance
                 IPatch patch;
                 switch (action)
@@ -560,10 +580,13 @@ namespace ContentPatcher
                     // load asset
                     case PatchType.Load:
                         {
-                            // init patch
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out IManagedTokenString fromAsset))
-                                return TrackSkip(error);
-                            patch = new LoadPatch(entry.LogName, pack, assetName, conditions, fromAsset, this.Helper.Content.NormalizeAssetName);
+                            // validate
+                            if (fromAsset == null)
+                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
+
+                            // save
+                            patch = new LoadPatch(entry.LogName, pack, targetAsset, conditions, fromAsset,
+                                this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
@@ -571,15 +594,10 @@ namespace ContentPatcher
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.FromFile == null)
+                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && fromAsset == null)
                                 return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
-                            if (entry.FromFile != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                            if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
                                 return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
-
-                            // parse 'from file' field
-                            IManagedTokenString fromAsset = null;
-                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
-                                return TrackSkip(error);
 
                             // parse data changes
                             bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string parseError)
@@ -589,9 +607,9 @@ namespace ContentPatcher
                             List<EditDataPatchRecord> entries = null;
                             List<EditDataPatchField> fields = null;
                             List<EditDataPatchMoveRecord> moveEntries = null;
-                            if (entry.FromFile == null)
+                            if (fromAsset == null)
                             {
-                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out error))
+                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out string error))
                                     return TrackSkip(error);
                             }
 
@@ -599,7 +617,7 @@ namespace ContentPatcher
                             patch = new EditDataPatch(
                                 logName: entry.LogName,
                                 contentPack: pack,
-                                assetName: assetName,
+                                assetName: targetAsset,
                                 conditions: conditions,
                                 fromFile: fromAsset,
                                 records: entries,
@@ -615,6 +633,10 @@ namespace ContentPatcher
                     // edit image
                     case PatchType.EditImage:
                         {
+                            // validate
+                            if (fromAsset == null)
+                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
+
                             // read patch mode
                             PatchMode patchMode = PatchMode.Replace;
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
@@ -631,19 +653,14 @@ namespace ContentPatcher
                                 return TrackSkip(error);
 
                             // save
-                            if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out error, out IManagedTokenString fromAsset))
-                                return TrackSkip(error);
-                            patch = new EditImagePatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditImagePatch(entry.LogName, pack, targetAsset, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 
                     // edit map
                     case PatchType.EditMap:
                         {
-                            // read map asset
-                            IManagedTokenString fromAsset = null;
-                            if (entry.FromFile != null && !this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, out string error, out fromAsset))
-                                return TrackSkip(error);
+                            string error;
 
                             // read map properties
                             var mapProperties = new List<EditMapPatchProperty>();
@@ -735,7 +752,7 @@ namespace ContentPatcher
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, assetName, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.Helper.Content.NormalizeAssetName);
+                            patch = new EditMapPatch(entry.LogName, pack, targetAsset, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.Helper.Content.NormalizeAssetName);
                         }
                         break;
 

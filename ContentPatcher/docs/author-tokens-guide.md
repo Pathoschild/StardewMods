@@ -17,6 +17,7 @@ This document lists the tokens available in Content Patcher packs.
   * [Number manipulation](#number-manipulation)
   * [String manipulation](#string-manipulation)
   * [Metadata](#metadata)
+  * [Metadata (patch-specific)](#metadata-patch-specific)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
   * [Overview](#overview)
@@ -648,7 +649,7 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 </table>
 
 ### Metadata
-These tokens provide meta info about tokens, patches, installed mods, and the game state.
+These tokens provide meta info about tokens, content pack files, installed mods, and the game state.
 
 <table>
 <tr>
@@ -728,6 +729,44 @@ code | meaning
 
 </td>
 </tr>
+</table>
+
+### Metadata (patch-specific)
+These tokens contain the values assigned to patch fields for use in other patch fields.
+
+These are subject to some restrictions:
+* They're only available in a patch block directly (e.g. they won't work in a dynamic token).
+* They can't be used in their source field. For example, you can't use `{{Target}}` in the `Target`
+  field.
+* You can't create circular references. For example, you can use `{{FromFile}}` in the `Target`
+  field and `{{Target}}` in the `FromFile` field, but not both at once.
+
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+</tr>
+
+<tr valign="top">
+<td>FromFile</td>
+<td>
+
+The patch's `FromFile` field value for the current asset. Path separators are normalized for the OS.
+This is mainly useful for checking if the path exists:
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/Schedule/{{Season}}_{{Day}}.json",
+   "When": {
+      "HasFile:{{FromFile}}": true
+   }
+}
+```
+
+</td>
+</tr>
 
 <tr valign="top">
 <td>Target</td>
@@ -743,9 +782,6 @@ This is mainly useful for patches which specify multiple targets:
    "FromFile": "assets/{{Target}}.png" // assets/Characters/Abigail.png *or* assets/Characters/Sam.png
 }
 ```
-
-**Limitation:** this is only available in a patch block directly (e.g. it won't work in a dynamic
-token).
 
 </td>
 </tr>
@@ -764,13 +800,9 @@ Equivalent to `Target`, but only the part after the last path separator:
 }
 ```
 
-**Limitation:** this is only available in a patch block directly (e.g. it won't work in a dynamic
-token).
-
 </td>
 </tr>
 </table>
-</dd>
 
 ## <span id="query"></span>Arithmetic
 _See also [number manipulation tokens](#number-manipulation)_.

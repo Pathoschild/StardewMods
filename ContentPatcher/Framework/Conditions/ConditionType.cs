@@ -150,6 +150,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Patch-specific
         ****/
+        /// <summary>The current patch's FromFile value.</summary>
+        FromFile,
+
         /// <summary>The current patch's full target value.</summary>
         Target,
 
