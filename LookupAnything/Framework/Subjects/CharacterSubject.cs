@@ -276,7 +276,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="npc">The NPC for which to show info.</param>
         private IEnumerable<ICustomField> GetDataForVillager(NPC npc)
         {
-            if (!this.Constants.AsocialVillagers.Contains(npc.Name))
+            // social fields (birthday, friendship, gifting, etc)
+            if (this.GameHelper.IsSocialVillager(npc))
             {
                 // birthday
                 if (npc.Birthday_Season != null)
