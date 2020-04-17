@@ -17,7 +17,7 @@ This document lists the tokens available in Content Patcher packs.
   * [Number manipulation](#number-manipulation)
   * [String manipulation](#string-manipulation)
   * [Metadata](#metadata)
-  * [Metadata (patch-specific)](#metadata-patch-specific)
+  * [Field references](#field-references)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
   * [Overview](#overview)
@@ -731,11 +731,12 @@ code | meaning
 </tr>
 </table>
 
-### Metadata (patch-specific)
-These tokens contain the values assigned to patch fields for use in other patch fields.
+### Field references
+These tokens contain field values for the current patch. For example, `{{FromFile}}` is the current
+value of the `FromFile` patch field.
 
-These are subject to some restrictions:
-* They're only available in a patch block directly (e.g. they won't work in a dynamic token).
+These have some restrictions:
+* They're only available in a patch block directly (e.g. they won't work in dynamic tokens).
 * They can't be used in their source field. For example, you can't use `{{Target}}` in the `Target`
   field.
 * You can't create circular references. For example, you can use `{{FromFile}}` in the `Target`

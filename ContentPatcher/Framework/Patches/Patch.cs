@@ -95,9 +95,9 @@ namespace ContentPatcher.Framework.Patches
             this.PrivateContext.Update(context);
             bool changed = false;
             if (this.ManagedRawTargetAsset.UsesTokens(ConditionType.FromFile))
-                changed |= this.UpdateFromFile(context) | this.UpdateTargetPath(context);
+                changed |= this.UpdateFromFile(this.PrivateContext) | this.UpdateTargetPath(this.PrivateContext);
             else
-                changed |= this.UpdateTargetPath(context) | this.UpdateFromFile(context);
+                changed |= this.UpdateTargetPath(this.PrivateContext) | this.UpdateFromFile(this.PrivateContext);
             isReady &= this.RawTargetAsset.IsReady && this.RawFromAsset?.IsReady != false;
 
             // update contextuals
@@ -152,6 +152,8 @@ namespace ContentPatcher.Framework.Patches
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()
+                .MergeFrom(this.ManagedRawTargetAsset.GetDiagnosticState())
+                .MergeFrom(this.ManagedRawFromAsset?.GetDiagnosticState())
                 .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
 
@@ -212,17 +214,17 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Update the target path, and add the relevant tokens to the patch context.</summary>
-        /// <param name="context">The context for which to update.</param>
+        /// <param name="context">The local patch context (already updated from the parent context).</param>
         /// <returns>Returns whether the field changed.</returns>
-        private bool UpdateTargetPath(IContext context)
+        private bool UpdateTargetPath(LocalContext context)
         {
             bool changed = this.ManagedRawTargetAsset.UpdateContext(context);
 
             if (this.RawTargetAsset.IsReady)
             {
                 this.TargetAsset = this.NormalizeAssetNameImpl(this.RawTargetAsset.Value);
-                this.PrivateContext.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset);
-                this.PrivateContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(this.TargetAsset));
+                context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset);
+                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(this.TargetAsset));
             }
             else
                 this.TargetAsset = "";
@@ -231,15 +233,15 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Update the 'FromFile' value, and add the relevant tokens to the patch context.</summary>
-        /// <param name="context">The context for which to update.</param>
+        /// <param name="context">The local patch context (already updated from the parent context).</param>
         /// <returns>Returns whether the field changed.</returns>
-        private bool UpdateFromFile(IContext context)
+        private bool UpdateFromFile(LocalContext context)
         {
             // no value
             if (this.ManagedRawFromAsset == null)
             {
                 this.FromAsset = null;
-                this.PrivateContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
+                context.SetLocalValue(ConditionType.FromFile.ToString(), "");
                 return false;
             }
 
@@ -248,7 +250,7 @@ namespace ContentPatcher.Framework.Patches
             if (this.RawFromAsset.IsReady)
             {
                 this.FromAsset = this.NormalizeLocalAssetPath(this.RawFromAsset.Value, logName: $"{nameof(PatchConfig.FromFile)} field");
-                this.PrivateContext.SetLocalValue(ConditionType.FromFile.ToString(), this.FromAsset);
+                context.SetLocalValue(ConditionType.FromFile.ToString(), this.FromAsset);
             }
             else
                 this.FromAsset = null;
