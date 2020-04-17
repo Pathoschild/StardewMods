@@ -235,8 +235,16 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the field changed.</returns>
         private bool UpdateFromFile(IContext context)
         {
-            bool changed = this.ManagedRawFromAsset.UpdateContext(context);
+            // no value
+            if (this.ManagedRawFromAsset == null)
+            {
+                this.FromAsset = null;
+                this.PrivateContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
+                return false;
+            }
 
+            // update
+            bool changed = this.ManagedRawFromAsset.UpdateContext(context);
             if (this.RawFromAsset.IsReady)
             {
                 this.FromAsset = this.NormalizeLocalAssetPath(this.RawFromAsset.Value, logName: $"{nameof(PatchConfig.FromFile)} field");
@@ -244,7 +252,6 @@ namespace ContentPatcher.Framework.Patches
             }
             else
                 this.FromAsset = null;
-
             return changed;
         }
 
