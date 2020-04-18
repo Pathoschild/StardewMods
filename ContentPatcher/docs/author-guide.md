@@ -69,8 +69,8 @@ Content Patcher supports all game assets with some very powerful features, but i
 framework. More specialized frameworks might be better for specific things. You should consider
 whether one of these would work for you:
 
-  * [Advanced Location Loader](https://community.playstarbound.com/resources/smapi-advanced-location-loader.3619/) for complex changes to maps. (For simple changes, see _[edit part of a map](#editmap)_ below.)
-  * [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) to add machines.
+  * [TMXL Map Toolkit](https://www.nexusmods.com/stardewvalley/mods/1820) for complex changes to maps. (For simple changes, see _[edit part of a map](#editmap)_ below.)
+  * [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) to add machines.
   * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
   * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add many things like items, crafting recipes, crops, fruit trees, hats, and weapons.
 
@@ -115,7 +115,7 @@ All patches support these common fields:
 
 field      | purpose
 ---------- | -------
-`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`); explained in the next four sections.
+`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`); explained in the next section.
 `Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced) (e.g. config tokens) if they return true/false.
@@ -132,8 +132,8 @@ patch, so your content pack won't be compatible with other content packs that re
 
 field      | purpose
 ---------- | -------
-&nbsp;     | See _common fields_ above.
-`FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` (map), or `.xnb` file. This field supports [tokens](#advanced) and capitalisation doesn't matter.
+&nbsp;     | See _[common fields](#common-fields)_ above.
+`FromFile` | The relative file path in your content pack folder to load instead (like `assets/dinosaur.png`). This can be a `.json` (data), `.png` (image), `.tbin` or `.tmx` (map), or `.xnb` file. This field supports [tokens](#advanced) and capitalisation doesn't matter.
 
 Required fields: `FromFile`.
 
@@ -160,7 +160,7 @@ patching past the bottom (Content Patcher will expand the image to fit).
 
 field      | purpose
 ---------- | -------
-&nbsp;     | See _common fields_ above.
+&nbsp;     | See _[common fields](#common-fields)_ above.
 `FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced) and capitalisation doesn't matter.
 `FromArea` | The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
 `ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
@@ -189,7 +189,7 @@ For example, this changes one object sprite:
 
 field      | purpose
 ---------- | -------
-&nbsp;     | See _common fields_ above.
+&nbsp;     | See _[common fields](#common-fields)_ above.
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
@@ -372,7 +372,7 @@ _default_ | `ID` if it exists.
 `Data/ConcessionTastes` | `Name`
 `Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
 `Data/MoviesReactions` | `NPCName`
-`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like `item_cloth|category_fish,fish_semi_rare`).  The key is space-sensitive.
+`Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like <code>item_cloth&#124;category_fish,fish_semi_rare</code>). The key is space-sensitive.
 
 List assets also have an order which can affect game logic (e.g. the first entry in
 `Data\MoviesReactions` matching the NPC is used). You can move an entry within that order using the
@@ -434,7 +434,7 @@ target area will be fully overwritten with the source area.
 <td>&nbsp;</td>
 <td>
 
-See _common fields_ above.
+See _[common fields](#common-fields)_ above.
 
 </td>
 </tr>
@@ -447,11 +447,10 @@ See _common fields_ above.
 <td>
 
 The relative path to the map in your content pack folder from which to copy (like
-`assets/town.tbin`). This can be a `.tbin` or `.xnb` file. This field supports [tokens](#advanced)
+`assets/town.tmx`). This can be a `.tbin`, `.tmx`, or `.xnb` file. This field supports [tokens](#advanced)
 and capitalisation doesn't matter.
 
-Content Patcher will handle tilesheets referenced by the `FromFile` map for you if it's a `.tbin`
-file:
+Content Patcher will handle tilesheets referenced by the `FromFile` map for you:
 * If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a
   `z_` ID prefix to avoid conflicts with hardcoded game logic). If the source map has a custom
   version of a tilesheet that's already referenced, it'll be added as a separate tilesheet only
@@ -498,7 +497,7 @@ For example, this replaces the town square with the one in another map:
       {
          "Action": "EditMap",
          "Target": "Maps/Town",
-         "FromFile": "assets/town.tbin",
+         "FromFile": "assets/town.tmx",
          "FromArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 },
          "ToArea": { "X": 22, "Y": 61, "Width": 16, "Height": 13 }
       },
@@ -522,7 +521,7 @@ The `MapProperties` field lets you add, replace, or remove map-level properties.
 <td>&nbsp;</td>
 <td>
 
-See _common fields_ above.
+See _[common fields](#common-fields)_ above.
 
 </td>
 </tr>
@@ -576,7 +575,7 @@ properties.
 <td>&nbsp;</td>
 <td>
 
-See _common fields_ above.
+See _[common fields](#common-fields)_ above.
 
 </td>
 </tr>
@@ -701,7 +700,7 @@ You can validate your `content.json` and `manifest.json` automatically to detect
 detect all issues.)
 
 To validate online:
-1. Go to [json.smapi.io](https://json.smapi.io/).
+1. Go to [smapi.io/json](https://smapi.io/json).
 2. Set the format to 'Manifest' (for `manifest.json`) or 'Content Patcher' (for `content.json`).
 3. Drag & drop the JSON file onto the textbox, or paste in the text.
 4. Click the button to view the validation summary. You can optionally share the URL to let someone
