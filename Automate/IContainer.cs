@@ -27,5 +27,10 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stack">The item stack to store.</param>
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         void Store(ITrackedStack stack);
+
+        /// <summary>Get count for each item.</summary>
+        /// <param name="itemCounter">Counter to increment, indexed by item ID.</param>
+        /// <param name="predicate">Returns whether an item should be counted.</param>
+        void CountItems(IDictionary<int, int> itemCounter, Func<Item, bool> predicate=null);
     }
 }

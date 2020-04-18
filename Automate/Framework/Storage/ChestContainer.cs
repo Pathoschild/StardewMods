@@ -136,6 +136,21 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             return this.GetEnumerator();
         }
 
+        /// <summary>Get count for each item.</summary>
+        /// <param name="itemCounter">Counter to increment, indexed by item ID.</param>
+        /// <param name="predicate">Returns whether an item should be counted.</param>
+        public void CountItems(IDictionary<int, int> itemCounter, Func<Item, bool> predicate=null)
+        {
+            predicate = predicate ?? (t => true);
+            foreach (Item item in this.Chest.items.Where(predicate))
+            {
+                int itemCount = 0;
+                itemCounter.TryGetValue(item.ParentSheetIndex, out itemCount);
+                itemCount += item.Stack;
+                itemCounter[item.ParentSheetIndex] = itemCount;
+            }
+        }
+
 
         /*********
         ** Private methods

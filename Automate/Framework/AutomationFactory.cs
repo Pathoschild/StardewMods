@@ -50,6 +50,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
         public bool PullGemstonesFromJunimoHuts { get; set; }
 
+        /// <summary>Minimum number of each item to keep.</summary>
+        private readonly int KeepAtLeast;
+
 
         /*********
         ** Public methods
@@ -63,7 +66,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
         /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
         /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
+        /// <param name="keepAtLeast">Minimum number of each item to keep.</param>
+        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts, int keepAtLeast)
         {
             this.Connectors = new HashSet<string>(connectors, StringComparer.InvariantCultureIgnoreCase);
             this.AutomateShippingBin = automateShippingBin;
@@ -73,6 +77,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.BetterJunimosCompat = betterJunimosCompat;
             this.AutoGrabberModCompat = autoGrabberModCompat;
             this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
+            this.KeepAtLeast = keepAtLeast;
         }
 
         /// <summary>Get a machine, container, or connector instance for a given object.</summary>
@@ -185,9 +190,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (building is JunimoHut hut)
                 return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
             if (building is Mill mill)
-                return new MillMachine(mill, location);
+                return new MillMachine(mill, location, KeepAtLeast);
             if (this.AutomateShippingBin && building is ShippingBin bin)
-                return new ShippingBinMachine(bin, location, Game1.getFarm());
+                return new ShippingBinMachine(bin, location, Game1.getFarm(), this.KeepAtLeast);
             if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine(building, location);
             return null;
@@ -203,7 +208,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             // shipping bin
             if (this.AutomateShippingBin && location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
             {
-                return new ShippingBinMachine(farm, this.ShippingBinArea);
+                return new ShippingBinMachine(farm, this.ShippingBinArea, this.KeepAtLeast);
             }
 
             // garbage can

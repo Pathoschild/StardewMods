@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The in-game object names through which machines can connect.</summary>
         public string[] ConnectorNames { get; set; } = { "Workbench" };
 
+        /// <summary>The minimum number of each items to keep.</summary>
+        public int KeepAtLeast { get; set; } = 0;
+
         /// <summary>Options affecting compatibility with other mods.</summary>
         public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
 

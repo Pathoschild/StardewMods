@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -51,13 +52,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machines">The machines in the group.</param>
         /// <param name="containers">The containers in the group.</param>
         /// <param name="tiles">The tiles comprising the group.</param>
-        public MachineGroup(GameLocation location, IMachine[] machines, IContainer[] containers, Vector2[] tiles)
+        /// <param name="config">The mod configuration.</param>
+        public MachineGroup(GameLocation location, IMachine[] machines, IContainer[] containers, Vector2[] tiles, ModConfig config)
         {
             this.Location = location;
             this.Machines = machines;
             this.Containers = containers;
             this.Tiles = tiles;
-            this.StorageManager = new StorageManager(containers);
+            this.StorageManager = new StorageManager(containers, config.KeepAtLeast);
         }
 
         /// <summary>Automate the machines inside the group.</summary>

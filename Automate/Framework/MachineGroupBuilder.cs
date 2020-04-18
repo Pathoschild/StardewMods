@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 .Select(machine => (IMachine)new MachineWrapper(machine))
                 .ToArray();
 
-            return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray());
+            return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray(), this.Config);
         }
 
         /// <summary>Clear the saved data.</summary>

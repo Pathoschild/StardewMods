@@ -9,6 +9,7 @@ automatically pull raw items from the chest and push processed items into it.
   * [Factories](#factories)
   * [Connectors](#connectors)
   * [Machine priority](#machine-priority)
+  * [Saving items](#saving-items)
 * [Configure](#configure)
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
@@ -209,6 +210,49 @@ worm bins | `WormBin`
 
 For custom machines added by other mods, see their documentation or ask their mod authors.
 
+### Saving Items
+<dl>
+<dt>overview</dt>
+<dd>
+
+By default, each machine pull all the available ingredients out of the connected chests.
+
+You can change that by setting the minimum number of each items to keep in each chest group
+in [the `config.json`](#configure). Machines always leave at least this amount in its
+associated chest group, all quality included.
+
+The lowest quality items are pulled first, meaning that those kept in storage are of the best
+available quality.
+
+</dd>
+
+<dt>example</dt>
+<dd>
+
+For example, considering this chests and kegs setup:
+```
+┌───────────────────┐┌───────────────┐┌───────┐┌───────┐     ┌───────┐
+│  chest#1          ││  chest#2      ││ keg#1 ││ keg#2 │     │ keg#X │
+│3 tomatoes         ││3 gold tomatoes││       ││       │     │       │
+│3 silver tomatoes  ││               ││       ││       │ ⋅⋅⋅ │       │
+│3 gold tomatoes    ││               ││       ││       │     │       │
+│3 irridium tomatoes││               ││       ││       │     │       │
+└───────────────────┘└───────────────┘└───────┘└───────┘     └───────┘
+```
+
+By default, all the tomatoes will got into the kegs.
+
+To keep at least 5 tomatoes, you need edit the `config.json` this way:
+```js
+"KeepAtLeast": 5
+```
+
+Instead of pulling all the tomatoes, the combined content of the two chest would then be:
+
+* 10 bottle of tomato juice
+* 3 irridium tomatoes
+* 2 gold tomatoes
+
 ## Configure
 ### config.json
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
@@ -274,6 +318,17 @@ together. You must specify the exact _English_ names for any in-game items to us
 ```
 
 Contains `Workbench` by default.
+
+  </td>
+</tr>
+<tr>
+  <td><code>KeepAtLeast</code></td>
+  <td>
+
+The minimum number of each item to keep. Defaults to `0`.
+
+When this option is set to a positive value, machines always leave at least this amount in its
+associated chest group, all quality included; see [saving items](#saving-items).
 
   </td>
 </tr>
