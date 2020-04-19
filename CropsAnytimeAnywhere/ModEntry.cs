@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
@@ -12,6 +13,8 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
+using xTile.ObjectModel;
+using xTile.Tiles;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 {
@@ -30,6 +33,9 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         /// <summary>The seasons for which to override crops.</summary>
         private HashSet<string> EnabledSeasons;
 
+        /// <summary>The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</summary>
+        private IDictionary<string, IDictionary<int, string>> FallbackTileTypes;
+
         /// <summary>The locations which have been greenhouseified.</summary>
         private readonly HashSet<GameLocation> EnabledLocations = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
 
@@ -46,13 +52,16 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
             this.OverrideTilling = this.Config.ForceTillable.IsAnyEnabled();
             this.EnabledSeasons = new HashSet<string>(this.Config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
 
+            // read data
+            this.FallbackTileTypes = this.LoadFallbackTileTypes();
+
             // hook events
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             helper.Events.GameLoop.Saving += this.OnSaving;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             if (this.OverrideTilling)
-                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+                helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
         }
 
 
@@ -62,21 +71,23 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         /****
         ** Event handlers
         ****/
-        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
+        /// <summary>The method called before a tick update.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
         {
-            // allow tilling more tiles
-            // (The game has some messy logic for deciding which specific tile to till, but just marking the surrounding tiles diggable is sufficient for our purposes.)
-            if (Context.IsWorldReady && e.Button.IsUseToolButton() && Game1.player.CurrentTool is Hoe)
+            GameLocation location = Game1.currentLocation;
+            Farmer player = Game1.player;
+
+            if (!Context.IsWorldReady || !player.UsingTool || !(player.CurrentTool is Hoe hoe))
+                return;
+
+            Vector2 tilePos = player.GetToolLocation() / Game1.tileSize;
+            IList<Vector2> tilesAffected = this.Helper.Reflection.GetMethod(hoe, "tilesAffected").Invoke<List<Vector2>>(tilePos, player.toolPower, player);
+            foreach (Vector2 tile in tilesAffected)
             {
-                GameLocation location = Game1.currentLocation;
-                foreach (Vector2 tile in Utility.getSurroundingTileLocationsArray(e.Cursor.GrabTile).Concat(new[] { e.Cursor.GrabTile }))
-                {
-                    if (this.ShouldMakeTillable(location, tile))
-                        location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
-                }
+                if (this.ShouldMakeTillable(location, tile))
+                    location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
             }
         }
 
@@ -222,20 +233,112 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
 
         /// <summary>Get whether to override tilling for a given tile.</summary>
         /// <param name="location">The game location to check.</param>
-        /// <param name="tile">The tile position to check.</param>
-        private bool ShouldMakeTillable(GameLocation location, Vector2 tile)
+        /// <param name="tilePos">The tile position to check.</param>
+        private bool ShouldMakeTillable(GameLocation location, Vector2 tilePos)
         {
             ModConfigForceTillable config = this.Config.ForceTillable;
-            switch (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Type", "Back"))
+
+            // get tile
+            Tile tile = location.Map.GetLayer("Back")?.Tiles[(int)tilePos.X, (int)tilePos.Y];
+            if (tile?.TileSheet == null || this.GetProperty(tile, "Diggable") != null)
+                return false;
+
+            // get config for tile type
+            string type = this.GetProperty(tile, "Type") ?? this.GetFallbackTileType(tile.TileSheet.ImageSource, tile.TileIndex);
+            return type switch
             {
-                case "Dirt":
-                    return config.Dirt;
-                case "Grass":
-                    return config.Grass;
-                case "Stone":
-                    return config.Stone;
-                default:
-                    return config.Other;
+                "Dirt" => config.Dirt,
+                "Grass" => config.Grass,
+                "Stone" => config.Stone,
+                _ => config.Other
+            };
+        }
+
+        /// <summary>Get the value of a tile or tile index property.</summary>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="name">The property name.</param>
+        /// <remarks>Derived from <see cref="GameLocation.doesTileHaveProperty(int, int, string, string)"/> with optimizations.</remarks>
+        private string GetProperty(Tile tile, string name)
+        {
+            PropertyValue property = null;
+
+            if (tile.TileIndexProperties?.TryGetValue(name, out property) == true)
+            {
+                string value = property?.ToString();
+                if (value != null)
+                    return value;
+            }
+
+            if (tile.Properties?.TryGetValue(name, out property) == true)
+            {
+                string value = property?.ToString();
+                if (value != null)
+                    return value;
+            }
+
+            return null;
+        }
+
+        /// <summary>Get the tile type override for a tile, if any.</summary>
+        /// <param name="sheetImageSource">The tilesheet image source.</param>
+        /// <param name="backTileId">The back tile ID.</param>
+        private string GetFallbackTileType(string sheetImageSource, int backTileId)
+        {
+            if (sheetImageSource == null || this.FallbackTileTypes == null)
+                return null;
+
+            // get unique tilesheet key (e.g. "Maps/spring_outdoorsTileSheet" -> "outdoorsTileSheet")
+            string sheetKey = Path.GetFileNameWithoutExtension(sheetImageSource);
+            if (sheetKey.StartsWith("spring_") || sheetKey.StartsWith("summer_") || sheetKey.StartsWith("fall_") || sheetKey.StartsWith("winter_"))
+                sheetKey = sheetKey.Substring(sheetKey.IndexOf("_", StringComparison.Ordinal) + 1);
+
+            // get override
+            string type = null;
+            bool found = this.FallbackTileTypes.TryGetValue(sheetKey, out IDictionary<int, string> typeLookup) && typeLookup.TryGetValue(backTileId, out type);
+            return found
+                ? type
+                : null;
+        }
+
+        /// <summary>Load the fallback tile types.</summary>
+        /// <returns>Returns the overrides if valid, else null.</returns>
+        private IDictionary<string, IDictionary<int, string>> LoadFallbackTileTypes()
+        {
+            const string path = "assets/data.json";
+
+            try
+            {
+                // load raw file
+                var raw = this.Helper.Data.ReadJsonFile<ModData>(path);
+                if (raw == null)
+                {
+                    this.Monitor.Log($"Can't find '{path}' file. Some features might not work; consider reinstalling the mod to fix this.", LogLevel.Warn);
+                    return null;
+                }
+
+                // parse file
+                var data = new Dictionary<string, IDictionary<int, string>>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (var tilesheetGroup in raw.FallbackTileTypes)
+                {
+                    string tilesheetName = tilesheetGroup.Key;
+
+                    var typeLookup = new Dictionary<int, string>();
+                    foreach (var tileGroup in tilesheetGroup.Value)
+                    {
+                        foreach (int id in tileGroup.Value)
+                            typeLookup[id] = tileGroup.Key;
+                    }
+
+                    data[tilesheetName] = typeLookup;
+                }
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Can't load '{path}' file (see log for details). Some features might not work; consider reinstalling the mod to fix this.", LogLevel.Warn);
+                this.Monitor.Log(ex.ToString());
+                return null;
             }
         }
     }
