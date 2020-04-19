@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Data, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Data, helper.Multiplayer, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

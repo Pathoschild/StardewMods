@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Farmhands in multiplayer can now access chests in all synced locations (generally their current location, the farm, the main player's farmhouse, and constructed farm buildings).
 * Updated Android support (thanks to ZaneYork!).
 * Improved translations. Thanks to D0n-A (updated Russian) and niniack (updated Chinese)!
 
