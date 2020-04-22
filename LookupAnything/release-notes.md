@@ -8,7 +8,7 @@
 * Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
 * Fixed placed and held torches counted as different items.
 * Fixed cursor incorrectly detected on Android in some cases.
-* Improved translations. Thanks to niniack (updated Chinese)!
+* Improved translations. Thanks to Andites (updated Russian) and niniack (updated Chinese)!
 
 ## 1.26
 Released 09 March 2020.
