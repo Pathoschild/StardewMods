@@ -2,7 +2,7 @@
 ## Upcoming release
 * Added tile grid layer (when grid isn't enabled for all layers).
 * Fixed translations not updated after changing language until you restart the game.
-* Updated translations. Thanks to Annosz (added Hungarian), BURAKMESE (added Turkish), and D0n-A (updated Russian)!
+* Updated translations. Thanks to Annosz (added Hungarian), BURAKMESE (added Turkish), D0n-A (updated Russian), and misho104 (updated Japanese)!
 
 ## 1.11
 Released 08 March 2020.
