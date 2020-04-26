@@ -108,7 +108,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             else if (yearOffset == 1)
                                 line = $"-{L10n.FruitTree.QualityOnDateNextYear(quality: quality, date: this.Stringify(date))}";
                             else
-                                line = $"-{L10n.FruitTree.QualityOnDate(quality: quality, date: this.Text.Stringify(date, withYear: true))}";
+                                line = $"-{L10n.FruitTree.QualityOnDate(quality: quality, date: date.ToLocaleString(withYear: true))}";
 
                             line += $" ({this.GetRelativeDateStr(daysLeft)})";
 

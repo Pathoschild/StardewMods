@@ -168,7 +168,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             // birthday
             SDate birthday = SDate.Now().AddDays(-child.daysOld.Value);
-            yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), this.Text.Stringify(birthday, withYear: true));
+            yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), birthday.ToLocaleString(withYear: true));
 
             // age
             {

@@ -55,32 +55,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="translations">The translation helper.</param>
-        /// <param name="date">The game date.</param>
-        /// <param name="withYear">Whether to include the year number.</param>
-        public static string Stringify(this ITranslationHelper translations, SDate date, bool withYear)
-        {
-            if (withYear)
-            {
-                return L10n.Generic.DateWithYear(
-                    seasonNumber: Utility.getSeasonNumber(date.Season),
-                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
-                    dayNumber: date.Day,
-                    year: date.Year
-                );
-            }
-            else
-            {
-                return L10n.Generic.Date(
-                    seasonNumber: Utility.getSeasonNumber(date.Season),
-                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
-                    dayNumber: date.Day,
-                    year: date.Year
-                );
-            }
-        }
-
-        /// <summary>Get a human-readable representation of a value.</summary>
-        /// <param name="translations">The translation helper.</param>
         /// <param name="value">The underlying value.</param>
         public static string Stringify(this ITranslationHelper translations, object value)
         {
@@ -127,7 +101,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case Color color:
                     return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
-                    return translations.Stringify(date, withYear: date.Year != Game1.year);
+                    return date.ToLocaleString(withYear: date.Year != Game1.year);
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
