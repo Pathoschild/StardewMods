@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
-using ContentPatcher.Framework.Tokens;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -38,9 +37,6 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>Whether the patch is currently applied.</summary>
         public bool IsApplied { get; }
-
-        /// <summary>The patch context.</summary>
-        public IContext PatchContext { get; }
 
         /// <summary>Diagnostic info about the patch.</summary>
         public IContextualState State { get; }
@@ -82,7 +78,6 @@ namespace ContentPatcher.Framework.Commands
             this.IsLoaded = true;
             this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
-            this.PatchContext = patch.GetPatchContext();
             this.State = patch.GetDiagnosticState();
             this.Patch = patch;
         }

@@ -26,7 +26,7 @@ namespace ContentPatcher.Framework.Patches
         protected readonly ContextualState State = new ContextualState();
 
         /// <summary>The context which provides tokens specific to this patch like <see cref="ConditionType.Target"/>.</summary>
-        protected LocalContext PrivateContext { get; }
+        private readonly LocalContext PrivateContext;
 
         /// <summary>Whether the <see cref="FromAsset"/> file exists.</summary>
         private bool FromAssetExistsImpl;
@@ -102,14 +102,14 @@ namespace ContentPatcher.Framework.Patches
 
             // update contextuals
             changed |= this.Contextuals.UpdateContext(this.PrivateContext);
-            isReady &= this.Contextuals.IsReady && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch(this.PrivateContext)));
+            isReady &= this.Contextuals.IsReady && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch));
             this.FromAssetExistsImpl = false;
 
             // check from asset existence
             if (isReady && this.FromAsset != null)
             {
                 this.FromAssetExistsImpl = this.ContentPack.HasFile(this.FromAsset);
-                if (!this.FromAssetExistsImpl && this.Conditions.All(p => p.IsMatch(context)))
+                if (!this.FromAssetExistsImpl && this.Conditions.All(p => p.IsMatch))
                     this.State.AddErrors($"{nameof(PatchConfig.FromFile)} '{this.FromAsset}' does not exist");
             }
 
@@ -155,12 +155,6 @@ namespace ContentPatcher.Framework.Patches
                 .MergeFrom(this.ManagedRawTargetAsset.GetDiagnosticState())
                 .MergeFrom(this.ManagedRawFromAsset?.GetDiagnosticState())
                 .MergeFrom(this.Contextuals.GetDiagnosticState());
-        }
-
-        /// <summary>Get the context which provides tokens for this patch, including patch-specific tokens like <see cref="ConditionType.Target"/>.</summary>
-        public IContext GetPatchContext()
-        {
-            return this.PrivateContext;
         }
 
         /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
