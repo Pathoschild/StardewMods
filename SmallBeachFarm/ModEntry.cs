@@ -96,7 +96,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 if (this.Config.EnableIslands)
                 {
                     Map islands = this.Helper.Content.Load<Map>("assets/islands.tmx");
-                    AssetPatchUtilities.ApplyMapOverride(source: islands, target: map, targetArea: new Rectangle(0, 26, 56, 49));
+                    this.Helper.Content.GetPatchHelper(map)
+                        .AsMap()
+                        .PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
                 }
 
                 // add campfire
