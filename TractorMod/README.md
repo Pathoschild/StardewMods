@@ -123,11 +123,11 @@ it):
 
 Default 1, which is a 3 by 3 grid.
     
-<td>Config Menu</td>
-<td>1 Low</td>
-<td>4 Medium</td>
-<td>8 High</td>
-<td>16 Xtreme</td>
+<td>Config Menu
+1 Low
+4 Medium
+8 High
+16 Xtreme</td>
 
 **Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
 screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
