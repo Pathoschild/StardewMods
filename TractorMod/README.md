@@ -122,13 +122,13 @@ it):
 > ![](screenshots/distance.png)
 
 Default 1, which is a 3 by 3 grid.
-    
-<td>Config Menu<br>
+<br>  
+Config Menu<br>
 1 Low<br>
 4 Medium<br>
 8 High<br>
-16 Xtreme</td>
-
+16 Xtreme<br>
+<br>
 **Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
 screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
 recommended to avoid lag.
@@ -145,12 +145,12 @@ recommended to avoid lag.
 <td>
 
 The speed modifier when riding a tractor. Default -2.
-<td>Config Menu <br>
+<br>
+Config Menu <br>
 -2 Low<br>
 4 Medium<br>
 8 High<br>
-16 Xtreme</td>
-
+16 Xtreme<br>
 </td>
 </tr>
 
@@ -163,11 +163,12 @@ The speed modifier when riding a tractor. Default -2.
 <td>
 
 The item magnetism amount (higher values attract items from father away). Default 384.
-<td>Config Menu<br>
+<br>
+Config Menu<br>
 384 Low<br>
 484 Medium<br>
 684 High<br>
-1000 Xtreme</td>
+1000 Xtreme<br>
 </td>
 </tr>
 
