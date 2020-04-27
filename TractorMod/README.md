@@ -122,14 +122,13 @@ it):
 > ![](screenshots/distance.png)
 
 Default 1, which is a 3 by 3 grid.
-<tr>
     
-Config Menu</td>
+<td>Config Menu</td>
 <td>1 Low</td>
 <td>4 Medium</td>
 <td>8 High</td>
 <td>16 Xtreme</td>
-</tr>
+
 **Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
 screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
 recommended to avoid lag.
