@@ -123,10 +123,10 @@ it):
 
 Default 1, which is a 3 by 3 grid.
     
-<td>Config Menu
-1 Low
-4 Medium
-8 High
+<td>Config Menu<br>
+1 Low<br>
+4 Medium<br>
+8 High<br>
 16 Xtreme</td>
 
 **Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
@@ -145,11 +145,11 @@ recommended to avoid lag.
 <td>
 
 The speed modifier when riding a tractor. Default -2.
-Config Menu 
--2 Low
-4 Medium
-8 High
-16 Xtreme
+<td>Config Menu <br>
+-2 Low<br>
+4 Medium<br>
+8 High<br>
+16 Xtreme</td>
 
 </td>
 </tr>
@@ -163,11 +163,11 @@ Config Menu
 <td>
 
 The item magnetism amount (higher values attract items from father away). Default 384.
-Config Menu
-384 Low
-484 Medium
-684 High
-1000 Xtreme
+<td>Config Menu<br>
+384 Low<br>
+484 Medium<br>
+684 High<br>
+1000 Xtreme</td>
 </td>
 </tr>
 
