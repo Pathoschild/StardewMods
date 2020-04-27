@@ -110,25 +110,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Menu
                         CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
                         this.options.Add(customPlusMinus1);
                     }
-                    else if (property.Name.Contains("Distance"))
-                    {
-                        List<string> valueOptions = new List<string>
-                        {
-                            "1",
-                            "4",
-                            "8",
-                            "16"
-                        };
-                        List<string> displayOptions = new List<string>
-                        {
-                            "Low",
-                            "Medium",
-                            "High",
-                            "Xtreme"
-                        };
-                        CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
-                        this.options.Add(customPlusMinus1);
-                    }
                     else if (property.Name.Contains("MagneticRadius"))
                     {
                         List<string> valueOptions = new List<string>
