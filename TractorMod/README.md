@@ -73,6 +73,7 @@ field | action | default
 ----- | ------ | -------
 `SummonTractor` | warp an available tractor to your position. | `Backspace`
 `DismissTractor` | return the tractor you're riding to its home. | `Backspace`
+`Config Menu`    | Open Config Menu                              | `F2`
 `HoldToActivate` | if specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it. | _none_
 
 You can separate bindings with commas (like `Backspace, LeftShoulder` for either one), and set
@@ -121,7 +122,11 @@ it):
 > ![](screenshots/distance.png)
 
 Default 1, which is a 3 by 3 grid.
-
+Config Menu
+1 Low
+4 Medium
+8 High
+16 Xtreme
 **Distance has an exponential impact on performance.** A distance of 15 covers most of the visible
 screen; 78 covers the entire vanilla farm map and affects 25K tiles. A value of 15 or less is
 recommended to avoid lag.
@@ -138,6 +143,11 @@ recommended to avoid lag.
 <td>
 
 The speed modifier when riding a tractor. Default -2.
+Config Menu 
+-2 Low
+4 Medium
+8 High
+16 Xtreme
 
 </td>
 </tr>
@@ -151,7 +161,11 @@ The speed modifier when riding a tractor. Default -2.
 <td>
 
 The item magnetism amount (higher values attract items from father away). Default 384.
-
+Config Menu
+384 Low
+484 Medium
+684 High
+1000 Xtreme
 </td>
 </tr>
 
