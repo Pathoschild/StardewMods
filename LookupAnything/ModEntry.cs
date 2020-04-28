@@ -150,7 +150,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 if (keys.ToggleSearch.JustPressedUnique())
                     this.ToggleSearch();
-                if (keys.ToggleLookup.JustPressedUnique())
+                else if (keys.ToggleLookup.JustPressedUnique())
                     this.ToggleLookup();
                 else if (keys.ScrollUp.JustPressedUnique())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();

@@ -10,6 +10,7 @@
 * Fixed placed and held torches counted as different items.
 * Fixed cursor incorrectly detected on Android in some cases.
 * Fixed rare 'scissor rectangle is invalid' error with search menu.
+* Fixed issue where closing the search menu with the default key bindings could trigger a lookup after the menu closes.
 * Improved translations. Thanks to Andites (updated Russian) and niniack (updated Chinese)!
 
 ## 1.26
