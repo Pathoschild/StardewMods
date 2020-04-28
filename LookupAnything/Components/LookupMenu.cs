@@ -16,7 +16,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which shows information about an item.</summary>
-    internal class LookupMenu : IClickableMenu, IDisposable
+    internal class LookupMenu : BaseMenu, IDisposable
     {
         /*********
         ** Fields
@@ -390,6 +390,13 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                         // end draw
                         contentBatch.End();
                     }
+                    catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle"))
+                    {
+                        this.Monitor.Log("The viewport size seems to be inaccurate. Enabling compatibility mode; lookup menu may be misaligned.", LogLevel.Warn);
+                        this.Monitor.Log(ex.ToString());
+                        BaseMenu.UseSafeDimensions = true;
+                        this.UpdateLayout();
+                    }
                     finally
                     {
                         device.ScissorRectangle = prevScissorRectangle;
@@ -414,18 +421,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Update the layout dimensions based on the current game scale.</summary>
         private void UpdateLayout()
         {
-            // get viewport size
-            Point viewport = new Point(
-                x: Math.Min(Game1.viewport.Width, Game1.graphics.GraphicsDevice.Viewport.Width),
-                y: Math.Min(Game1.viewport.Height, Game1.graphics.GraphicsDevice.Viewport.Height)
-            );
+            Point viewport = this.GetViewportSize();
 
             // update size
-            {
-                Point size = this.GetMenuSize(viewport.X, viewport.Y);
-                this.width = size.X;
-                this.height = size.Y;
-            }
+            this.width = Math.Min(Game1.tileSize * 20, viewport.X);
+            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
 
             // update position
             Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
@@ -453,16 +453,6 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             this.CleanupImpl();
             base.cleanupBeforeExit();
-        }
-
-        /// <summary>Get the maximum width and height for the given viewport size.</summary>
-        /// <param name="viewportWidth">The viewport width.</param>
-        /// <param name="viewportHeight">The viewport height.</param>
-        private Point GetMenuSize(int viewportWidth, int viewportHeight)
-        {
-            int maxWidth = Math.Min(Game1.tileSize * 20, viewportWidth);
-            int maxHeight = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * maxWidth), viewportHeight);
-            return new Point(maxWidth, maxHeight);
         }
 
         /// <summary>Perform cleanup specific to the lookup menu.</summary>

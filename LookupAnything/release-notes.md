@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* The lookup menu is now centered again. (It will fallback to non-centered mode only if needed for compatibility.)
 * Added datamining field formatter for `npc.currentMarriageDialogue`.
 * Improved compatibility with custom NPC mods (including mods which replace non-social NPCs with social ones).
 * Fixed 'number crafted' including some incorrect recipes.
