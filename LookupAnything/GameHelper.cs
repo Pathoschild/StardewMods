@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private readonly DataParser DataParser;
 
         /// <summary>Scans the game world for owned items.</summary>
-        private readonly WorldItemScanner WorldItemScanner = new WorldItemScanner();
+        private readonly WorldItemScanner WorldItemScanner;
 
 
         /*********
@@ -68,12 +68,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
         /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata)
+        /// <param name="reflection">Simplifies access to protected code.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata, IReflectionHelper reflection)
         {
             this.DataParser = new DataParser(this);
             this.CustomFarmingRedux = customFarmingRedux;
             this.ProducerFrameworkMod = producerFrameworkMod;
             this.Metadata = metadata;
+            this.WorldItemScanner = new WorldItemScanner(reflection);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>

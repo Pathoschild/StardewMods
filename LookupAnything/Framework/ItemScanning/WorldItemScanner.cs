@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -15,8 +16,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
     public class WorldItemScanner
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>Simplifies access to protected code.</summary>
+        private readonly IReflectionHelper Reflection;
+
+
+        /*********
         ** Public methods
         *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="reflection">Simplifies access to protected code.</param>
+        public WorldItemScanner(IReflectionHelper reflection)
+        {
+            this.Reflection = reflection;
+        }
+
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
         /// This is derived from <see cref="Utility.iterateAllItems"/> with some improvements:
@@ -170,6 +185,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             {
                 if (obj.MinutesUntilReady <= 0 || obj is Cask) // cask output can be retrieved anytime
                     yield return obj.heldObject.Value;
+            }
+            else
+            {
+                // convention for custom mod items which contain items
+                Item heldItem = this.Reflection.GetField<Item>(root, nameof(obj.heldObject), required: false)?.GetValue();
+                if (heldItem != null)
+                    yield return heldItem;
             }
 
             // inventories

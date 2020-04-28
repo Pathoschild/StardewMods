@@ -7,7 +7,8 @@
 * Improved compatibility with custom NPC mods (including mods which replace non-social NPCs with social ones).
 * Improved item scanning (used for 'number owned' and gift taste fields):
   * now includes nested items (e.g. chests in chests in chests);
-  * now includes tool attachments.
+  * now includes tool attachments;
+  * now searches within some mod containers (e.g. bags).
 * Fixed 'number crafted' including some incorrect recipes.
 * Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
 * Fixed placed and held torches counted as different items.
