@@ -9,6 +9,7 @@
 * Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
 * Fixed placed and held torches counted as different items.
 * Fixed cursor incorrectly detected on Android in some cases.
+* Fixed rare 'scissor rectangle is invalid' error with search menu.
 * Improved translations. Thanks to Andites (updated Russian) and niniack (updated Chinese)!
 
 ## 1.26

@@ -6,19 +6,22 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which lets the player search for subjects.</summary>
-    internal class SearchMenu : IClickableMenu, IDisposable
+    internal class SearchMenu : BaseMenu, IDisposable
     {
         /*********
         ** Properties
         *********/
         /// <summary>Show a lookup menu.</summary>
         private readonly Action<ISubject> ShowLookup;
+
+        /// <summary>Encapsulates logging and monitoring.</summary>
+        private readonly IMonitor Monitor;
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
@@ -45,14 +48,16 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Construct an instance.</summary>
         /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="showLookup">Show a lookup menu.</param>
-        public SearchMenu(SubjectFactory codex, Action<ISubject> showLookup)
+        /// <param name="monitor">Encapsulates logging and monitoring.</param>
+        public SearchMenu(SubjectFactory codex, Action<ISubject> showLookup, IMonitor monitor)
         {
             // save data
             this.ShowLookup = showLookup;
+            this.Monitor = monitor;
             this.SearchLookup = codex.GetSearchSubjects().ToLookup(p => p.Name, StringComparer.InvariantCultureIgnoreCase);
 
             // initialise
-            this.CalculateDimensions();
+            this.UpdateLayout();
             this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
             this.SearchTextbox.OnChanged += (sender, text) => this.ReceiveSearchTextboxChanged(text);
@@ -107,7 +112,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="newBounds">The new viewport.</param>
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
-            this.CalculateDimensions();
+            this.UpdateLayout();
         }
 
         /****
@@ -146,51 +151,66 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // (This uses a separate sprite batch to set a clipping area for scrolling.)
             using (SpriteBatch contentBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
-                // begin draw
                 GraphicsDevice device = Game1.graphics.GraphicsDevice;
-                device.ScissorRectangle = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
-                contentBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
-
-                // scroll view
-                this.CurrentScroll = Math.Max(0, this.CurrentScroll); // don't scroll past top
-                this.CurrentScroll = Math.Min(this.MaxScroll, this.CurrentScroll); // don't scroll past bottom
-                topOffset -= this.CurrentScroll; // scrolled down == move text up
-
-                // draw fields
-                float wrapWidth = this.width - leftOffset - gutter;
+                Rectangle prevScissorRectangle = device.ScissorRectangle;
+                try
                 {
-                    Vector2 nameSize = contentBatch.DrawTextBlock(font, "Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
-                    Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
-                    topOffset += Math.Max(nameSize.Y, typeSize.Y);
+                    // begin draw
+                    device.ScissorRectangle = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
+                    contentBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
 
-                    this.SearchTextbox.Bounds = new Rectangle(x: x + (int)leftOffset, y: y + (int)topOffset, width: (int)wrapWidth, height: this.SearchTextbox.Bounds.Height);
-                    this.SearchTextbox.Draw(contentBatch);
-                    topOffset += this.SearchTextbox.Bounds.Height;
+                    // scroll view
+                    this.CurrentScroll = Math.Max(0, this.CurrentScroll); // don't scroll past top
+                    this.CurrentScroll = Math.Min(this.MaxScroll, this.CurrentScroll); // don't scroll past bottom
+                    topOffset -= this.CurrentScroll; // scrolled down == move text up
 
-                    int mouseX = Game1.getMouseX();
-                    int mouseY = Game1.getMouseY();
-                    foreach (SearchResultComponent result in this.SearchResults)
+                    // draw fields
+                    float wrapWidth = this.width - leftOffset - gutter;
                     {
-                        bool isHighlighted = result.containsPoint(mouseX, mouseY);
-                        var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
-                        topOffset += objSize.Y;
+                        Vector2 nameSize = contentBatch.DrawTextBlock(font, "Search", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: true);
+                        Vector2 typeSize = contentBatch.DrawTextBlock(font, "(Lookup Anything)", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                        topOffset += Math.Max(nameSize.Y, typeSize.Y);
+
+                        this.SearchTextbox.Bounds = new Rectangle(x: x + (int)leftOffset, y: y + (int)topOffset, width: (int)wrapWidth, height: this.SearchTextbox.Bounds.Height);
+                        this.SearchTextbox.Draw(contentBatch);
+                        topOffset += this.SearchTextbox.Bounds.Height;
+
+                        int mouseX = Game1.getMouseX();
+                        int mouseY = Game1.getMouseY();
+                        foreach (SearchResultComponent result in this.SearchResults)
+                        {
+                            bool isHighlighted = result.containsPoint(mouseX, mouseY);
+                            var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
+                            topOffset += objSize.Y;
+                        }
+
+                        // draw spacer
+                        topOffset += lineHeight;
                     }
 
-                    // draw spacer
-                    topOffset += lineHeight;
+                    // update max scroll
+                    this.MaxScroll = Math.Max(0, (int)(topOffset - contentHeight + this.CurrentScroll));
+
+                    // draw scroll icons
+                    if (this.MaxScroll > 0 && this.CurrentScroll > 0)
+                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
+                    if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
+                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
+
+                    // end draw
+                    contentBatch.End();
                 }
-
-                // update max scroll
-                this.MaxScroll = Math.Max(0, (int)(topOffset - contentHeight + this.CurrentScroll));
-
-                // draw scroll icons
-                if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                    contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
-                if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                    contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
-
-                // end draw
-                contentBatch.End();
+                catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle"))
+                {
+                    this.Monitor.Log("The viewport size seems to be inaccurate. Enabling compatibility mode; lookup menu may be misaligned.", LogLevel.Warn);
+                    this.Monitor.Log(ex.ToString());
+                    BaseMenu.UseSafeDimensions = true;
+                    this.UpdateLayout();
+                }
+                finally
+                {
+                    device.ScissorRectangle = prevScissorRectangle;
+                }
             }
 
             // draw mouse cursor
@@ -231,11 +251,16 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 .ToArray();
         }
 
-        /// <summary>Calculate the rendered dimensions based on the current game scale.</summary>
-        private void CalculateDimensions()
+        /// <summary>Update the layout dimensions based on the current game scale.</summary>
+        private void UpdateLayout()
         {
-            this.width = Game1.tileSize * 14;
-            this.height = (int)(this.AspectRatio.Y / this.AspectRatio.X * this.width);
+            Point viewport = this.GetViewportSize();
+
+            // update size
+            this.width = Math.Min(Game1.tileSize * 14, viewport.X);
+            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+
+            // update position
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
