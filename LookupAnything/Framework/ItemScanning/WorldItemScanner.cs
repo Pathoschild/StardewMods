@@ -19,10 +19,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         *********/
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
-        /// This is derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        /// This is derived from <see cref="Utility.iterateAllItems"/> with some improvements:
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
-        ///   * added recursive scanning (e.g. inside held chests) to support mods like Item Bag;
-        ///   * added hay in silos.
+        ///   * added hay in silos;
+        ///   * added tool attachments;
+        ///   * added recursive scanning (e.g. inside held chests) to support mods like Item Bag.
         /// </remarks>
         public IEnumerable<FoundItem> GetAllOwnedItems()
         {
@@ -181,6 +182,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
 
                 case Chest chest when chest.playerChest.Value:
                     foreach (Item item in chest.items)
+                        yield return item;
+                    break;
+
+                case Tool tool:
+                    foreach (SObject item in tool.attachments)
                         yield return item;
                     break;
             }
