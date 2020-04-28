@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
@@ -135,7 +136,7 @@ namespace Pathoschild.Stardew.LookupAnything
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
         ///   * added hay in silos.
         /// </remarks>
-        public IEnumerable<Item> GetAllOwnedItems()
+        public IEnumerable<FoundItem> GetAllOwnedItems()
         {
             return this.WorldItemScanner.GetAllOwnedItems();
         }
@@ -153,10 +154,11 @@ namespace Pathoschild.Stardew.LookupAnything
         public int CountOwnedItems(Item item)
         {
             return (
-                from worldItem in this.GetAllOwnedItems()
-                where this.AreEquivalent(worldItem, item)
-                let canStack = worldItem.canStackWith(worldItem)
-                select canStack ? Math.Max(1, worldItem.Stack) : 1
+                from found in this.GetAllOwnedItems()
+                let foundItem = found.Item
+                where this.AreEquivalent(foundItem, item)
+                let canStack = foundItem.canStackWith(foundItem)
+                select canStack ? Math.Max(1, foundItem.Stack) : 1
             ).Sum();
         }
 

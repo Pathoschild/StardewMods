@@ -9,7 +9,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.LookupAnything.Framework
+namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
 {
     /// <summary>Scans the game world for owned items.</summary>
     public class WorldItemScanner
@@ -19,13 +19,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         *********/
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
-        /// Derived from <see cref="Utility.iterateAllItems"/> with some differences:
+        /// This is derived from <see cref="Utility.iterateAllItems"/> with some differences:
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
+        ///   * added recursive scanning (e.g. inside held chests) to support mods like Item Bag;
         ///   * added hay in silos.
         /// </remarks>
-        public IEnumerable<Item> GetAllOwnedItems()
+        public IEnumerable<FoundItem> GetAllOwnedItems()
         {
-            List<Item> items = new List<Item>();
+            List<FoundItem> items = new List<FoundItem>();
 
             // in locations
             foreach (GameLocation location in CommonHelper.GetLocations())
@@ -34,27 +35,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 if (location is DecoratableLocation decorableLocation)
                 {
                     foreach (Furniture furniture in decorableLocation.furniture)
-                    {
-                        items.Add(furniture);
-
-                        if (furniture is StorageFurniture dresser)
-                            items.AddRange(dresser.heldItems);
-                        else
-                            items.Add(furniture.heldObject.Value);
-                    }
+                        this.ScanAndTrack(items, furniture);
                 }
 
                 // farmhouse fridge
                 if (location is FarmHouse house)
-                    items.AddRange(house.fridge.Value.items);
+                    this.ScanAndTrack(items, house.fridge.Value.items);
 
                 // character hats
                 foreach (NPC npc in location.characters)
                 {
-                    items.Add(
+                    Hat hat =
                         (npc as Child)?.hat.Value
-                        ?? (npc as Horse)?.hat.Value
-                    );
+                        ?? (npc as Horse)?.hat.Value;
+                    this.ScanAndTrack(items, hat);
                 }
 
                 // building output
@@ -62,61 +56,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 {
                     foreach (var building in buildableLocation.buildings)
                     {
-                        if (building is Mill mill)
-                            items.AddRange(mill.output.Value.items);
-                        else if (building is JunimoHut hut)
-                            items.AddRange(hut.output.Value.items);
+                        switch (building)
+                        {
+                            case Mill mill:
+                                this.ScanAndTrack(items, mill.output.Value.items);
+                                break;
+
+                            case JunimoHut hut:
+                                this.ScanAndTrack(items, hut.output.Value.items);
+                                break;
+                        }
                     }
                 }
 
                 // map objects
                 foreach (SObject item in location.objects.Values)
                 {
-                    // chest
-                    if (item is Chest chest)
-                    {
-                        if (chest.playerChest.Value)
-                        {
-                            items.Add(chest);
-                            items.AddRange(chest.items);
-                        }
-                    }
-
-                    // auto-grabber
-                    else if (item.ParentSheetIndex == 165 && item.heldObject.Value is Chest grabberChest)
-                    {
-                        items.Add(item);
-                        items.AddRange(grabberChest.items);
-                    }
-
-                    // craftable
-                    else if (item.bigCraftable.Value)
-                    {
-                        items.Add(item);
-                        if (item.MinutesUntilReady == 0 || item is Cask) // cask output can be retrieved anytime
-                            items.Add(item.heldObject.Value);
-                    }
-
-                    // anything else
-                    else if (!this.IsSpawnedWorldItem(item))
-                    {
-                        items.Add(item);
-                        items.Add(item.heldObject.Value);
-                    }
+                    if (item is Chest || !this.IsSpawnedWorldItem(item))
+                        this.ScanAndTrack(items, item);
                 }
             }
 
             // inventory
-            items.AddRange(Game1.player.Items);
-            items.AddRange(new Item[]
-            {
-                Game1.player.shirtItem.Value,
-                Game1.player.pantsItem.Value,
-                Game1.player.boots.Value,
-                Game1.player.hat.Value,
-                Game1.player.leftRing.Value,
-                Game1.player.rightRing.Value
-            });
+            this.ScanAndTrack(items, Game1.player.Items, isInInventory: true);
+            this.ScanAndTrack(
+                items,
+                new Item[]
+                {
+                    Game1.player.shirtItem.Value,
+                    Game1.player.pantsItem.Value,
+                    Game1.player.boots.Value,
+                    Game1.player.hat.Value,
+                    Game1.player.leftRing.Value,
+                    Game1.player.rightRing.Value
+                },
+                isInInventory: true
+            );
 
             // hay in silos
             int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
@@ -125,10 +100,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 SObject hay = new SObject(178, 1);
                 hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
                 hayCount -= hay.Stack;
-                items.Add(hay);
+                this.ScanAndTrack(items, hay);
             }
 
-            return items.Where(p => p != null);
+            return items;
         }
 
 
@@ -147,6 +122,68 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     || obj.isForage(null) // location argument is only used to check if it's on the beach, in which case everything is forage
                     || (!(obj is Chest) && (obj.Name == "Weeds" || obj.Name == "Stone" || obj.Name == "Twig"))
                 );
+        }
+
+        /// <summary>Recursively find all items contained within a root item (including the root item itself) and add them to the <paramref name="tracked"/> list.</summary>
+        /// <param name="tracked">The list to populate.</param>
+        /// <param name="root">The root item to search.</param>
+        /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, Item root, bool isInInventory = false)
+        {
+            foreach (FoundItem found in this.Scan(root, isInInventory))
+                tracked.Add(found);
+        }
+
+        /// <summary>Recursively find all items contained within a root item (including the root item itself) and add them to the <paramref name="tracked"/> list.</summary>
+        /// <param name="tracked">The list to populate.</param>
+        /// <param name="roots">The root items to search.</param>
+        /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, IEnumerable<Item> roots, bool isInInventory = false)
+        {
+            foreach (FoundItem found in roots.SelectMany(root => this.Scan(root, isInInventory)))
+                tracked.Add(found);
+        }
+
+        /// <summary>Recursively find all items contained within a root item (including the root item itself).</summary>
+        /// <param name="root">The root item to search.</param>
+        /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
+        private IEnumerable<FoundItem> Scan(Item root, bool isInInventory)
+        {
+            if (root == null)
+                yield break;
+
+            // get root
+            yield return new FoundItem(root, isInInventory);
+
+            // get direct contents
+            foreach (FoundItem child in this.GetDirectContents(root).SelectMany(p => this.Scan(p, isInInventory)))
+                yield return child;
+        }
+
+        /// <summary>Get the items contained by an item. This is not recursive and may return null values.</summary>
+        /// <param name="root">The root item to search.</param>
+        private IEnumerable<Item> GetDirectContents(Item root)
+        {
+            // held object
+            if (root is SObject obj)
+            {
+                if (obj.MinutesUntilReady <= 0 || obj is Cask) // cask output can be retrieved anytime
+                    yield return obj.heldObject.Value;
+            }
+
+            // inventories
+            switch (root)
+            {
+                case StorageFurniture dresser:
+                    foreach (Item item in dresser.heldItems)
+                        yield return item;
+                    break;
+
+                case Chest chest when chest.playerChest.Value:
+                    foreach (Item item in chest.items)
+                        yield return item;
+                    break;
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
@@ -39,14 +40,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 yield break;
 
             // get data
-            Item[] ownedItems = gameHelper.GetAllOwnedItems().ToArray();
-            Item[] inventory = Game1.player.Items.Where(p => p != null).ToArray();
+            FoundItem[] ownedItems = gameHelper.GetAllOwnedItems().ToArray();
+            Item[] inventory = ownedItems.Where(p => p.IsInInventory).Select(p => p.Item).ToArray();
             var items =
                 (
                     from entry in giftTastes[showTaste]
                     let item = entry.Item
                     let isInventory = inventory.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
-                    let isOwned = ownedItems.Any(p => p.ParentSheetIndex == item.ParentSheetIndex && p.Category == item.Category)
+                    let isOwned = ownedItems.Any(p => p.Item.ParentSheetIndex == item.ParentSheetIndex && p.Item.Category == item.Category)
                     where !onlyRevealed || entry.IsRevealed
                     orderby isInventory descending, isOwned descending, item.DisplayName
                     select new { Item = item, IsInventory = isInventory, IsOwned = isOwned, isRevealed = entry.IsRevealed }
