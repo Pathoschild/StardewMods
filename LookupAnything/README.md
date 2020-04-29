@@ -202,7 +202,7 @@ scans inside standard items recursively; for example, if you have an `Object` wi
 field set to a chest, Lookup Anything will look inside the chest too.
 
 If you have a custom non-`Object` item (e.g. a tool) which contains items, you can add a custom
-`heldObject` field with any `Item` type. For example:
+`heldObject` field or property with any `Item` type. For example:
 
 ```c#
 // store one item

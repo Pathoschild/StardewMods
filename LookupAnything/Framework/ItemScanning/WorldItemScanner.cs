@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 if (location is DecoratableLocation decorableLocation)
                 {
                     foreach (Furniture furniture in decorableLocation.furniture)
-                        this.ScanAndTrack(items, furniture);
+                        this.ScanAndTrack(items, furniture, isRootInWorld: true);
                 }
 
                 // farmhouse fridge
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 foreach (SObject item in location.objects.Values)
                 {
                     if (item is Chest || !this.IsSpawnedWorldItem(item))
-                        this.ScanAndTrack(items, item);
+                        this.ScanAndTrack(items, item, isRootInWorld: true);
                 }
             }
 
@@ -144,9 +144,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="tracked">The list to populate.</param>
         /// <param name="root">The root item to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, Item root, bool isInInventory = false)
+        /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, Item root, bool isInInventory = false, bool isRootInWorld = false)
         {
-            foreach (FoundItem found in this.Scan(root, isInInventory))
+            foreach (FoundItem found in this.Scan(root, isInInventory, isRootInWorld))
                 tracked.Add(found);
         }
 
@@ -154,16 +155,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="tracked">The list to populate.</param>
         /// <param name="roots">The root items to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, IEnumerable<Item> roots, bool isInInventory = false)
+        /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, IEnumerable<Item> roots, bool isInInventory = false, bool isRootInWorld = false)
         {
-            foreach (FoundItem found in roots.SelectMany(root => this.Scan(root, isInInventory)))
+            foreach (FoundItem found in roots.SelectMany(root => this.Scan(root, isInInventory, isRootInWorld)))
                 tracked.Add(found);
         }
 
         /// <summary>Recursively find all items contained within a root item (including the root item itself).</summary>
         /// <param name="root">The root item to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
-        private IEnumerable<FoundItem> Scan(Item root, bool isInInventory)
+        /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
+        private IEnumerable<FoundItem> Scan(Item root, bool isInInventory, bool isRootInWorld)
         {
             if (root == null)
                 yield break;
@@ -172,24 +175,31 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             yield return new FoundItem(root, isInInventory);
 
             // get direct contents
-            foreach (FoundItem child in this.GetDirectContents(root).SelectMany(p => this.Scan(p, isInInventory)))
+            foreach (FoundItem child in this.GetDirectContents(root, isRootInWorld).SelectMany(p => this.Scan(p, isInInventory, isRootInWorld: false)))
                 yield return child;
         }
 
         /// <summary>Get the items contained by an item. This is not recursive and may return null values.</summary>
         /// <param name="root">The root item to search.</param>
-        private IEnumerable<Item> GetDirectContents(Item root)
+        /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
+        private IEnumerable<Item> GetDirectContents(Item root, bool isRootInWorld)
         {
+            if (root == null)
+                yield break;
+
             // held object
             if (root is SObject obj)
             {
                 if (obj.MinutesUntilReady <= 0 || obj is Cask) // cask output can be retrieved anytime
                     yield return obj.heldObject.Value;
             }
-            else
+
+            // convention for custom mod items
+            if (this.IsCustomItemClass(root))
             {
-                // convention for custom mod items which contain items
-                Item heldItem = this.Reflection.GetField<Item>(root, nameof(obj.heldObject), required: false)?.GetValue();
+                Item heldItem =
+                    this.Reflection.GetField<Item>(root, nameof(obj.heldObject), required: false)?.GetValue()
+                    ?? this.Reflection.GetProperty<Item>(root, nameof(obj.heldObject), required: false)?.GetValue();
                 if (heldItem != null)
                     yield return heldItem;
             }
@@ -202,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                         yield return item;
                     break;
 
-                case Chest chest when chest.playerChest.Value:
+                case Chest chest when (!isRootInWorld || chest.playerChest.Value):
                     foreach (Item item in chest.items)
                         yield return item;
                     break;
@@ -212,6 +222,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                         yield return item;
                     break;
             }
+        }
+
+        /// <summary>Get whether an item instance is a custom mod subclass.</summary>
+        /// <param name="item">The item to check.</param>
+        private bool IsCustomItemClass(Item item)
+        {
+            string itemNamespace = item.GetType().Namespace ?? "";
+            return itemNamespace != "StardewValley" && !itemNamespace.StartsWith("StardewValley.");
         }
     }
 }
