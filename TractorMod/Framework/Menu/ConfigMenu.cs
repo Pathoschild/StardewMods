@@ -72,62 +72,32 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Menu
                     //Don't do anything with the price
                     if (property.Name.Contains("Price"))
                         continue;
-                    else if (property.Name.Contains("Distance"))
+                    //find the default values
+                    var defaultValues = new ModConfig();
+                    //search through the default properties
+                    foreach (var defaultProperty in defaultValues.GetType().GetProperties())
                     {
-                        List<string> valueOptions = new List<string>
+                        //if they are the same property generate the plus minus display
+                        if(property.Name == defaultProperty.Name)
                         {
-                            "1",
-                            "4",
-                            "8",
-                            "16"
+                            int defaultValue = (int)defaultProperty.GetValue(defaultValues, null);
+                            List<string> valueOptions = new List<string>
+                        {
+                            defaultValue.ToString(),
+                            Math.Abs((defaultValue*4)).ToString(),
+                            Math.Abs((defaultValue*8)).ToString(),
+                            Math.Abs((defaultValue*16)).ToString()
                         };
-                        List<string> displayOptions = new List<string>
+                            List<string> displayOptions = new List<string>
                         {
                             "Low",
                             "Medium",
                             "High",
                             "Xtreme"
                         };
-                        CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
-                        this.options.Add(customPlusMinus1);
-                    }
-                    else if (property.Name.Contains("TractorSpeed"))
-                    {
-                        List<string> valueOptions = new List<string>
-                        {
-                            "-2",
-                            "4",
-                            "8",
-                            "16"
-                        };
-                        List<string> displayOptions = new List<string>
-                        {
-                            "Low",
-                            "Medium",
-                            "High",
-                            "Xtreme"
-                        };
-                        CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
-                        this.options.Add(customPlusMinus1);
-                    }
-                    else if (property.Name.Contains("MagneticRadius"))
-                    {
-                        List<string> valueOptions = new List<string>
-                        {
-                            "384",
-                            "484",
-                            "684",
-                            "1000"
-                        };
-                        List<string> displayOptions = new List<string>
-                        {
-                            "Low",
-                            "Medium",
-                            "High",
-                            "Xtreme"
-                        };
-                        CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
-                        this.options.Add(customPlusMinus1);
+                            CustomPlusMinus customPlusMinus1 = new CustomPlusMinus(property.Name, label, 0, valueOptions, displayOptions, initialValue);
+                            this.options.Add(customPlusMinus1);
+                        }
                     }
                 }
             }
