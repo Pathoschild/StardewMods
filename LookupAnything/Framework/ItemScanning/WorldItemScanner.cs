@@ -193,13 +193,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 if (obj.MinutesUntilReady <= 0 || obj is Cask) // cask output can be retrieved anytime
                     yield return obj.heldObject.Value;
             }
-
-            // convention for custom mod items
-            if (this.IsCustomItemClass(root))
+            else if (this.IsCustomItemClass(root))
             {
+                // convention for custom mod items
                 Item heldItem =
-                    this.Reflection.GetField<Item>(root, nameof(obj.heldObject), required: false)?.GetValue()
-                    ?? this.Reflection.GetProperty<Item>(root, nameof(obj.heldObject), required: false)?.GetValue();
+                    this.Reflection.GetField<Item>(root, nameof(SObject.heldObject), required: false)?.GetValue()
+                    ?? this.Reflection.GetProperty<Item>(root, nameof(SObject.heldObject), required: false)?.GetValue();
                 if (heldItem != null)
                     yield return heldItem;
             }
