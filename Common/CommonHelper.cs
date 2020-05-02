@@ -124,7 +124,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="field">The field name to report in logged errors.</param>
         public static KeyBinding ParseButtons(string raw, IInputHelper input, IMonitor monitor, string field)
         {
-            return CommonHelper.ParseButtons(raw, input, onInvalidButton: error => monitor.Log($"Ignored invalid key bindings for {field} in config.json ({error}); delete the file to regenerate it, or see http://stardewvalleywiki.com/Modding:Key_bindings for valid keys.", LogLevel.Error));
+            return CommonHelper.ParseButtons(raw, input, onInvalidButton: error => monitor.Log($"Ignored invalid key bindings for {field} in config.json ({error}); delete the file to regenerate it, or see https://stardewvalleywiki.com/Modding:Key_bindings for valid keys.", LogLevel.Error));
         }
 
         /****
