@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added `Round` token.
 * Added `FromFile` patch token (e.g. so you can do `"HasFile:{{FromFile}}": true`).
+* The `patch export` command now supports exporting assets that haven't been loaded yet.
 * Fixed `{{Range}}` not including inclusive upper bound.
 * Fixed validation for `Target` fields containing `{{Target}}` and `{{TargetWithoutPath}}` tokens.
 * Fixed validation for `Target` fields not shown in `patch summary` in some cases.
