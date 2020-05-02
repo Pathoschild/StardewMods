@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>CropsAnytimeAnywhere</AssemblyName>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <RootNamespace>Pathoschild.Stardew.CropsAnytimeAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

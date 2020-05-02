@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TreeFallingHandler(int multiplier, IReflectionHelper reflection)
+        public TreeFallingHandler(float multiplier, IReflectionHelper reflection)
             : base(multiplier)
         {
             this.Reflection = reflection;
@@ -74,13 +74,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
+            GameTime gameTime = Game1.currentGameTime;
+
+            int skips = this.GetSkipsThisTick();
             foreach (var pair in this.GetFallingTrees())
-            {
-                // speed up animation
-                GameTime gameTime = Game1.currentGameTime;
-                for (int i = 1; i < this.Multiplier; i++)
-                    pair.Value.tickUpdate(gameTime, pair.Key, Game1.currentLocation);
-            }
+                this.ApplySkips(skips, () => pair.Value.tickUpdate(gameTime, pair.Key, Game1.currentLocation));
         }
 
 

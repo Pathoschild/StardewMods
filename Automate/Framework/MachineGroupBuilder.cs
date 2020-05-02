@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 
@@ -24,6 +25,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The tiles comprising the group.</summary>
         private readonly HashSet<Vector2> Tiles = new HashSet<Vector2>();
 
+        /// <summary>The mod configuration.</summary>
+        private readonly ModConfig Config;
+
 
         /*********
         ** Accessors
@@ -37,9 +41,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Create an instance.</summary>
         /// <param name="location">The location containing the group.</param>
-        public MachineGroupBuilder(GameLocation location)
+        /// <param name="config">The mod configuration.</param>
+        public MachineGroupBuilder(GameLocation location, ModConfig config)
         {
             this.Location = location;
+            this.Config = config;
         }
 
         /// <summary>Add a machine to the group.</summary>
@@ -76,7 +82,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Create a group from the saved data.</summary>
         public MachineGroup Build()
         {
-            return new MachineGroup(this.Location, this.Machines.ToArray(), this.Containers.ToArray(), this.Tiles.ToArray());
+            IMachine[] machines = this.Machines
+                .OrderByDescending(machine => this.GetPriority(machine.MachineTypeID))
+                .Select(machine => (IMachine)new MachineWrapper(machine))
+                .ToArray();
+
+            return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray());
         }
 
         /// <summary>Clear the saved data.</summary>
@@ -85,6 +96,15 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Machines.Clear();
             this.Containers.Clear();
             this.Tiles.Clear();
+        }
+
+        /// <summary>Get the priority in which a machine should be processed.</summary>
+        /// <param name="key">The machine type key.</param>
+        private int GetPriority(string key)
+        {
+            return this.Config.MachinePriority.TryGetValue(key, out int priority)
+                ? priority
+                : 0;
         }
     }
 }

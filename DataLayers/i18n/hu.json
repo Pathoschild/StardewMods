@@ -1,0 +1,71 @@
+{
+    // accessible
+    "accessible.name": "Elérhető",
+    "accessible.clear": "Tiszta",
+    "accessible.occupied": "Foglalt",
+    "accessible.impassable": "Átjárthatatlan",
+    "accessible.warp": "Teleport",
+
+    // buildable
+    "buildable.name": "Beépíthető",
+    "buildable.buildable": "Ide lehet építeni",
+    "buildable.occupied": "Foglalt",
+    "buildable.not-buildable": "Nem lehet ide építeni",
+
+    // coverage: bee houses
+    "bee-houses.name": "Lefedve: Méhkaptár",
+    "bee-houses.range": "Virágok elérése",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Lefedve: Junimo kunyhó",
+    "junimo-huts.can-harvest": "Le tudják aratni",
+    "junimo-huts.cannot-harvest": "Nem tudják learatni",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Lefedve: Madárijesztő",
+    "scarecrows.protected": "Védett",
+    "scarecrows.exposed": "Veszélyeztetett",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Lefedve: Öntöző",
+    "sprinklers.covered": "Lefedve",
+    "sprinklers.dry-crops": "Száradó termések",
+
+    // crops: harvest
+    "crop-harvest.name": "Termések: Aratásra kész",
+    "crop-harvest.ready": "Kész",
+    "crop-harvest.not-ready": "Nincs kész",
+    "crop-harvest.not-enough-time": "Nincs elég idő",
+
+    // crops: watered
+    "crop-water.name": "Termések: Öntözés",
+    "crop-water.watered": "Megöntözött termések",
+    "crop-water.dry": "Száradó termések",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Termések: Víz az árasztásos termésekek",
+    "crop-paddy-water.in-range": "Víz közelében",
+    "crop-paddy-water.not-in-range": "Száraz föld",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Termések: Trágyázva",
+    "crop-fertilizer.fertilizer": "Trágya",
+    "crop-fertilizer.retaining-soil": "Hidrogél",
+    "crop-fertilizer.speed-gro": "Gyorsnövesztő",
+
+    // machine processing
+    "machines.name": "Gépi termelés",
+    "machines.empty": "Üres",
+    "machines.processing": "Feldolgoz",
+    "machines.finished": "Befejezve",
+
+    // tile grid
+    "grid.name": "Pozíciórács",
+
+    // tillable
+    "tillable.name": "Megművelhető",
+    "tillable.tillable": "Megművelhető",
+    "tillable.tilled": "Megművelt",
+    "tillable.occupied": "Foglalt",
+    "tillable.not-tillable": "Nem megművelhető"
+}

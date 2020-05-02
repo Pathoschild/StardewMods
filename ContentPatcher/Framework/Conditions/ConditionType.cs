@@ -4,7 +4,7 @@ namespace ContentPatcher.Framework.Conditions
     internal enum ConditionType
     {
         /****
-        ** Date
+        ** Date and weather
         ****/
         /// <summary>The day of month.</summary>
         Day,
@@ -109,7 +109,31 @@ namespace ContentPatcher.Framework.Conditions
         Pregnant,
 
         /****
-        ** Other
+        ** Number manipulation
+        ****/
+        /// <summary>A dynamic query expression.</summary>
+        Query,
+
+        /// <summary>A list of numeric values based on the specified min/max values.</summary>
+        Range,
+
+        /// <summary>A rounded approximation of the input.</summary>
+        Round,
+
+        /****
+        ** String manipulation
+        ****/
+        /// <summary>A random value selected from the given input.</summary>
+        Random,
+
+        /// <summary>A token which transforms its input text to lowercase.</summary>
+        Lowercase,
+
+        /// <summary>A token which transforms its input text to uppercase.</summary>
+        Uppercase,
+
+        /****
+        ** Metadata
         ****/
         /// <summary>An installed mod ID.</summary>
         HasMod,
@@ -123,27 +147,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
 
-        /// <summary>A dynamic query expression.</summary>
-        Query,
-
-        /****
-        ** String manipulation
-        ****/
-        /// <summary>A random value selected from the given input.</summary>
-        Random,
-
-        /// <summary>A list of numeric values based on the specified min/max values.</summary>
-        Range,
-
-        /// <summary>A token which transforms its input text to lowercase.</summary>
-        Lowercase,
-
-        /// <summary>A token which transforms its input text to uppercase.</summary>
-        Uppercase,
-
         /****
         ** Patch-specific
         ****/
+        /// <summary>The current patch's FromFile value.</summary>
+        FromFile,
+
         /// <summary>The current patch's full target value.</summary>
         Target,
 

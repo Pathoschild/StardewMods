@@ -2,10 +2,6 @@
     /*********
     ** Generic translations
     *********/
-    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}} {{dayNumber}}日",
-    "generic.date-with-year": "{{year}}年目 {{seasonName}} {{dayNumber}}日",
-
     // date names
     "generic.now": "今",
     "generic.tomorrow": "明日",

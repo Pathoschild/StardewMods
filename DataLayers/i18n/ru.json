@@ -1,68 +1,71 @@
 {
     // accessible
-    "accessible.name": "Проходимость",
-    "accessible.clear": "Возможно",
-    "accessible.occupied": "Есть преграда",
-    "accessible.impassable": "Не возможно",
-    "accessible.warp": "Переход на локацию",
+    "accessible.name": "Проходимость клеток на карте",
+    "accessible.clear": "Однозначно проходимое место",
+    "accessible.occupied": "Проходимость недоступна: присутствует преграда",
+    "accessible.impassable": "Невозможно пройти здесь",
+    "accessible.warp": "Место перехода на другую локацию",
 
     // buildable
     "buildable.name": "Строительство",
-    "buildable.buildable": "Возможно",
-    "buildable.occupied": "Есть преграда",
-    "buildable.not-buildable": "Не возможно",
+    "buildable.buildable": "Строительство здесь возможно",
+    "buildable.occupied": "Строительство недоступно: присутствует преграда",
+    "buildable.not-buildable": "Невозможно построить здесь",
 
     // coverage: bee houses
-    "bee-houses.name": "Радиус: Ульи",
-    "bee-houses.range": "Радиус для цветка",
+    "bee-houses.name": "Состояние и зона действия ульев",
+    "bee-houses.range": "Радиус для расположения цветка",
 
     // coverage: Junimo huts
-    "junimo-huts.name": "Радиус: Домики Джунимо",
-    "junimo-huts.can-harvest": "Могут собрать",
-    "junimo-huts.cannot-harvest": "Не могут собрать",
+    "junimo-huts.name": "Состояние и зона действия Джунимо",
+    "junimo-huts.can-harvest": "Могут собирать урожай",
+    "junimo-huts.cannot-harvest": "Не могут собирать урожай",
 
     // coverage: scarecrows
-    "scarecrows.name": "Радиус: Пугала",
-    "scarecrows.protected": "Защищено",
-    "scarecrows.exposed": "Уязвимо",
+    "scarecrows.name": "Состояние и зона действия пугал",
+    "scarecrows.protected": "Защищено от вредителей",
+    "scarecrows.exposed": "Уязвимо для вредителей",
 
     // coverage: sprinklers
-    "sprinklers.name": "Радиус: Спринклеры",
-    "sprinklers.covered": "Поливается",
-    "sprinklers.dry-crops": "Не поливается",
+    "sprinklers.name": "Состояние и зона действия спринклеров",
+    "sprinklers.covered": "Поливается с помощью спринклера",
+    "sprinklers.dry-crops": "Спринклер не достаёт до необходимой зоны",
 
     // crops: harvest
-    "crop-harvest.name": "Посевы: Готовность к сбору",
-    "crop-harvest.ready": "Готовы",
-    "crop-harvest.not-ready": "Не готовы",
-    "crop-harvest.not-enough-time": "Не хватает времени",
+    "crop-harvest.name": "Состояние готовности урожая к сбору",
+    "crop-harvest.ready": "Культура готова к сбору урожая",
+    "crop-harvest.not-ready": "Культура ещё не готова к сбору урожая",
+    "crop-harvest.not-enough-time": "Вы не успели собрать урожай",
 
     // crops: watered
-    "crop-water.name": "Посевы: Увлажнённость",
-    "crop-water.watered": "Увлажненные посевы",
-    "crop-water.dry": "Сухие посевы",
+    "crop-water.name": "Состояние влажности почвы для культур",
+    "crop-water.watered": "Культуры успешно политы водой",
+    "crop-water.dry": "К сожалению, культуры не политы водой",
 
     // crops: water for paddy crops
-    "crop-paddy-water.name": "Радиус: Орошения рисовых посевов",
-    "crop-paddy-water.in-range": "Увлажненная почва",
-    "crop-paddy-water.not-in-range": "Сухая почва",
+    "crop-paddy-water.name": "Система орошения для культур",
+    "crop-paddy-water.in-range": "Орошение в действии: почва насыщена водой",
+    "crop-paddy-water.not-in-range": "Орошение недоступно: почва сухая",
 
     // crops: fertilized
-    "crop-fertilizer.name": "Посевы: Удобренные",
-    "crop-fertilizer.fertilizer": "Удобрением",
-    "crop-fertilizer.retaining-soil": "Влагосохраняющей почвой",
-    "crop-fertilizer.speed-gro": "СкороРостом",
+    "crop-fertilizer.name": "Система удобрений для культур",
+    "crop-fertilizer.fertilizer": "Здесь применено удобрение ",
+    "crop-fertilizer.retaining-soil": "Здесь влагосохраняющая почва",
+    "crop-fertilizer.speed-gro": "Здесь применён \"СкороРост\"",
 
     // machine processing
-    "machines.name": "Статус оборудования",
+    "machines.name": "Статус механической обработки",
     "machines.empty": "Пусто",
-    "machines.processing": "В процесе",
+    "machines.processing": "В процессе",
     "machines.finished": "Готово",
 
+    // tile grid
+    "grid.name": "Показывать сетку для клеток карты",
+
     // tillable
-    "tillable.name": "Вспахивание",
-    "tillable.tillable": "Возможно",
-    "tillable.tilled": "Уже вспахано",
-    "tillable.occupied": "Есть преграда",
-    "tillable.not-tillable": "Не возможно"
+    "tillable.name": "Процесс вспашки почвы",
+    "tillable.tillable": "Почва доступна для обработки",
+    "tillable.tilled": "Почва уже обработана",
+    "tillable.occupied": "Обработка недоступна: присутствует преграда",
+    "tillable.not-tillable": "Невозможно обработать почву"
 }

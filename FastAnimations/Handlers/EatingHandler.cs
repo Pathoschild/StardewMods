@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="disableConfirmation">Whether to disable the confirmation dialogue before eating or drinking.</param>
-        public EatingHandler(IReflectionHelper reflection, int multiplier, bool disableConfirmation)
+        public EatingHandler(IReflectionHelper reflection, float multiplier, bool disableConfirmation)
             : base(multiplier)
         {
             this.Reflection = reflection;
@@ -43,6 +43,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
+            // to allow disabling the confirmation even if the animation isn't sped up, the handler is still called with multiplier ≤ 1
             return
                 (this.Multiplier > 1 && this.IsAnimationPlaying())
                 || (this.DisableConfirmation && this.IsConfirmationShown(out _));
@@ -84,7 +85,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 // speed up animations
                 GameTime gameTime = Game1.currentGameTime;
                 GameLocation location = Game1.player.currentLocation;
-                for (int i = 1; i < this.Multiplier; i++)
+                this.ApplySkips(() =>
                 {
                     // temporary item animations
                     foreach (TemporaryAnimatedSprite animation in this.ItemAnimations.ToArray())
@@ -99,9 +100,10 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
 
                     // eating animation
                     Game1.player.Update(gameTime, location);
-                }
+                });
             }
         }
+
 
         /*********
         ** Private methods

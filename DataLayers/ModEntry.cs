@@ -51,6 +51,7 @@ namespace Pathoschild.Stardew.DataLayers
 
             // hook up events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
@@ -69,11 +70,18 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="e">The event arguments.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
-            // init
+            // init mod integrations
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-            this.Layers = this.GetLayers(this.Config, this.Helper.Input, this.Helper.Translation, this.Mods).ToArray();
+        }
 
-            // cache shortcut keys
+        /// <summary>The method invoked when the save is loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        {
+            // init layers
+            // need to do this after the save is loaded so translations use the selected language
+            this.Layers = this.GetLayers(this.Config, this.Helper.Input, this.Helper.Translation, this.Mods).ToArray();
             foreach (ILayer layer in this.Layers)
             {
                 if (layer.ShortcutKey.ToString() != SButton.None.ToString())
@@ -114,6 +122,10 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new MachineLayer(translation, layers.Machines, mods, input, this.Monitor);
             if (layers.Tillable.IsEnabled())
                 yield return new TillableLayer(translation, layers.Tillable, input, this.Monitor);
+
+            // add separate grid layer if grid isn't enabled for all layers
+            if (!config.ShowGrid && layers.TileGrid.IsEnabled())
+                yield return new GridLayer(translation, layers.TileGrid, input, this.Monitor);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -123,6 +135,7 @@ namespace Pathoschild.Stardew.DataLayers
         {
             this.CurrentOverlay?.Dispose();
             this.CurrentOverlay = null;
+            this.Layers = null;
         }
 
         /// <summary>The method invoked when the player presses an input button.</summary>
@@ -130,6 +143,9 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
+            if (this.Layers == null)
+                return;
+
             // perform bound action
             this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
             {

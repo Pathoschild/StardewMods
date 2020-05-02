@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
@@ -31,8 +31,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /****
         ** NPCs
         ****/
-        /// <summary>The names of villagers with social data (e.g. birthdays or gift tastes).</summary>
-        public string[] AsocialVillagers { get; set; }
+        /// <summary>The names of villagers for which to override the <see cref="StardewValley.NPC.CanSocialize"/> field.</summary>
+        public IDictionary<string, bool> ForceSocialVillagers { get; set; }
 
         /// <summary>The number of hearts for dateable NPCs which are locked until you give them a bouquet.</summary>
         public int DatingHearts { get; set; }
@@ -77,10 +77,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /// <summary>Items which can have an iridium quality. This is a list of category IDs (negative) or item IDs (positive).</summary>
         /// <remarks>
         /// The following can have iridium quality:
-        /// • animal produce;
-        /// • fruit tree produce;
-        /// • artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
-        /// • forage crops.
+        /// - animal produce;
+        /// - fruit tree produce;
+        /// - artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
+        /// - forage crops.
         /// </remarks>
         public int[] ItemsWithIridiumQuality { get; set; }
 

@@ -55,32 +55,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="translations">The translation helper.</param>
-        /// <param name="date">The game date.</param>
-        /// <param name="withYear">Whether to include the year number.</param>
-        public static string Stringify(this ITranslationHelper translations, SDate date, bool withYear)
-        {
-            if (withYear)
-            {
-                return L10n.Generic.DateWithYear(
-                    seasonNumber: Utility.getSeasonNumber(date.Season),
-                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
-                    dayNumber: date.Day,
-                    year: date.Year
-                );
-            }
-            else
-            {
-                return L10n.Generic.Date(
-                    seasonNumber: Utility.getSeasonNumber(date.Season),
-                    seasonName: Utility.getSeasonNameFromNumber(Utility.getSeasonNumber(date.Season)),
-                    dayNumber: date.Day,
-                    year: date.Year
-                );
-            }
-        }
-
-        /// <summary>Get a human-readable representation of a value.</summary>
-        /// <param name="translations">The translation helper.</param>
         /// <param name="value">The underlying value.</param>
         public static string Stringify(this ITranslationHelper translations, object value)
         {
@@ -127,7 +101,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 case Color color:
                     return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
-                    return translations.Stringify(date, withYear: date.Year != Game1.year);
+                    return date.ToLocaleString(withYear: date.Year != Game1.year);
                 case TimeSpan span:
                     {
                         List<string> parts = new List<string>();
@@ -147,6 +121,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // game types
                 case AnimatedSprite sprite:
                     return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{translations.Stringify(sprite.sourceRect)})";
+                case MarriageDialogueReference dialogue:
+                    return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {translations.Stringify(dialogue.Substitutions)})";
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();

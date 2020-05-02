@@ -10,11 +10,11 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -50,6 +50,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Parses the raw game data into usable models.</summary>
         private readonly DataParser DataParser;
 
+        /// <summary>Scans the game world for owned items.</summary>
+        private readonly WorldItemScanner WorldItemScanner;
+
 
         /*********
         ** Accessors
@@ -65,12 +68,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
         /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata)
+        /// <param name="reflection">Simplifies access to protected code.</param>
+        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata, IReflectionHelper reflection)
         {
             this.DataParser = new DataParser(this);
             this.CustomFarmingRedux = customFarmingRedux;
             this.ProducerFrameworkMod = producerFrameworkMod;
             this.Metadata = metadata;
+            this.WorldItemScanner = new WorldItemScanner(reflection);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
@@ -133,112 +138,9 @@ namespace Pathoschild.Stardew.LookupAnything
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
         ///   * added hay in silos.
         /// </remarks>
-        public IEnumerable<Item> GetAllOwnedItems()
+        public IEnumerable<FoundItem> GetAllOwnedItems()
         {
-            List<Item> items = new List<Item>();
-
-            // in locations
-            foreach (GameLocation location in CommonHelper.GetLocations())
-            {
-                // furniture
-                if (location is DecoratableLocation decorableLocation)
-                {
-                    foreach (Furniture furniture in decorableLocation.furniture)
-                    {
-                        items.Add(furniture);
-
-                        if (furniture is StorageFurniture dresser)
-                            items.AddRange(dresser.heldItems);
-                        else
-                            items.Add(furniture.heldObject.Value);
-                    }
-                }
-
-                // farmhouse fridge
-                if (location is FarmHouse house)
-                    items.AddRange(house.fridge.Value.items);
-
-                // character hats
-                foreach (NPC npc in location.characters)
-                {
-                    items.Add(
-                        (npc as Child)?.hat.Value
-                        ?? (npc as Horse)?.hat.Value
-                    );
-                }
-
-                // building output
-                if (location is BuildableGameLocation buildableLocation)
-                {
-                    foreach (var building in buildableLocation.buildings)
-                    {
-                        if (building is Mill mill)
-                            items.AddRange(mill.output.Value.items);
-                        else if (building is JunimoHut hut)
-                            items.AddRange(hut.output.Value.items);
-                    }
-                }
-
-                // map objects
-                foreach (SObject item in location.objects.Values)
-                {
-                    // chest
-                    if (item is Chest chest)
-                    {
-                        if (chest.playerChest.Value)
-                        {
-                            items.Add(chest);
-                            items.AddRange(chest.items);
-                        }
-                    }
-
-                    // auto-grabber
-                    else if (item.ParentSheetIndex == 165 && item.heldObject.Value is Chest grabberChest)
-                    {
-                        items.Add(item);
-                        items.AddRange(grabberChest.items);
-                    }
-
-                    // craftable
-                    else if (item.bigCraftable.Value)
-                    {
-                        items.Add(item);
-                        if (item.MinutesUntilReady == 0 || item is Cask) // cask output can be retrieved anytime
-                            items.Add(item.heldObject.Value);
-                    }
-
-                    // anything else
-                    else if (!item.IsSpawnedObject)
-                    {
-                        items.Add(item);
-                        items.Add(item.heldObject.Value);
-                    }
-                }
-            }
-
-            // inventory
-            items.AddRange(Game1.player.Items);
-            items.AddRange(new Item[]
-            {
-                Game1.player.shirtItem.Value,
-                Game1.player.pantsItem.Value,
-                Game1.player.boots.Value,
-                Game1.player.hat.Value,
-                Game1.player.leftRing.Value,
-                Game1.player.rightRing.Value
-            });
-
-            // hay in silos
-            int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
-            while (hayCount > 0)
-            {
-                SObject hay = new SObject(178, 1);
-                hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
-                hayCount -= hay.Stack;
-                items.Add(hay);
-            }
-
-            return items.Where(p => p != null);
+            return this.WorldItemScanner.GetAllOwnedItems();
         }
 
         /// <summary>Get all NPCs currently in the world.</summary>
@@ -254,10 +156,11 @@ namespace Pathoschild.Stardew.LookupAnything
         public int CountOwnedItems(Item item)
         {
             return (
-                from worldItem in this.GetAllOwnedItems()
-                where this.AreEquivalent(worldItem, item)
-                let canStack = worldItem.canStackWith(worldItem)
-                select canStack ? Math.Max(1, worldItem.Stack) : 1
+                from found in this.GetAllOwnedItems()
+                let foundItem = found.Item
+                where this.AreEquivalent(foundItem, item)
+                let canStack = foundItem.canStackWith(foundItem)
+                select canStack ? Math.Max(1, foundItem.Stack) : 1
             ).Sum();
         }
 
@@ -265,7 +168,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="npc">The NPC to check.</param>
         public bool IsSocialVillager(NPC npc)
         {
-            return npc.isVillager() && !this.Metadata.Constants.AsocialVillagers.Contains(npc.Name);
+            if (!npc.isVillager())
+                return false;
+
+            return this.Metadata.Constants.ForceSocialVillagers.TryGetValue(npc.Name, out bool social)
+                ? social
+                : npc.CanSocialize;
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
@@ -643,6 +551,15 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="b">The second item to compare.</param>
         private bool AreEquivalent(Item a, Item b)
         {
+            if (a == null || b == null)
+                return false;
+
+            // equivalent torches
+            // (torches change from SObject to Torch when placed)
+            if (a.ParentSheetIndex == b.ParentSheetIndex && new[] { a, b }.All(p => p is Torch || (p.ParentSheetIndex == 93 && p.GetItemType() == ItemType.Object)))
+                return true;
+
+            // equivalent
             return
                 // same generic item type
                 a.GetType() == b.GetType()

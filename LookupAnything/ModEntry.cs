@@ -124,7 +124,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // initialize functionality
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
-            this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata);
+            this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
             this.SubjectFactory = new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config);
             this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
@@ -150,7 +150,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 if (keys.ToggleSearch.JustPressedUnique())
                     this.ToggleSearch();
-                if (keys.ToggleLookup.JustPressedUnique())
+                else if (keys.ToggleLookup.JustPressedUnique())
                     this.ToggleLookup();
                 else if (keys.ScrollUp.JustPressedUnique())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
@@ -286,7 +286,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void ShowSearch()
         {
             this.PushMenu(
-                new SearchMenu(this.SubjectFactory, this.ShowLookupFor)
+                new SearchMenu(this.SubjectFactory, this.ShowLookupFor, this.Monitor)
             );
         }
 
@@ -341,7 +341,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // get context
             Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
-            bool hasCursor = Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
+            bool hasCursor = Constants.TargetPlatform != GamePlatform.Android && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
 
             // open menu
             if (Game1.activeClickableMenu != null)

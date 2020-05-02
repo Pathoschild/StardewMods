@@ -13,6 +13,7 @@ what the game is doing.
 * [Configure](#configure)
 * [Showcase](#showcase)
 * [Compatibility](#compatibility)
+* [Extensibility for modders](#extensibility-for-modders)
 * [See also](#see-also)
 
 ## Install
@@ -193,6 +194,33 @@ Enable tile lookups to see information about map tiles:
 ## Compatibility
 Lookup Anything is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
+
+## Extensibility for modders
+### Nested items
+Lookup Anything scans the world to detect items for the 'number owned' and gift taste fields. It
+scans inside standard items recursively; for example, if you have an `Object` with the `heldObject`
+field set to a chest, Lookup Anything will look inside the chest too.
+
+If you have a custom non-`Object` item (e.g. a tool) which contains items, you can add a custom
+`heldObject` field or property with any `Item` type. For example:
+
+```c#
+// store one item
+public Object heldObject;
+
+// store many items
+public Chest heldObject = new Chest();
+```
+
+Lookup Anything will detect the field and search inside it too.
+
+### Hovered items in custom menus
+Lookup Anything detects when the cursor is over an item in standard menus. For custom menus, create
+a `HoveredItem` field with any `Item` type and Lookup Menu will detect it:
+
+```c#
+public Object HoveredItem;
+```
 
 ## See also
 * [Release notes](release-notes.md)

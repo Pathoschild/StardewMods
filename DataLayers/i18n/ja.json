@@ -24,7 +24,7 @@
     // coverage: scarecrows
     "scarecrows.name": "範囲: カカシ",
     "scarecrows.protected": "守られている",
-    "scarecrows.exposed": "晒されている",
+    "scarecrows.exposed": "範囲外",
 
     // coverage: sprinklers
     "sprinklers.name": "範囲: スプリンクラー",
@@ -35,7 +35,7 @@
     "crop-harvest.name": "作物: 収穫可能",
     "crop-harvest.ready": "収穫可能",
     "crop-harvest.not-ready": "収穫不可能",
-    "crop-harvest.not-enough-time": "時間が足りない",
+    "crop-harvest.not-enough-time": "月末に間に合わない",
 
     // crops: watered
     "crop-water.name": "作物: 水やり",
@@ -50,7 +50,7 @@
     // crops: fertilized
     "crop-fertilizer.name": "作物: 肥料",
     "crop-fertilizer.fertilizer": "肥料",
-    "crop-fertilizer.retaining-soil": "保水した土壌",
+    "crop-fertilizer.retaining-soil": "保水土",
     "crop-fertilizer.speed-gro": "グングンノビール",
 
     // machine processing
@@ -59,10 +59,13 @@
     "machines.processing": "処理中",
     "machines.finished": "処理終了",
 
+    // tile grid
+    "grid.name": "タイルグリッド",
+
     // tillable
     "tillable.name": "耕作可能",
-    "tillable.tillable": "耕作可能",
-    "tillable.tilled": "Tilled", // TODO
+    "tillable.tillable": "耕せる",
+    "tillable.tilled": "耕し済み",
     "tillable.occupied": "占有",
     "tillable.not-tillable": "耕作不可能"
 }

@@ -31,9 +31,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         private EditDataPatchMoveRecord[] MoveRecords;
 
-        /// <summary>A list of warning messages which have been previously logged.</summary>
-        private readonly HashSet<string> LoggedWarnings = new HashSet<string>();
-
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
 
@@ -98,7 +95,7 @@ namespace ContentPatcher.Framework.Patches
                 return base.UpdateContext(context);
 
             // skip: file already loaded and target didn't change
-            if (!this.RawManagedTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
+            if (!this.ManagedRawTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
                 return base.UpdateContext(context);
 
             // reload non-data changes
@@ -281,7 +278,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply moves
             if (this.MoveRecords.Any())
-                this.LogOnce($"Can't move records for \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
+                this.Monitor.LogOnce($"Can't move records for \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
         }
 
         /// <summary>Apply the patch to a list asset.</summary>
@@ -331,7 +328,7 @@ namespace ContentPatcher.Framework.Patches
                 TValue entry = GetByKey(moveRecord.ID.Value);
                 if (entry == null)
                 {
-                    this.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.", LogLevel.Warn);
+                    this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.", LogLevel.Warn);
                     continue;
                 }
                 int fromIndex = data.IndexOf(entry);
@@ -358,12 +355,12 @@ namespace ContentPatcher.Framework.Patches
                     TValue anchorEntry = GetByKey(anchorID);
                     if (anchorEntry == null)
                     {
-                        this.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.", LogLevel.Warn);
+                        this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.", LogLevel.Warn);
                         continue;
                     }
                     if (object.ReferenceEquals(entry, anchorEntry))
                     {
-                        this.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
+                        this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
                         continue;
                     }
 
@@ -476,15 +473,6 @@ namespace ContentPatcher.Framework.Patches
         private string GetKey<TValue>(TValue entity)
         {
             return InternalConstants.GetListAssetKey(entity);
-        }
-
-        /// <summary>Log a message the first time it occurs.</summary>
-        /// <param name="message">The log message.</param>
-        /// <param name="level">The log level.</param>
-        private void LogOnce(string message, LogLevel level)
-        {
-            if (this.LoggedWarnings.Add(message))
-                this.Monitor.Log(message, level);
         }
     }
 }

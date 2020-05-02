@@ -18,8 +18,8 @@ file in a text editor to configure the mod.
 
 Here's what you can change:
 
-* You can choose how fast each animation runs. Each value is a multiple of the original speed (e.g. `1` for
-normal speed or `2` for double speed).
+* You can choose how fast each animation runs. Each value is a multiple of the original speed, like
+  `1` for normal speed or `2` for double speed. This can also be a fractional value like `1.5`.
 
   Player animations:
 

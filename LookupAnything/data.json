@@ -20,7 +20,11 @@ You shouldn't change this file unless you know what you're doing.
         "FruitTreeQualityGrowthTime": 112,
 
         /* NPCs */
-        "AsocialVillagers": [ "Bouncer", "Gunther", "Henchman", "Marlon", "Mister Qi" ],
+        "ForceSocialVillagers": {
+            "Dwarf": true, // always false?
+            "Krobus": true, // false in-game until met
+            "Sandy": true // false in-game until desert unlocked
+        },
         "DatingHearts": 2,
         "SpouseMaxFriendship": 3500,
         "SpouseFriendshipForStardrop": 3125,

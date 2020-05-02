@@ -1,6 +1,20 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.14
+Released 02 May 2020.
+
+* Added `Round` token.
+* Added `FromFile` patch token (e.g. so you can do `"HasFile:{{FromFile}}": true`).
+* The `patch export` command can now export assets that haven't been loaded yet.
+* Fixed `Range` token excluding its upper bound.
+* Fixed validation for `Target` fields containing `{{Target}}` and `{{TargetWithoutPath}}` tokens.
+* Fixed validation for `Target` fields not shown in `patch summary` in some cases.
+* Fixed 'file does not exist' error when the `FromFile` path is ready and doesn't exist, but the patch is disabled by a patch-specific condition.
+* Fixed error when removing a map tile without edits.
+* Fixed token handling in map tile/property fields.
+* Fixed format validation for 1.13 features not applied.
+
 ## 1.13
 Released 09 March 2020.
 

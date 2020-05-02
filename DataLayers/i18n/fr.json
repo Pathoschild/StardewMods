@@ -59,6 +59,9 @@
     "machines.processing": "En cours",
     "machines.finished": "Terminé",
 
+    // tile grid
+    "grid.name": "Tile Grid", // TODO
+
     // tillable
     "tillable.name": "Labourable",
     "tillable.tillable": "Labourable",

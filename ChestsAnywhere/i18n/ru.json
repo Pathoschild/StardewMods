@@ -1,40 +1,40 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Авто-сборщик #{{number}}",
-    "default-name.chest": "Сундук #{{number}}",
+    "default-name.auto-grabber": "Авто-сборщик №{{number}}",
+    "default-name.chest": "Сундук №{{number}}",
     "default-name.fridge": "Холодильник",
-    "default-name.junimo-hut": "Хижина джунимо #{{number}}",
+    "default-name.junimo-hut": "Хижина Джунимо №{{number}}",
     "default-name.shipping-bin": "Отгрузочный ящик",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.shipping-bin.store": "Отгрузочный ящик (отправленные предметы)",
+    "default-name.shipping-bin.take": "Отгрузочный ящик (принятые предметы)",
 
     // default category names
-    "default-category.owned-cabin": "Домик ({{owner}})",
-    "default-category.unowned-cabin": "Домик (пусто)",
-    "default-category.duplicate": "{{locationName}} #{{number}}",
+    "default-category.owned-cabin": "В данном домике проживает {{owner}}.",
+    "default-category.unowned-cabin": "Домик (пустой)",
+    "default-category.duplicate": "{{locationName}} №{{number}}",
 
     // edit-chest labels
     "label.location": "Локация",
-    "label.location.tile": "тайл {{x}}, {{y}}",
+    "label.location.tile": "Клетка {{x}}, {{y}}",
     "label.name": "Имя",
     "label.category": "Категория",
     "label.order": "Порядок",
     "label.hide-chest": "Скрыть этот сундук",
     "label.hide-chest-hidden": "Скрыть этот сундук (вам нужно найти сундук, чтобы отменить это!)",
     "label.automate-store": "(Автоматизировать) класть предметы в этот сундук",
-    "label.automate-store-first": "(Автоматизировать) С начала положите предметы в этот сундук",
+    "label.automate-store-first": "(Автоматизировать) Сначала класть предметы в этот сундук",
     "label.automate-take": "(Автоматизировать) брать предметы из этого сундука",
-    "label.automate-take-first": "(Автоматизировать) С начала брать предметы в этот сундук",
+    "label.automate-take-first": "(Автоматизировать) Сначала брать предметы из этого сундука",
 
     // button labels
-    "button.edit-chest": "редактировать сундук",
-    "button.sort-inventory": "сортировать инвентарь",
-    "button.save": "сохранить",
-    "button.reset": "сброс",
+    "button.edit-chest": "Редактировать сундук",
+    "button.sort-inventory": "Сортировать инвентарь",
+    "button.save": "Сохранить",
+    "button.reset": "Сброс",
 
     // errors
     "errors.disabled-from-here": "Вы не можете получить доступ к сундукам отсюда.",
-    "errors.no-chests": "У вас ещё нет сундуков.",
-    "errors.no-chests-in-location": "У вас нет сундуков в этой области.",
-    "errors.no-chests-in-range": "У вас нет сундуков в радиусе действия."
+    "errors.no-chests": "У вас отсутствуют сундуки.",
+    "errors.no-chests-in-location": "У вас отсутствуют сундуки в данной локации.",
+    "errors.no-chests-in-range": "У вас отсутствуют сундуки в радиусе действия."
 }

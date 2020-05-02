@@ -25,6 +25,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The keys which activate the layer.</summary>
         KeyBinding ShortcutKey { get; }
 
+        /// <summary>Whether to always show the tile grid.</summary>
+        bool AlwaysShowGrid { get; }
+
 
         /*********
         ** Methods

@@ -42,9 +42,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The machine's in-game location.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
-        protected BaseMachine(GameLocation location, in Rectangle tileArea)
+        /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
+        protected BaseMachine(GameLocation location, in Rectangle tileArea, string machineTypeId = null)
         {
-            this.MachineTypeID = this.GetType().FullName;
+            this.MachineTypeID = machineTypeId ?? this.GetDefaultMachineId();
             this.Location = location;
             this.TileArea = tileArea;
         }
@@ -61,6 +62,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         protected static Rectangle GetTileAreaFor(in Vector2 tile)
         {
             return new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+        }
+
+        /// <summary>Get the default ID for the machine type.</summary>
+        private string GetDefaultMachineId()
+        {
+            string id = this.GetType().Name;
+
+            if (id.EndsWith("Machine"))
+                id = id.Substring(0, id.Length - "Machine".Length);
+
+            return id;
         }
     }
 
@@ -81,8 +93,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machine">The underlying entity automated by this machine. This is only stored for the machine instance, and can be null if not applicable.</param>
         /// <param name="location">The machine's in-game location.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
-        protected BaseMachine(TMachine machine, GameLocation location, in Rectangle tileArea)
-            : base(location, tileArea)
+        /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
+        protected BaseMachine(TMachine machine, GameLocation location, in Rectangle tileArea, string machineTypeId = null)
+            : base(location, tileArea, machineTypeId)
         {
             this.Machine = machine;
         }

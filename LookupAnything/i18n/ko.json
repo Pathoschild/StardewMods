@@ -2,10 +2,6 @@
     /*********
     ** Generic translations 기본 번역
     *********/
-    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}} {{dayNumber}}일",
-    "generic.date-with-year": "{{year}}년, {{seasonName}} {{dayNumber}}일",
-
     // date names
     "generic.now": "지금 수확 가능",
     "generic.tomorrow": "내일",

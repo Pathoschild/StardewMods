@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using xTile;
 using xTile.Layers;
@@ -67,8 +66,10 @@ namespace ContentPatcher.Framework.Patches
             this.Monitor = monitor;
 
             this.Contextuals
-                .Add(fromArea)
-                .Add(toArea);
+                .Add(this.FromArea)
+                .Add(this.ToArea)
+                .Add(this.MapProperties)
+                .Add(this.MapTiles);
         }
 
         /// <summary>Apply the patch to a loaded asset.</summary>
@@ -91,13 +92,14 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // get map
-            Map target = asset.GetData<Map>();
+            IAssetDataForMap targetAsset = asset.AsMap();
+            Map target = targetAsset.Data;
 
             // apply map area patch
             if (this.AppliesMapPatch)
             {
                 Map source = this.ContentPack.Load<Map>(this.FromAsset);
-                if (!this.TryApplyMapPatch(source, target, out string error))
+                if (!this.TryApplyMapPatch(source, targetAsset, out string error))
                     this.Monitor.Log($"{errorPrefix}: map patch couldn't be applied: {error}", LogLevel.Warn);
             }
 
@@ -142,11 +144,13 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Try to apply a map overlay patch.</summary>
         /// <param name="source">The source map to overlay.</param>
-        /// <param name="target">The target map to overlay.</param>
+        /// <param name="targetAsset">The target map to overlay.</param>
         /// <param name="error">An error indicating why applying the patch failed, if applicable.</param>
         /// <returns>Returns whether applying the patch succeeded.</returns>
-        private bool TryApplyMapPatch(Map source, Map target, out string error)
+        private bool TryApplyMapPatch(Map source, IAssetDataForMap targetAsset, out string error)
         {
+            Map target = targetAsset.Data;
+
             // read data
             Rectangle mapBounds = this.GetMapArea(source);
             if (!this.TryReadArea(this.FromArea, 0, 0, mapBounds.Width, mapBounds.Height, out Rectangle sourceArea, out error))
@@ -168,7 +172,7 @@ namespace ContentPatcher.Framework.Patches
                 return this.Fail($"{sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", out error);
 
             // apply source map
-            AssetPatchUtilities.ApplyMapOverride(source: source, target: target, sourceArea: sourceArea, targetArea: targetArea);
+            targetAsset.PatchMap(source: source, sourceArea: sourceArea, targetArea: targetArea);
 
             error = null;
             return true;
@@ -184,6 +188,7 @@ namespace ContentPatcher.Framework.Patches
             // parse tile data
             if (!this.TryReadTile(tilePatch, out string layerName, out Location position, out int? setIndex, out string setTilesheetId, out IDictionary<string, string> setProperties, out bool removeTile, out error))
                 return this.Fail(error, out error);
+            bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Any();
 
             // get layer
             var layer = map.GetLayer(layerName);
@@ -205,7 +210,7 @@ namespace ContentPatcher.Framework.Patches
             Tile original = layer.Tiles[position];
 
             // if adding a new tile, the min tile info is required
-            if ((removeTile || original == null) && (setTilesheet == null || setIndex == null))
+            if (hasEdits && (removeTile || original == null) && (setTilesheet == null || setIndex == null))
                 return this.Fail($"the map has no tile at {layerName} ({position.X}, {position.Y}). To add a tile, the {nameof(PatchMapTileConfig.SetTilesheet)} and {nameof(PatchMapTileConfig.SetIndex)} fields must be set.", out error);
 
             // apply new tile

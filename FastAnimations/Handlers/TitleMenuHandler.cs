@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TitleMenuHandler(int multiplier, IReflectionHelper reflection)
+        public TitleMenuHandler(float multiplier, IReflectionHelper reflection)
             : base(multiplier)
         {
             this.Reflection = reflection;
@@ -43,8 +43,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             TitleMenu titleMenu = (TitleMenu)Game1.activeClickableMenu;
             var isTransition = this.GetIsTransitionField(titleMenu);
-            for (int i = 1; i < this.Multiplier && isTransition.GetValue(); i++)
-                titleMenu.update(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => titleMenu.update(Game1.currentGameTime),
+                until: () => !isTransition.GetValue()
+            );
         }
 
 

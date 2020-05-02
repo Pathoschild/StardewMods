@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -59,13 +60,13 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                     yield return this.TryCreate(ItemType.Flooring, id, () => new Wallpaper(id, isFloor: true) { Category = SObject.furnitureCategory });
 
                 // equipment
-                foreach (int id in Game1.content.Load<Dictionary<int, string>>("Data\\Boots").Keys)
+                foreach (int id in this.TryLoad<int, string>("Data\\Boots").Keys)
                     yield return this.TryCreate(ItemType.Boots, id, () => new Boots(id));
-                foreach (int id in Game1.content.Load<Dictionary<int, string>>("Data\\hats").Keys)
+                foreach (int id in this.TryLoad<int, string>("Data\\hats").Keys)
                     yield return this.TryCreate(ItemType.Hat, id, () => new Hat(id));
 
                 // weapons
-                foreach (int id in Game1.content.Load<Dictionary<int, string>>("Data\\weapons").Keys)
+                foreach (int id in this.TryLoad<int, string>("Data\\weapons").Keys)
                 {
                     yield return this.TryCreate(ItemType.Weapon, id, () => (id >= 32 && id <= 34)
                         ? (Item)new Slingshot(id)
@@ -74,7 +75,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                 }
 
                 // furniture
-                foreach (int id in Game1.content.Load<Dictionary<int, string>>("Data\\Furniture").Keys)
+                foreach (int id in this.TryLoad<int, string>("Data\\Furniture").Keys)
                 {
                     if (id == 1466 || id == 1468)
                         yield return this.TryCreate(ItemType.Furniture, id, () => new TV(id, Vector2.Zero));
@@ -94,7 +95,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                     // secret notes
                     if (id == 79)
                     {
-                        foreach (int secretNoteId in Game1.content.Load<Dictionary<int, string>>("Data\\SecretNotes").Keys)
+                        foreach (int secretNoteId in this.TryLoad<int, string>("Data\\SecretNotes").Keys)
                         {
                             yield return this.TryCreate(ItemType.Object, this.CustomIDOffset + secretNoteId, () =>
                             {
@@ -233,6 +234,23 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /*********
         ** Private methods
         *********/
+        /// <summary>Try to load a data file, and return empty data if it's invalid.</summary>
+        /// <typeparam name="TKey">The asset key type.</typeparam>
+        /// <typeparam name="TValue">The asset value type.</typeparam>
+        /// <param name="assetName">The data asset name.</param>
+        private Dictionary<TKey, TValue> TryLoad<TKey, TValue>(string assetName)
+        {
+            try
+            {
+                return Game1.content.Load<Dictionary<TKey, TValue>>(assetName);
+            }
+            catch (ContentLoadException)
+            {
+                // generally due to a player incorrectly replacing a data file with an XNB mod
+                return new Dictionary<TKey, TValue>();
+            }
+        }
+
         /// <summary>Create a searchable item if valid.</summary>
         /// <param name="type">The item type.</param>
         /// <param name="id">The unique ID (if different from the item's parent sheet index).</param>

@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            this.Config = helper.ReadConfig<ModConfig>();
+            this.Config = this.LoadConfig();
 
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -50,6 +50,9 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="e">The event arguments.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
+            if (Constants.TargetPlatform == GamePlatform.Android)
+                return; // return to title doesn't replay intro on Android
+
             if (e.NewMenu is TitleMenu)
                 this.CurrentStage = Stage.SkipIntro;
         }
@@ -89,6 +92,20 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Methods
         ****/
+        /// <summary>Load the mod configuration.</summary>
+        private ModConfig LoadConfig()
+        {
+            var config = this.Helper.ReadConfig<ModConfig>();
+
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                if (this.Config.SkipTo == Screen.HostCoop || this.Config.SkipTo == Screen.JoinCoop)
+                    this.Config.SkipTo = Screen.Title; // no co-op on Android
+            }
+
+            return config;
+        }
+
         /// <summary>Skip the intro if the game is ready.</summary>
         /// <param name="menu">The title menu whose intro to skip.</param>
         /// <param name="currentStage">The current step in the mod logic.</param>
@@ -106,13 +123,25 @@ namespace Pathoschild.Stardew.SkipIntro
             // main skip logic
             if (currentStage == Stage.SkipIntro)
             {
-                // skip to title screen
-                menu.receiveKeyPress(Keys.Escape);
-                menu.update(Game1.currentGameTime);
+                if (Constants.TargetPlatform == GamePlatform.Android)
+                {
+                    // skip to title screen
+                    menu.skipToTitleButtons();
 
-                // skip button transition
-                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                    // skip button transition
+                    while (this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons").GetValue())
+                        menu.update(Game1.currentGameTime);
+                }
+                else
+                {
+                    // skip to title screen
+                    menu.receiveKeyPress(Keys.Escape);
                     menu.update(Game1.currentGameTime);
+
+                    // skip button transition
+                    while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                        menu.update(Game1.currentGameTime);
+                }
 
                 // skip to next screen
                 switch (this.Config.SkipTo)

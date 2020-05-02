@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 
 namespace ContentPatcher.Framework
@@ -15,5 +16,9 @@ namespace ContentPatcher.Framework
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
         /// <param name="recursive">Whether to scan recursively.</param>
         IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive);
+
+        /// <summary>Get whether a token string uses the given token.</summary>
+        /// <param name="tokens">The token to find.</param>
+        bool UsesTokens(params ConditionType[] tokens);
     }
 }

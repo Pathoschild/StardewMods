@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Data, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Data, helper.Multiplayer, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -234,7 +234,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get chests
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
-            ManagedChest selectedChest = chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory)) ?? chests.FirstOrDefault();
+            ManagedChest selectedChest =
+                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory))
+                ?? chests.FirstOrDefault(p => p.Location == Game1.currentLocation)
+                ?? chests.FirstOrDefault();
 
             // show error
             if (selectedChest == null)

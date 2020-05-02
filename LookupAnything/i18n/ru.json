@@ -2,10 +2,6 @@
     /*********
     ** Generic translations
     *********/
-    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}}, {{dayNumber}}-е число",
-    "generic.date-with-year": "{{seasonName}}, {{dayNumber}}-е число, {{year}}-й год",
-
     // date names
     "generic.now": "сейчас",
     "generic.tomorrow": "завтра",
@@ -52,7 +48,7 @@
     "friendship-status.engaged": "Помолвлены",
     "friendship-status.married": "В браке",
     "friendship-status.divorced": "Разведены",
-    "friendship-status.kicked-out": "Kicked out", // TODO
+    "friendship-status.kicked-out": "Выгнан",
 
 
     /*********
@@ -65,7 +61,7 @@
     "bundle-area.boiler-room": "Бойлерная",
     "bundle-area.vault": "Сейф",
     "bundle-area.bulletin-board": "Доска объявлений",
-    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
+    "bundle-area.abandoned-joja-mart": "Заброшенный Joja mart",
 
     // shop names
     "shop.adventure-guild": "Гильдия Приключений",
@@ -83,7 +79,7 @@
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
     "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
+    "data.npc.trashbear.description": "Дружелюбный дух, который убирает мусор.",
 
     // item types
     "data.type.debris": "Мусор",
@@ -156,32 +152,31 @@
     "data.item.box.description": "Разбейте, чтобы получить разные вещи.",
 
     // location names
-    // TODO
-    "location.backwoods": "backwoods",
-    "location.beach": "beach",
-    "location.beach.east-pier": "beach (eastern pier)",
-    "location.bugLand": "mutant bug lair",
-    "location.busStop": "bus stop",
-    "location.desert": "desert",
-    "location.farm": "farm",
-    "location.farmCave": "farm cave",
-    "location.farmHouse": "farmhouse",
-    "location.forest": "forest",
-    "location.forest.fish-area-0": "forest river",
-    "location.forest.fish-area-1": "forest pond",
-    "location.forest.island-tip": "forest river (south tip of large island)",
-    "location.mountain": "mountain",
-    "location.railroad": "railroad",
-    "location.sewer": "sewers",
-    "location.submarine": "Night Market submarine",
-    "location.town": "town",
-    "location.town.northmost-bridge": "town (northmost bridge)",
-    "location.tunnel": "bus tunnel",
-    "location.undergroundMine": "mines",
-    "location.undergroundMine.level": "mine level {{level}}",
-    "location.witchSwamp": "witch's swamp",
-    "location.woods": "secret woods",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.backwoods": "глушь",
+    "location.beach": "пляж",
+    "location.beach.east-pier": "пляж (восточный пирс)",
+    "location.bugLand": "логово жуков-мутантов",
+    "location.busStop": "автобусная остановка",
+    "location.desert": "пустыня",
+    "location.farm": "ферма",
+    "location.farmCave": "пещера на ферме",
+    "location.farmHouse": "дом на ферме",
+    "location.forest": "лес",
+    "location.forest.fish-area-0": "лесная река",
+    "location.forest.fish-area-1": "лесное озеро",
+    "location.forest.island-tip": "лесная река (южная часть большого острова)",
+    "location.mountain": "горы",
+    "location.railroad": "железная дорога",
+    "location.sewer": "канализация",
+    "location.submarine": "ночной Рынок на подводной лодке",
+    "location.town": "город",
+    "location.town.northmost-bridge": "город (самый северный мост)",
+    "location.tunnel": "туннель рядом с автобусом",
+    "location.undergroundMine": "шахты",
+    "location.undergroundMine.level": "уровень шахты {{level}}",
+    "location.witchSwamp": "болото ведьмы",
+    "location.woods": "тайный лес",
+    "location.unknown-fish-area": "{{locationName}} (рыболовный район {{id}})",
 
 
     /*********
@@ -249,21 +244,19 @@
     ** Building > fish pond lookups
     *********/
     // labels
-    // TODO
-    "building.fish-pond.population": "Population",
-    "building.fish-pond.drops": "Drops",
-    "building.fish-pond.quests": "Quests",
+    "building.fish-pond.population": "Популяция",
+    "building.fish-pond.drops": "Дроп",
+    "building.fish-pond.quests": "Задания",
 
     // values
-    // TODO
-    "building.fish-pond.population.empty": "Add a fish to start this pond",
-    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:",
-    "building.fish-pond.drops.min-fish": "With {{count}} fish:",
-    "building.fish-pond.quests.done": "{{count}} fish",
-    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
-    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
-    "building.fish-pond.quests.available": "available {{relativeDate}}",
+    "building.fish-pond.population.empty": "Добавь рыбу, чтобы начать этот пруд",
+    "building.fish-pond.population.next-spawn": "Появилась новая рыба {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% шанс каждого дня на производство первого подобранного предмета:",
+    "building.fish-pond.drops.min-fish": "С {{count}} рыбой:",
+    "building.fish-pond.quests.done": "{{count}} рыб",
+    "building.fish-pond.quests.incomplete-one": "{{count}} рыб: нужно {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} рыб: нужен один из {{itemList}}",
+    "building.fish-pond.quests.available": "доступно {{relativeDate}}",
 
 
     /*********
@@ -272,19 +265,18 @@
     // labels
     "bush.name.berry": "Ягодный куст",
     "bush.name.plain": "Обычный куст",
-    "bush.name.tea": "Tea Bush", // TODO
+    "bush.name.tea": "Чайный куст",
     "bush.description.berry": "Куст, на котором растёт морошка или ежевика.",
     "bush.description.plain": "Куст, на котором ничего не растёт.",
-    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
-    "bush.date-planted": "Date planted", // TODO
-    "bush.growth": "Growth", // TODO
+    "bush.description.Tea": "Куст, который дает чайные листья.",
+    "bush.date-planted": "Дата посадки",
+    "bush.growth": "Рост",
     "bush.next-harvest": "Следующий сбор",
 
     // values
-    // TODO
     "bush.growth.summary": "вырастет {{date}}",
     "bush.schedule.berry": "20% шанса на сбор морошки, с 15-го по 18-ое число весны, а также на сбор ежевики, с 8-го по 11-ое число осени.",
-    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).",
+    "bush.schedule.tea": "Дает чайные листья с 22-го числа каждого сезона (кроме зимы, если не растет в теплице).",
 
 
     /*********
@@ -336,9 +328,9 @@
     "item.contents": "Содержит",
     "item.loves-this": "Любят",
     "item.likes-this": "Нравится",
-    "item.neutral-about-this": "Neutral about this", // TODO
-    "item.dislikes-this": "Dislikes this", // TODO
-    "item.hates-this": "Hates this", // TODO
+    "item.neutral-about-this": "Безразличны",
+    "item.dislikes-this": "Не любят",
+    "item.hates-this": "Ненавидят",
     "item.needed-for": "Необходим для",
     "item.number-owned": "Наличие",
     "item.number-cooked": "Приготовлено",
@@ -347,15 +339,15 @@
     "item.see-also": "Также смотри",
     "item.sells-for": "Продаётся за",
     "item.sells-to": "Место продажи",
-    "item.can-be-dyed": "Can be dyed", // TODO
-    "item.produces-dye": "Produces dye", // TODO
+    "item.can-be-dyed": "Можно покрасить",
+    "item.produces-dye": "Производит краситель",
 
     // values
     "item.contents.placed": "содержит {{name}}",
     "item.contents.ready": "{{name}} готов",
     "item.contents.partial": "{{name}} через {{time}}",
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste": "{{count}} неизвестных жителей",
+    "item.undiscovered-gift-taste-appended": ", и {{count}} неизвестных жителей",
     "item.needed-for.community-center": "Общественный центр ({{bundles}})",
     "item.needed-for.full-shipment": "достижение 'Мастер-груз' (Отгрузите 1 шт.)",
     "item.needed-for.polyculture": "достижение 'Севооборот' (Отгрузите {{count}} шт. или больше)",
@@ -407,40 +399,37 @@
     ** Item > fish lookups
     *********/
     // labels
-    // TODO
-    "item.fish-pond-drops": "Fish pond drops",
-    "item.fish-spawn-rules": "Spawn rules",
+    "item.fish-pond-drops": "Рыбный пруд даёт",
+    "item.fish-spawn-rules": "Условия появления",
 
     // values
-    // TODO
-    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
-    "item.fish-spawn-rules.locations": "locations: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.min-fishing-level": "минимальный уровень рыбалки: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "пока не пойман (может быть пойман только один раз)",
+    "item.fish-spawn-rules.locations": "местонахождение: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "местонахождение:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
-    "item.fish-spawn-rules.season-any": "any season",
-    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
-    "item.fish-spawn-rules.time": "time of day: {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
-    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+    "item.fish-spawn-rules.season-any": "любой сезон",
+    "item.fish-spawn-rules.season-list": "сезон: {{seasons}}",
+    "item.fish-spawn-rules.time": "время суток: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "погода: солнечно",
+    "item.fish-spawn-rules.weather-rainy": "погода: дождь",
 
 
     /*********
     ** Item > movie lookups
     *********/
     // labels
-    // TODO
-    "item.movie-snack-preference": "Preference",
-    "item.movie-ticket.movie-this-week": "Movie this week",
-    "item.movie-ticket.loves-movie": "Loves movie",
-    "item.movie-ticket.likes-movie": "Likes movie",
-    "item.movie-ticket.dislikes-movie": "Dislikes movie",
+    "item.movie-snack-preference": "Предпочтение",
+    "item.movie-ticket.movie-this-week": "Кино на этой неделе",
+    "item.movie-ticket.loves-movie": "Любит кино",
+    "item.movie-ticket.likes-movie": "Нравится кино",
+    "item.movie-ticket.dislikes-movie": "Не нравится кино",
 
     // values
-    "item.movie-snack-preference.love": "{{name}} loves this",
-    "item.movie-snack-preference.like": "{{name}} likes this",
-    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
-    "item.movie-ticket.movie-this-week.none": "No movie this week",
+    "item.movie-snack-preference.love": "{{name}} любит это",
+    "item.movie-snack-preference.like": "{{name}} нравится это",
+    "item.movie-snack-preference.dislike": "{{name}} не нравится это",
+    "item.movie-ticket.movie-this-week.none": "На этой неделе фильма нет",
 
 
     /*********
@@ -473,21 +462,21 @@
     "npc.gifted-today": "Подарок за сегодня",
     "npc.gifted-this-week": "Подарки за эту неделю",
     "npc.kissed-today": "Поцелуй за сегодня",
-    "npc.hugged-today": "Hugged today", // TODO
+    "npc.hugged-today": "Объятия за сегодня",
     "npc.loves-gifts": "Любит подарки:",
     "npc.likes-gifts": "Нравятся подарки:",
     "npc.neutral-gifts": "Равнодушен к подаркам:",
-    "npc.dislikes-gifts": "Dislikes gifts", // TODO
-    "npc.hates-gifts": "Hates gifts", // TODO
+    "npc.dislikes-gifts": "Не любит подарки",
+    "npc.hates-gifts": "Ненавидит подарки",
 
     // values
     "npc.can-romance.married": "Вы женаты! <", // < turns into a heart
-    "npc.can-romance.housemate": "You're housemates!", // TODO
+    "npc.can-romance.housemate": "Вы сожители!",
     "npc.friendship.not-met": "Вы ещё не встречались.",
     "npc.friendship.need-bouquet": "нужен букет для след.",
     "npc.friendship.need-points": "след. через {{count}}",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste": "{{count}} нераскрытых предметов",
+    "npc.undiscovered-gift-taste-appended": ", и {{count}} нераскрытых предметов",
 
 
     /*********
@@ -511,16 +500,15 @@
     // labels
     "pet.love": "Привязанность",
     "pet.petted-today": "За сегодня в настроении",
-    "pet.last-petted": "Last petted", // TODO
-    "pet.water-bowl": "Water bowl", // TODO
+    "pet.last-petted": "Последний раз гладили",
+    "pet.water-bowl": "Миска для воды",
 
     // values
-    // TODO
-    "pet.last-petted.yes": "yes (+12 love)",
-    "pet.last-petted.days-ago": "{{days}} days ago",
-    "pet.last-petted.never": "never",
-    "pet.water-bowl.empty": "Empty",
-    "pet.water-bowl.filled": "Filled (+6 love)",
+    "pet.last-petted.yes": "Да (+12 очков любви)",
+    "pet.last-petted.days-ago": "{{days}} дней спустя",
+    "pet.last-petted.never": "никогда",
+    "pet.water-bowl.empty": "Пусто",
+    "pet.water-bowl.filled": "Наполнена (+6 очков любви)",
 
 
     /*********
@@ -531,16 +519,16 @@
     "player.farm-map": "Карта фермы",
     "player.favorite-thing": "Любимая вещь",
     "player.gender": "Пол",
-    "player.housemate": "Housemate", // TODO
+    "player.housemate": "Сожитель",
     "player.spouse": "Супруг(а)",
-    "player.watched-movie-this-week": "Watched movie this week", // TODO
+    "player.watched-movie-this-week": "Смотрел кино на этой неделе",
     "player.combat-skill": "Боевые навыки",
     "player.farming-skill": "Фермерство",
     "player.fishing-skill": "Рыбная ловля",
     "player.foraging-skill": "Собирательство",
     "player.mining-skill": "Горное дело",
     "player.luck": "Удача",
-    "player.save-format": "Save format", // TODO
+    "player.save-format": "Сохранить формат",
 
     // values
     "player.farm-map.custom": "Пользовательская",
@@ -572,9 +560,8 @@
     ** Trash bear lookups
     *********/
     // trash bear lookup labels
-    // TODO
-    "trash-bear.item-wanted": "Item wanted",
-    "trash-bear.quest-progress": "Quest progress",
+    "trash-bear.item-wanted": "Требуется предмет",
+    "trash-bear.quest-progress": "Прогресс задания",
 
 
     /*********
@@ -584,7 +571,7 @@
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
     "tree.has-seed": "Содержит семена",
-    "tree.is-fertilized": "Is fertilized", // TODO
+    "tree.is-fertilized": "Использовано удобрение",
 
     // values
     "tree.name.maple": "Клён",
@@ -598,7 +585,7 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.chance": "20% шанс, что завтра вырастит в {{stage}}",
-    "tree.is-fertilized.effects": "guarantees daily growth, even in winter", // TODO
+    "tree.is-fertilized.effects": "Гарантирует ежедневный рост, даже зимой",
 
     // growth stages
     "tree.stages.seed": "семя",

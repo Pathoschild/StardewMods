@@ -39,6 +39,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
 
+        /// <summary>Whether the condition matches the current context.</summary>
+        public bool IsMatch { get; set; }
+
 
         /*********
         ** Public methods
@@ -76,18 +79,6 @@ namespace ContentPatcher.Framework.Conditions
             return this.Name.EqualsIgnoreCase(type.ToString());
         }
 
-        /// <summary>Whether the condition matches.</summary>
-        /// <param name="context">The condition context.</param>
-        public bool IsMatch(IContext context)
-        {
-            if (!this.IsReady)
-                return false;
-
-            return context
-                .GetValues(this.Name, this.Input, enforceContext: true)
-                .Any(value => this.CurrentValues.Contains(value));
-        }
-
         /// <summary>Update the instance when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <returns>Returns whether the instance changed.</returns>
@@ -95,6 +86,7 @@ namespace ContentPatcher.Framework.Conditions
         {
             // reset
             bool wasReady = this.IsReady;
+            bool wasMatch = this.IsMatch;
             this.State.Reset();
 
             // update contextuals
@@ -105,14 +97,21 @@ namespace ContentPatcher.Framework.Conditions
                 this.State.AddUnreadyTokens(this.Name);
 
             // update values
-            if (changed || wasReady != this.IsReady)
-            {
-                this.CurrentValues = this.IsReady
-                    ? this.Values.SplitValuesUnique()
-                    : new InvariantHashSet();
-                return true;
-            }
-            return false;
+            this.CurrentValues = this.IsReady
+                ? this.Values.SplitValuesUnique()
+                : new InvariantHashSet();
+
+            // update match
+            this.IsMatch =
+                this.IsReady
+                && context
+                    .GetValues(this.Name, this.Input, enforceContext: true)
+                    .Any(value => this.CurrentValues.Contains(value));
+
+            return
+                changed
+                || wasReady != this.IsReady
+                || wasMatch != this.IsMatch;
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
