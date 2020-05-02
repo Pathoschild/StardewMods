@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.27.1
+Released 02 May 2020.
+
 * Fixed compatibility issue with Mega Storage in 1.27.
 
 ## 1.27
