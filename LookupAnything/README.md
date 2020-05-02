@@ -1,4 +1,4 @@
-**Lookup Anything** is a [Stardew Valley](http://stardewvalley.net/) mod that shows live info about
+**Lookup Anything** is a [Stardew Valley](https://stardewvalley.net/) mod that shows live info about
 whatever's under your cursor when you press `F1`. Learn a villager's favorite gifts, when a crop
 will be ready to harvest, how long a fence will last, why your farm animals are unhappy, and more.
 
@@ -18,7 +18,7 @@ what the game is doing.
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
-2. [Install this mod from Nexus mods](http://www.nexusmods.com/stardewvalley/mods/541/).
+2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/541/).
 3. Run the game using SMAPI.
 
 ## Use
@@ -129,7 +129,7 @@ The screenshots below are without progression mode, and may show spoilers.
 
 * See a monster's stats, your progress towards the Adventurer's Guild eradication goals, and what
   items the monster will drop when killed. The drop list will highlight which items will definitely
-  drop (black), and which might drop because you have the [Burglar's Ring](http://stardewvalleywiki.com/Burglar%27s_Ring)
+  drop (black), and which might drop because you have the [Burglar's Ring](https://stardewvalleywiki.com/Burglar%27s_Ring)
   (gray but not crossed out).
   > ![](screenshots/monster.png)
 
@@ -224,4 +224,4 @@ public Object HoveredItem;
 
 ## See also
 * [Release notes](release-notes.md)
-* [Nexus mod](http://www.nexusmods.com/stardewvalley/mods/518)
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/518)
