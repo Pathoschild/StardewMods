@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.17
+Released 02 May 2020.
+
 * Added machine type priority.
 * Added support for berry bushes.
 * Shipping bins now have a lower priority than other machines by default.

@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 4.10.1
+Released 02 May 2020.
+
 * Improved translations. Thanks to D0n-A (updated Russian)!
 
 ## 4.10

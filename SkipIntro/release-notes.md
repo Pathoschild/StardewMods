@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.8.4
+Released 02 May 2020.
+
 * Fixed compatibility with Android (thanks to kdau!).
 
 ## 1.8.3

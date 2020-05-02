@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.8
+Released 02 May 2020.
+
 * Added support for fractional multipliers like 1.5 times faster (thanks to seraku24!).
 
 ## 1.7.5

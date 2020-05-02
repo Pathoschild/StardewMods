@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.12
+Released 02 May 2020.
+
 * Added tile grid layer (when grid isn't enabled for all layers).
 * Fixed translations not updated after changing language until you restart the game.
 * Updated translations. Thanks to Annosz (added Hungarian), BURAKMESE (added Turkish), D0n-A (updated Russian), and misho104 (updated Japanese)!

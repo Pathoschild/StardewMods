@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>SkipIntro</AssemblyName>
-    <Version>1.8.3</Version>
+    <Version>1.8.4</Version>
     <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

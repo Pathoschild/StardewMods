@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.2.1
+Released 02 May 2020.
+
 * Improved translations. Thanks to BURAKMESE (added Turkish) and D0n-A (updated Russian)!
 
 ## 1.2

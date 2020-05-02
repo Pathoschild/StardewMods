@@ -1,9 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Farmhands in multiplayer can now access chests in all synced locations (generally their current location, the farm, the main player's farmhouse, and constructed farm buildings).
-* The menu now defaults to a chest in the current location, if any.
+## 1.19
+Released 02 May 2020.
+
+* Farmhands in multiplayer can now access chests in all synced locations (including the farm, farmhouse, and constructed farm buildings).
+* The menu now defaults to chests in the current location, if any.
 * Updated Android support (thanks to ZaneYork!).
 * Improved translations. Thanks to D0n-A (updated Russian) and niniack (updated Chinese)!
 
