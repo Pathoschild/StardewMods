@@ -1117,7 +1117,7 @@ When you run the game, a `config.json` file will appear automatically with text 
 Players can edit it to configure your content pack.
 
 ## Mod-provided tokens
-SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](#extensibility-for-modders)),
+SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
 ```js
