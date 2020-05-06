@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.7.0</Version>
+    <Version>1.7.1</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
