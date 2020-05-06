@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.1
+Released 05 May 2020.
+
+* Moved `data.json` into standard `assets` folder.
+* Updated 'multiplayer limitations' message for 1.19.
+
 ## 1.19
 Released 02 May 2020.
 

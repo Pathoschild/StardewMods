@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // initialize
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
-            this.Data = helper.Data.ReadJsonFile<ModData>("data.json") ?? new ModData();
+            this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Data, helper.Multiplayer, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
 
             // hook events
@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // show multiplayer limitations warning
             if (!Context.IsMainPlayer)
-                this.Monitor.Log("Multiplayer limitations: you can only access chests in your current location (since you're not the main player). This is due to limitations in the game's sync logic.", LogLevel.Info);
+                this.Monitor.Log("Multiplayer limitations: you can only access chests in synced locations since you're not the main player. This is due to limitations in the game's sync logic.", LogLevel.Info);
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
