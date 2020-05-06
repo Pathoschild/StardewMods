@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Moved `data.json` into standard `assets` folder.
 * Updated 'multiplayer limitations' message for 1.19.
 
 ## 1.19
