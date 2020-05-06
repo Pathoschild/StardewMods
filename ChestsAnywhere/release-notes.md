@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated 'multiplayer limitations' message for 1.19.
+
 ## 1.19
 Released 02 May 2020.
 
