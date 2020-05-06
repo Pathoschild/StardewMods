@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                 prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_ResetSharedState))
             );
             harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.cleanupBeforePlayerExit)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.cleanupBeforePlayerExit)),
                 prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_CleanupBeforePlayerExit))
             );
         }

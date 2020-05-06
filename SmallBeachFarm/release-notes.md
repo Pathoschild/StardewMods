@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error in upcoming versions of SMAPI.
+
 ## 1.7
 Released 02 May 2020.
 
