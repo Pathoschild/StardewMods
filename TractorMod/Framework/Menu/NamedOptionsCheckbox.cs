@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using StardewValley;
 using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Menu
@@ -18,6 +19,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Menu
             this.Name = name;
             Regex r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
             base.label = r.Replace(label, " ");
+        }
+
+        public override void receiveLeftClick(int x, int y)
+        {
+            if (this.greyedOut)
+                return;
+            Game1.playSound("drumkit6");
+            this.isChecked = !this.isChecked;
+            
         }
     }
 }

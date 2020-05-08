@@ -108,7 +108,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Menu
                 object subValue = field.GetValue(this.Config.StandardAttachments);
                 foreach (var property in field.FieldType.GetProperties())
                 {
-                    this.options.Add(new NamedOptionsCheckbox(property.Name, 0, string.Concat(field.Name, ".", property.Name)) { isChecked = (bool)property.GetValue(subValue) });
+                    this.options.Add(new NamedOptionsCheckbox(property.Name, -50, string.Concat(field.Name, ".", property.Name)) { isChecked = (bool)property.GetValue(subValue) });
                 }
             }
 
