@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed chest color picker hidden unless you opened the chest directly.
+
 ## 1.19.1
 Released 05 May 2020.
 

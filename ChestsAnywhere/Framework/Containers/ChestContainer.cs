@@ -94,6 +94,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                     canBeExitedWithKey: true,
                     showOrganizeButton: true,
                     source: ItemGrabMenu.source_chest,
+                    sourceItem: this.Chest,
                     context: this.Context
                 );
             }
@@ -109,6 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 canBeExitedWithKey: true,
                 showOrganizeButton: true,
                 source: ItemGrabMenu.source_chest,
+                sourceItem: this.Chest,
                 context: this.Context
             );
         }
