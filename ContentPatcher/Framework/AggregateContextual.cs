@@ -86,7 +86,16 @@ namespace ContentPatcher.Framework
         /// <summary>Update the instance when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <returns>Returns whether the instance changed.</returns>
-        public bool UpdateContext(IContext context)
+        bool IContextual.UpdateContext(IContext context)
+        {
+            return this.UpdateContext(context, except: null);
+        }
+
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <param name="except">The contextuals to skip.</param>
+        /// <returns>Returns whether the instance changed.</returns>
+        public bool UpdateContext(IContext context, HashSet<IContextual> except = null)
         {
             bool wasReady = this.IsReady;
             this.IsReady = true;
@@ -94,6 +103,9 @@ namespace ContentPatcher.Framework
             bool changed = false;
             foreach (IContextual contextual in this.ValuesImpl)
             {
+                if (except != null && except.Contains(contextual))
+                    continue;
+
                 if (contextual.UpdateContext(context))
                     changed = true;
 
