@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.14.1
+Released 14 May 2020.
+
+* Fixed patches not updating correctly in 1.14 when a changed token is only in their `FromFile` field.
+
 ## 1.14
 Released 02 May 2020.
 

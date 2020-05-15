@@ -142,7 +142,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)
                     {
-                        if (Context.IsPlayerFree && !Game1.player.UsingTool)
+                        if (Context.IsPlayerFree && !Game1.player.UsingTool && !Game1.player.isEating)
                             this.OpenMenu();
                     }
 

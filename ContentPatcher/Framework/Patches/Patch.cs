@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches
@@ -21,6 +22,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The underlying contextual values.</summary>
         protected readonly AggregateContextual Contextuals = new AggregateContextual();
+
+        /// <summary>The tokens that are updated manually, rather than via <see cref="Contextuals"/>.</summary>
+        private readonly HashSet<IContextual> ManuallyUpdatedTokens = new HashSet<IContextual>(new ObjectReferenceComparer<IContextual>());
 
         /// <summary>Diagnostic info about the instance.</summary>
         protected readonly ContextualState State = new ContextualState();
@@ -101,7 +105,7 @@ namespace ContentPatcher.Framework.Patches
             isReady &= this.RawTargetAsset.IsReady && this.RawFromAsset?.IsReady != false;
 
             // update contextuals
-            changed |= this.Contextuals.UpdateContext(this.PrivateContext);
+            changed |= this.Contextuals.UpdateContext(this.PrivateContext, except: this.ManuallyUpdatedTokens);
             isReady &= this.Contextuals.IsReady && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch));
             this.FromAssetExistsImpl = false;
 
@@ -152,8 +156,6 @@ namespace ContentPatcher.Framework.Patches
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()
-                .MergeFrom(this.ManagedRawTargetAsset.GetDiagnosticState())
-                .MergeFrom(this.ManagedRawFromAsset?.GetDiagnosticState())
                 .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
 
@@ -185,7 +187,10 @@ namespace ContentPatcher.Framework.Patches
 
             this.Contextuals
                 .Add(this.Conditions)
-                .Add(assetName);
+                .Add(assetName)
+                .Add(fromAsset);
+            this.ManuallyUpdatedTokens.Add(assetName);
+            this.ManuallyUpdatedTokens.Add(fromAsset);
         }
 
         /// <summary>Try to read a tokenized rectangle.</summary>
