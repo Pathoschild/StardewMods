@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.19.2
+Released 14 May 2020.
+
 * Fixed chest color picker hidden unless you opened the chest directly.
 * Fixed being able to open the menu during the eat/drink animations and interrupting them.
 
