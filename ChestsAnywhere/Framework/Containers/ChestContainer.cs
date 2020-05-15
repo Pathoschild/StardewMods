@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Whether to show the chest color picker.</summary>
+        private readonly bool ShowColorPicker;
+
 
         /*********
         ** Accessors
@@ -47,11 +50,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Construct an instance.</summary>
         /// <param name="chest">The in-game chest.</param>
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
+        /// <param name="showColorPicker">Whether to show the chest color picker.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public ChestContainer(Chest chest, object context, IReflectionHelper reflection)
+        public ChestContainer(Chest chest, object context, bool showColorPicker, IReflectionHelper reflection)
         {
             this.Chest = chest;
             this.Context = context;
+            this.ShowColorPicker = showColorPicker;
             this.Reflection = reflection;
             this.Data = ContainerData.ParseName(chest.Name, this.DefaultName);
         }
@@ -81,9 +86,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            if (Constants.TargetPlatform == GamePlatform.Android)
+            Chest sourceItem = this.ShowColorPicker
+                ? this.Chest
+                : null;
+
+            return Constants.TargetPlatform switch
             {
-                return new ItemGrabMenu(
+                GamePlatform.Android => new ItemGrabMenu(
                     inventory: this.Inventory,
                     reverseGrab: true,
                     showReceivingMenu: true,
@@ -94,25 +103,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                     canBeExitedWithKey: true,
                     showOrganizeButton: true,
                     source: ItemGrabMenu.source_chest,
-                    sourceItem: this.Chest,
+                    sourceItem: sourceItem,
                     context: this.Context
-                );
-            }
+                ),
 
-            return new ItemGrabMenu(
-                inventory: this.Inventory,
-                reverseGrab: false,
-                showReceivingMenu: true,
-                highlightFunction: this.CanAcceptItem,
-                behaviorOnItemSelectFunction: this.GrabItemFromPlayer,
-                message: null,
-                behaviorOnItemGrab: this.GrabItemFromContainer,
-                canBeExitedWithKey: true,
-                showOrganizeButton: true,
-                source: ItemGrabMenu.source_chest,
-                sourceItem: this.Chest,
-                context: this.Context
-            );
+                _ => new ItemGrabMenu(
+                    inventory: this.Inventory,
+                    reverseGrab: false,
+                    showReceivingMenu: true,
+                    highlightFunction: this.CanAcceptItem,
+                    behaviorOnItemSelectFunction: this.GrabItemFromPlayer,
+                    message: null,
+                    behaviorOnItemGrab: this.GrabItemFromContainer,
+                    canBeExitedWithKey: true,
+                    showOrganizeButton: true,
+                    source: ItemGrabMenu.source_chest,
+                    sourceItem: sourceItem,
+                    context: this.Context
+                )
+            };
         }
 
         /// <summary>Persist the container data.</summary>
