@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.19.3
+Released 14 May 2020.
+
 * Fixed error opening chests in a different location in 1.19.2.
 * Fixed color picker shown for non-chests like the fridge.
 
