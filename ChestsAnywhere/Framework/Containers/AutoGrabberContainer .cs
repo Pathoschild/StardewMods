@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <param name="context">The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         public AutoGrabberContainer(SObject autoGrabber, Chest chest, object context, IReflectionHelper reflection)
-            : base(chest, context, reflection)
+            : base(chest, context, showColorPicker: false, reflection)
         {
             this.AutoGrabber = autoGrabber;
         }

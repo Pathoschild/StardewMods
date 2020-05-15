@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             if (obj is Chest chest && chest.playerChest.Value)
                             {
                                 yield return new ManagedChest(
-                                    container: new ChestContainer(chest, context: chest, this.Reflection),
+                                    container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.chest", new { number = ++namelessChests }),
@@ -133,7 +133,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
-                                container: new ChestContainer(fridge, context: fridge, this.Reflection),
+                                container: new ChestContainer(fridge, context: fridge, showColorPicker: false, this.Reflection),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: this.Translations.Get("default-name.fridge"),
@@ -322,6 +322,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             return location.Name;
+        }
+
+        /// <summary>Get whether it's safe to show a color picker for the given chest.</summary>
+        /// <param name="chest">The chest instance.</param>
+        /// <param name="location">The location containing the chest.</param>
+        /// <remarks>The game is hardcoded to exit the chest menu if this is enabled and the chest isn't present in the player's *current* location (see <see cref="ItemGrabMenu.update"/>), except if its tile location is (0, 0).</remarks>
+        private bool CanShowColorPicker(Chest chest, GameLocation location)
+        {
+            if (chest.TileLocation == Vector2.Zero)
+                return true;
+
+            return
+                object.ReferenceEquals(Game1.currentLocation, location)
+                && Game1.currentLocation.objects.TryGetValue(chest.TileLocation, out SObject obj)
+                && object.ReferenceEquals(obj, chest);
         }
     }
 }
