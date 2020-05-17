@@ -23,9 +23,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public SlingshotAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
-            : base(reflection, rateLimit: 60)
+        public SlingshotAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(modRegistry, reflection, rateLimit: 60)
         {
             this.Config = config;
         }

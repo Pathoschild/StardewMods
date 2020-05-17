@@ -24,9 +24,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public WateringCanAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
-            : base(reflection)
+        public WateringCanAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(modRegistry, reflection)
         {
             this.Config = config;
         }

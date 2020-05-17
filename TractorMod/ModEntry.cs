@@ -91,24 +91,25 @@ namespace Pathoschild.Stardew.TractorMod
 
             // init tractor logic
             {
+                IModRegistry modRegistry = this.Helper.ModRegistry;
                 IReflectionHelper reflection = this.Helper.Reflection;
                 StandardAttachmentsConfig toolConfig = this.Config.StandardAttachments;
                 this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Translation, this.Helper.Reflection, attachments: new IAttachment[]
                 {
-                    new CustomAttachment(this.Config.CustomAttachments, reflection), // should be first so it can override default attachments
-                    new AxeAttachment(toolConfig.Axe, reflection),
-                    new FertilizerAttachment(toolConfig.Fertilizer, reflection),
-                    new GrassStarterAttachment(toolConfig.GrassStarter, reflection),
-                    new HoeAttachment(toolConfig.Hoe, reflection),
-                    new MeleeWeaponAttachment(toolConfig.MeleeWeapon, reflection),
-                    new MilkPailAttachment(toolConfig.MilkPail, reflection),
-                    new PickaxeAttachment(toolConfig.PickAxe, reflection),
-                    new ScytheAttachment(toolConfig.Scythe, reflection),
-                    new SeedAttachment(toolConfig.Seeds, reflection),
-                    new SeedBagAttachment(toolConfig.SeedBagMod, reflection),
-                    new ShearsAttachment(toolConfig.Shears, reflection),
-                    new SlingshotAttachment(toolConfig.Slingshot, reflection),
-                    new WateringCanAttachment(toolConfig.WateringCan, reflection)
+                    new CustomAttachment(this.Config.CustomAttachments, modRegistry, reflection), // should be first so it can override default attachments
+                    new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
+                    new FertilizerAttachment(toolConfig.Fertilizer, modRegistry, reflection),
+                    new GrassStarterAttachment(toolConfig.GrassStarter, modRegistry, reflection),
+                    new HoeAttachment(toolConfig.Hoe, modRegistry, reflection),
+                    new MeleeWeaponAttachment(toolConfig.MeleeWeapon, modRegistry, reflection),
+                    new MilkPailAttachment(toolConfig.MilkPail, modRegistry, reflection),
+                    new PickaxeAttachment(toolConfig.PickAxe, modRegistry, reflection),
+                    new ScytheAttachment(toolConfig.Scythe, modRegistry, reflection),
+                    new SeedAttachment(toolConfig.Seeds, modRegistry, reflection),
+                    new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry, reflection),
+                    new ShearsAttachment(toolConfig.Shears, modRegistry, reflection),
+                    new SlingshotAttachment(toolConfig.Slingshot, modRegistry, reflection),
+                    new WateringCanAttachment(toolConfig.WateringCan, modRegistry, reflection)
                 });
             }
 

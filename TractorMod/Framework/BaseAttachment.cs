@@ -21,11 +21,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>Fetches metadata about loaded mods.</summary>
+        protected IModRegistry ModRegistry { get; }
+
         /// <summary>Simplifies access to private code.</summary>
         protected IReflectionHelper Reflection { get; }
 
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
         private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
+
+        /// <summary>Whether the Deep Woods mod is installed.</summary>
+        private readonly bool HasDeepWoods;
 
 
         /*********
@@ -67,12 +73,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(IReflectionHelper reflection, int rateLimit = 0)
+        protected BaseAttachment(IModRegistry modRegistry, IReflectionHelper reflection, int rateLimit = 0)
         {
+            this.ModRegistry = modRegistry;
             this.Reflection = reflection;
             this.RateLimit = rateLimit;
+
+            this.HasDeepWoods = modRegistry.IsLoaded("maxvollmer.deepwoodsmod");
         }
 
         /// <summary>Start a cooldown if it's not already started.</summary>
@@ -202,7 +212,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     return mineshaft.resourceClumps;
 
                 default:
-                    if (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_"))
+                    if (this.HasDeepWoods && (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_")))
                         return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
                     return new ResourceClump[0];
             }
