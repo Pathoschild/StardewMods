@@ -98,9 +98,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
             if (this.Config.ClearBouldersAndMeteorites)
             {
-                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
+                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile, player, out var applyTool);
                 if (clump != null && (!this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel) || tool.UpgradeLevel >= requiredUpgradeLevel))
-                    return this.UseToolOnTile(tool, tile, player, location);
+                    applyTool(tool);
             }
 
             return false;

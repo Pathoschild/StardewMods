@@ -1,4 +1,8 @@
 # Release notes
+## Upcoming release
+
+* Added compatibility with boulders and stumps added by Farm Type Manager.
+
 ## 4.10.1
 Released 02 May 2020.
 
