@@ -100,7 +100,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile, player, out var applyTool);
                 if (clump != null && (!this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel) || tool.UpgradeLevel >= requiredUpgradeLevel))
+                {
                     applyTool(tool);
+                    return true;
+                }
             }
 
             return false;

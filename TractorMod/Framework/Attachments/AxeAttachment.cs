@@ -96,13 +96,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 // giant crops
                 if (this.Config.CutGiantCrops && clump is GiantCrop)
+                {
                     applyTool(tool);
+                    return true;
+                }
 
                 // big stumps and fallen logs
                 // This needs to check if the axe upgrade level is high enough first, to avoid spamming
                 // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
                 if (this.Config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
+                {
                     applyTool(tool);
+                    return true;
+                }
             }
 
             // cut bushes in large terrain features

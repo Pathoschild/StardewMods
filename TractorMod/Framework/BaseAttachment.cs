@@ -224,9 +224,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
-        protected ResourceClump GetResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile)
         {
-            return this.GetResourceClumpCoveringTile(location, tile, null, out _);
+            return this.GetResourceClumpCoveringTile(location, tile, null, out _) != null;
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>

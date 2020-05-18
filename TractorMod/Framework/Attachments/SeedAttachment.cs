@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
-            if (dirtCoveredByObj || this.GetResourceClumpCoveringTile(location, tile) != null)
+            if (dirtCoveredByObj || this.HasResourceClumpCoveringTile(location, tile))
                 return false;
 
             // sow seeds
