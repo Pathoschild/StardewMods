@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     label: L10n.Item.FishSpawnRulesLocations(
                         locations: string.Join(", ", spawnRules.Locations.Select(p => p.LocationDisplayName).OrderBy(p => p))
                     ),
-                    isMet: spawnRules.Locations.Any(p => p.LocationName == Game1.currentLocation.Name)
+                    isMet: spawnRules.MatchesLocation(Game1.currentLocation.Name)
                 );
             }
             else

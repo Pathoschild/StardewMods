@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed spawn rules not showing "mine level X" matched when you're on that mine level.
+
 ## 1.27.1
 Released 02 May 2020.
 
