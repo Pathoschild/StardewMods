@@ -4,7 +4,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
     internal class MeleeWeaponConfig
     {
         /// <summary>Whether to attack monsters.</summary>
-        public bool AttackMonsters { get; set; } = false;
+        public bool AttackMonsters { get; set; } = true;
 
         /// <summary>Whether to clear dead crops.</summary>
         public bool ClearDeadCrops { get; set; } = true;
