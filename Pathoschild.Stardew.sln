@@ -55,7 +55,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "archived", "archived", "{86
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Common\Common.projitems*{44366a09-9a49-49b5-9d5f-51dc3f751fcb}*SharedItemsImports = 5
+		Common\Common.projitems*{4456349c-749d-430b-8295-d70d2b2d3649}*SharedItemsImports = 5
+		Common\Common.projitems*{495aa31a-abfd-402d-a091-620cdb4bc7e1}*SharedItemsImports = 5
+		Common\Common.projitems*{5ee9feb7-e8b4-4cbb-878b-b794810dd94b}*SharedItemsImports = 5
+		Common\Common.projitems*{6a78a4d9-bce8-43a4-8938-aedba5be98c0}*SharedItemsImports = 5
+		Common\Common.projitems*{7c05ff17-e7aa-485a-a0e9-bab0248cf653}*SharedItemsImports = 5
+		Common\Common.projitems*{7cd586e4-e766-494a-a06f-abac3e0e6c90}*SharedItemsImports = 5
+		Common\Common.projitems*{81b42938-5567-469b-8b92-56e006df588d}*SharedItemsImports = 5
+		Common\Common.projitems*{8fe9bd36-31eb-4a47-9c98-c216ff361664}*SharedItemsImports = 5
+		Common\Common.projitems*{9eecb232-2178-4101-9397-cfb885bc25f2}*SharedItemsImports = 5
 		Common\Common.projitems*{b9e9edfc-e98a-4370-994f-40a9f39a0284}*SharedItemsImports = 13
+		Common\Common.projitems*{ddf905ed-320b-48af-91a5-2a5563f256fa}*SharedItemsImports = 5
+		Common\Common.projitems*{ef4f1a38-6601-4441-b7b1-e9c26b312192}*SharedItemsImports = 5
+		Common\Common.projitems*{ef6d963f-fbc1-444a-b481-b8ca9c034fbc}*SharedItemsImports = 5
+		Common\Common.projitems*{f2c606b1-51d2-48f3-9cf7-2f8cd46daff9}*SharedItemsImports = 5
+		Common\Common.projitems*{fca458cf-d872-47b7-9048-403c56a20905}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
