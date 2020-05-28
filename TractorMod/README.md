@@ -148,9 +148,9 @@ The speed modifier when riding a tractor. Default -2.
 <br>
 Config Menu <br>
 -2 Low<br>
-4 Medium<br>
-8 High<br>
-16 Xtreme<br>
+8 Medium<br>
+16 High<br>
+32 Xtreme<br>
 </td>
 </tr>
 
@@ -166,9 +166,9 @@ The item magnetism amount (higher values attract items from father away). Defaul
 <br>
 Config Menu<br>
 384 Low<br>
-484 Medium<br>
-684 High<br>
-1000 Xtreme<br>
+768 Medium<br>
+3072 High<br>
+6144 Xtreme<br>
 </td>
 </tr>
 
