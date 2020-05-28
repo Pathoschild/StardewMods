@@ -280,11 +280,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (this.GameHelper.IsSocialVillager(npc))
             {
                 // birthday
-                if (npc.Birthday_Season != null)
-                {
-                    SDate birthday = new SDate(npc.Birthday_Day, npc.Birthday_Season);
+                if (this.GameHelper.TryGetDate(npc.Birthday_Day, npc.Birthday_Season, out SDate birthday))
                     yield return new GenericField(this.GameHelper, L10n.Npc.Birthday(), this.Text.Stringify(birthday));
-                }
 
                 // friendship
                 if (Game1.player.friendshipData.ContainsKey(npc.Name))

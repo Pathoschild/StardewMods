@@ -14,6 +14,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
@@ -89,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /****
-        ** Text helpers
+        ** Date/time helpers
         ****/
         /// <summary>Format a game time in military 24-hour notation.</summary>
         /// <param name="time">The time to format.</param>
@@ -107,6 +108,36 @@ namespace Pathoschild.Stardew.LookupAnything
             return number != -1
                 ? Utility.getSeasonNameFromNumber(number)
                 : season;
+        }
+
+        /// <summary>Get a date from its component parts if they're valid.</summary>
+        /// <param name="day">The day of month.</param>
+        /// <param name="season">The season name.</param>
+        /// <param name="date">The resulting date, if valid.</param>
+        /// <returns>Returns whether the date is valid.</returns>
+        public bool TryGetDate(int day, string season, out SDate date)
+        {
+            return this.TryGetDate(day, season, Game1.year, out date);
+        }
+
+        /// <summary>Get a date from its component parts if they're valid.</summary>
+        /// <param name="day">The day of month.</param>
+        /// <param name="season">The season name.</param>
+        /// <param name="year">The year.</param>
+        /// <param name="date">The resulting date, if valid.</param>
+        /// <returns>Returns whether the date is valid.</returns>
+        public bool TryGetDate(int day, string season, int year, out SDate date)
+        {
+            try
+            {
+                date = new SDate(day, season, year);
+                return true;
+            }
+            catch
+            {
+                date = SDate.Now();
+                return false;
+            }
         }
 
         /****
@@ -414,7 +445,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="spriteSize">The largest expected sprite size (measured in tiles).</param>
         public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile, Vector2? spriteSize = null)
         {
-            spriteSize = spriteSize ?? Constant.MaxTargetSpriteSize;
+            spriteSize ??= Constant.MaxTargetSpriteSize;
             return
                 spriteTile.Y >= occludeTile.Y // sprites never extend downward from their tile
                 && Math.Abs(spriteTile.X - occludeTile.X) <= spriteSize.Value.X
