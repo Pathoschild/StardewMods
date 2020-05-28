@@ -166,7 +166,7 @@ The item magnetism amount (higher values attract items from father away). Defaul
 <br>
 Config Menu<br>
 384 Low<br>
-768 Medium<br>
+1536 Medium<br>
 3072 High<br>
 6144 Xtreme<br>
 </td>
