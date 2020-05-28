@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>An API for reading and storing local mod data.</summary>
         private readonly IDataHelper DataHelper;
 
+        /// <summary>Provides multiplayer utilities.</summary>
+        private readonly IMultiplayerHelper Multiplayer;
+
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -42,12 +45,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
+        /// <param name="multiplayer">Provides multiplayer utilities.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IDataHelper dataHelper, IReflectionHelper reflection, ITranslationHelper translations, bool enableShippingBin)
+        public ChestFactory(IDataHelper dataHelper, IMultiplayerHelper multiplayer, IReflectionHelper reflection, ITranslationHelper translations, bool enableShippingBin)
         {
             this.DataHelper = dataHelper;
+            this.Multiplayer = multiplayer;
             this.Reflection = reflection;
             this.Translations = translations;
             this.EnableShippingBin = enableShippingBin;
@@ -111,7 +116,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
                             {
                                 yield return new ManagedChest(
-                                    container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection), 
+                                    container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
                                     location: location,
                                     tile: tile,
                                     defaultDisplayName: this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }),
@@ -265,13 +270,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Get the locations which are accessible to the current player (regardless of settings).</summary>
         private IEnumerable<GameLocation> GetAccessibleLocations()
         {
-            // main player can access chests in any location
-            if (Context.IsMainPlayer)
-                return CommonHelper.GetLocations();
-
-            // secondary player can only safely access chests in their current location
-            // (changes to other locations aren't synced to the other players)
-            return new[] { Game1.player.currentLocation };
+            return Context.IsMainPlayer
+                ? CommonHelper.GetLocations()
+                : this.Multiplayer.GetActiveLocations();
         }
 
         /// <summary>Get the underlying inventory for an <see cref="ItemGrabMenu.context"/> value.</summary>

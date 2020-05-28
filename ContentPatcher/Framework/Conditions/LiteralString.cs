@@ -66,6 +66,13 @@ namespace ContentPatcher.Framework.Conditions
             return Enumerable.Empty<LexTokenToken>();
         }
 
+        /// <summary>Get whether a token string uses the given token.</summary>
+        /// <param name="tokens">The token to find.</param>
+        public bool UsesTokens(params ConditionType[] tokens)
+        {
+            return false;
+        }
+
         /// <summary>Get diagnostic info about the contextual instance.</summary>
         public IContextualState GetDiagnosticState()
         {

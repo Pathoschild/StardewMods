@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed compatibility with Android (thanks to kdau!).
+
 ## 1.8.3
 Released 26 November 2019.
 

@@ -595,7 +595,6 @@ namespace ContentPatcher.Framework.Commands
             if (patch.IsApplied)
                 return null;
 
-            IContext tokenContext = patch.PatchContext;
             IContextualState state = patch.State;
 
             // state error
@@ -615,7 +614,7 @@ namespace ContentPatcher.Framework.Commands
                         ? $"{condition.Name}:{condition.Input.Raw}"
                         : condition.Name
                     orderby displayText
-                    where !condition.IsMatch(tokenContext)
+                    where !condition.IsMatch
                     select $"{displayText}"
                 ).ToArray();
 

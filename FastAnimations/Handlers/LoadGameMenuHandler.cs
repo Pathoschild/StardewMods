@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public LoadGameMenuHandler(int multiplier, IReflectionHelper reflection)
+        public LoadGameMenuHandler(float multiplier, IReflectionHelper reflection)
             : base(multiplier)
         {
             this.Reflection = reflection;
@@ -44,8 +44,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             LoadGameMenu menu = (LoadGameMenu)this.Reflection.GetField<IClickableMenu>(typeof(TitleMenu), "_subMenu").GetValue();
             IReflectedField<int> timerToLoad = this.GetTimerToLoad(menu);
-            for (int i = 1; i < this.Multiplier && timerToLoad.GetValue() > 0; i++)
-                menu.update(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => menu.update(Game1.currentGameTime),
+                until: () => timerToLoad.GetValue() <= 0
+            );
         }
 
 

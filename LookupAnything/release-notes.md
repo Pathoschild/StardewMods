@@ -1,6 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added datamining field formatter for `npc.currentMarriageDialogue`.
+* Improved compatibility with custom NPC mods (including mods which replace non-social NPCs with social ones).
+* Fixed 'number crafted' including some incorrect recipes.
+* Fixed some spawned items incorrectly counted as owned (e.g. weeds and stones).
+* Fixed placed and held torches counted as different items.
+* Fixed cursor incorrectly detected on Android in some cases.
+* Improved translations. Thanks to Andites (updated Russian) and niniack (updated Chinese)!
+
 ## 1.26
 Released 09 March 2020.
 

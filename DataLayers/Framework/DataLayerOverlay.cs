@@ -69,8 +69,11 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The last visible area.</summary>
         private Rectangle LastVisibleArea;
 
+        /// <summary>Whether to show a tile grid by default.</summary>
+        private readonly bool ShowGrid;
+
         /// <summary>The width of grid lines between tiles, if enabled.</summary>
-        private readonly int GridBorderSize;
+        private readonly int GridBorderSize = 1;
 
         /// <summary>The color of grid lines between tiles, if enabled.</summary>
         private readonly Color GridColor = Color.Black;
@@ -105,7 +108,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
             this.BoxContentWidth = this.GetMaxContentWidth(this.Layers, this.LegendColorSize);
             this.CombineOverlappingBorders = combineOverlappingBorders;
-            this.GridBorderSize = showGrid ? 1 : 0;
+            this.ShowGrid = showGrid;
             this.SetLayer(this.Layers.First());
         }
 
@@ -182,7 +185,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
                 // draw tile data
                 bool hasLeftBorder = false, hasRightBorder = false, hasTopBorder = false, hasBottomBorder = false;
-                int gridSize = this.GridBorderSize;
+                int gridSize = this.ShowGrid || this.CurrentLayer.AlwaysShowGrid ? this.GridBorderSize : 0;
                 if (tiles.TryGetValue(tilePos, out TileDrawData tile))
                 {
                     // draw overlay

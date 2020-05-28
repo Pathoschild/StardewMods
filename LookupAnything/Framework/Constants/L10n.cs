@@ -25,20 +25,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /// <summary>Generic field value translations.</summary>
         public static class Generic
         {
-            /// <summary>A value like <c>{{seasonName}} {{dayNumber}}</c>.</summary>
-            /// <param name="seasonName">The name of the current season.</param>
-            /// <param name="seasonNumber">The internal season number.</param>
-            /// <param name="dayNumber">The day of month.</param>
-            /// <param name="year">The year.</param>
-            public static Translation Date(string seasonName, int seasonNumber, int dayNumber, int year) => L10n.Helper.Get("generic.date", new { seasonName, seasonNumber, dayNumber, year });
-
-            /// <summary>A value like <c>{{seasonName}} {{dayNumber}} in year {{Year}}</c>.</summary>
-            /// <param name="seasonName">The name of the current season.</param>
-            /// <param name="seasonNumber">The internal season number.</param>
-            /// <param name="dayNumber">The day of month.</param>
-            /// <param name="year">The year.</param>
-            public static Translation DateWithYear(string seasonName, int seasonNumber, int dayNumber, int year) => L10n.Helper.Get("generic.date-with-year", new { seasonName, seasonNumber, dayNumber, year });
-
             /// <summary>A value like <c>now</c>.</summary>
             public static Translation Now() => L10n.Helper.Get("generic.now");
 
@@ -309,7 +295,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation AnimalsSummary(int count, int max) => L10n.Helper.Get("building.animals.summary", new { count, max });
 
             /// <summary>A value like <c>ready on {{date}}</c>.</summary>
-            public static Translation ConstructionSummary(SDate date) => L10n.Helper.Get("building.construction.summary", new { date });
+            public static Translation ConstructionSummary(SDate date) => L10n.Helper.Get("building.construction.summary", new { date = date.ToLocaleString(withYear: false) });
 
             /// <summary>A value like <c>automated</c>.</summary>
             public static Translation FeedTroughAutomated() => L10n.Helper.Get("building.feed-trough.automated");
@@ -625,7 +611,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation CaskScheduleTomorrow(ItemQuality quality) => L10n.Helper.Get("item.cask-schedule.tomorrow", new { quality = L10n.For(quality) });
 
             /// <summary>A value like <c>{{quality}} in {{count}} days ({{date}})</c>.</summary>
-            public static Translation CaskScheduleInXDays(ItemQuality quality, int count, SDate date) => L10n.Helper.Get("item.cask-schedule.in-x-days", new { quality = L10n.For(quality), count, date });
+            public static Translation CaskScheduleInXDays(ItemQuality quality, int count, SDate date) => L10n.Helper.Get("item.cask-schedule.in-x-days", new { quality = L10n.For(quality), count, date = date.ToLocaleString(withYear: false) });
 
             /// <summary>A value like <c>has {{name}}</c>.</summary>
             public static Translation ContentsPlaced(string name) => L10n.Helper.Get("item.contents.placed", new { name });

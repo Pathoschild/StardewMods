@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The tile covered by the machine.</param>
         public RecyclingMachine(SObject machine, GameLocation location, Vector2 tile)
-            : base(machine, location, tile) { }
+            : base(machine, location, tile, machineTypeId: "RecyclingMachine") { }
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

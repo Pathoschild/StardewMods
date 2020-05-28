@@ -26,8 +26,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         private static Func<GameLocation, bool> IsSmallBeachFarm;
 
-        /// <summary>Get whether a given position is ocean water.</summary>
-        private static Func<Farm, int, int, bool> IsOceanTile;
+        /// <summary>Get the fish that should be available from the given tile.</summary>
+        private static Func<Farm, int, int, FishType> GetFishType;
 
         /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
         private static bool IsInPatch = false;
@@ -42,14 +42,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <param name="addCampfire">Whether to add the campfire to the farm map.</param>
         /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
-        /// <param name="isOceanTile">Get whether a given position is ocean water.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, bool> isOceanTile)
+        /// <param name="getFishType">Get the fish that should be available from the given tile.</param>
+        public static void Hook(HarmonyInstance harmony, IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
         {
             FarmPatcher.Monitor = monitor;
             FarmPatcher.AddCampfire = addCampfire;
             FarmPatcher.UseBeachMusic = useBeachMusic;
             FarmPatcher.IsSmallBeachFarm = isSmallBeachFarm;
-            FarmPatcher.IsOceanTile = isOceanTile;
+            FarmPatcher.GetFishType = getFishType;
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish)),
@@ -93,17 +93,15 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
             {
                 FarmPatcher.IsInPatch = true;
 
-                // get ocean fish
-                if (FarmPatcher.IsOceanTile(__instance, (int)bobberTile.X, (int)bobberTile.Y))
+                FishType type = FarmPatcher.GetFishType(__instance, (int)bobberTile.X, (int)bobberTile.Y);
+                FarmPatcher.Monitor.VerboseLog($"Fishing {type.ToString().ToLower()} tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
+                if (type == FishType.Ocean)
                 {
                     __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Beach");
-                    FarmPatcher.Monitor.VerboseLog($"Fishing ocean tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
                     return false;
                 }
-
-                // get default riverlands fish
-                FarmPatcher.Monitor.VerboseLog($"Fishing river tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
-                return true;
+                else
+                    return true; // run default riverlands logic
             }
             finally
             {

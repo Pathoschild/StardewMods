@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public PamBusHandler(int multiplier)
+        public PamBusHandler(float multiplier)
             : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -33,8 +33,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override void Update(int playerAnimationID)
         {
             GameLocation location = Game1.currentLocation;
-            for (int i = 1; i < this.Multiplier && this.IsEnabled(playerAnimationID); i++)
-                location.UpdateWhenCurrentLocation(Game1.currentGameTime);
+
+            this.ApplySkips(
+                run: () => location.UpdateWhenCurrentLocation(Game1.currentGameTime),
+                until: () => !this.IsEnabled(playerAnimationID)
+            );
         }
     }
 }

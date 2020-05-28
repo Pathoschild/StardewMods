@@ -12,7 +12,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public WeaponSwingHandler(int multiplier)
+        public WeaponSwingHandler(float multiplier)
             : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override void Update(int playerAnimationID)
         {
-            this.SpeedUpPlayer(this.Multiplier, isActive: () => Game1.player.UsingTool);
+            this.SpeedUpPlayer(until: () => !Game1.player.UsingTool);
         }
     }
 }

@@ -2,10 +2,6 @@
     /*********
     ** Generic translations
     *********/
-    // dates (possible tokens: {{seasonName}}, {{seasonNumber}}, {{dayNumber}}, {{year}})
-    "generic.date": "{{seasonName}}{{dayNumber}}日",
-    "generic.date-with-year": "第{{year}}年{{seasonName}}{{dayNumber}}日",
-
     // date names
     "generic.now": "现在",
     "generic.tomorrow": "明天",
@@ -180,7 +176,7 @@
     "location.undergroundMine.level": "矿井层数：{{level}}",
     "location.witchSwamp": "女巫的沼泽",
     "location.woods": "秘密森林",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})", // TODO
+    "location.unknown-fish-area": "{{locationName}} (钓鱼区 {{id}})",
 
 
     /*********
@@ -350,8 +346,8 @@
     "item.contents.placed": "已放置{{name}}",
     "item.contents.ready": "目前{{name}}",
     "item.contents.partial": "{{name}}在{{time}}后完成",
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste": "{{count}} 位没揭露的村民",
+    "item.undiscovered-gift-taste-appended": ", 和 {{count}} 位没揭露的村民",
     "item.needed-for.community-center": "社区中心({{bundles}})",
     "item.needed-for.full-shipment": "全部货物成就(出货一个)",
     "item.needed-for.polyculture": "混合栽培成就(再出货{{count}}个)",
@@ -480,8 +476,8 @@
     "npc.friendship.not-met": "你们还没有见过面",
     "npc.friendship.need-bouquet": "需要花束进行到下一阶段",
     "npc.friendship.need-points": "下一等级需要{{count}}点好感度",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.undiscovered-gift-taste": "{{count}} 个没揭露的品目",
+    "npc.undiscovered-gift-taste-appended": ", 和 {{count}} 个没揭露的品目",
 
 
     /*********

@@ -1,0 +1,71 @@
+{
+    // accessible
+    "accessible.name": "Erişilebilir",
+    "accessible.clear": "Temizle",
+    "accessible.occupied": "Dolu",
+    "accessible.impassable": "Geçilmez",
+    "accessible.warp": "Çözgü",
+
+    // buildable
+    "buildable.name": "Buildable",
+    "buildable.buildable": "Burada Yapılabilir",
+    "buildable.occupied": "İşgal Altında",
+    "buildable.not-buildable": "Burada Yapılamaz",
+
+    // coverage: bee houses
+    "bee-houses.name": "Kapsam: Arı Evleri",
+    "bee-houses.range": "Çiçek Aralığı",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Kapsam: Junimo Huts",
+    "junimo-huts.can-harvest": "Hasat Edebilir",
+    "junimo-huts.cannot-harvest": "Can not Hasat",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Kapsam: Korkuluklar",
+    "scarecrows.protected": "Korumalı",
+    "scarecrows.exposed": "Maruz",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Kapsam: Sprinkler",
+    "sprinklers.covered": "Kaplı",
+    "sprinklers.dry-crops": "Kuru Mahsuller",
+
+    // crops: harvest
+    "crop-harvest.name": "Mahsuller: Hasat için Hazır",
+    "crop-harvest.ready": "Hazır",
+    "crop-harvest.not-ready": "Hazır Değil",
+    "crop-harvest.not-enough-time": "Yeterli Zaman Yok",
+
+    // crops: watered
+    "crop-water.name": "Mahsuller: Sulanan",
+    "crop-water.watered": "Sulanan Mahsul",
+    "crop-water.dry": "Kuru Mahsul",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Mahsuller: Çeltik Bitkileri için Su",
+    "crop-paddy-water.in-range": "Suya Yakın",
+    "crop-paddy-water.not-in-range": "Kuru Arazi",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Mahsuller: Döllenmiş",
+    "crop-fertilizer.fertilizer": "Gübre",
+    "crop-fertilizer.retaining-soil": "Toprağın Toplanması",
+    "crop-fertilizer.speed-gro": "Speed-Gro",
+
+    // machine processing
+    "machines.name": "Makine İşleme",
+    "machines.empty": "Boş",
+    "machines.processing": "İşleme",
+    "machines.finished": "Bitti",
+
+    // tile grid
+    "grid.name": "Döşeme Izgarası",
+
+    // tillable
+    "tillable.name": "sürülebilir",
+    "tillable.tillable": "sürülebilir",
+    "tillable.tilled": "tilled",
+    "tillable.occupied": "İşgal Edildi",
+    "tillable.not-tillable": "Değil sürülebilir "
+}

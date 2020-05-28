@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
+using Pathoschild.Stardew.TractorMod.Framework.Menu;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -437,6 +438,28 @@ namespace Pathoschild.Stardew.TractorMod
                 this.SummonTractor();
             else if (this.Keys.DismissTractor.JustPressedUnique() && Game1.player.isRidingHorse())
                 this.DismissTractor(Game1.player.mount);
+            else if (this.Keys.ConfigMenu.JustPressedUnique())
+                this.ShowConfigMenu();
+
+        }
+
+        /// <summary>
+        /// Creates a new Config Menu and opens it
+        /// </summary>
+        private void ShowConfigMenu()
+        {
+            Game1.activeClickableMenu = new ConfigMenu(Game1.viewport.Width / 2 - (800 + IClickableMenu.borderWidth * 2) / 2, Game1.viewport.Height / 2 - (600 + IClickableMenu.borderWidth * 2) / 2, 800 + IClickableMenu.borderWidth * 2, 600 + IClickableMenu.borderWidth * 2, this.Config);
+            Game1.activeClickableMenu.exitFunction = () => this.ConfigExitFunc();
+
+        }
+
+        /// <summary>
+        /// Saves the Config and updates the tractor after Config Menu is closed
+        /// </summary>
+        private void ConfigExitFunc()
+        {
+            this.Helper.WriteConfig(this.Config);
+            this.TractorManager.Update();
         }
 
         /// <summary>Raised after a mod message is received over the network.</summary>

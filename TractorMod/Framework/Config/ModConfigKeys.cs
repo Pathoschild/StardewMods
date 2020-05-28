@@ -17,7 +17,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>The keys which activate the tractor when held, or none to activate automatically.</summary>
         public KeyBinding HoldToActivate { get; }
 
-
+        /// <summary> The Key to open the config Menu. </summary>
+        public KeyBinding ConfigMenu { get; }
         /*********
         ** Public methods
         *********/
@@ -25,11 +26,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <param name="summonTractor">The keys which summon the tractor.</param>
         /// <param name="dismissTractor">The keys which return the tractor to its home.</param>
         /// <param name="holdToActivate">The keys which activate the tractor when held, or none to activate automatically.</param>
-        public ModConfigKeys(KeyBinding summonTractor, KeyBinding dismissTractor, KeyBinding holdToActivate)
+        public ModConfigKeys(KeyBinding summonTractor, KeyBinding dismissTractor, KeyBinding holdToActivate, KeyBinding configMenu)
         {
             this.SummonTractor = summonTractor;
             this.DismissTractor = dismissTractor;
             this.HoldToActivate = holdToActivate;
+            this.ConfigMenu = configMenu;
         }
     }
 }

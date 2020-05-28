@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Xna.Framework;
 using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework
@@ -8,10 +7,17 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
     internal abstract class BaseAnimationHandler : IAnimationHandler
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The fractional skips left to apply, so fractional multipliers can be smudged over multiple update ticks. For example, a multiplier of 1.5 will skip a frame every other tick.</summary>
+        private float Remainder;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The animation speed multiplier to apply.</summary>
-        protected readonly int Multiplier;
+        protected readonly float Multiplier;
 
 
         /*********
@@ -35,27 +41,53 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        protected BaseAnimationHandler(int multiplier)
+        protected BaseAnimationHandler(float multiplier)
         {
             this.Multiplier = multiplier;
         }
 
-        /// <summary>Speed up the player by the given multiplier for the current update tick.</summary>
-        /// <param name="multiplier">The multiplier to apply to the player.</param>
-        protected void SpeedUpPlayer(int multiplier)
+        /// <summary>Get the number of frames to skip for the current tick.</summary>
+        protected int GetSkipsThisTick()
         {
-            this.SpeedUpPlayer(multiplier, () => true);
+            if (this.Multiplier <= 1)
+                return 0;
+
+            float skips = this.Multiplier + this.Remainder - 1; // 1 is the default speed (i.e. skip zero frames), so subtract it to get the number of skips
+            this.Remainder = skips % 1;
+            return (int)skips;
+        }
+
+        /// <summary>Apply an animation update for each frame that should be skipped in the current tick.</summary>
+        /// <param name="run">Run one animation frame.</param>
+        /// <param name="until">Get whether the animation should stop being skipped.</param>
+        protected void ApplySkips(Action run, Func<bool> until = null)
+        {
+            this.ApplySkips(this.GetSkipsThisTick(), run, until);
+        }
+
+        /// <summary>Apply an animation update for each frame that should be skipped.</summary>
+        /// <param name="skips">The number of frames to skip for the current tick.</param>
+        /// <param name="run">Run one animation frame.</param>
+        /// <param name="until">Get whether the animation should stop being skipped.</param>
+        protected void ApplySkips(int skips, Action run, Func<bool> until = null)
+        {
+            for (int i = 0; i < skips; i++)
+            {
+                if (until?.Invoke() == true)
+                    break;
+
+                run();
+            }
         }
 
         /// <summary>Speed up the player by the given multiplier for the current update tick.</summary>
-        /// <param name="multiplier">The multiplier to apply to the player.</param>
-        /// <param name="isActive">A lambda which returns whether the animation is still active.</param>
-        protected void SpeedUpPlayer(int multiplier, Func<bool> isActive)
+        /// <param name="until">Get whether the animation should stop being skipped.</param>
+        protected void SpeedUpPlayer(Func<bool> until = null)
         {
-            GameTime gameTime = Game1.currentGameTime;
-            GameLocation location = Game1.player.currentLocation;
-            for (int i = 1; i < multiplier && isActive(); i++)
-                Game1.player.Update(gameTime, location);
+            this.ApplySkips(
+                run: () => Game1.player.Update(Game1.currentGameTime, Game1.player.currentLocation),
+                until
+            );
         }
     }
 }

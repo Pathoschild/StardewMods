@@ -1,6 +1,20 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added machine type priority.
+* Added support for berry bushes.
+* Shipping bins now have a lower priority than other machines by default.
+* Optimized machine scan when a location changes.
+* Internal change to let certain mods patch Automate behaviour more easily.
+* Fixed broken custom items in chests causing machines to stop working and spam errors. Automate now ignores broken items.
+* Fixed bushes in garden pots not automated.
+* Fixed furnaces not recognizing bouquets.
+* Fixed automated trash cans producing different output than they would if checked manually in some cases.
+* Fixed giftbox being automated as a chest.
+* Fixed search error if you have broken XNB mods.
+* Moved `data.json` into standard `assets` subfolder.
+
 ## 1.16
 Released 08 March 2020.
 

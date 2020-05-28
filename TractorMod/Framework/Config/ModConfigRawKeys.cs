@@ -18,6 +18,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>The keys which activate the tractor when held, or none to activate automatically.</summary>
         public string HoldToActivate { get; set; } = "";
 
+        /// <summary> The Key to open the config Menu. </summary>
+        public string ConfigMenu { get; set; } = SButton.F2.ToString();
 
         /*********
         ** Public fields
@@ -30,7 +32,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
             return new ModConfigKeys(
                 summonTractor: CommonHelper.ParseButtons(this.SummonTractor, input, monitor, nameof(this.SummonTractor)),
                 dismissTractor: CommonHelper.ParseButtons(this.DismissTractor, input, monitor, nameof(this.DismissTractor)),
-                holdToActivate: CommonHelper.ParseButtons(this.HoldToActivate, input, monitor, nameof(this.HoldToActivate))
+                holdToActivate: CommonHelper.ParseButtons(this.HoldToActivate, input, monitor, nameof(this.HoldToActivate)),
+                configMenu: CommonHelper.ParseButtons(this.ConfigMenu, input, monitor, nameof(this.ConfigMenu))
             );
         }
     }

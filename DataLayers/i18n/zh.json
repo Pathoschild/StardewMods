@@ -59,6 +59,9 @@
     "machines.processing": "运转中",
     "machines.finished": "已完成",
 
+    // tile grid
+    "grid.name": "Tile Grid", // TODO
+
     // tillable
     "tillable.name": "能否耕地",
     "tillable.tillable": "可耕地",

@@ -55,7 +55,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryParseRange(input, out int min, out int max, out string error))
                 return Enumerable.Empty<string>(); // error will be shown in validation
 
-            return Enumerable.Range(start: min, count: max - min).Select(p => p.ToString());
+            return Enumerable.Range(start: min, count: max - min + 1).Select(p => p.ToString());
         }
 
 

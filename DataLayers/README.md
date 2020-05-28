@@ -78,10 +78,13 @@ Shows where you can till dirt with your hoe. Useful for planning crop layouts.
 > ![](docs/screenshots/tillable.png)
 
 ### Grid
-There's an optional tile grid when viewing data layers:
-> ![](docs/screenshots/grid.png)
+The grid layer shows [tile borders](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Tiles)
+useful for planning layouts, calculating fishing distance, etc:
+> ![](docs/screenshots/grid-layer.png)
 
-It's disabled by default, but you can [edit the `config.json` file](#configure) to enable it.
+You can optionally [edit the `config.json` file](#configure) to enable the grid for all layers
+instead:
+> ![](docs/screenshots/grid-option.png)
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that

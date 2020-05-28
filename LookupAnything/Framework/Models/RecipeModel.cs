@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -41,6 +43,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The item ID produced by this recipe, if applicable.</summary>
         public int? OutputItemIndex { get; }
 
+        /// <summary>The item type produced by this recipe, if applicable.</summary>
+        public ItemType? OutputItemType { get; }
+
         /// <summary>The minimum number of items output by the recipe.</summary>
         public int MinOutput { get; }
 
@@ -71,10 +76,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="isForMachine">Get whether this recipe is for the given machine.</param>
         /// <param name="exceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
         /// <param name="outputItemIndex">The item ID produced by this recipe, if applicable.</param>
+        /// <param name="outputItemType">The item type produced by this recipe, if applicable.</param>
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)
@@ -98,6 +104,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.Item = item;
             this.MustBeLearned = mustBeLearned;
             this.OutputItemIndex = outputItemIndex;
+            this.OutputItemType = outputItemType;
             this.MinOutput = minOutput.Value;
             this.MaxOutput = maxOutput.Value;
             this.OutputChance = outputChance > 0 && outputChance < 100 ? outputChance.Value : 100;
@@ -116,12 +123,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                     .Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                 item: item => recipe.createItem(),
                 mustBeLearned: true,
-                outputItemIndex: reflectionHelper.GetField<List<int>>(recipe, "itemToProduce").GetValue()[0],
                 minOutput: recipe.numberProducedPerCraft,
                 machineParentSheetIndex: null,
                 isForMachine: obj => false
             )
-        { }
+        {
+            this.OutputItemIndex = reflectionHelper.GetField<List<int>>(recipe, "itemToProduce").GetValue()[0];
+            this.OutputItemType = this.GetItemType(recipe, this.OutputItemIndex.Value);
+        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="other">The other recipe to clone.</param>
@@ -135,6 +144,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 mustBeLearned: other.MustBeLearned,
                 exceptIngredients: other.ExceptIngredients,
                 outputItemIndex: other.OutputItemIndex,
+                outputItemType: other.OutputItemType,
                 minOutput: other.MinOutput,
                 machineParentSheetIndex: other.MachineParentSheetIndex,
                 isForMachine: other.IsForMachine
@@ -170,6 +180,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 default:
                     return -1;
             }
+        }
+
+        /// <summary>Get the item type produced by a recipe.</summary>
+        /// <param name="recipe">The recipe.</param>
+        /// <param name="itemID">The produced item ID.</param>
+        /// <remarks>Derived from <see cref="CraftingRecipe.createItem"/>.</remarks>
+        private ItemType GetItemType(CraftingRecipe recipe, int itemID)
+        {
+            if (recipe.bigCraftable)
+                return ItemType.BigCraftable;
+
+            if (itemID >= Ring.ringLowerIndexRange && itemID <= Ring.ringUpperIndexRange || itemID == 801)
+                return ItemType.Ring;
+
+            return ItemType.Object;
         }
     }
 }

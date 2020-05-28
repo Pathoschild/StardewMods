@@ -1,4 +1,4 @@
-﻿using Pathoschild.Stardew.FastAnimations.Framework;
+using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
-        public BreakingGeodeHandler(int multiplier)
+        public BreakingGeodeHandler(float multiplier)
             : base(multiplier) { }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -29,8 +29,9 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             GeodeMenu menu = (GeodeMenu)Game1.activeClickableMenu;
 
-            for (int i = 1; i < this.Multiplier; i++)
-                menu.update(Game1.currentGameTime);
+            this.ApplySkips(
+                () => menu.update(Game1.currentGameTime)
+            );
         }
     }
 }

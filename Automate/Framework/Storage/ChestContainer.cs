@@ -123,26 +123,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         {
             foreach (Item item in this.Chest.items.ToArray())
             {
-                if (item != null)
-                {
-                    ITrackedStack stack = null;
-                    try
-                    {
-                        stack = this.GetTrackedItem(item);
-                    }
-                    catch (Exception ex)
-                    {
-                        string error = $"Failed to retrieve item #{item.ParentSheetIndex} ('{item.Name}'";
-                        if (item is SObject obj && obj.preservedParentSheetIndex.Value >= 0)
-                            error += $", preserved item #{obj.preservedParentSheetIndex.Value}";
-                        error += $") from container '{this.Chest.Name}' at {this.Location.Name} (tile: {this.TileArea.X}, {this.TileArea.Y}).";
-
-                        throw new InvalidOperationException(error, ex);
-                    }
-
-                    if (stack != null)
-                        yield return stack;
-                }
+                ITrackedStack stack = this.GetTrackedItem(item);
+                if (stack != null)
+                    yield return stack;
             }
         }
 
@@ -168,8 +151,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             {
                 if (item != null && predicate(item))
                 {
+                    ITrackedStack stack = this.GetTrackedItem(item);
+                    if (stack == null)
+                        continue;
+
                     countFound += item.Stack;
-                    yield return this.GetTrackedItem(item);
+                    yield return stack;
                     if (countFound >= count)
                         yield break;
                 }
@@ -180,7 +167,26 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="item">The item to track.</param>
         private ITrackedStack GetTrackedItem(Item item)
         {
-            return new TrackedItem(item, onEmpty: i => this.Chest.items.Remove(i));
+            if (item == null)
+                return null;
+
+            try
+            {
+                return new TrackedItem(item, onEmpty: i => this.Chest.items.Remove(i));
+            }
+            catch (KeyNotFoundException)
+            {
+                return null; // invalid/broken item, silently ignore it
+            }
+            catch (Exception ex)
+            {
+                string error = $"Failed to retrieve item #{item.ParentSheetIndex} ('{item.Name}'";
+                if (item is SObject obj && obj.preservedParentSheetIndex.Value >= 0)
+                    error += $", preserved item #{obj.preservedParentSheetIndex.Value}";
+                error += $") from container '{this.Chest.Name}' at {this.Location.Name} (tile: {this.TileArea.X}, {this.TileArea.Y}).";
+
+                throw new InvalidOperationException(error, ex);
+            }
         }
 
         /// <summary>Migrate legacy options stored in a chest name.</summary>
