@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Common.Integrations.GenericModConfigMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations.FarmExpansion;
@@ -168,6 +170,64 @@ namespace Pathoschild.Stardew.TractorMod
             {
                 farmExpansion.AddFarmBluePrint(this.GetBlueprint());
                 farmExpansion.AddExpansionBluePrint(this.GetBlueprint());
+            }
+            GenericModMenuIntegraion genericModConfigMenu = new GenericModMenuIntegraion(this.Helper.ModRegistry, this.Monitor);
+            if (genericModConfigMenu.IsLoaded)
+            {
+                this.CreateMenu(genericModConfigMenu);
+            }
+        }
+
+        /// <summary>
+        /// Creates the home screen config menu
+        /// </summary>
+        /// <param name="genericModConfigMenu">Integration for the Generic Mod Config Menu API</param>
+        public void CreateMenu(GenericModMenuIntegraion genericModConfigMenu)
+        {
+
+            genericModConfigMenu.RegisterModConfig(this.ModManifest, () => this.Config = new ModConfig(), () => this.Helper.WriteConfig(this.Config));
+            genericModConfigMenu.RegisterLabel(this.ModManifest, "Basic Config Options", "Config Options");
+
+            genericModConfigMenu.RegisterLabel(this.ModManifest, "", "");
+            Regex r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+
+            foreach (var property in this.Config.GetType().GetProperties())
+            {
+                string label = r.Replace(property.Name, " ");
+                if (property.PropertyType == typeof(bool))
+                {
+                    genericModConfigMenu.RegisterSimpleOption(this.ModManifest, label, "", () => (bool)property.GetValue(this.Config, null), (bool val) => property.SetValue(this.Config, val, null));
+                }
+                else if (property.PropertyType == typeof(int))
+                {
+                    //Don't do anything with the price
+                    if (property.Name.Contains("Price"))
+                        continue;
+
+                    var defaultValues = new ModConfig();
+                    foreach (var defaultProperty in defaultValues.GetType().GetProperties())
+                    {
+                        if (property.Name == defaultProperty.Name)
+                        {
+                            int defaultValue = (int)defaultProperty.GetValue(defaultValues);
+                            genericModConfigMenu.RegisterClampedOption(this.ModManifest, label, "", () => (int)property.GetValue(this.Config, null), (int val) => property.SetValue(this.Config, val, null), defaultValue, Math.Abs(defaultValue * 15));
+                        }
+                    }
+
+                }
+            }
+
+            genericModConfigMenu.RegisterLabel(this.ModManifest, "Tool Config Options", "Config Options");
+            foreach (var field in this.Config.StandardAttachments.GetType().GetFields())
+            {
+                string label = r.Replace(field.Name, " ");
+                genericModConfigMenu.RegisterLabel(this.ModManifest, label, "Config Options");
+                object subValue = field.GetValue(this.Config.StandardAttachments);
+                foreach (var property in field.FieldType.GetProperties())
+                {
+                    label = r.Replace(property.Name, " ");
+                    genericModConfigMenu.RegisterSimpleOption(this.ModManifest, label, "", () => (bool)property.GetValue(subValue), (bool val) => property.SetValue(subValue, val, null));
+                }
             }
         }
 
