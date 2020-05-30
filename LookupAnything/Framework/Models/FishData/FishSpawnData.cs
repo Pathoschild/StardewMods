@@ -47,10 +47,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
             this.IsUnique = isUnique;
         }
 
-        /// <summary>Get whether the fish is available in given location name.</summary>
-        public bool MatchesLocation(string currentLocationName)
+        /// <summary>Get whether the fish is available in a given location name.</summary>
+        /// <param name="locationName">The location name to match.</param>
+        public bool MatchesLocation(string locationName)
         {
-            return this.Locations.Any(p => p.MatchesLocation(currentLocationName));
+            return this.Locations.Any(p => p.MatchesLocation(locationName));
         }
     }
 }
