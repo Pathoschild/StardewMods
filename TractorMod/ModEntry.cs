@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Common.Integrations.GenericModConfigMenu;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations.FarmExpansion;
@@ -171,61 +169,14 @@ namespace Pathoschild.Stardew.TractorMod
                 farmExpansion.AddFarmBluePrint(this.GetBlueprint());
                 farmExpansion.AddExpansionBluePrint(this.GetBlueprint());
             }
-            var configMenu = new GenericModConfigMenuIntegration(this.Helper.ModRegistry, this.Monitor);
-            if (configMenu.IsLoaded)
-                this.CreateMenu(configMenu);
-        }
 
-        /// <summary>
-        /// Creates the home screen config menu
-        /// </summary>
-        /// <param name="configMenu">Integration for the Generic Mod Config Menu API</param>
-        public void CreateMenu(GenericModConfigMenuIntegration configMenu)
-        {
-            configMenu.RegisterModConfig(this.ModManifest, () => this.Config = new ModConfig(), () => this.Helper.WriteConfig(this.Config));
-            configMenu.RegisterLabel(this.ModManifest, "Basic Config Options", "Config Options");
-
-            configMenu.RegisterLabel(this.ModManifest, "", "");
-            Regex r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
-
-            foreach (var property in this.Config.GetType().GetProperties())
-            {
-                string label = r.Replace(property.Name, " ");
-                if (property.PropertyType == typeof(bool))
-                {
-                    configMenu.RegisterSimpleOption(this.ModManifest, label, "", () => (bool)property.GetValue(this.Config, null), (bool val) => property.SetValue(this.Config, val, null));
-                }
-                else if (property.PropertyType == typeof(int))
-                {
-                    //Don't do anything with the price
-                    if (property.Name.Contains("Price"))
-                        continue;
-
-                    var defaultValues = new ModConfig();
-                    foreach (var defaultProperty in defaultValues.GetType().GetProperties())
-                    {
-                        if (property.Name == defaultProperty.Name)
-                        {
-                            int defaultValue = (int)defaultProperty.GetValue(defaultValues);
-                            configMenu.RegisterClampedOption(this.ModManifest, label, "", () => (int)property.GetValue(this.Config, null), (int val) => property.SetValue(this.Config, val, null), defaultValue, Math.Abs(defaultValue * 15));
-                        }
-                    }
-
-                }
-            }
-
-            configMenu.RegisterLabel(this.ModManifest, "Tool Config Options", "Config Options");
-            foreach (var field in this.Config.StandardAttachments.GetType().GetFields())
-            {
-                string label = r.Replace(field.Name, " ");
-                configMenu.RegisterLabel(this.ModManifest, label, "Config Options");
-                object subValue = field.GetValue(this.Config.StandardAttachments);
-                foreach (var property in field.FieldType.GetProperties())
-                {
-                    label = r.Replace(property.Name, " ");
-                    configMenu.RegisterSimpleOption(this.ModManifest, label, "", () => (bool)property.GetValue(subValue), (bool val) => property.SetValue(subValue, val, null));
-                }
-            }
+            // add Generic Mod Config Menu integration
+            var configMenu = new GenericModConfigMenuIntegrationForTractor(
+                getConfig: () => this.Config,
+                reset: () => this.Helper.WriteConfig(this.Config),
+                saveAndApply: () => this.Helper.WriteConfig(this.Config)
+            );
+            configMenu.Register(this.Helper.ModRegistry, this.Monitor, this.ModManifest);
         }
 
         /// <summary>The event called after a save slot is loaded.</summary>
