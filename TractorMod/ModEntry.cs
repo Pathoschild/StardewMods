@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.TractorMod
                     new PickaxeAttachment(toolConfig.PickAxe, modRegistry, reflection),
                     new ScytheAttachment(toolConfig.Scythe, modRegistry, reflection),
                     new SeedAttachment(toolConfig.Seeds, modRegistry, reflection),
-                    new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry, reflection),
+                    helper.ModRegistry.IsLoaded(SeedBagAttachment.ModId) ? new SeedBagAttachment(toolConfig.SeedBagMod, modRegistry, reflection) : null,
                     new ShearsAttachment(toolConfig.Shears, modRegistry, reflection),
                     new SlingshotAttachment(toolConfig.Slingshot, modRegistry, reflection),
                     new WateringCanAttachment(toolConfig.WateringCan, modRegistry, reflection)
@@ -171,7 +171,7 @@ namespace Pathoschild.Stardew.TractorMod
             }
 
             // add Generic Mod Config Menu integration
-            var configMenu = new GenericModConfigMenuIntegrationForTractor(
+            new GenericModConfigMenuIntegrationForTractor(
                 getConfig: () => this.Config,
                 reset: () =>
                 {
@@ -182,8 +182,7 @@ namespace Pathoschild.Stardew.TractorMod
                 modRegistry: this.Helper.ModRegistry,
                 monitor: this.Monitor,
                 manifest: this.ModManifest
-            );
-            configMenu.Register();
+            ).Register();
         }
 
         /// <summary>The event called after a save slot is loaded.</summary>

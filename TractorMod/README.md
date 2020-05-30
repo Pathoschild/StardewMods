@@ -219,7 +219,8 @@ field                    | default | effect
 `ClearFruitTreeSeed`     | false   | Whether to clear fruit tree seeds.
 `ClearFruitTreeSaplings` | false   | Whether to clear fruit trees that aren't fully grown.
 `CutGrownFruitTrees`     | false   | Whether to clear fully-grown fruit trees.
-`ClearTreeSeeds`         | false   | Whether to clear non-fruit trees that aren't fully grown.
+`ClearTreeSeeds`         | false   | Whether to clear non-fruit tree seeds.
+`ClearTreeSaplings`      | false   | Whether to clear non-fruit trees that aren't fully grown.
 `CutGrownTrees`          | false   | Whether to clear full-grown non-fruit trees.
 `CutTappedTrees`         | false   | Whether to cut non-fruit trees that have a tapper.
 `CutBushes`              | false   | Whether to cut choppable bushes.
@@ -243,7 +244,7 @@ Configure the tractor effects when holding a fertilizer item:
 
 field    | default | effect
 -------- | ------- | ------
-`Enable` | true    | Whether to apply the fertilizer to tilled dirt.
+`Enable` | true    | Whether to apply the fertilizer to crops and tilled dirt.
 
 </td>
 </tr>
@@ -361,7 +362,7 @@ field               | default | effect
 `HarvestForage`     | true    | Whether to harvest forage.
 `HarvestFruitTrees` | true    | Whether to harvest fruits on fruit trees.
 `HarvestMachines`   | false   | Whether to collect machine output.
-`HarvestGrass`      | true    | Whether to cut down grass. If you have free silo space, this gives you hay as usual.
+`HarvestGrass`      | true    | Whether to cut tall grass. If you have free silo space, this gives you hay as usual.
 `ClearDeadCrops`    | true    | Whether to clear dead crops.
 `ClearWeeds`        | true    | Whether to clear weeds.
 

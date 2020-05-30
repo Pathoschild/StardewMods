@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Keys = keys;
             this.Translation = translation;
             this.Reflection = reflection;
-            this.Attachments = attachments.ToArray();
+            this.Attachments = attachments.Where(p => p != null).ToArray();
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
         }
 

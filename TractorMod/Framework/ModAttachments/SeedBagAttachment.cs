@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /*********
         ** Accessors
         *********/
+        /// <summary>The unique ID for the Seed Bag mod.</summary>
+        internal const string ModId = "Platonymous.SeedBag";
+
         /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
         internal const string SeedBagTypeName = "SeedBag.SeedBagTool";
 

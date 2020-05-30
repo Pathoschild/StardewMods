@@ -82,17 +82,45 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="description">A description shown on hover, if any.</param>
         /// <param name="get">Get the current value.</param>
         /// <param name="set">Set a new value.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddCheckbox(string label, string description, Func<TConfig, bool> get, Action<TConfig, bool> set)
+        /// <param name="enable">Whether the field is enabled.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddCheckbox(string label, string description, Func<TConfig, bool> get, Action<TConfig, bool> set, bool enable = true)
         {
             this.AssertLoaded();
 
-            this.ModApi.RegisterSimpleOption(
-                mod: this.ConsumerManifest,
-                optionName: label,
-                optionDesc: description,
-                optionGet: () => get(this.GetConfig()),
-                optionSet: val => set(this.GetConfig(), val)
-            );
+            if (enable)
+            {
+                this.ModApi.RegisterSimpleOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val)
+                );
+            }
+
+            return this;
+        }
+
+        /// <summary>Add a checkbox to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        /// <param name="enable">Whether the field is enabled.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddTextbox(string label, string description, Func<TConfig, string> get, Action<TConfig, string> set, bool enable = true)
+        {
+            this.AssertLoaded();
+
+            if (enable)
+            {
+                this.ModApi.RegisterSimpleOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val)
+                );
+            }
 
             return this;
         }
@@ -104,19 +132,22 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="set">Set a new value.</param>
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, int> get, Action<TConfig, int> set, int min, int max)
+        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, int> get, Action<TConfig, int> set, int min, int max, bool enable = true)
         {
             this.AssertLoaded();
 
-            this.ModApi.RegisterClampedOption(
-                mod: this.ConsumerManifest,
-                optionName: label,
-                optionDesc: description,
-                optionGet: () => get(this.GetConfig()),
-                optionSet: val => set(this.GetConfig(), val),
-                min: min,
-                max: max
-            );
+            if (enable)
+            {
+                this.ModApi.RegisterClampedOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val),
+                    min: min,
+                    max: max
+                );
+            }
 
             return this;
         }

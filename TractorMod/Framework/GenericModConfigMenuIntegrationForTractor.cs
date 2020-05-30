@@ -1,6 +1,7 @@
 using System;
-using System.Text.RegularExpressions;
+using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
@@ -14,8 +15,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The Generic Mod Config Menu integration.</summary>
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
 
-        /// <summary>Get the current config model.</summary>
-        private readonly Func<ModConfig> GetConfig;
+        /// <summary>An API for fetching metadata about loaded mods.</summary>
+        private readonly IModRegistry ModRegistry;
 
 
         /*********
@@ -31,7 +32,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public GenericModConfigMenuIntegrationForTractor(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Action reset, Action saveAndApply)
         {
             this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
-            this.GetConfig = getConfig;
+            this.ModRegistry = modRegistry;
         }
 
         /// <summary>Register the config menu if available.</summary>
@@ -43,48 +44,333 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             menu
                 .RegisterConfig()
-                .AddLabel("Basic Config Options", "Config Options")
-                .AddLabel("", "");
 
-            Regex r = new Regex(@"(?<=[A-Z])(?=[A-Z][a-z])|(?<=[^A-Z])(?=[A-Z])|(?<=[A-Za-z])(?=[^A-Za-z])");
+                // main options
+                .AddLabel("Main Options")
+                .AddNumberField(
+                    label: "Distance",
+                    description: "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default 1; a value of 15 covers most of the visible screen, and higher values may negatively impact game performance.",
+                    get: config => config.Distance,
+                    set: (config, value) => config.Distance = value,
+                    min: 1,
+                    max: 16
+                )
+                .AddNumberField(
+                    label: "Tractor Speed",
+                    description: "The speed modifier when riding a tractor. Default -2.",
+                    get: config => config.TractorSpeed,
+                    set: (config, value) => config.TractorSpeed = value,
+                    min: -5,
+                    max: 10
+                )
+                .AddNumberField(
+                    label: "Magnetic Radius",
+                    description: "The item magnetism amount (higher values attract items from father away). Default 384.",
+                    get: config => config.MagneticRadius,
+                    set: (config, value) => config.MagneticRadius = value,
+                    min: 0,
+                    max: 1000
+                )
+                .AddNumberField(
+                    label: "Build Price",
+                    description: "The gold price to buy a tractor garage. Default 150,000g.",
+                    get: config => config.BuildPrice,
+                    set: (config, value) => config.BuildPrice = value,
+                    min: 0,
+                    max: 1_000_000
+                )
+                .AddCheckbox(
+                    label: "Can Summon Without Garage",
+                    description: "Whether you can summon a temporary tractor without building a garage first. Default false.",
+                    get: config => config.CanSummonWithoutGarage,
+                    set: (config, value) => config.CanSummonWithoutGarage = value
+                )
+                .AddCheckbox(
+                    label: "Invincible on Tractor",
+                    description: "Whether you should be immune to damage from any source when riding the tractor. Default true.",
+                    get: config => config.InvincibleOnTractor,
+                    set: (config, value) => config.InvincibleOnTractor = value
+                )
+                .AddCheckbox(
+                    label: "Highlight Radius (Debug)",
+                    description: "Whether to highlight the tractor radius when riding one, to help visualize the distance option. Default false.",
+                    get: config => config.HighlightRadius,
+                    set: (config, value) => config.HighlightRadius = value
+                )
 
-            foreach (var property in this.GetConfig().GetType().GetProperties())
-            {
-                string label = r.Replace(property.Name, " ");
-                if (property.PropertyType == typeof(bool))
-                    menu.AddCheckbox(label, "", config => (bool)property.GetValue(config, null), (config, val) => property.SetValue(config, val, null));
+                // axe
+                .AddLabel("Axe Features")
+                .AddCheckbox(
+                    label: "Chop Fruit Trees (Seeds)",
+                    description: "Whether the axe clears fruit tree seeds. Default false.",
+                    get: config => config.StandardAttachments.Axe.ClearFruitTreeSeeds,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearFruitTreeSeeds = value
+                )
+                .AddCheckbox(
+                    label: "Chop Fruit Trees (Saplings)",
+                    description: "Whether the axe clears fruit trees which aren't fully grown. Default false.",
+                    get: config => config.StandardAttachments.Axe.ClearFruitTreeSaplings,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearFruitTreeSaplings = value
+                )
+                .AddCheckbox(
+                    label: "Chop Fruit Trees (Grown)",
+                    description: "Whether the axe cuts fully-grown fruit trees. Default false.",
+                    get: config => config.StandardAttachments.Axe.CutGrownFruitTrees,
+                    set: (config, value) => config.StandardAttachments.Axe.CutGrownFruitTrees = value
+                )
+                .AddCheckbox(
+                    label: "Chop Trees (Seeds)",
+                    description: "Whether the axe clears non-fruit tree seeds. Default false.",
+                    get: config => config.StandardAttachments.Axe.ClearTreeSeeds,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearTreeSeeds = value
+                )
+                .AddCheckbox(
+                    label: "Chop Trees (Saplings)",
+                    description: "Whether the axe clears non-fruit trees which aren't fully grown. Default false.",
+                    get: config => config.StandardAttachments.Axe.ClearTreeSaplings,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearTreeSaplings = value
+                )
+                .AddCheckbox(
+                    label: "Chop Trees (Grown)",
+                    description: "Whether the axe clears fully-grown non-fruit trees. Default false.",
+                    get: config => config.StandardAttachments.Axe.CutGrownTrees,
+                    set: (config, value) => config.StandardAttachments.Axe.CutGrownTrees = value
+                )
+                .AddCheckbox(
+                    label: "Chop Bushes",
+                    description: "Whether the axe cuts choppable bushes. Default false.",
+                    get: config => config.StandardAttachments.Axe.CutBushes,
+                    set: (config, value) => config.StandardAttachments.Axe.CutBushes = value
+                )
+                .AddCheckbox(
+                    label: "Chop Crops (Dead)",
+                    description: "Whether the axe clears dead crops. Default true.",
+                    get: config => config.StandardAttachments.Axe.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Chop Crops (Live)",
+                    description: "Whether the axe clears live crops. Default false.",
+                    get: config => config.StandardAttachments.Axe.ClearLiveCrops,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearLiveCrops = value
+                )
+                .AddCheckbox(
+                    label: "Chop Crops (Giant)",
+                    description: "Whether the axe cuts giant crops. Default true.",
+                    get: config => config.StandardAttachments.Axe.CutGiantCrops,
+                    set: (config, value) => config.StandardAttachments.Axe.CutGiantCrops = value
+                )
+                .AddCheckbox(
+                    label: "Chop Debris",
+                    description: "Whether the axe clears debris like weeds, twigs, giant stumps, and fallen logs. Default true.",
+                    get: config => config.StandardAttachments.Axe.ClearDebris,
+                    set: (config, value) => config.StandardAttachments.Axe.ClearDebris = value
+                )
 
-                else if (property.PropertyType == typeof(int))
-                {
-                    //Don't do anything with the price
-                    if (property.Name.Contains("Price"))
-                        continue;
+                // hoe
+                .AddLabel("Hoe Features")
+                .AddCheckbox(
+                    label: "Till Dirt",
+                    description: "Whether the hoe tills empty dirt. Default true.",
+                    get: config => config.StandardAttachments.Hoe.TillDirt,
+                    set: (config, value) => config.StandardAttachments.Hoe.TillDirt = value
+                )
+                .AddCheckbox(
+                    label: "Clear Weeds",
+                    description: "Whether the hoe clears weeds. Default true.",
+                    get: config => config.StandardAttachments.Hoe.ClearWeeds,
+                    set: (config, value) => config.StandardAttachments.Hoe.ClearWeeds = value
+                )
+                .AddCheckbox(
+                    label: "Dig Artifact Spots",
+                    description: "Whether the hoe digs artifact spots. Default true.",
+                    get: config => config.StandardAttachments.Hoe.DigArtifactSpots,
+                    set: (config, value) => config.StandardAttachments.Hoe.DigArtifactSpots = value
+                )
 
-                    var defaultValues = new ModConfig();
-                    foreach (var defaultProperty in defaultValues.GetType().GetProperties())
-                    {
-                        if (property.Name == defaultProperty.Name)
-                        {
-                            int defaultValue = (int)defaultProperty.GetValue(defaultValues);
-                            menu.AddNumberField(label, "", config => (int)property.GetValue(config, null), (config, val) => property.SetValue(config, val, null), defaultValue, Math.Abs(defaultValue * 15));
-                        }
-                    }
+                // pickaxe
+                .AddLabel("Pickaxe Features")
+                .AddCheckbox(
+                    label: "Clear Debris",
+                    description: "Whether the pickaxe clears debris. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.ClearDebris,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearDebris = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether the pickaxe clears dead crops. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Clear Tilled Dirt",
+                    description: "Whether the pickaxe clears tilled dirt. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.ClearDirt,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearDirt = value
+                )
+                .AddCheckbox(
+                    label: "Clear Weeds",
+                    description: "Whether the pickaxe clears weeds. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.ClearWeeds,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearWeeds = value
+                )
+                .AddCheckbox(
+                    label: "Break Flooring",
+                    description: "Whether the pickaxe breaks placed flooring. Default false.",
+                    get: config => config.StandardAttachments.PickAxe.ClearFlooring,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearFlooring = value
+                )
+                .AddCheckbox(
+                    label: "Break Boulders and Meteorites",
+                    description: "Whether the pickaxe breaks boulders and meteorites. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.ClearBouldersAndMeteorites,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearBouldersAndMeteorites = value
+                )
+                .AddCheckbox(
+                    label: "Break Objects",
+                    description: "Whether the pickaxe breaks placed objects. Default false.",
+                    get: config => config.StandardAttachments.PickAxe.ClearObjects,
+                    set: (config, value) => config.StandardAttachments.PickAxe.ClearObjects = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether the pickaxe breaks containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.PickAxe.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.PickAxe.BreakMineContainers = value
+                )
 
-                }
-            }
+                // scythe
+                .AddLabel("Scythe Features")
+                .AddCheckbox(
+                    label: "Harvest Crops",
+                    description: "Whether the scythe harvests crops. Default true.",
+                    get: config => config.StandardAttachments.Scythe.HarvestCrops,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestCrops = value
+                )
+                .AddCheckbox(
+                    label: "Harvest Flowers",
+                    description: "Whether the scythe harvests flowers. Default true.",
+                    get: config => config.StandardAttachments.Scythe.HarvestFlowers,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestFlowers = value
+                )
+                .AddCheckbox(
+                    label: "Harvest Forage",
+                    description: "Whether the scythe harvests forage. Default true.",
+                    get: config => config.StandardAttachments.Scythe.HarvestForage,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestForage = value
+                )
+                .AddCheckbox(
+                    label: "Harvest Fruit Trees",
+                    description: "Whether the scythe harvests fruit trees. Default true.",
+                    get: config => config.StandardAttachments.Scythe.HarvestFruitTrees,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestFruitTrees = value
+                )
+                .AddCheckbox(
+                    label: "Harvest Machines",
+                    description: "Whether the scythe collects machine output. Default false.",
+                    get: config => config.StandardAttachments.Scythe.HarvestMachines,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestMachines = value
+                )
+                .AddCheckbox(
+                    label: "Harvest Grass",
+                    description: "Whether the scythe cuts grass. If you have free silo space, this gives you hay as usual. Default true.",
+                    get: config => config.StandardAttachments.Scythe.HarvestGrass,
+                    set: (config, value) => config.StandardAttachments.Scythe.HarvestGrass = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether the scythe clears dead crops. Default true.",
+                    get: config => config.StandardAttachments.Scythe.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.Scythe.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Clear Weeds",
+                    description: "Whether the scythe clears weeds. Default true.",
+                    get: config => config.StandardAttachments.Scythe.ClearWeeds,
+                    set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
+                )
 
-            menu.AddLabel("Tool Config Options", "Config Options");
-            foreach (var field in this.GetConfig().StandardAttachments.GetType().GetFields())
-            {
-                string label = r.Replace(field.Name, " ");
-                menu.AddLabel(label, "Config Options");
-                object subValue = field.GetValue(this.GetConfig().StandardAttachments);
-                foreach (var property in field.FieldType.GetProperties())
-                {
-                    label = r.Replace(property.Name, " ");
-                    menu.AddCheckbox(label, "", config => (bool)property.GetValue(subValue), (config, val) => property.SetValue(subValue, val, null));
-                }
-            }
+                // melee weapon
+                .AddLabel("Melee Weapon Features")
+                .AddCheckbox(
+                    label: "Attack Monsters",
+                    description: "Whether melee weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeWeapon.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeWeapon.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether melee weapons clear dead crops. Default true.",
+                    get: config => config.StandardAttachments.MeleeWeapon.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeWeapon.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether melee weapons break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeWeapon.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeWeapon.BreakMineContainers = value
+                )
+
+                // other
+                .AddLabel("Other Tools")
+                .AddCheckbox(
+                    label: "Enable Milk Pail",
+                    description: "Whether to collect milk from farm animals using the milk pail. Default true.",
+                    get: config => config.StandardAttachments.GrassStarter.Enable,
+                    set: (config, value) => config.StandardAttachments.GrassStarter.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Shears",
+                    description: "Whether to collect wool from farm animals using the shears. Default true.",
+                    get: config => config.StandardAttachments.Shears.Enable,
+                    set: (config, value) => config.StandardAttachments.Shears.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Watering Can",
+                    description: "Whether to water nearby tiles. This doesn't consume water in the watering can. Default true.",
+                    get: config => config.StandardAttachments.WateringCan.Enable,
+                    set: (config, value) => config.StandardAttachments.WateringCan.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Fertilizer",
+                    description: "Whether to apply fertilizer to crops and tilled dirt. Default true.",
+                    get: config => config.StandardAttachments.Fertilizer.Enable,
+                    set: (config, value) => config.StandardAttachments.Fertilizer.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Grass Starters",
+                    description: "Whether to plant grass starters. Default true.",
+                    get: config => config.StandardAttachments.GrassStarter.Enable,
+                    set: (config, value) => config.StandardAttachments.GrassStarter.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Seeds",
+                    description: "Whether to plant seeds. Default true.",
+                    get: config => config.StandardAttachments.Seeds.Enable,
+                    set: (config, value) => config.StandardAttachments.Seeds.Enable = value
+                )
+                .AddCheckbox(
+                    label: "Enable Seed Bags",
+                    description: "Whether to plant seeds from the Seed Bag mod. Default true.",
+                    get: config => config.StandardAttachments.SeedBagMod.Enable,
+                    set: (config, value) => config.StandardAttachments.SeedBagMod.Enable = value,
+                    enable: this.ModRegistry.IsLoaded(SeedBagAttachment.ModId)
+                )
+                .AddCheckbox(
+                    label: "Enable Slingshot",
+                    description: "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.Slingshot.Enable,
+                    set: (config, value) => config.StandardAttachments.Slingshot.Enable = value
+                )
+
+                // custom tools
+                .AddLabel("Custom Tools")
+                .AddTextbox(
+                    label: "Custom Tool Names",
+                    description: "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas.",
+                    get: config => string.Join(", ", config.CustomAttachments),
+                    set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
+                );
         }
     }
 }
