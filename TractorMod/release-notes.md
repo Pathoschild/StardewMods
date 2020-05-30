@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-
+* Added support for Generic Mod Config Menu (thanks to collaboration with NexusFlight!).
 * Added compatibility with boulders and stumps added by Farm Type Manager.
 
 ## 4.10.1

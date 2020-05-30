@@ -169,6 +169,21 @@ namespace Pathoschild.Stardew.TractorMod
                 farmExpansion.AddFarmBluePrint(this.GetBlueprint());
                 farmExpansion.AddExpansionBluePrint(this.GetBlueprint());
             }
+
+            // add Generic Mod Config Menu integration
+            var configMenu = new GenericModConfigMenuIntegrationForTractor(
+                getConfig: () => this.Config,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                },
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            );
+            configMenu.Register();
         }
 
         /// <summary>The event called after a save slot is loaded.</summary>
