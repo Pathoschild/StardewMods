@@ -173,7 +173,11 @@ namespace Pathoschild.Stardew.TractorMod
             // add Generic Mod Config Menu integration
             var configMenu = new GenericModConfigMenuIntegrationForTractor(
                 getConfig: () => this.Config,
-                reset: () => this.Helper.WriteConfig(this.Config),
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                },
                 saveAndApply: () => this.Helper.WriteConfig(this.Config)
             );
             configMenu.Register(this.Helper.ModRegistry, this.Monitor, this.ModManifest);
