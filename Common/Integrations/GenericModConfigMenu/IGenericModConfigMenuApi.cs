@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
 namespace Common.Integrations.GenericModConfigMenu
 {
-    public interface IGenericModMenuApi
+    public interface IGenericModConfigMenuApi
     {
         void RegisterModConfig(IManifest mod, Action revertToDefault, Action saveToFile);
 
@@ -23,9 +21,6 @@ namespace Common.Integrations.GenericModConfigMenu
 
         void RegisterChoiceOption(IManifest mod, string optionName, string optionDesc, Func<string> optionGet, Action<string> optionSet, string[] choices);
 
-        void RegisterComplexOption(IManifest mod, string optionName, string optionDesc,
-                                   Func<Vector2, object, object> widgetUpdate,
-                                   Func<SpriteBatch, Vector2, object, object> widgetDraw,
-                                   Action<object> onSave);
+        void RegisterComplexOption(IManifest mod, string optionName, string optionDesc, Func<Vector2, object, object> widgetUpdate, Func<SpriteBatch, Vector2, object, object> widgetDraw, Action<object> onSave);
     }
 }

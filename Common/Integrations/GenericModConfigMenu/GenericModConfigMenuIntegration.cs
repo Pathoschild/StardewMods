@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations;
@@ -8,16 +6,16 @@ using StardewModdingAPI;
 
 namespace Common.Integrations.GenericModConfigMenu
 {
-    internal class GenericModMenuIntegraion : BaseIntegration
+    internal class GenericModConfigMenuIntegration : BaseIntegration
     {
-        private readonly IGenericModMenuApi ModApi;
-        public GenericModMenuIntegraion(IModRegistry modRegistry, IMonitor monitor)
+        private readonly IGenericModConfigMenuApi ModApi;
+        public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor)
             : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.1.0", modRegistry, monitor)
         {
             if (!this.IsLoaded)
                 return;
             // get mod API
-            this.ModApi = this.GetValidatedApi<IGenericModMenuApi>();
+            this.ModApi = this.GetValidatedApi<IGenericModConfigMenuApi>();
             this.IsLoaded = this.ModApi != null;
         }
 
