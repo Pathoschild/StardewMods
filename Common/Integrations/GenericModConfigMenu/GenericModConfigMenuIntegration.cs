@@ -1,82 +1,124 @@
 using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
 
 namespace Common.Integrations.GenericModConfigMenu
 {
-    internal class GenericModConfigMenuIntegration : BaseIntegration
+    /// <summary>Handles the logic for integrating with the Generic Mod Configuration Menu mod.</summary>
+    /// <typeparam name="TConfig">The mod configuration type.</typeparam>
+    internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration
+        where TConfig : new()
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The mod's public API.</summary>
         private readonly IGenericModConfigMenuApi ModApi;
-        public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor)
+
+        /// <summary>The manifest for the mod consuming the API.</summary>
+        private readonly IManifest ConsumerManifest;
+
+        /// <summary>Get the current config model.</summary>
+        private readonly Func<TConfig> GetConfig;
+
+        /// <summary>Reset the config model to the default values.</summary>
+        private readonly Action Reset;
+
+        /// <summary>Save and apply the current config model.</summary>
+        private readonly Action SaveAndApply;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="consumerManifest">The manifest for the mod consuming the API.</param>
+        /// <param name="getConfig">Get the current config model.</param>
+        /// <param name="reset">Reset the config model to the default values.</param>
+        /// <param name="saveAndApply">Save and apply the current config model.</param>
+        public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor, IManifest consumerManifest, Func<TConfig> getConfig, Action reset, Action saveAndApply)
             : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.1.0", modRegistry, monitor)
         {
-            if (!this.IsLoaded)
-                return;
+            // init
+            this.ConsumerManifest = consumerManifest;
+            this.GetConfig = getConfig;
+            this.Reset = reset;
+            this.SaveAndApply = saveAndApply;
+
             // get mod API
-            this.ModApi = this.GetValidatedApi<IGenericModConfigMenuApi>();
-            this.IsLoaded = this.ModApi != null;
+            if (this.IsLoaded)
+            {
+                this.ModApi = this.GetValidatedApi<IGenericModConfigMenuApi>();
+                this.IsLoaded = this.ModApi != null;
+            }
         }
 
-        public void RegisterModConfig(IManifest mod, Action revertToDefault, Action saveToFile)
+        /// <summary>Register the mod config.</summary>
+        public GenericModConfigMenuIntegration<TConfig> RegisterConfig()
         {
             this.AssertLoaded();
-            this.ModApi.RegisterModConfig(mod, revertToDefault, saveToFile);
+
+            this.ModApi.RegisterModConfig(this.ConsumerManifest, this.Reset, this.SaveAndApply);
+
+            return this;
         }
 
-        public void RegisterLabel(IManifest mod, string labelName, string labelDesc)
+        /// <summary>Add a label to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddLabel(string label, string description = null)
         {
             this.AssertLoaded();
-            this.ModApi.RegisterLabel(mod, labelName, labelDesc);
-        }
-        public void RegisterSimpleOption(IManifest mod, string optionName, string optionDesc, Func<bool> optionGet, Action<bool> optionSet)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterSimpleOption(mod, optionName, optionDesc, optionGet, optionSet);
-        }
-        public void RegisterSimpleOption(IManifest mod, string optionName, string optionDesc, Func<int> optionGet, Action<int> optionSet)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterSimpleOption(mod, optionName, optionDesc, optionGet, optionSet);
-        }
-        public void RegisterSimpleOption(IManifest mod, string optionName, string optionDesc, Func<float> optionGet, Action<float> optionSet)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterSimpleOption(mod, optionName, optionDesc, optionGet, optionSet);
-        }
-        public void RegisterSimpleOption(IManifest mod, string optionName, string optionDesc, Func<string> optionGet, Action<string> optionSet)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterSimpleOption(mod, optionName, optionDesc, optionGet, optionSet);
-        }
-        public void RegisterSimpleOption(IManifest mod, string optionName, string optionDesc, Func<SButton> optionGet, Action<SButton> optionSet)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterSimpleOption(mod, optionName, optionDesc, optionGet, optionSet);
+
+            this.ModApi.RegisterLabel(this.ConsumerManifest, label, description);
+
+            return this;
         }
 
-        public void RegisterClampedOption(IManifest mod, string optionName, string optionDesc, Func<int> optionGet, Action<int> optionSet, int min, int max)
+        /// <summary>Add a checkbox to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddCheckbox(string label, string description, Func<TConfig, bool> get, Action<TConfig, bool> set)
         {
             this.AssertLoaded();
-            this.ModApi.RegisterClampedOption(mod, optionName, optionDesc, optionGet, optionSet, min, max);
-        }
-        public void RegisterClampedOption(IManifest mod, string optionName, string optionDesc, Func<float> optionGet, Action<float> optionSet, float min, float max)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterClampedOption(mod, optionName, optionDesc, optionGet, optionSet, min, max);
-        }
-        public void RegisterChoiceOption(IManifest mod, string optionName, string optionDesc, Func<string> optionGet, Action<string> optionSet, string[] choices)
-        {
-            this.AssertLoaded();
-            this.ModApi.RegisterChoiceOption(mod, optionName, optionDesc, optionGet, optionSet, choices);
+
+            this.ModApi.RegisterSimpleOption(
+                mod: this.ConsumerManifest,
+                optionName: label,
+                optionDesc: description,
+                optionGet: () => get(this.GetConfig()),
+                optionSet: val => set(this.GetConfig(), val)
+            );
+
+            return this;
         }
 
-        public void RegisterComplexOption(IManifest mod, string optionName, string optionDesc, Func<Vector2, object, object> widgetUpdate,
-                                                        Func<SpriteBatch, Vector2, object, object> widgetDraw, Action<object> onSave)
+        /// <summary>Add a numeric field to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        /// <param name="min">The minimum value.</param>
+        /// <param name="max">The maximum value.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, int> get, Action<TConfig, int> set, int min, int max)
         {
             this.AssertLoaded();
-            this.ModApi.RegisterComplexOption(mod, optionName, optionDesc, widgetUpdate, widgetDraw, onSave);
+
+            this.ModApi.RegisterClampedOption(
+                mod: this.ConsumerManifest,
+                optionName: label,
+                optionDesc: description,
+                optionGet: () => get(this.GetConfig()),
+                optionSet: val => set(this.GetConfig(), val),
+                min: min,
+                max: max
+            );
+
+            return this;
         }
     }
 }

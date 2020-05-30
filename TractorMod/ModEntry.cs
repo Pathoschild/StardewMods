@@ -178,9 +178,12 @@ namespace Pathoschild.Stardew.TractorMod
                     this.Config = new ModConfig();
                     this.Helper.WriteConfig(this.Config);
                 },
-                saveAndApply: () => this.Helper.WriteConfig(this.Config)
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
             );
-            configMenu.Register(this.Helper.ModRegistry, this.Monitor, this.ModManifest);
+            configMenu.Register();
         }
 
         /// <summary>The event called after a save slot is loaded.</summary>
