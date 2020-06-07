@@ -1,10 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using Harmony;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -62,7 +61,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             helper.Events.GameLoop.DayEnding += this.DayEnding;
 
             // hook Harmony patch
-            HarmonyInstance harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
+            var harmony = new Harmony(this.ModManifest.UniqueID);
             FarmPatcher.Hook(
                 harmony,
                 this.Monitor,

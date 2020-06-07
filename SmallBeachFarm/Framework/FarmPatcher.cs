@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using Harmony;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
         /// <param name="getFishType">Get the fish that should be available from the given tile.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
+        public static void Hook(Harmony harmony, IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
         {
             FarmPatcher.Monitor = monitor;
             FarmPatcher.AddCampfire = addCampfire;
