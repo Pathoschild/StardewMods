@@ -151,5 +151,28 @@ namespace Common.Integrations.GenericModConfigMenu
 
             return this;
         }
+
+        /// <summary>Add a key binding field to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddKeyBinding(string label, string description, Func<TConfig, SButton> get, Action<TConfig, SButton> set, bool enable = true)
+        {
+            this.AssertLoaded();
+
+            if (enable)
+            {
+                this.ModApi.RegisterSimpleOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val)
+                );
+            }
+
+            return this;
+        }
     }
 }

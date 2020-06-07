@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private readonly ModConfigKeys Keys;
+        private ModConfigKeys Keys;
 
         /// <summary>The number of ticks since the tractor last checked for an action to perform.</summary>
         private int SkippedActionTicks;
@@ -199,11 +199,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Update mod configuration if it changed.</summary>
         /// <param name="config">The new mod configuration.</param>
+        /// <param name="keys">The new key bindings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        public void UpdateConfig(ModConfig config, IEnumerable<IAttachment> attachments)
+        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IEnumerable<IAttachment> attachments)
         {
             // update config
             this.Config = config;
+            this.Keys = keys;
             this.Attachments = attachments.Where(p => p != null).ToArray();
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
 

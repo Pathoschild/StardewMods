@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Input;
+using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 
@@ -15,6 +18,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The Generic Mod Config Menu integration.</summary>
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
 
+        /// <summary>Get the parsed key bindings.</summary>
+        private readonly Func<ModConfigKeys> GetKeys;
+
         /// <summary>An API for fetching metadata about loaded mods.</summary>
         private readonly IModRegistry ModRegistry;
 
@@ -27,21 +33,44 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="manifest">The mod manifest.</param>
         /// <param name="getConfig">Get the current config model.</param>
+        /// <param name="getKeys">Get the parsed key bindings.</param>
         /// <param name="reset">Reset the config model to the default values.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
-        public GenericModConfigMenuIntegrationForTractor(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Action reset, Action saveAndApply)
+        public GenericModConfigMenuIntegrationForTractor(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Func<ModConfigKeys> getKeys, Action reset, Action saveAndApply)
         {
-            this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
             this.ModRegistry = modRegistry;
+            this.GetKeys = getKeys;
+            this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
         }
 
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
+            // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)
                 return;
 
+            // get control label
+            string controlLabel = "Configure the key bindings for the tractor.";
+            {
+                var keys = this.GetKeys();
+
+                List<string> complexKeys = new List<string>();
+                if (!this.IsEditable(keys.SummonTractor))
+                    complexKeys.Add("Summon Tractor");
+                if (!this.IsEditable(keys.DismissTractor))
+                    complexKeys.Add("Dismiss Tractor");
+                if (!this.IsEditable(keys.HoldToActivate))
+                    complexKeys.Add("Hold to Activate");
+
+                if (complexKeys.Any())
+                    controlLabel += $" Some key bindings ({string.Join(", ", complexKeys)}) can't be edited because they contain multiple keys; you'll need to edit them through the config.json file.";
+
+                controlLabel += " To disable a control, edit the config.json and set it to a empty string.";
+            }
+
+            // register
             menu
                 .RegisterConfig()
 
@@ -96,6 +125,30 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     description: "Whether to highlight the tractor radius when riding one, to help visualize the distance option. Default false.",
                     get: config => config.HighlightRadius,
                     set: (config, value) => config.HighlightRadius = value
+                )
+
+                // controls
+                .AddLabel("Controls", controlLabel)
+                .AddKeyBinding(
+                    label: "Summon Tractor",
+                    description: "Warp an available tractor to your position. Default backspace.",
+                    get: config => this.GetSingleButton(this.GetKeys().SummonTractor),
+                    set: (config, value) => config.Controls.SummonTractor = value.ToString(),
+                    enable: this.IsEditable(this.GetKeys().SummonTractor)
+                )
+                .AddKeyBinding(
+                    label: "Dismiss Tractor",
+                    description: "Return the tractor you're riding to its home.",
+                    get: config => this.GetSingleButton(this.GetKeys().DismissTractor),
+                    set: (config, value) => config.Controls.DismissTractor = value.ToString(),
+                    enable: this.IsEditable(this.GetKeys().DismissTractor)
+                )
+                .AddKeyBinding(
+                    label: "Hold to Activate",
+                    description: "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+                    get: config => this.GetSingleButton(this.GetKeys().HoldToActivate),
+                    set: (config, value) => config.Controls.HoldToActivate = value.ToString(),
+                    enable: this.IsEditable(this.GetKeys().HoldToActivate)
                 )
 
                 // axe
@@ -371,6 +424,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     get: config => string.Join(", ", config.CustomAttachments),
                     set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
                 );
+        }
+
+        /// <summary>Get whether a key binding consists of a single key.</summary>
+        /// <param name="binding">The key binding.</param>
+        private bool IsEditable(KeyBinding binding)
+        {
+            SButton[][] sets = binding.ButtonSets;
+            return
+                sets.Length == 0
+                || (sets.Length == 1 && sets[0].Length == 1);
+        }
+
+        /// <summary>Get the first button in a key binding, if any.</summary>
+        /// <param name="binding">The key binding.</param>
+        private SButton GetSingleButton(KeyBinding binding)
+        {
+            SButton[] set = binding.ButtonSets.FirstOrDefault();
+            return set?.FirstOrDefault() ?? SButton.None;
         }
     }
 }

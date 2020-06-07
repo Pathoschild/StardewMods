@@ -152,6 +152,7 @@ namespace Pathoschild.Stardew.TractorMod
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForTractor(
                 getConfig: () => this.Config,
+                getKeys: () => this.Keys,
                 reset: () =>
                 {
                     this.Config = new ModConfig();
@@ -467,10 +468,12 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Apply the mod configuration if it changed.</summary>
         private void UpdateConfig()
         {
+            this.Keys = this.Config.Controls.ParseControls(this.Helper.Input, this.Monitor);
+
             var modRegistry = this.Helper.ModRegistry;
             var reflection = this.Helper.Reflection;
             var toolConfig = this.Config.StandardAttachments;
-            this.TractorManager.UpdateConfig(this.Config, new IAttachment[]
+            this.TractorManager.UpdateConfig(this.Config, this.Keys, new IAttachment[]
             {
                 new CustomAttachment(this.Config.CustomAttachments, modRegistry, reflection), // should be first so it can override default attachments
                 new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
