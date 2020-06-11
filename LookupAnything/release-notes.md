@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed display for tailored hat recipes.
 * Fixed the search key working during cutscenes or when a menu is already open.
 * Fixed spawn rules not showing "mine level X" matched when you're on that mine level.
 * Fixed error looking up custom NPCs with invalid birthday data.

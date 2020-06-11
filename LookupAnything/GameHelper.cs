@@ -541,6 +541,10 @@ namespace Pathoschild.Stardew.LookupAnything
                 }
             }
 
+            // hat
+            if (item is Hat hat)
+                return new SpriteInfo(FarmerRenderer.hatsTexture, new Rectangle(hat.which.Value * 20 % FarmerRenderer.hatsTexture.Width, hat.which.Value * 20 / FarmerRenderer.hatsTexture.Width * 20 * 4, 20, 20));
+
             // unknown item
             return null;
         }
@@ -691,7 +695,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         type: RecipeType.TailorInput,
                         displayType: "Tailoring",
                         ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
-                        item: input => new Clothing(outputId),
+                        item: _ => this.GetTailoredItem(outputId),
                         mustBeLearned: false,
                         outputItemIndex: recipe.CraftedItemID,
                         machineParentSheetIndex: null,
@@ -699,6 +703,20 @@ namespace Pathoschild.Stardew.LookupAnything
                     );
                 }
             }
+        }
+
+        /// <summary>Get the item produced by a tailoring recipe based on the output ID.</summary>
+        /// <param name="id">The output item ID.</param>
+        /// <remarks>Derived from <see cref="TailoringMenu.CraftItem"/>.</remarks>
+        private Item GetTailoredItem(int id)
+        {
+            if (id < 0)
+                return new SObject(-id, 1);
+
+            if (id < 2000 || id >= 3000)
+                return new Clothing(id);
+
+            return new Hat(id - 2000);
         }
 
         /// <summary>Get an NPC's preference for an item.</summary>
