@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The underlying contextual values.</summary>
-        private readonly AggregateContextual Contextuals = new AggregateContextual();
+        protected readonly AggregateContextual Contextuals = new AggregateContextual();
 
 
         /*********

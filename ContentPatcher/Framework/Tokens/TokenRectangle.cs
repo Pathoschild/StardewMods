@@ -9,13 +9,6 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
-        /// <summary>The underlying contextual values.</summary>
-        private readonly AggregateContextual Contextuals = new AggregateContextual();
-
-
-        /*********
-        ** Accessors
-        *********/
         /// <summary>The width of the area.</summary>
         public ITokenString Width { get; }
 

@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error when using tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
+
 ## 1.14.1
 Released 14 May 2020.
 
