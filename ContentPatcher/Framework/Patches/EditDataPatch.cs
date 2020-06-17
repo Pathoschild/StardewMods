@@ -123,10 +123,12 @@ namespace ContentPatcher.Framework.Patches
                 this.AttemptedDataLoad = true;
             }
 
+            // update context
             this.Contextuals
                 .Add(this.Records)
                 .Add(this.Fields)
-                .Add(this.MoveRecords);
+                .Add(this.MoveRecords)
+                .UpdateContext(context);
             this.IsReady = this.IsReady && this.Contextuals.IsReady;
 
             return true;
