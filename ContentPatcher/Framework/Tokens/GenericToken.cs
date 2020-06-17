@@ -57,26 +57,26 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Update the token data when the context changes.</summary>
         /// <param name="context">The condition context.</param>
         /// <returns>Returns whether the token data changed.</returns>
-        public bool UpdateContext(IContext context)
+        public virtual bool UpdateContext(IContext context)
         {
             return this.Values.UpdateContext(context);
         }
 
         /// <summary>Get the token names used by this patch in its fields.</summary>
-        public IEnumerable<string> GetTokensUsed()
+        public virtual IEnumerable<string> GetTokensUsed()
         {
             return this.Values.GetTokensUsed();
         }
 
         /// <summary>Get diagnostic info about the contextual instance.</summary>
-        public IContextualState GetDiagnosticState()
+        public virtual IContextualState GetDiagnosticState()
         {
             return this.Values.GetDiagnosticState();
         }
 
         /// <summary>Whether the token may return multiple values for the given name.</summary>
         /// <param name="input">The input argument, if any.</param>
-        public bool CanHaveMultipleValues(ITokenString input)
+        public virtual bool CanHaveMultipleValues(ITokenString input)
         {
             return this.Values.CanHaveMultipleValues(input);
         }
@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        public virtual bool TryValidateInput(ITokenString input, out string error)
         {
             return this.Values.TryValidateInput(input, out error);
         }
@@ -96,7 +96,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
+        public virtual bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
         {
             if (!this.TryValidateInput(input, out error) || !this.Values.TryValidateValues(input, values, out error))
                 return false;
@@ -106,7 +106,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <summary>Get the allowed input arguments, if supported and restricted to a specific list.</summary>
-        public InvariantHashSet GetAllowedInputArguments()
+        public virtual InvariantHashSet GetAllowedInputArguments()
         {
             return this.Values.GetValidInputs();
         }
@@ -115,7 +115,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="input">The input argument, if applicable.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        public virtual bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
         {
             return this.Values.HasBoundedValues(input, out allowedValues);
         }
@@ -125,7 +125,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="min">The minimum value this token may return.</param>
         /// <param name="max">The maximum value this token may return.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        public virtual bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
         {
             return this.Values.HasBoundedRangeValues(input, out min, out max);
         }

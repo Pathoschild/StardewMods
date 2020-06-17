@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
 * Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
 * Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.
 
