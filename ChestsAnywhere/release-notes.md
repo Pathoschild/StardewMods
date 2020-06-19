@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed mouse scroll wheel navigation reversed.
+* Improved translations. Thanks to stefanhahn80 (updated German)!
 
 ## 1.19.3
 Released 14 May 2020.
