@@ -4,9 +4,9 @@
     "default-name.chest": "Kiste #{{number}}",
     "default-name.fridge": "Kühlschrank",
     "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
-    "default-name.shipping-bin": "Versandbox",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.shipping-bin": "Versandbehälter",
+    "default-name.shipping-bin.store": "Versandbehälter (verschicken)",
+    "default-name.shipping-bin.take": "Versandbehälter (zurückholen)",
 
     // default category names
     "default-category.owned-cabin": "Hütte ({{owner}})",
@@ -20,7 +20,7 @@
     "label.category": "Kategorie",
     "label.order": "Reihenfolge",
     "label.hide-chest": "Kiste ausblenden",
-    "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden um dies rückgängig zu machen!)",
+    "label.hide-chest-hidden": "Kiste ausblenden (Du musst die Kiste wieder finden, um dies rückgängig zu machen!)",
     "label.automate-store": "(Automatisieren) Lege Gegenstände in diese Kiste",
     "label.automate-store-first": "(Automatisieren) Lege zuerst Gegenstände in diese Kiste",
     "label.automate-take": "(Automatisieren) Nimm Gegenstände von dieser Kiste",
