@@ -1,9 +1,6 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming version
-* Updated to Harmony 2.0 in SMAPI 3.6.
-
 ## 1.7.1
 Released 05 May 2020.
 
