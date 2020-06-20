@@ -25,7 +25,7 @@ namespace ContentPatcher.Framework.Tokens
         public string Scope { get; }
 
         /// <summary>The token name.</summary>
-        public string Name { get; }
+        public virtual string Name { get; }
 
         /// <summary>Whether the value can change after it's initialized.</summary>
         public bool IsMutable => this.Values.IsMutable;

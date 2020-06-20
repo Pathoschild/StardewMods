@@ -219,6 +219,18 @@ namespace ContentPatcher
                 .OrderByIgnoreCase(p => p)
             );
 
+            // log custom tokens
+            {
+                var tokensByMod = (
+                    from token in this.QueuedModTokens
+                    orderby token.Name
+                    group token by token.Mod into modGroup
+                    select new { ModName = modGroup.Key.Name, ModPrefix = modGroup.First().NamePrefix, TokenNames = modGroup.Select(p => p.NameWithoutPrefix).ToArray() }
+                );
+                foreach (var group in tokensByMod)
+                    this.Monitor.Log($"{group.ModName} added {(group.TokenNames.Length == 1 ? "a custom token" : $"{group.TokenNames.Length} custom tokens")} with prefix '{group.ModPrefix}': {string.Join(", ", group.TokenNames)}.");
+            }
+
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());

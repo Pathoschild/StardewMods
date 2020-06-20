@@ -23,18 +23,29 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The mod which registered the token.</summary>
         public IManifest Mod { get; }
 
+        /// <summary>The mod prefix.</summary>
+        public string NamePrefix { get; }
+
+        /// <summary>The token name without the mod prefix.</summary>
+        public string NameWithoutPrefix { get; }
+
+        /// <summary>The token name.</summary>
+        public override string Name => $"{this.NamePrefix}{this.NameWithoutPrefix}";
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name">The token name.</param>
+        /// <param name="nameWithoutPrefix">The token name without the mod prefix.</param>
         /// <param name="mod">The mod which registered the token.</param>
         /// <param name="provider">The underlying value provider.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public ModProvidedToken(string name, IManifest mod, IValueProvider provider, IMonitor monitor)
-            : base(name, provider)
+        public ModProvidedToken(string nameWithoutPrefix, IManifest mod, IValueProvider provider, IMonitor monitor)
+            : base(null, provider)
         {
+            this.NamePrefix = $"{mod.UniqueID}{InternalConstants.ModTokenSeparator}";
+            this.NameWithoutPrefix = nameWithoutPrefix;
             this.Mod = mod;
             this.Monitor = monitor;
         }
