@@ -29,6 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.GetValueImpl = getValue;
 
+            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
             this.MarkReady(false);
         }
 
@@ -39,9 +40,29 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInputArgument(input);
 
-            return this.IsReady
-                ? this.Values.ToArray()
-                : Enumerable.Empty<string>();
+            if (!this.IsReady)
+                return Enumerable.Empty<string>();
+
+            if (!input.IsMeaningful())
+                return this.Values.ToArray();
+
+            return new[] { this.Values.Contains(input.Value).ToString() };
+        }
+
+        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
+        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="allowedValues">The possible values for the input.</param>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
+        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        {
+            if (input.IsMeaningful())
+            {
+                allowedValues = InvariantHashSet.Boolean();
+                return true;
+            }
+
+            allowedValues = null;
+            return false;
         }
 
         /// <summary>Update the instance when the context changes.</summary>
