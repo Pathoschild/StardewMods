@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added `HasConversationTopic` token.
 * Mod-provided tokens now support the `{{token:value}}` form which returns `true` or `false`. (This doesn't affect mods using the advanced API.)
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.

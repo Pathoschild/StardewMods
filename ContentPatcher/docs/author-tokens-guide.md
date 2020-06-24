@@ -232,6 +232,16 @@ answers to question dialogues.
 </tr>
 
 <tr valign="top">
+<td>HasConversationTopic</td>
+<td>
+
+The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Active_dialogue_events)
+for the player. Previous topics are stored as flags (see `HasFlag`).
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasFlag</td>
 <td>
 

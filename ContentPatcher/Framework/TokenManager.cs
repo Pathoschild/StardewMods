@@ -171,6 +171,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
 
             // player
+            yield return new ConditionTypeValueProvider(ConditionType.HasConversationTopic, () => Game1.player?.activeDialogueEvents.Keys, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
             yield return new HasProfessionValueProvider(NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);

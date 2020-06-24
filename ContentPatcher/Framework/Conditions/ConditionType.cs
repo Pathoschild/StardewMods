@@ -30,6 +30,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Player
         ****/
+        /// <summary>A conversation topic ID set for the player.</summary>
+        HasConversationTopic,
+
         /// <summary>A letter ID or mail flag set for the player.</summary>
         HasFlag,
 
