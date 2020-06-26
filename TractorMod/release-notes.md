@@ -2,6 +2,8 @@
 ## Upcoming release
 * Added support for Generic Mod Config Menu (thanks to collaboration with NexusFlight!).
 * Added compatibility with boulders and stumps added by Farm Type Manager.
+* Fixed warp loop when riding the tractor onto the Witch's Hut warp runes.
+* Fixed broken event when riding the tractor into the event for the Cryptic Note quest.
 
 ## 4.10.1
 Released 02 May 2020.

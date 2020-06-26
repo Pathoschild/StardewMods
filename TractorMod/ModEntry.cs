@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.FarmExpansion;
 using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework;
@@ -107,6 +108,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
+            events.Player.Warped += this.OnWarped;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -284,6 +286,25 @@ namespace Pathoschild.Stardew.TractorMod
                     }
                 }
             }
+        }
+
+        /// <summary>The event called after the player warps into a new location.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnWarped(object sender, WarpedEventArgs e)
+        {
+            if (!e.IsLocalPlayer || !this.TractorManager.IsCurrentPlayerRiding)
+                return;
+
+            // fix: warping onto a magic warp while mounted causes an infinite warp loop
+            Vector2 tile = CommonHelper.GetPlayerTile(Game1.player);
+            string touchAction = Game1.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
+            if (this.TractorManager.IsCurrentPlayerRiding && touchAction != null && touchAction.StartsWith("MagicWarp "))
+                Game1.currentLocation.lastTouchActionLocation = tile;
+
+            // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)
+            if (Game1.CurrentEvent != null)
+                Game1.player.mount.dismount();
         }
 
         /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
