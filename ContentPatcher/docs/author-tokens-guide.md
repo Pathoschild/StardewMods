@@ -52,10 +52,10 @@ There are two ways to use tokens.
 ### Conditions
 You can make a patch conditional by adding a `When` field, which can list any number of conditions.
 Each condition has...
-* A key (before `:`) containing a [token](#advanced-tokens--conditions) without the outer curly
-  braces, like `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
-* A value (after `:`) containing the comma-separated values to match, like `spring, summer`. If the
-  key token returns any of these values, the condition matches. This field supports
+* A key containing a [token](#advanced-tokens--conditions) without the outer curly braces, like
+  `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
+* A value containing the comma-separated values to match, like `spring, summer`. If the key token
+  returns any of these values, the condition matches. This field supports
   [tokens](#advanced-tokens--conditions) and is not case-sensitive.
 
 For example: this changes the house texture only in spring or summer, if the player is married, and
@@ -881,9 +881,9 @@ info):
 {
    "Action": "Load",
    "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat |key=outfit}}.png",
    "When": {
-      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png"
+      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat |key=outfit}}.png"
    }
 }
 ```
@@ -948,7 +948,7 @@ key:
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | abigail-outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key=abigail-outfit}}.png"
 }
 ```
 
@@ -957,7 +957,7 @@ You can use tokens in a pinned key. For example, this synchronizes values separa
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail, Characters/Haley, Portraits/Haley",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | {{TargetWithoutPath}}-outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key={{TargetWithoutPath}}-outfit}}.png"
 }
 ```
 
@@ -973,12 +973,12 @@ For example, this gives Abigail and Haley random outfits but ensures they never 
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key=outfit}}.png"
 },
 {
    "Action": "Load",
    "Target": "Characters/Haley, Portraits/Haley",
-   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood | outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood |key=outfit}}.png"
 }
 ```
 
@@ -996,9 +996,9 @@ Without pinned keys, each token will randomly choose its own value:
 
 If they have the same pinned key, they'll always be in sync:
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = hood
-{{Random: hood, jacket, raincoat | outfit}} = hood
-{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
 ```
 
 For basic cases, you just need to know that same options + same key = same value.
@@ -1006,16 +1006,16 @@ For basic cases, you just need to know that same options + same key = same value
 If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
 key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 ```
 
 You can use that in interesting ways. For example, shifting the values guarantees they'll never
 choose the same value (since same index = different value):
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: jacket, raincoat, hood | outfit}} = 217437 modulo 3 choices = index 0 = jacket
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: jacket, raincoat, hood |key=outfit}} = 217437 modulo 3 choices = index 0 = jacket
 ```
 </dd>
 </dl>

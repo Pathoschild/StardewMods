@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
@@ -47,25 +46,19 @@ namespace ContentPatcher.Framework
                 token.SetReady(false);
         }
 
-        /// <summary>Get whether a mod is installed.</summary>
-        /// <param name="id">The mod ID.</param>
+        /// <inheritdoc />
         public bool IsModInstalled(string id)
         {
             return this.LastParentContext?.IsModInstalled(id) ?? false;
         }
 
-        /// <summary>Get whether the context contains the given token.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public bool Contains(string name, bool enforceContext)
         {
             return this.GetToken(name, enforceContext) != null;
         }
 
-        /// <summary>Get the underlying token which handles a key.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
+        /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
             return this.LocalTokens.TryGetValue(name, out DynamicToken token)
@@ -73,8 +66,7 @@ namespace ContentPatcher.Framework
                 : this.LastParentContext?.GetToken(name, enforceContext);
         }
 
-        /// <summary>Get the underlying tokens.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
             foreach (DynamicToken token in this.LocalTokens.Values)
@@ -87,13 +79,8 @@ namespace ContentPatcher.Framework
             }
         }
 
-        /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
+        /// <inheritdoc />
+        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? new string[0];

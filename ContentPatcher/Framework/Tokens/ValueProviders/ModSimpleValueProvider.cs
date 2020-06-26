@@ -25,37 +25,32 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>Pathoschild.ExampleMod/SomeTokenName</c>.</param>
         /// <param name="getValue">A function which returns the current token value (if any). If this returns null, the token is considered unavailable for use.</param>
         public ModSimpleValueProvider(string name, Func<IEnumerable<string>> getValue)
-            : base(name, canHaveMultipleValuesForRoot: true)
+            : base(name, mayReturnMultipleValuesForRoot: true)
         {
             this.GetValueImpl = getValue;
 
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.MarkReady(false);
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
             if (!this.IsReady)
                 return Enumerable.Empty<string>();
 
-            if (!input.IsMeaningful())
+            if (!input.HasPositionalArgs)
                 return this.Values.ToArray();
 
-            return new[] { this.Values.Contains(input.Value).ToString() };
+            return new[] { this.Values.Contains(input.GetFirstPositionalArg()).ToString() };
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
                 allowedValues = InvariantHashSet.Boolean();
                 return true;
@@ -65,9 +60,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return false;
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(this.Values, () =>

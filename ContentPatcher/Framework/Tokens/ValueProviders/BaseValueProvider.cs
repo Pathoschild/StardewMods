@@ -14,79 +14,83 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>Whether multiple values may exist when no input is provided.</summary>
-        protected bool CanHaveMultipleValuesForRoot { get; set; }
+        protected bool MayReturnMultipleValuesForRoot { get; set; }
 
         /// <summary>Whether multiple values may exist when an input argument is provided.</summary>
-        protected bool CanHaveMultipleValuesForInput { get; set; }
+        protected bool MayReturnMultipleValuesForInput { get; set; }
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new ContextualState();
+
+        /// <summary>The maximum number of positional arguments allowed, if limited.</summary>
+        private int? MaxPositionalArgs;
 
 
         /*********
         ** Accessors
         *********/
-        /// <summary>The value provider name.</summary>
+        /// <inheritdoc />
         public string Name { get; }
 
-        /// <summary>Whether the provided values can change after the provider is initialized.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; protected set; } = true;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.State.IsReady;
 
-        /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
+        /// <inheritdoc />
         public bool AllowsInput { get; private set; }
 
-        /// <summary>Whether the value provider requires an input argument to work, and does not provide values without it (see <see cref="IValueProvider.AllowsInput"/>).</summary>
+        /// <inheritdoc />
         public bool RequiresInput { get; private set; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public virtual bool UpdateContext(IContext context)
         {
             return false;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return Enumerable.Empty<string>();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone();
         }
 
-        /// <summary>Whether the value provider may return multiple values for the given input.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        public bool CanHaveMultipleValues(ITokenString input = null)
+        /// <inheritdoc />
+        public bool CanHaveMultipleValues(IInputArguments input)
         {
-            return input.IsMeaningful()
-                ? this.CanHaveMultipleValuesForInput
-                : this.CanHaveMultipleValuesForRoot;
+            return input.HasPositionalArgs
+                ? this.MayReturnMultipleValuesForInput
+                : this.MayReturnMultipleValuesForRoot;
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public virtual bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public virtual bool TryValidateInput(IInputArguments input, out string error)
         {
             // validate input
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
                 // check if input allowed
                 if (!this.AllowsInput)
                 {
-                    error = $"invalid input argument ({input}), token {this.Name} doesn't allow input.";
+                    error = $"invalid input arguments ({input.TokenString.Value}), token {this.Name} doesn't allow input.";
+                    return false;
+                }
+
+                // check argument count
+                if (input.PositionalArgs.Length > this.MaxPositionalArgs)
+                {
+                    error = $"invalid input arguments ({input.TokenString.Value}), token {this.Name} doesn't allow more than {this.MaxPositionalArgs} argument{(this.MaxPositionalArgs == 1 ? "" : "s")}.";
                     return false;
                 }
 
@@ -94,9 +98,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 InvariantHashSet validInputs = this.GetValidInputs();
                 if (validInputs?.Any() == true)
                 {
-                    if (!validInputs.Contains(input.Value))
+                    if (!validInputs.Contains(input.GetFirstPositionalArg()))
                     {
-                        error = $"invalid input argument ({(input.Raw != input.Value ? $"{input.Raw} => {input.Value}" : input.Value)}) for {this.Name} token, expected any of {string.Join(", ", validInputs.OrderByIgnoreCase(p => p))}";
+                        string raw = input.TokenString.Raw;
+                        string parsed = input.TokenString.Value;
+                        error = $"invalid input argument ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of {string.Join(", ", validInputs.OrderByIgnoreCase(p => p))}";
                         return false;
                     }
                 }
@@ -107,12 +113,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error)
+        /// <inheritdoc />
+        public bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error)
         {
             if (!this.TryValidateInput(input, out error))
                 return false;
@@ -157,40 +159,31 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
+        /// <inheritdoc />
         public virtual InvariantHashSet GetValidInputs()
         {
             return new InvariantHashSet();
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public virtual bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
             allowedValues = null;
             return false;
         }
 
-        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedValues"/>.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="min">The minimum value this token may return.</param>
-        /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        /// <inheritdoc />
+        public virtual bool HasBoundedRangeValues(IInputArguments input, out int min, out int max)
         {
             min = 0;
             max = 0;
             return false;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public virtual IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
             yield break;
         }
 
@@ -200,25 +193,25 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The value provider name.</param>
-        /// <param name="canHaveMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
-        protected BaseValueProvider(string name, bool canHaveMultipleValuesForRoot)
+        /// <param name="mayReturnMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
+        protected BaseValueProvider(string name, bool mayReturnMultipleValuesForRoot)
         {
             this.Name = name;
-            this.CanHaveMultipleValuesForRoot = canHaveMultipleValuesForRoot;
+            this.MayReturnMultipleValuesForRoot = mayReturnMultipleValuesForRoot;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The value provider name.</param>
-        /// <param name="canHaveMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
-        protected BaseValueProvider(ConditionType type, bool canHaveMultipleValuesForRoot)
-            : this(type.ToString(), canHaveMultipleValuesForRoot) { }
+        /// <param name="mayReturnMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
+        protected BaseValueProvider(ConditionType type, bool mayReturnMultipleValuesForRoot)
+            : this(type.ToString(), mayReturnMultipleValuesForRoot) { }
 
         /// <summary>Validate that the provided value is valid for an input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="input">The input arguments.</param>
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        protected virtual bool TryValidate(ITokenString input, string value, out string error)
+        protected virtual bool TryValidate(IInputArguments input, string value, out string error)
         {
             error = null;
             return true;
@@ -226,23 +219,29 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Enable input arguments for this value provider.</summary>
         /// <param name="required">Whether an input argument is required when using this value provider.</param>
-        /// <param name="canHaveMultipleValues">Whether the value provider may return multiple values for an input argument.</param>
-        protected void EnableInputArguments(bool required, bool canHaveMultipleValues)
+        /// <param name="mayReturnMultipleValues">Whether the value provider may return multiple values for an input argument.</param>
+        /// <param name="maxPositionalArgs">The maximum number of positional arguments allowed, if limited.</param>
+        protected void EnableInputArguments(bool required, bool mayReturnMultipleValues, int? maxPositionalArgs)
         {
             this.AllowsInput = true;
             this.RequiresInput = required;
-            this.CanHaveMultipleValuesForInput = canHaveMultipleValues;
+            this.MayReturnMultipleValuesForInput = mayReturnMultipleValues;
+            this.MaxPositionalArgs = maxPositionalArgs;
         }
 
         /// <summary>Assert that an input argument is valid for the value provider.</summary>
-        /// <param name="input">The input argument to check, if applicable.</param>
+        /// <param name="input">The input arguments.</param>
         /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
-        protected void AssertInputArgument(ITokenString input)
+        protected void AssertInput(IInputArguments input)
         {
-            if (this.RequiresInput && !input.IsMeaningful())
+            bool hasInput = input.HasPositionalArgs;
+
+            if (this.RequiresInput && !hasInput)
                 throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
-            if (!this.AllowsInput && input.IsMeaningful())
+            if (!this.AllowsInput && hasInput)
                 throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
+            if (input.PositionalArgs.Length > this.MaxPositionalArgs)
+                throw new InvalidOperationException($"The '{this.Name}' token doesn't allow more than {this.MaxPositionalArgs} input argument{(this.MaxPositionalArgs == 1 ? "" : "s")}.");
         }
 
         /// <summary>Try to parse a raw case-insensitive string into an enum value.</summary>

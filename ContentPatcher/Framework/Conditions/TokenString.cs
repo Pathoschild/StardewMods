@@ -74,13 +74,10 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    select new TokenStringPart
-                    {
-                        LexToken = token,
-                        Input = token is LexTokenToken lexToken && lexToken.InputArg != null
-                            ? new TokenString(lexToken.InputArg?.Parts, context)
-                            : null
-                    }
+                    let input = token is LexTokenToken lexToken && lexToken.InputArg != null
+                        ? new TokenString(lexToken.InputArg?.Parts, context)
+                        : null
+                    select new TokenStringPart(token, input)
                 )
                 .ToArray();
 
@@ -255,14 +252,13 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // get token input
-                        TokenString input = part.Input;
-                        if (input != null)
+                        if (part.Input != null)
                         {
                             // update input
-                            input.UpdateContext(context);
+                            part.Input.UpdateContext(context);
 
                             // check for unavailable tokens
-                            string[] unavailableInputTokens = input
+                            string[] unavailableInputTokens = part.Input
                                 .GetTokensUsed()
                                 .Where(name => context.GetToken(name, enforceContext: true)?.IsReady != true)
                                 .ToArray();
@@ -276,7 +272,7 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // validate input
-                        if (!token.TryValidateInput(input, out string error))
+                        if (!token.TryValidateInput(part.InputArgs, out string error))
                         {
                             errors.Add(error);
                             text = null;
@@ -284,7 +280,7 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // get text representation
-                        string[] values = token.GetValues(input).ToArray();
+                        string[] values = token.GetValues(part.InputArgs).ToArray();
                         text = string.Join(", ", values);
                         return true;
                     }
@@ -298,11 +294,31 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A lexical token component in the token string.</summary>
         private class TokenStringPart
         {
+            /*********
+            ** Accessors
+            *********/
             /// <summary>The underlying lex token.</summary>
-            public ILexToken LexToken { get; set; }
+            public ILexToken LexToken { get; }
 
             /// <summary>The input to the lex token, if it's a <see cref="LexTokenType.Token"/>.</summary>
-            public TokenString Input { get; set; }
+            public TokenString Input { get; }
+
+            /// <summary>The parsed version of <see cref="Input"/>.</summary>
+            public IInputArguments InputArgs { get; }
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Construct an instance.</summary>
+            /// <param name="lexToken">The underlying lex token.</param>
+            /// <param name="input">The parsed version of <see cref="Input"/>.</param>
+            public TokenStringPart(ILexToken lexToken, TokenString input)
+            {
+                this.LexToken = lexToken;
+                this.Input = input;
+                this.InputArgs = new InputArguments(input);
+            }
         }
     }
 }

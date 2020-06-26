@@ -26,15 +26,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
         public HasProfessionValueProvider(Func<bool> isPlayerDataAvailable)
-            : base(ConditionType.HasProfession, canHaveMultipleValuesForRoot: true)
+            : base(ConditionType.HasProfession, mayReturnMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(this.Professions, () =>
@@ -48,28 +46,23 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             });
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.IsMeaningful()
+            allowedValues = input.HasPositionalArgs
                 ? InvariantHashSet.Boolean()
                 : null;
             return allowedValues != null;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
-                bool hasProfession = this.TryParseEnum(input.Value, out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
+                bool hasProfession = this.TryParseEnum(input.GetFirstPositionalArg(), out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
                 yield return hasProfession.ToString();
             }
             else
@@ -79,18 +72,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
         }
 
-        /// <summary>Validate that the provided value is valid for an input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="value">The value to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        protected override bool TryValidate(ITokenString input, string value, out string error)
+        /// <inheritdoc />
+        protected override bool TryValidate(IInputArguments input, string value, out string error)
         {
             if (!base.TryValidate(input, value, out error))
                 return false;
 
             // validate profession IDs
-            string profession = input.IsMeaningful() ? input.Value : value;
+            string profession = input.GetFirstPositionalArg() ?? value;
             if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
             {
                 error = $"can't parse '{profession}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";

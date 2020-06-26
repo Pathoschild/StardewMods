@@ -175,7 +175,7 @@ namespace ContentPatcher.Framework.Commands
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && token.GetValues(new LiteralString(inputArgs[0])).Count() > 1)
+                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0]))).Count() > 1)
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
@@ -217,7 +217,7 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
+                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input))))}");
                                 }
                             }
                             else
@@ -272,7 +272,7 @@ namespace ContentPatcher.Framework.Commands
                             let result = new
                             {
                                 Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                Value = token.IsReady ? string.Join(", ", token.GetValues(input)) : "",
+                                Value = token.IsReady ? string.Join(", ", token.GetValues(new InputArguments(input))) : "",
                                 IsReady = token.IsReady
                             }
                             orderby result.Name
@@ -594,7 +594,7 @@ namespace ContentPatcher.Framework.Commands
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
                     let displayText = !condition.Is(ConditionType.HasFile) && condition.HasInput()
-                        ? $"{condition.Name}:{condition.Input.Raw}"
+                        ? $"{condition.Name}:{condition.Input.TokenString.Raw}"
                         : condition.Name
                     orderby displayText
                     where !condition.IsMatch

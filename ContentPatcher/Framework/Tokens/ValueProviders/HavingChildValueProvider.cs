@@ -31,19 +31,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="type">The condition type (must be <see cref="ConditionType.HavingChild"/> or <see cref="ConditionType.Pregnant"/>).</param>
         /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
         public HavingChildValueProvider(ConditionType type, Func<bool> isPlayerDataAvailable)
-            : base(type, canHaveMultipleValuesForRoot: true)
+            : base(type, mayReturnMultipleValuesForRoot: true)
         {
             if (type != ConditionType.HavingChild && type != ConditionType.Pregnant)
                 throw new ArgumentException($"The condition type must be {ConditionType.HavingChild} or {ConditionType.Pregnant}.");
 
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.PregnancyOnly = type == ConditionType.Pregnant;
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             const string playerPrefix = InternalConstants.PlayerNamePrefix;
@@ -89,28 +87,22 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             });
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.IsMeaningful()
+            allowedValues = input.HasPositionalArgs
                 ? InvariantHashSet.Boolean()
                 : null;
             return allowedValues != null;
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public override bool TryValidateInput(IInputArguments input, out string error)
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
 
-            if (input.IsReady && input.IsMeaningful() && input.SplitValuesUnique().Any(p => !p.StartsWith(InternalConstants.PlayerNamePrefix)))
+            if (input.PositionalArgs.Any(p => !p.StartsWith(InternalConstants.PlayerNamePrefix)))
             {
                 error = $"invalid input argument ({input}), player names must be prefixed with {InternalConstants.PlayerNamePrefix}.";
                 return false;
@@ -119,17 +111,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this token, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
                 yield return this.PartnersHavingChild
-                    .Contains(input.Value)
+                    .Contains(input.GetFirstPositionalArg())
                     .ToString();
             }
             else

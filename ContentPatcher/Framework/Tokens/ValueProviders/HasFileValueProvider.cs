@@ -23,15 +23,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="relativePathExists">Get whether a relative file path exists in the content pack.</param>
         public HasFileValueProvider(Func<string, bool> relativePathExists)
-            : base(ConditionType.HasFile, canHaveMultipleValuesForRoot: false)
+            : base(ConditionType.HasFile, mayReturnMultipleValuesForRoot: false)
         {
             this.RelativePathExists = relativePathExists;
-            this.EnableInputArguments(required: true, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             bool changed = !this.IsReady;
@@ -39,26 +37,21 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return changed;
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.IsMeaningful()
+            allowedValues = input.HasPositionalArgs
                 ? InvariantHashSet.Boolean()
                 : null;
             return allowedValues != null;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            yield return this.GetPathExists(input).ToString();
+            yield return this.GetPathExists(input.GetFirstPositionalArg()).ToString();
         }
 
 
@@ -66,15 +59,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>Get whether the given file path exists.</summary>
-        /// <param name="input">The relative file path.</param>
+        /// <param name="path">The relative file path.</param>
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
-        private bool GetPathExists(ITokenString input)
+        private bool GetPathExists(string path)
         {
-            if (!input.IsMeaningful() || !input.IsReady)
+            if (string.IsNullOrWhiteSpace(path))
                 return false;
 
             // get normalized path
-            string path = PathUtilities.NormalizePathSeparators(input.Value);
+            path = PathUtilities.NormalizePathSeparators(path);
 
             // validate
             if (Path.IsPathRooted(path))

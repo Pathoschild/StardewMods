@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name without the mod prefix.</summary>
         public string NameWithoutPrefix { get; }
 
-        /// <summary>The token name.</summary>
+        /// <inheritdoc />
         public override string Name => $"{this.NamePrefix}{this.NameWithoutPrefix}";
 
 
@@ -50,9 +50,7 @@ namespace ContentPatcher.Framework.Tokens
             this.Monitor = monitor;
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             try
@@ -66,7 +64,7 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public override IEnumerable<string> GetTokensUsed()
         {
             try
@@ -80,7 +78,7 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public override IContextualState GetDiagnosticState()
         {
             try
@@ -94,9 +92,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Whether the token may return multiple values for the given name.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        public override bool CanHaveMultipleValues(ITokenString input)
+        /// <inheritdoc />
+        public override bool CanHaveMultipleValues(IInputArguments input)
         {
             try
             {
@@ -109,11 +106,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public override bool TryValidateInput(IInputArguments input, out string error)
         {
             try
             {
@@ -127,13 +121,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
+        /// <inheritdoc />
+        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, out string error)
         {
             try
             {
@@ -147,7 +136,7 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get the allowed input arguments, if supported and restricted to a specific list.</summary>
+        /// <inheritdoc />
         public override InvariantHashSet GetAllowedInputArguments()
         {
             try
@@ -161,11 +150,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IToken.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
             try
             {
@@ -183,12 +169,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IToken.HasBoundedValues"/>.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="min">The minimum value this token may return.</param>
-        /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public override bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        /// <inheritdoc />
+        public override bool HasBoundedRangeValues(IInputArguments input, out int min, out int max)
         {
             try
             {
@@ -207,10 +189,8 @@ namespace ContentPatcher.Framework.Tokens
             }
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="input">The input to check, if any.</param>
-        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
             try
             {

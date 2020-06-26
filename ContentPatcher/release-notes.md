@@ -5,9 +5,11 @@
 * Added `HasConversationTopic` token.
 * Mod-provided tokens now support the `{{token:value}}` form which returns `true` or `false`. (This doesn't affect mods using the advanced API.)
 * Reduced trace logs when a mod adds many custom tokens.
+* `Random` now uses a named `key=` argument for the pinned key.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
 * Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
 * Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.
+* Fixed Content Patcher allowing multiple input arguments to tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now returns an error.
 
 ## 1.14.1
 Released 14 May 2020.

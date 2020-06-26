@@ -24,8 +24,8 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The token name in the context.</summary>
         public string Name { get; }
 
-        /// <summary>The token input argument, if any.</summary>
-        public ITokenString Input { get; }
+        /// <summary>The token input arguments.</summary>
+        public IInputArguments Input { get; }
 
         /// <summary>The token values for which this condition is valid.</summary>
         public ITokenString Values { get; }
@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework.Conditions
         {
             // save values
             this.Name = name;
-            this.Input = input;
+            this.Input = new InputArguments(input);
             this.Values = values;
             this.Contextuals = new AggregateContextual()
                 .Add(input)
@@ -68,7 +68,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Get whether the condition has a non-empty input argument.</summary>
         public bool HasInput()
         {
-            return this.Input != null && this.Input.IsMeaningful();
+            return this.Input.HasPositionalArgs || this.Input.HasNamedArgs;
         }
 
 

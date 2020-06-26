@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -23,10 +22,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The value provider name.</param>
         public DynamicTokenValueProvider(string name)
-            : base(name, canHaveMultipleValuesForRoot: false)
+            : base(name, mayReturnMultipleValuesForRoot: false)
         {
             this.AllowedRootValues = new InvariantHashSet();
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.SetReady(false); // not ready until initialized
         }
 
@@ -38,7 +37,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (possibleValues.IsMutable || this.AllowedRootValues == null)
             {
                 this.AllowedRootValues = null;
-                this.CanHaveMultipleValuesForRoot = true;
+                this.MayReturnMultipleValuesForRoot = true;
                 return;
             }
 
@@ -46,7 +45,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             InvariantHashSet splitValues = possibleValues.SplitValuesUnique();
             foreach (string value in splitValues)
                 this.AllowedRootValues.Add(value.Trim());
-            this.CanHaveMultipleValuesForRoot = this.CanHaveMultipleValuesForRoot || splitValues.Count > 1;
+            this.MayReturnMultipleValuesForRoot = this.MayReturnMultipleValuesForRoot || splitValues.Count > 1;
         }
 
         /// <summary>Set the current values.</summary>
@@ -63,27 +62,22 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.MarkReady(ready);
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.IsMeaningful()
+            allowedValues = input.HasPositionalArgs
                 ? InvariantHashSet.Boolean()
                 : this.AllowedRootValues;
             return allowedValues != null;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (input.IsMeaningful())
-                return new[] { this.Values.Contains(input.Value).ToString() };
+            if (input.HasPositionalArgs)
+                return new[] { this.Values.Contains(input.GetFirstPositionalArg()).ToString() };
             return this.Values;
         }
     }
