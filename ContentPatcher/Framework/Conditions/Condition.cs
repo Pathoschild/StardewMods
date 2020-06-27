@@ -65,13 +65,6 @@ namespace ContentPatcher.Framework.Conditions
                 this.CurrentValues = this.Values.SplitValuesUnique();
         }
 
-        /// <summary>Get whether the condition has any input arguments.</summary>
-        public bool HasInput()
-        {
-            return this.Input.HasPositionalArgs || this.Input.HasNamedArgs;
-        }
-
-
         /// <summary>Get whether the condition is for a given condition type.</summary>
         /// <param name="type">The condition type.</param>
         public bool Is(ConditionType type)

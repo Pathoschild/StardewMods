@@ -593,7 +593,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !condition.Is(ConditionType.HasFile) && condition.HasInput()
+                    let displayText = !condition.Is(ConditionType.HasFile) && !string.IsNullOrWhiteSpace(condition.Input.TokenString?.Raw)
                         ? $"{condition.Name}:{condition.Input.TokenString.Raw}"
                         : condition.Name
                     orderby displayText

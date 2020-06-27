@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
@@ -119,8 +120,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <param name="input">The input arguments.</param>
         private string ToApiInput(IInputArguments input)
         {
-            return input.HasPositionalArgs
-                ? string.Join(", ", input.PositionalArgs)
+            StringBuilder inputStr = new StringBuilder();
+
+            inputStr.Append(string.Join(", ", input.PositionalArgs));
+            foreach (var arg in input.NamedArgs)
+                inputStr.Append($" |{arg.Key}={string.Join(", ", arg.Value.Parsed)}");
+
+            return inputStr.Length > 0
+                ? inputStr.ToString()
                 : null;
         }
     }

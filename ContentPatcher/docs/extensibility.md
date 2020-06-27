@@ -151,8 +151,8 @@ Note that boundedness is _per-input_. For example, your token might be bounded i
 arguments, but unrestricted without one:
 ```js
 "When": {
-   "Spouse": "John", // unrestricted: '{{spouse}}' may return any value
-   "Spouse:John": "true" // bounded: '{{spouse:John}}' can only return true or false
+   "Relationship": "Abigail:Married", // unrestricted: may return any value (e.g. for custom NPCs)
+   "Relationship:Abigail": "Married"  // bounded: returns predefined values like 'married' or 'dating'
 }
 ```
 
@@ -174,6 +174,18 @@ etc).
 
 Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise
 prohibited.
+
+</dd>
+
+<dt>Input arguments</dt>
+<dd>
+
+See [_input arguments_ in the tokens guide](author-tokens-guide.md#input-arguments) for more info.
+
+Due to limitations in SMAPI's API proxying, your mod will receive a normalised input string
+identical to the format shown in the tokens guide instead of a parsed object. Any tokens in the
+input will be replaced by their value. Note that if no input arguments were given, the token will
+receive `null`.
 
 </dd>
 </dl>

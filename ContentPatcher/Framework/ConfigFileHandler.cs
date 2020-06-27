@@ -96,7 +96,7 @@ namespace ContentPatcher.Framework
                     logWarning(rawKey, "the config field name can't be empty.");
                     continue;
                 }
-                if (rawKey.Contains(InternalConstants.PositionalInputArgSeparator))
+                if (rawKey.Contains(InternalConstants.PositionalInputArgSeparator) || rawKey.Contains(InternalConstants.NamedInputArgSeparator))
                 {
                     logWarning(rawKey, $"the name '{rawKey}' can't have input arguments ({InternalConstants.PositionalInputArgSeparator} or {InternalConstants.NamedInputArgSeparator} character).");
                     continue;
