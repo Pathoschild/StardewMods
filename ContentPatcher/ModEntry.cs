@@ -986,10 +986,23 @@ namespace ContentPatcher
             immutableRequiredModIDs = null;
             if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
             {
-                if (!condition.HasInput())
+                // contains
+                if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue contains))
+                {
+                    if (bool.TryParse(condition.Values.Value, out bool required) && required)
+                        immutableRequiredModIDs = new InvariantHashSet(contains.Parsed);
+                }
+
+                // positional input
+                else if (condition.Input.HasPositionalArgs)
+                {
+                    if (bool.TryParse(condition.Values.Value, out bool required) && required)
+                        immutableRequiredModIDs = new InvariantHashSet(condition.Input.GetFirstPositionalArg());
+                }
+
+                // values
+                else
                     immutableRequiredModIDs = condition.CurrentValues;
-                else if (bool.TryParse(condition.Values.Value, out bool required) && required)
-                    immutableRequiredModIDs = new InvariantHashSet(condition.Input.GetFirstPositionalArg());
             }
 
             return true;
