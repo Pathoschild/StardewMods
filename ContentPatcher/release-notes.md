@@ -3,10 +3,10 @@
 # Release notes
 ## Upcoming release
 * Added `HasConversationTopic` token.
-* Overhauled token input:
-  * Added an `|inputSeparator=` argument to use a different separator for a token's input arguments.
-  * `Random` pinned keys are now set with a `key=` argument.
-* Mod-provided tokens now support the `{{token:value}}` form which returns `true` or `false`. (This doesn't affect mods using the advanced API.)
+* Added [named token argument support](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-tokens-guide.md#global-input-arguments):
+  * Added a universal `contains` argument to search token values.
+  * Added a universal `inputSeparator` token argument to allow commas in input values by using a custom separator.
+  * Added a `key` argument to `{{Random}}`.
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
 * Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.

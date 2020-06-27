@@ -29,7 +29,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.GetValueImpl = getValue;
 
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.MarkReady(false);
         }
 
@@ -38,29 +37,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (!this.IsReady)
-                return Enumerable.Empty<string>();
-
-            if (!input.HasPositionalArgs)
-                return this.Values.ToArray();
-
-            return new[] { this.Values.Contains(input.GetFirstPositionalArg()).ToString() };
+            return this.IsReady
+                ? this.Values.ToArray()
+                : Enumerable.Empty<string>();
         }
 
-        /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
-        {
-            if (input.HasPositionalArgs)
-            {
-                allowedValues = InvariantHashSet.Boolean();
-                return true;
-            }
-
-            allowedValues = null;
-            return false;
-        }
-
-        /// <inheritdoc />
+        /// <summary>Update the instance when the context changes.</summary>
+        /// <param name="context">Provides access to contextual tokens.</param>
+        /// <returns>Returns whether the instance changed.</returns>
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(this.Values, () =>

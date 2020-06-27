@@ -20,6 +20,9 @@ This document lists the tokens available in Content Patcher packs.
   * [String manipulation](#string-manipulation)
   * [Metadata](#metadata)
   * [Field references](#field-references)
+* [Global input arguments](#global-input-arguments)
+  * [Token search](#token-search)
+  * [Custom input value separator](#custom-input-value-separator)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
   * [Overview](#overview)
@@ -110,69 +113,8 @@ below. For example, the `Uppercase` token makes its input uppercase:
 }
 ```
 
-There are also **global input arguments** which are handled by Content Patcher, so they work with
-any token:
-
-<table>
-<tr>
-<th>input</th>
-<th>purpose</th>
-</tr>
-
-<tr>
-<td><code>inputSeparator</code>
-<td>
-
-Use a custom value separator instead of the usual comma for input arguments. Note that the `{}|=:`
-symbols are reserved and shouldn't be used as a separator. A separator can be multiple characters.
-For example:
-
-```json
-"Entries": {
-   "fri": "{{Random: Hey there! @@ Hey, what's up? |inputSeparator=@@}}"
-```
-
-</td>
-</tr>
-</table>
-
-### Token search
-Some tokens can match an optional [input argument](#input-arguments) like `{{tokenName:value}}`,
-which returns `true` or `false`. For example, `{{hasProfession:Gemologist}}` will check whether the
-player has the `Gemologist` profession.
-
-For example, `{{hasProfession: Gemologist}}` will check whether the player has the `Gemologist`
-profession.
-
-This is mainly useful for using logic in conditions:
-
-```js
-// player has blacksmith OR gemologist
-"When": {
-   "HasProfession": "Blacksmith, Gemologist"
-}
-
-// player has blacksmith AND gemologist
-"When": {
-   "HasProfession: Blacksmith": "true",
-   "HasProfession: Gemologist": "true"
-}
-
-// NOT year 1
-"When": {
-   "Year: 1": "false"
-}
-```
-
-This can also be used in placeholders. For example, this will load a different file depending on
-whether the player has the `Gemologist` profession:
-```js
-{
-    "Action": "EditImage",
-    "Target": "Buildings/houses",
-    "FromFile": "assets/gems-{{HasProfession: Gemologist}}.png" // assets/gems-true.png
-}
-```
+There are also [**global input arguments**](#global-input-arguments) which are handled by Content
+Patcher, so they work with any token.
 
 ## Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
@@ -581,7 +523,7 @@ player is having a child:
 ```
 
 Usage notes:
-* `HavingChild:@{{playerName}}` and `HavingChild:{{spouse}}` are equivalent for this token.
+* `"HavingChild": "@{{playerName}}"` and `"HavingChild": "{{spouse}}"` are equivalent for this token.
 * See also the `Pregnant` token.
 
 </td>
@@ -861,6 +803,71 @@ Equivalent to `Target`, but only the part after the last path separator:
 </td>
 </tr>
 </table>
+
+## Global input arguments
+Global [input arguments](#input-arguments) are handled by Content Patcher itself, so they work with
+all tokens (including mod-provided tokens).
+
+### Token search
+The `contains` argument returns `true` or `false` depending on whether the token contains any of
+the given values. This is mainly useful for logic in [conditions](#conditions):
+
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession": "Blacksmith, Gemologist"
+}
+
+// player has blacksmith AND gemologist
+"When": {
+   "HasProfession |contains=Blacksmith": "true",
+   "HasProfession |contains=Gemologist": "true"
+}
+
+// NOT year 1
+"When": {
+   "Year |contains=1": "false"
+}
+```
+
+This can also be used in placeholders. For example, this will load a different file depending on
+whether the player has the `Gemologist` profession:
+```js
+{
+    "Action": "EditImage",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/gems-{{HasProfession |contains=Gemologist}}.png" // assets/gems-true.png
+}
+```
+
+You can specify multiple values, in which case it returns whether _any_ of them match:
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession |contains=Blacksmith, Gemologist": "true"
+}
+
+// player has neither blacksmith NOR gemologist
+"When": {
+   "HasProfession |contains=Blacksmith, Gemologist": "false"
+}
+```
+
+### Custom input value separator
+By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
+input values. You can use the `inputSeparator` argument to use a different separator (which can be
+one or multiple characters).
+
+For example, this can allow commas in random dialogue:
+
+```json
+"Entries": {
+   "fri": "{{Random: Hey, how are you? @@ Hey, what's up? |inputSeparator=@@}}"
+```
+
+**Note:** you should avoid the `{}|=:` characters in separators, even if they're technically valid.
+The behavior when separators conflict with token syntax depends on implementation details that may
+change from one Content Patcher version to the next.
 
 ## <span id="query"></span>Arithmetic
 _See also [number manipulation tokens](#number-manipulation)_.

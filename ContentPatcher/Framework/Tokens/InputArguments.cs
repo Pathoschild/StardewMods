@@ -15,13 +15,17 @@ namespace ContentPatcher.Framework.Tokens
         /****
         ** Constants
         ****/
-        /// <summary>The name of the input separator argument.</summary>
-        private const string InputSeparatorArg = "inputSeparator";
+        /// <summary>The 'contains' argument key.</summary>
+        internal const string ContainsKey = "contains";
+
+        /// <summary>The 'inputSeparator' argument key.</summary>
+        internal const string InputSeparatorKey = "inputSeparator";
 
         /// <summary>The argument names handled by Content Patcher.</summary>
         private static readonly ISet<string> ReservedArgKeys = new InvariantHashSet
         {
-            InputArguments.InputSeparatorArg
+            InputArguments.ContainsKey,
+            InputArguments.InputSeparatorKey
         };
 
         /****
@@ -116,7 +120,7 @@ namespace ContentPatcher.Framework.Tokens
             InputArguments.GetRawArguments(input, out string rawPositionalArgs, out InvariantDictionary<string> rawNamedArgs);
 
             // get value separator
-            if (!rawNamedArgs.TryGetValue(InputArguments.InputSeparatorArg, out string inputSeparator) || string.IsNullOrWhiteSpace(inputSeparator))
+            if (!rawNamedArgs.TryGetValue(InputArguments.InputSeparatorKey, out string inputSeparator) || string.IsNullOrWhiteSpace(inputSeparator))
                 inputSeparator = ",";
 
             // parse arguments
