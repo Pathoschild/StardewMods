@@ -34,6 +34,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [Debug mode](#debug-mode)
   * [Verbose log](#verbose-log)
 * [FAQs](#faqs)
+  * [Are Content Patcher updates backwards-compatible?](#are-content-patcher-updates-backwards-compatible)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
 * [Configure](#configure)
@@ -862,6 +863,9 @@ and then search the SMAPI log file for that name. Particular questions to ask:
   _If not, check your `When` and `Target` fields._
 
 ## FAQs
+### Are Content Patcher updates backwards-compatible?
+Yep. See the [author migration guide](author-migration-guide.md) for more info.
+
 ### How multiple patches interact
 Any number of patches can be applied to the same file. `Action: Load` always happens before other
 action types, but otherwise each patch is applied sequentially. After each patch is done, the next

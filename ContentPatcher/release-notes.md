@@ -181,10 +181,8 @@ Released 08 May 2019.
 * Fixed config schema issues logged as `Debug` instead of `Warning`.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
 
-**Update note for mod authors:**
-* The `ConfigSchema` field changes when you update your format to 1.7:
-  * `AllowValues` is no longer required. If you omit it, the config field will allow _any_ value.
-  * If you omit `Default`, the default is now blank instead of the first `AllowValues` value.
+**Update note for mod authors:**  
+Updating the `Format` field to `1.7.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.6.5
 Released 06 April 2019.
@@ -236,8 +234,8 @@ Released 08 December 2018.
 * Fixed token strings not validated for format version compatibility.
 * Fixed some 1.5 tokens not validated for format version compatibility.
 
-**Update note for mod authors:**
-* The `Weather` token now returns `Wind` on windy days instead of `Sun`. Existing content packs with `"Format": "1.5"` or earlier should work fine, since Content Patcher will adjust their conditions. Content packs which target version 1.6 or later should handle the new weather value.
+**Update note for mod authors:**  
+Updating the `Format` field to `1.6.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.5.3
 Released 08 November 2018.
