@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Lexing
 {
@@ -12,8 +13,8 @@ namespace ContentPatcher.Framework.Lexing
         /*********
         ** Fields
         *********/
-        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.InputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:)", RegexOptions.Compiled);
+        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
+        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:|\|)", RegexOptions.Compiled);
 
 
         /*********
@@ -50,8 +51,12 @@ namespace ContentPatcher.Framework.Lexing
                         type = LexBitType.EndToken;
                         break;
 
-                    case InternalConstants.InputArgSeparator:
-                        type = LexBitType.InputArgSeparator;
+                    case InternalConstants.PositionalInputArgSeparator:
+                        type = LexBitType.PositionalInputArgSeparator;
+                        break;
+
+                    case InternalConstants.NamedInputArgSeparator:
+                        type = LexBitType.NamedInputArgSeparator;
                         break;
 
                     default:
@@ -124,7 +129,8 @@ namespace ContentPatcher.Framework.Lexing
 
                         // text/separator outside token
                         case LexBitType.Literal:
-                        case LexBitType.InputArgSeparator:
+                        case LexBitType.PositionalInputArgSeparator:
+                        case LexBitType.NamedInputArgSeparator:
                             input.Dequeue();
                             yield return new LexTokenLiteral(next.Text);
                             break;
@@ -147,7 +153,7 @@ namespace ContentPatcher.Framework.Lexing
             }
 
             // normalize literal values
-            IList<LinkedListNode<ILexToken>> removeQueue = new List<LinkedListNode<ILexToken>>();
+            ISet<LinkedListNode<ILexToken>> removeQueue = new HashSet<LinkedListNode<ILexToken>>(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
             for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
             {
                 if (node.Value.Type != LexTokenType.Literal)
@@ -222,11 +228,20 @@ namespace ContentPatcher.Framework.Lexing
                 throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
             // extract input argument if present
+            // Note: the positional input argument separator (:) is the 'real' separator between
+            // the token name and input arguments, but a token can skip positional arguments and
+            // start named arguments directly like {{TokenName |key=value}}. In that case the ':'
+            // is implied, and the '|' separator *is* included in the input argument.
             LexTokenInputArg inputArg = null;
-            if (input.Any() && input.Peek().Type == LexBitType.InputArgSeparator)
+            if (input.Any())
             {
-                input.Dequeue();
-                inputArg = this.ExtractInputArgument(input);
+                var next = input.Peek().Type;
+                if (next == LexBitType.PositionalInputArgSeparator || next == LexBitType.NamedInputArgSeparator)
+                {
+                    if (next == LexBitType.PositionalInputArgSeparator)
+                        input.Dequeue();
+                    inputArg = this.ExtractInputArgument(input);
+                }
             }
 
             // end token

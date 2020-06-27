@@ -58,8 +58,8 @@ namespace ContentPatcher.Framework
         {
             if (token.Scope != this.Scope)
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
-            if (token.Name.Contains(InternalConstants.InputArgSeparator))
-                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because input arguments aren't supported ({InternalConstants.InputArgSeparator} character).");
+            if (token.Name.Contains(InternalConstants.PositionalInputArgSeparator))
+                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because positional input arguments aren't supported ({InternalConstants.PositionalInputArgSeparator} character).");
             if (this.ParentContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
             if (this.LocalContext.Contains(token.Name, enforceContext: false))

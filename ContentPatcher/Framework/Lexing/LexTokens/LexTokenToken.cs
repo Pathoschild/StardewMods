@@ -66,7 +66,8 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
             str.Append(name);
             if (tokenInputArgArgument != null)
             {
-                str.Append(InternalConstants.InputArgSeparator);
+                if (!tokenInputArgArgument.Text.StartsWith(InternalConstants.NamedInputArgSeparator))
+                    str.Append(InternalConstants.PositionalInputArgSeparator);
                 str.Append(tokenInputArgArgument.Text);
             }
             if (!impliedBraces)

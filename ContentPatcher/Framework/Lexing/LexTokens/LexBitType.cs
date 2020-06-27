@@ -12,7 +12,10 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>The characters which end a token ('}}').</summary>
         EndToken,
 
-        /// <summary>The character which separates a token name from its input argument (':').</summary>
-        InputArgSeparator
+        /// <summary>The character which separates a token name from its positional input arguments (':').</summary>
+        PositionalInputArgSeparator,
+
+        /// <summary>The character which separates a token name or positional input arguments from named input arguments ('|').</summary>
+        NamedInputArgSeparator
     }
 }

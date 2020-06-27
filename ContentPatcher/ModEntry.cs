@@ -378,9 +378,9 @@ namespace ContentPatcher
                                 LogSkip("the token name can't be empty.");
                                 continue;
                             }
-                            if (entry.Name.Contains(InternalConstants.InputArgSeparator))
+                            if (entry.Name.Contains(InternalConstants.PositionalInputArgSeparator))
                             {
-                                LogSkip($"the token name can't have an input argument ({InternalConstants.InputArgSeparator} character).");
+                                LogSkip($"the token name can't have positional input arguments ({InternalConstants.PositionalInputArgSeparator} character).");
                                 continue;
                             }
                             if (Enum.TryParse<ConditionType>(entry.Name, true, out _))
