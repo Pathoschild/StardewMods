@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>A function which returns the current value for a given input argument (if any).</summary>
+        /// <summary>Get the current values for given input arguments (if any).</summary>
         private readonly Func<IEnumerable<string>> GetValueImpl;
 
         /// <summary>The current values.</summary>

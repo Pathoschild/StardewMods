@@ -60,10 +60,10 @@ namespace ContentPatcher.Framework.Conditions
             : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="raw">The raw token input argument.</param>
+        /// <param name="inputArgs">The raw token input arguments.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInputArg raw, IContext context)
-            : this(lexTokens: raw?.Parts, context: context) { }
+        public TokenString(LexTokenInput inputArgs, IContext context)
+            : this(lexTokens: inputArgs?.Parts, context: context) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
@@ -74,8 +74,8 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    let input = token is LexTokenToken lexToken && lexToken.InputArg != null
-                        ? new TokenString(lexToken.InputArg?.Parts, context)
+                    let input = token is LexTokenToken lexToken && lexToken.InputArgs != null
+                        ? new TokenString(lexToken.InputArgs?.Parts, context)
                         : null
                     select new TokenStringPart(token, input)
                 )
@@ -219,7 +219,7 @@ namespace ContentPatcher.Framework.Conditions
 
                 if (recursive)
                 {
-                    ILexToken[] inputLexTokens = token.InputArg?.Parts;
+                    ILexToken[] inputLexTokens = token.InputArgs?.Parts;
                     if (inputLexTokens != null)
                     {
                         foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(inputLexTokens, recursive: true))

@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Lexing
             IEnumerable<ILexToken> RawParse()
             {
                 // 'Implied braces' means we're parsing inside a token. This necessarily starts with a token name,
-                // optionally followed by an input argument.
+                // optionally followed by input arguments.
                 if (impliedBraces)
                 {
                     while (input.Any())
@@ -227,12 +227,12 @@ namespace ContentPatcher.Framework.Lexing
             if (name.Type != LexBitType.Literal)
                 throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
-            // extract input argument if present
+            // extract input arguments if present
             // Note: the positional input argument separator (:) is the 'real' separator between
             // the token name and input arguments, but a token can skip positional arguments and
             // start named arguments directly like {{TokenName |key=value}}. In that case the ':'
-            // is implied, and the '|' separator *is* included in the input argument.
-            LexTokenInputArg inputArg = null;
+            // is implied, and the '|' separator *is* included in the input arguments string.
+            LexTokenInput inputArgs = null;
             if (input.Any())
             {
                 var next = input.Peek().Type;
@@ -240,7 +240,7 @@ namespace ContentPatcher.Framework.Lexing
                 {
                     if (next == LexBitType.PositionalInputArgSeparator)
                         input.Dequeue();
-                    inputArg = this.ExtractInputArgument(input);
+                    inputArgs = this.ExtractInputArguments(input);
                 }
             }
 
@@ -252,12 +252,12 @@ namespace ContentPatcher.Framework.Lexing
                     throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }
 
-            return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces);
+            return new LexTokenToken(name.Text.Trim(), inputArgs, impliedBraces);
         }
 
-        /// <summary>Extract a token input argument from the front of a lexical input queue.</summary>
-        /// <param name="input">The input from which to extract an input argument. The extracted lexical bits will be removed from the queue.</param>
-        public LexTokenInputArg ExtractInputArgument(Queue<LexBit> input)
+        /// <summary>Extract token input arguments from the front of a lexical input queue.</summary>
+        /// <param name="input">The input from which to extract input arguments. The extracted lexical bits will be removed from the queue.</param>
+        public LexTokenInput ExtractInputArguments(Queue<LexBit> input)
         {
             // extract input arg parts
             Queue<LexBit> inputArgBits = new Queue<LexBit>();
@@ -293,7 +293,7 @@ namespace ContentPatcher.Framework.Lexing
 
             // parse
             ILexToken[] tokenized = this.ParseBitQueue(inputArgBits, impliedBraces: false, trim: true).ToArray();
-            return new LexTokenInputArg(tokenized);
+            return new LexTokenInput(tokenized);
         }
     }
 }

@@ -115,7 +115,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the input argument format used by the the mod API.</summary>
+        /// <summary>Convert input arguments into the format used by the mod API.</summary>
         /// <param name="input">The input arguments.</param>
         private string ToApiInput(IInputArguments input)
         {

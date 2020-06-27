@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name in the context.</param>
-        /// <param name="input">The token input argument, if any.</param>
+        /// <param name="input">The token input arguments.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
         public Condition(string name, IManagedTokenString input, IManagedTokenString values)
         {
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Conditions
                 this.CurrentValues = this.Values.SplitValuesUnique();
         }
 
-        /// <summary>Get whether the condition has a non-empty input argument.</summary>
+        /// <summary>Get whether the condition has any input arguments.</summary>
         public bool HasInput()
         {
             return this.Input.HasPositionalArgs || this.Input.HasNamedArgs;

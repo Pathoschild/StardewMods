@@ -147,8 +147,8 @@ This affects two things:
   }
    ```
 
-Note that boundedness is _per-input_. For example, your token might be bounded if it receives an
-input argument, but unrestricted without one:
+Note that boundedness is _per-input_. For example, your token might be bounded if it receives input
+arguments, but unrestricted without one:
 ```js
 "When": {
    "Spouse": "John", // unrestricted: '{{spouse}}' may return any value
@@ -209,14 +209,14 @@ internal class InitialsToken
     /****
     ** Metadata
     ****/
-    /// <summary>Get whether the token allows an input argument (e.g. an NPC name for a relationship token).</summary>
+    /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
     public bool AllowsInput()
     {
         return true;
     }
 
     /// <summary>Whether the token may return multiple values for the given input.</summary>
-    /// <param name="input">The input argument, if applicable.</param>
+    /// <param name="input">The input arguments, if applicable.</param>
     public bool CanHaveMultipleValues(string input = null)
     {
         return false;
@@ -241,7 +241,7 @@ internal class InitialsToken
     }
 
     /// <summary>Get the current values.</summary>
-    /// <param name="input">The input argument, if applicable.</param>
+    /// <param name="input">The input arguments, if applicable.</param>
     public IEnumerable<string> GetValues(string input)
     {
         // get name

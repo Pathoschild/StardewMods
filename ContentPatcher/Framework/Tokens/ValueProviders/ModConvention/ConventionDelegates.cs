@@ -13,16 +13,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <remarks>Default true.</remarks>
         internal delegate bool IsMutable();
 
-        /// <summary>Get whether the token allows an input argument (e.g. an NPC name for a relationship token).</summary>
+        /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
         /// <remarks>Default false.</remarks>
         internal delegate bool AllowsInput();
 
-        /// <summary>Whether the token requires an input argument to work, and does not provide values without it (see <see cref="AllowsInput"/>).</summary>
+        /// <summary>Whether the token requires input arguments to work, and does not provide values without it (see <see cref="AllowsInput"/>).</summary>
         /// <remarks>Default false.</remarks>
         internal delegate bool RequiresInput();
 
         /// <summary>Whether the token may return multiple values for the given input.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="input">The input arguments, if any.</param>
         /// <remarks>Default true.</remarks>
         internal delegate bool CanHaveMultipleValues(string input = null);
 
@@ -31,27 +31,27 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         internal delegate IEnumerable<string> GetValidInputs();
 
         /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="input">The input arguments, if any.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
         /// <remarks>Default unrestricted.</remarks>
         internal delegate bool HasBoundedValues(string input, out IEnumerable<string> allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
-        /// <param name="input">The input argument, if any.</param>
+        /// <param name="input">The input arguments, if any.</param>
         /// <param name="min">The minimum value this token may return.</param>
         /// <param name="max">The maximum value this token may return.</param>
         /// <remarks>Default false.</remarks>
         internal delegate bool HasBoundedRangeValues(string input, out int min, out int max);
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <summary>Validate that the provided input arguments are valid.</summary>
+        /// <param name="input">The input arguments, if any.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
         /// <remarks>Default true.</remarks>
         internal delegate bool TryValidateInput(string input, out string error);
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <summary>Validate that the provided values are valid for the given input arguments (regardless of whether they match).</summary>
+        /// <param name="input">The input arguments, if any.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         internal delegate bool IsReady();
 
         /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
+        /// <param name="input">The input arguments, if any.</param>
         internal delegate IEnumerable<string> GetValues(string input);
     }
 }

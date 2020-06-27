@@ -18,8 +18,8 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>The Content Patcher token name.</summary>
         public string Name { get; }
 
-        /// <summary>The input argument passed to the Content Patcher token.</summary>
-        public LexTokenInputArg InputArg { get; }
+        /// <summary>The input arguments passed to the Content Patcher token.</summary>
+        public LexTokenInput InputArgs { get; }
 
         /// <summary>Whether the token omits the start/end character patterns because it's in a token-only context.</summary>
         public bool ImpliedBraces { get; }
@@ -30,14 +30,14 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The Content Patcher token name.</param>
-        /// <param name="inputArg">The input argument passed to the Content Patcher token.</param>
+        /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        public LexTokenToken(string name, LexTokenInputArg inputArg, bool impliedBraces)
+        public LexTokenToken(string name, LexTokenInput inputArgs, bool impliedBraces)
         {
             this.Type = LexTokenType.Token;
-            this.Text = LexTokenToken.GetRawText(name, inputArg, impliedBraces);
+            this.Text = LexTokenToken.GetRawText(name, inputArgs, impliedBraces);
             this.Name = name;
-            this.InputArg = inputArg;
+            this.InputArgs = inputArgs;
             this.ImpliedBraces = impliedBraces;
         }
 
@@ -56,19 +56,19 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         *********/
         /// <summary>Get a string representation of a token.</summary>
         /// <param name="name">The Content Patcher token name.</param>
-        /// <param name="tokenInputArgArgument">The input argument passed to the Content Patcher token.</param>
+        /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        private static string GetRawText(string name, LexTokenInputArg tokenInputArgArgument, bool impliedBraces)
+        private static string GetRawText(string name, LexTokenInput inputArgs, bool impliedBraces)
         {
             StringBuilder str = new StringBuilder();
             if (!impliedBraces)
                 str.Append("{{");
             str.Append(name);
-            if (tokenInputArgArgument != null)
+            if (inputArgs != null)
             {
-                if (!tokenInputArgArgument.Text.StartsWith(InternalConstants.NamedInputArgSeparator))
+                if (!inputArgs.Text.StartsWith(InternalConstants.NamedInputArgSeparator))
                     str.Append(InternalConstants.PositionalInputArgSeparator);
-                str.Append(tokenInputArgArgument.Text);
+                str.Append(inputArgs.Text);
             }
             if (!impliedBraces)
                 str.Append("}}");

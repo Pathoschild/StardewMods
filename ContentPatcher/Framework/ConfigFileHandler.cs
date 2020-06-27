@@ -98,7 +98,7 @@ namespace ContentPatcher.Framework
                 }
                 if (rawKey.Contains(InternalConstants.PositionalInputArgSeparator))
                 {
-                    logWarning(rawKey, $"the name '{rawKey}' can't have an input argument ({InternalConstants.PositionalInputArgSeparator} character).");
+                    logWarning(rawKey, $"the name '{rawKey}' can't have input arguments ({InternalConstants.PositionalInputArgSeparator} or {InternalConstants.NamedInputArgSeparator} character).");
                     continue;
                 }
 

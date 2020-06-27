@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>Parse the numeric min/max values from a range specifier if it's valid.</summary>
-        /// <param name="input">The input argument containing the range specifier.</param>
+        /// <param name="input">The input arguments containing the range specifier.</param>
         /// <param name="min">The parsed min value, if valid.</param>
         /// <param name="max">The parsed max value, if valid.</param>
         /// <param name="error">The error indicating why the range is invalid, if applicable.</param>

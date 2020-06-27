@@ -27,13 +27,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input arguments.</param>
         bool CanHaveMultipleValues(IInputArguments input);
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
+        /// <summary>Validate that the provided input arguments are valid.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
         bool TryValidateInput(IInputArguments input, out string error);
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
+        /// <summary>Validate that the provided values are valid for the given input arguments (regardless of whether they match).</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>

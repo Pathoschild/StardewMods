@@ -123,8 +123,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
         }
 
-        /// <summary>Try to parse an input argument into its components.</summary>
-        /// <param name="input">The input argument to parse.</param>
+        /// <summary>Try to parse input arguments.</summary>
+        /// <param name="input">The input arguments to parse.</param>
         /// <param name="value">The value to round.</param>
         /// <param name="decimals">The number of digits after the decimal point to keep.</param>
         /// <param name="mode">The rounding logic to apply.</param>

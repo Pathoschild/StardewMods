@@ -955,7 +955,7 @@ namespace ContentPatcher
             if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
                 return Fail($"'{name}' isn't a valid token name", out error, out condition, out immutableRequiredModIDs);
 
-            IManagedTokenString inputStr = new TokenString(lexToken.InputArg, tokenParser.Context);
+            IManagedTokenString inputStr = new TokenString(lexToken.InputArgs, tokenParser.Context);
             IInputArguments inputArgs = new InputArguments(inputStr);
 
             // get token
@@ -1048,7 +1048,7 @@ namespace ContentPatcher
                 // parse token
                 LexTokenToken lexToken = parsed.GetTokenPlaceholders(recursive: false).Single();
                 IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArg, tokenParser.Context));
+                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context));
 
                 // check token options
                 if (token == null)
@@ -1100,7 +1100,7 @@ namespace ContentPatcher
                 // parse token
                 LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
                 IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArg, tokenParser.Context));
+                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context));
 
                 // check token options
                 if (token == null || token.IsMutable || !token.IsReady)
@@ -1212,7 +1212,7 @@ namespace ContentPatcher
                 // parse token
                 LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
                 IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArg, tokenParser.Context));
+                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context));
 
                 // check token options
                 bool isIntegerBounded =

@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether multiple values may exist when no input is provided.</summary>
         protected bool MayReturnMultipleValuesForRoot { get; set; }
 
-        /// <summary>Whether multiple values may exist when an input argument is provided.</summary>
+        /// <summary>Whether multiple values may exist when input arguments are provided.</summary>
         protected bool MayReturnMultipleValuesForInput { get; set; }
 
         /// <summary>The named input arguments recognised by this value provider.</summary>
@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     {
                         string raw = input.TokenString.Raw;
                         string parsed = input.TokenString.Value;
-                        error = $"invalid input argument ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
+                        error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
                         return false;
                     }
                 }
@@ -229,7 +229,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         protected BaseValueProvider(ConditionType type, bool mayReturnMultipleValuesForRoot)
             : this(type.ToString(), mayReturnMultipleValuesForRoot) { }
 
-        /// <summary>Validate that the provided value is valid for an input argument (regardless of whether they match).</summary>
+        /// <summary>Validate that the provided value is valid for the given input arguments (regardless of whether they match).</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="value">The value to validate.</param>
         /// <param name="error">The validation error, if any.</param>
@@ -241,8 +241,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <summary>Enable input arguments for this value provider.</summary>
-        /// <param name="required">Whether an input argument is required when using this value provider.</param>
-        /// <param name="mayReturnMultipleValues">Whether the value provider may return multiple values for an input argument.</param>
+        /// <param name="required">Whether input arguments are required when using this value provider.</param>
+        /// <param name="mayReturnMultipleValues">Whether the value provider may return multiple values for input arguments.</param>
         /// <param name="maxPositionalArgs">The maximum number of positional arguments allowed, if limited.</param>
         protected void EnableInputArguments(bool required, bool mayReturnMultipleValues, int? maxPositionalArgs)
         {
@@ -252,13 +252,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.MaxPositionalArgs = maxPositionalArgs;
         }
 
-        /// <summary>Assert that an input argument is valid for the value provider.</summary>
+        /// <summary>Assert that the given input arguments are valid for the value provider.</summary>
         /// <param name="input">The input arguments.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsPositionalInput"/> or <see cref="RequiresPositionalInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input arguments don't match this value provider.</exception>
         protected void AssertInput(IInputArguments input)
         {
             if (this.RequiresPositionalInput && !input.HasPositionalArgs)
-                throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
+                throw new InvalidOperationException($"The '{this.Name}' token requires input arguments.");
             if (!this.AllowsPositionalInput && input.HasPositionalArgs)
                 throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
             if (input.PositionalArgs.Length > this.MaxPositionalArgs)

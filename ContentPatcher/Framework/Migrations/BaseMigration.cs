@@ -52,9 +52,9 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // check input arguments
-                if (token.InputArg != null)
+                if (token.InputArgs != null)
                 {
-                    foreach (ILexToken part in token.InputArg.Parts)
+                    foreach (ILexToken part in token.InputArgs.Parts)
                     {
                         if (!this.TryMigrate(part, out error))
                             return false;
