@@ -33,10 +33,7 @@ namespace ContentPatcher.Framework.Tokens
         public bool IsReady => this.Values.IsReady;
 
         /// <inheritdoc />
-        public bool CanHaveInput => this.Values.AllowsInput;
-
-        /// <inheritdoc />
-        public bool RequiresInput => this.Values.RequiresInput;
+        public bool RequiresInput => this.Values.RequiresPositionalInput;
 
 
         /*********
@@ -96,7 +93,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public virtual InvariantHashSet GetAllowedInputArguments()
         {
-            return this.Values.GetValidInputs();
+            return this.Values.GetValidPositionalArgs();
         }
 
         /// <inheritdoc />

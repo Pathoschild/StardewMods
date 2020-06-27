@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether multiple values may exist when an input argument is provided.</summary>
         protected bool MayReturnMultipleValuesForInput { get; set; }
 
+        /// <summary>The named input arguments recognised by this value provider.</summary>
+        protected readonly ISet<string> ValidNamedArguments = new InvariantHashSet();
+
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new ContextualState();
 
@@ -39,10 +42,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public bool IsReady => this.State.IsReady;
 
         /// <inheritdoc />
-        public bool AllowsInput { get; private set; }
+        public bool AllowsPositionalInput { get; private set; }
 
         /// <inheritdoc />
-        public bool RequiresInput { get; private set; }
+        public bool RequiresPositionalInput { get; private set; }
 
 
         /*********
@@ -77,11 +80,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public virtual bool TryValidateInput(IInputArguments input, out string error)
         {
-            // validate input
+            // validate positional arguments
             if (input.HasPositionalArgs)
             {
                 // check if input allowed
-                if (!this.AllowsInput)
+                if (!this.AllowsPositionalInput)
                 {
                     error = $"invalid input arguments ({input.TokenString.Value}), token {this.Name} doesn't allow input.";
                     return false;
@@ -94,15 +97,35 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     return false;
                 }
 
-                // check value
-                InvariantHashSet validInputs = this.GetValidInputs();
+                // check values
+                InvariantHashSet validInputs = this.GetValidPositionalArgs();
                 if (validInputs?.Any() == true)
                 {
-                    if (!validInputs.Contains(input.GetFirstPositionalArg()))
+                    if (input.PositionalArgs.Any(arg => !validInputs.Contains(arg)))
                     {
                         string raw = input.TokenString.Raw;
                         string parsed = input.TokenString.Value;
-                        error = $"invalid input argument ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of {string.Join(", ", validInputs.OrderByIgnoreCase(p => p))}";
+                        error = $"invalid input argument ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
+                        return false;
+                    }
+                }
+            }
+
+            // validate named arguments
+            if (input.HasNamedArgs)
+            {
+                if (this.ValidNamedArguments != null)
+                {
+                    if (!this.ValidNamedArguments.Any())
+                    {
+                        error = $"invalid named argument '{input.NamedArgs.First().Key}' for {this.Name} token, which does not accept any named arguments.";
+                        return false;
+                    }
+
+                    string invalidKey = (from arg in input.NamedArgs where !this.ValidNamedArguments.Contains(arg.Key) select arg.Key).FirstOrDefault();
+                    if (invalidKey != null)
+                    {
+                        error = $"invalid named argument '{invalidKey}' for {this.Name} token, expected any of '{string.Join("', '", this.ValidNamedArguments.OrderByIgnoreCase(p => p))}'";
                         return false;
                     }
                 }
@@ -160,7 +183,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public virtual InvariantHashSet GetValidInputs()
+        public virtual InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet();
         }
@@ -223,22 +246,20 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="maxPositionalArgs">The maximum number of positional arguments allowed, if limited.</param>
         protected void EnableInputArguments(bool required, bool mayReturnMultipleValues, int? maxPositionalArgs)
         {
-            this.AllowsInput = true;
-            this.RequiresInput = required;
+            this.AllowsPositionalInput = true;
+            this.RequiresPositionalInput = required;
             this.MayReturnMultipleValuesForInput = mayReturnMultipleValues;
             this.MaxPositionalArgs = maxPositionalArgs;
         }
 
         /// <summary>Assert that an input argument is valid for the value provider.</summary>
         /// <param name="input">The input arguments.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="AllowsPositionalInput"/> or <see cref="RequiresPositionalInput"/>.</exception>
         protected void AssertInput(IInputArguments input)
         {
-            bool hasInput = input.HasPositionalArgs;
-
-            if (this.RequiresInput && !hasInput)
+            if (this.RequiresPositionalInput && !input.HasPositionalArgs)
                 throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
-            if (!this.AllowsInput && hasInput)
+            if (!this.AllowsPositionalInput && input.HasPositionalArgs)
                 throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments.");
             if (input.PositionalArgs.Length > this.MaxPositionalArgs)
                 throw new InvalidOperationException($"The '{this.Name}' token doesn't allow more than {this.MaxPositionalArgs} input argument{(this.MaxPositionalArgs == 1 ? "" : "s")}.");

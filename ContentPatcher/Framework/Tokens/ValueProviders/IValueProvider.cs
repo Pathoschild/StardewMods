@@ -13,11 +13,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The value provider name.</summary>
         string Name { get; }
 
-        /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
-        bool AllowsInput { get; }
+        /// <summary>Whether the value provider allows positional input arguments (e.g. an NPC name for a relationship token).</summary>
+        bool AllowsPositionalInput { get; }
 
-        /// <summary>Whether the value provider requires an input argument to work, and does not provide values without it (see <see cref="AllowsInput"/>).</summary>
-        bool RequiresInput { get; }
+        /// <summary>Whether the value provider requires positional input arguments, and does not provide values without it (see <see cref="AllowsPositionalInput"/>).</summary>
+        bool RequiresPositionalInput { get; }
 
 
         /*********
@@ -41,24 +41,24 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error);
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
-        InvariantHashSet GetValidInputs();
+        InvariantHashSet GetValidPositionalArgs();
 
         /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't match this value provider, or doesn't respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="min">The minimum value this token may return.</param>
         /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't match this value provider, or doesn't respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedRangeValues(IInputArguments input, out int min, out int max);
 
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input arguments.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't match this value provider, or doesn't respect <see cref="AllowsInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         IEnumerable<string> GetValues(IInputArguments input);
     }
 }

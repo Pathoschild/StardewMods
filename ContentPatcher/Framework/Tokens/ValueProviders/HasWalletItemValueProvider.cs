@@ -67,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidInputs()
+        public override InvariantHashSet GetValidPositionalArgs()
         {
             return this.ValidInputs;
         }
@@ -77,7 +77,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             allowedValues = input.HasPositionalArgs
                 ? InvariantHashSet.Boolean()
-                : this.GetValidInputs();
+                : this.GetValidPositionalArgs();
             return true;
         }
 

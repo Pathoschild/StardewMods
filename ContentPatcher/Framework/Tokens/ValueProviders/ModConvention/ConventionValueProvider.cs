@@ -23,10 +23,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         public string Name { get; }
 
         /// <inheritdoc />
-        public bool AllowsInput => this.Provider.AllowsInput();
+        public bool AllowsPositionalInput => this.Provider.AllowsInput();
 
         /// <inheritdoc />
-        public bool RequiresInput => this.Provider.RequiresInput();
+        public bool RequiresPositionalInput => this.Provider.RequiresInput();
 
         /// <inheritdoc />
         public bool IsMutable => this.Provider.IsMutable();
@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public InvariantHashSet GetValidInputs()
+        public InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet(this.Provider.GetValidInputs());
         }

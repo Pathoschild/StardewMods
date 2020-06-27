@@ -16,10 +16,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name.</summary>
         string Name { get; }
 
-        /// <summary>Whether this token recognizes input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
-        bool CanHaveInput { get; }
-
-        /// <summary>Whether this token is only valid with an input argument (see <see cref="CanHaveInput"/>).</summary>
+        /// <summary>Whether this token is only valid with an input argument.</summary>
         bool RequiresInput { get; }
 
 
@@ -50,19 +47,19 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't match this value provider, or doesn't respect <see cref="CanHaveInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="min">The minimum value this token may return.</param>
         /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't match this value provider, or doesn't respect <see cref="CanHaveInput"/> or <see cref="RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedRangeValues(IInputArguments input, out int min, out int max);
 
         /// <summary>Get the current token values.</summary>
         /// <param name="input">The input arguments.</param>
-        /// <exception cref="InvalidOperationException">The input doesn't respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
+        /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         IEnumerable<string> GetValues(IInputArguments input);
     }
 }

@@ -36,6 +36,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Random, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.ValidNamedArguments.Add("key");
             this.UpdateRandom();
         }
 

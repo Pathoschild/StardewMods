@@ -50,7 +50,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidInputs()
+        public override InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet(this.Values.Keys);
         }
