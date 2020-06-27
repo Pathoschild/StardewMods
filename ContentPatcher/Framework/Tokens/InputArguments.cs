@@ -12,6 +12,17 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Fields
         *********/
+        /****
+        ** Constants
+        ****/
+        /// <summary>The argument names handled by Content Patcher.</summary>
+        private static readonly ISet<string> ReservedArgKeys = new InvariantHashSet
+        {
+        };
+
+        /****
+        ** State
+        ****/
         /// <summary>The last tokenisable value that was parsed.</summary>
         private string LastParsedValue = null;
 
@@ -21,6 +32,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The backing field for <see cref="NamedArgs"/>.</summary>
         private IDictionary<string, IInputArgumentValue> NamedArgsImpl = new InvariantDictionary<IInputArgumentValue>();
 
+        /// <summary>The backing field for <see cref="ReservedArgs"/>.</summary>
+        private IDictionary<string, IInputArgumentValue> ReservedArgsImpl = new InvariantDictionary<IInputArgumentValue>();
+
 
         /*********
         ** Accessors
@@ -28,6 +42,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>A singleton instance representing zero input arguments.</summary>
         public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty));
 
+        /****
+        ** Values
+        ****/
         /// <inheritdoc />
         public ITokenString TokenString { get; }
 
@@ -37,6 +54,12 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public IDictionary<string, IInputArgumentValue> NamedArgs => this.ParseIfNeeded().NamedArgsImpl;
 
+        /// <inheritdoc />
+        public IDictionary<string, IInputArgumentValue> ReservedArgs => this.ParseIfNeeded().ReservedArgsImpl;
+
+        /****
+        ** Metadata
+        ****/
         /// <inheritdoc />
         public bool HasNamedArgs => this.NamedArgs.Any();
 
@@ -72,7 +95,7 @@ namespace ContentPatcher.Framework.Tokens
         {
             if (this.LastParsedValue != this.TokenString?.Value)
             {
-                InputArguments.Parse(this.TokenString, out this.PositionalArgsImpl, out this.NamedArgsImpl);
+                InputArguments.Parse(this.TokenString, out this.PositionalArgsImpl, out this.NamedArgsImpl, out this.ReservedArgsImpl);
                 this.LastParsedValue = this.TokenString?.Value;
             }
 
@@ -81,28 +104,25 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Parse arguments from a tokenised string.</summary>
         /// <param name="input">The tokenised string to parse.</param>
-        /// <param name="positionalArgs">The parsed positional arguments.</param>
-        /// <param name="namedArgs">The parsed named arguments.</param>
-        private static void Parse(ITokenString input, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs)
+        /// <param name="positionalArgs">The positional arguments.</param>
+        /// <param name="namedArgs">The named arguments.</param>
+        /// <param name="reservedArgs">The named arguments handled by Content Patcher.</param>
+        private static void Parse(ITokenString input, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs, out IDictionary<string, IInputArgumentValue> reservedArgs)
         {
-            InputArguments.GetRawArguments(input, out string rawPositionalArgs, out string rawNamedArgs);
+            InputArguments.GetRawArguments(input, out string rawPositionalArgs, out InvariantDictionary<string> rawNamedArgs);
 
+            // parse arguments
             positionalArgs = rawPositionalArgs.SplitValuesNonUnique().ToArray();
             namedArgs = new InvariantDictionary<IInputArgumentValue>();
-
-            foreach (string arg in rawNamedArgs.SplitValuesNonUnique('|'))
+            reservedArgs = new InvariantDictionary<IInputArgumentValue>();
+            foreach (var arg in rawNamedArgs)
             {
-                string[] parts = arg.Split(new[] { '=' }, 2);
+                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique().ToArray());
 
-                if (parts.Length == 1)
-                    namedArgs[arg] = new InputArgumentValue(string.Empty, new string[0]);
+                if (InputArguments.ReservedArgKeys.Contains(arg.Key))
+                    reservedArgs[arg.Key] = values;
                 else
-                {
-                    string key = parts[0].Trim();
-                    string value = parts[1].Trim();
-
-                    namedArgs[key] = new InputArgumentValue(value, value.SplitValuesNonUnique().ToArray());
-                }
+                    namedArgs[arg.Key] = values;
             }
         }
 
@@ -110,23 +130,46 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="input">The tokenised string to parse.</param>
         /// <param name="rawPositional">The positional arguments string.</param>
         /// <param name="rawNamed">The named argument string.</param>
-        private static void GetRawArguments(ITokenString input, out string rawPositional, out string rawNamed)
+        private static void GetRawArguments(ITokenString input, out string rawPositional, out InvariantDictionary<string> rawNamed)
         {
+            // get token text
             string raw = input?.IsReady == true
                 ? input.Value?.Trim() ?? string.Empty
                 : string.Empty;
 
-            int splitIndex = raw.IndexOf("|", StringComparison.Ordinal);
-            if (splitIndex == -1)
+            // split into positional and named segments
+            string positionalSegment;
+            string namedSegment;
             {
-                rawPositional = raw;
-                rawNamed = string.Empty;
+                int splitIndex = raw.IndexOf("|", StringComparison.Ordinal);
+                if (splitIndex == -1)
+                {
+                    positionalSegment = raw;
+                    namedSegment = string.Empty;
+                }
+                else
+                {
+                    string[] parts = raw.Split(new[] { '|' }, 2);
+                    positionalSegment = parts[0].Trim();
+                    namedSegment = parts[1].Trim();
+                }
             }
-            else
+
+            // extract raw arguments
+            rawPositional = positionalSegment;
+            rawNamed = new InvariantDictionary<string>();
+            foreach (string arg in namedSegment.SplitValuesNonUnique('|'))
             {
-                string[] parts = raw.Split(new[] { '|' }, 2);
-                rawPositional = parts[0].Trim();
-                rawNamed = parts[1].Trim();
+                string[] parts = arg.Split(new[] { '=' }, 2);
+
+                if (parts.Length == 1)
+                    rawNamed[arg] = string.Empty;
+                else
+                {
+                    string key = parts[0].Trim();
+                    string value = parts[1].Trim();
+                    rawNamed[key] = value;
+                }
             }
         }
     }

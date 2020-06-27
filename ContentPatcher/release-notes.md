@@ -3,9 +3,10 @@
 # Release notes
 ## Upcoming release
 * Added `HasConversationTopic` token.
+* Overhauled token input:
+  * `Random` pinned keys are now set with a `key=` argument.
 * Mod-provided tokens now support the `{{token:value}}` form which returns `true` or `false`. (This doesn't affect mods using the advanced API.)
 * Reduced trace logs when a mod adds many custom tokens.
-* `Random` now uses a named `key=` argument for the pinned key.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
 * Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
 * Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.

@@ -7,8 +7,10 @@ This document lists the tokens available in Content Patcher packs.
 ## Contents
 * [Introduction](#introduction)
   * [Overview](#overview)
-  * [Conditions](#conditions)
   * [Placeholders](#placeholders)
+  * [Conditions](#conditions)
+  * [Input arguments](#input-arguments)
+  * [Token search](#token-search)
 * [Global tokens](#global-tokens)
   * [Date and weather](#date-and-weather)
   * [Player](#player)
@@ -30,87 +32,27 @@ This document lists the tokens available in Content Patcher packs.
 
 ## Introduction
 ### Overview
-A **token** is a placeholder for a predefined value. For example, `season` (the token) may contain
-`spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
-[global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
+A **token** is a named container which has predefined values.
 
-Tokens are indicated by two curly braces (except in `When` condition keys, where the braces are
-implied). For example, here's a simple dialogue text which includes the current season name:
+For example, `season` (the token) may contain `spring`, `summer`, `fall`, or `winter` (the value).
+Here's a dialogue which includes the current season name:
 ```js
 "Entries": {
-   "fri": "It's a beautiful {{season}} day!"
+   "fri": "It's a beautiful {{season}} day!" // It's a beautiful Spring day!
 }
 ```
 
-Most tokens contain values directly, like `{{Season}}` = `spring` or `{{HasProfession}}` =
-`Blacksmith, Forester, Miner`. Some tokens also have an _input argument_, which can be a literal
-value (like `{{Relationship:Abigail}}` = `Married`) or contain tokens too (like
-`{{HasFile:assets/{{spouse}}.png}}` = `true`).
-
-There are two ways to use tokens.
-
-### Conditions
-You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition has...
-* A key containing a [token](#advanced-tokens--conditions) without the outer curly braces, like
-  `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
-* A value containing the comma-separated values to match, like `spring, summer`. If the key token
-  returns any of these values, the condition matches. This field supports
-  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
-
-For example: this changes the house texture only in spring or summer, if the player is married, and
-the number of hearts with their spouse matches the number in the `{{minHearts}}` config field:
-
-```js
-{
-    "Action": "EditImage",
-    "Target": "Buildings/houses",
-    "FromFile": "assets/{{season}}_house.png",
-    "When": {
-        "Season": "spring, summer",
-        "HasValue:{{spouse}}": "true",
-        "Hearts:{{spouse}}": "{{minHearts}}"
-    }
-}
-```
-
-Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
-conditions match.
-
-Most tokens have an optional `{{tokenName:value}}` form which returns `true` or `false`. This can be
-used to perform AND logic:
-
-```js
-// player has blacksmith OR gemologist
-"When": {
-   "HasProfession": "Blacksmith, Gemologist"
-}
-
-// player has blacksmith AND gemologist
-"When": {
-   "HasProfession:Blacksmith": "true",
-   "HasProfession:Gemologist": "true"
-}
-```
-
-This can also be used for negative conditions:
-
-```js
-// only year one
-"When": {
-   "Year": "1"
-}
-
-// NOT year 1
-"When": {
-   "Year:1": "false"
-}
-```
+Tokens can be used as _placeholders_ in text (like the above example) or as patch _conditions_. You
+can use [player config](#player-config), [global token values](#global-tokens), and
+[dynamic token values](#dynamic-tokens) as tokens.
 
 ### Placeholders
 You can use tokens in text by putting two curly brackets around the token name, which will be
-replaced with the actual value automatically. Token placeholders are not case-sensitive. Patches
-will be disabled automatically if a token they use isn't currently available.
+replaced with the actual value automatically.
+
+Token placeholders can be used in most fields (the documentation for each field will specify), and
+they're not case-sensitive (so `{{season}}` and `{{SEASON}}` are the same thing). Patches will be
+disabled automatically if a token they use isn't currently available.
 
 For example, this gives the farmhouse a different appearance in each season:
 
@@ -122,12 +64,100 @@ For example, this gives the farmhouse a different appearance in each season:
 }
 ```
 
-You can use placeholders in most fields (the documentation for each field will mention if it does).
+Tokens which return a single value (like `{{season}}`) are most useful in placeholders, but
+multi-value tokens will work too (they'll show a comma-delimited list).
 
-Tokens which return a single value (like `{{season}}`) are most useful in placeholders. You can
-use multi-value tokens as placeholders too, which will return a comma-delimited list. Most tokens
-also have an optional `{{tokenName:value}}` form which returns `true` or `false` (like
-`{{hasProfession:Gemologist}}`).
+### Conditions
+You can make a patch conditional by adding a `When` field, which can list any number of conditions.
+Each condition has...
+* A key containing a [token](#advanced-tokens--conditions) without the outer curly braces, like
+  `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
+* A value containing the comma-separated values to match, like `spring, summer`. If the key token
+  returns any of these values, the condition matches. This field supports
+  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
+
+For example, this changes the house texture only in spring or summer in the first year:
+
+```js
+{
+    "Action": "EditImage",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/{{season}}_house.png",
+    "When": {
+        "Season": "spring, summer",
+        "Year": "1"
+    }
+}
+```
+
+Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
+conditions match.
+
+### Input arguments
+An **input argument** or **input** is a value you give to the token within the `{{...}}` braces.
+Input can be _positional_ (an unnamed list of values) or _named_. Argument values are
+comma-separated, and named arguments are pipe-separated.
+
+For example, `{{Random: a, b, c |key=some, value |example }}` has five arguments: three positional
+values `a`, `b`, `c`; a named `key` argument with values `some` and `value`; and a named `example`
+argument with an empty value.
+
+Some tokens recognise input arguments to change their output, which are documented in the sections
+below. For example, the `Uppercase` token makes its input uppercase:
+```js
+"Entries": {
+   "fri": "It's a beautiful {{uppercase: {{season}}}} day!" // It's a beautiful SPRING day!
+}
+```
+
+There are also **global input arguments** which are handled by Content Patcher, so they work with
+any token:
+
+<table>
+<tr>
+<th>input</th>
+<th>purpose</th>
+</tr>
+
+</table>
+
+### Token search
+Some tokens can match an optional [input argument](#input-arguments) like `{{tokenName:value}}`,
+which returns `true` or `false`. For example, `{{hasProfession:Gemologist}}` will check whether the
+player has the `Gemologist` profession.
+
+For example, `{{hasProfession: Gemologist}}` will check whether the player has the `Gemologist`
+profession.
+
+This is mainly useful for using logic in conditions:
+
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession": "Blacksmith, Gemologist"
+}
+
+// player has blacksmith AND gemologist
+"When": {
+   "HasProfession: Blacksmith": "true",
+   "HasProfession: Gemologist": "true"
+}
+
+// NOT year 1
+"When": {
+   "Year: 1": "false"
+}
+```
+
+This can also be used in placeholders. For example, this will load a different file depending on
+whether the player has the `Gemologist` profession:
+```js
+{
+    "Action": "EditImage",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/gems-{{HasProfession: Gemologist}}.png" // assets/gems-true.png
+}
+```
 
 ## Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.

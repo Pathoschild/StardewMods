@@ -18,6 +18,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The named input arguments.</summary>
         IDictionary<string, IInputArgumentValue> NamedArgs { get; }
 
+        /// <summary>The named input arguments handled by Content Patcher. Tokens should generally ignore these.</summary>
+        IDictionary<string, IInputArgumentValue> ReservedArgs { get; }
+
         /// <summary>Whether any named arguments were provided.</summary>
         bool HasNamedArgs { get; }
 

@@ -171,7 +171,7 @@ namespace ContentPatcher.Framework.Commands
                     (
                         from token in this.TokenManager.GetTokens(enforceContext: false)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
-                        let rootValues = !token.RequiresInput ? token.GetValues(null).ToArray() : new string[0]
+                        let rootValues = !token.RequiresInput ? token.GetValues(InputArguments.Empty).ToArray() : new string[0]
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
@@ -224,7 +224,7 @@ namespace ContentPatcher.Framework.Commands
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
+                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
                     }
 
                     output.AppendLine();
