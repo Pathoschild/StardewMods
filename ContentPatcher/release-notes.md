@@ -2,15 +2,16 @@
 
 # Release notes
 ## Upcoming release
-* Added `HasConversationTopic` token.
-* Added [named token argument support](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-tokens-guide.md#global-input-arguments):
+* Added [named token argument support](docs/author-tokens-guide.md#global-input-arguments):
   * Added a universal `contains` argument to search token values.
   * Added a universal `inputSeparator` token argument to allow commas in input values by using a custom separator.
   * Added a `key` argument to `{{Random}}`.
+* Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
 * Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
 * Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.
+* Fixed format migrations not applied for tokens within JSON objects.
 * Fixed Content Patcher allowing multiple input arguments to tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now returns an error.
 
 ## 1.14.1
@@ -99,7 +100,7 @@ Released 26 November 2019.
 * Added `patch parse` console command, which parses an arbitrary tokenizable string and shows the result.
 * Added new 'current changes' list for each content pack to `patch summary` output.
 * Added world state IDs to the `HasFlag` token.
-* Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
+* Added [`manifest.json` and `content.json` validator](docs/author-guide.md#schema-validator) for content pack authors.
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
 * Fixed `Hearts` and `Relationship` tokens not working for unmet NPCs. They now return `0` and `Unmet` respectively.

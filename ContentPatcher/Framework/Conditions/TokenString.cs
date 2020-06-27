@@ -53,7 +53,7 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
+        /// <summary>Construct an instance from raw text. This constructor bypasses migrations, so it should not be used to parse any values from a content pack.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="context">The available token context.</param>
         public TokenString(string raw, IContext context)

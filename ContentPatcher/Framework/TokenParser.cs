@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
@@ -50,10 +53,21 @@ namespace ContentPatcher.Framework
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        public bool TryParseStringTokens(string rawValue, InvariantHashSet assumeModIds, out string error, out IManagedTokenString parsed)
+        public bool TryParseString(string rawValue, InvariantHashSet assumeModIds, out string error, out IManagedTokenString parsed)
         {
-            // parse
-            parsed = new TokenString(rawValue, this.Context);
+            // parse lexical bits
+            var bits = new Lexer().ParseBits(rawValue, impliedBraces: false).ToArray();
+            foreach (ILexToken bit in bits)
+            {
+                if (!this.Migrator.TryMigrate(bit, out error))
+                {
+                    parsed = null;
+                    return false;
+                }
+            }
+
+            // get token string
+            parsed = new TokenString(bits, this.Context);
             if (!this.Migrator.TryMigrate(parsed, out error))
                 return false;
 
@@ -75,7 +89,7 @@ namespace ContentPatcher.Framework
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
-        public bool TryParseJsonTokens(JToken rawJson, InvariantHashSet assumeModIds, out string error, out TokenizableJToken parsed)
+        public bool TryParseJson(JToken rawJson, InvariantHashSet assumeModIds, out string error, out TokenizableJToken parsed)
         {
             if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
@@ -84,8 +98,15 @@ namespace ContentPatcher.Framework
                 return true;
             }
 
-            // parse
-            parsed = new TokenizableJToken(rawJson, this.Context);
+            // extract mutable fields
+            if (!this.TryInjectJsonProxyFields(rawJson, assumeModIds, out error, out TokenizableProxy[] proxyFields))
+            {
+                parsed = null;
+                return false;
+            }
+
+            // build tokenizable structure
+            parsed = new TokenizableJToken(rawJson, proxyFields);
             if (!this.Migrator.TryMigrate(parsed, out error))
                 return false;
 
@@ -139,6 +160,107 @@ namespace ContentPatcher.Framework
             // no error found
             error = null;
             return true;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Find all tokens in a JSON structure and inject proxy fields which can be updated to change the structure.</summary>
+        /// <param name="token">The JSON structure to modify.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
+        /// <param name="proxyFields">The injected proxy fields, if any.</param>
+        /// <returns>Returns whether the JSON structure was successfully modified, regardless of whether any proxy fields are needed.</returns>
+        private bool TryInjectJsonProxyFields(JToken token, InvariantHashSet assumeModIds, out string error, out TokenizableProxy[] proxyFields)
+        {
+            proxyFields = null;
+
+            List<TokenizableProxy> fields = new List<TokenizableProxy>();
+            switch (token)
+            {
+                case JValue valueToken:
+                    {
+                        string value = valueToken.Value<string>();
+                        if (!this.TryInjectJsonProxyField(value, assumeModIds, val => valueToken.Value = val, out error, out TokenizableProxy proxy))
+                            return false;
+
+                        fields.Add(proxy);
+                    }
+                    break;
+
+                case JObject objToken:
+                    foreach (JProperty p in objToken.Properties())
+                    {
+                        JProperty property = p;
+
+                        // resolve property name
+                        if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => property = this.ReplaceJsonProperty(property, new JProperty(val, property.Value)), out error, out TokenizableProxy proxyName))
+                            return false;
+                        fields.Add(proxyName);
+
+                        // resolve property values
+                        if (!this.TryInjectJsonProxyFields(property.Value, assumeModIds, out error, out TokenizableProxy[] proxyValues))
+                            return false;
+                        fields.AddRange(proxyValues);
+                    }
+                    break;
+
+                case JArray arrToken:
+                    foreach (JToken valueToken in arrToken)
+                    {
+                        if (!this.TryInjectJsonProxyFields(valueToken, assumeModIds, out error, out TokenizableProxy[] proxyValues))
+                            return false;
+                        fields.AddRange(proxyValues);
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown JSON token: {token.GetType().FullName} ({token.Type})");
+            }
+
+            proxyFields = fields.Where(p => p != null).ToArray();
+            error = null;
+            return true;
+        }
+
+        /// <summary>Resolve tokens in a string field, replace immutable tokens with their values, and get mutable tokens.</summary>
+        /// <param name="str">The string to scan.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="setValue">Update the source with a new value.</param>
+        /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
+        /// <param name="parsed">The parsed value if needed, or <c>null</c> if the string does not contain any tokens.</param>
+        private bool TryInjectJsonProxyField(string str, InvariantHashSet assumeModIds, Action<string> setValue, out string error, out TokenizableProxy parsed)
+        {
+            // parse string
+            if (!this.TryParseString(str, assumeModIds, out error, out IManagedTokenString tokenStr))
+            {
+                parsed = null;
+                return false;
+            }
+
+            // handle mutable token
+            if (tokenStr.IsMutable)
+            {
+                parsed = new TokenizableProxy(tokenStr, setValue);
+                return true;
+            }
+
+            // substitute immutable value
+            if (tokenStr.Value != str)
+                setValue(tokenStr.Value);
+            parsed = null;
+            return true;
+        }
+
+        /// <summary>Replace a JSON property with a new one.</summary>
+        /// <param name="oldProperty">The JSON property to replace.</param>
+        /// <param name="newProperty">The new JSON property to inject.</param>
+        /// <returns>Returns the injected property.</returns>
+        private JProperty ReplaceJsonProperty(JProperty oldProperty, JProperty newProperty)
+        {
+            oldProperty.Replace(newProperty);
+            return newProperty;
         }
     }
 }
