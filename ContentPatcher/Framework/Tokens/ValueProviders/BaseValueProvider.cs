@@ -286,7 +286,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 HashSet<T> oldValues = new HashSet<T>(values);
                 action();
-                return values.Count != oldValues.Count || values.Any(p => !oldValues.Contains(p));
+                return this.IsChanged(oldValues, values);
             });
         }
 
@@ -325,6 +325,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (isSocial)
                     yield return npc;
             }
+        }
+
+        /// <summary>Get whether the values in a collection changed.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="oldValues">The old values to check.</param>
+        /// <param name="newValues">The new values to check.</param>
+        protected bool IsChanged<T>(HashSet<T> oldValues, HashSet<T> newValues)
+        {
+            return newValues.Count != oldValues.Count || newValues.Any(p => !oldValues.Contains(p));
         }
     }
 }

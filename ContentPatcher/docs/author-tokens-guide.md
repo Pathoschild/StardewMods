@@ -25,12 +25,10 @@ This document lists the tokens available in Content Patcher packs.
   * [Custom input value separator](#custom-input-value-separator)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
-  * [Overview](#overview)
-  * [Unique properties](#unique-properties)
-  * [Pinned keys](#pinned-keys)
 * [Dynamic tokens](#dynamic-tokens)
 * [Player config](#player-config)
 * [Mod-provided tokens](#mod-provided-tokens)
+* [Constants](#constants)
 * [See also](#see-also)
 
 ## Introduction
@@ -209,21 +207,24 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
-<td>HasDialogueAnswer</td>
+<td>HasConversationTopic</td>
 <td>
 
-The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for the player's
-answers to question dialogues.
+The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Active_dialogue_events)
+for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
+
+Topics that have expired are stored as flags (see `HasFlag`).
 
 </td>
 </tr>
 
 <tr valign="top">
-<td>HasConversationTopic</td>
+<td>HasDialogueAnswer</td>
 <td>
 
-The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Active_dialogue_events)
-for the player. Previous topics are stored as flags (see `HasFlag`).
+The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for answers to
+question dialogues by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument).
 
 </td>
 </tr>
@@ -232,8 +233,10 @@ for the player. Previous topics are stored as flags (see `HasFlag`).
 <td>HasFlag</td>
 <td>
 
-The flags set for the current player, including letters received and world state IDs. Some useful
-flags:
+The flags set for the current player (or the player specified with a [`PlayerType`](#playertype)
+argument), including letters received and world state IDs.
+
+Some useful flags:
 
 flag | meaning
 ---- | -------
@@ -263,7 +266,10 @@ flag | meaning
 <td>HasProfession</td>
 <td>
 
-The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
+The [professions](https://stardewvalleywiki.com/Skills) learned by the current player (or the
+player specified with a [`PlayerType`](#playertype) argument).
+
+Possible values:
 
 * Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
 * Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
@@ -278,15 +284,22 @@ Custom professions added by a mod are represented by their integer profession ID
 
 <tr valign="top">
 <td>HasReadLetter</td>
-<td>The letter IDs opened by the player (i.e. a letter UI was displayed).</td>
+<td>
+
+The letter IDs opened by the current player (or the player specified with a
+[`PlayerType`](#playertype) argument). A letter is considered 'opened' if the letter UI was shown.
+
+</td>
 </tr>
 
 <tr valign="top">
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs the player has seen, matching IDs in the `Data/Events` files. (You can use
-[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+The event IDs seen by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument), matching IDs in the `Data/Events` files.
+
+You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
 
 </td>
 </tr>
@@ -295,7 +308,9 @@ The event IDs the player has seen, matching IDs in the `Data/Events` files. (You
 <td>HasWalletItem</td>
 <td>
 
-The [special items in the player wallet](https://stardewvalleywiki.com/Wallet). Possible values:
+The [special wallet items](https://stardewvalleywiki.com/Wallet) for the current player.
+
+Possible values:
 
 flag                       | meaning
 -------------------------- | -------
@@ -1221,6 +1236,24 @@ To use a mod-provided token, at least one of these must be true:
      ]
   }
   ```
+
+## Constants
+These are predefined values used in tokens.
+
+### `PlayerType`
+value | meaning
+----- | -------
+`currentPlayer` | The current player who has the mod installed.
+`hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
+
+The player type can be specified as an [input argument](#input-argument) for tokens that support it,
+defaulting to the current player. For example:
+
+example | meaning
+------- | -------
+`{{HasFlag}}` | Get flags for the current player.
+`{{HasFlag: hostPlayer}}` | Get flags for the host player.
+`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
 
 ## See also
 * [README](../README.md) for other info

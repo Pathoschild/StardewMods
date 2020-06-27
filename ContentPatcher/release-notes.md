@@ -6,6 +6,7 @@
   * Added a universal `contains` argument to search token values.
   * Added a universal `inputSeparator` token argument to allow commas in input values by using a custom separator.
   * Added a `key` argument to `{{Random}}`.
+* Several [player tokens](docs/author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
 * Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.

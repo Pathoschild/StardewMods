@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
+using ContentPatcher.Framework.Tokens.ValueProviders.Players;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -159,13 +160,13 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
 
             // player
-            yield return new ConditionTypeValueProvider(ConditionType.HasConversationTopic, () => Game1.player?.activeDialogueEvents.Keys, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
-            yield return new HasProfessionValueProvider(NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
-            yield return new HasWalletItemValueProvider(NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, this.GetProfessions, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, this.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => Game1.currentLocation?.Name, NeedsBasicInfo);
@@ -240,40 +241,67 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the event IDs seen by the player.</summary>
-        private IEnumerable<string> GetEventsSeen()
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetEventsSeen(Farmer player)
         {
-            Farmer player = Game1.player;
-            if (player == null)
-                return new string[0];
-
             return player.eventsSeen
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
 
-        /// <summary>Get the letter IDs read by the player.</summary>
-        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetReadLetters()
-        {
-            if (Game1.player == null)
-                return new string[0];
-            return Game1.player.mailReceived;
-        }
-
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
         /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetFlags()
+        private IEnumerable<string> GetFlags(Farmer player)
         {
             // mail flags
-            if (Game1.player != null)
-            {
-                foreach (string flag in Game1.player.mailReceived.Union(Game1.player.mailForTomorrow).Union(Game1.player.mailbox))
-                    yield return flag;
-            }
+            foreach (string flag in player.mailReceived.Union(player.mailForTomorrow).Union(player.mailbox))
+                yield return flag;
 
             // world state flags
             foreach (string flag in Game1.worldStateIDs)
                 yield return flag;
+        }
+
+        /// <summary>Get the professions for the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetProfessions(Farmer player)
+        {
+            foreach (int professionID in player.professions)
+            {
+                yield return Enum.IsDefined(typeof(Profession), professionID)
+                    ? ((Profession)professionID).ToString()
+                    : professionID.ToString();
+            }
+        }
+
+        /// <summary>Get the wallet items for the current player.</summary>
+        private IEnumerable<string> GetWalletItems()
+        {
+            Farmer player = Game1.player;
+            if (player == null)
+                yield break;
+
+            if (player.canUnderstandDwarves)
+                yield return WalletItem.DwarvishTranslationGuide.ToString();
+            if (player.hasRustyKey)
+                yield return WalletItem.RustyKey.ToString();
+            if (player.hasClubCard)
+                yield return WalletItem.ClubCard.ToString();
+            if (player.hasSpecialCharm)
+                yield return WalletItem.SpecialCharm.ToString();
+            if (player.hasSkullKey)
+                yield return WalletItem.SkullKey.ToString();
+            if (player.hasMagnifyingGlass)
+                yield return WalletItem.MagnifyingGlass.ToString();
+            if (player.hasDarkTalisman)
+                yield return WalletItem.DarkTalisman.ToString();
+            if (player.hasMagicInk)
+                yield return WalletItem.MagicInk.ToString();
+            if (player.eventsSeen.Contains(2120303))
+                yield return WalletItem.BearsKnowledge.ToString();
+            if (player.eventsSeen.Contains(3910979))
+                yield return WalletItem.SpringOnionMastery.ToString();
         }
 
         /// <summary>Get whether the community center is complete.</summary>
@@ -312,11 +340,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the response IDs of dialogue answers given by the player.</summary>
-        private IEnumerable<string> GetDialogueAnswers()
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetDialogueAnswers(Farmer player)
         {
-            if (Game1.player == null)
-                return new string[0];
-            return Game1.player.dialogueQuestionsAnswered
+            return player.dialogueQuestionsAnswered
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
