@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -112,21 +111,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input arguments.</param>
         private string GetPinnedKey(IInputArguments input)
         {
-            // from named argument
-            if (input.NamedArgs.TryGetValue("key", out IInputArgumentValue value))
-                return value.Raw;
-
-            // from legacy format
-            // (Before Content Patcher 1.15, pinned keys were set like `{{Random: choices | pinned-key}}`,
-            // which `input` represents as a 'pinned-key' named argument with no value.)
-            if (input.NamedArgs.Count == 1)
-            {
-                var argument = input.NamedArgs.First();
-                if (!argument.Value.Parsed.Any())
-                    return argument.Value.Raw;
-            }
-
-            return null;
+            return input.NamedArgs.TryGetValue("key", out IInputArgumentValue value)
+                ? value.Raw
+                : null;
         }
 
         /// <summary>Update the random number generator if needed.</summary>

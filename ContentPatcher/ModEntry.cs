@@ -49,7 +49,8 @@ namespace ContentPatcher
             new Migration_1_10(),
             new Migration_1_11(),
             new Migration_1_13(),
-            new Migration_1_14()
+            new Migration_1_14(),
+            new Migration_1_15()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -991,13 +992,6 @@ namespace ContentPatcher
                 {
                     if (bool.TryParse(condition.Values.Value, out bool required) && required)
                         immutableRequiredModIDs = new InvariantHashSet(contains.Parsed);
-                }
-
-                // positional input
-                else if (condition.Input.HasPositionalArgs)
-                {
-                    if (bool.TryParse(condition.Values.Value, out bool required) && required)
-                        immutableRequiredModIDs = new InvariantHashSet(condition.Input.GetFirstPositionalArg());
                 }
 
                 // values

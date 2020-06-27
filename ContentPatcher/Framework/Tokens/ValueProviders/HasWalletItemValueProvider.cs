@@ -20,8 +20,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The defined wallet items and whether the player has them.</summary>
         private readonly IDictionary<WalletItem, bool> Values = new Dictionary<WalletItem, bool>();
 
-        /// <summary>The valid input arguments.</summary>
-        private readonly InvariantHashSet ValidInputs = new InvariantHashSet(Enum.GetNames(typeof(WalletItem)));
+        /// <summary>The valid values.</summary>
+        private readonly InvariantHashSet ValidValues = new InvariantHashSet(Enum.GetNames(typeof(WalletItem)));
 
 
         /*********
@@ -33,7 +33,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.HasWalletItem, mayReturnMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
         /// <inheritdoc />
@@ -67,17 +66,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidPositionalArgs()
-        {
-            return this.ValidInputs;
-        }
-
-        /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : this.GetValidPositionalArgs();
+            allowedValues = this.ValidValues;
             return true;
         }
 
@@ -86,18 +77,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (input.HasPositionalArgs)
+            foreach (KeyValuePair<WalletItem, bool> pair in this.Values)
             {
-                bool hasItem = this.TryParseEnum(input.GetFirstPositionalArg(), out WalletItem item) && this.Values[item];
-                yield return hasItem.ToString();
-            }
-            else
-            {
-                foreach (KeyValuePair<WalletItem, bool> pair in this.Values)
-                {
-                    if (pair.Value)
-                        yield return pair.Key.ToString();
-                }
+                if (pair.Value)
+                    yield return pair.Key.ToString();
             }
         }
     }

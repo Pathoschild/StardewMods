@@ -137,7 +137,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error)
+        public virtual bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error)
         {
             if (!this.TryValidateInput(input, out error))
                 return false;
@@ -168,13 +168,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     error = $"invalid values ({string.Join(", ", invalidValues)}); expected one of {string.Join(", ", validValues)}";
                     return false;
                 }
-            }
-
-            // custom validation
-            foreach (string value in values)
-            {
-                if (!this.TryValidate(input, value, out error))
-                    return false;
             }
 
             // no issues found
@@ -228,17 +221,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="mayReturnMultipleValuesForRoot">Whether the root value provider may contain multiple values.</param>
         protected BaseValueProvider(ConditionType type, bool mayReturnMultipleValuesForRoot)
             : this(type.ToString(), mayReturnMultipleValuesForRoot) { }
-
-        /// <summary>Validate that the provided value is valid for the given input arguments (regardless of whether they match).</summary>
-        /// <param name="input">The input arguments.</param>
-        /// <param name="value">The value to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        protected virtual bool TryValidate(IInputArguments input, string value, out string error)
-        {
-            error = null;
-            return true;
-        }
 
         /// <summary>Enable input arguments for this value provider.</summary>
         /// <param name="required">Whether input arguments are required when using this value provider.</param>

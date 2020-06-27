@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
@@ -38,7 +37,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
             this.PregnancyOnly = type == ConditionType.Pregnant;
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
         /// <inheritdoc />
@@ -88,45 +86,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
-        {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : null;
-            return allowedValues != null;
-        }
-
-        /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
-        {
-            if (!base.TryValidateInput(input, out error))
-                return false;
-
-            if (input.PositionalArgs.Any(p => !p.StartsWith(InternalConstants.PlayerNamePrefix)))
-            {
-                error = $"invalid input argument ({input}), player names must be prefixed with {InternalConstants.PlayerNamePrefix}.";
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <inheritdoc />
         public override IEnumerable<string> GetValues(IInputArguments input)
         {
             this.AssertInput(input);
 
-            if (input.HasPositionalArgs)
-            {
-                yield return this.PartnersHavingChild
-                    .Contains(input.GetFirstPositionalArg())
-                    .ToString();
-            }
-            else
-            {
-                foreach (string name in this.PartnersHavingChild)
-                    yield return name;
-            }
+            return this.PartnersHavingChild;
         }
 
 

@@ -31,16 +31,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.Values = values ?? new InvariantHashSet();
             this.AllowedRootValues = allowedValues?.Any() == true ? allowedValues : null;
             this.MayReturnMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.IsMutable = false;
         }
 
         /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : this.AllowedRootValues;
+            allowedValues = this.AllowedRootValues;
             return allowedValues != null;
         }
 
@@ -49,8 +46,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (input.PositionalArgs.Any())
-                return new[] { this.Values.Contains(input.GetFirstPositionalArg()).ToString() };
             return this.Values;
         }
     }

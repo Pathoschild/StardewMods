@@ -14,6 +14,9 @@
 * Fixed format migrations not applied for tokens within JSON objects.
 * Fixed Content Patcher allowing multiple input arguments to tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now returns an error.
 
+**Update note for mod authors:**  
+Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
+
 ## 1.14.1
 Released 14 May 2020.
 

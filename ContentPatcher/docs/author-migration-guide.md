@@ -11,6 +11,7 @@ This document helps mod authors update their content packs for newer versions of
   * [So I never need to update my content packs?](#so-i-never-need-to-update-my-content-packs)
   * [How do I update my content pack?](#how-do-i-update-my-content-pack)
 * [Migration guides](#migration-guides)
+  * [1.15](#115)
   * [1.7](#17)
   * [1.6](#16)
 * [See also](#see-also)
@@ -53,6 +54,33 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
+
+### 1.15
+* **Token search syntax:** you could previously search some tokens by passing the value as an input
+  argument like `{{Season: Spring}}`. That should now be written like `{{Season |contains=Spring}}`,
+  which works with all tokens.
+
+  The change affects all tokens _except_ `HasFile`, `HasValue`, `Hearts`, `Lowercase`/`Uppercase`,
+  `Query`, `Random`, `Range`, `Round` `Relationship`, `SkillLevel`, and mod-provided tokens (which
+  all use input arguments for a different purpose).
+
+  That also affects conditions:
+  ```js
+  "When": {
+    "Season: Spring": "true" // should be "Season |contains=Spring": "true"
+  }
+  ```
+
+  Note that conditions like this aren't affected:
+  ```js
+  // still okay!
+  "When": {
+    "Season": "Spring"
+  }
+  ```
+
+* **Random pinned keys:** the `Random` token allows an optional pinned key. The previous format was
+  `{{Random: choices | pinned-key}}`; that should be changed to `{{Random: choices |key=pinned-key}}`.
 
 ### 1.7
 Released 08 May 2019.

@@ -29,7 +29,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.HasProfession, mayReturnMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
         /// <inheritdoc />
@@ -47,12 +46,23 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error)
         {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : null;
-            return allowedValues != null;
+            if (!base.TryValidateValues(input, values, out error))
+                return false;
+
+            // validate profession IDs
+            foreach (string value in values)
+            {
+                if (!this.TryParseEnum(value, out Profession _, mustBeNamed: false))
+                {
+                    error = $"can't parse '{value}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
         }
 
         /// <inheritdoc />
@@ -60,34 +70,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (input.HasPositionalArgs)
-            {
-                bool hasProfession = this.TryParseEnum(input.GetFirstPositionalArg(), out Profession profession, mustBeNamed: false) && this.Professions.Contains(profession);
-                yield return hasProfession.ToString();
-            }
-            else
-            {
-                foreach (Profession profession in this.Professions)
-                    yield return profession.ToString();
-            }
-        }
-
-        /// <inheritdoc />
-        protected override bool TryValidate(IInputArguments input, string value, out string error)
-        {
-            if (!base.TryValidate(input, value, out error))
-                return false;
-
-            // validate profession IDs
-            string profession = input.GetFirstPositionalArg() ?? value;
-            if (!this.TryParseEnum(profession, out Profession _, mustBeNamed: false))
-            {
-                error = $"can't parse '{profession}' as a profession ID; must be one of [{string.Join(", ", Enum.GetNames(typeof(Profession)).OrderByIgnoreCase(p => p))}] or an integer ID.";
-                return false;
-            }
-
-            error = null;
-            return true;
+            foreach (Profession profession in this.Professions)
+                yield return profession.ToString();
         }
     }
 }

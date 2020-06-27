@@ -39,7 +39,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.IsValidInContextImpl = isValidInContext;
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = () => new InvariantHashSet(values());
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
         /// <summary>Construct an instance.</summary>
@@ -68,9 +67,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : this.AllowedRootValues;
+            allowedValues = this.AllowedRootValues;
             return allowedValues != null;
         }
 
@@ -79,8 +76,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (input.HasPositionalArgs)
-                return new[] { this.Values.Contains(input.GetFirstPositionalArg()).ToString() };
             return this.Values;
         }
     }

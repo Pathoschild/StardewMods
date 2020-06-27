@@ -876,7 +876,7 @@ You can calculate mathematical expressions in patches using the `query` token (i
 tokens which return a number):
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1097,7 +1097,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1142,7 +1142,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1186,7 +1186,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1206,7 +1206,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.14.0",
+     "Format": "1.15.0",
      "Changes": [
         {
            "Action": "EditData",
