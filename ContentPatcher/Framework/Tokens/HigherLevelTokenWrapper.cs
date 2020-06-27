@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
@@ -24,6 +25,32 @@ namespace ContentPatcher.Framework.Tokens
 
             // default logic
             return base.CanHaveMultipleValues(input);
+        }
+
+        /// <inheritdoc />
+        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, out string error)
+        {
+            // 'contains' limited to true/false
+            if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
+            {
+                if (!base.TryValidateInput(input, out error))
+                    return false;
+
+                string[] invalidValues = values
+                    .Where(p => !bool.TryParse(p, out bool _))
+                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .ToArray();
+                if (invalidValues.Any())
+                {
+                    error = $"invalid values ({string.Join(", ", invalidValues)}); expected 'true' or 'false' when used with 'contains'.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            return base.TryValidateValues(input, values, context, out error);
         }
 
         /// <inheritdoc />
