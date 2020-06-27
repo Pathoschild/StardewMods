@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be(parsed);
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(1);
-            tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.Text).Should().BeEquivalentTo("{{" + configKey + "}}");
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.ToString()).Should().BeEquivalentTo("{{" + configKey + "}}");
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
             diagnosticState.IsReady.Should().BeTrue();
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(3);
-            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.Text).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.ToString()).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
             tokenStr.IsReady.Should().BeFalse();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();

@@ -7,10 +7,10 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         ** Accessors
         *********/
         /// <summary>The lexical token type.</summary>
-        public LexTokenType Type { get; }
+        public LexTokenType Type { get; } = LexTokenType.Literal;
 
         /// <summary>A text representation of the lexical token.</summary>
-        public string Text { get; }
+        public string Text { get; private set; }
 
 
         /*********
@@ -20,8 +20,20 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="text">The literal text value.</param>
         public LexTokenLiteral(string text)
         {
-            this.Type = LexTokenType.Literal;
+            this.MigrateTo(text);
+        }
+
+        /// <summary>Apply changes for a format migration.</summary>
+        /// <param name="text">The new text to set.</param>
+        public void MigrateTo(string text)
+        {
             this.Text = text;
+        }
+
+        /// <summary>Get a text representation of the lexical token.</summary>
+        public override string ToString()
+        {
+            return this.Text;
         }
     }
 }

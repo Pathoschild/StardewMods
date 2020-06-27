@@ -156,19 +156,17 @@ namespace ContentPatcher.Framework.Lexing
             ISet<LinkedListNode<ILexToken>> removeQueue = new HashSet<LinkedListNode<ILexToken>>(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
             for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
             {
-                if (node.Value.Type != LexTokenType.Literal)
-                    continue;
-
                 // fetch info
-                ILexToken current = node.Value;
+                if (!(node.Value is LexTokenLiteral current))
+                    continue;
                 ILexToken previous = node.Previous?.Value;
                 ILexToken next = node.Next?.Value;
-                string newText = node.Value.Text;
+                string newText = current.Text;
 
                 // collapse sequential literals
-                if (previous?.Type == LexTokenType.Literal)
+                if (previous is LexTokenLiteral prevLiteral)
                 {
-                    newText = previous.Text + newText;
+                    newText = prevLiteral.Text + newText;
                     removeQueue.Add(node.Previous);
                 }
 
@@ -191,8 +189,8 @@ namespace ContentPatcher.Framework.Lexing
                 }
 
                 // replace value if needed
-                if (newText != current.Text)
-                    node.Value = new LexTokenLiteral(newText);
+                if (current.Text != newText)
+                    current.MigrateTo(newText);
             }
             foreach (LinkedListNode<ILexToken> entry in removeQueue)
                 tokens.Remove(entry);

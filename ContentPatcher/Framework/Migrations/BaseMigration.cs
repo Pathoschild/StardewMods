@@ -73,13 +73,6 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
         {
-            // tokens which need a higher version
-            foreach (ILexToken token in tokenStr.LexTokens)
-            {
-                if (!this.TryMigrate(token, out error))
-                    return false;
-            }
-
             // no issue found
             error = null;
             return true;

@@ -82,7 +82,7 @@ namespace ContentPatcher.Framework.Conditions
                 .ToArray();
 
             // set raw value
-            this.Raw = string.Join("", this.Parts.Select(p => p.LexToken.Text)).Trim();
+            this.Raw = string.Join("", this.Parts.Select(p => p.LexToken)).Trim();
             if (string.IsNullOrWhiteSpace(this.Raw))
             {
                 this.Value = this.Raw;
@@ -181,7 +181,7 @@ namespace ContentPatcher.Framework.Conditions
             {
                 StringBuilder str = new StringBuilder();
                 foreach (TokenStringPart part in this.Parts)
-                    str.Append(this.TryGetTokenText(context, part, unavailableTokens, errors, out string text) ? text : part.LexToken.Text);
+                    str.Append(this.TryGetTokenText(context, part, unavailableTokens, errors, out string text) ? text : part.LexToken.ToString());
 
                 this.Value = !unavailableTokens.Any() && !errors.Any()
                     ? str.ToString().Trim()
@@ -286,7 +286,7 @@ namespace ContentPatcher.Framework.Conditions
                     }
 
                 default:
-                    text = part.LexToken.Text;
+                    text = part.LexToken.ToString();
                     return true;
             }
         }

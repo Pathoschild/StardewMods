@@ -9,7 +9,11 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>The lexical token type.</summary>
         LexTokenType Type { get; }
 
-        /// <summary>A text representation of the lexical token.</summary>
-        string Text { get; }
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Get a text representation of the lexical token.</summary>
+        string ToString();
     }
 }

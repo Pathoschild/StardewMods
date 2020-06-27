@@ -41,7 +41,7 @@ namespace ContentPatcher.Framework.Migrations
             // 1.7 adds nested tokens
             if (lexToken is LexTokenToken token && !token.Name.EqualsIgnoreCase("HasFile") && token.InputArgs?.Parts.Any(p => p.Type == LexTokenType.Token) == true)
             {
-                error = this.GetNounPhraseError($"using nested tokens like '{lexToken.Text}'");
+                error = this.GetNounPhraseError($"using nested tokens like '{lexToken}'");
                 return false;
             }
 
