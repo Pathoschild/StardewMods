@@ -89,13 +89,13 @@ namespace ContentPatcher.Framework
         /// <summary>Get comma-separated values from a string.</summary>
         /// <param name="str">The string to parse.</param>
         /// <param name="separator">The separator by which to split the value.</param>
-        public static IEnumerable<string> SplitValuesNonUnique(this string str, char separator = ',')
+        public static IEnumerable<string> SplitValuesNonUnique(this string str, string separator = ",")
         {
             if (string.IsNullOrWhiteSpace(str))
                 return Enumerable.Empty<string>();
 
             return str
-                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(p => p.Trim());
         }
 

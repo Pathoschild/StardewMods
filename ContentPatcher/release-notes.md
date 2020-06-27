@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added `HasConversationTopic` token.
 * Overhauled token input:
+  * Added an `|inputSeparator=` argument to use a different separator for a token's input arguments.
   * `Random` pinned keys are now set with a `key=` argument.
 * Mod-provided tokens now support the `{{token:value}}` form which returns `true` or `false`. (This doesn't affect mods using the advanced API.)
 * Reduced trace logs when a mod adds many custom tokens.

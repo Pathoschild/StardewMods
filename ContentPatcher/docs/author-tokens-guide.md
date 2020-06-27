@@ -119,6 +119,21 @@ any token:
 <th>purpose</th>
 </tr>
 
+<tr>
+<td><code>inputSeparator</code>
+<td>
+
+Use a custom value separator instead of the usual comma for input arguments. Note that the `{}|=:`
+symbols are reserved and shouldn't be used as a separator. A separator can be multiple characters.
+For example:
+
+```json
+"Entries": {
+   "fri": "{{Random: Hey there! @@ Hey, what's up? |inputSeparator=@@}}"
+```
+
+</td>
+</tr>
 </table>
 
 ### Token search

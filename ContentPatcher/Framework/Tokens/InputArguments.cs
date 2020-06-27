@@ -15,9 +15,13 @@ namespace ContentPatcher.Framework.Tokens
         /****
         ** Constants
         ****/
+        /// <summary>The name of the input separator argument.</summary>
+        private const string InputSeparatorArg = "inputSeparator";
+
         /// <summary>The argument names handled by Content Patcher.</summary>
         private static readonly ISet<string> ReservedArgKeys = new InvariantHashSet
         {
+            InputArguments.InputSeparatorArg
         };
 
         /****
@@ -111,13 +115,17 @@ namespace ContentPatcher.Framework.Tokens
         {
             InputArguments.GetRawArguments(input, out string rawPositionalArgs, out InvariantDictionary<string> rawNamedArgs);
 
+            // get value separator
+            if (!rawNamedArgs.TryGetValue(InputArguments.InputSeparatorArg, out string inputSeparator) || string.IsNullOrWhiteSpace(inputSeparator))
+                inputSeparator = ",";
+
             // parse arguments
-            positionalArgs = rawPositionalArgs.SplitValuesNonUnique().ToArray();
+            positionalArgs = rawPositionalArgs.SplitValuesNonUnique(inputSeparator).ToArray();
             namedArgs = new InvariantDictionary<IInputArgumentValue>();
             reservedArgs = new InvariantDictionary<IInputArgumentValue>();
             foreach (var arg in rawNamedArgs)
             {
-                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique().ToArray());
+                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique(inputSeparator).ToArray());
 
                 if (InputArguments.ReservedArgKeys.Contains(arg.Key))
                     reservedArgs[arg.Key] = values;
@@ -158,7 +166,7 @@ namespace ContentPatcher.Framework.Tokens
             // extract raw arguments
             rawPositional = positionalSegment;
             rawNamed = new InvariantDictionary<string>();
-            foreach (string arg in namedSegment.SplitValuesNonUnique('|'))
+            foreach (string arg in namedSegment.SplitValuesNonUnique("|"))
             {
                 string[] parts = arg.Split(new[] { '=' }, 2);
 
