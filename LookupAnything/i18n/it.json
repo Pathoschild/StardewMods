@@ -151,32 +151,31 @@
     "data.item.box.description": "Rompila per ottenere diversi materiali.",
 
     // location names
-    // TODO
-    "location.backwoods": "backwoods",
-    "location.beach": "beach",
-    "location.beach.east-pier": "beach (eastern pier)",
-    "location.bugLand": "mutant bug lair",
-    "location.busStop": "bus stop",
-    "location.desert": "desert",
-    "location.farm": "farm",
-    "location.farmCave": "farm cave",
-    "location.farmHouse": "farmhouse",
-    "location.forest": "forest",
-    "location.forest.fish-area-0": "forest river",
-    "location.forest.fish-area-1": "forest pond",
-    "location.forest.island-tip": "forest river (south tip of large island)",
-    "location.mountain": "mountain",
-    "location.railroad": "railroad",
-    "location.sewer": "sewers",
-    "location.submarine": "Night Market submarine",
-    "location.town": "town",
-    "location.town.northmost-bridge": "town (northmost bridge)",
-    "location.tunnel": "bus tunnel",
-    "location.undergroundMine": "mines",
-    "location.undergroundMine.level": "mine level {{level}}",
-    "location.witchSwamp": "witch's swamp",
-    "location.woods": "secret woods",
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.backwoods": "campagna",
+    "location.beach": "spiaggia",
+    "location.beach.east-pier": "spiaggia (molo orientale)",
+    "location.bugLand": "tana dell'insetto mutante",
+    "location.busStop": "bus stop", // TODO
+    "location.desert": "deserto",
+    "location.farm": "fattoria",
+    "location.farmCave": "grotta nella fattoria",
+    "location.farmHouse": "casale",
+    "location.forest": "foresta",
+    "location.forest.fish-area-0": "fiume nella forest",
+    "location.forest.fish-area-1": "lagetto nella foresta",
+    "location.forest.island-tip": "fiume nella foresta (punta Sud dell'isola maggiore)",
+    "location.mountain": "montagna",
+    "location.railroad": "ferrovia",
+    "location.sewer": "fogne",
+    "location.submarine": "sottomarino",
+    "location.town": "paese",
+    "location.town.northmost-bridge": "paese (ponte Nord)",
+    "location.tunnel": "bus tunnel", // TODO
+    "location.undergroundMine": "miniera",
+    "location.undergroundMine.level": "miniera livello {{level}}",
+    "location.witchSwamp": "palude della strega",
+    "location.woods": "boschi segreti",
+    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})", // TODO
 
 
     /*********
@@ -251,8 +250,8 @@
     // values
     "building.fish-pond.population.empty": "Aggiungi un pesce per dare vita a questo stagno",
     "building.fish-pond.population.next-spawn": "Nuovo pesce generato il {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
-    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
+    "building.fish-pond.drops.preface": "{{chance}}% Possibilita' ogni giorno di produrre il primo oggetto associato:",
+    "building.fish-pond.drops.min-fish": "Con {{count}} pesci:",
     "building.fish-pond.quests.done": "{{count}} pesci",
     "building.fish-pond.quests.incomplete-one": "{{count}} pesci: avranno bisogno di {{itemName}}",
     "building.fish-pond.quests.incomplete-random": "{{count}} pesci: avranno bisogno di un {{itemList}}",
@@ -399,22 +398,20 @@
     ** Item > fish lookups
     *********/
     // labels
-    // TODO
-    "item.fish-pond-drops": "Fish pond drops",
-    "item.fish-spawn-rules": "Spawn rules",
+    "item.fish-pond-drops": "Prodotti dello stagno",
+    "item.fish-spawn-rules": "Regole di produzione",
 
     // values
-    // TODO
-    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
-    "item.fish-spawn-rules.locations": "locations: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.min-fishing-level": "livello minimo di pesca: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "Non ancora pescato (si può pescare solo una volta)",
+    "item.fish-spawn-rules.locations": "luogo: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "luoghi:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
-    "item.fish-spawn-rules.season-any": "any season",
-    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
-    "item.fish-spawn-rules.time": "time of day: {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
-    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+    "item.fish-spawn-rules.season-any": "tutte le stagioni",
+    "item.fish-spawn-rules.season-list": "stagioni: {{seasons}}",
+    "item.fish-spawn-rules.time": "orario: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "tempo meteo: soleggiato",
+    "item.fish-spawn-rules.weather-rainy": "tempo meteo: pioggia",
 
 
     /*********
