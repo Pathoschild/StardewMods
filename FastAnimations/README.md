@@ -1,5 +1,5 @@
 **Fast Animations** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you selectively
-speed up many animations (currently eating, drinking, milking, shearing, and breaking geodes).
+speed up many animations like eating, breaking geodes, etc.
 
 ## Contents
 * [Install](#install)
@@ -28,6 +28,7 @@ Here's what you can change:
   `EatAndDrinkSpeed`   | 10×     | How fast you eat and drink.
   `FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
   `MilkSpeed`          | 5×      | How fast you use the milk pail.
+  `MountOrDismountSpeed` | 2×    | How fast you mount/dismount horses (including custom mounts like Tractor Mod).
   `ShearSpeed`         | 5×      | How fast you use the shears.
   `ToolSwingSpeed`     | 1×      | How fast you swing your tools (except weapons & fishing rod).<br /><small>(Suggested value: 2×.)</small>
   `WeaponSwingSpeed`   | 1×      | How fast you swing your weapons.<br /><small>(Suggested value: 4×.)</small>

@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for horse mount/dismount animations.
+
 ## 1.8
 Released 02 May 2020.
 
