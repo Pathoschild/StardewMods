@@ -575,16 +575,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             List<string> neededFor = new List<string>();
 
-            // fetch info
-            var recipes =
-                (
-                    from recipe in this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
-                    let item = recipe.CreateItem(this.DisplayItem)
-                    orderby item.DisplayName
-                    select new { recipe.Type, item.DisplayName, TimesCrafted = recipe.GetTimesCrafted(Game1.player) }
-                )
-                .ToArray();
-
             // bundles
             {
                 string[] missingBundles =
@@ -617,15 +607,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (obj.needsToBeDonated())
                 neededFor.Add(L10n.Item.NeededForFullCollection());
 
-            // gourmet chef achievement (cook every recipe)
+            // recipe achievements
             {
+                var recipes =
+                    (
+                        from recipe in this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
+                        let item = recipe.CreateItem(this.DisplayItem)
+                        orderby item.DisplayName
+                        select new { recipe.Type, item.DisplayName, TimesCrafted = recipe.GetTimesCrafted(Game1.player) }
+                    )
+                    .ToArray();
+
+                // gourmet chef achievement (cook every recipe)
                 string[] uncookedNames = (from recipe in recipes where recipe.Type == RecipeType.Cooking && recipe.TimesCrafted <= 0 select recipe.DisplayName).ToArray();
                 if (uncookedNames.Any())
                     neededFor.Add(L10n.Item.NeededForGourmetChef(recipes: string.Join(", ", uncookedNames)));
-            }
 
-            // craft master achievement (craft every item)
-            {
+                // craft master achievement (craft every item)
                 string[] uncraftedNames = (from recipe in recipes where recipe.Type == RecipeType.Crafting && recipe.TimesCrafted <= 0 select recipe.DisplayName).ToArray();
                 if (uncraftedNames.Any())
                     neededFor.Add(L10n.Item.NeededForCraftMaster(recipes: string.Join(", ", uncraftedNames)));
