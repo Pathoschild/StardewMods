@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for horse mount/dismount animations.
+* Added support for crop harvest animations.
 
 ## 1.8
 Released 02 May 2020.

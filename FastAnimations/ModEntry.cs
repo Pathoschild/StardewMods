@@ -95,6 +95,8 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)
                 yield return new FishingHandler(config.FishingSpeed);
+            if (config.HarvestSpeed > 1)
+                yield return new HarvestHandler(config.HarvestSpeed);
             if (config.MilkSpeed > 1)
                 yield return new MilkingHandler(config.MilkSpeed);
             if (config.MountOrDismountSpeed > 1)
