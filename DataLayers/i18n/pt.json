@@ -60,12 +60,12 @@
     "machines.finished": "Processo concluído",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "Grade de blocos",
 
     // tillable
     "tillable.name": "Arabilidade",
     "tillable.tillable": "Arável",
-    "tillable.tilled": "Tilled", // TODO
+    "tillable.tilled": "Já arado",
     "tillable.occupied": "Ocupado",
     "tillable.not-tillable": "Não Arável"
 }
