@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing.LexTokens;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
 {
     /// <summary>Migrate patches to format version 1.15.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
-    internal class Migration_1_15 : BaseMigration
+    internal class Migration_1_15_Rewrites : BaseMigration
     {
         /*********
         ** Fields
@@ -64,14 +63,8 @@ namespace ContentPatcher.Framework.Migrations
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public Migration_1_15()
-            : base(new SemanticVersion(1, 15, 0))
-        {
-            this.AddedTokens = new InvariantHashSet
-            {
-                ConditionType.HasConversationTopic.ToString()
-            };
-        }
+        public Migration_1_15_Rewrites()
+            : base(new SemanticVersion(1, 15, 0)) { }
 
         /// <summary>Migrate a lexical token.</summary>
         /// <param name="lexToken">The lexical token to migrate.</param>
@@ -85,13 +78,6 @@ namespace ContentPatcher.Framework.Migrations
             if (lexToken is LexTokenToken token && token.InputArgs != null)
             {
                 ConditionType? conditionType = this.GetConditionType(token.Name);
-
-                // 1.15 adds named arguments
-                if (token.InputArgs.ToString().Contains("|") && token.InputArgs.ToString().Contains("="))
-                {
-                    error = this.GetNounPhraseError("using named arguments");
-                    return false;
-                }
 
                 // 1.15 drops {{token:search}} form in favor of {{token |contains=search}}
                 if (conditionType != null && this.TokensWhichDroppedSearchForm.Contains(conditionType.Value))
