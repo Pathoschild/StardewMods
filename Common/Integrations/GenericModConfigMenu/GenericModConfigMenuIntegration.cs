@@ -132,7 +132,36 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="set">Set a new value.</param>
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
+        /// <param name="enable">Whether the field is enabled.</param>
         public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, int> get, Action<TConfig, int> set, int min, int max, bool enable = true)
+        {
+            this.AssertLoaded();
+
+            if (enable)
+            {
+                this.ModApi.RegisterClampedOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val),
+                    min: min,
+                    max: max
+                );
+            }
+
+            return this;
+        }
+
+        /// <summary>Add a numeric field to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        /// <param name="min">The minimum value.</param>
+        /// <param name="max">The maximum value.</param>
+        /// <param name="enable">Whether the field is enabled.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, float> get, Action<TConfig, float> set, float min, float max, bool enable = true)
         {
             this.AssertLoaded();
 
@@ -157,6 +186,7 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="description">A description shown on hover, if any.</param>
         /// <param name="get">Get the current value.</param>
         /// <param name="set">Set a new value.</param>
+        /// <param name="enable">Whether the field is enabled.</param>
         public GenericModConfigMenuIntegration<TConfig> AddKeyBinding(string label, string description, Func<TConfig, SButton> get, Action<TConfig, SButton> set, bool enable = true)
         {
             this.AssertLoaded();

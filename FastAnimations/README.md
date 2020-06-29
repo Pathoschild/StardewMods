@@ -13,6 +13,14 @@ speed up many animations like eating, breaking geodes, etc.
 3. Run the game using SMAPI.
 
 ## Configure
+### In-game settings
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+you can click the cog button (⚙) on the title screen to configure the mod. Hover the cursor over
+a field for details, or see the next section.
+
+![](screenshots/generic-config-menu.png)
+
+### `config.json` file
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
@@ -38,7 +46,7 @@ Here's what you can change:
 
   setting              | default | what it affects
   :------------------- | :------ | :------------------
-  `BreakGeodeSpeed`    | 20×     | How fast the blacksmiths breaks geodes for you.
+  `BreakGeodeSpeed`    | 20×     | How fast the blacksmith breaks geodes for you.
   `CasinoSlotsSpeed`   | 8×      | How fast the casino slots turn.
   `PamBusSpeed`        | 6×      | How fast Pam drives her bus to and from the desert.
   `TreeFallingSpeed`   | 1×      | How fast trees fall after you chop them down.<br /><small>(Suggested value: 3×.)</small>

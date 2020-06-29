@@ -2,8 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Added support for horse mount/dismount animations.
-* Added support for crop harvest animations.
+* Added support for...
+  * horse mount/dismount animations;
+  * crop harvest animations.
+* Added integration with Generic Mod Config Menu.
 
 ## 1.8
 Released 02 May 2020.
