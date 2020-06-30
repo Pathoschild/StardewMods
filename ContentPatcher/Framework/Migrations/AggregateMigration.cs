@@ -32,12 +32,11 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="version">The content pack version.</param>
-        /// <param name="validVersions">The valid format versions.</param>
         /// <param name="migrations">The migrations to apply.</param>
-        public AggregateMigration(ISemanticVersion version, string[] validVersions, IMigration[] migrations)
+        public AggregateMigration(ISemanticVersion version, IMigration[] migrations)
         {
             this.Version = version;
-            this.ValidVersions = new HashSet<string>(validVersions);
+            this.ValidVersions = new HashSet<string>(migrations.Select(p => p.Version.ToString()));
             this.Migrations = migrations.Where(m => m.Version.IsNewerThan(version)).ToArray();
         }
 

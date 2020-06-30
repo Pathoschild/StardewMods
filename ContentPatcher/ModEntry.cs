@@ -37,7 +37,8 @@ namespace ContentPatcher
         private readonly string ConfigFileName = "config.json";
 
         /// <summary>The recognized format versions and their migrations.</summary>
-        private readonly Func<IMigration[]> FormatVersions = () => new IMigration[] {
+        private readonly Func<ContentConfig, IMigration[]> GetFormatVersions = content => new IMigration[]
+        {
             new Migration_1_0(),
             new Migration_1_3(),
             new Migration_1_4(),
@@ -51,7 +52,7 @@ namespace ContentPatcher
             new Migration_1_13(),
             new Migration_1_14(),
             new Migration_1_15_Prevalidation(),
-            new Migration_1_15_Rewrites()
+            new Migration_1_15_Rewrites(content)
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -210,11 +211,8 @@ namespace ContentPatcher
         {
             var helper = this.Helper;
 
-            // init migrations
-            IMigration[] migrations = this.FormatVersions();
-
             // fetch content packs
-            RawContentPack[] contentPacks = this.GetContentPacks(migrations).ToArray();
+            RawContentPack[] contentPacks = this.GetContentPacks().ToArray();
             InvariantHashSet installedMods = new InvariantHashSet(
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
@@ -288,14 +286,12 @@ namespace ContentPatcher
         }
 
         /// <summary>Load the registered content packs.</summary>
-        /// <param name="migrations">The format version migrations to apply.</param>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private IEnumerable<RawContentPack> GetContentPacks(IMigration[] migrations)
+        private IEnumerable<RawContentPack> GetContentPacks()
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
-            string[] validVersions = migrations.Select(p => p.Version.ToString()).ToArray();
             foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
                 RawContentPack rawContentPack;
@@ -315,7 +311,7 @@ namespace ContentPatcher
                     }
 
                     // apply migrations
-                    IMigration migrator = new AggregateMigration(content.Format, validVersions, migrations);
+                    IMigration migrator = new AggregateMigration(content.Format, this.GetFormatVersions(content));
                     if (!migrator.TryMigrate(content, out string error))
                     {
                         this.Monitor.Log($"Loading content pack '{contentPack.Manifest.Name}' failed: {error}.", LogLevel.Error);

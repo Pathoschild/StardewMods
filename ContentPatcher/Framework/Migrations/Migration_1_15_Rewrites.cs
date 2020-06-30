@@ -4,7 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -58,13 +60,20 @@ namespace ContentPatcher.Framework.Migrations
             ConditionType.Language
         };
 
+        /// <summary>The dynamic and config token names defined by the content pack.</summary>
+        private readonly Lazy<ISet<string>> LocalTokenNames;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public Migration_1_15_Rewrites()
-            : base(new SemanticVersion(1, 15, 0)) { }
+        /// <param name="content">The content pack being validated.</param>
+        public Migration_1_15_Rewrites(ContentConfig content)
+            : base(new SemanticVersion(1, 15, 0))
+        {
+            this.LocalTokenNames = new Lazy<ISet<string>>(() => this.GetLocalTokenNames(content));
+        }
 
         /// <summary>Migrate a lexical token.</summary>
         /// <param name="lexToken">The lexical token to migrate.</param>
@@ -80,7 +89,7 @@ namespace ContentPatcher.Framework.Migrations
                 ConditionType? conditionType = this.GetConditionType(token.Name);
 
                 // 1.15 drops {{token:search}} form in favor of {{token |contains=search}}
-                if (conditionType != null && this.TokensWhichDroppedSearchForm.Contains(conditionType.Value))
+                if (this.LocalTokenNames.Value.Contains(token.Name) || (conditionType != null && this.TokensWhichDroppedSearchForm.Contains(conditionType.Value)))
                 {
                     var parts = new List<ILexToken>(token.InputArgs.Parts);
 
@@ -120,6 +129,38 @@ namespace ContentPatcher.Framework.Migrations
             if (Enum.TryParse(name, ignoreCase: true, out ConditionType type))
                 return type;
             return null;
+        }
+
+        /// <summary>Get the dynamic and config token names defined by a content pack.</summary>
+        /// <param name="content">The content pack to read.</param>
+        private ISet<string> GetLocalTokenNames(ContentConfig content)
+        {
+            InvariantHashSet names = new InvariantHashSet();
+
+            // dynamic tokens
+            if (content.DynamicTokens?.Any() == true)
+            {
+                foreach (string name in content.DynamicTokens.Select(p => p.Name))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        names.Add(name);
+                }
+            }
+
+            // config schema
+            if (content.ConfigSchema != null)
+            {
+                foreach (string name in content.ConfigSchema.Select(p => p.Key))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        names.Add(name);
+                }
+            }
+
+            // exclude tokens that conflict with a built-in condition, which will be ignored
+            names.RemoveWhere(p => Enum.TryParse(p, ignoreCase: true, out ConditionType _));
+
+            return names;
         }
     }
 }
