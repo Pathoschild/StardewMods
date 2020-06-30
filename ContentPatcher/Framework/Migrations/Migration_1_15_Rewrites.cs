@@ -31,10 +31,12 @@ namespace ContentPatcher.Framework.Migrations
             ConditionType.Weather,
 
             // player
+            ConditionType.HasDialogueAnswer,
             ConditionType.HasFlag,
+            ConditionType.HasProfession,
             ConditionType.HasReadLetter,
             ConditionType.HasSeenEvent,
-            ConditionType.HasDialogueAnswer,
+            ConditionType.HasWalletItem,
             ConditionType.IsMainPlayer,
             ConditionType.IsOutdoors,
             ConditionType.LocationName,
