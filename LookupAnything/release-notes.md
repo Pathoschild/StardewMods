@@ -6,7 +6,7 @@
 * Fixed the search key working during cutscenes or when a menu is already open.
 * Fixed spawn rules not showing "mine level X" matched when you're on that mine level.
 * Fixed error looking up custom NPCs with invalid birthday data.
-* Improved translations. Thanks to AndyAllanPoe (updated Italian)!
+* Improved translations. Thanks to AndyAllanPoe (updated Italian) and Rittsuka (updated Portuguese)!
 
 ## 1.27.1
 Released 02 May 2020.
