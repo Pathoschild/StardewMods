@@ -4,7 +4,9 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A token which delegates implementation to a nested instance.</summary>
-    internal abstract class DelegatingToken : IToken
+    /// <typeparam name="TToken">The wrapped token type.</typeparam>
+    internal abstract class DelegatingToken<TToken> : IToken
+        where TToken : IToken
     {
         /*********
         ** Accessors
@@ -25,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens
         public virtual bool RequiresInput => this.Token.RequiresInput;
 
         /// <summary>The wrapped token instance.</summary>
-        protected IToken Token { get; }
+        public TToken Token { get; }
 
 
         /*********
@@ -97,7 +99,7 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="token">The wrapped token instance.</param>
-        protected DelegatingToken(IToken token)
+        protected DelegatingToken(TToken token)
         {
             this.Token = token;
         }

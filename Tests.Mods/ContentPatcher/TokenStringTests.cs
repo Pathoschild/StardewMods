@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // arrange
             const string configKey = "tokenKey";
             var context = new GenericTokenContext(modId => false);
-            context.Save(new ImmutableToken(configKey, new InvariantHashSet { "value" }));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(configKey, new InvariantHashSet { "value" })));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
@@ -74,8 +74,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string tokenKey = "season";
             const string raw = "  assets/{{configKey}}_{{season}}_{{ invalid  }}.png  ";
             var context = new GenericTokenContext(modId => false);
-            context.Save(new ImmutableToken(configKey, new InvariantHashSet { configValue }));
-            context.Save(new ImmutableToken(tokenKey, new InvariantHashSet { "A" }));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(configKey, new InvariantHashSet { configValue })));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(tokenKey, new InvariantHashSet { "A" })));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);

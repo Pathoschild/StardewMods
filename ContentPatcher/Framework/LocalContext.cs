@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -18,7 +19,7 @@ namespace ContentPatcher.Framework
         private IContext LastParentContext;
 
         /// <summary>The local token values.</summary>
-        private readonly InvariantDictionary<DynamicToken> LocalTokens = new InvariantDictionary<DynamicToken>();
+        private readonly InvariantDictionary<IHigherLevelToken<DynamicToken>> LocalTokens = new InvariantDictionary<IHigherLevelToken<DynamicToken>>();
 
 
         /*********
@@ -42,7 +43,7 @@ namespace ContentPatcher.Framework
         {
             this.LastParentContext = parentContext;
 
-            foreach (DynamicToken token in this.LocalTokens.Values)
+            foreach (DynamicToken token in this.LocalTokens.Values.Select(p => p.Token))
                 token.SetReady(false);
         }
 
@@ -61,7 +62,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            return this.LocalTokens.TryGetValue(name, out DynamicToken token)
+            return this.LocalTokens.TryGetValue(name, out var token)
                 ? token
                 : this.LastParentContext?.GetToken(name, enforceContext);
         }
@@ -69,7 +70,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (DynamicToken token in this.LocalTokens.Values)
+            foreach (var token in this.LocalTokens.Values)
                 yield return token;
 
             if (this.LastParentContext != null)
@@ -99,9 +100,15 @@ namespace ContentPatcher.Framework
         /// <param name="value">The token value.</param>
         public void SetLocalValue(string name, ITokenString value)
         {
-            if (!this.LocalTokens.TryGetValue(name, out DynamicToken token))
-                this.LocalTokens[name] = token = new DynamicToken(name, this.Scope);
+            // get or create token
+            DynamicToken token;
+            {
+                if (!this.LocalTokens.TryGetValue(name, out IHigherLevelToken<DynamicToken> wrapper))
+                    this.LocalTokens[name] = wrapper = new HigherLevelTokenWrapper<DynamicToken>(new DynamicToken(name, this.Scope));
+                token = wrapper.Token;
+            }
 
+            // update values
             token.SetValue(value);
             token.SetReady(true);
         }

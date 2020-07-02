@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add a standard token to the context.</summary>
         /// <param name="token">The config token to add.</param>
-        public void Add(IToken token)
+        public void Add(IHigherLevelToken<IToken> token)
         {
             if (token.Scope != this.Scope)
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework
             if (this.LocalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
-            this.LocalContext.Tokens[token.Name] = token;
+            this.LocalContext.Save(token);
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
@@ -79,8 +79,12 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
-            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
-                this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name, this.Scope));
+            DynamicToken token;
+            {
+                if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out IHigherLevelToken<DynamicToken> wrapper))
+                    this.DynamicContext.Save(wrapper = new HigherLevelTokenWrapper<DynamicToken>(new DynamicToken(tokenValue.Name, this.Scope)));
+                token = wrapper.Token;
+            }
 
             // add token value
             token.AddTokensUsed(tokenValue.GetTokensUsed());
@@ -134,7 +138,7 @@ namespace ContentPatcher.Framework
             }
 
             // update local standard tokens
-            foreach (IToken token in this.LocalContext.Tokens.Values)
+            foreach (var token in this.LocalContext.Tokens.Values)
             {
                 if (token.IsMutable && affectedTokens?.Contains(token.Name) != false)
                     token.UpdateContext(this);
@@ -142,7 +146,7 @@ namespace ContentPatcher.Framework
 
             // reset dynamic tokens
             // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
-            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+            foreach (DynamicToken token in this.DynamicContext.Tokens.Values.Select(p => p.Token))
             {
                 token.SetValue(null);
                 token.SetReady(false);
@@ -152,7 +156,7 @@ namespace ContentPatcher.Framework
                 tokenValue.UpdateContext(this);
                 if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
                 {
-                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name].Token;
                     token.SetValue(tokenValue.Value);
                     token.SetReady(true);
                 }

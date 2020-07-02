@@ -55,9 +55,9 @@ namespace ContentPatcher.Framework
             this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
-                this.GlobalContext.Tokens[modToken.Name] = new HigherLevelTokenWrapper(modToken);
+                this.GlobalContext.Save(new HigherLevelTokenWrapper(modToken));
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Tokens[valueProvider.Name] = new HigherLevelTokenWrapper(new GenericToken(valueProvider));
+                this.GlobalContext.Save(new HigherLevelTokenWrapper(new GenericToken(valueProvider)));
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>

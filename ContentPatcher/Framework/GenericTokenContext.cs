@@ -7,7 +7,8 @@ namespace ContentPatcher.Framework
 {
     /// <summary>A generic token context.</summary>
     /// <typeparam name="TToken">The token type to store.</typeparam>
-    internal class GenericTokenContext<TToken> : IContext where TToken : class, IToken
+    internal class GenericTokenContext<TToken> : IContext
+        where TToken : class, IToken
     {
         /*********
         ** Fields
@@ -20,7 +21,7 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>The available tokens.</summary>
-        public InvariantDictionary<TToken> Tokens { get; } = new InvariantDictionary<TToken>();
+        public InvariantDictionary<IHigherLevelToken<TToken>> Tokens { get; } = new InvariantDictionary<IHigherLevelToken<TToken>>();
 
 
         /*********
@@ -41,7 +42,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Save the given token to the context.</summary>
         /// <param name="token">The token to save.</param>
-        public void Save(TToken token)
+        public void Save(IHigherLevelToken<TToken> token)
         {
             this.Tokens[token.Name] = token;
         }
@@ -55,7 +56,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            return this.Tokens.TryGetValue(name, out TToken token) && this.ShouldConsider(token, enforceContext)
+            return this.Tokens.TryGetValue(name, out IHigherLevelToken<TToken> token) && this.ShouldConsider(token, enforceContext)
                 ? token
                 : null;
         }
@@ -63,7 +64,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (TToken token in this.Tokens.Values)
+            foreach (IHigherLevelToken<TToken> token in this.Tokens.Values)
             {
                 if (this.ShouldConsider(token, enforceContext))
                     yield return token;
