@@ -209,7 +209,7 @@ The year number (like `1` or `2`).
 <td>HasConversationTopic</td>
 <td>
 
-The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Active_dialogue_events)
+The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
 for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
 
 Topics that have expired are stored as flags (see `HasFlag`).

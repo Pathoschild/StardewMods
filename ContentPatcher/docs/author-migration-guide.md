@@ -23,15 +23,15 @@ No, this guide is only for content pack authors. Existing content packs should w
 ### Are Content Patcher updates backwards-compatible?
 Yep; even content packs written for Content Patcher 1.0 still work in the latest versions.
 
-Content Patcher updates rarely have breaking changes, but when needed the [`Format` field in your
+Content Patcher updates rarely have breaking changes, but the [`Format` field in your
 `content.json`](author-guide.md#format) says which version it was created for. When a future
-version of Content Patcher loads your content pack, it internally changes your `content.json` to
+version of Content Patcher loads your content pack, it internally migrates your `content.json` to
 the latest format (without changing the actual files). Content Patcher itself no longer supports
 older formats, but your content pack is just changed to use the latest one.
 
 ### So I never need to update my content packs?
 Technically you don't need to (aside from game changes), but **updating your `Format` version when
-you update the content pack is strongly encouraged.**
+you update the content pack is strongly encouraged**.
 
 Using an old `Format` version has major disadvantages:
 
@@ -41,8 +41,7 @@ Using an old `Format` version has major disadvantages:
   backwards compatibility.)
 * There's more risk of bugs and startup time is impacted. (For example, a content pack which uses
   `"Format": "1.0"` has over a dozen automated migrations applied, which increases the chance that
-  something will be migrated incorrectly. A content pack which uses the latest `Format` version has
-  zero migrations applied, so it's much less likely to have issues and loads more quickly.)
+  something will be migrated incorrectly and increases startup time.)
 
 ### How do I update my content pack?
 Just set the `Format` field to the latest version shown in the [author guide](author-guide.md),
@@ -56,6 +55,8 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
 
 ### 1.15
+Released 04 July 2020.
+
 * **Token search syntax:** you could previously search some tokens by passing the value as an input
   argument like `{{Season: Spring}}`. That should now be written like `{{Season |contains=Spring}}`,
   which works with all tokens.

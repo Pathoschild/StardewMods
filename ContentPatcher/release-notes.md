@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.15
-Released 04 July 2020.
+Released 04 July 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
 
 * Added [named token arguments](docs/author-tokens-guide.md#global-input-arguments).
 * Added a universal `|contains=` argument to search token values.
@@ -26,7 +26,7 @@ Released 14 May 2020.
 * Fixed patches not updating correctly in 1.14 when a changed token is only in their `FromFile` field.
 
 ## 1.14
-Released 02 May 2020.
+Released 02 May 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-36931803).
 
 * Added `Round` token.
 * Added `FromFile` patch token (e.g. so you can do `"HasFile:{{FromFile}}": true`).
@@ -40,7 +40,7 @@ Released 02 May 2020.
 * Fixed format validation for 1.13 features not applied.
 
 ## 1.13
-Released 09 March 2020.
+Released 09 March 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-34749703).
 
 * Added support for arithmetic expressions.
 * Added support for editing map tiles.
@@ -52,7 +52,7 @@ Released 09 March 2020.
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.
 
 ## 1.12
-Released 01 February 2020.
+Released 01 February 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-33691875).
 
 * Added advanced API to let other mods add more flexible tokens.
 * Added support for mod-provided tokens in `EditData` fields.
@@ -73,7 +73,7 @@ Released 27 December 2019.
 * Fixed error when married to an NPC that's not loaded.
 
 ## 1.11
-Released 15 December 2019.
+Released 15 December 2019. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
 
 * Added `Lowercase` and `Uppercase` tokens.
 * `Random` tokens can have 'pinned keys' to support many new scenarios (see readme).
@@ -91,7 +91,7 @@ Released 02 December 2019.
 * Fixed error when an `EditData` patch uses tokens in `FromFile` that aren't available.
 
 ## 1.10
-Released 26 November 2019.
+Released 26 November 2019. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
 
 * Updated for Stardew Valley 1.4, including new farm type.
 * Added new tokens:
