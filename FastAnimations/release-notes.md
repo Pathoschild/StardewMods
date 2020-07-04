@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9
+Released 03 July 2020.
+
 * Added support for...
   * horse mount/dismount animations;
   * crop harvest animations.

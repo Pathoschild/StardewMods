@@ -10,7 +10,6 @@ This document lists the tokens available in Content Patcher packs.
   * [Placeholders](#placeholders)
   * [Conditions](#conditions)
   * [Input arguments](#input-arguments)
-  * [Token search](#token-search)
 * [Global tokens](#global-tokens)
   * [Date and weather](#date-and-weather)
   * [Player](#player)
@@ -71,11 +70,11 @@ multi-value tokens will work too (they'll show a comma-delimited list).
 ### Conditions
 You can make a patch conditional by adding a `When` field, which can list any number of conditions.
 Each condition has...
-* A key containing a [token](#advanced-tokens--conditions) without the outer curly braces, like
+* A key containing a [token](#introduction) without the outer curly braces, like
   `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
 * A value containing the comma-separated values to match, like `spring, summer`. If the key token
   returns any of these values, the condition matches. This field supports
-  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
+  [tokens](#introduction) and is not case-sensitive.
 
 For example, this changes the house texture only in spring or summer in the first year:
 
@@ -341,7 +340,7 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](#known-limitations).
+Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>
@@ -351,7 +350,7 @@ Whether the player is outdoors. Possible values: `true`, `false`. This [does not
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
-This [does not affect dialogue](#known-limitations).
+This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>
@@ -1093,9 +1092,9 @@ Each block in this section defines the value for a token using these fields:
 
 field   | purpose
 ------- | -------
-`Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#advanced-tokens--conditions), including dynamic tokens defined before this entry.
-`When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
+`Name`  | The name of the token to use for [tokens & condition](#introduction).
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#introduction), including dynamic tokens defined before this entry.
+`When`  | _(optional)_ Only set the value if the given [conditions](#introduction) match. If not specified, always matches.
 
 Some usage notes:
 * You can list any number of dynamic token blocks.
@@ -1139,7 +1138,7 @@ crop sprites depending on the weather:
 ## Player config
 You can let players configure your mod using a `config.json` file. Content Patcher will
 automatically create and load the file, and you can use the config values as
-[tokens & conditions](#advanced-tokens--conditions). Config fields are not case-sensitive.
+[tokens & conditions](#introduction). Config fields are not case-sensitive.
 
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
@@ -1246,7 +1245,7 @@ value | meaning
 `currentPlayer` | The current player who has the mod installed.
 `hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
 
-The player type can be specified as an [input argument](#input-argument) for tokens that support it,
+The player type can be specified as an [input argument](#input-arguments) for tokens that support it,
 defaulting to the current player. For example:
 
 example | meaning

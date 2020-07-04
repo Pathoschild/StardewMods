@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.12.1
+Released 03 July 2020.
+
 * Improved translations. Thanks to Rittsuka (updated Portuguese)!
 
 ## 1.12

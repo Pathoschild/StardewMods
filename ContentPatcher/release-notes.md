@@ -1,19 +1,21 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added [named token argument support](docs/author-tokens-guide.md#global-input-arguments):
-  * Added a universal `contains` argument to search token values.
-  * Added a universal `inputSeparator` token argument to allow commas in input values by using a custom separator.
-  * Added a `key` argument to `{{Random}}`.
+## 1.15
+Released 04 July 2020.
+
+* Added [named token arguments](docs/author-tokens-guide.md#global-input-arguments).
+* Added a universal `|contains=` argument to search token values.
+* Added a universal `|inputSeparator=` argument to allow commas in input values using a custom separator.
+* Added a `key` argument to `{{Random}}`.
 * Several [player tokens](docs/author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
 * Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.
-* Fixed broken custom tokens added by other mods breaking Content Patcher in some cases.
-* Fixed support for tokens in a `From`/`ToArea`'s `Width` or `Height` fields.
+* Fixed custom tokens added by other mods able to break Content Patcher in some cases.
+* Fixed support for tokens in a `From`/`ToArea`'s `Width` and `Height` fields.
 * Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.
-* Fixed format migrations not applied for tokens within JSON objects.
-* Fixed Content Patcher allowing multiple input arguments to tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now returns an error.
+* Fixed format migrations not applied to tokens within JSON objects.
+* Fixed multiple input arguments allowed for tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now shows an error.
 
 **Update note for mod authors:**  
 Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
