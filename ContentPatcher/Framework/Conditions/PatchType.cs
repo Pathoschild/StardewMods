@@ -6,6 +6,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Load the initial version of the file.</summary>
         Load,
 
+        /// <summary>Replace an image with bread.</summary>
+        Loaf,
+
         /// <summary>Edit an image.</summary>
         EditImage,
 

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
@@ -14,6 +16,9 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using ContentPatcher.Framework.Validators;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -85,6 +90,24 @@ namespace ContentPatcher
         /// <summary>Whether the next tick is the first one.</summary>
         private bool IsFirstTick = true;
 
+        /// <summary>Images of bread.</summary>
+        private Texture2D[] breads;
+
+        /// <summary>Images of soggy bread.</summary>
+        private Texture2D[] soggyBreads;
+
+        /// <summary>A random generator used to choose bread.</summary>
+        private Random breadRandom = new Random();
+
+        /// <summary>Paths to bread.</summary>
+        private string[] breadPaths = new string[]
+        {
+            "bagel.png",
+            "italian.png",
+            "white.png",
+            "pumpernickel.png"
+        };
+
 
         /*********
         ** Public methods
@@ -95,6 +118,9 @@ namespace ContentPatcher
         {
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
+
+            // seeded with sesame, flax, and poppy seeds, and freshly baked!
+            this.breadRandom = new Random(1633 + (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
@@ -230,6 +256,9 @@ namespace ContentPatcher
                 foreach (var group in tokensByMod)
                     this.Monitor.Log($"{group.ModName} added {(group.TokenNames.Length == 1 ? "a custom token" : $"{group.TokenNames.Length} custom tokens")} with prefix '{group.ModPrefix}': {string.Join(", ", group.TokenNames)}.");
             }
+
+            // load breads
+            this.LoadBreads();
 
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
@@ -600,6 +629,22 @@ namespace ContentPatcher
                         }
                         break;
 
+                    // loaf image
+                    case PatchType.Loaf:
+                        {
+                            // validate
+                            if (this.breads.Length == 0)
+                                return TrackSkip($"wasn't able to load any bread. Who ate all the bread?");
+
+                            // get bread source
+                            Texture2D[] breadSource = entry.Soggy ? this.soggyBreads : this.breads;
+
+                            // save
+                            patch = new LoafPatch(entry.LogName, pack, targetAsset, conditions, fromAsset,
+                                this.Helper.Content.NormalizeAssetName, this.Monitor, breadSource[this.breadRandom.Next(breadSource.Length)], entry.Soggy);
+                        }
+                        break;
+
                     // edit data
                     case PatchType.EditData:
                         {
@@ -783,6 +828,63 @@ namespace ContentPatcher
             {
                 return TrackSkip($"error reading info. Technical details:\n{ex}");
             }
+        }
+
+        /// <summary>Loads the breads to be used for <see cref="PatchType.Loaf"/> patches.</summary>
+        private void LoadBreads()
+        {
+            IList<Texture2D> breads = new List<Texture2D>();
+
+            foreach(string breadPath in this.breadPaths)
+            {
+                try
+                {
+                    Texture2D bread = this.Helper.Content.Load<Texture2D>(Path.Combine("assets", "bread", breadPath));
+
+                    breads.Add(bread);
+                } catch (ContentLoadException ex)
+                {
+                    this.Monitor.Log($"Couldn't load {breadPath} bread. Details: {ex.Message}.", LogLevel.Warn);
+                }
+            }
+
+            this.breads = breads.ToArray();
+            this.soggyBreads = this.MakeSoggy(this.breads);
+        }
+
+        /// <summary>Creates new, soggy bread from normal bread.</summary>
+        private Texture2D[] MakeSoggy(Texture2D[] breads)
+        {
+            this.Monitor.Log("Making bread soggy...");
+            // it might not be raining now, but will rain later with 100% probability
+            // sleep for 5 seconds: after that, it's probably rained
+            // TODO: check if computer is outside. If not, ask user to go outside
+            Thread.Sleep(5000);
+
+            Texture2D[] soggyBreads = new Texture2D[breads.Length];
+
+            for (int breadIndex = 0; breadIndex < breads.Length; breadIndex++)
+            {
+                Texture2D bread = (Texture2D)breads[breadIndex];
+                Texture2D soggyBread = new Texture2D(Game1.graphics.GraphicsDevice, bread.Width, bread.Height);
+                Color[] soggyData = new Color[bread.Width * bread.Height];
+
+                Color[] breadData = new Color[bread.Width * bread.Height];
+
+                bread.GetData(breadData);
+
+                for(int i = 0; i < breadData.Length; i++)
+                {
+                    // the rain has turned the soggy bread more blue
+                    soggyData[i] = new Color(breadData[i].R, breadData[i].G, Math.Min(breadData[i].B + 150, 255), breadData[i].A);
+                }
+
+                soggyBread.SetData(soggyData);
+
+                soggyBreads[breadIndex] = soggyBread;
+            }
+
+            return soggyBreads;
         }
 
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>

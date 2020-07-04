@@ -335,13 +335,13 @@ namespace ContentPatcher.Framework
         /// <param name="asset">The asset being intercepted.</param>
         public IEnumerable<IPatch> GetCurrentEditors(IAssetInfo asset)
         {
-            PatchType? patchType = this.GetEditType(asset.DataType);
-            if (patchType == null)
+            PatchType[] patchTypes = this.GetEditType(asset.DataType);
+            if (patchTypes == null)
                 return new IPatch[0];
 
             return this
                 .GetPatches(asset.AssetName)
-                .Where(patch => patch.Type == patchType && patch.IsReady);
+                .Where(patch => patchTypes.Contains(patch.Type) && patch.IsReady);
         }
 
         /*********
@@ -349,14 +349,14 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Get the patch type which applies when editing a given asset type.</summary>
         /// <param name="assetType">The asset type.</param>
-        private PatchType? GetEditType(Type assetType)
+        private PatchType[] GetEditType(Type assetType)
         {
             if (assetType == typeof(Texture2D))
-                return PatchType.EditImage;
+                return new PatchType[] { PatchType.EditImage, PatchType.Loaf };
             if (assetType == typeof(Map))
-                return PatchType.EditMap;
+                return new PatchType[] { PatchType.EditMap };
             else
-                return PatchType.EditData;
+                return new PatchType[] { PatchType.EditData };
         }
     }
 }

@@ -152,6 +152,33 @@ For example, this replaces the dinosaur sprite with your own image:
 }
 ```
 
+### `Loaf`
+`"Action": "Loaf"` replaces the entire image with a randomly chosen image of bread. This is useful for mods which
+like bread.
+
+Avoid this if you don't like bread, or you'd like to see coherent bread images in game. This relaces the **ENTIRE** image with bread, so you end up just seeing parts of bread in game.
+
+field      | purpose
+---------- | -------
+&nbsp;     | See _[common fields](#common-fields)_ above.
+`Soggy`    | Whether the bread should be soggy or not. When set to true, Content Patcher will leave the bread out in the rain for a bit before using it for images. This can be `true` or `false`.
+
+Required fields: none.
+
+For example, this replaces the dinosaur sprite with a bread:
+```js
+{
+   "Format": "1.15.0",
+   "Changes": [
+      {
+         "Action": "Loaf",
+         "Target": "Animals/Dinosaur",
+         "Soggy": true
+      },
+   ]
+}
+```
+
 ### `EditImage`
 `"Action": "EditImage"` changes one part of an image. For example, you can change one area in a
 spritesheet, or overlay an image onto the existing one.
@@ -886,6 +913,9 @@ need to explicitly patch after another content pack, see [manifest dependencies]
   `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
   `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
   `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+
+  * The list of bread Content Patcher knows to use for the `Loaf` action is hardcoded. More bread will be added over time once funding is secured.
+  * Bread cannot be toasted yet.
 
 ## Configure
 Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can

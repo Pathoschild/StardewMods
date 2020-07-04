@@ -8,6 +8,7 @@ Released 04 July 2020.
 * Added a universal `|contains=` argument to search token values.
 * Added a universal `|inputSeparator=` argument to allow commas in input values using a custom separator.
 * Added a `key` argument to `{{Random}}`.
+* Added `Loaf` action. Delicious!
 * Several [player tokens](docs/author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
 * Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.

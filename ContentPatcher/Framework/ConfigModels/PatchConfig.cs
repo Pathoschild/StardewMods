@@ -67,6 +67,12 @@ namespace ContentPatcher.Framework.ConfigModels
         public PatchMapTileConfig[] MapTiles { get; set; }
 
 
+        /****
+        ** Loaf
+        ****/
+        /// <summary>Whether the bread has been left out in the rain for a bit.</summary>
+        public bool Soggy { get; set; }
+
         /*********
         ** Public methods
         *********/
@@ -98,6 +104,9 @@ namespace ContentPatcher.Framework.ConfigModels
             // EditMap
             this.MapProperties = other.MapProperties?.ToDictionary(p => p.Key, p => p.Value);
             this.MapTiles = other.MapTiles?.Select(p => new PatchMapTileConfig(p)).ToArray();
+
+            // Loaf
+            this.Soggy = other.Soggy;
         }
     }
 }

@@ -12,6 +12,10 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="assets\bread\" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(SolutionDir)\common.targets" />
 
