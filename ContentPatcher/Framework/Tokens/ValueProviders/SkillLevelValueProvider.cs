@@ -26,15 +26,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public SkillLevelValueProvider(Func<bool> isPlayerDataAvailable)
-            : base(ConditionType.SkillLevel, canHaveMultipleValuesForRoot: true)
+            : base(ConditionType.SkillLevel, mayReturnMultipleValuesForRoot: true)
         {
             this.IsPlayerDataAvailable = isPlayerDataAvailable;
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(() =>
@@ -61,22 +59,20 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         }
 
-        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
-        public override InvariantHashSet GetValidInputs()
+        /// <inheritdoc />
+        public override InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet(Enum.GetNames(typeof(Skill)));
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
-                if (this.TryParseEnum(input.Value, out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
+                if (this.TryParseEnum(input.GetFirstPositionalArg(), out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
                     yield return level.ToString();
             }
             else

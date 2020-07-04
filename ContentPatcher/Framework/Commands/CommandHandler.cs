@@ -171,11 +171,11 @@ namespace ContentPatcher.Framework.Commands
                     (
                         from token in this.TokenManager.GetTokens(enforceContext: false)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
-                        let rootValues = !token.RequiresInput ? token.GetValues(null).ToArray() : new string[0]
+                        let rootValues = !token.RequiresInput ? token.GetValues(InputArguments.Empty).ToArray() : new string[0]
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && token.GetValues(new LiteralString(inputArgs[0])).Count() > 1)
+                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0]))).Count() > 1)
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
@@ -217,14 +217,14 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new LiteralString(input)))}");
+                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input))))}");
                                 }
                             }
                             else
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(null).OrderByIgnoreCase(p => p)));
+                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
                     }
 
                     output.AppendLine();
@@ -272,7 +272,7 @@ namespace ContentPatcher.Framework.Commands
                             let result = new
                             {
                                 Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                Value = token.IsReady ? string.Join(", ", token.GetValues(input)) : "",
+                                Value = token.IsReady ? string.Join(", ", token.GetValues(new InputArguments(input))) : "",
                                 IsReady = token.IsReady
                             }
                             orderby result.Name
@@ -593,8 +593,8 @@ namespace ContentPatcher.Framework.Commands
             {
                 string[] failedConditions = (
                     from condition in patch.ParsedConditions
-                    let displayText = !condition.Is(ConditionType.HasFile) && condition.HasInput()
-                        ? $"{condition.Name}:{condition.Input.Raw}"
+                    let displayText = !condition.Is(ConditionType.HasFile) && !string.IsNullOrWhiteSpace(condition.Input.TokenString?.Raw)
+                        ? $"{condition.Name}:{condition.Input.TokenString.Raw}"
                         : condition.Name
                     orderby displayText
                     where !condition.IsMatch

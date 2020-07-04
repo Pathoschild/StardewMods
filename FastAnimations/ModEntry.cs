@@ -29,8 +29,9 @@ namespace Pathoschild.Stardew.FastAnimations
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Handlers = this.GetHandlers(this.Config).ToArray();
+            this.UpdateConfig();
 
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Player.Warped += this.OnWarped;
@@ -43,6 +44,31 @@ namespace Pathoschild.Stardew.FastAnimations
         /****
         ** Events
         ****/
+        /// <summary>The method invoked when the game is launched.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForFastAnimations(
+                getConfig: () => this.Config,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                saveAndApply: () =>
+                {
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
         /// <summary>The method invoked after the player loads a saved game.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -87,6 +113,12 @@ namespace Pathoschild.Stardew.FastAnimations
         /****
         ** Methods
         ****/
+        /// <summary>Apply the mod configuration if it changed.</summary>
+        private void UpdateConfig()
+        {
+            this.Handlers = this.GetHandlers(this.Config).ToArray();
+        }
+
         /// <summary>Get the enabled animation handlers.</summary>
         private IEnumerable<IAnimationHandler> GetHandlers(ModConfig config)
         {
@@ -95,8 +127,12 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)
                 yield return new FishingHandler(config.FishingSpeed);
+            if (config.HarvestSpeed > 1)
+                yield return new HarvestHandler(config.HarvestSpeed);
             if (config.MilkSpeed > 1)
                 yield return new MilkingHandler(config.MilkSpeed);
+            if (config.MountOrDismountSpeed > 1)
+                yield return new MountHorseHandler(config.MountOrDismountSpeed);
             if (config.ShearSpeed > 1)
                 yield return new ShearingHandler(config.ShearSpeed);
             if (config.ToolSwingSpeed > 1)

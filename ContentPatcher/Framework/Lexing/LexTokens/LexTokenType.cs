@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>A Content Patcher token.</summary>
         Token,
 
-        /// <summary>The input argument to a Content Patcher token.</summary>
+        /// <summary>The input arguments to a Content Patcher token.</summary>
         TokenInput
     }
 }

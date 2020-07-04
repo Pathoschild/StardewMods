@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /*********
         ** Accessors
         *********/
+        /// <summary>The unique ID for the Seed Bag mod.</summary>
+        internal const string ModId = "Platonymous.SeedBag";
+
         /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
         internal const string SeedBagTypeName = "SeedBag.SeedBagTool";
 
@@ -29,9 +32,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public SeedBagAttachment(GenericAttachmentConfig config, IReflectionHelper reflection)
-            : base(reflection)
+        public SeedBagAttachment(GenericAttachmentConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(modRegistry, reflection)
         {
             this.Config = config;
         }

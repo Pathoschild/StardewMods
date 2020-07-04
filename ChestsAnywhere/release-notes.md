@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.4
+Released 03 July 2020.
+
+* Fixed mouse scroll wheel navigation reversed.
+* Improved translations. Thanks to stefanhahn80 (updated German)!
+
 ## 1.19.3
 Released 14 May 2020.
 

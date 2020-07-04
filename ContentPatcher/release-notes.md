@@ -1,6 +1,25 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.15
+Released 04 July 2020.
+
+* Added [named token arguments](docs/author-tokens-guide.md#global-input-arguments).
+* Added a universal `|contains=` argument to search token values.
+* Added a universal `|inputSeparator=` argument to allow commas in input values using a custom separator.
+* Added a `key` argument to `{{Random}}`.
+* Several [player tokens](docs/author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
+* Added `HasConversationTopic` token.
+* Reduced trace logs when a mod adds many custom tokens.
+* Fixed custom tokens added by other mods able to break Content Patcher in some cases.
+* Fixed support for tokens in a `From`/`ToArea`'s `Width` and `Height` fields.
+* Fixed support for tokens in a `.json` file loaded through `Action: EditData` with a `FromFile` path containing tokens.
+* Fixed format migrations not applied to tokens within JSON objects.
+* Fixed multiple input arguments allowed for tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now shows an error.
+
+**Update note for mod authors:**  
+Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
+
 ## 1.14.1
 Released 14 May 2020.
 
@@ -87,7 +106,7 @@ Released 26 November 2019.
 * Added `patch parse` console command, which parses an arbitrary tokenizable string and shows the result.
 * Added new 'current changes' list for each content pack to `patch summary` output.
 * Added world state IDs to the `HasFlag` token.
-* Added [`manifest.json` and `content.json` validator](https://github.com/Pathoschild/StardewMods/tree/develop/ContentPatcher#schema-validator) for content pack authors.
+* Added [`manifest.json` and `content.json` validator](docs/author-guide.md#schema-validator) for content pack authors.
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
 * Fixed `Hearts` and `Relationship` tokens not working for unmet NPCs. They now return `0` and `Unmet` respectively.
@@ -169,10 +188,8 @@ Released 08 May 2019.
 * Fixed config schema issues logged as `Debug` instead of `Warning`.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
 
-**Update note for mod authors:**
-* The `ConfigSchema` field changes when you update your format to 1.7:
-  * `AllowValues` is no longer required. If you omit it, the config field will allow _any_ value.
-  * If you omit `Default`, the default is now blank instead of the first `AllowValues` value.
+**Update note for mod authors:**  
+Updating the `Format` field to `1.7.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.6.5
 Released 06 April 2019.
@@ -224,8 +241,8 @@ Released 08 December 2018.
 * Fixed token strings not validated for format version compatibility.
 * Fixed some 1.5 tokens not validated for format version compatibility.
 
-**Update note for mod authors:**
-* The `Weather` token now returns `Wind` on windy days instead of `Sun`. Existing content packs with `"Format": "1.5"` or earlier should work fine, since Content Patcher will adjust their conditions. Content packs which target version 1.6 or later should handle the new weather value.
+**Update note for mod authors:**  
+Updating the `Format` field to `1.6.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.5.3
 Released 08 November 2018.

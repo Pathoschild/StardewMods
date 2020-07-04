@@ -54,18 +54,18 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add a standard token to the context.</summary>
         /// <param name="token">The config token to add.</param>
-        public void Add(IToken token)
+        public void Add(IHigherLevelToken<IToken> token)
         {
             if (token.Scope != this.Scope)
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
-            if (token.Name.Contains(InternalConstants.InputArgSeparator))
-                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because input arguments aren't supported ({InternalConstants.InputArgSeparator} character).");
+            if (token.Name.Contains(InternalConstants.PositionalInputArgSeparator))
+                throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because positional input arguments aren't supported ({InternalConstants.PositionalInputArgSeparator} character).");
             if (this.ParentContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because there's a global token with that name.");
             if (this.LocalContext.Contains(token.Name, enforceContext: false))
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
-            this.LocalContext.Tokens[token.Name] = token;
+            this.LocalContext.Save(token);
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
@@ -79,8 +79,12 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
-            if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out DynamicToken token))
-                this.DynamicContext.Save(token = new DynamicToken(tokenValue.Name, this.Scope));
+            DynamicToken token;
+            {
+                if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out IHigherLevelToken<DynamicToken> wrapper))
+                    this.DynamicContext.Save(wrapper = new HigherLevelTokenWrapper<DynamicToken>(new DynamicToken(tokenValue.Name, this.Scope)));
+                token = wrapper.Token;
+            }
 
             // add token value
             token.AddTokensUsed(tokenValue.GetTokensUsed());
@@ -134,7 +138,7 @@ namespace ContentPatcher.Framework
             }
 
             // update local standard tokens
-            foreach (IToken token in this.LocalContext.Tokens.Values)
+            foreach (var token in this.LocalContext.Tokens.Values)
             {
                 if (token.IsMutable && affectedTokens?.Contains(token.Name) != false)
                     token.UpdateContext(this);
@@ -142,7 +146,7 @@ namespace ContentPatcher.Framework
 
             // reset dynamic tokens
             // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
-            foreach (DynamicToken token in this.DynamicContext.Tokens.Values)
+            foreach (DynamicToken token in this.DynamicContext.Tokens.Values.Select(p => p.Token))
             {
                 token.SetValue(null);
                 token.SetReady(false);
@@ -152,7 +156,7 @@ namespace ContentPatcher.Framework
                 tokenValue.UpdateContext(this);
                 if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
                 {
-                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name];
+                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name].Token;
                     token.SetValue(tokenValue.Value);
                     token.SetReady(true);
                 }
@@ -171,25 +175,19 @@ namespace ContentPatcher.Framework
         /****
         ** IContext
         ****/
-        /// <summary>Get whether a mod is installed.</summary>
-        /// <param name="id">The mod ID.</param>
+        /// <inheritdoc />
         public bool IsModInstalled(string id)
         {
             return this.ParentContext.IsModInstalled(id);
         }
 
-        /// <summary>Get whether the context contains the given token.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public bool Contains(string name, bool enforceContext)
         {
             return this.Contexts.Any(p => p.Contains(name, enforceContext));
         }
 
-        /// <summary>Get the underlying token which handles a name.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
+        /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
             foreach (IContext context in this.Contexts)
@@ -202,8 +200,7 @@ namespace ContentPatcher.Framework
             return null;
         }
 
-        /// <summary>Get the underlying tokens.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
             foreach (IContext context in this.Contexts)
@@ -213,13 +210,8 @@ namespace ContentPatcher.Framework
             }
         }
 
-        /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
-        /// <exception cref="ArgumentNullException">The specified token name is null.</exception>
-        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
+        /// <inheritdoc />
+        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? Enumerable.Empty<string>();

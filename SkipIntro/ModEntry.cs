@@ -99,8 +99,8 @@ namespace Pathoschild.Stardew.SkipIntro
 
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                if (this.Config.SkipTo == Screen.HostCoop || this.Config.SkipTo == Screen.JoinCoop)
-                    this.Config.SkipTo = Screen.Title; // no co-op on Android
+                if (config.SkipTo == Screen.HostCoop || config.SkipTo == Screen.JoinCoop)
+                    config.SkipTo = Screen.Title; // no co-op on Android
             }
 
             return config;

@@ -12,9 +12,6 @@ namespace Pathoschild.Stardew.Common.Input
         /*********
         ** Fields
         *********/
-        /// <summary>The underlying buttons.</summary>
-        private readonly SButton[][] ButtonSets;
-
         /// <summary>Get the current state for a button.</summary>
         private readonly Func<SButton, SButtonState> GetButtonState;
 
@@ -23,6 +20,13 @@ namespace Pathoschild.Stardew.Common.Input
 
         /// <summary>Whether any keys are bound.</summary>
         private readonly bool HasAnyImpl;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The underlying buttons.</summary>
+        public SButton[][] ButtonSets { get; }
 
 
         /*********

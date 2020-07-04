@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8.5
+Released 03 July 2020.
+
+* Fixed error when loading mod on Android.
+
 ## 1.8.4
 Released 02 May 2020.
 

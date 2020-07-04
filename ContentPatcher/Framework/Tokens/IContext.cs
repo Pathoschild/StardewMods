@@ -27,10 +27,10 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Get the current values of the given token for comparison.</summary>
         /// <param name="name">The token name.</param>
-        /// <param name="input">The input argument, if any.</param>
+        /// <param name="input">The input arguments.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
         /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext);
+        IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext);
     }
 }

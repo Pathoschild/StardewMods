@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
@@ -21,23 +20,20 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
-        /// <summary>The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</summary>
+        /// <inheritdoc />
         public string Scope { get; }
 
-        /// <summary>The token name.</summary>
-        public string Name { get; }
+        /// <inheritdoc />
+        public virtual string Name { get; }
 
-        /// <summary>Whether the value can change after it's initialized.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.Values.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Values.IsReady;
 
-        /// <summary>Whether this token recognizes input arguments (e.g. <c>Relationship:Abigail</c> is a <c>Relationship</c> token with an <c>Abigail</c> input).</summary>
-        public bool CanHaveInput => this.Values.AllowsInput;
-
-        /// <summary>Whether this token is only valid with an input argument (see <see cref="IToken.CanHaveInput"/>).</summary>
-        public bool RequiresInput => this.Values.RequiresInput;
+        /// <inheritdoc />
+        public bool RequiresInput => this.Values.RequiresPositionalInput;
 
 
         /*********
@@ -51,52 +47,41 @@ namespace ContentPatcher.Framework.Tokens
             this.Values = provider;
             this.Scope = scope;
             this.Name = provider.Name;
-            this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues();
+            this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues(InputArguments.Empty);
         }
 
-        /// <summary>Update the token data when the context changes.</summary>
-        /// <param name="context">The condition context.</param>
-        /// <returns>Returns whether the token data changed.</returns>
-        public bool UpdateContext(IContext context)
+        /// <inheritdoc />
+        public virtual bool UpdateContext(IContext context)
         {
             return this.Values.UpdateContext(context);
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
-        public IEnumerable<string> GetTokensUsed()
+        /// <inheritdoc />
+        public virtual IEnumerable<string> GetTokensUsed()
         {
             return this.Values.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
-        public IContextualState GetDiagnosticState()
+        /// <inheritdoc />
+        public virtual IContextualState GetDiagnosticState()
         {
             return this.Values.GetDiagnosticState();
         }
 
-        /// <summary>Whether the token may return multiple values for the given name.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        public bool CanHaveMultipleValues(ITokenString input)
+        /// <inheritdoc />
+        public virtual bool CanHaveMultipleValues(IInputArguments input)
         {
             return this.Values.CanHaveMultipleValues(input);
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public virtual bool TryValidateInput(IInputArguments input, out string error)
         {
             return this.Values.TryValidateInput(input, out error);
         }
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, IContext context, out string error)
+        /// <inheritdoc />
+        public virtual bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, out string error)
         {
             if (!this.TryValidateInput(input, out error) || !this.Values.TryValidateValues(input, values, out error))
                 return false;
@@ -105,37 +90,27 @@ namespace ContentPatcher.Framework.Tokens
             return true;
         }
 
-        /// <summary>Get the allowed input arguments, if supported and restricted to a specific list.</summary>
-        public InvariantHashSet GetAllowedInputArguments()
+        /// <inheritdoc />
+        public virtual InvariantHashSet GetAllowedInputArguments()
         {
-            return this.Values.GetValidInputs();
+            return this.Values.GetValidPositionalArgs();
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IToken.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public virtual bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
             return this.Values.HasBoundedValues(input, out allowedValues);
         }
 
-        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IToken.HasBoundedValues"/>.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="min">The minimum value this token may return.</param>
-        /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        /// <inheritdoc />
+        public virtual bool HasBoundedRangeValues(IInputArguments input, out int min, out int max)
         {
             return this.Values.HasBoundedRangeValues(input, out min, out max);
         }
 
-        /// <summary>Get the current token values.</summary>
-        /// <param name="input">The input to check, if any.</param>
-        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        public virtual IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInput(input);
             return this.Values.GetValues(input);
         }
 
@@ -151,19 +126,6 @@ namespace ContentPatcher.Framework.Tokens
             : this(provider, scope)
         {
             this.Name = name;
-        }
-
-        /// <summary>Assert that an input argument is valid.</summary>
-        /// <param name="input">The input to check, if any.</param>
-        /// <exception cref="InvalidOperationException">The input does not respect <see cref="IToken.CanHaveInput"/> or <see cref="IToken.RequiresInput"/>.</exception>
-        protected void AssertInput(ITokenString input)
-        {
-            bool hasInput = input.IsMeaningful();
-
-            if (!this.CanHaveInput && hasInput)
-                throw new InvalidOperationException($"The '{this.Name}' token does not allow input arguments ({InternalConstants.InputArgSeparator}).");
-            if (this.RequiresInput && !hasInput)
-                throw new InvalidOperationException($"The '{this.Name}' token requires an input argument.");
         }
     }
 }

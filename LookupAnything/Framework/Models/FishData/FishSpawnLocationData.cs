@@ -45,5 +45,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
             this.Area = area;
             this.Seasons = new HashSet<string>(seasons, StringComparer.InvariantCultureIgnoreCase);
         }
+
+        /// <summary>Get whether this matches a given location name.</summary>
+        /// <param name="locationName">The location name to match.</param>
+        public bool MatchesLocation(string locationName)
+        {
+            // specific mine level (e.g. Lava Eel in UndergroundMine100)
+            if (this.LocationName == "UndergroundMine" && !string.IsNullOrWhiteSpace(this.Area))
+                return locationName == $"{this.LocationName}{this.Area}";
+
+            // location name
+            return locationName == this.LocationName;
+        }
     }
 }

@@ -21,11 +21,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>Fetches metadata about loaded mods.</summary>
+        protected IModRegistry ModRegistry { get; }
+
         /// <summary>Simplifies access to private code.</summary>
         protected IReflectionHelper Reflection { get; }
 
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
         private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
+
+        /// <summary>Whether the Deep Woods mod is installed.</summary>
+        private readonly bool HasDeepWoods;
+
+        /// <summary>Whether the Farm Type Manager mod is installed.</summary>
+        private readonly bool HasFarmTypeManager;
 
 
         /*********
@@ -67,12 +76,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="rateLimit">The minimum number of ticks between each update.</param>
-        protected BaseAttachment(IReflectionHelper reflection, int rateLimit = 0)
+        protected BaseAttachment(IModRegistry modRegistry, IReflectionHelper reflection, int rateLimit = 0)
         {
+            this.ModRegistry = modRegistry;
             this.Reflection = reflection;
             this.RateLimit = rateLimit;
+
+            this.HasDeepWoods = modRegistry.IsLoaded("maxvollmer.deepwoodsmod");
+            this.HasFarmTypeManager = modRegistry.IsLoaded("Esca.FarmTypeManager");
         }
 
         /// <summary>Start a cooldown if it's not already started.</summary>
@@ -100,9 +114,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool UseToolOnTile(Tool tool, Vector2 tile, Farmer player, GameLocation location)
         {
             // use tool on center of tile
-            Vector2 useAt = this.GetToolPixelPosition(tile);
-            player.lastClick = useAt;
-            tool.DoFunction(location, (int)useAt.X, (int)useAt.Y, 0, player);
+            player.lastClick = this.GetToolPixelPosition(tile);
+            tool.DoFunction(location, (int)player.lastClick.X, (int)player.lastClick.Y, 0, player);
             return true;
         }
 
@@ -181,9 +194,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return new Rectangle((int)pos.X, (int)pos.Y, Game1.tileSize, Game1.tileSize);
         }
 
-        /// <summary>Get resource clumps in a given location.</summary>
+        /// <summary>Get the resource clumps in a given location.</summary>
         /// <param name="location">The location to search.</param>
-        protected IEnumerable<ResourceClump> GetResourceClumps(GameLocation location)
+        private IEnumerable<ResourceClump> GetNormalResourceClumps(GameLocation location)
         {
             switch (location)
             {
@@ -202,7 +215,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     return mineshaft.resourceClumps;
 
                 default:
-                    if (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_"))
+                    if (this.HasDeepWoods && (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_")))
                         return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
                     return new ResourceClump[0];
             }
@@ -211,15 +224,45 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
-        protected ResourceClump GetResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        protected bool HasResourceClumpCoveringTile(GameLocation location, Vector2 tile)
+        {
+            return this.GetResourceClumpCoveringTile(location, tile, null, out _) != null;
+        }
+
+        /// <summary>Get the resource clump which covers a given tile, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="applyTool">Applies a tool to the resource clump.</param>
+        protected ResourceClump GetResourceClumpCoveringTile(GameLocation location, Vector2 tile, Farmer player, out Func<Tool, bool> applyTool)
         {
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
-            foreach (ResourceClump clump in this.GetResourceClumps(location))
+
+            // normal resource clumps
+            foreach (ResourceClump clump in this.GetNormalResourceClumps(location))
             {
                 if (clump.getBoundingBox(clump.tile.Value).Intersects(tileArea))
+                {
+                    applyTool = tool => this.UseToolOnTile(tool, tile, player, location);
                     return clump;
+                }
             }
 
+            // FarmTypeManager resource clumps
+            if (this.HasFarmTypeManager)
+            {
+                foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
+                {
+                    if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
+                    {
+                        ResourceClump clump = this.Reflection.GetField<Netcode.NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
+                        applyTool = tool => feature.performToolAction(tool, 0, tile, location);
+                        return clump;
+                    }
+                }
+            }
+
+            applyTool = null;
             return null;
         }
 

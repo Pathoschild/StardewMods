@@ -149,7 +149,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 ModConfigKeys keys = this.Keys;
 
                 if (keys.ToggleSearch.JustPressedUnique())
-                    this.ToggleSearch();
+                    this.TryToggleSearch();
                 else if (keys.ToggleLookup.JustPressedUnique())
                     this.ToggleLookup();
                 else if (keys.ScrollUp.JustPressedUnique())
@@ -273,12 +273,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Search menu helpers
         ****/
-        /// <summary>Toggle the search UI.</summary>
-        private void ToggleSearch()
+        /// <summary>Toggle the search UI if applicable.</summary>
+        private void TryToggleSearch()
         {
             if (Game1.activeClickableMenu is SearchMenu)
                 this.HideSearch();
-            else
+            else if (Context.IsPlayerFree)
                 this.ShowSearch();
         }
 

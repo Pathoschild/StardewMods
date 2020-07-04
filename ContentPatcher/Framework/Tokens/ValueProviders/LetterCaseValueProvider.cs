@@ -21,18 +21,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type. This must be one of <see cref="ConditionType.Lowercase"/> or <see cref="ConditionType.Uppercase"/>.</param>
         public LetterCaseValueProvider(ConditionType type)
-            : base(type, canHaveMultipleValuesForRoot: false)
+            : base(type, mayReturnMultipleValuesForRoot: false)
         {
             if (type != ConditionType.Lowercase && type != ConditionType.Uppercase)
                 throw new ArgumentException($"The {nameof(type)} must be one of {ConditionType.Lowercase} or {ConditionType.Uppercase}.", nameof(type));
 
             this.Type = type;
-            this.EnableInputArguments(required: true, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             bool changed = !this.IsReady;
@@ -40,31 +38,26 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return changed;
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
             allowedValues = new InvariantHashSet(this.GetValues(input));
             return true;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
             switch (this.Type)
             {
                 case ConditionType.Lowercase:
-                    yield return input.Value.ToLowerInvariant();
+                    yield return input.TokenString.Value.ToLowerInvariant();
                     break;
 
                 case ConditionType.Uppercase:
-                    yield return input.Value.ToUpperInvariant();
+                    yield return input.TokenString.Value.ToUpperInvariant();
                     break;
 
                 default:

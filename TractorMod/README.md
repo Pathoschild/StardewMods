@@ -48,10 +48,20 @@ Tractors use no stamina when using tools, and the watering can won't run out of 
 consume fertilizer or seeds when you sow those, though.
 
 ## Configure
+### In-game settings
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+you can click the cog button (⚙) on the title screen to configure the mod. Hover the cursor over
+a field for details, or see the next section.
+
+![](screenshots/generic-config-menu.png)
+
+### `config.json` file
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
-### Global settings
+<dl>
+<dt>Global settings:<dt>
+<dd>
 <table>
 <tr>
 <th>setting</th>
@@ -193,10 +203,11 @@ Whether you can summon a temporary tractor without building a garage first. Defa
 
 </td>
 </tr>
-
 </table>
+</dd>
 
-### Standard tool features
+<dt>Standard tool features:</dt>
+<dd>
 The `StandardAttachments` section lets you configure the tractor effects when holding a specific tool or item:
 
 <table>
@@ -219,7 +230,8 @@ field                    | default | effect
 `ClearFruitTreeSeed`     | false   | Whether to clear fruit tree seeds.
 `ClearFruitTreeSaplings` | false   | Whether to clear fruit trees that aren't fully grown.
 `CutGrownFruitTrees`     | false   | Whether to clear fully-grown fruit trees.
-`ClearTreeSeeds`         | false   | Whether to clear non-fruit trees that aren't fully grown.
+`ClearTreeSeeds`         | false   | Whether to clear non-fruit tree seeds.
+`ClearTreeSaplings`      | false   | Whether to clear non-fruit trees that aren't fully grown.
 `CutGrownTrees`          | false   | Whether to clear full-grown non-fruit trees.
 `CutTappedTrees`         | false   | Whether to cut non-fruit trees that have a tapper.
 `CutBushes`              | false   | Whether to cut choppable bushes.
@@ -243,7 +255,7 @@ Configure the tractor effects when holding a fertilizer item:
 
 field    | default | effect
 -------- | ------- | ------
-`Enable` | true    | Whether to apply the fertilizer to tilled dirt.
+`Enable` | true    | Whether to apply the fertilizer to crops and tilled dirt.
 
 </td>
 </tr>
@@ -361,7 +373,7 @@ field               | default | effect
 `HarvestForage`     | true    | Whether to harvest forage.
 `HarvestFruitTrees` | true    | Whether to harvest fruits on fruit trees.
 `HarvestMachines`   | false   | Whether to collect machine output.
-`HarvestGrass`      | true    | Whether to cut down grass. If you have free silo space, this gives you hay as usual.
+`HarvestGrass`      | true    | Whether to cut tall grass. If you have free silo space, this gives you hay as usual.
 `ClearDeadCrops`    | true    | Whether to clear dead crops.
 `ClearWeeds`        | true    | Whether to clear weeds.
 
@@ -453,8 +465,11 @@ field    | default | effect
 </td>
 </tr>
 </table>
+</dd>
 
-### Custom tools
+<dt>Custom tools:</dt>
+<dd>
+
 The `CustomAttachments` enables custom items/tools while riding the tractor. Tools will be used on
 each surrounding tile, while items will be put down. If you specify something that's already
 supported (like the axe), this overrides all limitations on its use.
@@ -466,8 +481,8 @@ example:
 "CustomAttachments": ["Axe", "Mega Bomb"]
 ```
 
-</td>
-</tr>
+</dd>
+</dl>
 
 
 ## Custom textures

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using ContentPatcher.Framework.Conditions;
@@ -23,14 +22,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public VillagerHeartsValueProvider()
-            : base(ConditionType.Hearts, canHaveMultipleValuesForRoot: false)
+            : base(ConditionType.Hearts, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: false, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(this.Values, () =>
@@ -52,22 +49,20 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             });
         }
 
-        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
-        public override InvariantHashSet GetValidInputs()
+        /// <inheritdoc />
+        public override InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet(this.Values.Keys);
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (input.IsMeaningful())
+            if (input.HasPositionalArgs)
             {
-                if (this.Values.TryGetValue(input.Value, out string value))
+                if (this.Values.TryGetValue(input.GetFirstPositionalArg(), out string value))
                     yield return value;
             }
             else

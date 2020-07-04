@@ -387,7 +387,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    bool scrollNext = amount > 0;
+                    bool scrollNext = amount < 0;
 
                     // scroll dropdowns
                     if (this.Keys.HoldToMouseWheelScrollCategories.IsDown())

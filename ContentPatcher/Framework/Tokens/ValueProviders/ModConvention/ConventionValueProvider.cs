@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Text;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
@@ -20,19 +20,19 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /*********
         ** Accessor
         *********/
-        /// <summary>The value provider name.</summary>
+        /// <inheritdoc />
         public string Name { get; }
 
-        /// <summary>Whether the value provider allows an input argument (e.g. an NPC name for a relationship token).</summary>
-        public bool AllowsInput => this.Provider.AllowsInput();
+        /// <inheritdoc />
+        public bool AllowsPositionalInput => this.Provider.AllowsInput();
 
-        /// <summary>Whether the value provider requires an input argument to work, and does not provide values without it (see <see cref="IValueProvider.AllowsInput"/>).</summary>
-        public bool RequiresInput => this.Provider.RequiresInput();
+        /// <inheritdoc />
+        public bool RequiresPositionalInput => this.Provider.RequiresInput();
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.Provider.IsMutable();
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Provider.IsReady();
 
 
@@ -48,87 +48,87 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
             this.Provider = provider;
         }
 
-
-        /// <summary>Whether the value provider may return multiple values for the given input.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        public bool CanHaveMultipleValues(ITokenString input = null)
+        /// <inheritdoc />
+        public bool CanHaveMultipleValues(IInputArguments input)
         {
-            return this.Provider.CanHaveMultipleValues(input?.Value);
+            return this.Provider.CanHaveMultipleValues(this.ToApiInput(input));
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public bool TryValidateInput(IInputArguments input, out string error)
         {
-            return this.Provider.TryValidateInput(input?.Value, out error);
+            return this.Provider.TryValidateInput(this.ToApiInput(input), out error);
         }
 
-        /// <summary>Validate that the provided values are valid for the input argument (regardless of whether they match).</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="values">The values to validate.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public bool TryValidateValues(ITokenString input, InvariantHashSet values, out string error)
+        /// <inheritdoc />
+        public bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error)
         {
-            return this.Provider.TryValidateValues(input?.Value, values, out error);
+            return this.Provider.TryValidateValues(this.ToApiInput(input), values, out error);
         }
 
-        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
-        public InvariantHashSet GetValidInputs()
+        /// <inheritdoc />
+        public InvariantHashSet GetValidPositionalArgs()
         {
             return new InvariantHashSet(this.Provider.GetValidInputs());
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            bool bounded = this.Provider.HasBoundedValues(input?.Value, out IEnumerable<string> values);
+            bool bounded = this.Provider.HasBoundedValues(this.ToApiInput(input), out IEnumerable<string> values);
             allowedValues = bounded
                 ? new InvariantHashSet(values)
                 : null;
             return bounded;
         }
 
-        /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedValues"/>.</summary>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="min">The minimum value this token may return.</param>
-        /// <param name="max">The maximum value this token may return.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public bool HasBoundedRangeValues(ITokenString input, out int min, out int max)
+        /// <inheritdoc />
+        public bool HasBoundedRangeValues(IInputArguments input, out int min, out int max)
         {
-            return this.Provider.HasBoundedRangeValues(input?.Value, out min, out max);
+            return this.Provider.HasBoundedRangeValues(this.ToApiInput(input), out min, out max);
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public IEnumerable<string> GetValues(IInputArguments input)
         {
-            return this.Provider.GetValues(input?.Value);
+            return this.Provider.GetValues(this.ToApiInput(input));
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             return this.Provider.UpdateContext();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             yield break;
+        }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Convert input arguments into the format used by the mod API.</summary>
+        /// <param name="input">The input arguments.</param>
+        private string ToApiInput(IInputArguments input)
+        {
+            StringBuilder inputStr = new StringBuilder();
+
+            inputStr.Append(string.Join(", ", input.PositionalArgs));
+            foreach (var arg in input.NamedArgs)
+                inputStr.Append($" |{arg.Key}={string.Join(", ", arg.Value.Parsed)}");
+
+            return inputStr.Length > 0
+                ? inputStr.ToString()
+                : null;
         }
     }
 }

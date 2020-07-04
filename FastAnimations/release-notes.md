@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9
+Released 03 July 2020.
+
+* Added support for...
+  * horse mount/dismount animations;
+  * crop harvest animations.
+* Added integration with Generic Mod Config Menu.
+
 ## 1.8
 Released 02 May 2020.
 

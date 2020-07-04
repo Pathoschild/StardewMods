@@ -33,9 +33,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The attachment settings.</param>
+        /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public AxeAttachment(AxeConfig config, IReflectionHelper reflection)
-            : base(reflection)
+        public AxeAttachment(AxeConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+            : base(modRegistry, reflection)
         {
             this.Config = config;
         }
@@ -91,17 +92,23 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // cut resource stumps
             if (this.Config.ClearDebris || this.Config.CutGiantCrops)
             {
-                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile);
+                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile, player, out var applyTool);
 
                 // giant crops
                 if (this.Config.CutGiantCrops && clump is GiantCrop)
-                    this.UseToolOnTile(tool, tile, player, location);
+                {
+                    applyTool(tool);
+                    return true;
+                }
 
                 // big stumps and fallen logs
                 // This needs to check if the axe upgrade level is high enough first, to avoid spamming
                 // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
                 if (this.Config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
-                    this.UseToolOnTile(tool, tile, player, location);
+                {
+                    applyTool(tool);
+                    return true;
+                }
             }
 
             // cut bushes in large terrain features

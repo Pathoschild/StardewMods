@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -21,11 +20,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>The underlying random number generator.</summary>
         private Random Random;
 
-        /// <summary>The cached results by token string instance.</summary>
-        private readonly IDictionary<ITokenString, string> CachedResults = new Dictionary<ITokenString, string>(new ObjectReferenceComparer<ITokenString>());
-
-        /// <summary>The random numbers assigned for each pinned key.</summary>
+        /// <summary>The random numbers assigned to pinned keys.</summary>
         private readonly InvariantDictionary<int> PinnedKeys = new InvariantDictionary<int>();
+
+        /// <summary>The random numbers generated for input arguments that didn't specify one.</summary>
+        private readonly IDictionary<ITokenString, int> GeneratedKeys = new Dictionary<ITokenString, int>(new ObjectReferenceComparer<ITokenString>());
 
 
         /*********
@@ -33,66 +32,44 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RandomValueProvider()
-            : base(ConditionType.Random, canHaveMultipleValuesForRoot: false)
+            : base(ConditionType.Random, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: true, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.ValidNamedArguments.Add("key");
             this.UpdateRandom();
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             this.PinnedKeys.Clear();
-            this.CachedResults.Clear();
+            this.GeneratedKeys.Clear();
             bool changed = this.UpdateRandom();
 
             return base.UpdateContext(context) || changed;
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
-
-            if (string.IsNullOrWhiteSpace(input.Value))
+            // validate
+            this.AssertInput(input);
+            if (!input.HasPositionalArgs)
                 yield break;
 
-            // get for pinned key
-            if (this.TryGetPinnedNumber(input, out string choices, out int randomNumber))
-            {
-                yield return this.Choose(choices, randomNumber);
-                yield break;
-            }
-
-            // get for input string
-            if (!this.CachedResults.TryGetValue(input, out string result))
-            {
-                string[] options = input.SplitValuesNonUnique().ToArray();
-                this.CachedResults[input] = result = options[this.Random.Next(options.Length)];
-            }
-            yield return result;
+            // get pinned value
+            int pinnedNumber = this.GetPinnedNumber(input);
+            yield return this.Choose(input.PositionalArgs, pinnedNumber);
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            if (input.IsMutable || !input.IsReady)
-            {
-                allowedValues = null;
-                return false;
-            }
+            allowedValues = !input.IsMutable
+                ? new InvariantHashSet(input.PositionalArgs)
+                : null;
 
-            allowedValues = this.TryGetPinnedNumber(input, out string choices, out _)
-                ? new InvariantHashSet(choices.SplitValuesNonUnique())
-                : new InvariantHashSet(input.SplitValuesNonUnique());
-            return true;
+            return allowedValues != null;
         }
 
 
@@ -100,43 +77,43 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>Get a value from the given input based on the selected random number.</summary>
-        /// <param name="input">The comma-delimited input to parse.</param>
+        /// <param name="choices">The choices to pick from.</param>
         /// <param name="randomNumber">The random number to apply.</param>
-        private string Choose(string input, int randomNumber)
+        private string Choose(string[] choices, int randomNumber)
         {
-            string[] options = input.SplitValuesNonUnique().ToArray();
-            return options[randomNumber % options.Length];
+            return choices[randomNumber % choices.Length];
         }
 
-        /// <summary>Parse a token string to extract the underlying input and the number associated with the pinned key, if applicable.</summary>
-        /// <param name="tokenStr">The token string to parse.</param>
-        /// <param name="choices">The comma-delimited choices.</param>
-        /// <param name="randomNumber">The random number associated with the pinned value.</param>
-        private bool TryGetPinnedNumber(ITokenString tokenStr, out string choices, out int randomNumber)
+        /// <summary>Get the pinned random number from the input arguments.</summary>
+        /// <param name="input">The input arguments.</param>
+        private int GetPinnedNumber(IInputArguments input)
         {
-            choices = null;
-            randomNumber = -1;
-            if (!tokenStr.IsReady || string.IsNullOrWhiteSpace(tokenStr.Value))
-                return false;
+            // from cache
+            if (this.GeneratedKeys.TryGetValue(input.TokenString, out int cachedKey))
+                return cachedKey;
 
-            // parse token
-            string rawInput, pinnedKey;
+            // from pinned key
+            string pinnedKey = this.GetPinnedKey(input);
+            if (pinnedKey != null)
             {
-                string[] parts = tokenStr.Value.Split(new[] { '|' }, 2);
-                if (parts.Length != 2)
-                    return false;
-
-                rawInput = parts[0].Trim();
-                pinnedKey = parts[1].Trim();
+                if (!this.PinnedKeys.TryGetValue(pinnedKey, out int pinnedNumber))
+                    this.PinnedKeys[pinnedKey] = pinnedNumber = this.Random.Next();
+                return pinnedNumber;
             }
-            if (string.IsNullOrWhiteSpace(pinnedKey))
-                return false;
 
-            // get value
-            choices = rawInput;
-            if (!this.PinnedKeys.TryGetValue(pinnedKey, out randomNumber))
-                this.PinnedKeys[pinnedKey] = randomNumber = this.Random.Next();
-            return true;
+            // generate new number
+            int generated = this.Random.Next();
+            this.GeneratedKeys[input.TokenString] = generated;
+            return generated;
+        }
+
+        /// <summary>Get the pinned key from the given input arguments, if any.</summary>
+        /// <param name="input">The input arguments.</param>
+        private string GetPinnedKey(IInputArguments input)
+        {
+            return input.NamedArgs.TryGetValue("key", out IInputArgumentValue value)
+                ? value.Raw
+                : null;
         }
 
         /// <summary>Update the random number generator if needed.</summary>

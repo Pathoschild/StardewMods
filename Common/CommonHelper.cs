@@ -59,6 +59,14 @@ namespace Pathoschild.Stardew.Common
                 );
         }
 
+        /// <summary>Get a player's current tile position.</summary>
+        /// <param name="player">The player to check.</param>
+        public static Vector2 GetPlayerTile(Farmer player)
+        {
+            Vector2 position = player?.Position ?? Vector2.Zero;
+            return new Vector2((int)(position.X / Game1.tileSize), (int)(position.Y / Game1.tileSize)); // note: player.getTileLocationPoint() isn't reliable in many cases, e.g. right after a warp when riding a horse
+        }
+
         /// <summary>Get the item type for an item to disambiguate IDs.</summary>
         /// <param name="item">The item to check.</param>
         public static ItemType GetItemType(this Item item)

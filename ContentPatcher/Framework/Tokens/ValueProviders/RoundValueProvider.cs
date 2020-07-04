@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -32,14 +31,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RoundValueProvider()
-            : base(ConditionType.Round, canHaveMultipleValuesForRoot: false)
+            : base(ConditionType.Round, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: true, canHaveMultipleValues: false);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             bool changed = !this.IsReady;
@@ -47,22 +44,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return changed;
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public override bool TryValidateInput(IInputArguments input, out string error)
         {
             return
                 base.TryValidateInput(input, out error)
                 && this.TryParse(input, out _, out _, out _, out error);
         }
 
-        /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="IValueProvider.HasBoundedRangeValues"/>.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="allowedValues">The possible values for the input.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override bool HasBoundedValues(ITokenString input, out InvariantHashSet allowedValues)
+        /// <inheritdoc />
+        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
             if (this.TryParseAndRound(input, out decimal value, out _))
             {
@@ -76,15 +67,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
             if (!this.TryParseAndRound(input, out decimal value, out string parseError))
-                throw new InvalidOperationException($"Invalid input value '{input.Value}': {parseError}"); // should never happen
+                throw new InvalidOperationException($"Invalid input value '{input.TokenString.Value}': {parseError}"); // should never happen
 
             yield return value.ToString(CultureInfo.InvariantCulture);
         }
@@ -93,11 +82,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Private methods
         *********/
-        /// <summary>Parse a token string directly and get the rounded value if valid.</summary>
+        /// <summary>Parse input arguments and get the rounded value if valid.</summary>
         /// <param name="input">The input to parse.</param>
         /// <param name="result">The rounded value, if applicable.</param>
         /// <param name="parseError">A human-readable error indicating why parsing failed, if applicable.</param>
-        private bool TryParseAndRound(ITokenString input, out decimal result, out string parseError)
+        private bool TryParseAndRound(IInputArguments input, out decimal result, out string parseError)
         {
             if (!this.TryParse(input, out decimal value, out int decimals, out RoundMode mode, out parseError))
             {
@@ -134,13 +123,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             }
         }
 
-        /// <summary>Try to parse an input argument into its components.</summary>
-        /// <param name="input">The input argument to parse.</param>
+        /// <summary>Try to parse input arguments.</summary>
+        /// <param name="input">The input arguments to parse.</param>
         /// <param name="value">The value to round.</param>
         /// <param name="decimals">The number of digits after the decimal point to keep.</param>
         /// <param name="mode">The rounding logic to apply.</param>
         /// <param name="parseError">A human-readable error indicating why parsing failed, if applicable.</param>
-        private bool TryParse(ITokenString input, out decimal value, out int decimals, out RoundMode mode, out string parseError)
+        private bool TryParse(IInputArguments input, out decimal value, out int decimals, out RoundMode mode, out string parseError)
         {
             // set defaults
             value = 0;
@@ -148,42 +137,42 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             mode = RoundMode.Default;
 
             // skip if not ready
-            if (!input.IsReady)
+            if (!input.TokenString.IsReady)
             {
                 parseError = "input isn't ready";
                 return false;
             }
 
             // parse parts
-            string[] parts = input.SplitValuesNonUnique().ToArray();
-            if (parts.Length < 1 || parts.Length > 3)
+            string[] args = input.PositionalArgs;
+            if (args.Length < 1 || args.Length > 3)
             {
-                parseError = $"input {input.Value} must have 1-3 comma-separated arguments.";
+                parseError = $"input '{input.TokenString.Value}' must have 1-3 comma-separated arguments.";
                 return false;
             }
-            if (!decimal.TryParse(parts[0], out value))
+            if (!decimal.TryParse(args[0], out value))
             {
-                parseError = $"value '{parts[0]}' can't be parsed as a numeric value.";
+                parseError = $"value '{args[0]}' can't be parsed as a numeric value.";
                 return false;
             }
-            if (parts.Length >= 2)
+            if (args.Length >= 2)
             {
-                if (!int.TryParse(parts[1], out decimals))
+                if (!int.TryParse(args[1], out decimals))
                 {
-                    parseError = $"digit count '{parts[1]}' can't be parsed as an integer value.";
+                    parseError = $"digit count '{args[1]}' can't be parsed as an integer value.";
                     return false;
                 }
                 if (decimals < 0)
                 {
-                    parseError = $"digit count '{parts[1]}' can't be less than zero.";
+                    parseError = $"digit count '{args[1]}' can't be less than zero.";
                     return false;
                 }
             }
-            if (parts.Length >= 3)
+            if (args.Length >= 3)
             {
-                if (!Enum.TryParse(parts[2], ignoreCase: true, out mode))
+                if (!Enum.TryParse(args[2], ignoreCase: true, out mode))
                 {
-                    parseError = $"round mode '{parts[2]}' is invalid; must be one of '{string.Join(", ", Enum.GetNames(typeof(RoundMode)))}'.";
+                    parseError = $"round mode '{args[2]}' is invalid; must be one of '{string.Join(", ", Enum.GetNames(typeof(RoundMode)))}'.";
                     return false;
                 }
             }

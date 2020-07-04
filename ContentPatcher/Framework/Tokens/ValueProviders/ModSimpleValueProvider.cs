@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>A function which returns the current value for a given input argument (if any).</summary>
+        /// <summary>Get the current values for given input arguments (if any).</summary>
         private readonly Func<IEnumerable<string>> GetValueImpl;
 
         /// <summary>The current values.</summary>
@@ -25,19 +25,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>Pathoschild.ExampleMod/SomeTokenName</c>.</param>
         /// <param name="getValue">A function which returns the current token value (if any). If this returns null, the token is considered unavailable for use.</param>
         public ModSimpleValueProvider(string name, Func<IEnumerable<string>> getValue)
-            : base(name, canHaveMultipleValuesForRoot: true)
+            : base(name, mayReturnMultipleValuesForRoot: true)
         {
             this.GetValueImpl = getValue;
 
             this.MarkReady(false);
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
             return this.IsReady
                 ? this.Values.ToArray()

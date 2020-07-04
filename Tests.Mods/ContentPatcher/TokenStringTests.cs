@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // arrange
             const string configKey = "tokenKey";
             var context = new GenericTokenContext(modId => false);
-            context.Save(new ImmutableToken(configKey, new InvariantHashSet { "value" }));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(configKey, new InvariantHashSet { "value" })));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be(parsed);
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(1);
-            tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.Text).Should().BeEquivalentTo("{{" + configKey + "}}");
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(p => p.ToString()).Should().BeEquivalentTo("{{" + configKey + "}}");
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeTrue();
             diagnosticState.IsReady.Should().BeTrue();
@@ -74,8 +74,8 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string tokenKey = "season";
             const string raw = "  assets/{{configKey}}_{{season}}_{{ invalid  }}.png  ";
             var context = new GenericTokenContext(modId => false);
-            context.Save(new ImmutableToken(configKey, new InvariantHashSet { configValue }));
-            context.Save(new ImmutableToken(tokenKey, new InvariantHashSet { "A" }));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(configKey, new InvariantHashSet { configValue })));
+            context.Save(new HigherLevelTokenWrapper(new ImmutableToken(tokenKey, new InvariantHashSet { "A" })));
 
             // act
             TokenString tokenStr = new TokenString(raw, context);
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(3);
-            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.Text).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.ToString()).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
             tokenStr.IsReady.Should().BeFalse();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();

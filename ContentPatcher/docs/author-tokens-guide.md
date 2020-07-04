@@ -7,8 +7,9 @@ This document lists the tokens available in Content Patcher packs.
 ## Contents
 * [Introduction](#introduction)
   * [Overview](#overview)
-  * [Conditions](#conditions)
   * [Placeholders](#placeholders)
+  * [Conditions](#conditions)
+  * [Input arguments](#input-arguments)
 * [Global tokens](#global-tokens)
   * [Date and weather](#date-and-weather)
   * [Player](#player)
@@ -18,99 +19,40 @@ This document lists the tokens available in Content Patcher packs.
   * [String manipulation](#string-manipulation)
   * [Metadata](#metadata)
   * [Field references](#field-references)
+* [Global input arguments](#global-input-arguments)
+  * [Token search](#token-search)
+  * [Custom input value separator](#custom-input-value-separator)
 * [Arithmetic](#arithmetic)
 * [Randomization](#randomization)
-  * [Overview](#overview)
-  * [Unique properties](#unique-properties)
-  * [Pinned keys](#pinned-keys)
 * [Dynamic tokens](#dynamic-tokens)
 * [Player config](#player-config)
 * [Mod-provided tokens](#mod-provided-tokens)
+* [Constants](#constants)
 * [See also](#see-also)
 
 ## Introduction
 ### Overview
-A **token** is a placeholder for a predefined value. For example, `season` (the token) may contain
-`spring`, `summer`, `fall`, or `winter` (the value). You can use [player config](#player-config),
-[global token values](#global-tokens), and [dynamic token values](#dynamic-tokens) as tokens.
+A **token** is a named container which has predefined values.
 
-Tokens are indicated by two curly braces (except in `When` condition keys, where the braces are
-implied). For example, here's a simple dialogue text which includes the current season name:
+For example, `season` (the token) may contain `spring`, `summer`, `fall`, or `winter` (the value).
+Here's a dialogue which includes the current season name:
 ```js
 "Entries": {
-   "fri": "It's a beautiful {{season}} day!"
+   "fri": "It's a beautiful {{season}} day!" // It's a beautiful Spring day!
 }
 ```
 
-Most tokens contain values directly, like `{{Season}}` = `spring` or `{{HasProfession}}` =
-`Blacksmith, Forester, Miner`. Some tokens also have an _input argument_, which can be a literal
-value (like `{{Relationship:Abigail}}` = `Married`) or contain tokens too (like
-`{{HasFile:assets/{{spouse}}.png}}` = `true`).
-
-There are two ways to use tokens.
-
-### Conditions
-You can make a patch conditional by adding a `When` field, which can list any number of conditions.
-Each condition has...
-* A key (before `:`) containing a [token](#advanced-tokens--conditions) without the outer curly
-  braces, like `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
-* A value (after `:`) containing the comma-separated values to match, like `spring, summer`. If the
-  key token returns any of these values, the condition matches. This field supports
-  [tokens](#advanced-tokens--conditions) and is not case-sensitive.
-
-For example: this changes the house texture only in spring or summer, if the player is married, and
-the number of hearts with their spouse matches the number in the `{{minHearts}}` config field:
-
-```js
-{
-    "Action": "EditImage",
-    "Target": "Buildings/houses",
-    "FromFile": "assets/{{season}}_house.png",
-    "When": {
-        "Season": "spring, summer",
-        "HasValue:{{spouse}}": "true",
-        "Hearts:{{spouse}}": "{{minHearts}}"
-    }
-}
-```
-
-Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
-conditions match.
-
-Most tokens have an optional `{{tokenName:value}}` form which returns `true` or `false`. This can be
-used to perform AND logic:
-
-```js
-// player has blacksmith OR gemologist
-"When": {
-   "HasProfession": "Blacksmith, Gemologist"
-}
-
-// player has blacksmith AND gemologist
-"When": {
-   "HasProfession:Blacksmith": "true",
-   "HasProfession:Gemologist": "true"
-}
-```
-
-This can also be used for negative conditions:
-
-```js
-// only year one
-"When": {
-   "Year": "1"
-}
-
-// NOT year 1
-"When": {
-   "Year:1": "false"
-}
-```
+Tokens can be used as _placeholders_ in text (like the above example) or as patch _conditions_. You
+can use [player config](#player-config), [global token values](#global-tokens), and
+[dynamic token values](#dynamic-tokens) as tokens.
 
 ### Placeholders
 You can use tokens in text by putting two curly brackets around the token name, which will be
-replaced with the actual value automatically. Token placeholders are not case-sensitive. Patches
-will be disabled automatically if a token they use isn't currently available.
+replaced with the actual value automatically.
+
+Token placeholders can be used in most fields (the documentation for each field will specify), and
+they're not case-sensitive (so `{{season}}` and `{{SEASON}}` are the same thing). Patches will be
+disabled automatically if a token they use isn't currently available.
 
 For example, this gives the farmhouse a different appearance in each season:
 
@@ -122,12 +64,54 @@ For example, this gives the farmhouse a different appearance in each season:
 }
 ```
 
-You can use placeholders in most fields (the documentation for each field will mention if it does).
+Tokens which return a single value (like `{{season}}`) are most useful in placeholders, but
+multi-value tokens will work too (they'll show a comma-delimited list).
 
-Tokens which return a single value (like `{{season}}`) are most useful in placeholders. You can
-use multi-value tokens as placeholders too, which will return a comma-delimited list. Most tokens
-also have an optional `{{tokenName:value}}` form which returns `true` or `false` (like
-`{{hasProfession:Gemologist}}`).
+### Conditions
+You can make a patch conditional by adding a `When` field, which can list any number of conditions.
+Each condition has...
+* A key containing a [token](#introduction) without the outer curly braces, like
+  `Season` or `HasValue:{{spouse}}`. The key is not case-sensitive.
+* A value containing the comma-separated values to match, like `spring, summer`. If the key token
+  returns any of these values, the condition matches. This field supports
+  [tokens](#introduction) and is not case-sensitive.
+
+For example, this changes the house texture only in spring or summer in the first year:
+
+```js
+{
+    "Action": "EditImage",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/{{season}}_house.png",
+    "When": {
+        "Season": "spring, summer",
+        "Year": "1"
+    }
+}
+```
+
+Each condition is true if _any_ of its values match, and the patch is applied if _all_ of its
+conditions match.
+
+### Input arguments
+An **input argument** or **input** is a value you give to the token within the `{{...}}` braces.
+Input can be _positional_ (an unnamed list of values) or _named_. Argument values are
+comma-separated, and named arguments are pipe-separated.
+
+For example, `{{Random: a, b, c |key=some, value |example }}` has five arguments: three positional
+values `a`, `b`, `c`; a named `key` argument with values `some` and `value`; and a named `example`
+argument with an empty value.
+
+Some tokens recognise input arguments to change their output, which are documented in the sections
+below. For example, the `Uppercase` token makes its input uppercase:
+```js
+"Entries": {
+   "fri": "It's a beautiful {{uppercase: {{season}}}} day!" // It's a beautiful SPRING day!
+}
+```
+
+There are also [**global input arguments**](#global-input-arguments) which are handled by Content
+Patcher, so they work with any token.
 
 ## Global tokens
 Global token values are defined by Content Patcher, so you can use them without doing anything else.
@@ -222,11 +206,24 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
+<td>HasConversationTopic</td>
+<td>
+
+The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Active_dialogue_events)
+for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
+
+Topics that have expired are stored as flags (see `HasFlag`).
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasDialogueAnswer</td>
 <td>
 
-The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for the player's
-answers to question dialogues.
+The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for answers to
+question dialogues by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument).
 
 </td>
 </tr>
@@ -235,17 +232,21 @@ answers to question dialogues.
 <td>HasFlag</td>
 <td>
 
-The flags set for the current player, including letters received and world state IDs. Some useful
-flags:
+The flags set for the current player (or the player specified with a [`PlayerType`](#playertype)
+argument), including letters received and world state IDs.
+
+Some useful flags:
 
 flag | meaning
 ---- | -------
+`abandonedJojaMartAccessible` | The [abandoned JojaMart](https://stardewvalleywiki.com/Bundles#Abandoned_JojaMart) is accessible.
 `artifactFound` | The player has found at least one artifact.
 `Beat_PK` | The player has beaten the Prairie King arcade game.
 `beenToWoods` | The player has entered the Secret Woods at least once.
 `beachBridgeFixed` | The bridge to access the second beach area is repaired.
 `canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
 `ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` and `IsJojaMartComplete` tokens instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
+`ccMovieTheater`<br />`ccMovieTheaterJoja` | The movie theater has been constructed, either through the community path (only `ccMovieTheater` is set) or through Joja (both are set).
 `doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
 `galaxySword` | The player has acquired the Galaxy Sword.
 `geodeFound` | The player has found at least one geode.
@@ -264,7 +265,10 @@ flag | meaning
 <td>HasProfession</td>
 <td>
 
-The [professions](https://stardewvalleywiki.com/Skills) learned by the player. Possible values:
+The [professions](https://stardewvalleywiki.com/Skills) learned by the current player (or the
+player specified with a [`PlayerType`](#playertype) argument).
+
+Possible values:
 
 * Combat skill: `Acrobat`, `Brute`, `Defender`, `Desperado`, `Fighter`, `Scout`.
 * Farming skill: `Agriculturist`, `Artisan`, `Coopmaster`, `Rancher`, `Shepherd`, `Tiller`.
@@ -279,15 +283,22 @@ Custom professions added by a mod are represented by their integer profession ID
 
 <tr valign="top">
 <td>HasReadLetter</td>
-<td>The letter IDs opened by the player (i.e. a letter UI was displayed).</td>
+<td>
+
+The letter IDs opened by the current player (or the player specified with a
+[`PlayerType`](#playertype) argument). A letter is considered 'opened' if the letter UI was shown.
+
+</td>
 </tr>
 
 <tr valign="top">
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs the player has seen, matching IDs in the `Data/Events` files. (You can use
-[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.)
+The event IDs seen by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument), matching IDs in the `Data/Events` files.
+
+You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
 
 </td>
 </tr>
@@ -296,7 +307,9 @@ The event IDs the player has seen, matching IDs in the `Data/Events` files. (You
 <td>HasWalletItem</td>
 <td>
 
-The [special items in the player wallet](https://stardewvalleywiki.com/Wallet). Possible values:
+The [special wallet items](https://stardewvalleywiki.com/Wallet) for the current player.
+
+Possible values:
 
 flag                       | meaning
 -------------------------- | -------
@@ -327,7 +340,7 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](#known-limitations).
+Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>
@@ -337,7 +350,7 @@ Whether the player is outdoors. Possible values: `true`, `false`. This [does not
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
-This [does not affect dialogue](#known-limitations).
+This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>
@@ -524,7 +537,7 @@ player is having a child:
 ```
 
 Usage notes:
-* `HavingChild:@{{playerName}}` and `HavingChild:{{spouse}}` are equivalent for this token.
+* `"HavingChild": "@{{playerName}}"` and `"HavingChild": "{{spouse}}"` are equivalent for this token.
 * See also the `Pregnant` token.
 
 </td>
@@ -805,6 +818,71 @@ Equivalent to `Target`, but only the part after the last path separator:
 </tr>
 </table>
 
+## Global input arguments
+Global [input arguments](#input-arguments) are handled by Content Patcher itself, so they work with
+all tokens (including mod-provided tokens).
+
+### Token search
+The `contains` argument returns `true` or `false` depending on whether the token contains any of
+the given values. This is mainly useful for logic in [conditions](#conditions):
+
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession": "Blacksmith, Gemologist"
+}
+
+// player has blacksmith AND gemologist
+"When": {
+   "HasProfession |contains=Blacksmith": "true",
+   "HasProfession |contains=Gemologist": "true"
+}
+
+// NOT year 1
+"When": {
+   "Year |contains=1": "false"
+}
+```
+
+This can also be used in placeholders. For example, this will load a different file depending on
+whether the player has the `Gemologist` profession:
+```js
+{
+    "Action": "EditImage",
+    "Target": "Buildings/houses",
+    "FromFile": "assets/gems-{{HasProfession |contains=Gemologist}}.png" // assets/gems-true.png
+}
+```
+
+You can specify multiple values, in which case it returns whether _any_ of them match:
+```js
+// player has blacksmith OR gemologist
+"When": {
+   "HasProfession |contains=Blacksmith, Gemologist": "true"
+}
+
+// player has neither blacksmith NOR gemologist
+"When": {
+   "HasProfession |contains=Blacksmith, Gemologist": "false"
+}
+```
+
+### Custom input value separator
+By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
+input values. You can use the `inputSeparator` argument to use a different separator (which can be
+one or multiple characters).
+
+For example, this can allow commas in random dialogue:
+
+```json
+"Entries": {
+   "fri": "{{Random: Hey, how are you? @@ Hey, what's up? |inputSeparator=@@}}"
+```
+
+**Note:** you should avoid the `{}|=:` characters in separators, even if they're technically valid.
+The behavior when separators conflict with token syntax depends on implementation details that may
+change from one Content Patcher version to the next.
+
 ## <span id="query"></span>Arithmetic
 _See also [number manipulation tokens](#number-manipulation)_.
 
@@ -812,7 +890,7 @@ You can calculate mathematical expressions in patches using the `query` token (i
 tokens which return a number):
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -869,9 +947,9 @@ info):
 {
    "Action": "Load",
    "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png",
+   "FromFile": "assets/abigail-{{Random:hood, jacket, raincoat |key=outfit}}.png",
    "When": {
-      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat | outfit}}.png"
+      "HasFile": "assets/abigail-{{Random:hood, jacket, raincoat |key=outfit}}.png"
    }
 }
 ```
@@ -936,7 +1014,7 @@ key:
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | abigail-outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key=abigail-outfit}}.png"
 }
 ```
 
@@ -945,7 +1023,7 @@ You can use tokens in a pinned key. For example, this synchronizes values separa
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail, Characters/Haley, Portraits/Haley",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | {{TargetWithoutPath}}-outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key={{TargetWithoutPath}}-outfit}}.png"
 }
 ```
 
@@ -961,12 +1039,12 @@ For example, this gives Abigail and Haley random outfits but ensures they never 
 {
    "Action": "Load",
    "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat | outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:hood, jacket, raincoat |key=outfit}}.png"
 },
 {
    "Action": "Load",
    "Target": "Characters/Haley, Portraits/Haley",
-   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood | outfit}}.png"
+   "FromFile": "assets/{{Target}}-{{Random:jacket, raincoat, hood |key=outfit}}.png"
 }
 ```
 
@@ -984,9 +1062,9 @@ Without pinned keys, each token will randomly choose its own value:
 
 If they have the same pinned key, they'll always be in sync:
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = hood
-{{Random: hood, jacket, raincoat | outfit}} = hood
-{{Random: hood, jacket, raincoat | outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = hood
 ```
 
 For basic cases, you just need to know that same options + same key = same value.
@@ -994,16 +1072,16 @@ For basic cases, you just need to know that same options + same key = same value
 If you want to get fancy, then the way it works under the hood comes into play. Setting a pinned
 key doesn't sync the choice, it syncs the _internal number_ used to make that choice:
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
 ```
 
 You can use that in interesting ways. For example, shifting the values guarantees they'll never
 choose the same value (since same index = different value):
 ```txt
-{{Random: hood, jacket, raincoat | outfit}} = 217437 modulo 3 choices = index 0 = hood
-{{Random: jacket, raincoat, hood | outfit}} = 217437 modulo 3 choices = index 0 = jacket
+{{Random: hood, jacket, raincoat |key=outfit}} = 217437 modulo 3 choices = index 0 = hood
+{{Random: jacket, raincoat, hood |key=outfit}} = 217437 modulo 3 choices = index 0 = jacket
 ```
 </dd>
 </dl>
@@ -1014,9 +1092,9 @@ Each block in this section defines the value for a token using these fields:
 
 field   | purpose
 ------- | -------
-`Name`  | The name of the token to use for [tokens & condition](#advanced-tokens--conditions).
-`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#advanced-tokens--conditions), including dynamic tokens defined before this entry.
-`When`  | _(optional)_ Only set the value if the given [conditions](#advanced-tokens--conditions) match. If not specified, always matches.
+`Name`  | The name of the token to use for [tokens & condition](#introduction).
+`Value` | The value(s) to set. This can be a comma-delimited value to give it multiple values. If _any_ block for a token name has multiple values, it will only be usable in conditions. This field supports [tokens](#introduction), including dynamic tokens defined before this entry.
+`When`  | _(optional)_ Only set the value if the given [conditions](#introduction) match. If not specified, always matches.
 
 Some usage notes:
 * You can list any number of dynamic token blocks.
@@ -1033,7 +1111,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1060,7 +1138,7 @@ crop sprites depending on the weather:
 ## Player config
 You can let players configure your mod using a `config.json` file. Content Patcher will
 automatically create and load the file, and you can use the config values as
-[tokens & conditions](#advanced-tokens--conditions). Config fields are not case-sensitive.
+[tokens & conditions](#introduction). Config fields are not case-sensitive.
 
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
@@ -1078,7 +1156,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1122,7 +1200,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1142,7 +1220,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.14.0",
+     "Format": "1.15.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1157,6 +1235,24 @@ To use a mod-provided token, at least one of these must be true:
      ]
   }
   ```
+
+## Constants
+These are predefined values used in tokens.
+
+### `PlayerType`
+value | meaning
+----- | -------
+`currentPlayer` | The current player who has the mod installed.
+`hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
+
+The player type can be specified as an [input argument](#input-arguments) for tokens that support it,
+defaulting to the current player. For example:
+
+example | meaning
+------- | -------
+`{{HasFlag}}` | Get flags for the current player.
+`{{HasFlag: hostPlayer}}` | Get flags for the host player.
+`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
 
 ## See also
 * [README](../README.md) for other info

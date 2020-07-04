@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
+using ContentPatcher.Framework.Tokens.ValueProviders.Players;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -54,9 +55,9 @@ namespace ContentPatcher.Framework
             this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
-                this.GlobalContext.Tokens[modToken.Name] = modToken;
+                this.GlobalContext.Save(new HigherLevelTokenWrapper(modToken));
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Tokens[valueProvider.Name] = new GenericToken(valueProvider);
+                this.GlobalContext.Save(new HigherLevelTokenWrapper(new GenericToken(valueProvider)));
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -69,7 +70,7 @@ namespace ContentPatcher.Framework
             {
                 this.LocalTokens[pack.Pack] = localTokens = new ModTokenContext(scope, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
-                    localTokens.Add(new GenericToken(valueProvider, scope));
+                    localTokens.Add(new HigherLevelTokenWrapper(new GenericToken(valueProvider, scope)));
             }
 
             return localTokens;
@@ -108,44 +109,32 @@ namespace ContentPatcher.Framework
         /****
         ** IContext
         ****/
-        /// <summary>Get whether a mod is installed.</summary>
-        /// <param name="id">The mod ID.</param>
+        /// <inheritdoc />
         public bool IsModInstalled(string id)
         {
             return this.InstalledMods.Contains(id);
         }
 
-        /// <summary>Get whether the context contains the given token.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public bool Contains(string name, bool enforceContext)
         {
             return this.GlobalContext.Contains(name, enforceContext);
         }
 
-        /// <summary>Get the underlying token which handles a key.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
+        /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
             return this.GlobalContext.GetToken(name, enforceContext);
         }
 
-        /// <summary>Get the underlying tokens.</summary>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
+        /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
             return this.GlobalContext.GetTokens(enforceContext);
         }
 
-        /// <summary>Get the current values of the given token for comparison.</summary>
-        /// <param name="name">The token name.</param>
-        /// <param name="input">The input argument, if any.</param>
-        /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
-        /// <returns>Return the values of the matching token, or an empty list if the token doesn't exist.</returns>
-        /// <exception cref="ArgumentNullException">The specified key is null.</exception>
-        public IEnumerable<string> GetValues(string name, ITokenString input, bool enforceContext)
+        /// <inheritdoc />
+        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             return this.GlobalContext.GetValues(name, input, enforceContext);
         }
@@ -171,12 +160,13 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
 
             // player
-            yield return new ConditionTypeValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
-            yield return new HasProfessionValueProvider(NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasReadLetter, this.GetReadLetters, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
-            yield return new HasWalletItemValueProvider(NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, this.GetProfessions, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, this.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => Game1.currentLocation?.Name, NeedsBasicInfo);
@@ -251,40 +241,67 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the event IDs seen by the player.</summary>
-        private IEnumerable<string> GetEventsSeen()
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetEventsSeen(Farmer player)
         {
-            Farmer player = Game1.player;
-            if (player == null)
-                return new string[0];
-
             return player.eventsSeen
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
 
-        /// <summary>Get the letter IDs read by the player.</summary>
-        /// <remarks>See game logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetReadLetters()
-        {
-            if (Game1.player == null)
-                return new string[0];
-            return Game1.player.mailReceived;
-        }
-
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
         /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetFlags()
+        private IEnumerable<string> GetFlags(Farmer player)
         {
             // mail flags
-            if (Game1.player != null)
-            {
-                foreach (string flag in Game1.player.mailReceived.Union(Game1.player.mailForTomorrow).Union(Game1.player.mailbox))
-                    yield return flag;
-            }
+            foreach (string flag in player.mailReceived.Union(player.mailForTomorrow).Union(player.mailbox))
+                yield return flag;
 
             // world state flags
             foreach (string flag in Game1.worldStateIDs)
                 yield return flag;
+        }
+
+        /// <summary>Get the professions for the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetProfessions(Farmer player)
+        {
+            foreach (int professionID in player.professions)
+            {
+                yield return Enum.IsDefined(typeof(Profession), professionID)
+                    ? ((Profession)professionID).ToString()
+                    : professionID.ToString();
+            }
+        }
+
+        /// <summary>Get the wallet items for the current player.</summary>
+        private IEnumerable<string> GetWalletItems()
+        {
+            Farmer player = Game1.player;
+            if (player == null)
+                yield break;
+
+            if (player.canUnderstandDwarves)
+                yield return WalletItem.DwarvishTranslationGuide.ToString();
+            if (player.hasRustyKey)
+                yield return WalletItem.RustyKey.ToString();
+            if (player.hasClubCard)
+                yield return WalletItem.ClubCard.ToString();
+            if (player.hasSpecialCharm)
+                yield return WalletItem.SpecialCharm.ToString();
+            if (player.hasSkullKey)
+                yield return WalletItem.SkullKey.ToString();
+            if (player.hasMagnifyingGlass)
+                yield return WalletItem.MagnifyingGlass.ToString();
+            if (player.hasDarkTalisman)
+                yield return WalletItem.DarkTalisman.ToString();
+            if (player.hasMagicInk)
+                yield return WalletItem.MagicInk.ToString();
+            if (player.eventsSeen.Contains(2120303))
+                yield return WalletItem.BearsKnowledge.ToString();
+            if (player.eventsSeen.Contains(3910979))
+                yield return WalletItem.SpringOnionMastery.ToString();
         }
 
         /// <summary>Get whether the community center is complete.</summary>
@@ -323,11 +340,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the response IDs of dialogue answers given by the player.</summary>
-        private IEnumerable<string> GetDialogueAnswers()
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetDialogueAnswers(Farmer player)
         {
-            if (Game1.player == null)
-                return new string[0];
-            return Game1.player.dialogueQuestionsAnswered
+            return player.dialogueQuestionsAnswered
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }

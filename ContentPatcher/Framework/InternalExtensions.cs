@@ -54,16 +54,6 @@ namespace ContentPatcher.Framework
             return source.OrderBy(keySelector, StringComparer.InvariantCultureIgnoreCase);
         }
 
-        /// <summary>Perform a subsequent ordering of the elements in a sequence in ascending order according to a key.</summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
-        /// <param name="source">The sequence whose elements to group.</param>
-        /// <param name="keySelector">A function to extract the key for each element.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
-        public static IOrderedEnumerable<TSource> ThenByIgnoreCase<TSource>(this IOrderedEnumerable<TSource> source, Func<TSource, string> keySelector)
-        {
-            return source.ThenBy(keySelector, StringComparer.InvariantCultureIgnoreCase);
-        }
-
         /****
         ** Tokens
         ****/
@@ -98,13 +88,14 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get comma-separated values from a string.</summary>
         /// <param name="str">The string to parse.</param>
-        public static IEnumerable<string> SplitValuesNonUnique(this string str)
+        /// <param name="separator">The separator by which to split the value.</param>
+        public static IEnumerable<string> SplitValuesNonUnique(this string str, string separator = ",")
         {
             if (string.IsNullOrWhiteSpace(str))
                 return Enumerable.Empty<string>();
 
             return str
-                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(p => p.Trim());
         }
 

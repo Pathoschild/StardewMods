@@ -52,9 +52,9 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // check input arguments
-                if (token.InputArg != null)
+                if (token.InputArgs != null)
                 {
-                    foreach (ILexToken part in token.InputArg.Parts)
+                    foreach (ILexToken part in token.InputArgs.Parts)
                     {
                         if (!this.TryMigrate(part, out error))
                             return false;
@@ -73,13 +73,6 @@ namespace ContentPatcher.Framework.Migrations
         /// <returns>Returns whether migration succeeded.</returns>
         public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
         {
-            // tokens which need a higher version
-            foreach (ILexToken token in tokenStr.LexTokens)
-            {
-                if (!this.TryMigrate(token, out error))
-                    return false;
-            }
-
             // no issue found
             error = null;
             return true;

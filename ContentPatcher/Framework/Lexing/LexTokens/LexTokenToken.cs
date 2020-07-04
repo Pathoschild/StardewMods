@@ -10,16 +10,13 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         ** Accessors
         *********/
         /// <summary>The lexical token type.</summary>
-        public LexTokenType Type { get; }
-
-        /// <summary>A text representation of the lexical token.</summary>
-        public string Text { get; }
+        public LexTokenType Type { get; } = LexTokenType.Token;
 
         /// <summary>The Content Patcher token name.</summary>
-        public string Name { get; }
+        public string Name { get; private set; }
 
-        /// <summary>The input argument passed to the Content Patcher token.</summary>
-        public LexTokenInputArg InputArg { get; }
+        /// <summary>The input arguments passed to the Content Patcher token.</summary>
+        public LexTokenInput InputArgs { get; private set; }
 
         /// <summary>Whether the token omits the start/end character patterns because it's in a token-only context.</summary>
         public bool ImpliedBraces { get; }
@@ -30,15 +27,21 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The Content Patcher token name.</param>
-        /// <param name="inputArg">The input argument passed to the Content Patcher token.</param>
+        /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        public LexTokenToken(string name, LexTokenInputArg inputArg, bool impliedBraces)
+        public LexTokenToken(string name, LexTokenInput inputArgs, bool impliedBraces)
         {
-            this.Type = LexTokenType.Token;
-            this.Text = LexTokenToken.GetRawText(name, inputArg, impliedBraces);
-            this.Name = name;
-            this.InputArg = inputArg;
             this.ImpliedBraces = impliedBraces;
+            this.MigrateTo(name, inputArgs);
+        }
+
+        /// <summary>Apply changes for a format migration.</summary>
+        /// <param name="name">The Content Patcher token name.</param>
+        /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
+        public void MigrateTo(string name, LexTokenInput inputArgs)
+        {
+            this.Name = name;
+            this.InputArgs = inputArgs;
         }
 
         /// <summary>Get the unique ID of the mod which provides this token, if applicable.</summary>
@@ -50,34 +53,35 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
                 : null;
         }
 
+        /// <summary>Get a text representation of the lexical token.</summary>
+        public override string ToString()
+        {
+            return LexTokenToken.GetRawText(this.Name, this.InputArgs, this.ImpliedBraces);
+        }
+
 
         /*********
         ** Private methods
         *********/
         /// <summary>Get a string representation of a token.</summary>
         /// <param name="name">The Content Patcher token name.</param>
-        /// <param name="tokenInputArgArgument">The input argument passed to the Content Patcher token.</param>
+        /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        private static string GetRawText(string name, LexTokenInputArg tokenInputArgArgument, bool impliedBraces)
+        private static string GetRawText(string name, LexTokenInput inputArgs, bool impliedBraces)
         {
             StringBuilder str = new StringBuilder();
             if (!impliedBraces)
                 str.Append("{{");
             str.Append(name);
-            if (tokenInputArgArgument != null)
+            if (inputArgs != null)
             {
-                str.Append(InternalConstants.InputArgSeparator);
-                str.Append(tokenInputArgArgument.Text);
+                if (!inputArgs.ToString().StartsWith(InternalConstants.NamedInputArgSeparator))
+                    str.Append(InternalConstants.PositionalInputArgSeparator);
+                str.Append(inputArgs);
             }
             if (!impliedBraces)
                 str.Append("}}");
             return str.ToString();
-        }
-
-        /// <summary>Get a string representation of the lexical token.</summary>
-        public override string ToString()
-        {
-            return this.Text;
         }
     }
 }

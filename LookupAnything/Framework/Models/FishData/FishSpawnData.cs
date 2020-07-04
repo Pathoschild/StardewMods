@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
 {
     /// <summary>Spawning rules for a fish.</summary>
@@ -43,6 +45,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
             this.Weather = weather;
             this.MinFishingLevel = minFishingLevel;
             this.IsUnique = isUnique;
+        }
+
+        /// <summary>Get whether the fish is available in a given location name.</summary>
+        /// <param name="locationName">The location name to match.</param>
+        public bool MatchesLocation(string locationName)
+        {
+            return this.Locations.Any(p => p.MatchesLocation(locationName));
         }
     }
 }

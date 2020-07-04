@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -20,42 +19,34 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         public RangeValueProvider()
-            : base(ConditionType.Range, canHaveMultipleValuesForRoot: true)
+            : base(ConditionType.Range, mayReturnMultipleValuesForRoot: true)
         {
-            this.EnableInputArguments(required: true, canHaveMultipleValues: true);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: true, maxPositionalArgs: 2);
             this.MarkReady(true);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return false;
         }
 
-        /// <summary>Validate that the provided input argument is valid.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <param name="error">The validation error, if any.</param>
-        /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidateInput(ITokenString input, out string error)
+        /// <inheritdoc />
+        public override bool TryValidateInput(IInputArguments input, out string error)
         {
             return
                 base.TryValidateInput(input, out error)
                 && this.TryParseRange(input, out _, out _, out error);
         }
 
-        /// <summary>Get the current values.</summary>
-        /// <param name="input">The input argument, if applicable.</param>
-        /// <exception cref="InvalidOperationException">The input argument doesn't match this value provider, or does not respect <see cref="IValueProvider.AllowsInput"/> or <see cref="IValueProvider.RequiresInput"/>.</exception>
-        public override IEnumerable<string> GetValues(ITokenString input)
+        /// <inheritdoc />
+        public override IEnumerable<string> GetValues(IInputArguments input)
         {
-            this.AssertInputArgument(input);
+            this.AssertInput(input);
 
-            if (!this.TryParseRange(input, out int min, out int max, out string error))
-                return Enumerable.Empty<string>(); // error will be shown in validation
-
-            return Enumerable.Range(start: min, count: max - min + 1).Select(p => p.ToString());
+            return this.TryParseRange(input, out int min, out int max, out _)
+                ? Enumerable.Range(start: min, count: max - min + 1).Select(p => p.ToString())
+                : Enumerable.Empty<string>(); // error will be shown in validation
         }
 
 
@@ -63,53 +54,53 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>Parse the numeric min/max values from a range specifier if it's valid.</summary>
-        /// <param name="input">The input argument containing the range specifier.</param>
+        /// <param name="input">The input arguments containing the range specifier.</param>
         /// <param name="min">The parsed min value, if valid.</param>
         /// <param name="max">The parsed max value, if valid.</param>
         /// <param name="error">The error indicating why the range is invalid, if applicable.</param>
-        private bool TryParseRange(ITokenString input, out int min, out int max, out string error)
+        private bool TryParseRange(IInputArguments input, out int min, out int max, out string error)
         {
             min = 0;
             max = 0;
+            string errorPrefix = $"invalid input ('{input.TokenString.Value}')";
 
             // check if input provided
-            if (!input.IsMeaningful())
+            if (!input.HasPositionalArgs)
             {
-                error = $"invalid input argument ({input.Value}), token {this.Name} requires non-blank input.";
+                error = $"{errorPrefix}, token {this.Name} requires input arguments.";
                 return false;
             }
 
-            // split input
-            string[] parts = input.SplitValuesNonUnique().ToArray();
-            if (parts.Length != 2)
+            // validate length
+            if (input.PositionalArgs.Length != 2)
             {
-                error = $"invalid input argument ({input.Value}), must specify a minimum and maximum value like {{{{{this.Name}:0,20}}}}.";
+                error = $"{errorPrefix}, must specify a minimum and maximum value like {{{{{this.Name}:0,20}}}}.";
                 return false;
             }
 
             // parse min/max values
-            if (!int.TryParse(parts[0], out min))
+            if (!int.TryParse(input.PositionalArgs[0], out min))
             {
-                error = $"invalid input argument ({input.Value}), can't parse min value '{parts[0]} as an integer.";
+                error = $"{errorPrefix}, can't parse min value '{input.PositionalArgs[0]}' as an integer.";
                 return false;
             }
-            if (!int.TryParse(parts[1], out max))
+            if (!int.TryParse(input.PositionalArgs[1], out max))
             {
-                error = $"invalid input argument ({input.Value}), can't parse max value '{parts[1]} as an integer.";
+                error = $"{errorPrefix}, can't parse max value '{input.PositionalArgs[1]}' as an integer.";
                 return false;
             }
 
             // validate range
             if (min > max)
             {
-                error = $"invalid input argument ({input.Value}), min value '{min}' can't be greater than max value '{max}'.";
+                error = $"{errorPrefix}, min value '{min}' can't be greater than max value '{max}'.";
                 return false;
             }
 
             int count = (max - min) + 1;
             if (count > RangeValueProvider.MaxCount)
             {
-                error = $"invalid input argument ({input.Value}), range can't exceed {RangeValueProvider.MaxCount} numbers (specified range would contain {count} numbers).";
+                error = $"{errorPrefix}, range can't exceed {RangeValueProvider.MaxCount} numbers (specified range would contain {count} numbers).";
                 return false;
             }
 

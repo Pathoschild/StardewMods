@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Lexing
 {
@@ -12,8 +13,8 @@ namespace ContentPatcher.Framework.Lexing
         /*********
         ** Fields
         *********/
-        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.InputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:)", RegexOptions.Compiled);
+        /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
+        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:|\|)", RegexOptions.Compiled);
 
 
         /*********
@@ -50,8 +51,12 @@ namespace ContentPatcher.Framework.Lexing
                         type = LexBitType.EndToken;
                         break;
 
-                    case InternalConstants.InputArgSeparator:
-                        type = LexBitType.InputArgSeparator;
+                    case InternalConstants.PositionalInputArgSeparator:
+                        type = LexBitType.PositionalInputArgSeparator;
+                        break;
+
+                    case InternalConstants.NamedInputArgSeparator:
+                        type = LexBitType.NamedInputArgSeparator;
                         break;
 
                     default:
@@ -94,7 +99,7 @@ namespace ContentPatcher.Framework.Lexing
             IEnumerable<ILexToken> RawParse()
             {
                 // 'Implied braces' means we're parsing inside a token. This necessarily starts with a token name,
-                // optionally followed by an input argument.
+                // optionally followed by input arguments.
                 if (impliedBraces)
                 {
                     while (input.Any())
@@ -124,7 +129,8 @@ namespace ContentPatcher.Framework.Lexing
 
                         // text/separator outside token
                         case LexBitType.Literal:
-                        case LexBitType.InputArgSeparator:
+                        case LexBitType.PositionalInputArgSeparator:
+                        case LexBitType.NamedInputArgSeparator:
                             input.Dequeue();
                             yield return new LexTokenLiteral(next.Text);
                             break;
@@ -147,22 +153,20 @@ namespace ContentPatcher.Framework.Lexing
             }
 
             // normalize literal values
-            IList<LinkedListNode<ILexToken>> removeQueue = new List<LinkedListNode<ILexToken>>();
+            ISet<LinkedListNode<ILexToken>> removeQueue = new HashSet<LinkedListNode<ILexToken>>(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
             for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
             {
-                if (node.Value.Type != LexTokenType.Literal)
-                    continue;
-
                 // fetch info
-                ILexToken current = node.Value;
+                if (!(node.Value is LexTokenLiteral current))
+                    continue;
                 ILexToken previous = node.Previous?.Value;
                 ILexToken next = node.Next?.Value;
-                string newText = node.Value.Text;
+                string newText = current.Text;
 
                 // collapse sequential literals
-                if (previous?.Type == LexTokenType.Literal)
+                if (previous is LexTokenLiteral prevLiteral)
                 {
-                    newText = previous.Text + newText;
+                    newText = prevLiteral.Text + newText;
                     removeQueue.Add(node.Previous);
                 }
 
@@ -185,8 +189,8 @@ namespace ContentPatcher.Framework.Lexing
                 }
 
                 // replace value if needed
-                if (newText != current.Text)
-                    node.Value = new LexTokenLiteral(newText);
+                if (current.Text != newText)
+                    current.MigrateTo(newText);
             }
             foreach (LinkedListNode<ILexToken> entry in removeQueue)
                 tokens.Remove(entry);
@@ -221,12 +225,21 @@ namespace ContentPatcher.Framework.Lexing
             if (name.Type != LexBitType.Literal)
                 throw new LexFormatException($"Unexpected {name.Type} where token name should be.");
 
-            // extract input argument if present
-            LexTokenInputArg inputArg = null;
-            if (input.Any() && input.Peek().Type == LexBitType.InputArgSeparator)
+            // extract input arguments if present
+            // Note: the positional input argument separator (:) is the 'real' separator between
+            // the token name and input arguments, but a token can skip positional arguments and
+            // start named arguments directly like {{TokenName |key=value}}. In that case the ':'
+            // is implied, and the '|' separator *is* included in the input arguments string.
+            LexTokenInput inputArgs = null;
+            if (input.Any())
             {
-                input.Dequeue();
-                inputArg = this.ExtractInputArgument(input);
+                var next = input.Peek().Type;
+                if (next == LexBitType.PositionalInputArgSeparator || next == LexBitType.NamedInputArgSeparator)
+                {
+                    if (next == LexBitType.PositionalInputArgSeparator)
+                        input.Dequeue();
+                    inputArgs = this.ExtractInputArguments(input);
+                }
             }
 
             // end token
@@ -237,12 +250,12 @@ namespace ContentPatcher.Framework.Lexing
                     throw new LexFormatException($"Unexpected {endToken.Type} before end of token.");
             }
 
-            return new LexTokenToken(name.Text.Trim(), inputArg, impliedBraces);
+            return new LexTokenToken(name.Text.Trim(), inputArgs, impliedBraces);
         }
 
-        /// <summary>Extract a token input argument from the front of a lexical input queue.</summary>
-        /// <param name="input">The input from which to extract an input argument. The extracted lexical bits will be removed from the queue.</param>
-        public LexTokenInputArg ExtractInputArgument(Queue<LexBit> input)
+        /// <summary>Extract token input arguments from the front of a lexical input queue.</summary>
+        /// <param name="input">The input from which to extract input arguments. The extracted lexical bits will be removed from the queue.</param>
+        public LexTokenInput ExtractInputArguments(Queue<LexBit> input)
         {
             // extract input arg parts
             Queue<LexBit> inputArgBits = new Queue<LexBit>();
@@ -278,7 +291,7 @@ namespace ContentPatcher.Framework.Lexing
 
             // parse
             ILexToken[] tokenized = this.ParseBitQueue(inputArgBits, impliedBraces: false, trim: true).ToArray();
-            return new LexTokenInputArg(tokenized);
+            return new LexTokenInput(tokenized);
         }
     }
 }

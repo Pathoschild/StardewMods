@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         /// <summary>Whether to collect machine output.</summary>
         public bool HarvestMachines { get; set; } = false;
 
-        /// <summary>Whether to cut down grass.</summary>
+        /// <summary>Whether to cut tall grass.</summary>
         public bool HarvestGrass { get; set; } = true;
 
         /// <summary>Whether to clear dead crops.</summary>

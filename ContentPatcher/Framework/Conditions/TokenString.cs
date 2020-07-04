@@ -53,17 +53,17 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
+        /// <summary>Construct an instance from raw text. This constructor bypasses migrations, so it should not be used to parse any values from a content pack.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="context">The available token context.</param>
         public TokenString(string raw, IContext context)
             : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="raw">The raw token input argument.</param>
+        /// <param name="inputArgs">The raw token input arguments.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInputArg raw, IContext context)
-            : this(lexTokens: raw?.Parts, context: context) { }
+        public TokenString(LexTokenInput inputArgs, IContext context)
+            : this(lexTokens: inputArgs?.Parts, context: context) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
@@ -74,18 +74,15 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    select new TokenStringPart
-                    {
-                        LexToken = token,
-                        Input = token is LexTokenToken lexToken && lexToken.InputArg != null
-                            ? new TokenString(lexToken.InputArg?.Parts, context)
-                            : null
-                    }
+                    let input = token is LexTokenToken lexToken && lexToken.InputArgs != null
+                        ? new TokenString(lexToken.InputArgs?.Parts, context)
+                        : null
+                    select new TokenStringPart(token, input)
                 )
                 .ToArray();
 
             // set raw value
-            this.Raw = string.Join("", this.Parts.Select(p => p.LexToken.Text)).Trim();
+            this.Raw = string.Join("", this.Parts.Select(p => p.LexToken)).Trim();
             if (string.IsNullOrWhiteSpace(this.Raw))
             {
                 this.Value = this.Raw;
@@ -184,7 +181,7 @@ namespace ContentPatcher.Framework.Conditions
             {
                 StringBuilder str = new StringBuilder();
                 foreach (TokenStringPart part in this.Parts)
-                    str.Append(this.TryGetTokenText(context, part, unavailableTokens, errors, out string text) ? text : part.LexToken.Text);
+                    str.Append(this.TryGetTokenText(context, part, unavailableTokens, errors, out string text) ? text : part.LexToken.ToString());
 
                 this.Value = !unavailableTokens.Any() && !errors.Any()
                     ? str.ToString().Trim()
@@ -222,7 +219,7 @@ namespace ContentPatcher.Framework.Conditions
 
                 if (recursive)
                 {
-                    ILexToken[] inputLexTokens = token.InputArg?.Parts;
+                    ILexToken[] inputLexTokens = token.InputArgs?.Parts;
                     if (inputLexTokens != null)
                     {
                         foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(inputLexTokens, recursive: true))
@@ -255,14 +252,13 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // get token input
-                        TokenString input = part.Input;
-                        if (input != null)
+                        if (part.Input != null)
                         {
                             // update input
-                            input.UpdateContext(context);
+                            part.Input.UpdateContext(context);
 
                             // check for unavailable tokens
-                            string[] unavailableInputTokens = input
+                            string[] unavailableInputTokens = part.Input
                                 .GetTokensUsed()
                                 .Where(name => context.GetToken(name, enforceContext: true)?.IsReady != true)
                                 .ToArray();
@@ -276,7 +272,7 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // validate input
-                        if (!token.TryValidateInput(input, out string error))
+                        if (!token.TryValidateInput(part.InputArgs, out string error))
                         {
                             errors.Add(error);
                             text = null;
@@ -284,13 +280,13 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // get text representation
-                        string[] values = token.GetValues(input).ToArray();
+                        string[] values = token.GetValues(part.InputArgs).ToArray();
                         text = string.Join(", ", values);
                         return true;
                     }
 
                 default:
-                    text = part.LexToken.Text;
+                    text = part.LexToken.ToString();
                     return true;
             }
         }
@@ -298,11 +294,31 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A lexical token component in the token string.</summary>
         private class TokenStringPart
         {
+            /*********
+            ** Accessors
+            *********/
             /// <summary>The underlying lex token.</summary>
-            public ILexToken LexToken { get; set; }
+            public ILexToken LexToken { get; }
 
             /// <summary>The input to the lex token, if it's a <see cref="LexTokenType.Token"/>.</summary>
-            public TokenString Input { get; set; }
+            public TokenString Input { get; }
+
+            /// <summary>The parsed version of <see cref="Input"/>.</summary>
+            public IInputArguments InputArgs { get; }
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Construct an instance.</summary>
+            /// <param name="lexToken">The underlying lex token.</param>
+            /// <param name="input">The parsed version of <see cref="Input"/>.</param>
+            public TokenStringPart(ILexToken lexToken, TokenString input)
+            {
+                this.LexToken = lexToken;
+                this.Input = input;
+                this.InputArgs = new InputArguments(input);
+            }
         }
     }
 }

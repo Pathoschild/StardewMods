@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Migrations
             // 1.9 adds mod tokens
             if (lexToken is LexTokenToken token && token.Name.Contains(InternalConstants.ModTokenSeparator))
             {
-                error = this.GetNounPhraseError($"using custom mod-provided tokens like '{lexToken.Text}'");
+                error = this.GetNounPhraseError($"using custom mod-provided tokens like '{lexToken}'");
                 return false;
             }
 

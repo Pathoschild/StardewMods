@@ -24,8 +24,8 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The token name in the context.</summary>
         public string Name { get; }
 
-        /// <summary>The token input argument, if any.</summary>
-        public ITokenString Input { get; }
+        /// <summary>The token input arguments.</summary>
+        public IInputArguments Input { get; }
 
         /// <summary>The token values for which this condition is valid.</summary>
         public ITokenString Values { get; }
@@ -48,13 +48,13 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name in the context.</param>
-        /// <param name="input">The token input argument, if any.</param>
+        /// <param name="input">The token input arguments.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
         public Condition(string name, IManagedTokenString input, IManagedTokenString values)
         {
             // save values
             this.Name = name;
-            this.Input = input;
+            this.Input = new InputArguments(input);
             this.Values = values;
             this.Contextuals = new AggregateContextual()
                 .Add(input)
@@ -64,13 +64,6 @@ namespace ContentPatcher.Framework.Conditions
             if (this.IsReady)
                 this.CurrentValues = this.Values.SplitValuesUnique();
         }
-
-        /// <summary>Get whether the condition has a non-empty input argument.</summary>
-        public bool HasInput()
-        {
-            return this.Input != null && this.Input.IsMeaningful();
-        }
-
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
         /// <param name="type">The condition type.</param>

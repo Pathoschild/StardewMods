@@ -82,7 +82,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -147,12 +147,12 @@ This affects two things:
   }
    ```
 
-Note that boundedness is _per-input_. For example, your token might be bounded if it receives an
-input argument, but unrestricted without one:
+Note that boundedness is _per-input_. For example, your token might be bounded if it receives input
+arguments, but unrestricted without one:
 ```js
 "When": {
-   "Spouse": "John", // unrestricted: '{{spouse}}' may return any value
-   "Spouse:John": "true" // bounded: '{{spouse:John}}' can only return true or false
+   "Relationship": "Abigail:Married", // unrestricted: may return any value (e.g. for custom NPCs)
+   "Relationship:Abigail": "Married"  // bounded: returns predefined values like 'married' or 'dating'
 }
 ```
 
@@ -174,6 +174,18 @@ etc).
 
 Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise
 prohibited.
+
+</dd>
+
+<dt>Input arguments</dt>
+<dd>
+
+See [_input arguments_ in the tokens guide](author-tokens-guide.md#input-arguments) for more info.
+
+Due to limitations in SMAPI's API proxying, your mod will receive a normalised input string
+identical to the format shown in the tokens guide instead of a parsed object. Any tokens in the
+input will be replaced by their value. Note that if no input arguments were given, the token will
+receive `null`.
 
 </dd>
 </dl>
@@ -209,14 +221,14 @@ internal class InitialsToken
     /****
     ** Metadata
     ****/
-    /// <summary>Get whether the token allows an input argument (e.g. an NPC name for a relationship token).</summary>
+    /// <summary>Get whether the token allows input arguments (e.g. an NPC name for a relationship token).</summary>
     public bool AllowsInput()
     {
         return true;
     }
 
     /// <summary>Whether the token may return multiple values for the given input.</summary>
-    /// <param name="input">The input argument, if applicable.</param>
+    /// <param name="input">The input arguments, if applicable.</param>
     public bool CanHaveMultipleValues(string input = null)
     {
         return false;
@@ -241,7 +253,7 @@ internal class InitialsToken
     }
 
     /// <summary>Get the current values.</summary>
-    /// <param name="input">The input argument, if applicable.</param>
+    /// <param name="input">The input arguments, if applicable.</param>
     public IEnumerable<string> GetValues(string input)
     {
         // get name
@@ -271,7 +283,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.14.0",
+   "Format": "1.15.0",
    "Changes": [
       {
          "Action": "EditData",
