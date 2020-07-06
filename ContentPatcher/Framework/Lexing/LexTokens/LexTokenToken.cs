@@ -53,6 +53,12 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
                 : null;
         }
 
+        /// <summary>Get whether the token has any input arguments.</summary>
+        public bool HasInputArgs()
+        {
+            return this.InputArgs?.Parts.Length > 0;
+        }
+
         /// <summary>Get a text representation of the lexical token.</summary>
         public override string ToString()
         {
