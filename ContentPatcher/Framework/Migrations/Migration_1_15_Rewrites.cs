@@ -86,7 +86,8 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(lexToken, out error))
                 return false;
 
-            if (lexToken is LexTokenToken token && token.InputArgs != null)
+            // migrate token input arguments
+            if (lexToken is LexTokenToken token && token.HasInputArgs())
             {
                 ConditionType? conditionType = this.GetConditionType(token.Name);
 
@@ -104,7 +105,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // 1.15 changes {{Random: choices | pinned-key}} to {{Random: choices |key=pinned-key}}
-                if (conditionType == ConditionType.Random && token.InputArgs != null)
+                if (conditionType == ConditionType.Random)
                 {
                     LexTokenLiteral lexSeparator = token.InputArgs.Parts.OfType<LexTokenLiteral>().FirstOrDefault(p => p.ToString().Contains("|"));
                     if (lexSeparator != null && !Regex.IsMatch(lexSeparator.Text, @"\|\s*key\s*="))

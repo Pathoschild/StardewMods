@@ -74,8 +74,8 @@ namespace ContentPatcher.Framework.Conditions
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
-                    let input = token is LexTokenToken lexToken && lexToken.InputArgs != null
-                        ? new TokenString(lexToken.InputArgs?.Parts, context)
+                    let input = token is LexTokenToken lexToken && lexToken.HasInputArgs()
+                        ? new TokenString(lexToken.InputArgs.Parts, context)
                         : null
                     select new TokenStringPart(token, input)
                 )
@@ -217,14 +217,10 @@ namespace ContentPatcher.Framework.Conditions
             {
                 yield return token;
 
-                if (recursive)
+                if (recursive && token.HasInputArgs())
                 {
-                    ILexToken[] inputLexTokens = token.InputArgs?.Parts;
-                    if (inputLexTokens != null)
-                    {
-                        foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(inputLexTokens, recursive: true))
-                            yield return subtoken;
-                    }
+                    foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(token.InputArgs.Parts, recursive: true))
+                        yield return subtoken;
                 }
             }
         }

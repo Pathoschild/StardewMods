@@ -34,7 +34,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.15 adds named arguments
-            if (lexToken is LexTokenToken token && token.InputArgs != null && token.InputArgs.ToString().Contains("|") && token.InputArgs.ToString().Contains("="))
+            if (lexToken is LexTokenToken token && token.HasInputArgs() && token.InputArgs.ToString().Contains("|") && token.InputArgs.ToString().Contains("="))
             {
                 error = this.GetNounPhraseError("using named arguments");
                 return false;

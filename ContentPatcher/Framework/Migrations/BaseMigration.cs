@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // check input arguments
-                if (token.InputArgs != null)
+                if (token.HasInputArgs())
                 {
                     foreach (ILexToken part in token.InputArgs.Parts)
                     {
