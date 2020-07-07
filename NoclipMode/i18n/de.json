@@ -1,4 +1,4 @@
 {
-    "enabled-message": "Keine Kollisionen aktiviert; drücke nochmal {{button}} zum ausschalten.",
-    "disabled-message": "Keine Kollisionen deaktiviert; drücke nochmal {{button}} zum einschalten."
+    "enabled-message": "Keine Kollisionen aktiviert; drücke nochmal {{button}} zum Ausschalten.",
+    "disabled-message": "Keine Kollisionen deaktiviert; drücke nochmal {{button}} zum Einschalten."
 }
