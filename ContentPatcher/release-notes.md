@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed migration error for pre-1.15 content packs with empty input arguments like `{{token:}}`.
+## 1.15.1
+Released 06 July 2020.
+
+* Fixed error loading pre-1.15 content packs that use a token with empty input arguments like `{{token:}}`.
 
 ## 1.15
 Released 04 July 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
