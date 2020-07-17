@@ -79,15 +79,16 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
             GameLocation location = Game1.currentLocation;
             Farmer player = Game1.player;
 
-            if (!Context.IsWorldReady || !player.UsingTool || !(player.CurrentTool is Hoe hoe))
-                return;
-
-            Vector2 tilePos = player.GetToolLocation() / Game1.tileSize;
-            IList<Vector2> tilesAffected = this.Helper.Reflection.GetMethod(hoe, "tilesAffected").Invoke<List<Vector2>>(tilePos, player.toolPower, player);
-            foreach (Vector2 tile in tilesAffected)
+            // mark tiles under hoe diggable
+            if (Context.IsWorldReady && player.UsingTool && player.CurrentTool is Hoe hoe)
             {
-                if (this.ShouldMakeTillable(location, tile))
-                    location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
+                Vector2 tilePos = player.GetToolLocation() / Game1.tileSize;
+                IList<Vector2> tilesAffected = this.Helper.Reflection.GetMethod(hoe, "tilesAffected").Invoke<List<Vector2>>(tilePos, player.toolPower, player);
+                foreach (Vector2 tile in tilesAffected)
+                {
+                    if (this.ShouldMakeTillable(location, tile))
+                        location.setTileProperty((int)tile.X, (int)tile.Y, "Back", "Diggable", "T");
+                }
             }
         }
 
