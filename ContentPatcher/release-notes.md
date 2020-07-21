@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Internal changes to prepare for upcoming features.
 * Fixed error using `HasFile` with filenames containing commas.
 * Fixed rare issue where a broken patch would prevent other patches from being updated.
 
