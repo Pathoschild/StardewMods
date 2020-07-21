@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed rare issue where a broken patch would prevent other patches from being updated.
+
 ## 1.15.1
 Released 06 July 2020.
 
