@@ -199,7 +199,17 @@ namespace ContentPatcher.Framework
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
-                bool changed = patch.UpdateContext(tokenContext);
+                bool changed;
+                try
+                {
+                    changed = patch.UpdateContext(tokenContext);
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Patch error: {patch.LogName} failed on context update (see log file for details).\n{ex.Message}", LogLevel.Error);
+                    this.Monitor.Log(ex.ToString(), LogLevel.Trace);
+                    changed = false;
+                }
                 bool isReady = patch.IsReady;
 
                 // track patches to reload

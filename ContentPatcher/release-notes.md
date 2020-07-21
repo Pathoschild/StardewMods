@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.15.2
+Released 21 July 2020.
+
+* Internal changes to prepare for upcoming features.
+* Fixed error using `HasFile` with filenames containing commas.
+* Fixed broken patches preventing other patches from being applied/updated in rare cases.
+
 ## 1.15.1
 Released 06 July 2020.
 

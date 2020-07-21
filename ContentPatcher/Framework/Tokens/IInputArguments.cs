@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace ContentPatcher.Framework.Tokens
@@ -36,5 +35,8 @@ namespace ContentPatcher.Framework.Tokens
         *********/
         /// <summary>Get the first positional argument value, if any.</summary>
         string GetFirstPositionalArg();
+
+        /// <summary>Get the raw input argument segment containing positional arguments, after parsing tokens but before splitting into individual arguments.</summary>
+        string GetPositionalSegment();
     }
 }

@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.27.3
+Released 21 July 2020.
+
+* Fixed error looking up items when some item data is invalid.
+* Fixed incorrect color for sturgeon roe image.
+
 ## 1.27.2
 Released 03 July 2020.
 

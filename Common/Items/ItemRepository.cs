@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                 // furniture
                 foreach (int id in this.TryLoad<int, string>("Data\\Furniture").Keys)
                 {
-                    if (id == 1466 || id == 1468)
+                    if (id == 1466 || id == 1468 || id == 1680)
                         yield return this.TryCreate(ItemType.Furniture, id, () => new TV(id, Vector2.Zero));
                     else
                         yield return this.TryCreate(ItemType.Furniture, id, () => new Furniture(id, Vector2.Zero));
@@ -192,7 +192,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                     SObject input = this.TryCreate(ItemType.Object, -1, () => new SObject(pair.Key, 1))?.Item as SObject;
                                     if (input == null || input.Category != SObject.FishCategory)
                                         continue;
-                                    Color color = TailoringMenu.GetDyeColor(input) ?? Color.Orange;
+                                    Color color = this.GetRoeColor(input);
 
                                     // yield roe
                                     SObject roe = null;
@@ -259,12 +259,24 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         {
             try
             {
-                return new SearchableItem(type, id, createItem());
+                var item = createItem();
+                item.getDescription(); // force-load item data, so it crashes here if it's invalid
+                return new SearchableItem(type, id, item);
             }
             catch
             {
                 return null; // if some item data is invalid, just don't include it
             }
+        }
+
+        /// <summary>Get the color to use a given fish's roe.</summary>
+        /// <param name="fish">The fish whose roe to color.</param>
+        /// <remarks>Derived from <see cref="StardewValley.Buildings.FishPond.GetFishProduce"/>.</remarks>
+        private Color GetRoeColor(SObject fish)
+        {
+            return fish.ParentSheetIndex == 698 // sturgeon
+                ? new Color(61, 55, 42)
+                : (TailoringMenu.GetDyeColor(fish) ?? Color.Orange);
         }
     }
 }
