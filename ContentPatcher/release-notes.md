@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed error using `HasFile` with filenames containing commas.
 * Fixed rare issue where a broken patch would prevent other patches from being updated.
 
 ## 1.15.1

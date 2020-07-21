@@ -692,6 +692,8 @@ argument. Returns `true` or `false`. For example:
 }
 ```
 
+If the input has commas like `HasFile: a, b.png`, they're treated as part of the filename.
+
 </td>
 </tr>
 

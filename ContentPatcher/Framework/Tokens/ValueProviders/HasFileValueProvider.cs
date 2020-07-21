@@ -26,7 +26,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.HasFile, mayReturnMultipleValuesForRoot: false)
         {
             this.RelativePathExists = relativePathExists;
-            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
+            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
         /// <inheritdoc />
@@ -40,10 +40,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = input.HasPositionalArgs
-                ? InvariantHashSet.Boolean()
-                : null;
-            return allowedValues != null;
+            allowedValues = InvariantHashSet.Boolean();
+            return true;
         }
 
         /// <inheritdoc />
@@ -51,7 +49,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.GetPathExists(input.GetFirstPositionalArg()).ToString();
+            yield return this.GetPathExists(input.GetPositionalSegment()).ToString();
         }
 
 
