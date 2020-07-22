@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>A singleton instance representing zero input arguments.</summary>
-        public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty));
+        public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty, new LogPathBuilder()));
 
         /****
         ** Values

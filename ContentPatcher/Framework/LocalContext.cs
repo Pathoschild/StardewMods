@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework
         /// <param name="value">The token value.</param>
         public void SetLocalValue(string name, string value)
         {
-            this.SetLocalValue(name, new LiteralString(value));
+            this.SetLocalValue(name, new LiteralString(value, new LogPathBuilder(nameof(LocalContext), this.Scope, name)));
         }
 
         /// <summary>Set a dynamic token value.</summary>

@@ -17,5 +17,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>Whether the token string consists of a single token with no surrounding text.</summary>
         bool IsSingleTokenOnly { get; }
+
+        /// <summary>The path to the value from the root content file.</summary>
+        string Path { get; }
     }
 }

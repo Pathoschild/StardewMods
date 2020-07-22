@@ -159,6 +159,7 @@ namespace ContentPatcher.Framework.Commands
         private bool HandleSummary()
         {
             StringBuilder output = new StringBuilder();
+            LogPathBuilder path = new LogPathBuilder("console command");
 
             // add condition summary
             output.AppendLine();
@@ -175,7 +176,7 @@ namespace ContentPatcher.Framework.Commands
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0]))).Count() > 1)
+                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input")))).Count() > 1)
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
@@ -217,7 +218,7 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input))))}");
+                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
                                 }
                             }
                             else
@@ -262,7 +263,7 @@ namespace ContentPatcher.Framework.Commands
 
                             // get input arguments
                             let validInputs = token.IsReady && token.RequiresInput
-                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p)).AsEnumerable<ITokenString>()
+                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
                                 : new ITokenString[] { null }
                             from ITokenString input in validInputs
 
@@ -446,7 +447,7 @@ namespace ContentPatcher.Framework.Commands
             TokenString tokenStr;
             try
             {
-                tokenStr = new TokenString(raw, context);
+                tokenStr = new TokenString(raw, context, new LogPathBuilder("console command"));
             }
             catch (LexFormatException ex)
             {

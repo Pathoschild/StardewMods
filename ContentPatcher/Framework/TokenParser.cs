@@ -51,9 +51,10 @@ namespace ContentPatcher.Framework
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        public bool TryParseString(string rawValue, InvariantHashSet assumeModIds, out string error, out IManagedTokenString parsed)
+        public bool TryParseString(string rawValue, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out IManagedTokenString parsed)
         {
             // parse lexical bits
             var bits = new Lexer().ParseBits(rawValue, impliedBraces: false).ToArray();
@@ -67,7 +68,7 @@ namespace ContentPatcher.Framework
             }
 
             // get token string
-            parsed = new TokenString(bits, this.Context);
+            parsed = new TokenString(bits, this.Context, path);
             if (!this.Migrator.TryMigrate(parsed, out error))
                 return false;
 
@@ -87,9 +88,10 @@ namespace ContentPatcher.Framework
         /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawJson">The raw JSON structure which may contain tokens.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value, which may be legitimately <c>null</c> even if successful.</param>
-        public bool TryParseJson(JToken rawJson, InvariantHashSet assumeModIds, out string error, out TokenizableJToken parsed)
+        public bool TryParseJson(JToken rawJson, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out TokenizableJToken parsed)
         {
             if (rawJson == null || rawJson.Type == JTokenType.Null)
             {
@@ -99,7 +101,7 @@ namespace ContentPatcher.Framework
             }
 
             // extract mutable fields
-            if (!this.TryInjectJsonProxyFields(rawJson, assumeModIds, out error, out TokenizableProxy[] proxyFields))
+            if (!this.TryInjectJsonProxyFields(rawJson, assumeModIds, path, out error, out TokenizableProxy[] proxyFields))
             {
                 parsed = null;
                 return false;
@@ -169,10 +171,11 @@ namespace ContentPatcher.Framework
         /// <summary>Find all tokens in a JSON structure and inject proxy fields which can be updated to change the structure.</summary>
         /// <param name="token">The JSON structure to modify.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
         /// <param name="proxyFields">The injected proxy fields, if any.</param>
         /// <returns>Returns whether the JSON structure was successfully modified, regardless of whether any proxy fields are needed.</returns>
-        private bool TryInjectJsonProxyFields(JToken token, InvariantHashSet assumeModIds, out string error, out TokenizableProxy[] proxyFields)
+        private bool TryInjectJsonProxyFields(JToken token, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out TokenizableProxy[] proxyFields)
         {
             proxyFields = null;
 
@@ -182,7 +185,7 @@ namespace ContentPatcher.Framework
                 case JValue valueToken:
                     {
                         string value = valueToken.Value<string>();
-                        if (!this.TryInjectJsonProxyField(value, assumeModIds, val => valueToken.Value = val, out error, out TokenizableProxy proxy))
+                        if (!this.TryInjectJsonProxyField(value, assumeModIds, val => valueToken.Value = val, path, out error, out TokenizableProxy proxy))
                             return false;
 
                         fields.Add(proxy);
@@ -193,25 +196,29 @@ namespace ContentPatcher.Framework
                     foreach (JProperty p in objToken.Properties())
                     {
                         JProperty property = p;
+                        LogPathBuilder localPath = path.With(p.Name);
 
                         // resolve property name
-                        if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => property = this.ReplaceJsonProperty(property, new JProperty(val, property.Value)), out error, out TokenizableProxy proxyName))
+                        if (!this.TryInjectJsonProxyField(property.Name, assumeModIds, val => property = this.ReplaceJsonProperty(property, new JProperty(val, property.Value)), localPath.With("key"), out error, out TokenizableProxy proxyName))
                             return false;
                         fields.Add(proxyName);
 
                         // resolve property values
-                        if (!this.TryInjectJsonProxyFields(property.Value, assumeModIds, out error, out TokenizableProxy[] proxyValues))
+                        if (!this.TryInjectJsonProxyFields(property.Value, assumeModIds, localPath.With("value"), out error, out TokenizableProxy[] proxyValues))
                             return false;
                         fields.AddRange(proxyValues);
                     }
                     break;
 
                 case JArray arrToken:
-                    foreach (JToken valueToken in arrToken)
                     {
-                        if (!this.TryInjectJsonProxyFields(valueToken, assumeModIds, out error, out TokenizableProxy[] proxyValues))
-                            return false;
-                        fields.AddRange(proxyValues);
+                        int i = 0;
+                        foreach (JToken valueToken in arrToken)
+                        {
+                            if (!this.TryInjectJsonProxyFields(valueToken, assumeModIds, path.With(i++.ToString()), out error, out TokenizableProxy[] proxyValues))
+                                return false;
+                            fields.AddRange(proxyValues);
+                        }
                     }
                     break;
 
@@ -228,12 +235,13 @@ namespace ContentPatcher.Framework
         /// <param name="str">The string to scan.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
         /// <param name="setValue">Update the source with a new value.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why validation failed (if applicable).</param>
         /// <param name="parsed">The parsed value if needed, or <c>null</c> if the string does not contain any tokens.</param>
-        private bool TryInjectJsonProxyField(string str, InvariantHashSet assumeModIds, Action<string> setValue, out string error, out TokenizableProxy parsed)
+        private bool TryInjectJsonProxyField(string str, InvariantHashSet assumeModIds, Action<string> setValue, LogPathBuilder path, out string error, out TokenizableProxy parsed)
         {
             // parse string
-            if (!this.TryParseString(str, assumeModIds, out error, out IManagedTokenString tokenStr))
+            if (!this.TryParseString(str, assumeModIds, path, out error, out IManagedTokenString tokenStr))
             {
                 parsed = null;
                 return false;

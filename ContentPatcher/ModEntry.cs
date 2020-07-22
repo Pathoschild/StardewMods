@@ -365,9 +365,19 @@ namespace ContentPatcher
                         }
 
                         // load dynamic tokens
+                        IDictionary<string, int> dynamicTokenCountByName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                         foreach (DynamicTokenConfig entry in content.DynamicTokens ?? new DynamicTokenConfig[0])
                         {
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
+
+                            // get path
+                            LogPathBuilder path = new LogPathBuilder(nameof(content.DynamicTokens));
+                            {
+                                if (!dynamicTokenCountByName.ContainsKey(entry.Name))
+                                    dynamicTokenCountByName[entry.Name] = -1;
+                                int discriminator = ++dynamicTokenCountByName[entry.Name];
+                                path = path.With($"{entry.Name} {discriminator}");
+                            }
 
                             // validate token key
                             if (string.IsNullOrWhiteSpace(entry.Name))
@@ -395,7 +405,7 @@ namespace ContentPatcher
                             IList<Condition> conditions;
                             InvariantHashSet immutableRequiredModIDs;
                             {
-                                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, out conditions, out immutableRequiredModIDs, out string conditionError))
+                                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, path.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string conditionError))
                                 {
                                     this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
@@ -406,14 +416,14 @@ namespace ContentPatcher
                             IManagedTokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, out string valueError, out values))
+                                if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, path.With(nameof(entry.Value)), out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
                                 }
                             }
                             else
-                                values = new LiteralString("");
+                                values = new LiteralString("", path.With(nameof(entry.Value)));
 
                             // add token
                             modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
@@ -434,7 +444,7 @@ namespace ContentPatcher
                         }
                     }
 
-                    this.PatchLoader.LoadPatches(current, content.Changes, modContext);
+                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, new LogPathBuilder(nameof(content.Changes)));
                 }
                 catch (Exception ex)
                 {
