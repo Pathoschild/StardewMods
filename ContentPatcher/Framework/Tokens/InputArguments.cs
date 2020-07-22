@@ -97,6 +97,15 @@ namespace ContentPatcher.Framework.Tokens
             return this.PositionalArgs.FirstOrDefault();
         }
 
+        /// <summary>Get the raw value for a named argument, if any.</summary>
+        /// <param name="key">The argument name.</param>
+        public string GetRawArgumentValue(string key)
+        {
+            return this.NamedArgs.TryGetValue(key, out IInputArgumentValue value)
+                ? value.Raw
+                : null;
+        }
+
         /// <inheritdoc />
         public string GetPositionalSegment()
         {

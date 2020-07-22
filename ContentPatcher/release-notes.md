@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Randomization is now consistent between players, regardless of installed content packs.
+
 ## 1.15.2
 Released 21 July 2020.
 
