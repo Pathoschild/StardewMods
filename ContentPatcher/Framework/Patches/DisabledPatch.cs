@@ -6,8 +6,8 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>A unique name for this patch shown in log messages.</summary>
-        public string LogName { get; }
+        /// <summary>The path to the patch from the root content file.</summary>
+        public LogPathBuilder Path { get; }
 
         /// <summary>The raw patch type.</summary>
         public string Type { get; }
@@ -25,14 +25,14 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The raw patch type.</param>
         /// <param name="assetName">The raw asset name to intercept.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(string logName, string type, string assetName, ManagedContentPack contentPack, string reasonDisabled)
+        public DisabledPatch(LogPathBuilder path, string type, string assetName, ManagedContentPack contentPack, string reasonDisabled)
         {
-            this.LogName = logName;
+            this.Path = path;
             this.Type = type;
             this.ContentPack = contentPack;
             this.AssetName = assetName;

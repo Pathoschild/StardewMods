@@ -12,14 +12,14 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public LoadPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString localAsset, Func<string, string> normalizeAssetName)
-            : base(logName, PatchType.Load, contentPack, assetName, conditions, normalizeAssetName, fromAsset: localAsset) { }
+        public LoadPatch(LogPathBuilder path, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString localAsset, Func<string, string> normalizeAssetName)
+            : base(path, PatchType.Load, contentPack, assetName, conditions, normalizeAssetName, fromAsset: localAsset) { }
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <param name="asset">The asset to load.</param>

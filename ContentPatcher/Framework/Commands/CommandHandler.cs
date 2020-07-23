@@ -300,16 +300,16 @@ namespace ContentPatcher.Framework.Commands
                 output.AppendLine("   Patches:");
                 output.AppendLine("      loaded  | conditions | applied | name + details");
                 output.AppendLine("      ------- | ---------- | ------- | --------------");
-                foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.ShortName))
+                foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.PathWithoutContentPackPrefix))
                 {
                     // log checkbox and patch name
-                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
+                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
 
                     // log target value if different from name
                     {
                         // get raw value
                         string rawValue = null;
-                        if (!patch.ShortName.Contains($"{patch.RawTargetAsset}"))
+                        if (!patch.PathWithoutContentPackPrefix.Contains($"{patch.RawTargetAsset}"))
                             rawValue = $"{patch.Type} {patch.RawTargetAsset}";
 
                         // get parsed value

@@ -71,12 +71,12 @@ namespace ContentPatcher.Framework
             // validate
             if (patches.Length > 1)
             {
-                this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). None will be applied.", LogLevel.Error);
+                this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.Path select entry.Path)}). None will be applied.", LogLevel.Error);
                 return false;
             }
             if (patches.Length == 1 && !patches[0].FromAssetExists())
             {
-                this.Monitor.Log($"Can't apply load \"{patches[0].LogName}\" to {patches[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{patches[0].FromAsset}' doesn't exist.", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply load \"{patches[0].Path}\" to {patches[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{patches[0].FromAsset}' doesn't exist.", LogLevel.Warn);
                 return false;
             }
 
@@ -104,12 +104,12 @@ namespace ContentPatcher.Framework
             if (!patches.Any())
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen because it means validation failed.");
             if (patches.Length > 1)
-                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because multiple patches apply ({string.Join(", ", from entry in patches orderby entry.LogName select entry.LogName)}). This should never happen because it means validation failed.");
+                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because multiple patches apply ({string.Join(", ", from entry in patches orderby entry.Path select entry.Path)}). This should never happen because it means validation failed.");
 
             // apply patch
             IPatch patch = patches.Single();
             if (this.Monitor.IsVerbose)
-                this.Monitor.VerboseLog($"Patch \"{patch.LogName}\" loaded {asset.AssetName}.");
+                this.Monitor.VerboseLog($"Patch \"{patch.Path}\" loaded {asset.AssetName}.");
             else
                 this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
 
@@ -119,7 +119,7 @@ namespace ContentPatcher.Framework
             {
                 if (!validator.TryValidate(asset, data, patch, out string error))
                 {
-                    this.Monitor.Log($"Can't apply patch {patch.LogName} to {asset.AssetName}: {error}.", LogLevel.Error);
+                    this.Monitor.Log($"Can't apply patch {patch.Path} to {asset.AssetName}: {error}.", LogLevel.Error);
                     return default;
                 }
             }
@@ -140,7 +140,7 @@ namespace ContentPatcher.Framework
             foreach (IPatch patch in patches)
             {
                 if (this.Monitor.IsVerbose)
-                    this.Monitor.VerboseLog($"Applied patch \"{patch.LogName}\" to {asset.AssetName}.");
+                    this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.AssetName}.");
                 else if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
                     this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
 
@@ -151,7 +151,7 @@ namespace ContentPatcher.Framework
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"unhandled exception applying patch: {patch.LogName}.\n{ex}", LogLevel.Error);
+                    this.Monitor.Log($"unhandled exception applying patch: {patch.Path}.\n{ex}", LogLevel.Error);
                     patch.IsApplied = false;
                 }
             }
@@ -206,7 +206,7 @@ namespace ContentPatcher.Framework
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Patch error: {patch.LogName} failed on context update (see log file for details).\n{ex.Message}", LogLevel.Error);
+                    this.Monitor.Log($"Patch error: {patch.Path} failed on context update (see log file for details).\n{ex.Message}", LogLevel.Error);
                     this.Monitor.Log(ex.ToString(), LogLevel.Trace);
                     changed = false;
                 }
@@ -233,13 +233,13 @@ namespace ContentPatcher.Framework
                         changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
-                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.LogName}: {(changes.Any() ? changesStr : "OK")}");
+                    this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.Path}: {(changes.Any() ? changesStr : "OK")}");
                 }
 
                 // warn for invalid load patch
                 // (Other patch types show an error when applied, but that's not possible for a load patch since we can't cleanly abort a load.)
                 if (patch is LoadPatch loadPatch && patch.IsReady && !patch.FromAssetExists())
-                    this.Monitor.Log($"Patch error: {patch.LogName} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
+                    this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
             // rebuild asset name lookup

@@ -67,11 +67,12 @@ namespace ContentPatcher.Framework
 
             // load patches
             var patches = this.SplitPatches(rawPatches).ToArray();
-            this.NamePatches(contentPack.ManagedPack, patches);
+            this.NamePatches(patches);
             foreach (PatchConfig patch in patches)
             {
-                this.Monitor.VerboseLog($"   loading {patch.LogName}...");
-                this.LoadPatch(contentPack.ManagedPack, patch, tokenParser, path.With(patch.LogName), logSkip: reasonPhrase => this.Monitor.Log($"Ignored {patch.LogName}: {reasonPhrase}", LogLevel.Warn));
+                var localPath = path.With(patch.LogName);
+                this.Monitor.VerboseLog($"   loading {localPath}...");
+                this.LoadPatch(contentPack.ManagedPack, patch, tokenParser, localPath, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
             }
         }
 
@@ -147,9 +148,8 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Set a unique name for all patches in a content pack.</summary>
-        /// <param name="contentPack">The content pack.</param>
         /// <param name="patches">The patches to name.</param>
-        private void NamePatches(ManagedContentPack contentPack, PatchConfig[] patches)
+        private void NamePatches(PatchConfig[] patches)
         {
             // add default log names
             foreach (PatchConfig patch in patches)
@@ -165,10 +165,6 @@ namespace ContentPatcher.Framework
                 foreach (PatchConfig patch in patchGroup)
                     patch.LogName += $" #{++i}";
             }
-
-            // prefix with content pack name
-            foreach (PatchConfig patch in patches)
-                patch.LogName = $"{contentPack.Manifest.Name} > {patch.LogName}";
         }
 
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
@@ -182,7 +178,7 @@ namespace ContentPatcher.Framework
             bool TrackSkip(string reason, bool warn = true)
             {
                 reason = reason.TrimEnd('.', ' ');
-                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(entry.LogName, entry.Action, entry.Target, pack, reason));
+                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, entry.Target, pack, reason));
                 if (warn)
                     logSkip(reason + '.');
                 return false;
@@ -257,7 +253,7 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
 
                             // save
-                            patch = new LoadPatch(entry.LogName, pack, targetAsset, conditions, fromAsset, this.NormalizeAssetName);
+                            patch = new LoadPatch(path, pack, targetAsset, conditions, fromAsset, this.NormalizeAssetName);
                         }
                         break;
 
@@ -286,7 +282,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new EditDataPatch(
-                                logName: entry.LogName,
+                                path: path,
                                 contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -324,7 +320,7 @@ namespace ContentPatcher.Framework
                                 return TrackSkip(error);
 
                             // save
-                            patch = new EditImagePatch(entry.LogName, pack, targetAsset, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.NormalizeAssetName);
+                            patch = new EditImagePatch(path, pack, targetAsset, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.NormalizeAssetName);
                         }
                         break;
 
@@ -426,7 +422,7 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(entry.LogName, pack, targetAsset, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.NormalizeAssetName);
+                            patch = new EditMapPatch(path, pack, targetAsset, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.NormalizeAssetName);
                         }
                         break;
 

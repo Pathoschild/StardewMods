@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ContentPatcher.Framework
@@ -6,10 +7,10 @@ namespace ContentPatcher.Framework
     internal class LogPathBuilder
     {
         /*********
-        ** Fields
+        ** Accessors
         *********/
         /// <summary>The path values to combine into a breadcrumb path.</summary>
-        private readonly string[] Segments;
+        public IEnumerable<string> Segments { get; }
 
 
         /*********

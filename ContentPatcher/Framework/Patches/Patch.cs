@@ -45,8 +45,8 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>A unique name for this patch shown in log messages.</summary>
-        public string LogName { get; }
+        /// <summary>The path to the patch from the root content file.</summary>
+        public LogPathBuilder Path { get; }
 
         /// <summary>The patch type.</summary>
         public PatchType Type { get; }
@@ -167,16 +167,16 @@ namespace ContentPatcher.Framework.Patches
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
+        protected Patch(LogPathBuilder path, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
         {
-            this.LogName = logName;
+            this.Path = path;
             this.Type = type;
             this.ContentPack = contentPack;
             this.ManagedRawTargetAsset = assetName;
@@ -223,7 +223,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.TargetAsset = this.NormalizeAssetNameImpl(this.RawTargetAsset.Value);
                 context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset);
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(this.TargetAsset));
+                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset));
             }
             else
                 this.TargetAsset = "";
@@ -272,7 +272,7 @@ namespace ContentPatcher.Framework.Patches
                 string fullPath = this.ContentPack.GetFullPath(newPath);
                 if (!File.Exists(fullPath))
                 {
-                    if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
+                    if (File.Exists($"{fullPath}.xnb") || System.IO.Path.GetExtension(path) == ".xnb")
                         newPath += ".xnb";
                 }
 
@@ -280,7 +280,7 @@ namespace ContentPatcher.Framework.Patches
             }
             catch (Exception ex)
             {
-                throw new FormatException($"The {logName} for patch '{this.LogName}' isn't a valid asset path (current value: '{path}').", ex);
+                throw new FormatException($"The {logName} for patch '{this.Path}' isn't a valid asset path (current value: '{path}').", ex);
             }
         }
     }

@@ -45,7 +45,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -56,8 +56,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="mapTiles">The map tiles to change when editing a map.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IMonitor monitor, Func<string, string> normalizeAssetName)
-            : base(logName, PatchType.EditMap, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
+        public EditMapPatch(LogPathBuilder path, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IMonitor monitor, Func<string, string> normalizeAssetName)
+            : base(path, PatchType.EditMap, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromAsset)
         {
             this.FromArea = fromArea;
             this.ToArea = toArea;
@@ -77,7 +77,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset to edit.</param>
         public override void Edit<T>(IAssetData asset)
         {
-            string errorPrefix = $"Can't apply map patch \"{this.LogName}\" to {this.TargetAsset}";
+            string errorPrefix = $"Can't apply map patch \"{this.Path}\" to {this.TargetAsset}";
 
             // validate
             if (typeof(T) != typeof(Map))
