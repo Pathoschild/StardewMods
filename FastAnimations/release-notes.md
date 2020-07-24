@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed harvest speed option temporarily speeding up the Tractor Mod tractor while harvesting.
+
 ## 1.9
 Released 03 July 2020.
 
