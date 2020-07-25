@@ -55,8 +55,22 @@ namespace ContentPatcher.Framework
         /// <param name="modContext">The context containing dynamic tokens for the mod.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
-        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path, bool reindex)
+        public bool TryLoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path, bool reindex, out string error)
         {
+            // sanity check
+            {
+                int[] nullPositions = rawPatches
+                    .Select((patch, index) => new { patch, index })
+                    .Where(p => p.patch == null)
+                    .Select(p => p.index + 1)
+                    .ToArray();
+                if (nullPositions.Any())
+                {
+                    error = $"Found null patch{(nullPositions.Length == 1 ? "" : "es")} at position{(nullPositions.Length == 1 ? "" : "s")} {string.Join(", ", nullPositions)}.";
+                    return false;
+                }
+            }
+
             // get fake patch context (so patch tokens are available in patch validation)
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
             fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
@@ -79,6 +93,9 @@ namespace ContentPatcher.Framework
             // rebuild indexes
             if (reindex)
                 this.PatchManager.Reindex(patchListChanged: true);
+
+            error = null;
+            return true;
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>

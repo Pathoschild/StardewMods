@@ -431,21 +431,9 @@ namespace ContentPatcher
                         }
                     }
 
-                    // sanity check
-                    {
-                        int[] nullPositions = content.Changes
-                            .Select((patch, index) => new { patch, index })
-                            .Where(p => p.patch == null)
-                            .Select(p => p.index + 1)
-                            .ToArray();
-                        if (nullPositions.Any())
-                        {
-                            this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Found null patch{(nullPositions.Length == 1 ? "" : "es")} at position{(nullPositions.Length == 1 ? "" : "s")} {string.Join(", ", nullPositions)}.", LogLevel.Error);
-                            continue;
-                        }
-                    }
-
-                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, path, reindex: false);
+                    // load patches
+                    if (!this.PatchLoader.TryLoadPatches(current, content.Changes, modContext, path, reindex: false, out string error))
+                        this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. {error}", LogLevel.Error);
                 }
                 catch (Exception ex)
                 {
