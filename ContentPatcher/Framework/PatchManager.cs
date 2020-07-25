@@ -242,13 +242,8 @@ namespace ContentPatcher.Framework
                     this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
-            // rebuild asset name lookup
-            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
-                let key = patchGroup.Key
-                let value = new HashSet<IPatch>(patchGroup)
-                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
-            );
+            // rebuild indexes
+            this.Reindex(patchListChanged: false);
 
             // reload assets if needed
             if (reloadAssetNames.Any())
@@ -267,41 +262,51 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Add a patch.</summary>
         /// <param name="patch">The patch to add.</param>
-        public void Add(IPatch patch)
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        public void Add(IPatch patch, bool reindex = true)
         {
-            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
-
             // set initial context
+            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
             patch.UpdateContext(modContext);
 
             // add to patch list
             this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
 
-            // add to target cache
-            if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> patches))
-                this.PatchesByCurrentTarget[patch.TargetAsset] = patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
-            patches.Add(patch);
-
-            // add to token cache
-            InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
-            foreach (string tokenName in tokensUsed)
-                this.TrackPatchAffectedByToken(patch, tokenName);
-            foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
-            {
-                if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
-                    this.TrackPatchAffectedByToken(patch, token.Name);
-            }
+            // rebuild indexes
+            if (reindex)
+                this.Reindex(patchListChanged: true);
         }
 
-        /// <summary>Track that a given token may cause the patch to update.</summary>
-        /// <param name="patch">The affected patch.</param>
-        /// <param name="tokenName">The token name.</param>
-        private void TrackPatchAffectedByToken(IPatch patch, string tokenName)
+        /// <summary>Rebuild the internal patch lookup indexes. This should only be called manually if patches were added/removed with the reindex option disabled.</summary>
+        /// <param name="patchListChanged">Whether patches were added or removed.</param>
+        public void Reindex(bool patchListChanged)
         {
-            if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
-                this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
-            affected.Add(patch);
+            // rebuild target asset lookup
+            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
+                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
+                let key = patchGroup.Key
+                let value = new HashSet<IPatch>(patchGroup)
+                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
+            );
+
+            // rebuild affected-by-tokens lookup
+            if (patchListChanged)
+            {
+                foreach (IPatch patch in this.Patches)
+                {
+                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
+
+                    InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+                    foreach (string tokenName in tokensUsed)
+                        this.TrackPatchAffectedByToken(patch, tokenName);
+                    foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
+                    {
+                        if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
+                            this.TrackPatchAffectedByToken(patch, token.Name);
+                    }
+                }
+            }
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>
@@ -357,6 +362,16 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Track that a given token may cause the patch to update.</summary>
+        /// <param name="patch">The affected patch.</param>
+        /// <param name="tokenName">The token name.</param>
+        private void TrackPatchAffectedByToken(IPatch patch, string tokenName)
+        {
+            if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
+                this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+            affected.Add(patch);
+        }
+
         /// <summary>Get the patch type which applies when editing a given asset type.</summary>
         /// <param name="assetType">The asset type.</param>
         private PatchType? GetEditType(Type assetType)

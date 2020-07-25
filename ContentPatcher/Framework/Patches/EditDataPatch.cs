@@ -13,7 +13,7 @@ using xTile;
 
 namespace ContentPatcher.Framework.Patches
 {
-    /// <summary>Metadata for a data to edit into a data file.</summary>
+    /// <summary>Metadata for data to edit into a data file.</summary>
     internal class EditDataPatch : Patch
     {
         /*********

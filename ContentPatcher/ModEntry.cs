@@ -445,7 +445,7 @@ namespace ContentPatcher
                         }
                     }
 
-                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, path);
+                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, path, reindex: false);
                 }
                 catch (Exception ex)
                 {
@@ -453,6 +453,8 @@ namespace ContentPatcher
                     continue;
                 }
             }
+
+            this.PatchManager.Reindex(patchListChanged: true);
         }
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>

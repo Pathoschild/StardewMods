@@ -3,13 +3,14 @@
 # Release notes
 ## Upcoming release
 * Randomization is now consistent between players, regardless of installed content packs.
+* Internal changes to prepare for upcoming features.
 
 ## 1.15.2
 Released 21 July 2020.
 
-* Internal changes to prepare for upcoming features.
 * Fixed error using `HasFile` with filenames containing commas.
 * Fixed broken patches preventing other patches from being applied/updated in rare cases.
+* Internal changes to prepare for upcoming features.
 
 ## 1.15.1
 Released 06 July 2020.

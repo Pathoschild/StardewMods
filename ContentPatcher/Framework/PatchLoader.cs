@@ -54,7 +54,8 @@ namespace ContentPatcher.Framework
         /// <param name="rawPatches">The raw patches to load.</param>
         /// <param name="modContext">The context containing dynamic tokens for the mod.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
-        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path)
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path, bool reindex)
         {
             // get fake patch context (so patch tokens are available in patch validation)
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
@@ -72,8 +73,12 @@ namespace ContentPatcher.Framework
             {
                 var localPath = path.With(patch.LogName);
                 this.Monitor.VerboseLog($"   loading {localPath}...");
-                this.LoadPatch(contentPack.ManagedPack, patch, tokenParser, localPath, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                this.LoadPatch(contentPack.ManagedPack, patch, tokenParser, localPath, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn), reindex: false);
             }
+
+            // rebuild indexes
+            if (reindex)
+                this.PatchManager.Reindex(patchListChanged: true);
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>
@@ -173,7 +178,8 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, Action<string> logSkip)
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, Action<string> logSkip, bool reindex)
         {
             bool TrackSkip(string reason, bool warn = true)
             {
@@ -436,7 +442,7 @@ namespace ContentPatcher.Framework
                     return TrackSkip($"{nameof(PatchConfig.Enabled)} is false", warn: false);
 
                 // save patch
-                this.PatchManager.Add(patch);
+                this.PatchManager.Add(patch, reindex);
                 return true;
             }
             catch (Exception ex)
