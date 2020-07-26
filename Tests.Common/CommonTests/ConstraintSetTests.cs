@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         {
             // arrange
             const string value = "boop";
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
 
             // act
             bool added = set.AddBound(value);
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void AddBound_MultipleValues_WithCaseInsensitiveComparer(string[] input, string[] expected)
         {
             // arrange
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
 
             // act
             bool added = set.AddBound(input);
@@ -176,7 +176,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         {
             // arrange
             const string value = "boop";
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
 
             // act
             bool added = set.Exclude(value);
@@ -232,7 +232,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Exclude_MultipleValues_WithCaseInsensitiveComparer(string[] input, string[] expected)
         {
             // arrange
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
 
             // act
             bool added = set.Exclude(input);
@@ -317,13 +317,13 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Allows_WithCaseInsensitiveComparer(string[] restrict, string[] exclude, string[] test, bool expectedResult)
         {
             // arrange
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             set.AddBound(restrict);
             set.Exclude(exclude);
             this.AssertBounds(
                 set,
-                new HashSet<string>(restrict, StringComparer.InvariantCultureIgnoreCase).ToArray(),
-                new HashSet<string>(exclude, StringComparer.InvariantCultureIgnoreCase).ToArray()
+                new HashSet<string>(restrict, StringComparer.OrdinalIgnoreCase).ToArray(),
+                new HashSet<string>(exclude, StringComparer.OrdinalIgnoreCase).ToArray()
             );
 
             // act/assert
@@ -339,8 +339,8 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Intersects_Bounded_Intersection()
         {
             // arrange
-            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
-            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             left.AddBound(new[] { "A", "B", "C", "D" });
             right.AddBound(new[] { "C", "D" });
             left.Exclude("C");
@@ -360,8 +360,8 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Intersects_Bounded_NonIntersection()
         {
             // arrange
-            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
-            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             left.AddBound(new[] { "A", "B", "C" });
             right.AddBound(new[] { "C" });
             left.Exclude("C");
@@ -381,8 +381,8 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Intersects_BothInfinite_Intersection()
         {
             // arrange
-            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
-            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             left.Exclude("C");
             right.Exclude("D");
 
@@ -400,8 +400,8 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Intersects_OneInfinite_Intersection()
         {
             // arrange
-            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
-            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             left.Exclude("C");
             right.AddBound(new[] { "A", "B", "C" });
 
@@ -419,8 +419,8 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         public void Intersects_OneInfinite_NonIntersection()
         {
             // arrange
-            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
-            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.InvariantCultureIgnoreCase);
+            ConstraintSet<string> left = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string> right = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
             left.Exclude(new[] { "A", "B", "C" });
             right.AddBound(new[] { "A", "B", "C" });
 

@@ -364,7 +364,7 @@ namespace ContentPatcher.Framework.Commands
 
                 // print patch effects
                 {
-                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.InvariantCultureIgnoreCase);
+                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.OrdinalIgnoreCase);
                     foreach (PatchInfo patch in patchGroup)
                     {
                         if (!patch.IsApplied || patch.Patch == null)
@@ -390,8 +390,8 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
                         output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
-                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.InvariantCultureIgnoreCase))
-                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
+                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
                     }
                     else
                         output.AppendLine("   No current changes.");
@@ -476,7 +476,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
             output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
             if (tokenStr.HasAnyTokens)
-                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
             output.AppendLine();
 
             output.AppendLine("Diagnostic state");

@@ -173,7 +173,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
             public static Translation AreaName(string locationName, string id)
             {
                 Translation areaTranslation;
-                if (string.Equals(locationName, "UndergroundMine", StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(locationName, "UndergroundMine", StringComparison.OrdinalIgnoreCase))
                     areaTranslation = L10n.Helper.Get("location.undergroundMine.level", new { level = id });
                 else if (int.TryParse(id, out int _))
                     areaTranslation = L10n.Helper.Get($"location.{locationName}.fish-area-{id}");

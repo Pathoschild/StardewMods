@@ -45,8 +45,8 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         public bool NameContains(string substring)
         {
             return
-                this.Name.IndexOf(substring, StringComparison.InvariantCultureIgnoreCase) != -1
-                || this.DisplayName.IndexOf(substring, StringComparison.InvariantCultureIgnoreCase) != -1;
+                this.Name.IndexOf(substring, StringComparison.OrdinalIgnoreCase) != -1
+                || this.DisplayName.IndexOf(substring, StringComparison.OrdinalIgnoreCase) != -1;
         }
 
         /// <summary>Get whether the item name is exactly equal to a case-insensitive string.</summary>
@@ -54,8 +54,8 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         public bool NameEquivalentTo(string name)
         {
             return
-                this.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
-                || this.DisplayName.Equals(name, StringComparison.InvariantCultureIgnoreCase);
+                this.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+                || this.DisplayName.Equals(name, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

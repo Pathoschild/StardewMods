@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected IReflectionHelper Reflection { get; }
 
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
-        private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>Whether the Deep Woods mod is installed.</summary>
         private readonly bool HasDeepWoods;

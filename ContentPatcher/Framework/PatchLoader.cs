@@ -156,7 +156,7 @@ namespace ContentPatcher.Framework
                     continue;
                 }
 
-                foreach (string target in patch.Target.Split(',').Select(p => p.Trim()).Distinct(StringComparer.InvariantCultureIgnoreCase))
+                foreach (string target in patch.Target.Split(',').Select(p => p.Trim()).Distinct(StringComparer.OrdinalIgnoreCase))
                 {
                     if (string.IsNullOrWhiteSpace(target))
                         continue;
@@ -182,7 +182,7 @@ namespace ContentPatcher.Framework
             }
 
             // make names unique within content pack
-            foreach (var patchGroup in patches.GroupBy(p => p.LogName, StringComparer.InvariantCultureIgnoreCase).Where(p => p.Count() > 1))
+            foreach (var patchGroup in patches.GroupBy(p => p.LogName, StringComparer.OrdinalIgnoreCase).Where(p => p.Count() > 1))
             {
                 int i = 0;
                 foreach (PatchConfig patch in patchGroup)

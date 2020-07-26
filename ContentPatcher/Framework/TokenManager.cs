@@ -83,7 +83,7 @@ namespace ContentPatcher.Framework
         {
             foreach (var pair in this.LocalTokens)
             {
-                if (pair.Key.Manifest.UniqueID.Equals(contentPackID, StringComparison.InvariantCultureIgnoreCase))
+                if (pair.Key.Manifest.UniqueID.Equals(contentPackID, StringComparison.OrdinalIgnoreCase))
                     return pair.Value;
             }
 

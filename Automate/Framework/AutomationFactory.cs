@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
         public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
         {
-            this.Connectors = new HashSet<string>(connectors, StringComparer.InvariantCultureIgnoreCase);
+            this.Connectors = new HashSet<string>(connectors, StringComparer.OrdinalIgnoreCase);
             this.AutomateShippingBin = automateShippingBin;
             this.Monitor = monitor;
             this.Reflection = reflection;

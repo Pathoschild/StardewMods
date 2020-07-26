@@ -90,7 +90,7 @@ namespace ContentPatcher.Framework
             // cache file paths
             if (this.RelativePaths == null)
             {
-                this.RelativePaths = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                this.RelativePaths = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (string path in this.GetRealRelativePaths())
                     this.RelativePaths[path] = path;
             }

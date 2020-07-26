@@ -78,7 +78,7 @@ namespace ContentPatcher.Framework.Migrations
                         return false;
                     }
 
-                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true && condition.Value?.IndexOf("HasFile", StringComparison.InvariantCultureIgnoreCase) == -1))
+                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true && condition.Value?.IndexOf("HasFile", StringComparison.OrdinalIgnoreCase) == -1))
                     {
                         error = this.GetNounPhraseError("using tokens in condition values");
                         return false;

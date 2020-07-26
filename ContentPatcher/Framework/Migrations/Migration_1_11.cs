@@ -35,7 +35,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.11 adds pinned keys
-            if (lexToken is LexTokenToken token && token.Name.Equals("Random", StringComparison.InvariantCultureIgnoreCase) && token.HasInputArgs() && token.InputArgs.ToString().Contains("|"))
+            if (lexToken is LexTokenToken token && token.Name.Equals("Random", StringComparison.OrdinalIgnoreCase) && token.HasInputArgs() && token.InputArgs.ToString().Contains("|"))
             {
                 error = this.GetNounPhraseError("using pinned keys with the Random token");
                 return false;
