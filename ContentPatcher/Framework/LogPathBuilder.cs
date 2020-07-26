@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>The path values to combine into a breadcrumb path.</summary>
-        public IEnumerable<string> Segments { get; }
+        public string[] Segments { get; }
 
 
         /*********
@@ -23,11 +24,16 @@ namespace ContentPatcher.Framework
             this.Segments = segments;
         }
 
+        /// <summary>Construct an instance.</summary>
+        /// <param name="segments">The initial path values.</param>
+        public LogPathBuilder(IEnumerable<string> segments)
+            : this(segments.ToArray()) { }
+
         /// <summary>Get a new instance with the given path values appended.</summary>
         /// <param name="segments">The path values to append.</param>
         public LogPathBuilder With(params string[] segments)
         {
-            return new LogPathBuilder(this.Segments.Concat(segments).ToArray());
+            return new LogPathBuilder(this.Segments.Concat(segments));
         }
 
         /// <inheritdoc />

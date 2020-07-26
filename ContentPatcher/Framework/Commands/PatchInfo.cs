@@ -100,7 +100,7 @@ namespace ContentPatcher.Framework.Commands
             this.RawType = rawType;
             this.ParsedType = parsedType;
 
-            this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1).ToArray()).ToString();
+            this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1)).ToString();
         }
     }
 }
