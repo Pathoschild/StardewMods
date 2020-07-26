@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -15,13 +16,19 @@ namespace ContentPatcher.Framework.Commands
         public LogPathBuilder Path { get; }
 
         /// <summary>The <see cref="Path"/> without the content pack prefix.</summary>
-        public string PathWithoutContentPackPrefix { get; }
+        public LogPathBuilder PathWithoutContentPackPrefix { get; }
 
         /// <summary>The raw patch type.</summary>
         public string RawType { get; }
 
         /// <summary>The parsed patch type, if valid.</summary>
         public PatchType? ParsedType { get; }
+
+        /// <summary>The local asset name to load.</summary>
+        public string RawFromAsset { get; set; }
+
+        /// <summary>The parsed asset name to load (if available).</summary>
+        public ITokenString ParsedFromAsset { get; set; }
 
         /// <summary>The asset name to intercept.</summary>
         public string RawTargetAsset { get; }
@@ -69,7 +76,11 @@ namespace ContentPatcher.Framework.Commands
         public PatchInfo(IPatch patch)
             : this(patch.Path, patch.Type.ToString(), patch.Type)
         {
-            this.RawTargetAsset = patch.RawTargetAsset.Raw;
+            this.ParsedType = patch.Type;
+            this.RawFromAsset = patch.RawFromAsset?.Raw;
+            this.ParsedFromAsset = patch.RawTargetAsset;
+
+            this.RawTargetAsset = patch.RawTargetAsset?.Raw;
             this.ParsedTargetAsset = patch.RawTargetAsset;
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
@@ -100,7 +111,7 @@ namespace ContentPatcher.Framework.Commands
             this.RawType = rawType;
             this.ParsedType = parsedType;
 
-            this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1)).ToString();
+            this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1));
         }
     }
 }

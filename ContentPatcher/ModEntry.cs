@@ -47,7 +47,8 @@ namespace ContentPatcher
             new Migration_1_13(),
             new Migration_1_14(),
             new Migration_1_15_Prevalidation(),
-            new Migration_1_15_Rewrites(content)
+            new Migration_1_15_Rewrites(content),
+            new Migration_1_16()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -432,7 +433,7 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    this.PatchLoader.LoadPatches(current, content.Changes, path, reindex: false);
+                    this.PatchLoader.LoadPatches(current, content.Changes, path, reindex: false, parentPatch: null);
                 }
                 catch (Exception ex)
                 {

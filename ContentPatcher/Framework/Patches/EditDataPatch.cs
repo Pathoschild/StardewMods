@@ -57,6 +57,7 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -67,8 +68,17 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(LogPathBuilder path, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
-            : base(path, PatchType.EditData, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromFile)
+        public EditDataPatch(LogPathBuilder path, IPatch parentPatch, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+            : base(
+                path: path,
+                type: PatchType.EditData,
+                contentPack: contentPack,
+                assetName: assetName,
+                conditions: conditions,
+                normalizeAssetName: normalizeAssetName,
+                parentPatch: parentPatch,
+                fromAsset: fromFile
+            )
         {
             // set fields
             this.Records = records?.ToArray();

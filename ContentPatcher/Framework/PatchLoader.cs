@@ -60,7 +60,8 @@ namespace ContentPatcher.Framework
         /// <param name="rawPatches">The raw patches to load.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
-        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, LogPathBuilder path, bool reindex)
+        /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
+        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, LogPathBuilder path, bool reindex, Patch parentPatch)
         {
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ManagedPack);
@@ -92,10 +93,25 @@ namespace ContentPatcher.Framework
             {
                 var localPath = path.With(patch.LogName);
                 this.Monitor.VerboseLog($"   loading {localPath}...");
-                this.LoadPatch(contentPack.ManagedPack, patch, tokenParser, localPath, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn), reindex: false);
+                this.LoadPatch(contentPack, patch, tokenParser, localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
             }
 
             // rebuild indexes
+            if (reindex)
+                this.PatchManager.Reindex(patchListChanged: true);
+        }
+
+        /// <summary>Unload patches loaded (directly or indirectly) by the given patch.</summary>
+        /// <param name="parentPatch">The parent patch for which to unload descendants.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        public void UnloadPatchesLoadedBy(IPatch parentPatch, bool reindex)
+        {
+            foreach (var patch in this.PatchManager.GetPatches())
+            {
+                if (this.IsDescendant(parent: parentPatch, child: patch))
+                    this.PatchManager.Remove(patch, reindex: false);
+            }
+
             if (reindex)
                 this.PatchManager.Reindex(patchListChanged: true);
         }
@@ -179,7 +195,12 @@ namespace ContentPatcher.Framework
             foreach (PatchConfig patch in patches)
             {
                 if (string.IsNullOrWhiteSpace(patch.LogName))
-                    patch.LogName = $"{patch.Action} {PathUtilities.NormalizePathSeparators(patch.Target)}";
+                {
+                    if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include)
+                        patch.LogName = $"{type} {PathUtilities.NormalizePathSeparators(patch.FromFile)}";
+                    else
+                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePathSeparators(patch.Target)}";
+                }
             }
 
             // make names unique within content pack
@@ -192,19 +213,22 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Load one patch from a content pack's <c>content.json</c> file.</summary>
-        /// <param name="pack">The content pack being loaded.</param>
+        /// <param name="rawContentPack">The content pack being loaded.</param>
         /// <param name="entry">The change to load.</param>
-        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
-        /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
-        private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, Action<string> logSkip, bool reindex)
+        /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
+        /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
+        private bool LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
         {
+            var pack = rawContentPack.ManagedPack;
             PatchType? action = null;
+
             bool TrackSkip(string reason, bool warn = true)
             {
                 reason = reason.TrimEnd('.', ' ');
-                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, action, entry.Target, pack, reason));
+                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, action, entry.Target, pack, parentPatch, reason));
                 if (warn)
                     logSkip(reason + '.');
                 return false;
@@ -236,7 +260,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // parse target asset
-                IManagedTokenString targetAsset;
+                IManagedTokenString targetAsset = null;
+                if (action != PatchType.Include)
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
@@ -260,8 +285,11 @@ namespace ContentPatcher.Framework
                 }
 
                 // validate field reference tokens
-                if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath))
-                    return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                if (targetAsset != null)
+                {
+                    if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                }
                 if (fromAsset != null)
                 {
                     if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
@@ -274,6 +302,28 @@ namespace ContentPatcher.Framework
                 IPatch patch;
                 switch (action)
                 {
+                    // include
+                    case PatchType.Include:
+                        {
+                            // validate
+                            if (fromAsset == null)
+                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Include} patch.");
+
+                            // save
+                            patch = new IncludePatch(
+                                path: path,
+                                parentPatch: parentPatch,
+                                contentPack: rawContentPack,
+                                assetName: null,
+                                conditions: conditions,
+                                fromFile: fromAsset,
+                                normalizeAssetName: this.NormalizeAssetName,
+                                monitor: this.Monitor,
+                                patchLoader: this
+                            );
+                        }
+                        break;
+
                     // load asset
                     case PatchType.Load:
                         {
@@ -282,7 +332,15 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
 
                             // save
-                            patch = new LoadPatch(path, pack, targetAsset, conditions, fromAsset, this.NormalizeAssetName);
+                            patch = new LoadPatch(
+                                path: path,
+                                parentPatch: parentPatch,
+                                contentPack: pack,
+                                assetName: targetAsset,
+                                conditions: conditions,
+                                localAsset: fromAsset,
+                                normalizeAssetName: this.NormalizeAssetName
+                            );
                         }
                         break;
 
@@ -312,6 +370,7 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new EditDataPatch(
                                 path: path,
+                                parentPatch: parentPatch,
                                 contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -349,7 +408,19 @@ namespace ContentPatcher.Framework
                                 return TrackSkip(error);
 
                             // save
-                            patch = new EditImagePatch(path, pack, targetAsset, conditions, fromAsset, fromArea, toArea, patchMode, this.Monitor, this.NormalizeAssetName);
+                            patch = new EditImagePatch(
+                                path: path,
+                                parentPatch: parentPatch,
+                                contentPack: pack,
+                                assetName: targetAsset,
+                                conditions: conditions,
+                                fromAsset: fromAsset,
+                                fromArea: fromArea,
+                                toArea: toArea,
+                                patchMode: patchMode,
+                                monitor: this.Monitor,
+                                normalizeAssetName: this.NormalizeAssetName
+                            );
                         }
                         break;
 
@@ -451,7 +522,20 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
-                            patch = new EditMapPatch(path, pack, targetAsset, conditions, fromAsset, fromArea, toArea, mapProperties, mapTiles, this.Monitor, this.NormalizeAssetName);
+                            patch = new EditMapPatch(
+                                path: path,
+                                parentPatch: parentPatch,
+                                contentPack: pack,
+                                assetName: targetAsset,
+                                conditions: conditions,
+                                fromAsset: fromAsset,
+                                fromArea: fromArea,
+                                toArea: toArea,
+                                mapProperties: mapProperties,
+                                mapTiles: mapTiles,
+                                monitor: this.Monitor,
+                                normalizeAssetName: this.NormalizeAssetName
+                            );
                         }
                         break;
 
@@ -913,6 +997,20 @@ namespace ContentPatcher.Framework
             // looks OK
             error = null;
             return true;
+        }
+
+        /// <summary>Get whether a patch was loaded directly or indirectly by a parent patch.</summary>
+        /// <param name="parent">The parent patch.</param>
+        /// <param name="child">The child patch.</param>
+        private bool IsDescendant(IPatch parent, IPatch child)
+        {
+            for (IPatch cur = child.ParentPatch; cur != null; cur = cur.ParentPatch)
+            {
+                if (object.ReferenceEquals(cur, parent))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

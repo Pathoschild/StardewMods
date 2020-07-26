@@ -49,6 +49,9 @@ namespace ContentPatcher.Framework.Patches
         public LogPathBuilder Path { get; }
 
         /// <inheritdoc />
+        public IPatch ParentPatch { get; }
+
+        /// <inheritdoc />
         public PatchType Type { get; }
 
         /// <inheritdoc />
@@ -96,11 +99,11 @@ namespace ContentPatcher.Framework.Patches
             // patch is loaded.)
             this.PrivateContext.Update(context);
             bool changed = false;
-            if (this.ManagedRawTargetAsset.UsesTokens(ConditionType.FromFile))
+            if (this.ManagedRawTargetAsset?.UsesTokens(ConditionType.FromFile) == true)
                 changed |= this.UpdateFromFile(this.PrivateContext) | this.UpdateTargetPath(this.PrivateContext);
             else
                 changed |= this.UpdateTargetPath(this.PrivateContext) | this.UpdateFromFile(this.PrivateContext);
-            isReady &= this.RawTargetAsset.IsReady && this.RawFromAsset?.IsReady != false;
+            isReady &= this.RawTargetAsset?.IsReady != false && this.RawFromAsset?.IsReady != false;
 
             // update contextuals
             changed |= this.Contextuals.UpdateContext(this.PrivateContext, except: this.ManuallyUpdatedTokens);
@@ -165,8 +168,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(LogPathBuilder path, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
+        protected Patch(LogPathBuilder path, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IPatch parentPatch, IManagedTokenString fromAsset = null)
         {
             this.Path = path;
             this.Type = type;
@@ -176,6 +180,7 @@ namespace ContentPatcher.Framework.Patches
             this.NormalizeAssetNameImpl = normalizeAssetName;
             this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
             this.ManagedRawFromAsset = fromAsset;
+            this.ParentPatch = parentPatch;
 
             this.Contextuals
                 .Add(this.Conditions)
@@ -209,6 +214,9 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the field changed.</returns>
         private bool UpdateTargetPath(LocalContext context)
         {
+            if (this.RawTargetAsset == null)
+                return false;
+
             bool changed = this.ManagedRawTargetAsset.UpdateContext(context);
 
             if (this.RawTargetAsset.IsReady)

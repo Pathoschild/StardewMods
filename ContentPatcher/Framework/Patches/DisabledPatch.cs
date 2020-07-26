@@ -26,6 +26,10 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The reason this patch is disabled.</summary>
         public string ReasonDisabled { get; }
 
+        /// <summary>The parent patch for which this patch was loaded, if any.</summary>
+        public Patch ParentPatch { get; }
+
+
         /*********
         ** Public methods
         *********/
@@ -35,14 +39,16 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parsedType">The parsed patch type, if valid.</param>
         /// <param name="assetName">The raw asset name to intercept.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(LogPathBuilder path, string rawType, PatchType? parsedType, string assetName, ManagedContentPack contentPack, string reasonDisabled)
+        public DisabledPatch(LogPathBuilder path, string rawType, PatchType? parsedType, string assetName, ManagedContentPack contentPack, Patch parentPatch, string reasonDisabled)
         {
             this.Path = path;
             this.RawType = rawType;
             this.ParsedType = parsedType;
             this.ContentPack = contentPack;
             this.AssetName = assetName;
+            this.ParentPatch = parentPatch;
             this.ReasonDisabled = reasonDisabled;
         }
     }

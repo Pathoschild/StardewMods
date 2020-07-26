@@ -301,7 +301,7 @@ namespace ContentPatcher.Framework.Commands
                 output.AppendLine("   Patches:");
                 output.AppendLine("      loaded  | conditions | applied | name + details");
                 output.AppendLine("      ------- | ---------- | ------- | --------------");
-                foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.PathWithoutContentPackPrefix))
+                foreach (PatchInfo patch in patchGroup.OrderBy(p => p, new PatchDisplaySortComparer()))
                 {
                     // log checkbox and patch name
                     output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
@@ -309,18 +309,23 @@ namespace ContentPatcher.Framework.Commands
                     // log target value if different from name
                     {
                         // get patch values
-                        string rawTargetPath = PathUtilities.NormalizePathSeparators(patch.RawTargetAsset);
-                        var parsedTargetPath = patch.ParsedTargetAsset;
+                        string rawIdentifyingPath = PathUtilities.NormalizePathSeparators(patch.ParsedType == PatchType.Include
+                            ? patch.RawFromAsset
+                            : patch.RawTargetAsset
+                        );
+                        var parsedIdentifyingPath = patch.ParsedType == PatchType.Include
+                            ? patch.ParsedFromAsset
+                            : patch.ParsedTargetAsset;
 
                         // get raw name if different
                         // (ignore differences in whitespace, capitalization, and path separators)
-                        string rawValue = !PathUtilities.NormalizePathSeparators(patch.PathWithoutContentPackPrefix.Replace(" ", "")).ContainsIgnoreCase(rawTargetPath?.Replace(" ", ""))
-                            ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawTargetPath}"
+                        string rawValue = !PathUtilities.NormalizePathSeparators(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
+                            ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
                             : null;
 
                         // get parsed value
-                        string parsedValue = patch.MatchesContext && parsedTargetPath?.HasAnyTokens == true
-                            ? PathUtilities.NormalizePathSeparators(parsedTargetPath.Value)
+                        string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
+                            ? PathUtilities.NormalizePathSeparators(parsedIdentifyingPath.Value)
                             : null;
 
                         // format

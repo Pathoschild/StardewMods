@@ -278,6 +278,21 @@ namespace ContentPatcher.Framework
                 this.Reindex(patchListChanged: true);
         }
 
+        /// <summary>Remove a patch.</summary>
+        /// <param name="patch">The patch to remove.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        public void Remove(IPatch patch, bool reindex = true)
+        {
+            // remove from patch list
+            this.Monitor.VerboseLog($"      removed {patch.Path}.");
+            if (!this.Patches.Remove(patch))
+                return;
+
+            // rebuild indexes
+            if (reindex)
+                this.Reindex(patchListChanged: true);
+        }
+
         /// <summary>Rebuild the internal patch lookup indexes. This should only be called manually if patches were added/removed with the reindex option disabled.</summary>
         /// <param name="patchListChanged">Whether patches were added or removed.</param>
         public void Reindex(bool patchListChanged)
@@ -285,9 +300,8 @@ namespace ContentPatcher.Framework
             // rebuild target asset lookup
             this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
                 from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
-                let key = patchGroup.Key
-                let value = new HashSet<IPatch>(patchGroup)
-                select new KeyValuePair<string, HashSet<IPatch>>(key, value)
+                where patchGroup.Key != null // ignore include tokens for target lookups
+                select new KeyValuePair<string, HashSet<IPatch>>(patchGroup.Key, new HashSet<IPatch>(patchGroup))
             );
 
             // rebuild affected-by-tokens lookup
