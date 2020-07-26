@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -178,7 +179,7 @@ namespace ContentPatcher.Framework
             foreach (PatchConfig patch in patches)
             {
                 if (string.IsNullOrWhiteSpace(patch.LogName))
-                    patch.LogName = $"{patch.Action} {patch.Target}";
+                    patch.LogName = $"{patch.Action} {PathUtilities.NormalizePathSeparators(patch.Target)}";
             }
 
             // make names unique within content pack
