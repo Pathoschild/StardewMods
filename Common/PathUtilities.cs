@@ -28,6 +28,9 @@ namespace Pathoschild.Stardew.Common
         /// <param name="limit">The number of segments to match. Any additional segments will be merged into the last returned part.</param>
         public static string[] GetSegments(string path, int? limit = null)
         {
+            if (path == null)
+                return new string[0];
+
             return limit.HasValue
                 ? path.Split(PathUtilities.PossiblePathSeparators, limit.Value, StringSplitOptions.RemoveEmptyEntries)
                 : path.Split(PathUtilities.PossiblePathSeparators, StringSplitOptions.RemoveEmptyEntries);
@@ -38,6 +41,9 @@ namespace Pathoschild.Stardew.Common
         [Pure]
         public static string NormalizePathSeparators(string path)
         {
+            if (string.IsNullOrWhiteSpace(path))
+                return path;
+
             string[] parts = PathUtilities.GetSegments(path);
             string normalized = string.Join(PathUtilities.PreferredPathSeparator, parts);
             if (path.StartsWith(PathUtilities.PreferredPathSeparator))

@@ -30,6 +30,9 @@ namespace ContentPatcher.Framework
         /// <param name="other">The second value to compare.</param>
         public static bool ContainsIgnoreCase(this string value, string other)
         {
+            if (value == null || other == null)
+                return value == other;
+
             return value?.IndexOf(other, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 

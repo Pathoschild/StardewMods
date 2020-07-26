@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
@@ -307,15 +308,20 @@ namespace ContentPatcher.Framework.Commands
 
                     // log target value if different from name
                     {
-                        // get raw value
-                        string rawValue = null;
-                        if (!patch.PathWithoutContentPackPrefix.Contains($"{patch.RawTargetAsset}"))
-                            rawValue = $"{patch.Type} {patch.RawTargetAsset}";
+                        // get patch values
+                        string rawTargetPath = PathUtilities.NormalizePathSeparators(patch.RawTargetAsset);
+                        var parsedTargetPath = patch.ParsedTargetAsset;
+
+                        // get raw name if different
+                        // (ignore differences in whitespace, capitalization, and path separators)
+                        string rawValue = !PathUtilities.NormalizePathSeparators(patch.PathWithoutContentPackPrefix.Replace(" ", "")).ContainsIgnoreCase(rawTargetPath?.Replace(" ", ""))
+                            ? $"{patch.Type} {rawTargetPath}"
+                            : null;
 
                         // get parsed value
-                        string parsedValue = null;
-                        if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
-                            parsedValue = patch.ParsedTargetAsset.Value;
+                        string parsedValue = patch.MatchesContext && parsedTargetPath?.HasAnyTokens == true
+                            ? PathUtilities.NormalizePathSeparators(parsedTargetPath.Value)
+                            : null;
 
                         // format
                         if (rawValue != null || parsedValue != null)
