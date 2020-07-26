@@ -315,7 +315,7 @@ namespace ContentPatcher.Framework.Commands
                         // get raw name if different
                         // (ignore differences in whitespace, capitalization, and path separators)
                         string rawValue = !PathUtilities.NormalizePathSeparators(patch.PathWithoutContentPackPrefix.Replace(" ", "")).ContainsIgnoreCase(rawTargetPath?.Replace(" ", ""))
-                            ? $"{patch.Type} {rawTargetPath}"
+                            ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawTargetPath}"
                             : null;
 
                         // get parsed value

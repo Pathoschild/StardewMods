@@ -199,10 +199,11 @@ namespace ContentPatcher.Framework
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         private bool LoadPatch(ManagedContentPack pack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, Action<string> logSkip, bool reindex)
         {
+            PatchType? action = null;
             bool TrackSkip(string reason, bool warn = true)
             {
                 reason = reason.TrimEnd('.', ' ');
-                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, entry.Target, pack, reason));
+                this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, action, entry.Target, pack, reason));
                 if (warn)
                     logSkip(reason + '.');
                 return false;
@@ -214,12 +215,15 @@ namespace ContentPatcher.Framework
                 entry.When ??= new InvariantDictionary<string>();
 
                 // parse action
-                if (!Enum.TryParse(entry.Action, true, out PatchType action))
                 {
-                    return TrackSkip(string.IsNullOrWhiteSpace(entry.Action)
-                        ? $"must set the {nameof(PatchConfig.Action)} field"
-                        : $"invalid {nameof(PatchConfig.Action)} value '{entry.Action}', expected one of: {string.Join(", ", Enum.GetNames(typeof(PatchType)))}"
-                    );
+                    if (!Enum.TryParse(entry.Action, true, out PatchType parsedAction))
+                    {
+                        return TrackSkip(string.IsNullOrWhiteSpace(entry.Action)
+                            ? $"must set the {nameof(PatchConfig.Action)} field"
+                            : $"invalid {nameof(PatchConfig.Action)} value '{entry.Action}', expected one of: {string.Join(", ", Enum.GetNames(typeof(PatchType)))}"
+                        );
+                    }
+                    action = parsedAction;
                 }
 
                 // parse conditions

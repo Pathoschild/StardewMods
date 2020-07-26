@@ -1,3 +1,5 @@
+using ContentPatcher.Framework.Conditions;
+
 namespace ContentPatcher.Framework.Patches
 {
     /// <summary>An invalid patch that couldn't be loaded.</summary>
@@ -10,7 +12,10 @@ namespace ContentPatcher.Framework.Patches
         public LogPathBuilder Path { get; }
 
         /// <summary>The raw patch type.</summary>
-        public string Type { get; }
+        public string RawType { get; }
+
+        /// <summary>The parsed patch type, if valid.</summary>
+        public PatchType? ParsedType { get; }
 
         /// <summary>The raw asset name to intercept.</summary>
         public string AssetName { get; }
@@ -26,14 +31,16 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="type">The raw patch type.</param>
+        /// <param name="rawType">The raw patch type.</param>
+        /// <param name="parsedType">The parsed patch type, if valid.</param>
         /// <param name="assetName">The raw asset name to intercept.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(LogPathBuilder path, string type, string assetName, ManagedContentPack contentPack, string reasonDisabled)
+        public DisabledPatch(LogPathBuilder path, string rawType, PatchType? parsedType, string assetName, ManagedContentPack contentPack, string reasonDisabled)
         {
             this.Path = path;
-            this.Type = type;
+            this.RawType = rawType;
+            this.ParsedType = parsedType;
             this.ContentPack = contentPack;
             this.AssetName = assetName;
             this.ReasonDisabled = reasonDisabled;

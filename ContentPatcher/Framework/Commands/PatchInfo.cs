@@ -17,8 +17,11 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The <see cref="Path"/> without the content pack prefix.</summary>
         public string PathWithoutContentPackPrefix { get; }
 
-        /// <summary>The patch type.</summary>
-        public string Type { get; }
+        /// <summary>The raw patch type.</summary>
+        public string RawType { get; }
+
+        /// <summary>The parsed patch type, if valid.</summary>
+        public PatchType? ParsedType { get; }
 
         /// <summary>The asset name to intercept.</summary>
         public string RawTargetAsset { get; }
@@ -54,7 +57,7 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(DisabledPatch patch)
-            : this(patch.Path, patch.Type)
+            : this(patch.Path, patch.RawType, patch.ParsedType)
         {
             this.RawTargetAsset = patch.AssetName;
             this.ContentPack = patch.ContentPack;
@@ -64,7 +67,7 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(IPatch patch)
-            : this(patch.Path, patch.Type.ToString())
+            : this(patch.Path, patch.Type.ToString(), patch.Type)
         {
             this.RawTargetAsset = patch.RawTargetAsset.Raw;
             this.ParsedTargetAsset = patch.RawTargetAsset;
@@ -89,11 +92,13 @@ namespace ContentPatcher.Framework.Commands
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="type">The patch type.</param>
-        private PatchInfo(LogPathBuilder path, string type)
+        /// <param name="rawType">The raw patch type.</param>
+        /// <param name="parsedType">The parsed patch type, if valid.</param>
+        private PatchInfo(LogPathBuilder path, string rawType, PatchType? parsedType)
         {
             this.Path = path;
-            this.Type = type;
+            this.RawType = rawType;
+            this.ParsedType = parsedType;
 
             this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1).ToArray()).ToString();
         }
