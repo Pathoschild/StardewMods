@@ -7,13 +7,13 @@
 * Content packs containing `null` patches are no longer disabled; instead those patches are now skipped with a warning.
 * Fixed boolean/numeric fields rejecting tokens with surrounding whitespace like `"  {{SomeToken}}  "`.
 * Fixed auto-generated patch names not normalising path separators.
-* Fixed `patch summary` showing duplicate target path in some cases.
+* Fixed `patch summary` showing duplicate target paths in some cases.
 * Fixed string sorting/comparison for some special characters.
 
 **Update note for mod authors:**  
 Using `"Action": "EditData"` with a `FromFile` field is now deprecated, though it still works.
-Migrating to an `"Action": "Include"` patch is recommended. This is more flexible and works more
-intuitively.
+Migrating to an `"Action": "Include"` patch is recommended; it's more flexible and works more
+intuitively. (That doesn't apply to `"Action": "EditData"` patches without a `FromFile` field.)
 
 ## 1.15.2
 Released 21 July 2020.
