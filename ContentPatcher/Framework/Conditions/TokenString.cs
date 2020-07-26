@@ -122,7 +122,7 @@ namespace ContentPatcher.Framework.Conditions
             // set metadata
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
-            this.IsSingleTokenOnly = this.Parts.Length == 1 && this.Parts.First().LexToken.Type == LexTokenType.Token;
+            this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);
             this.Path = path.ToString();
 
             // set initial context
@@ -288,6 +288,36 @@ namespace ContentPatcher.Framework.Conditions
                     text = part.LexToken.ToString();
                     return true;
             }
+        }
+
+        /// <summary>Get whether a string only contains a single root token, ignoring literal whitespace.</summary>
+        /// <param name="parts">The lexical string parts.</param>
+        private static bool GetIsSingleTokenOnly(TokenStringPart[] parts)
+        {
+            bool foundToken = false;
+            foreach (TokenStringPart part in parts)
+            {
+                // non-token content
+                if (part.LexToken is LexTokenLiteral literal)
+                {
+                    if (!string.IsNullOrWhiteSpace(literal.Text))
+                        return false;
+                }
+
+                // multiple tokens
+                else if (part.LexToken.Type == LexTokenType.Token)
+                {
+                    if (foundToken)
+                        return false;
+                    foundToken = true;
+                }
+
+                // non-token content
+                else
+                    return false;
+            }
+
+            return foundToken;
         }
 
         /// <summary>A lexical token component in the token string.</summary>
