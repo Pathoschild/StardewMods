@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Randomization is now consistent between players, regardless of installed content packs.
+* Content packs containing `null` patches are no longer disabled; instead those patches are now skipped with a warning.
 * Internal changes to prepare for upcoming features.
 
 ## 1.15.2

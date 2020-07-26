@@ -55,22 +55,8 @@ namespace ContentPatcher.Framework
         /// <param name="modContext">The context containing dynamic tokens for the mod.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
-        public bool TryLoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path, bool reindex, out string error)
+        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, ModTokenContext modContext, LogPathBuilder path, bool reindex)
         {
-            // sanity check
-            {
-                int[] nullPositions = rawPatches
-                    .Select((patch, index) => new { patch, index })
-                    .Where(p => p.patch == null)
-                    .Select(p => p.index + 1)
-                    .ToArray();
-                if (nullPositions.Any())
-                {
-                    error = $"Found null patch{(nullPositions.Length == 1 ? "" : "es")} at position{(nullPositions.Length == 1 ? "" : "s")} {string.Join(", ", nullPositions)}.";
-                    return false;
-                }
-            }
-
             // get fake patch context (so patch tokens are available in patch validation)
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
             fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
@@ -80,9 +66,22 @@ namespace ContentPatcher.Framework
             // get token parser for fake context
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);
 
-            // load patches
-            var patches = this.SplitPatches(rawPatches).ToArray();
+            // ignore null patches with a warning
+            PatchConfig[] patches = rawPatches
+                .Where((patch, i) =>
+                {
+                    bool isValid = patch != null;
+                    if (!isValid)
+                        this.Monitor.Log($"Ignored {path.With($"patch at index {i}")}: patch is null.", LogLevel.Warn);
+                    return isValid;
+                })
+                .ToArray();
+
+            // preprocess patches
+            patches = this.SplitPatches(patches).ToArray();
             this.NamePatches(patches);
+
+            // load patches
             foreach (PatchConfig patch in patches)
             {
                 var localPath = path.With(patch.LogName);
@@ -93,9 +92,6 @@ namespace ContentPatcher.Framework
             // rebuild indexes
             if (reindex)
                 this.PatchManager.Reindex(patchListChanged: true);
-
-            error = null;
-            return true;
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>

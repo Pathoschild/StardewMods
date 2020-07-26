@@ -432,8 +432,7 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    if (!this.PatchLoader.TryLoadPatches(current, content.Changes, modContext, path, reindex: false, out string error))
-                        this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. {error}", LogLevel.Error);
+                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, path, reindex: false);
                 }
                 catch (Exception ex)
                 {
