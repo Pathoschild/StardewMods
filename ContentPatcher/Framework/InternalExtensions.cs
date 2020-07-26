@@ -25,6 +25,14 @@ namespace ContentPatcher.Framework
                 ?? other == null;
         }
 
+        /// <summary>Get whether a value contains a substring, ignoring case.</summary>
+        /// <param name="value">The first value to compare.</param>
+        /// <param name="other">The second value to compare.</param>
+        public static bool ContainsIgnoreCase(this string value, string other)
+        {
+            return value?.IndexOf(other, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
         /// <summary>Get the set difference of two sequences, ignoring case.</summary>
         /// <param name="source">The first sequence to compare.</param>
         /// <param name="other">The second sequence to compare.</param>
