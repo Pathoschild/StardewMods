@@ -232,7 +232,7 @@ namespace ContentPatcher
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.PatchLoader = new PatchLoader(this.PatchManager, this.Monitor, installedMods, this.Helper.Content.NormalizeAssetName);
+            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, this.Helper.Content.NormalizeAssetName);
             this.UpdateContext(); // set initial context before loading any custom mod tokens
 
             // load context
@@ -432,7 +432,7 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    this.PatchLoader.LoadPatches(current, content.Changes, modContext, path, reindex: false);
+                    this.PatchLoader.LoadPatches(current, content.Changes, path, reindex: false);
                 }
                 catch (Exception ex)
                 {
