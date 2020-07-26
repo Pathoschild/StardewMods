@@ -58,9 +58,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(toArea);
         }
 
-        /// <summary>Apply the patch to a loaded asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
+        /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
             string errorPrefix = $"Can't apply image patch \"{this.Path}\" to {this.TargetAsset}";
@@ -122,7 +120,7 @@ namespace ContentPatcher.Framework.Patches
             editor.PatchImage(source, sourceArea, targetArea, this.PatchMode);
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
             if (this.ResizedLastImage)

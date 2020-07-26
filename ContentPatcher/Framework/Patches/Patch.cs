@@ -45,46 +45,44 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>The path to the patch from the root content file.</summary>
+        /// <inheritdoc />
         public LogPathBuilder Path { get; }
 
-        /// <summary>The patch type.</summary>
+        /// <inheritdoc />
         public PatchType Type { get; }
 
-        /// <summary>The content pack which requested the patch.</summary>
+        /// <inheritdoc />
         public ManagedContentPack ContentPack { get; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; } = true;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady { get; protected set; }
 
-        /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
+        /// <inheritdoc />
         public string FromAsset { get; private set; }
 
-        /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
+        /// <inheritdoc />
         public ITokenString RawFromAsset => this.ManagedRawFromAsset;
 
-        /// <summary>The normalized asset name to intercept.</summary>
+        /// <inheritdoc />
         public string TargetAsset { get; private set; }
 
-        /// <summary>The raw asset name to intercept, including tokens.</summary>
+        /// <inheritdoc />
         public ITokenString RawTargetAsset => this.ManagedRawTargetAsset;
 
-        /// <summary>The conditions which determine whether this patch should be applied.</summary>
+        /// <inheritdoc />
         public Condition[] Conditions { get; }
 
-        /// <summary>Whether the patch is currently applied to the target asset.</summary>
+        /// <inheritdoc />
         public bool IsApplied { get; set; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
+        /// <inheritdoc />
         public virtual bool UpdateContext(IContext context)
         {
             // reset
@@ -122,44 +120,38 @@ namespace ContentPatcher.Framework.Patches
             return changed || this.IsReady != wasReady;
         }
 
-        /// <summary>Get whether the <see cref="FromAsset"/> file exists.</summary>
+        /// <inheritdoc />
         public bool FromAssetExists()
         {
             return this.FromAssetExistsImpl;
         }
 
-        /// <summary>Load the initial version of the asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to load.</param>
-        /// <exception cref="NotSupportedException">The current patch type doesn't support loading assets.</exception>
+        /// <inheritdoc />
         public virtual T Load<T>(IAssetInfo asset)
         {
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Apply the patch to a loaded asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        /// <exception cref="NotSupportedException">The current patch type doesn't support editing assets.</exception>
+        /// <inheritdoc />
         public virtual void Edit<T>(IAssetData asset)
         {
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public virtual IEnumerable<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()
                 .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public abstract IEnumerable<string> GetChangeLabels();
 
 

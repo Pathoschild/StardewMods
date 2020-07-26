@@ -85,9 +85,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Conditions);
         }
 
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             // skip: don't need to handle a data file
@@ -134,10 +132,7 @@ namespace ContentPatcher.Framework.Patches
             return true;
         }
 
-        /// <summary>Apply the patch to a loaded asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        /// <exception cref="NotSupportedException">The asset data can't be parsed or edited.</exception>
+        /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
             // throw on invalid type
@@ -196,7 +191,7 @@ namespace ContentPatcher.Framework.Patches
                 throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
             if (this.Records?.Any(p => p.Value?.Value == null) == true)

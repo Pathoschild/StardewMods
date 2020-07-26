@@ -21,14 +21,13 @@ namespace ContentPatcher.Framework.Patches
         public LoadPatch(LogPathBuilder path, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString localAsset, Func<string, string> normalizeAssetName)
             : base(path, PatchType.Load, contentPack, assetName, conditions, normalizeAssetName, fromAsset: localAsset) { }
 
-        /// <summary>Load the initial version of the asset.</summary>
-        /// <param name="asset">The asset to load.</param>
+        /// <inheritdoc />
         public override T Load<T>(IAssetInfo asset)
         {
             return this.ContentPack.Load<T>(this.FromAsset);
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
             yield return "replaced asset";
