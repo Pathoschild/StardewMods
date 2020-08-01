@@ -5,10 +5,12 @@
 * Added [an `Include` action](docs/author-guide.md#include) which loads patches from another JSON file.
 * Randomization is now consistent between players, regardless of installed content packs.
 * Content packs containing `null` patches are no longer disabled; instead those patches are now skipped with a warning.
+* Improved performance when updating very large content packs.
 * Fixed boolean/numeric fields rejecting tokens with surrounding whitespace like `"  {{SomeToken}}  "`.
 * Fixed auto-generated patch names not normalising path separators.
 * Fixed `patch summary` showing duplicate target paths in some cases.
 * Fixed string sorting/comparison for some special characters.
+* Internal changes to prepare for upcoming features.
 
 **Update note for mod authors:**  
 Using `"Action": "EditData"` with a `FromFile` field is now deprecated, though it still works.
@@ -20,7 +22,7 @@ Released 21 July 2020.
 
 * Fixed error using `HasFile` with filenames containing commas.
 * Fixed broken patches preventing other patches from being applied/updated in rare cases.
-* Internal changes to prepare for upcoming features.
+* Internal changes to prepare for 1.16.
 
 ## 1.15.1
 Released 06 July 2020.

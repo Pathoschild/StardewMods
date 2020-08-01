@@ -159,27 +159,27 @@ namespace ContentPatcher.Framework
 
         /// <summary>Update the current context.</summary>
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
-        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
-        public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens = null)
+        /// <param name="globalChangedTokens">The global token values which changed.</param>
+        public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens)
         {
             this.Monitor.VerboseLog("Propagating context...");
 
+            // nothing to do
+            if (!globalChangedTokens.Any())
+                return;
+
             // collect patches to update
-            HashSet<IPatch> patches;
-            if (globalChangedTokens != null)
+            HashSet<IPatch> patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+            foreach (string tokenName in globalChangedTokens)
             {
-                patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
-                foreach (string tokenName in globalChangedTokens)
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
                 {
-                    if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
-                    {
-                        foreach (IPatch patch in affectedPatches)
-                            patches.Add(patch);
-                    }
+                    foreach (IPatch patch in affectedPatches)
+                        patches.Add(patch);
                 }
             }
-            else
-                patches = this.Patches;
+            if (!patches.Any())
+                return;
 
             // update patches
             InvariantHashSet reloadAssetNames = new InvariantHashSet();

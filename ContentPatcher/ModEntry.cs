@@ -277,12 +277,12 @@ namespace ContentPatcher
         /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
         private void UpdateContext(ConditionType[] affectedTokens = null)
         {
-            InvariantHashSet set = affectedTokens != null
+            InvariantHashSet onlyTokens = affectedTokens != null
                 ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
                 : null;
 
-            this.TokenManager.UpdateContext(set);
-            this.PatchManager.UpdateContext(this.Helper.Content, set);
+            this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens, onlyTokens);
+            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens);
         }
 
         /// <summary>Load the registered content packs.</summary>
