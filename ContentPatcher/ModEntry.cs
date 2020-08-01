@@ -111,19 +111,6 @@ namespace ContentPatcher
         /****
         ** Event handlers
         ****/
-        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
-        {
-            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
-            if (this.IsFirstTick)
-            {
-                this.IsFirstTick = false;
-                this.Initialize();
-            }
-        }
-
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -200,6 +187,19 @@ namespace ContentPatcher
             this.Monitor.VerboseLog("Updating context: returned to title.");
             this.TokenManager.IsBasicInfoLoaded = false;
             this.UpdateContext();
+        }
+
+        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        {
+            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            if (this.IsFirstTick)
+            {
+                this.IsFirstTick = false;
+                this.Initialize();
+            }
         }
 
         /****
