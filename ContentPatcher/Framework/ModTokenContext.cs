@@ -33,6 +33,9 @@ namespace ContentPatcher.Framework
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
         private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new InvariantDictionary<InvariantHashSet>();
 
+        /// <summary>The new tokens which haven't received a context update yet.</summary>
+        private readonly InvariantHashSet PendingTokens = new InvariantHashSet();
+
 
         /*********
         ** Public methods
@@ -66,6 +69,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
             this.LocalContext.Save(token);
+            this.PendingTokens.Add(token.Name);
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
@@ -123,23 +127,18 @@ namespace ContentPatcher.Framework
         public void UpdateContext(InvariantHashSet globalChangedTokens)
         {
             // nothing to do
-            if (!globalChangedTokens.Any())
+            if (!globalChangedTokens.Any() && !this.PendingTokens.Any())
                 return;
 
-            // get affected dynamic tokens
-            InvariantHashSet affectedTokens = new InvariantHashSet();
-            foreach (string globalToken in globalChangedTokens)
-            {
-                foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
-                    affectedTokens.Add(affectedToken);
-            }
+            // get dynamic tokens which need an update
+            InvariantHashSet affectedTokens = this.GetTokensToUpdate(globalChangedTokens);
             if (!affectedTokens.Any())
                 return;
 
             // update local standard tokens
             foreach (var token in this.LocalContext.Tokens.Values)
             {
-                if (token.IsMutable && affectedTokens?.Contains(token.Name) != false)
+                if (token.IsMutable && affectedTokens.Contains(token.Name))
                     token.UpdateContext(this);
             }
 
@@ -160,6 +159,8 @@ namespace ContentPatcher.Framework
                     token.SetReady(true);
                 }
             }
+
+            this.PendingTokens.Clear();
         }
 
         /// <summary>Get the tokens affected by changes to a given token.</summary>
@@ -214,6 +215,29 @@ namespace ContentPatcher.Framework
         {
             IToken token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? Enumerable.Empty<string>();
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the tokens which need a context update.</summary>
+        /// <param name="globalChangedTokens">The global token values which changed.</param>
+        private InvariantHashSet GetTokensToUpdate(InvariantHashSet globalChangedTokens)
+        {
+            // add tokens which depend on a changed global token
+            InvariantHashSet affectedTokens = new InvariantHashSet();
+            foreach (string globalToken in globalChangedTokens)
+            {
+                foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
+                    affectedTokens.Add(affectedToken);
+            }
+
+            // add uninitialized tokens
+            foreach (string patch in this.PendingTokens)
+                affectedTokens.Add(patch);
+
+            return affectedTokens;
         }
     }
 }

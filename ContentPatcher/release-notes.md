@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some patches not applied correctly in 1.16.
+
 ## 1.16
 Released 02 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40028155).
 
