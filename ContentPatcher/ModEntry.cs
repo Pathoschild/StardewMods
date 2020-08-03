@@ -47,7 +47,8 @@ namespace ContentPatcher
             new Migration_1_13(),
             new Migration_1_14(),
             new Migration_1_15_Prevalidation(),
-            new Migration_1_15_Rewrites(content)
+            new Migration_1_15_Rewrites(content),
+            new Migration_1_16()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -110,19 +111,6 @@ namespace ContentPatcher
         /****
         ** Event handlers
         ****/
-        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
-        {
-            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
-            if (this.IsFirstTick)
-            {
-                this.IsFirstTick = false;
-                this.Initialize();
-            }
-        }
-
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -201,6 +189,19 @@ namespace ContentPatcher
             this.UpdateContext();
         }
 
+        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        {
+            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            if (this.IsFirstTick)
+            {
+                this.IsFirstTick = false;
+                this.Initialize();
+            }
+        }
+
         /****
         ** Methods
         ****/
@@ -232,7 +233,7 @@ namespace ContentPatcher
             // load content packs and context
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.PatchLoader = new PatchLoader(this.PatchManager, this.Monitor, installedMods, this.Helper.Content.NormalizeAssetName);
+            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, this.Helper.Content.NormalizeAssetName);
             this.UpdateContext(); // set initial context before loading any custom mod tokens
 
             // load context
@@ -276,12 +277,12 @@ namespace ContentPatcher
         /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
         private void UpdateContext(ConditionType[] affectedTokens = null)
         {
-            InvariantHashSet set = affectedTokens != null
+            InvariantHashSet onlyTokens = affectedTokens != null
                 ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
                 : null;
 
-            this.TokenManager.UpdateContext(set);
-            this.PatchManager.UpdateContext(this.Helper.Content, set);
+            this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens, onlyTokens);
+            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens);
         }
 
         /// <summary>Load the registered content packs.</summary>
@@ -342,6 +343,7 @@ namespace ContentPatcher
             foreach (RawContentPack current in contentPacks)
             {
                 this.Monitor.VerboseLog($"Loading content pack '{current.Manifest.Name}'...");
+                LogPathBuilder path = new LogPathBuilder(current.Manifest.Name);
 
                 try
                 {
@@ -365,9 +367,19 @@ namespace ContentPatcher
                         }
 
                         // load dynamic tokens
+                        IDictionary<string, int> dynamicTokenCountByName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                         foreach (DynamicTokenConfig entry in content.DynamicTokens ?? new DynamicTokenConfig[0])
                         {
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
+
+                            // get path
+                            LogPathBuilder localPath = path.With(nameof(content.DynamicTokens));
+                            {
+                                if (!dynamicTokenCountByName.ContainsKey(entry.Name))
+                                    dynamicTokenCountByName[entry.Name] = -1;
+                                int discriminator = ++dynamicTokenCountByName[entry.Name];
+                                localPath = localPath.With($"{entry.Name} {discriminator}");
+                            }
 
                             // validate token key
                             if (string.IsNullOrWhiteSpace(entry.Name))
@@ -395,7 +407,7 @@ namespace ContentPatcher
                             IList<Condition> conditions;
                             InvariantHashSet immutableRequiredModIDs;
                             {
-                                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, out conditions, out immutableRequiredModIDs, out string conditionError))
+                                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string conditionError))
                                 {
                                     this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
                                     continue;
@@ -406,35 +418,22 @@ namespace ContentPatcher
                             IManagedTokenString values;
                             if (!string.IsNullOrWhiteSpace(entry.Value))
                             {
-                                if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, out string valueError, out values))
+                                if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, localPath.With(nameof(entry.Value)), out string valueError, out values))
                                 {
                                     LogSkip($"the token value is invalid: {valueError}");
                                     continue;
                                 }
                             }
                             else
-                                values = new LiteralString("");
+                                values = new LiteralString("", localPath.With(nameof(entry.Value)));
 
                             // add token
                             modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
                         }
                     }
 
-                    // sanity check
-                    {
-                        int[] nullPositions = content.Changes
-                            .Select((patch, index) => new { patch, index })
-                            .Where(p => p.patch == null)
-                            .Select(p => p.index + 1)
-                            .ToArray();
-                        if (nullPositions.Any())
-                        {
-                            this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Found null patch{(nullPositions.Length == 1 ? "" : "es")} at position{(nullPositions.Length == 1 ? "" : "s")} {string.Join(", ", nullPositions)}.", LogLevel.Error);
-                            continue;
-                        }
-                    }
-
-                    this.PatchLoader.LoadPatches(current, content.Changes, modContext);
+                    // load patches
+                    this.PatchLoader.LoadPatches(current, content.Changes, path, reindex: false, parentPatch: null);
                 }
                 catch (Exception ex)
                 {
@@ -442,6 +441,8 @@ namespace ContentPatcher
                     continue;
                 }
             }
+
+            this.PatchManager.Reindex(patchListChanged: true);
         }
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>

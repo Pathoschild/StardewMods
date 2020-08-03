@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>A singleton instance representing zero input arguments.</summary>
-        public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty));
+        public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty, new LogPathBuilder()));
 
         /****
         ** Values
@@ -95,6 +95,15 @@ namespace ContentPatcher.Framework.Tokens
         public string GetFirstPositionalArg()
         {
             return this.PositionalArgs.FirstOrDefault();
+        }
+
+        /// <summary>Get the raw value for a named argument, if any.</summary>
+        /// <param name="key">The argument name.</param>
+        public string GetRawArgumentValue(string key)
+        {
+            return this.NamedArgs.TryGetValue(key, out IInputArgumentValue value)
+                ? value.Raw
+                : null;
         }
 
         /// <inheritdoc />

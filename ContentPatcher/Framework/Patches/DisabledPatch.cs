@@ -1,3 +1,5 @@
+using ContentPatcher.Framework.Conditions;
+
 namespace ContentPatcher.Framework.Patches
 {
     /// <summary>An invalid patch that couldn't be loaded.</summary>
@@ -6,11 +8,14 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>A unique name for this patch shown in log messages.</summary>
-        public string LogName { get; }
+        /// <summary>The path to the patch from the root content file.</summary>
+        public LogPathBuilder Path { get; }
 
         /// <summary>The raw patch type.</summary>
-        public string Type { get; }
+        public string RawType { get; }
+
+        /// <summary>The parsed patch type, if valid.</summary>
+        public PatchType? ParsedType { get; }
 
         /// <summary>The raw asset name to intercept.</summary>
         public string AssetName { get; }
@@ -21,21 +26,29 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The reason this patch is disabled.</summary>
         public string ReasonDisabled { get; }
 
+        /// <summary>The parent patch for which this patch was loaded, if any.</summary>
+        public Patch ParentPatch { get; }
+
+
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
-        /// <param name="type">The raw patch type.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
+        /// <param name="rawType">The raw patch type.</param>
+        /// <param name="parsedType">The parsed patch type, if valid.</param>
         /// <param name="assetName">The raw asset name to intercept.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(string logName, string type, string assetName, ManagedContentPack contentPack, string reasonDisabled)
+        public DisabledPatch(LogPathBuilder path, string rawType, PatchType? parsedType, string assetName, ManagedContentPack contentPack, Patch parentPatch, string reasonDisabled)
         {
-            this.LogName = logName;
-            this.Type = type;
+            this.Path = path;
+            this.RawType = rawType;
+            this.ParsedType = parsedType;
             this.ContentPack = contentPack;
             this.AssetName = assetName;
+            this.ParentPatch = parentPatch;
             this.ReasonDisabled = reasonDisabled;
         }
     }

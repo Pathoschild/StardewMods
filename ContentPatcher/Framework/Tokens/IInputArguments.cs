@@ -36,6 +36,10 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Get the first positional argument value, if any.</summary>
         string GetFirstPositionalArg();
 
+        /// <summary>Get the raw value for a named argument, if any.</summary>
+        /// <param name="key">The argument name.</param>
+        string GetRawArgumentValue(string key);
+
         /// <summary>Get the raw input argument segment containing positional arguments, after parsing tokens but before splitting into individual arguments.</summary>
         string GetPositionalSegment();
     }

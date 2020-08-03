@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.2.1
+Released 02 August 2020.
+
+* Fixed string sorting/comparison for some special characters.
+
 ## 1.2
 Released 02 May 2020.
 

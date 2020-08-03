@@ -11,26 +11,29 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Accessors
         *********/
-        /// <summary>The raw string without token substitution.</summary>
+        /// <inheritdoc />
         public string Raw { get; }
 
-        /// <summary>The lexical tokens parsed from the raw string.</summary>
+        /// <inheritdoc />
         public IEnumerable<ILexToken> LexTokens { get; }
 
-        /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
+        /// <inheritdoc />
         public bool HasAnyTokens { get; } = false;
 
-        /// <summary>Whether the token string value may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; } = false;
 
-        /// <summary>Whether the token string consists of a single token with no surrounding text.</summary>
+        /// <inheritdoc />
         public bool IsSingleTokenOnly { get; } = false;
 
-        /// <summary>The string with tokens substituted for the last context update.</summary>
+        /// <inheritdoc />
         public string Value { get; }
 
-        /// <summary>Whether all tokens in the value have been replaced.</summary>
+        /// <inheritdoc />
         public bool IsReady { get; } = true;
+
+        /// <inheritdoc />
+        public string Path { get; }
 
 
         /*********
@@ -38,42 +41,40 @@ namespace ContentPatcher.Framework.Conditions
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The literal string value.</param>
-        public LiteralString(string value)
+        /// <param name="path">The path to the value from the root content file.</param>
+        public LiteralString(string value, LogPathBuilder path)
         {
             this.Raw = value;
             this.Value = value;
             this.LexTokens = new ILexToken[] { new LexTokenLiteral(value) };
+            this.Path = path.ToString();
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             return false;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return Enumerable.Empty<string>();
         }
 
-        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
-        /// <param name="recursive">Whether to scan recursively.</param> 
+        /// <inheritdoc />
         public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
         {
             return Enumerable.Empty<LexTokenToken>();
         }
 
-        /// <summary>Get whether a token string uses the given token.</summary>
-        /// <param name="tokens">The token to find.</param>
+        /// <inheritdoc />
         public bool UsesTokens(params ConditionType[] tokens)
         {
             return false;
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return new ContextualState();

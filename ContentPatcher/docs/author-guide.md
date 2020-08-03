@@ -26,6 +26,7 @@ This document helps mod authors create a content pack for Content Patcher.
     * [Map properties](#map-properties)
     * [Tiles and tile properties](#tiles-and-tile-properties)
     * [Known limitations](#map-known-limitations)
+  * [`Include`](#include)
 * [Advanced: conditions & tokens](#advanced)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
@@ -86,7 +87,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.15.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Format`       | The format version. You should always use the latest version (currently `1.16.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
 
@@ -94,7 +95,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "Load",
@@ -116,7 +117,7 @@ All patches support these common fields:
 
 field      | purpose
 ---------- | -------
-`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`); explained in the next section.
+`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`, `Include`); explained in the next section.
 `Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced).
 `LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
 `Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced) (e.g. config tokens) if they return true/false.
@@ -141,7 +142,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "Load",
@@ -172,7 +173,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -194,7 +195,7 @@ field      | purpose
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
-`FromFile` | The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.
+`FromFile` | **This field was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**<br />~~The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.~~
 
 Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `FromFile`.
 
@@ -224,7 +225,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -247,7 +248,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -263,17 +264,19 @@ used to change event conditions:
 
 </dd>
 
-<dt id="data-load-changes-from-a-file">Load changes from a file</dt>
+<dt id="data-load-changes-from-a-file"><s>Load changes from a file</s></dt>
 <dd>
 
-You can optionally load changes from a separate JSON file in your content pack. The file can contain
-`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
-the patch.
+**This was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**
 
-For example, this patch in `content.json`:
+~~You can optionally load changes from a separate JSON file in your content pack. The file can contain
+`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
+the patch.~~
+
+~~For example, this patch in `content.json`:~~
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -284,7 +287,7 @@ For example, this patch in `content.json`:
 }
 ```
 
-Loads changes from this `assets/jade.json` file:
+~~Loads changes from this `assets/jade.json` file:~~
 ```js
 {
    "Entries": {
@@ -299,11 +302,11 @@ Loads changes from this `assets/jade.json` file:
 }
 ```
 
-The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
-this single patch loads a dialogue file for multiple NPCs:
+~~The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
+this single patch loads a dialogue file for multiple NPCs:~~
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -326,7 +329,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -383,7 +386,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -493,7 +496,7 @@ coordinates of the top-left corner, and the tile width and height of the area. I
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -547,7 +550,7 @@ and values.
 For example, This changes the warp map property for the farm cave:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -610,7 +613,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -631,7 +634,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-   "Format": "1.15.0",
+   "Format": "1.16.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -660,6 +663,82 @@ that leads to a different location each day:
 
 </dd>
 </dl>
+
+### `Include`
+`"Action": "Include"` reads patches from another JSON file, as if you'd added them directly to the
+current position. You can have any number of `Include` patches, and files can be included
+recursively (i.e. include a file which includes another file).
+
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+
+<tr>
+<td>&nbsp;</td>
+<td>
+
+See _[common fields](#common-fields)_ above.
+
+</td>
+</tr>
+
+<tr>
+<td><code>FromFile</code></td>
+<td>
+
+The relative path to the JSON file containing patches in your content pack folder. The loaded JSON
+file uses the same format as `content.json`, except that _only_ the `Changes` field is allowed.
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+When including a file into an included file, the `FromFile` path is always **relative to your
+`content.json`**. For example, if `assets/A.json` includes `assets/B.json`, it would specify
+`"FromFile": "assets/B.json"` (_not_ `"FromFile": "B.json"`).
+
+</td>
+</tr>
+</table>
+
+In the simplest case, you can use this to organize your patches into subfiles:
+
+```js
+{
+   "Format": "1.16.0",
+   "Changes": [
+      {
+         "Action": "Include",
+         "FromFile": "assets/John NPC.json"
+      },
+      {
+         "Action": "Include",
+         "FromFile": "assets/Jane NPC.json"
+      },
+   ]
+}
+```
+
+You can combine this with tokens and conditions to load files dynamically:
+
+```js
+{
+   "Format": "1.16.0",
+   "Changes": [
+      {
+         "Action": "Include",
+         "FromFile": "assets/John_{{season}}.json",
+         "When": {
+            "EnableJohn": true
+         }
+      }
+   ]
+}
+```
+
+There's no restriction against including the same file multiple times (as long as there's no
+circular include loop). In that case the patches are duplicated for each inclusion, as if you
+copied & pasted them into each place. This may negatively impact performance though, since each
+patch will be reapplied multiple times.
 
 ## <span id="advanced"></span>Advanced: conditions & tokens
 The previous sections explain how to make static changes, but that's only scratching the surface of

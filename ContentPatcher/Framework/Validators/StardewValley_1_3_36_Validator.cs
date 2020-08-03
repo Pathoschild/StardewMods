@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Validators
         ** Fields
         *********/
         /// <summary>A map of tilesheets removed in Stardew Valley 1.3.36 and the new tilesheets that should be referenced instead.</summary>
-        private readonly IDictionary<string, string> ObsoleteTilesheets = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        private readonly IDictionary<string, string> ObsoleteTilesheets = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             ["mine"] = "Mines/mine",
             ["mine_dark"] = "Mines/mine_dark",
@@ -82,7 +82,7 @@ namespace ContentPatcher.Framework.Validators
                 return true;
 
             // strip .png
-            if (curKey.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase) && this.ObsoleteTilesheets.TryGetValue(curKey.Substring(0, curKey.Length - 4), out newKey))
+            if (curKey.EndsWith(".png", StringComparison.OrdinalIgnoreCase) && this.ObsoleteTilesheets.TryGetValue(curKey.Substring(0, curKey.Length - 4), out newKey))
                 return true;
 
             return false;

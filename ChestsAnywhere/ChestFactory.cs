@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // dressers
                     if (location is DecoratableLocation decoratableLocation)
                     {
-                        var dresserCounts = new Dictionary<string, int>(StringComparer.InvariantCultureIgnoreCase);
+                        var dresserCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                         foreach (StorageFurniture furniture in decoratableLocation.furniture.OfType<StorageFurniture>())
                         {
                             var container = new StorageFurnitureContainer(furniture, this.Reflection);

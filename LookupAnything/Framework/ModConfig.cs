@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to hide content until the player has discovered it in-game (where applicable).</summary>
         public bool ProgressionMode { get; set; } = false;
 
-        /// <summary>>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
+        /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         public bool HighlightUnrevealedGiftTastes { get; set; } = false;
 
         /// <summary>Whether to show advanced data mining fields.</summary>

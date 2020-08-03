@@ -147,7 +147,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 string[] invalidValues = values
                     .Where(p => !int.TryParse(p, out int val) || val < min || val > max)
-                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToArray();
 
                 if (invalidValues.Any())
@@ -160,7 +160,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 string[] invalidValues = values
                     .Where(p => !validValues.Contains(p))
-                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToArray();
 
                 if (invalidValues.Any())

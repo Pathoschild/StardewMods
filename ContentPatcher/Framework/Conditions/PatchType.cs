@@ -13,6 +13,9 @@ namespace ContentPatcher.Framework.Conditions
         EditData,
 
         /// <summary>Edit a map after it's loaded.</summary>
-        EditMap
+        EditMap,
+
+        /// <summary>Include patches from another JSON file.</summary>
+        Include
     }
 }

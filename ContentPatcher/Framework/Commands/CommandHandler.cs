@@ -12,6 +12,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewValley;
@@ -159,6 +160,7 @@ namespace ContentPatcher.Framework.Commands
         private bool HandleSummary()
         {
             StringBuilder output = new StringBuilder();
+            LogPathBuilder path = new LogPathBuilder("console command");
 
             // add condition summary
             output.AppendLine();
@@ -175,7 +177,7 @@ namespace ContentPatcher.Framework.Commands
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0]))).Count() > 1)
+                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input")))).Count() > 1)
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
                         select token
                     )
@@ -217,7 +219,7 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input))))}");
+                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
                                 }
                             }
                             else
@@ -262,7 +264,7 @@ namespace ContentPatcher.Framework.Commands
 
                             // get input arguments
                             let validInputs = token.IsReady && token.RequiresInput
-                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p)).AsEnumerable<ITokenString>()
+                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
                                 : new ITokenString[] { null }
                             from ITokenString input in validInputs
 
@@ -299,22 +301,32 @@ namespace ContentPatcher.Framework.Commands
                 output.AppendLine("   Patches:");
                 output.AppendLine("      loaded  | conditions | applied | name + details");
                 output.AppendLine("      ------- | ---------- | ------- | --------------");
-                foreach (PatchInfo patch in patchGroup.OrderByIgnoreCase(p => p.ShortName))
+                foreach (PatchInfo patch in patchGroup.OrderBy(p => p, new PatchDisplaySortComparer()))
                 {
                     // log checkbox and patch name
-                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.ShortName}");
+                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
 
                     // log target value if different from name
                     {
-                        // get raw value
-                        string rawValue = null;
-                        if (!patch.ShortName.Contains($"{patch.RawTargetAsset}"))
-                            rawValue = $"{patch.Type} {patch.RawTargetAsset}";
+                        // get patch values
+                        string rawIdentifyingPath = PathUtilities.NormalizePathSeparators(patch.ParsedType == PatchType.Include
+                            ? patch.RawFromAsset
+                            : patch.RawTargetAsset
+                        );
+                        var parsedIdentifyingPath = patch.ParsedType == PatchType.Include
+                            ? patch.ParsedFromAsset
+                            : patch.ParsedTargetAsset;
+
+                        // get raw name if different
+                        // (ignore differences in whitespace, capitalization, and path separators)
+                        string rawValue = !PathUtilities.NormalizePathSeparators(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
+                            ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
+                            : null;
 
                         // get parsed value
-                        string parsedValue = null;
-                        if (patch.MatchesContext && patch.ParsedTargetAsset != null && patch.ParsedTargetAsset.HasAnyTokens)
-                            parsedValue = patch.ParsedTargetAsset.Value;
+                        string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
+                            ? PathUtilities.NormalizePathSeparators(parsedIdentifyingPath.Value)
+                            : null;
 
                         // format
                         if (rawValue != null || parsedValue != null)
@@ -363,7 +375,7 @@ namespace ContentPatcher.Framework.Commands
 
                 // print patch effects
                 {
-                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.InvariantCultureIgnoreCase);
+                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.OrdinalIgnoreCase);
                     foreach (PatchInfo patch in patchGroup)
                     {
                         if (!patch.IsApplied || patch.Patch == null)
@@ -389,8 +401,8 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
                         output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
-                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.InvariantCultureIgnoreCase))
-                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
+                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
                     }
                     else
                         output.AppendLine("   No current changes.");
@@ -446,7 +458,7 @@ namespace ContentPatcher.Framework.Commands
             TokenString tokenStr;
             try
             {
-                tokenStr = new TokenString(raw, context);
+                tokenStr = new TokenString(raw, context, new LogPathBuilder("console command"));
             }
             catch (LexFormatException ex)
             {
@@ -475,7 +487,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
             output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
             if (tokenStr.HasAnyTokens)
-                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.InvariantCultureIgnoreCase))}");
+                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
             output.AppendLine();
 
             output.AppendLine("Diagnostic state");

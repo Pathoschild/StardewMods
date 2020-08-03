@@ -13,7 +13,7 @@ using xTile;
 
 namespace ContentPatcher.Framework.Patches
 {
-    /// <summary>Metadata for a data to edit into a data file.</summary>
+    /// <summary>Metadata for data to edit into a data file.</summary>
     internal class EditDataPatch : Patch
     {
         /*********
@@ -56,7 +56,8 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -67,8 +68,17 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(string logName, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
-            : base(logName, PatchType.EditData, contentPack, assetName, conditions, normalizeAssetName, fromAsset: fromFile)
+        public EditDataPatch(LogPathBuilder path, IPatch parentPatch, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+            : base(
+                path: path,
+                type: PatchType.EditData,
+                contentPack: contentPack,
+                assetName: assetName,
+                conditions: conditions,
+                normalizeAssetName: normalizeAssetName,
+                parentPatch: parentPatch,
+                fromAsset: fromFile
+            )
         {
             // set fields
             this.Records = records?.ToArray();
@@ -85,9 +95,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Conditions);
         }
 
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             // skip: don't need to handle a data file
@@ -118,7 +126,7 @@ namespace ContentPatcher.Framework.Patches
                     this.MoveRecords = moveEntries.ToArray();
                 }
                 else
-                    this.Monitor.Log($"Can't load \"{this.LogName}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
+                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
 
                 this.AttemptedDataLoad = true;
             }
@@ -134,16 +142,13 @@ namespace ContentPatcher.Framework.Patches
             return true;
         }
 
-        /// <summary>Apply the patch to a loaded asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        /// <exception cref="NotSupportedException">The asset data can't be parsed or edited.</exception>
+        /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
             // throw on invalid type
             if (typeof(T) == typeof(Texture2D) || typeof(T) == typeof(Map))
             {
-                this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.TargetAsset}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
                 return;
             }
 
@@ -196,7 +201,7 @@ namespace ContentPatcher.Framework.Patches
                 throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
             if (this.Records?.Any(p => p.Value?.Value == null) == true)
@@ -280,7 +285,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply moves
             if (this.MoveRecords.Any())
-                this.Monitor.LogOnce($"Can't move records for \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
+                this.Monitor.LogOnce($"Can't move records for \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
         }
 
         /// <summary>Apply the patch to a list asset.</summary>
@@ -324,7 +329,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 if (!moveRecord.IsReady)
                     continue;
-                string errorLabel = $"record \"{this.LogName}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID.Value}\"";
+                string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID.Value}\"";
 
                 // get entry
                 TValue entry = GetByKey(moveRecord.ID.Value);
@@ -402,7 +407,7 @@ namespace ContentPatcher.Framework.Patches
                         else if (record.Value.Value is JValue field)
                             setEntry(key, field.Value<TValue>());
                         else
-                            this.Monitor.Log($"Can't apply data patch \"{this.LogName} > entry #{i}\" to {this.TargetAsset}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
 
                     // apply object
@@ -413,7 +418,7 @@ namespace ContentPatcher.Framework.Patches
                         else if (record.Value.Value is JObject field)
                             setEntry(key, field.ToObject<TValue>());
                         else
-                            this.Monitor.Log($"Can't apply data patch \"{this.LogName} > entry #{i}\" to {this.TargetAsset}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
                 }
             }
@@ -427,7 +432,7 @@ namespace ContentPatcher.Framework.Patches
                     TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
                     if (!hasEntry(key))
                     {
-                        this.Monitor.Log($"Can't apply data patch \"{this.LogName}\" to {this.TargetAsset}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
+                        this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                         continue;
                     }
 
@@ -439,12 +444,12 @@ namespace ContentPatcher.Framework.Patches
                         {
                             if (!int.TryParse(field.FieldKey.Value, out int index))
                             {
-                                this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
+                                this.Monitor.Log($"Can't apply data field \"{this.Path}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
                                 continue;
                             }
                             if (index < 0 || index > actualFields.Length - 1)
                             {
-                                this.Monitor.Log($"Can't apply data field \"{this.LogName}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldKey} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                                this.Monitor.Log($"Can't apply data field \"{this.Path}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldKey} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                                 continue;
                             }
 

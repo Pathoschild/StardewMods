@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -11,11 +12,23 @@ namespace ContentPatcher.Framework.Commands
         /*********
         ** Accessors
         *********/
-        /// <summary>The patch name shown in log messages, without the content pack prefix.</summary>
-        public string ShortName { get; }
+        /// <summary>The path to the patch from the root content file.</summary>
+        public LogPathBuilder Path { get; }
 
-        /// <summary>The patch type.</summary>
-        public string Type { get; }
+        /// <summary>The <see cref="Path"/> without the content pack prefix.</summary>
+        public LogPathBuilder PathWithoutContentPackPrefix { get; }
+
+        /// <summary>The raw patch type.</summary>
+        public string RawType { get; }
+
+        /// <summary>The parsed patch type, if valid.</summary>
+        public PatchType? ParsedType { get; }
+
+        /// <summary>The local asset name to load.</summary>
+        public string RawFromAsset { get; set; }
+
+        /// <summary>The parsed asset name to load (if available).</summary>
+        public ITokenString ParsedFromAsset { get; set; }
 
         /// <summary>The asset name to intercept.</summary>
         public string RawTargetAsset { get; }
@@ -51,27 +64,23 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(DisabledPatch patch)
+            : this(patch.Path, patch.RawType, patch.ParsedType)
         {
-            this.ShortName = this.GetShortName(patch.ContentPack, patch.LogName);
-            this.Type = patch.Type;
             this.RawTargetAsset = patch.AssetName;
-            this.ParsedTargetAsset = null;
-            this.ParsedConditions = null;
             this.ContentPack = patch.ContentPack;
-            this.IsLoaded = false;
-            this.MatchesContext = false;
-            this.IsApplied = false;
             this.State = new ContextualState().AddErrors(patch.ReasonDisabled);
-            this.Patch = null;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(IPatch patch)
+            : this(patch.Path, patch.Type.ToString(), patch.Type)
         {
-            this.ShortName = this.GetShortName(patch.ContentPack, patch.LogName);
-            this.Type = patch.Type.ToString();
-            this.RawTargetAsset = patch.RawTargetAsset.Raw;
+            this.ParsedType = patch.Type;
+            this.RawFromAsset = patch.RawFromAsset?.Raw;
+            this.ParsedFromAsset = patch.RawTargetAsset;
+
+            this.RawTargetAsset = patch.RawTargetAsset?.Raw;
             this.ParsedTargetAsset = patch.RawTargetAsset;
             this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
@@ -92,15 +101,17 @@ namespace ContentPatcher.Framework.Commands
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the patch name shown in log messages, without the content pack prefix.</summary>
-        /// <param name="contentPack">The content pack which requested the patch.</param>
-        /// <param name="logName">The unique patch name shown in log messages.</param>
-        private string GetShortName(ManagedContentPack contentPack, string logName)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="path">The path to the patch from the root content file.</param>
+        /// <param name="rawType">The raw patch type.</param>
+        /// <param name="parsedType">The parsed patch type, if valid.</param>
+        private PatchInfo(LogPathBuilder path, string rawType, PatchType? parsedType)
         {
-            string prefix = contentPack.Manifest.Name + " > ";
-            return logName.StartsWith(prefix)
-                ? logName.Substring(prefix.Length)
-                : logName;
+            this.Path = path;
+            this.RawType = rawType;
+            this.ParsedType = parsedType;
+
+            this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1));
         }
     }
 }

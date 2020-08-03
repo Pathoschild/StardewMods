@@ -124,10 +124,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         where property.CanRead
                         select new { property.Name, Type = property.PropertyType, Value = this.GetDebugValue(obj, property) }
                     )
-                    .OrderBy(field => field.Name, StringComparer.InvariantCultureIgnoreCase);
+                    .OrderBy(field => field.Name, StringComparer.OrdinalIgnoreCase);
 
                 // yield valid values
-                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var field in fields)
                 {
                     if (seenValues.TryGetValue(field.Name, out string value) && value == field.Value)

@@ -322,7 +322,7 @@ namespace Pathoschild.Stardew.Common
                 // split on newlines
                 string wordPart = word;
                 int newlineIndex;
-                while ((newlineIndex = wordPart.IndexOf(Environment.NewLine, StringComparison.InvariantCulture)) >= 0)
+                while ((newlineIndex = wordPart.IndexOf(Environment.NewLine, StringComparison.Ordinal)) >= 0)
                 {
                     if (newlineIndex == 0)
                     {

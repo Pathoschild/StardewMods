@@ -28,26 +28,29 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Accessors
         *********/
-        /// <summary>The raw string without token substitution.</summary>
+        /// <inheritdoc />
         public string Raw { get; }
 
-        /// <summary>The lexical tokens parsed from the raw string.</summary>
+        /// <inheritdoc />
         public IEnumerable<ILexToken> LexTokens => this.Parts.Select(p => p.LexToken);
 
-        /// <summary>Whether the string contains any tokens (including invalid tokens).</summary>
+        /// <inheritdoc />
         public bool HasAnyTokens { get; }
 
-        /// <summary>Whether the token string value may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; }
 
-        /// <summary>Whether the token string consists of a single token with no surrounding text.</summary>
+        /// <inheritdoc />
         public bool IsSingleTokenOnly { get; }
 
-        /// <summary>The string with tokens substituted for the last context update.</summary>
+        /// <inheritdoc />
         public string Value { get; private set; }
 
-        /// <summary>Whether all tokens in the value have been replaced.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.State.IsReady;
+
+        /// <inheritdoc />
+        public string Path { get; }
 
 
         /*********
@@ -56,26 +59,29 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance from raw text. This constructor bypasses migrations, so it should not be used to parse any values from a content pack.</summary>
         /// <param name="raw">The raw string before token substitution.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(string raw, IContext context)
-            : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context) { }
+        /// <param name="path">The path to the value from the root content file.</param>
+        public TokenString(string raw, IContext context, LogPathBuilder path)
+            : this(lexTokens: new Lexer().ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="inputArgs">The raw token input arguments.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(LexTokenInput inputArgs, IContext context)
-            : this(lexTokens: inputArgs?.Parts, context: context) { }
+        /// <param name="path">The path to the value from the root content file.</param>
+        public TokenString(LexTokenInput inputArgs, IContext context, LogPathBuilder path)
+            : this(lexTokens: inputArgs?.Parts, context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
-        public TokenString(ILexToken[] lexTokens, IContext context)
+        /// <param name="path">The path to the value from the root content file.</param>
+        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
         {
             // get lexical tokens
             this.Parts =
                 (
                     from token in (lexTokens ?? new ILexToken[0])
                     let input = token is LexTokenToken lexToken && lexToken.HasInputArgs()
-                        ? new TokenString(lexToken.InputArgs.Parts, context)
+                        ? new TokenString(lexToken.InputArgs.Parts, context, path.With(lexToken.Name))
                         : null
                     select new TokenStringPart(token, input)
                 )
@@ -116,42 +122,39 @@ namespace ContentPatcher.Framework.Conditions
             // set metadata
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
-            this.IsSingleTokenOnly = this.Parts.Length == 1 && this.Parts.First().LexToken.Type == LexTokenType.Token;
+            this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);
+            this.Path = path.ToString();
 
             // set initial context
             if (this.State.IsReady)
                 this.UpdateContext(context, forceUpdate: true);
         }
 
-        /// <summary>Update the <see cref="Value"/> with the given tokens.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the value changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             return this.UpdateContext(context, forceUpdate: false);
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return this.TokensUsed;
         }
 
-        /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
-        /// <param name="recursive">Whether to scan recursively.</param> 
+        /// <inheritdoc />
         public IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive)
         {
             return this.GetTokenPlaceholders(this.LexTokens, recursive);
         }
 
-        /// <summary>Get whether a token string uses the given token.</summary>
-        /// <param name="tokens">The token to find.</param>
+        /// <inheritdoc />
         public bool UsesTokens(params ConditionType[] tokens)
         {
             return tokens.Any(token => this.TokensUsed.Contains(token.ToString()));
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone();
@@ -285,6 +288,36 @@ namespace ContentPatcher.Framework.Conditions
                     text = part.LexToken.ToString();
                     return true;
             }
+        }
+
+        /// <summary>Get whether a string only contains a single root token, ignoring literal whitespace.</summary>
+        /// <param name="parts">The lexical string parts.</param>
+        private static bool GetIsSingleTokenOnly(TokenStringPart[] parts)
+        {
+            bool foundToken = false;
+            foreach (TokenStringPart part in parts)
+            {
+                // non-token content
+                if (part.LexToken is LexTokenLiteral literal)
+                {
+                    if (!string.IsNullOrWhiteSpace(literal.Text))
+                        return false;
+                }
+
+                // multiple tokens
+                else if (part.LexToken.Type == LexTokenType.Token)
+                {
+                    if (foundToken)
+                        return false;
+                    foundToken = true;
+                }
+
+                // non-token content
+                else
+                    return false;
+            }
+
+            return foundToken;
         }
 
         /// <summary>A lexical token component in the token string.</summary>

@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
         {
             this.LocationName = locationName;
             this.Area = area;
-            this.Seasons = new HashSet<string>(seasons, StringComparer.InvariantCultureIgnoreCase);
+            this.Seasons = new HashSet<string>(seasons, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>Get whether this matches a given location name.</summary>

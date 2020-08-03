@@ -15,33 +15,44 @@ namespace ContentPatcher.Framework
         /****
         ** Case-insensitive extensions
         ****/
-        /// <summary>Get whether a value is equal to another, using the invariant culture and ignoring case.</summary>
+        /// <summary>Get whether a value is equal to another, ignoring case.</summary>
         /// <param name="value">The first value to compare.</param>
         /// <param name="other">The second value to compare.</param>
         public static bool EqualsIgnoreCase(this string value, string other)
         {
             return
-                value?.Equals(other, StringComparison.InvariantCultureIgnoreCase)
+                value?.Equals(other, StringComparison.OrdinalIgnoreCase)
                 ?? other == null;
         }
 
-        /// <summary>Get the set difference of two sequences, using the invariant culture and ignoring case.</summary>
+        /// <summary>Get whether a value contains a substring, ignoring case.</summary>
+        /// <param name="value">The first value to compare.</param>
+        /// <param name="other">The second value to compare.</param>
+        public static bool ContainsIgnoreCase(this string value, string other)
+        {
+            if (value == null || other == null)
+                return value == other;
+
+            return value?.IndexOf(other, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        /// <summary>Get the set difference of two sequences, ignoring case.</summary>
         /// <param name="source">The first sequence to compare.</param>
         /// <param name="other">The second sequence to compare.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="other" /> is <see langword="null" />.</exception>
         public static IEnumerable<string> ExceptIgnoreCase(this IEnumerable<string> source, IEnumerable<string> other)
         {
-            return source.Except(other, StringComparer.InvariantCultureIgnoreCase);
+            return source.Except(other, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>Group the elements of a sequence according to a specified key selector function, comparing the keys using the invariant culture and ignoring case.</summary>
+        /// <summary>Group the elements of a sequence according to a specified key selector function, comparing the keys without case.</summary>
         /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
         /// <param name="source">The sequence whose elements to group.</param>
         /// <param name="keySelector">A function to extract the key for each element.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
         public static IEnumerable<IGrouping<string, TSource>> GroupByIgnoreCase<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector)
         {
-            return source.GroupBy(keySelector, StringComparer.InvariantCultureIgnoreCase);
+            return source.GroupBy(keySelector, StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>Sort the elements of a sequence in ascending order by using a specified comparer.</summary>
@@ -51,7 +62,7 @@ namespace ContentPatcher.Framework
         /// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
         public static IOrderedEnumerable<TSource> OrderByIgnoreCase<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector)
         {
-            return source.OrderBy(keySelector, StringComparer.InvariantCultureIgnoreCase);
+            return source.OrderBy(keySelector, StringComparer.OrdinalIgnoreCase);
         }
 
         /****

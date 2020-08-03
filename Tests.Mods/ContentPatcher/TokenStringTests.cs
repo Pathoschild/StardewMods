@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void TokenStringBuilder_PlainString(string raw)
         {
             // act
-            TokenString tokenStr = new TokenString(raw, new GenericTokenContext(modId => false));
+            TokenString tokenStr = new TokenString(raw, new GenericTokenContext(modId => false), new LogPathBuilder("unit test"));
             IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             context.Save(new HigherLevelTokenWrapper(new ImmutableToken(configKey, new InvariantHashSet { "value" })));
 
             // act
-            TokenString tokenStr = new TokenString(raw, context);
+            TokenString tokenStr = new TokenString(raw, context, new LogPathBuilder("unit test"));
             IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             context.Save(new HigherLevelTokenWrapper(new ImmutableToken(tokenKey, new InvariantHashSet { "A" })));
 
             // act
-            TokenString tokenStr = new TokenString(raw, context);
+            TokenString tokenStr = new TokenString(raw, context, new LogPathBuilder("unit test"));
             IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert

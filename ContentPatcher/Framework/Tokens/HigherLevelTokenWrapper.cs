@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Tokens
 
                 string[] invalidValues = values
                     .Where(p => !bool.TryParse(p, out bool _))
-                    .Distinct(StringComparer.InvariantCultureIgnoreCase)
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
                     .ToArray();
                 if (invalidValues.Any())
                 {

@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.TestMod
         ** Accessors
         *********/
         /// <summary>The unique assets for which <see cref="IAssetLoader.CanLoad{T}"/> was called.</summary>
-        private readonly HashSet<string> LoadedAssets = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly HashSet<string> LoadedAssets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 
         /*********

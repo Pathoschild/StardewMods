@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // save data
             this.ShowLookup = showLookup;
             this.Monitor = monitor;
-            this.SearchLookup = codex.GetSearchSubjects().ToLookup(p => p.Name, StringComparer.InvariantCultureIgnoreCase);
+            this.SearchLookup = codex.GetSearchSubjects().ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
             // initialise
             this.UpdateLayout();
@@ -243,7 +243,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.SearchResults =
                 (
                     from entry in this.SearchLookup
-                    where words.All(word => entry.Key.IndexOf(word, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    where words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                     orderby entry.Key
                     select new SearchResultComponent(entry.First()) // first result for each name
                 )

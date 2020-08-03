@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
             this.OverrideTilling = this.Config.ForceTillable.IsAnyEnabled();
-            this.EnabledSeasons = new HashSet<string>(this.Config.EnableInSeasons.GetEnabledSeasons(), StringComparer.InvariantCultureIgnoreCase);
+            this.EnabledSeasons = new HashSet<string>(this.Config.EnableInSeasons.GetEnabledSeasons(), StringComparer.OrdinalIgnoreCase);
 
             // read data
             this.FallbackTileTypes = this.LoadFallbackTileTypes();
@@ -318,7 +318,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                 }
 
                 // parse file
-                var data = new Dictionary<string, IDictionary<int, string>>(StringComparer.InvariantCultureIgnoreCase);
+                var data = new Dictionary<string, IDictionary<int, string>>(StringComparer.OrdinalIgnoreCase);
                 foreach (var tilesheetGroup in raw.FallbackTileTypes)
                 {
                     string tilesheetName = tilesheetGroup.Key;

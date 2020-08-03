@@ -33,7 +33,8 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                     || playerAnimationID == FarmerSprite.harvestItemLeft
                     || playerAnimationID == FarmerSprite.harvestItemRight
                     || playerAnimationID == FarmerSprite.harvestItemUp
-                );
+                )
+                && !this.IsRidingTractor();
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

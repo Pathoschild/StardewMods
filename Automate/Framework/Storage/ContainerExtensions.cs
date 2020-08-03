@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="tag">The tag to check, excluding the '|' delimiters.</param>
         private static bool HasTag(this IContainer container, string tag)
         {
-            return container.Name?.IndexOf($"|{tag}|", StringComparison.InvariantCultureIgnoreCase) >= 0;
+            return container.Name?.IndexOf($"|{tag}|", StringComparison.OrdinalIgnoreCase) >= 0;
         }
     }
 }

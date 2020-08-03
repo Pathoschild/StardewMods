@@ -45,46 +45,47 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>A unique name for this patch shown in log messages.</summary>
-        public string LogName { get; }
+        /// <inheritdoc />
+        public LogPathBuilder Path { get; }
 
-        /// <summary>The patch type.</summary>
+        /// <inheritdoc />
+        public IPatch ParentPatch { get; }
+
+        /// <inheritdoc />
         public PatchType Type { get; }
 
-        /// <summary>The content pack which requested the patch.</summary>
+        /// <inheritdoc />
         public ManagedContentPack ContentPack { get; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; } = true;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady { get; protected set; }
 
-        /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
+        /// <inheritdoc />
         public string FromAsset { get; private set; }
 
-        /// <summary>The raw asset key from which to load the local asset (if applicable), including tokens.</summary>
+        /// <inheritdoc />
         public ITokenString RawFromAsset => this.ManagedRawFromAsset;
 
-        /// <summary>The normalized asset name to intercept.</summary>
+        /// <inheritdoc />
         public string TargetAsset { get; private set; }
 
-        /// <summary>The raw asset name to intercept, including tokens.</summary>
+        /// <inheritdoc />
         public ITokenString RawTargetAsset => this.ManagedRawTargetAsset;
 
-        /// <summary>The conditions which determine whether this patch should be applied.</summary>
+        /// <inheritdoc />
         public Condition[] Conditions { get; }
 
-        /// <summary>Whether the patch is currently applied to the target asset.</summary>
+        /// <inheritdoc />
         public bool IsApplied { get; set; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Update the patch data when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the patch data changed.</returns>
+        /// <inheritdoc />
         public virtual bool UpdateContext(IContext context)
         {
             // reset
@@ -98,11 +99,11 @@ namespace ContentPatcher.Framework.Patches
             // patch is loaded.)
             this.PrivateContext.Update(context);
             bool changed = false;
-            if (this.ManagedRawTargetAsset.UsesTokens(ConditionType.FromFile))
+            if (this.ManagedRawTargetAsset?.UsesTokens(ConditionType.FromFile) == true)
                 changed |= this.UpdateFromFile(this.PrivateContext) | this.UpdateTargetPath(this.PrivateContext);
             else
                 changed |= this.UpdateTargetPath(this.PrivateContext) | this.UpdateFromFile(this.PrivateContext);
-            isReady &= this.RawTargetAsset.IsReady && this.RawFromAsset?.IsReady != false;
+            isReady &= this.RawTargetAsset?.IsReady != false && this.RawFromAsset?.IsReady != false;
 
             // update contextuals
             changed |= this.Contextuals.UpdateContext(this.PrivateContext, except: this.ManuallyUpdatedTokens);
@@ -122,44 +123,38 @@ namespace ContentPatcher.Framework.Patches
             return changed || this.IsReady != wasReady;
         }
 
-        /// <summary>Get whether the <see cref="FromAsset"/> file exists.</summary>
+        /// <inheritdoc />
         public bool FromAssetExists()
         {
             return this.FromAssetExistsImpl;
         }
 
-        /// <summary>Load the initial version of the asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to load.</param>
-        /// <exception cref="NotSupportedException">The current patch type doesn't support loading assets.</exception>
+        /// <inheritdoc />
         public virtual T Load<T>(IAssetInfo asset)
         {
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Apply the patch to a loaded asset.</summary>
-        /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        /// <exception cref="NotSupportedException">The current patch type doesn't support editing assets.</exception>
+        /// <inheritdoc />
         public virtual void Edit<T>(IAssetData asset)
         {
             throw new NotSupportedException("This patch type doesn't support loading assets.");
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public virtual IEnumerable<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()
                 .MergeFrom(this.Contextuals.GetDiagnosticState());
         }
 
-        /// <summary>Get a human-readable list of changes applied to the asset for display when troubleshooting.</summary>
+        /// <inheritdoc />
         public abstract IEnumerable<string> GetChangeLabels();
 
 
@@ -167,16 +162,17 @@ namespace ContentPatcher.Framework.Patches
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="logName">A unique name for this patch shown in log messages.</param>
+        /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(string logName, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
+        protected Patch(LogPathBuilder path, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IPatch parentPatch, IManagedTokenString fromAsset = null)
         {
-            this.LogName = logName;
+            this.Path = path;
             this.Type = type;
             this.ContentPack = contentPack;
             this.ManagedRawTargetAsset = assetName;
@@ -184,6 +180,7 @@ namespace ContentPatcher.Framework.Patches
             this.NormalizeAssetNameImpl = normalizeAssetName;
             this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
             this.ManagedRawFromAsset = fromAsset;
+            this.ParentPatch = parentPatch;
 
             this.Contextuals
                 .Add(this.Conditions)
@@ -217,13 +214,16 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether the field changed.</returns>
         private bool UpdateTargetPath(LocalContext context)
         {
+            if (this.RawTargetAsset == null)
+                return false;
+
             bool changed = this.ManagedRawTargetAsset.UpdateContext(context);
 
             if (this.RawTargetAsset.IsReady)
             {
                 this.TargetAsset = this.NormalizeAssetNameImpl(this.RawTargetAsset.Value);
                 context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset);
-                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), Path.GetFileName(this.TargetAsset));
+                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset));
             }
             else
                 this.TargetAsset = "";
@@ -272,7 +272,7 @@ namespace ContentPatcher.Framework.Patches
                 string fullPath = this.ContentPack.GetFullPath(newPath);
                 if (!File.Exists(fullPath))
                 {
-                    if (File.Exists($"{fullPath}.xnb") || Path.GetExtension(path) == ".xnb")
+                    if (File.Exists($"{fullPath}.xnb") || System.IO.Path.GetExtension(path) == ".xnb")
                         newPath += ".xnb";
                 }
 
@@ -280,7 +280,7 @@ namespace ContentPatcher.Framework.Patches
             }
             catch (Exception ex)
             {
-                throw new FormatException($"The {logName} for patch '{this.LogName}' isn't a valid asset path (current value: '{path}').", ex);
+                throw new FormatException($"The {logName} for patch '{this.Path}' isn't a valid asset path (current value: '{path}').", ex);
             }
         }
     }

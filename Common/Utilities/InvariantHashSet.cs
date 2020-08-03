@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.Common.Utilities
 {
-    /// <summary>An implementation of <see cref="HashSet{T}"/> for strings which always uses <see cref="StringComparer.InvariantCultureIgnoreCase"/>.</summary>
+    /// <summary>An implementation of <see cref="HashSet{T}"/> for strings which always uses <see cref="StringComparer.OrdinalIgnoreCase"/>.</summary>
     internal class InvariantHashSet : HashSet<string>
     {
         /*********
@@ -11,17 +11,17 @@ namespace Pathoschild.Stardew.Common.Utilities
         *********/
         /// <summary>Construct an instance.</summary>
         public InvariantHashSet()
-            : base(StringComparer.InvariantCultureIgnoreCase) { }
+            : base(StringComparer.OrdinalIgnoreCase) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="values">The values to add.</param>
         public InvariantHashSet(IEnumerable<string> values)
-            : base(values, StringComparer.InvariantCultureIgnoreCase) { }
+            : base(values, StringComparer.OrdinalIgnoreCase) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The single value to add.</param>
         public InvariantHashSet(string value)
-            : base(new[] { value }, StringComparer.InvariantCultureIgnoreCase) { }
+            : base(new[] { value }, StringComparer.OrdinalIgnoreCase) { }
 
         /// <summary>Get a hashset for boolean true/false.</summary>
         public static InvariantHashSet Boolean()

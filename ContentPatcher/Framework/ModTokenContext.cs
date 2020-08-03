@@ -119,23 +119,22 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Update the current context.</summary>
-        /// <param name="globalChangedTokens">The global token values which changed, or <c>null</c> to update all tokens.</param>
+        /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(InvariantHashSet globalChangedTokens)
         {
-            // get affected tokens (or null to update all tokens)
-            InvariantHashSet affectedTokens = null;
-            if (globalChangedTokens != null)
-            {
-                affectedTokens = new InvariantHashSet();
-                foreach (string globalToken in globalChangedTokens)
-                {
-                    foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
-                        affectedTokens.Add(affectedToken);
-                }
+            // nothing to do
+            if (!globalChangedTokens.Any())
+                return;
 
-                if (!affectedTokens.Any())
-                    return;
+            // get affected dynamic tokens
+            InvariantHashSet affectedTokens = new InvariantHashSet();
+            foreach (string globalToken in globalChangedTokens)
+            {
+                foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
+                    affectedTokens.Add(affectedToken);
             }
+            if (!affectedTokens.Any())
+                return;
 
             // update local standard tokens
             foreach (var token in this.LocalContext.Tokens.Values)

@@ -10,8 +10,11 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
-        /// <summary>A unique name for this patch shown in log messages.</summary>
-        string LogName { get; }
+        /// <summary>The path to the patch from the root content file.</summary>
+        public LogPathBuilder Path { get; }
+
+        /// <summary>The parent patch for which this patch was loaded, if any.</summary>
+        IPatch ParentPatch { get; }
 
         /// <summary>The patch type.</summary>
         PatchType Type { get; }

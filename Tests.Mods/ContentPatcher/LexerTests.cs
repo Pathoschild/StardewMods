@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         )]
         [TestCase(
             "  inner whitespace with ~!@#$%^&*()_=[]{}':;\"',.<>/ characters",
-            "[  inner whitespace with ~!@#$%^&*()_=[]{}']<InputArgSeparator::>[;\"',.<>/ characters]",
+            "[  inner whitespace with ~!@#$%^&*()_=[]{}']<PositionalInputArgSeparator::>[;\"',.<>/ characters]",
             "[  inner whitespace with ~!@#$%^&*()_=[]{}':;\"',.<>/ characters]"
         )]
         [TestCase(
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         )]
         [TestCase(
             " {{  Relationship : Abigail }}   ",
-            "[ ]<StartToken:{{>[  Relationship ]<InputArgSeparator::>[ Abigail ]<EndToken:}}>[   ]",
+            "[ ]<StartToken:{{>[  Relationship ]<PositionalInputArgSeparator::>[ Abigail ]<EndToken:}}>[   ]",
             "[ ]<Token:Relationship input=<input:[Abigail]>>[   ]"
         )]
         public void ParseTokenizedString(string input, string expectedBits, string expectedTokens)
