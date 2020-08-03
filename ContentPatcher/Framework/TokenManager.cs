@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
+        /// <summary>Whether the next context update is the first one.</summary>
+        private bool IsFirstUpdate = true;
+
 
         /*********
         ** Accessors
@@ -99,13 +102,18 @@ namespace ContentPatcher.Framework
             changedGlobalTokens = new InvariantHashSet();
             foreach (IToken token in this.GlobalContext.Tokens.Values)
             {
-                if (token.IsMutable && onlyTokens?.Contains(token.Name) != false && token.UpdateContext(this))
+                bool changed =
+                    (token.IsMutable && onlyTokens?.Contains(token.Name) != false && token.UpdateContext(this)) // token changed state/value
+                    || (this.IsFirstUpdate && token.IsReady); // tokens implicitly change to ready on their first update, even if they were ready from creation
+                if (changed)
                     changedGlobalTokens.Add(token.Name);
             }
 
             // update mod contexts
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
                 localContext.UpdateContext(changedGlobalTokens);
+
+            this.IsFirstUpdate = false;
         }
 
         /****

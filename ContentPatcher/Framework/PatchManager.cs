@@ -43,6 +43,9 @@ namespace ContentPatcher.Framework
         /// <summary>The patches to apply, indexed by asset name.</summary>
         private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
+        /// <summary>The new patches which haven't received a context update yet.</summary>
+        private readonly HashSet<IPatch> PendingPatches = new HashSet<IPatch>();
+
 
         /*********
         ** Public methods
@@ -165,19 +168,11 @@ namespace ContentPatcher.Framework
             this.Monitor.VerboseLog("Propagating context...");
 
             // nothing to do
-            if (!globalChangedTokens.Any())
+            if (!globalChangedTokens.Any() && !this.PendingPatches.Any())
                 return;
 
             // collect patches to update
-            HashSet<IPatch> patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
-            foreach (string tokenName in globalChangedTokens)
-            {
-                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
-                {
-                    foreach (IPatch patch in affectedPatches)
-                        patches.Add(patch);
-                }
-            }
+            HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens);
             if (!patches.Any())
                 return;
 
@@ -242,6 +237,9 @@ namespace ContentPatcher.Framework
                     this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
+            // clear initialized tokens
+            this.PendingPatches.Clear();
+
             // rebuild indexes
             this.Reindex(patchListChanged: false);
 
@@ -272,6 +270,7 @@ namespace ContentPatcher.Framework
             // add to patch list
             this.Monitor.VerboseLog($"      added {patch.Type} {patch.TargetAsset}.");
             this.Patches.Add(patch);
+            this.PendingPatches.Add(patch);
 
             // rebuild indexes
             if (reindex)
@@ -396,6 +395,28 @@ namespace ContentPatcher.Framework
                 return PatchType.EditMap;
             else
                 return PatchType.EditData;
+        }
+
+        /// <summary>Get the tokens which need a context update.</summary>
+        /// <param name="globalChangedTokens">The global token values which changed.</param>
+        private HashSet<IPatch> GetPatchesToUpdate(InvariantHashSet globalChangedTokens)
+        {
+            // add patches which depend on a changed token
+            var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+            foreach (string tokenName in globalChangedTokens)
+            {
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
+                {
+                    foreach (IPatch patch in affectedPatches)
+                        patches.Add(patch);
+                }
+            }
+
+            // add uninitialized patches
+            foreach (var patch in this.PendingPatches)
+                patches.Add(patch);
+
+            return patches;
         }
     }
 }
