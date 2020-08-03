@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Removed legacy token API obsolete since Content Patcher 1.12.
+
 ## 1.16.1
 Released 03 August 2020.
 
