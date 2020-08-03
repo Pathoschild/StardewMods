@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.16.1
+Released 03 August 2020.
+
 * Fixed some patches not applied correctly in 1.16.
 
 ## 1.16
