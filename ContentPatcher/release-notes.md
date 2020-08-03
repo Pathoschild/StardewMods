@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
+* Removed legacy token API obsolete since Content Patcher 1.12.
 
 ## 1.16.4
 Released 12 August 2020.
