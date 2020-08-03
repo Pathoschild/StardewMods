@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added [an `Include` action](docs/author-guide.md#include) which loads patches from another JSON file.
+## 1.16
+Released 02 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40028155).
+
+* Added [an `Include` action](docs/author-guide.md#include) to load patches from another JSON file. That includes full token support, so you can load files dynamically or conditionally.
 * Randomization is now consistent between players, regardless of installed content packs.
 * Content packs containing `null` patches are no longer disabled; instead those patches are now skipped with a warning.
 * Improved performance when updating very large content packs.

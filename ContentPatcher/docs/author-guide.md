@@ -693,17 +693,8 @@ file uses the same format as `content.json`, except that _only_ the `Changes` fi
 This field supports [tokens](#advanced) and capitalisation doesn't matter.
 
 When including a file into an included file, the `FromFile` path is always **relative to your
-`content.json`**. For example, let's say you have this structure:
-
-```
-content.json
-assets/
-   A.json
-   B.json
-```
-
-If `content.json` includes `assets/A.json` which includes `assets/B.json`, then `assets/A.json`
-would specify `"FromFile": "assets/B.json"` (_not_ `"FromFile": "B.json"`).
+`content.json`**. For example, if `assets/A.json` includes `assets/B.json`, it would specify
+`"FromFile": "assets/B.json"` (_not_ `"FromFile": "B.json"`).
 
 </td>
 </tr>

@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.19.5
+Released 02 August 2020.
+
 * Fixed string sorting/comparison for some special characters.
 
 ## 1.19.4
