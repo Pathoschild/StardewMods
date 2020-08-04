@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed berry bushes not applying forage level bonus.
+
 ## 1.17.1
 Released 02 August 2020.
 

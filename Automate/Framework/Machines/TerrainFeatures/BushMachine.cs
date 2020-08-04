@@ -28,7 +28,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             // berry bush
             int itemId = Game1.currentSeason == "fall" ? 410 : 296; // blackberry or salmonberry
             int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
-            return new TrackedItem(new SObject(itemId, 1, quality: quality), onReduced: this.OnOutputReduced);
+            int count = 1 + Game1.player.ForagingLevel / 4;
+            return new TrackedItem(new SObject(itemId, initialStack: count, quality: quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Get the machine's processing state.</summary>
