@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed patches not always unapplied when an `Include` patch changes.
 * Fixed error using some tokens within the `contains` input argument.
 
 ## 1.16.1
