@@ -42,7 +42,6 @@ namespace ContentPatcher.Framework.Tokens
         public void AddAllowedValues(ITokenString possibleValues)
         {
             this.DynamicValues.AddAllowedValues(possibleValues);
-            this.CanHaveMultipleRootValues = this.DynamicValues.CanHaveMultipleValues(InputArguments.Empty);
         }
 
         /// <summary>Set the current values.</summary>

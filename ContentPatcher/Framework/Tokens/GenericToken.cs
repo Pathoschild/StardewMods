@@ -13,9 +13,6 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The underlying value provider.</summary>
         protected IValueProvider Values { get; }
 
-        /// <summary>Whether the root token may contain multiple values.</summary>
-        protected bool CanHaveMultipleRootValues { get; set; }
-
 
         /*********
         ** Accessors
@@ -47,7 +44,6 @@ namespace ContentPatcher.Framework.Tokens
             this.Values = provider;
             this.Scope = scope;
             this.Name = provider.Name;
-            this.CanHaveMultipleRootValues = provider.CanHaveMultipleValues(InputArguments.Empty);
         }
 
         /// <inheritdoc />
