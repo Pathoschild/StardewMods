@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error using some tokens within the `contains` input argument.
+
 ## 1.16.1
 Released 03 August 2020.
 

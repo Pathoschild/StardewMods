@@ -31,6 +31,9 @@ namespace ContentPatcher.Framework.Tokens
         /****
         ** State
         ****/
+        /// <summary>The last raw value that was parsed.</summary>
+        private string LastRawValue = null;
+
         /// <summary>The last tokenisable value that was parsed.</summary>
         private string LastParsedValue = null;
 
@@ -80,6 +83,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public bool IsMutable => this.TokenString.IsMutable;
 
+        /// <inheritdoc />
+        public bool IsReady => this.TokenString.IsReady;
+
 
         /*********
         ** Public methods
@@ -119,10 +125,11 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Parse the underlying token string if it's not already parsed.</summary>
         private InputArguments ParseIfNeeded()
         {
-            if (this.LastParsedValue != this.TokenString?.Value)
+            if (this.LastParsedValue != this.TokenString?.Value || this.LastRawValue != this.TokenString?.Raw)
             {
                 InputArguments.Parse(this.TokenString, out this.PositionalSegment, out this.PositionalArgsImpl, out this.NamedArgsImpl, out this.ReservedArgsImpl);
                 this.LastParsedValue = this.TokenString?.Value;
+                this.LastRawValue = this.TokenString?.Raw;
             }
 
             return this;
@@ -165,8 +172,9 @@ namespace ContentPatcher.Framework.Tokens
         {
             // get token text
             string raw = input?.IsReady == true
-                ? input.Value?.Trim() ?? string.Empty
-                : string.Empty;
+                ? input.Value
+                : input?.Raw;
+            raw = raw?.Trim() ?? string.Empty;
 
             // split into positional and named segments
             string positionalSegment;
