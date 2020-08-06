@@ -84,8 +84,8 @@ namespace ContentPatcher
         /// <summary>Whether the next tick is the first one.</summary>
         private bool IsFirstTick = true;
 
-        /// <summary>The list of raw content packs.</summary>
-        private readonly List<RawContentPack> RawContentPacks = new List<RawContentPack>();
+        /// <summary>The loaded content packs.</summary>
+        private readonly IList<RawContentPack> RawContentPacks = new List<RawContentPack>();
 
 
         /*********

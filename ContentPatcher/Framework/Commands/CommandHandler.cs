@@ -38,8 +38,8 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Manages loading and unloading patches.</summary>
         private readonly PatchLoader PatchLoader;
 
-        /// <summary>The list of content packs.</summary>
-        private readonly List<RawContentPack> ContentPacks;
+        /// <summary>The loaded content packs.</summary>
+        private readonly IList<RawContentPack> ContentPacks;
 
         /// <summary>Get the current token context for a given mod ID, or the global context if given a null mod ID.</summary>
         private readonly Func<string, IContext> GetContext;
@@ -70,10 +70,12 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="tokenManager">Manages loaded tokens.</param>
         /// <param name="patchManager">Manages loaded patches.</param>
+        /// <param name="patchLoader">Manages loading and unloading patches.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, IMonitor monitor, List<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, IMonitor monitor, IList<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
         {
             this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
@@ -598,7 +600,7 @@ namespace ContentPatcher.Framework.Commands
             RawContentPack pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
             if (pack == null)
             {
-                this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".");
+                this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".", LogLevel.Error);
                 return true;
             }
 
@@ -611,10 +613,11 @@ namespace ContentPatcher.Framework.Commands
 
             // reload patches
             this.PatchLoader.LoadPatches(pack, pack.Content.Changes, new LogPathBuilder(pack.Manifest.Name), reindex: true, parentPatch: null);
-            
+
             // make the changes apply
             this.UpdateContext();
 
+            this.Monitor.Log("Content pack reloaded.", LogLevel.Info);
             return true;
         }
 

@@ -124,7 +124,7 @@ namespace ContentPatcher.Framework
             var patches = new List<IPatch>(this.PatchManager.GetPatches());
             foreach (var patch in patches)
             {
-                if ( patch.ContentPack == pack.ManagedPack )
+                if (patch.ContentPack == pack.ManagedPack)
                     this.PatchManager.Remove(patch, reindex: false);
             }
 
