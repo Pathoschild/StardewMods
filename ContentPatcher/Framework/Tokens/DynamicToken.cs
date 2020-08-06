@@ -11,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The underlying value provider.</summary>
-        private readonly DynamicTokenValueProvider DynamicValues;
+        private readonly ManualValueProvider DynamicValues;
 
         /// <summary>The values which this dynamic token may use.</summary>
         private readonly InvariantHashSet PossibleTokensUsed = new InvariantHashSet();
@@ -24,9 +24,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         /// <param name="scope">The mod namespace in which the token is accessible.</param>
         public DynamicToken(string name, string scope)
-            : base(new DynamicTokenValueProvider(name), scope)
+            : base(new ManualValueProvider(name), scope)
         {
-            this.DynamicValues = (DynamicTokenValueProvider)base.Values;
+            this.DynamicValues = (ManualValueProvider)base.Values;
         }
 
         /// <summary>Add token names which this dynamic token may depend on.</summary>

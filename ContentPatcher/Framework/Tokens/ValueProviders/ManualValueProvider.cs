@@ -4,7 +4,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
     /// <summary>A value provider for user-defined dynamic tokens.</summary>
-    internal class DynamicTokenValueProvider : BaseValueProvider
+    internal class ManualValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The value provider name.</param>
-        public DynamicTokenValueProvider(string name)
+        public ManualValueProvider(string name)
             : base(name, mayReturnMultipleValuesForRoot: false)
         {
             this.AllowedRootValues = new InvariantHashSet();
