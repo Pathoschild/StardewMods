@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
@@ -15,6 +16,12 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="token">The wrapped token instance.</param>
         public HigherLevelTokenWrapper(IToken token)
             : base(token) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="provider">The underlying value provider.</param>
+        /// <param name="scope">The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</param>
+        public HigherLevelTokenWrapper(IValueProvider provider, string scope = null)
+            : base(new GenericToken(provider, scope)) { }
 
         /// <inheritdoc />
         public override bool CanHaveMultipleValues(IInputArguments input)

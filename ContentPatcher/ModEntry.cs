@@ -9,6 +9,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.ValueProviders;
 using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -366,7 +367,8 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            modContext.AddLocalToken(new HigherLevelTokenWrapper(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple)));
+                            IValueProvider valueProvider = new ImmutableValueProvider(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+                            modContext.AddLocalToken(new HigherLevelTokenWrapper(valueProvider, scope: current.Manifest.UniqueID));
                         }
 
                         // load dynamic tokens
