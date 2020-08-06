@@ -60,7 +60,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add a standard token to the context.</summary>
         /// <param name="token">The config token to add.</param>
-        public void AddLocalToken(IHigherLevelToken token)
+        public void AddLocalToken(IToken token)
         {
             if (token.Scope != this.Scope)
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework
             {
                 managed = new ManagedManualToken(name, this.Scope);
                 this.DynamicTokens[name] = managed;
-                this.DynamicContext.Save(new HigherLevelTokenWrapper(managed.Token));
+                this.DynamicContext.Save(managed.Token);
             }
 
             // save value info

@@ -8,7 +8,8 @@ using StardewModdingAPI;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A token provided by a mod.</summary>
-    internal class ModProvidedToken : GenericToken
+    /// <remarks>To avoid breaking high-level token functionality (e.g. 'contains' handling), this must always call the base method.</remarks>
+    internal class ModProvidedToken : Token
     {
         /*********
         ** Fields

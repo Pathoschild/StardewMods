@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>The available tokens.</summary>
-        public InvariantDictionary<IHigherLevelToken> Tokens { get; } = new InvariantDictionary<IHigherLevelToken>();
+        public InvariantDictionary<IToken> Tokens { get; } = new InvariantDictionary<IToken>();
 
 
         /*********
@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Save the given token to the context.</summary>
         /// <param name="token">The token to save.</param>
-        public void Save(IHigherLevelToken token)
+        public void Save(IToken token)
         {
             this.Tokens[token.Name] = token;
         }
@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            return this.Tokens.TryGetValue(name, out IHigherLevelToken token) && this.ShouldConsider(token, enforceContext)
+            return this.Tokens.TryGetValue(name, out IToken token) && this.ShouldConsider(token, enforceContext)
                 ? token
                 : null;
         }
@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (IHigherLevelToken token in this.Tokens.Values)
+            foreach (IToken token in this.Tokens.Values)
             {
                 if (this.ShouldConsider(token, enforceContext))
                     yield return token;

@@ -368,7 +368,7 @@ namespace ContentPatcher
                         {
                             ConfigField field = pair.Value;
                             IValueProvider valueProvider = new ImmutableValueProvider(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
-                            modContext.AddLocalToken(new HigherLevelTokenWrapper(valueProvider, scope: current.Manifest.UniqueID));
+                            modContext.AddLocalToken(new Token(valueProvider, scope: current.Manifest.UniqueID));
                         }
 
                         // load dynamic tokens

@@ -98,10 +98,10 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         /// <summary>Get an immutable token whose value never changes.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="values">The token values.</param>
-        private IHigherLevelToken GetImmutableToken(string name, params string[] values)
+        private IToken GetImmutableToken(string name, params string[] values)
         {
             IValueProvider valueProvider = new ImmutableValueProvider(name, new InvariantHashSet(values));
-            return new HigherLevelTokenWrapper(valueProvider);
+            return new Token(valueProvider);
         }
     }
 }

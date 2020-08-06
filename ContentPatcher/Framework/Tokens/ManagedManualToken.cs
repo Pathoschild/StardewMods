@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The token instance.</summary>
-        public IHigherLevelToken Token { get; }
+        public IToken Token { get; }
 
         /// <summary>The value provider for the token.</summary>
         public ManualValueProvider ValueProvider { get; }
@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Tokens
         public ManagedManualToken(string name, string scope = null)
         {
             this.ValueProvider = new ManualValueProvider(name);
-            this.Token = new HigherLevelTokenWrapper(new GenericToken(this.ValueProvider, scope));
+            this.Token = new Token(this.ValueProvider, scope);
         }
     }
 }
