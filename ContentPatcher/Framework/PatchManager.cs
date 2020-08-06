@@ -208,7 +208,7 @@ namespace ContentPatcher.Framework
                 bool isReady = patch.IsReady;
 
                 // track patches to reload
-                bool reload = (wasReady && changed) || (!wasReady && isReady);
+                bool reload = (wasReady && changed) || (!wasReady && isReady) || (isReady && !patch.IsApplied);
                 if (reload)
                 {
                     patch.IsApplied = false;

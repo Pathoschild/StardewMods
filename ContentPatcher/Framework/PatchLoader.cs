@@ -116,6 +116,22 @@ namespace ContentPatcher.Framework
                 this.PatchManager.Reindex(patchListChanged: true);
         }
 
+        /// <summary>Unload patches loaded (directly or indirectly) by the given content pack.</summary>
+        /// <param name="pack">The content pack for which to unload descendants.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        public void UnloadPatchesLoadedBy(RawContentPack pack, bool reindex)
+        {
+            var patches = new List<IPatch>(this.PatchManager.GetPatches());
+            foreach (var patch in patches)
+            {
+                if ( patch.ContentPack == pack.ManagedPack )
+                    this.PatchManager.Remove(patch, reindex: false);
+            }
+
+            if (reindex)
+                this.PatchManager.Reindex(patchListChanged: true);
+        }
+
         /// <summary>Normalize and parse the given condition values.</summary>
         /// <param name="raw">The raw condition values to normalize.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
