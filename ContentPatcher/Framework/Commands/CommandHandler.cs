@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
@@ -33,6 +34,12 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>Manages loaded patches.</summary>
         private readonly PatchManager PatchManager;
+
+        /// <summary>Manages loading and unloading patches.</summary>
+        private readonly PatchLoader PatchLoader;
+
+        /// <summary>The list of content packs.</summary>
+        private readonly List<RawContentPack> ContentPacks;
 
         /// <summary>Get the current token context for a given mod ID, or the global context if given a null mod ID.</summary>
         private readonly Func<string, IContext> GetContext;
@@ -66,11 +73,13 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, IMonitor monitor, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, IMonitor monitor, List<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
         {
             this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
+            this.PatchLoader = patchLoader;
             this.Monitor = monitor;
+            this.ContentPacks = contentPacks;
             this.GetContext = getContext;
             this.UpdateContext = updateContext;
         }
@@ -101,6 +110,9 @@ namespace ContentPatcher.Framework.Commands
                 case "export":
                     return this.HandleExport(subcommandArgs);
 
+                case "reload":
+                    return this.HandleReload(subcommandArgs);
+
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.", LogLevel.Debug);
                     return false;
@@ -126,7 +138,8 @@ namespace ContentPatcher.Framework.Commands
                 ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.",
                 ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches.",
                 ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
-                ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'."
+                ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'.",
+                ["reload"] = $"{this.CommandName} reload\n   Usage: {this.CommandName} reload \"<content pack ID>\"\n   Reloads the patches of the content.json of a content pack. Config schema changes and dynamic token changes are unsupported."
             };
 
             // build output
@@ -566,6 +579,41 @@ namespace ContentPatcher.Framework.Commands
             }
             else
                 this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
+
+            return true;
+        }
+
+
+        private bool HandleReload(string[] args)
+        {
+            // get pack ID
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch reload' command expects a single arguments containing the target content pack ID. See 'patch help' for more info.", LogLevel.Error);
+                return true;
+            }
+            string packId = args[0];
+
+            // get pack
+            RawContentPack pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
+            if (pack == null)
+            {
+                this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".");
+                return true;
+            }
+
+            // unload patches
+            this.PatchLoader.UnloadPatchesLoadedBy(pack, false);
+
+            // load pack patches
+            var changes = pack.ManagedPack.ReadJsonFile<ContentConfig>("content.json").Changes;
+            pack.Content.Changes = changes;
+
+            // reload patches
+            this.PatchLoader.LoadPatches(pack, pack.Content.Changes, new LogPathBuilder(pack.Manifest.Name), reindex: true, parentPatch: null);
+            
+            // make the changes apply
+            this.UpdateContext();
 
             return true;
         }
