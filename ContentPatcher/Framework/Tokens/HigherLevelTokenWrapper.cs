@@ -6,16 +6,14 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework.Tokens
 {
     /// <summary>A token wrapped by Content Patcher to handle global input arguments.</summary>
-    /// <typeparam name="TToken">The wrapped token type.</typeparam>
-    internal class HigherLevelTokenWrapper<TToken> : DelegatingToken<TToken>, IHigherLevelToken<TToken>
-        where TToken : IToken
+    internal class HigherLevelTokenWrapper : DelegatingToken, IHigherLevelToken
     {
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="token">The wrapped token instance.</param>
-        public HigherLevelTokenWrapper(TToken token)
+        public HigherLevelTokenWrapper(IToken token)
             : base(token) { }
 
         /// <inheritdoc />
@@ -99,17 +97,5 @@ namespace ContentPatcher.Framework.Tokens
 
             return values;
         }
-    }
-
-    /// <summary>A token wrapped by Content Patcher to handle global input arguments.</summary>
-    internal class HigherLevelTokenWrapper : HigherLevelTokenWrapper<IToken>
-    {
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="token">The wrapped token instance.</param>
-        public HigherLevelTokenWrapper(IToken token)
-            : base(token) { }
     }
 }

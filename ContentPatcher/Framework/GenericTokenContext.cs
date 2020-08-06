@@ -6,9 +6,7 @@ using Pathoschild.Stardew.Common.Utilities;
 namespace ContentPatcher.Framework
 {
     /// <summary>A generic token context.</summary>
-    /// <typeparam name="TToken">The token type to store.</typeparam>
-    internal class GenericTokenContext<TToken> : IContext
-        where TToken : class, IToken
+    internal class GenericTokenContext : IContext
     {
         /*********
         ** Fields
@@ -21,7 +19,7 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>The available tokens.</summary>
-        public InvariantDictionary<IHigherLevelToken<TToken>> Tokens { get; } = new InvariantDictionary<IHigherLevelToken<TToken>>();
+        public InvariantDictionary<IHigherLevelToken> Tokens { get; } = new InvariantDictionary<IHigherLevelToken>();
 
 
         /*********
@@ -42,7 +40,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Save the given token to the context.</summary>
         /// <param name="token">The token to save.</param>
-        public void Save(IHigherLevelToken<TToken> token)
+        public void Save(IHigherLevelToken token)
         {
             this.Tokens[token.Name] = token;
         }
@@ -56,7 +54,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            return this.Tokens.TryGetValue(name, out IHigherLevelToken<TToken> token) && this.ShouldConsider(token, enforceContext)
+            return this.Tokens.TryGetValue(name, out IHigherLevelToken token) && this.ShouldConsider(token, enforceContext)
                 ? token
                 : null;
         }
@@ -64,7 +62,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (IHigherLevelToken<TToken> token in this.Tokens.Values)
+            foreach (IHigherLevelToken token in this.Tokens.Values)
             {
                 if (this.ShouldConsider(token, enforceContext))
                     yield return token;
@@ -89,17 +87,5 @@ namespace ContentPatcher.Framework
         {
             return !enforceContext || token.IsReady;
         }
-    }
-
-    /// <summary>A generic token context.</summary>
-    internal class GenericTokenContext : GenericTokenContext<IToken>
-    {
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="isModInstalled">Get whether a mod is installed.</param>
-        public GenericTokenContext(Func<string, bool> isModInstalled)
-            : base(isModInstalled) { }
     }
 }

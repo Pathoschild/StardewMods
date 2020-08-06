@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
+using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework
@@ -18,17 +20,19 @@ namespace ContentPatcher.Framework
         /// <summary>The parent token context.</summary>
         private readonly IContext ParentContext;
 
-        /// <summary>The available local standard tokens.</summary>
+        /// <summary>The standard local tokens for this content pack.</summary>
+        /// <remarks>This includes config tokens and per-mod core tokens like <see cref="ConditionType.HasFile"/>.</remarks>
         private readonly GenericTokenContext LocalContext;
 
-        /// <summary>The dynamic tokens whose value depends on <see cref="DynamicTokenValues"/>.</summary>
-        private readonly GenericTokenContext<DynamicToken> DynamicContext;
+        /// <summary>The dynamic tokens for this content pack.</summary>
+        private readonly GenericTokenContext DynamicContext;
 
-        /// <summary>The conditional values used to set the values of <see cref="DynamicContext"/> tokens.</summary>
+        /// <summary>The dynamic tokens stored in the <see cref="DynamicContext"/>.</summary>
+        private readonly InvariantDictionary<ManagedManualToken> DynamicTokens = new InvariantDictionary<ManagedManualToken>();
+
+        /// <summary>The possible values for the <see cref="DynamicTokens"/>.</summary>
+        /// <remarks>These must be stored in registration order, since each token value may affect the value of subsequent tokens.</remarks>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
-
-        /// <summary>The underlying token contexts in priority order.</summary>
-        private readonly IContext[] Contexts;
 
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
         private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new InvariantDictionary<InvariantHashSet>();
@@ -51,13 +55,12 @@ namespace ContentPatcher.Framework
             this.Scope = scope;
             this.ParentContext = parentContext;
             this.LocalContext = new GenericTokenContext(this.IsModInstalled);
-            this.DynamicContext = new GenericTokenContext<DynamicToken>(this.IsModInstalled);
-            this.Contexts = new[] { this.ParentContext, this.LocalContext, this.DynamicContext };
+            this.DynamicContext = new GenericTokenContext(this.IsModInstalled);
         }
 
         /// <summary>Add a standard token to the context.</summary>
         /// <param name="token">The config token to add.</param>
-        public void Add(IHigherLevelToken<IToken> token)
+        public void AddLocalToken(IHigherLevelToken token)
         {
             if (token.Scope != this.Scope)
                 throw new InvalidOperationException($"Can't register the '{token.Name}' mod token because its scope '{token.Scope}' doesn't match this mod scope '{this.Scope}.");
@@ -73,52 +76,49 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
-        /// <param name="tokenValue">The token to add.</param>
-        public void Add(DynamicTokenValue tokenValue)
+        /// <param name="name">The token name.</param>
+        /// <param name="value">The token value to set.</param>
+        /// <param name="conditions">The conditions that must match to set this value.</param>
+        public void AddDynamicToken(string name, IManagedTokenString value, IEnumerable<Condition> conditions)
         {
             // validate
-            if (this.ParentContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue}' token because there's a global token with that name.");
-            if (this.LocalContext.Contains(tokenValue.Name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{tokenValue.Name}' dynamic token because there's a config token with that name.");
+            if (this.ParentContext.Contains(name, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{name}' token because there's a global token with that name.");
+            if (this.LocalContext.Contains(name, enforceContext: false))
+                throw new InvalidOperationException($"Can't register a '{name}' dynamic token because there's a config token with that name.");
 
             // get (or create) token
-            DynamicToken token;
+            if (!this.DynamicTokens.TryGetValue(name, out ManagedManualToken managed))
             {
-                if (!this.DynamicContext.Tokens.TryGetValue(tokenValue.Name, out IHigherLevelToken<DynamicToken> wrapper))
-                    this.DynamicContext.Save(wrapper = new HigherLevelTokenWrapper<DynamicToken>(new DynamicToken(tokenValue.Name, this.Scope)));
-                token = wrapper.Token;
+                managed = new ManagedManualToken(name, this.Scope);
+                this.DynamicTokens[name] = managed;
+                this.DynamicContext.Save(new HigherLevelTokenWrapper(managed.Token));
             }
 
-            // add token value
-            token.AddTokensUsed(tokenValue.GetTokensUsed());
-            token.AddAllowedValues(tokenValue.Value);
-            this.DynamicTokenValues.Add(tokenValue);
+            // save value info
+            managed.ValueProvider.AddTokensUsed(value.GetTokensUsed());
+            managed.ValueProvider.AddAllowedValues(value);
+            this.DynamicTokenValues.Add(new DynamicTokenValue(managed, value, conditions));
 
             // track tokens which should trigger an update to this token
-            Queue<string> tokenQueue = new Queue<string>(tokenValue.GetTokensUsed());
+            Queue<string> tokenQueue = new Queue<string>(value.GetTokensUsed());
             InvariantHashSet visited = new InvariantHashSet();
             while (tokenQueue.Any())
             {
                 // get token name
-                string tokenName = tokenQueue.Dequeue();
-                if (!visited.Add(tokenName))
+                string usedTokenName = tokenQueue.Dequeue();
+                if (!visited.Add(usedTokenName))
                     continue;
 
-                // if the current token uses other tokens, they may affect the being added too
-                IToken curToken = this.GetToken(tokenName, enforceContext: false);
-                foreach (string name in curToken.GetTokensUsed())
-                    tokenQueue.Enqueue(name);
-                if (curToken is DynamicToken curDynamicToken)
-                {
-                    foreach (string name in curDynamicToken.GetPossibleTokensUsed())
-                        tokenQueue.Enqueue(name);
-                }
+                // if the used token uses other tokens, they may affect the one being added too
+                IToken usedToken = this.GetToken(usedTokenName, enforceContext: false);
+                foreach (string nextTokenName in usedToken.GetTokensUsed())
+                    tokenQueue.Enqueue(nextTokenName);
 
-                // add dynamic value as a dependency of the current token
-                if (!this.TokenDependents.TryGetValue(curToken.Name, out InvariantHashSet used))
-                    this.TokenDependents.Add(curToken.Name, used = new InvariantHashSet());
-                used.Add(tokenValue.Name);
+                // add new token as a dependent of the used token
+                if (!this.TokenDependents.TryGetValue(usedToken.Name, out InvariantHashSet used))
+                    this.TokenDependents.Add(usedToken.Name, used = new InvariantHashSet());
+                used.Add(name);
             }
         }
 
@@ -144,19 +144,20 @@ namespace ContentPatcher.Framework
 
             // reset dynamic tokens
             // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
-            foreach (DynamicToken token in this.DynamicContext.Tokens.Values.Select(p => p.Token))
+            foreach (ManagedManualToken managed in this.DynamicTokens.Values)
             {
-                token.SetValue(null);
-                token.SetReady(false);
+                managed.ValueProvider.SetValue(null);
+                managed.ValueProvider.SetReady(false);
             }
             foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
             {
                 tokenValue.UpdateContext(this);
                 if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
                 {
-                    DynamicToken token = this.DynamicContext.Tokens[tokenValue.Name].Token;
-                    token.SetValue(tokenValue.Value);
-                    token.SetReady(true);
+                    ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+
+                    valueProvider.SetValue(tokenValue.Value);
+                    valueProvider.SetReady(true);
                 }
             }
 
@@ -184,13 +185,13 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public bool Contains(string name, bool enforceContext)
         {
-            return this.Contexts.Any(p => p.Contains(name, enforceContext));
+            return this.GetContexts().Any(p => p.Contains(name, enforceContext));
         }
 
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            foreach (IContext context in this.Contexts)
+            foreach (IContext context in this.GetContexts())
             {
                 IToken token = context.GetToken(name, enforceContext);
                 if (token != null)
@@ -203,7 +204,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (IContext context in this.Contexts)
+            foreach (IContext context in this.GetContexts())
             {
                 foreach (IToken token in context.GetTokens(enforceContext))
                     yield return token;
@@ -221,6 +222,14 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the underlying contexts in priority order.</summary>
+        private IEnumerable<IContext> GetContexts()
+        {
+            yield return this.ParentContext;
+            yield return this.LocalContext;
+            yield return this.DynamicContext;
+        }
+
         /// <summary>Get the tokens which need a context update.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         private InvariantHashSet GetTokensToUpdate(InvariantHashSet globalChangedTokens)

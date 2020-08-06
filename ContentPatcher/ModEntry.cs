@@ -366,7 +366,7 @@ namespace ContentPatcher
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            modContext.Add(new HigherLevelTokenWrapper(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple)));
+                            modContext.AddLocalToken(new HigherLevelTokenWrapper(new ImmutableToken(pair.Key, field.Value, scope: current.Manifest.UniqueID, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple)));
                         }
 
                         // load dynamic tokens
@@ -431,7 +431,7 @@ namespace ContentPatcher
                                 values = new LiteralString("", localPath.With(nameof(entry.Value)));
 
                             // add token
-                            modContext.Add(new DynamicTokenValue(entry.Name, values, conditions));
+                            modContext.AddDynamicToken(entry.Name, values, conditions);
                         }
                     }
 

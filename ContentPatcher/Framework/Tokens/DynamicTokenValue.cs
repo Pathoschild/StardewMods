@@ -17,8 +17,11 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
+        /// <summary>The token for which this value is registered.</summary>
+        public ManagedManualToken ParentToken { get; }
+
         /// <summary>The name of the token whose value to set.</summary>
-        public string Name { get; }
+        public string Name => this.ParentToken.ValueProvider.Name;
 
         /// <summary>The token value to set.</summary>
         public ITokenString Value { get; }
@@ -37,12 +40,12 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name">The name of the token whose value to set.</param>
+        /// <param name="parentToken">The token whose value to set.</param>
         /// <param name="value">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public DynamicTokenValue(string name, IManagedTokenString value, IEnumerable<Condition> conditions)
+        public DynamicTokenValue(ManagedManualToken parentToken, IManagedTokenString value, IEnumerable<Condition> conditions)
         {
-            this.Name = name;
+            this.ParentToken = parentToken;
             this.Value = value;
             this.Conditions = conditions.ToArray();
             this.Contextuals = new AggregateContextual()

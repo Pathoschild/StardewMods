@@ -73,7 +73,7 @@ namespace ContentPatcher.Framework
             {
                 this.LocalTokens[pack.Pack] = localTokens = new ModTokenContext(scope, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
-                    localTokens.Add(new HigherLevelTokenWrapper(new GenericToken(valueProvider, scope)));
+                    localTokens.AddLocalToken(new HigherLevelTokenWrapper(new GenericToken(valueProvider, scope)));
             }
 
             return localTokens;

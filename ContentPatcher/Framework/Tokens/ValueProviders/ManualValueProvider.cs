@@ -3,7 +3,7 @@ using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A value provider for user-defined dynamic tokens.</summary>
+    /// <summary>A value provider whose values are set manually in code.</summary>
     internal class ManualValueProvider : BaseValueProvider
     {
         /*********
@@ -14,6 +14,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>The current values.</summary>
         private InvariantHashSet Values = new InvariantHashSet();
+
+        /// <summary>The tokens which the values use.</summary>
+        private readonly InvariantHashSet TokensUsed = new InvariantHashSet();
 
 
         /*********
@@ -28,6 +31,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.SetReady(false); // not ready until initialized
         }
 
+        /****
+        ** Management API
+        ****/
         /// <summary>Add a set of possible values.</summary>
         /// <param name="possibleValues">The possible values to add.</param>
         public void AddAllowedValues(ITokenString possibleValues)
@@ -47,6 +53,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.MayReturnMultipleValuesForRoot = this.MayReturnMultipleValuesForRoot || splitValues.Count > 1;
         }
 
+        /// <summary>Add token names which this token may depend on.</summary>
+        /// <param name="tokens">The token names used.</param>
+        public void AddTokensUsed(IEnumerable<string> tokens)
+        {
+            foreach (string name in tokens)
+                this.TokensUsed.Add(name);
+        }
+
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
         public void SetValue(ITokenString values)
@@ -59,6 +73,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public void SetReady(bool ready)
         {
             this.MarkReady(ready);
+        }
+
+        /****
+        ** Value provider API
+        ****/
+        /// <inheritdoc />
+        public override IEnumerable<string> GetTokensUsed()
+        {
+            return this.TokensUsed;
         }
 
         /// <inheritdoc />
