@@ -49,7 +49,8 @@ namespace ContentPatcher
             new Migration_1_14(),
             new Migration_1_15_Prevalidation(),
             new Migration_1_15_Rewrites(content),
-            new Migration_1_16()
+            new Migration_1_16(),
+            new Migration_1_17()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
