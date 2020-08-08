@@ -47,9 +47,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override bool TryValidateInput(IInputArguments input, out string error)
         {
-            return
-                base.TryValidateInput(input, out error)
-                && this.TryParse(input, out _, out _, out _, out error);
+            if (!base.TryValidateInput(input, out error))
+                return false;
+
+            if (input.IsReady)
+            {
+                return
+                    base.TryValidateInput(input, out error)
+                    && this.TryParse(input, out _, out _, out _, out error);
+            }
+
+            return true;
         }
 
         /// <inheritdoc />

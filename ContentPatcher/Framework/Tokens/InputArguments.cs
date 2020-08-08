@@ -81,10 +81,10 @@ namespace ContentPatcher.Framework.Tokens
         public bool HasPositionalArgs => this.PositionalArgs.Any();
 
         /// <inheritdoc />
-        public bool IsMutable => this.TokenString.IsMutable;
+        public bool IsMutable => this.TokenString?.IsMutable ?? false;
 
         /// <inheritdoc />
-        public bool IsReady => this.TokenString.IsReady;
+        public bool IsReady => this.TokenString?.IsReady ?? false;
 
 
         /*********

@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.16.3
+Released 08 August 2020.
+
+* Fixed incorrect token input validation in some cases with 1.16.2.
+
 ## 1.16.2
 Released 08 August 2020.
 
