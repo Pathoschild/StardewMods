@@ -364,7 +364,7 @@ namespace ContentPatcher.Framework.Commands
                     if (errorReason != null)
                         output.Append($"  // {errorReason}");
 
-                    // log common issues
+                    // log common issues if not applied
                     if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
                     {
                         string assetName = patch.ParsedTargetAsset.Value;
@@ -382,6 +382,19 @@ namespace ContentPatcher.Framework.Commands
 
                         if (issues.Any())
                             output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
+                    }
+
+                    // log possible token issues
+                    if (patch.Patch != null)
+                    {
+                        // location tokens used with daily patch
+                        if (patch.Patch.UpdateRate == UpdateRate.OnDayStart)
+                        {
+                            var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+                            string[] locationTokensUsed = this.TokenManager.LocationTokens.Where(p => tokensUsed.Contains(p)).ToArray();
+                            if (locationTokensUsed.Any())
+                                output.Append($" // hint: patch uses location tokens, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{UpdateRate.OnLocationChange}\".");
+                        }
                     }
 
                     // end line

@@ -42,6 +42,13 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
+        /// <summary>The tokens which are linked to the player's current location.</summary>
+        public IEnumerable<string> LocationTokens { get; } = new InvariantHashSet
+        {
+            ConditionType.LocationName.ToString(),
+            ConditionType.IsOutdoors.ToString()
+        };
+
 
         /*********
         ** Public methods

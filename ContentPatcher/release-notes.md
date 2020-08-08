@@ -4,7 +4,10 @@
 ## Upcoming release
 * Added new tokens:
   * `TargetPathOnly`: the target field value for the current patch, without the filename.
-* Patches can now update on location change (not only on day start). This is specified per-patch using the new `Update` field, and defaults to `OnDayStart`.
+* First step towards towards realtime changes:
+  * Token values now update on location change (previously on day start).
+  * Patches can now update on location change (not only on day start). This is specified per-patch using the new `Update` field, and defaults to `OnDayStart`.
+  * `patch summary` now shows troubleshooting hints related to update rate.
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
 * Removed legacy token API obsolete since Content Patcher 1.12.
 * Internal changes to prepare for realtime content updates.
