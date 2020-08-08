@@ -12,6 +12,7 @@ This document helps mod authors create a content pack for Content Patcher.
 * [Format](#format)
   * [Overview](#overview)
   * [Common fields](#common-fields)
+* [Update rate](#update-rate)
 * [Actions](#actions)
   * [`Load`](#load)
   * [`EditImage`](#editimage)
@@ -187,6 +188,15 @@ Note that dialogue ignores changes after the day starts (see [known limitations]
 </td>
 </tr>
 </table>
+
+## Update rate
+Your changes apply at the start of each day by default. For example, if you change the house
+texture depending on your friendship level with your spouse, it'll use the friendship level at the
+start of the current day.
+
+You can optionally use the [`Update` field](#common-fields) to update patches each time the
+current player changes location (`OnLocationChange`), in which case they'll use the token values as
+of the last location change.
 
 ## Actions
 ### `Load`
