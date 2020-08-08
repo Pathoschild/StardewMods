@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -16,7 +17,13 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         public Migration_1_17()
-            : base(new SemanticVersion(1, 17, 0)) { }
+            : base(new SemanticVersion(1, 17, 0))
+        {
+            this.AddedTokens = new InvariantHashSet
+            {
+                ConditionType.TargetPathOnly.ToString()
+            };
+        }
 
         /// <summary>Migrate a content pack.</summary>
         /// <param name="content">The content pack data to migrate.</param>

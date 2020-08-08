@@ -68,6 +68,7 @@ namespace ContentPatcher.Framework
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
             fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
             fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
+            fakePatchContext.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "");
             fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "");
 
             // get token parser for fake context
@@ -312,13 +313,13 @@ namespace ContentPatcher.Framework
                 // validate field reference tokens
                 if (targetAsset != null)
                 {
-                    if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                    if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
                 }
                 if (fromAsset != null)
                 {
-                    if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.FromFile}' token if the {nameof(entry.FromFile)} field uses the '{ConditionType.Target}' or '{ConditionType.TargetWithoutPath}' tokens.");
+                    if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.FromFile}' token if the {nameof(entry.FromFile)} field uses the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
                     if (fromAsset.UsesTokens(ConditionType.FromFile))
                         return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{ConditionType.FromFile}' token.");
                 }

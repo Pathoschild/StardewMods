@@ -228,6 +228,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.TargetAsset = this.NormalizeAssetNameImpl(this.RawTargetAsset.Value);
                 context.SetLocalValue(ConditionType.Target.ToString(), this.TargetAsset);
+                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), System.IO.Path.GetDirectoryName(this.TargetAsset));
                 context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset));
             }
             else

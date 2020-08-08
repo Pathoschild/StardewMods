@@ -160,6 +160,9 @@ namespace ContentPatcher.Framework.Conditions
         Target,
 
         /// <summary>The filename portion of the current patch's target value.</summary>
-        TargetWithoutPath
+        TargetWithoutPath,
+
+        /// <summary>The path portion of the current patch's target value, without the filename.</summary>
+        TargetPathOnly
     };
 }
