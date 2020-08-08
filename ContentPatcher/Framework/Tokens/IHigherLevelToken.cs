@@ -9,6 +9,6 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>The wrapped token instance.</summary>
-        public TToken Token { get; }
+        TToken Token { get; }
     }
 }

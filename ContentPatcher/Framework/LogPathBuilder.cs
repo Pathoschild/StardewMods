@@ -1,11 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ContentPatcher.Framework
 {
     /// <summary>Encapsulates building a breadcrumb path for log messages.</summary>
-    internal class LogPathBuilder
+    internal class LogPathBuilder : IComparable<LogPathBuilder>
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>A string representation of the log path.</summary>
+        private readonly Lazy<string> PathString;
+
+
         /*********
         ** Accessors
         *********/
@@ -21,6 +29,7 @@ namespace ContentPatcher.Framework
         public LogPathBuilder(params string[] segments)
         {
             this.Segments = segments;
+            this.PathString = new Lazy<string>(() => string.Join(" > ", this.Segments));
         }
 
         /// <summary>Construct an instance.</summary>
@@ -38,7 +47,13 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public override string ToString()
         {
-            return string.Join(" > ", this.Segments);
+            return this.PathString.Value;
+        }
+
+        /// <inheritdoc />
+        public int CompareTo(LogPathBuilder other)
+        {
+            return string.Compare(this.PathString.Value, other?.PathString.Value, StringComparison.Ordinal);
         }
     }
 }

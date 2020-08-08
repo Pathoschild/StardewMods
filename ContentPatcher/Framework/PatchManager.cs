@@ -46,6 +46,9 @@ namespace ContentPatcher.Framework
         /// <summary>The new patches which haven't received a context update yet.</summary>
         private readonly HashSet<IPatch> PendingPatches = new HashSet<IPatch>();
 
+        /// <summary>Assets for which patches were removed, which should be reloaded on the next context update.</summary>
+        private readonly InvariantHashSet AssetsWithRemovedPatches = new InvariantHashSet();
+
 
         /*********
         ** Public methods
@@ -167,17 +170,13 @@ namespace ContentPatcher.Framework
         {
             this.Monitor.VerboseLog("Propagating context...");
 
-            // nothing to do
-            if (!globalChangedTokens.Any() && !this.PendingPatches.Any())
-                return;
-
-            // collect patches to update
+            // get changes to apply
             HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens);
-            if (!patches.Any())
+            InvariantHashSet reloadAssetNames = new InvariantHashSet(this.AssetsWithRemovedPatches);
+            if (!patches.Any() && !reloadAssetNames.Any())
                 return;
 
             // update patches
-            InvariantHashSet reloadAssetNames = new InvariantHashSet();
             string prevAssetName = null;
             foreach (IPatch patch in patches)
             {
@@ -190,7 +189,7 @@ namespace ContentPatcher.Framework
 
                 // track old values
                 string wasAssetName = patch.TargetAsset;
-                bool wasReady = patch.IsReady;
+                bool wasReady = patch.IsReady && !this.PendingPatches.Contains(patch);
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
@@ -208,8 +207,8 @@ namespace ContentPatcher.Framework
                 bool isReady = patch.IsReady;
 
                 // track patches to reload
-                bool reload = (wasReady && changed) || (!wasReady && isReady);
-                if (reload)
+                bool reloadAsset = isReady != wasReady || (isReady && changed);
+                if (reloadAsset)
                 {
                     patch.IsApplied = false;
                     if (wasReady)
@@ -237,10 +236,9 @@ namespace ContentPatcher.Framework
                     this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
-            // clear initialized tokens
+            // reset indexes
             this.PendingPatches.Clear();
-
-            // rebuild indexes
+            this.AssetsWithRemovedPatches.Clear();
             this.Reindex(patchListChanged: false);
 
             // reload assets if needed
@@ -286,6 +284,10 @@ namespace ContentPatcher.Framework
             this.Monitor.VerboseLog($"      removed {patch.Path}.");
             if (!this.Patches.Remove(patch))
                 return;
+
+            // mark asset to reload
+            if (patch.IsApplied)
+                this.AssetsWithRemovedPatches.Add(patch.TargetAsset);
 
             // rebuild indexes
             if (reindex)

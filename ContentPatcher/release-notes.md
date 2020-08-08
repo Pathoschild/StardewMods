@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.16.2
+Released 08 August 2020.
+
+* Fixed patches not always unapplied when an `Include` patch changes.
+* Fixed error using some tokens within the `contains` input argument.
+* Fixed broken error message when multiple load patches apply in 1.16.
+
 ## 1.16.1
 Released 03 August 2020.
 

@@ -115,13 +115,65 @@ few sections for more info about the format. For example:
 ### Common fields
 All patches support these common fields:
 
-field      | purpose
----------- | -------
-`Action`   | The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`, `Include`); explained in the next section.
-`Target`   | The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to edit `Content/Animals/Dinosaur.xnb`). This field supports [tokens](#advanced) and capitalisation doesn't matter. Your changes are applied in all languages unless you specify a language [condition](#advanced).
-`LogName`  | _(optional)_ A name for this patch shown in log messages. This is very useful for understanding errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
-`Enabled`  | _(optional)_ Whether to apply this patch. Default true. This fields supports immutable [tokens](#advanced) (e.g. config tokens) if they return true/false.
-`When`     | _(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced)).
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+
+<tr>
+<td><code>Action</code></td>
+<td>
+
+The kind of change to make (`Load`, `EditImage`, `EditData`, `EditMap`, `Include`); explained in
+the next section.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Target</code></td>
+<td>
+
+The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside
+your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to
+edit `Content/Animals/Dinosaur.xnb`). Your changes are applied in all languages unless you specify a language
+[condition](#advanced).
+
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+</td>
+</tr>
+
+<tr>
+<td><code>When</code></td>
+<td>
+
+_(optional)_ Only apply the patch if the given conditions match (see [_conditions_](#advanced)).
+
+</td>
+</tr>
+
+<tr>
+<td><code>LogName</code></td>
+<td>
+
+_(optional)_ A name for this patch shown in log messages. This is very useful for understanding
+errors; if not specified, will default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Enabled</code></td>
+<td>
+
+_(optional)_ Whether to apply this patch. Default true. This fields supports immutable
+[tokens](#advanced) (e.g. config tokens) if they return true/false.
+
+</td>
+</tr>
+</table>
 
 ## Actions
 ### `Load`
@@ -665,9 +717,13 @@ that leads to a different location each day:
 </dl>
 
 ### `Include`
-`"Action": "Include"` reads patches from another JSON file, as if you'd added them directly to the
-current position. You can have any number of `Include` patches, and files can be included
-recursively (i.e. include a file which includes another file).
+`"Action": "Include"` reads patches from another JSON file, and adds them in the current position.
+The included patches work just as if you'd pasted them into that position yourself; for example,
+they have full access to all the tokens and conditions (including dynamic tokens) available in your
+`content.json`.
+
+You can have any number of `Include` patches, and files can be included recursively (i.e. include a
+file which includes another file).
 
 <table>
 <tr>

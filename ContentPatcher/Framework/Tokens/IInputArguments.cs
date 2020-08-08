@@ -29,6 +29,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Whether the input arguments contain tokens that may change depending on the context.</summary>
         bool IsMutable { get; }
 
+        /// <summary>Whether the instance is valid for the current context.</summary>
+        bool IsReady { get; }
+
 
         /*********
         ** Public methods
