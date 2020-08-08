@@ -49,13 +49,13 @@ namespace ContentPatcher.Framework.Patches
         public LogPathBuilder Path { get; }
 
         /// <inheritdoc />
-        public IPatch ParentPatch { get; }
-
-        /// <inheritdoc />
         public PatchType Type { get; }
 
         /// <inheritdoc />
         public ManagedContentPack ContentPack { get; }
+
+        /// <inheritdoc />
+        public IPatch ParentPatch { get; }
 
         /// <inheritdoc />
         public bool IsMutable { get; } = true;
@@ -74,6 +74,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <inheritdoc />
         public ITokenString RawTargetAsset => this.ManagedRawTargetAsset;
+
+        /// <inheritdoc />
+        public UpdateRate UpdateRate { get; set; }
 
         /// <inheritdoc />
         public Condition[] Conditions { get; }
@@ -164,22 +167,24 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
-        /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
+        /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(LogPathBuilder path, PatchType type, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, Func<string, string> normalizeAssetName, IPatch parentPatch, IManagedTokenString fromAsset = null)
+        protected Patch(LogPathBuilder path, PatchType type, IManagedTokenString assetName, IEnumerable<Condition> conditions, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
         {
             this.Path = path;
             this.Type = type;
-            this.ContentPack = contentPack;
             this.ManagedRawTargetAsset = assetName;
             this.Conditions = conditions.ToArray();
+            this.UpdateRate = updateRate;
             this.NormalizeAssetNameImpl = normalizeAssetName;
-            this.PrivateContext = new LocalContext(scope: this.ContentPack.Manifest.UniqueID);
+            this.PrivateContext = new LocalContext(scope: contentPack.Manifest.UniqueID);
             this.ManagedRawFromAsset = fromAsset;
+            this.ContentPack = contentPack;
             this.ParentPatch = parentPatch;
 
             this.Contextuals

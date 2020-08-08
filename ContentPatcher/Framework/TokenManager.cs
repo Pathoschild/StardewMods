@@ -95,15 +95,14 @@ namespace ContentPatcher.Framework
 
         /// <summary>Update the current context.</summary>
         /// <param name="changedGlobalTokens">The global tokens which changed value.</param>
-        /// <param name="onlyTokens">Only update the context for the given global tokens, or <c>null</c> to update all tokens.</param>
-        public void UpdateContext(out InvariantHashSet changedGlobalTokens, InvariantHashSet onlyTokens = null)
+        public void UpdateContext(out InvariantHashSet changedGlobalTokens)
         {
             // update global tokens
             changedGlobalTokens = new InvariantHashSet();
             foreach (IToken token in this.GlobalContext.Tokens.Values)
             {
                 bool changed =
-                    (token.IsMutable && onlyTokens?.Contains(token.Name) != false && token.UpdateContext(this)) // token changed state/value
+                    (token.IsMutable && token.UpdateContext(this)) // token changed state/value
                     || (this.IsFirstUpdate && token.IsReady); // tokens implicitly change to ready on their first update, even if they were ready from creation
                 if (changed)
                     changedGlobalTokens.Add(token.Name);

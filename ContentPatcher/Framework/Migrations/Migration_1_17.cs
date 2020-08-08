@@ -1,4 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text.RegularExpressions;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using StardewModdingAPI;
 
@@ -23,6 +26,35 @@ namespace ContentPatcher.Framework.Migrations
         {
             if (!base.TryMigrate(content, out error))
                 return false;
+
+            if (content.Changes?.Any() == true)
+            {
+                foreach (PatchConfig patch in content.Changes)
+                {
+                    // 1.17 adds 'Update' field
+                    if (patch.Update != null)
+                    {
+                        error = this.GetNounPhraseError($"specifying the patch update rate ('{nameof(patch.Update)}' field)");
+                        return false;
+                    }
+
+                    // pre-1.17 patches which used {{IsOutdoors}}/{{LocationName}} would update on location change
+                    // (Technically that applies to all references, but parsing tokens at this
+                    // point is difficult and a review of existing content packs shows that they
+                    // only used these as condition keys.)
+                    if (patch.When?.Any() == true)
+                    {
+                        bool hasLocationToken = patch.When.Keys.Any(key =>
+                            !string.IsNullOrWhiteSpace(key)
+                            && (key.ContainsIgnoreCase("IsOutdoors") || key.ContainsIgnoreCase("LocationName")) // quick check with false positives
+                            && Regex.IsMatch(key, @"\b(?:IsOutdoors|LocationName)\b") // slower but reliable check
+                        );
+
+                        if (hasLocationToken)
+                            patch.Update = UpdateRate.OnLocationChange.ToString();
+                    }
+                }
+            }
 
             return true;
         }

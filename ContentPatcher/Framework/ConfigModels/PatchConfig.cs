@@ -23,6 +23,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The asset key to change.</summary>
         public string Target { get; set; }
 
+        /// <summary>Indicates when a patch should be updated.</summary>
+        public string Update { get; set; }
+
         /// <summary>The local file to load.</summary>
         public string FromFile { get; set; }
 
@@ -81,6 +84,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.LogName = other.LogName;
             this.Action = other.Action;
             this.Target = other.Target;
+            this.Update = other.Update;
             this.FromFile = other.FromFile;
             this.Enabled = other.Enabled;
             this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;

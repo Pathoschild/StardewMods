@@ -49,6 +49,9 @@ namespace ContentPatcher.Framework
         /// <summary>Assets for which patches were removed, which should be reloaded on the next context update.</summary>
         private readonly InvariantHashSet AssetsWithRemovedPatches = new InvariantHashSet();
 
+        /// <summary>The tokens which changed since the last daily update.</summary>
+        private readonly InvariantHashSet QueuedDailyTokenChanges = new InvariantHashSet();
+
 
         /*********
         ** Public methods
@@ -166,12 +169,27 @@ namespace ContentPatcher.Framework
         /// <summary>Update the current context.</summary>
         /// <param name="contentHelper">The content helper through which to invalidate assets.</param>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
-        public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens)
+        /// <param name="updateType">The context update type.</param>
+        public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
         {
             this.Monitor.VerboseLog("Propagating context...");
 
+            // track token changes for the next start-of-day update
+            if (updateType.HasFlag((ContextUpdateType)UpdateRate.OnDayStart))
+            {
+                globalChangedTokens = new InvariantHashSet(globalChangedTokens);
+                foreach (string token in this.QueuedDailyTokenChanges)
+                    globalChangedTokens.Add(token);
+                this.QueuedDailyTokenChanges.Clear();
+            }
+            else
+            {
+                foreach (string token in globalChangedTokens)
+                    this.QueuedDailyTokenChanges.Add(token);
+            }
+
             // get changes to apply
-            HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens);
+            HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
             InvariantHashSet reloadAssetNames = new InvariantHashSet(this.AssetsWithRemovedPatches);
             if (!patches.Any() && !reloadAssetNames.Any())
                 return;
@@ -401,7 +419,8 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the tokens which need a context update.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
-        private HashSet<IPatch> GetPatchesToUpdate(InvariantHashSet globalChangedTokens)
+        /// <param name="updateType">The context update type.</param>
+        private HashSet<IPatch> GetPatchesToUpdate(InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
         {
             // add patches which depend on a changed token
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
@@ -410,7 +429,10 @@ namespace ContentPatcher.Framework
                 if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
                 {
                     foreach (IPatch patch in affectedPatches)
-                        patches.Add(patch);
+                    {
+                        if (updateType.HasFlag((ContextUpdateType)patch.UpdateRate))
+                            patches.Add(patch);
+                    }
                 }
             }
 

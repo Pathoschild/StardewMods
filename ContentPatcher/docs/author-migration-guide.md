@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [1.17](#117)
   * [1.15](#115)
   * [1.7](#17)
   * [1.6](#16)
@@ -67,6 +68,18 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
+
+### 1.17
+* **Patch updates on location change:** using `LocationName` or `IsOutdoors` as a condition/token
+  no longer automatically updates the patch when the player changes location. You can add this
+  patch field to enable that:
+
+  ```js
+  "Update": "OnLocationChange"
+  ```
+
+  (This is part of the migration to realtime content updates, since all tokens will soon update
+  live.)
 
 ### 1.15
 Released 04 July 2020.

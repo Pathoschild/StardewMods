@@ -338,7 +338,7 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](author-guide.md#known-limitations).
+Whether the player is outdoors. Possible values: `true`, `false`.
 
 </td>
 </tr>
@@ -348,7 +348,6 @@ Whether the player is outdoors. Possible values: `true`, `false`. This [does not
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
-This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>

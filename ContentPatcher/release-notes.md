@@ -2,9 +2,15 @@
 
 # Release notes
 ## Upcoming release
+* Patches can now update on location change (not only on day start). This is specified per-patch using the new `Update` field, and defaults to `OnDayStart`.
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
 * Removed legacy token API obsolete since Content Patcher 1.12.
 * Internal changes to prepare for realtime content updates.
+
+**Update note for mod authors:**  
+If you use the `LocationName` or `IsOutdoors` token/condition, updating the `Format` field to
+`1.17.0` or later requires changes to your `content.json`. See the
+[migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.16.4
 Released 12 August 2020.

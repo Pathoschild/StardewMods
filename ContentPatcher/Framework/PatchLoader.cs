@@ -293,6 +293,14 @@ namespace ContentPatcher.Framework
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
+                // parse update rate
+                UpdateRate updateRate = UpdateRate.OnDayStart;
+                if (entry.Update != null)
+                {
+                    if (!Enum.TryParse(entry.Update, true, out updateRate))
+                        return TrackSkip($"Invalid {nameof(PatchConfig.Update)} value '{entry.Update}', expected one of: {string.Join(", ", Enum.GetNames(typeof(UpdateRate)))}");
+                }
+
                 // parse 'from file'
                 IManagedTokenString fromAsset = null;
                 if (entry.FromFile != null)
@@ -329,11 +337,12 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new IncludePatch(
                                 path: path,
-                                parentPatch: parentPatch,
-                                contentPack: rawContentPack,
                                 assetName: null,
                                 conditions: conditions,
                                 fromFile: fromAsset,
+                                updateRate: updateRate,
+                                contentPack: rawContentPack,
+                                parentPatch: parentPatch,
                                 normalizeAssetName: this.NormalizeAssetName,
                                 monitor: this.Monitor,
                                 patchLoader: this
@@ -351,11 +360,12 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new LoadPatch(
                                 path: path,
-                                parentPatch: parentPatch,
-                                contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
                                 localAsset: fromAsset,
+                                updateRate: updateRate,
+                                contentPack: pack,
+                                parentPatch: parentPatch,
                                 normalizeAssetName: this.NormalizeAssetName
                             );
                         }
@@ -387,14 +397,15 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new EditDataPatch(
                                 path: path,
-                                parentPatch: parentPatch,
-                                contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
                                 fromFile: fromAsset,
                                 records: entries,
                                 fields: fields,
                                 moveRecords: moveEntries,
+                                updateRate: updateRate,
+                                contentPack: pack,
+                                parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 normalizeAssetName: this.NormalizeAssetName,
                                 tryParseFields: TryParseFields
@@ -427,14 +438,15 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new EditImagePatch(
                                 path: path,
-                                parentPatch: parentPatch,
-                                contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
                                 toArea: toArea,
                                 patchMode: patchMode,
+                                updateRate: updateRate,
+                                contentPack: pack,
+                                parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 normalizeAssetName: this.NormalizeAssetName
                             );
@@ -541,8 +553,6 @@ namespace ContentPatcher.Framework
                             // save
                             patch = new EditMapPatch(
                                 path: path,
-                                parentPatch: parentPatch,
-                                contentPack: pack,
                                 assetName: targetAsset,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
@@ -550,6 +560,9 @@ namespace ContentPatcher.Framework
                                 toArea: toArea,
                                 mapProperties: mapProperties,
                                 mapTiles: mapTiles,
+                                updateRate: updateRate,
+                                contentPack: pack,
+                                parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 normalizeAssetName: this.NormalizeAssetName
                             );

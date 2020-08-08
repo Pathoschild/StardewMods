@@ -36,26 +36,28 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
-        /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The sprite area from which to read an image.</param>
         /// <param name="toArea">The sprite area to overwrite.</param>
         /// <param name="patchMode">Indicates how the image should be patched.</param>
+        /// <param name="updateRate">When the patch should be updated.</param>
+        /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(LogPathBuilder path, IPatch parentPatch, ManagedContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMode patchMode, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMode patchMode, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditImage,
-                contentPack: contentPack,
                 assetName: assetName,
                 conditions: conditions,
                 normalizeAssetName: normalizeAssetName,
-                parentPatch: parentPatch,
-                fromAsset: fromAsset
+                fromAsset: fromAsset,
+                updateRate: updateRate,
+                contentPack: contentPack,
+                parentPatch: parentPatch
             )
         {
             this.FromArea = fromArea;

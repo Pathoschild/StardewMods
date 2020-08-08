@@ -173,6 +173,19 @@ _(optional)_ Whether to apply this patch. Default true. This fields supports imm
 
 </td>
 </tr>
+
+<tr>
+<td><code>Update</code></td>
+<td>
+
+_(optional)_ When the patch should update if it changed. The possible values are...
+* `OnDayStart` (default): when the in-game day starts;
+* `OnLocationChange`: when the current player warps to a new location (includes day start).
+
+Note that dialogue ignores changes after the day starts (see [known limitations](#known-limitations)).
+
+</td>
+</tr>
 </table>
 
 ## Actions
@@ -1024,8 +1037,7 @@ you have multiple content packs, each one is applied in the order they're loaded
 need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Known limitations
-* Dialogue is set when the day starts, so conditions that update during the day (like `IsOutdoors`)
-  won't affect dialogue.
+* Dialogue is set when the day starts, so setting `"Update": "OnLocationChange"` won't affect dialogue after the day starts.
 * Some game assets have special logic. This isn't specific to Content Patcher, but they're
   documented here for convenience.
 

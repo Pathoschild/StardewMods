@@ -159,7 +159,7 @@ namespace ContentPatcher
                 case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
                     this.TokenManager.IsBasicInfoLoaded = true;
-                    this.UpdateContext();
+                    this.UpdateContext(ContextUpdateType.All);
                     break;
             }
         }
@@ -171,7 +171,7 @@ namespace ContentPatcher
         {
             this.Monitor.VerboseLog("Updating context: new day started.");
             this.TokenManager.IsBasicInfoLoaded = true;
-            this.UpdateContext();
+            this.UpdateContext(ContextUpdateType.All);
         }
 
         /// <summary>The method invoked when the player warps.</summary>
@@ -179,9 +179,8 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            ConditionType[] affectedTokens = new[] { ConditionType.LocationName, ConditionType.IsOutdoors };
-            this.Monitor.VerboseLog($"Updating context for {string.Join(", ", affectedTokens)}: player warped.");
-            this.UpdateContext(affectedTokens);
+            this.Monitor.VerboseLog("Updating context: player warped.");
+            this.UpdateContext(ContextUpdateType.OnLocationChange);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -191,7 +190,7 @@ namespace ContentPatcher
         {
             this.Monitor.VerboseLog("Updating context: returned to title.");
             this.TokenManager.IsBasicInfoLoaded = false;
-            this.UpdateContext();
+            this.UpdateContext(ContextUpdateType.All);
         }
 
         /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
@@ -239,11 +238,11 @@ namespace ContentPatcher
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
             this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, this.Helper.Content.NormalizeAssetName);
-            this.UpdateContext(); // set initial context before loading any custom mod tokens
+            this.UpdateContext(ContextUpdateType.All); // set initial context before loading any custom mod tokens
 
             // load context
             this.LoadContentPacks(contentPacks, installedMods);
-            this.UpdateContext(); // set initial context once patches + dynamic tokens + custom tokens are loaded
+            this.UpdateContext(ContextUpdateType.All); // set initial context once patches + dynamic tokens + custom tokens are loaded
 
             // register patcher
             helper.Content.AssetLoaders.Add(this.PatchManager);
@@ -258,7 +257,7 @@ namespace ContentPatcher
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext());
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext(ContextUpdateType.All));
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
 
             // can no longer queue tokens
@@ -279,15 +278,11 @@ namespace ContentPatcher
         }
 
         /// <summary>Update the current context.</summary>
-        /// <param name="affectedTokens">The specific tokens for which to update context, or <c>null</c> to affect all tokens</param>
-        private void UpdateContext(ConditionType[] affectedTokens = null)
+        /// <param name="updateType">The context update type.</param>
+        private void UpdateContext(ContextUpdateType updateType)
         {
-            InvariantHashSet onlyTokens = affectedTokens != null
-                ? new InvariantHashSet(affectedTokens.Select(p => p.ToString()))
-                : null;
-
-            this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens, onlyTokens);
-            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens);
+            this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens);
+            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens, updateType);
         }
 
         /// <summary>Load the registered content packs.</summary>

@@ -13,11 +13,11 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The path to the patch from the root content file.</summary>
         LogPathBuilder Path { get; }
 
-        /// <summary>The parent patch for which this patch was loaded, if any.</summary>
-        IPatch ParentPatch { get; }
-
         /// <summary>The patch type.</summary>
         PatchType Type { get; }
+
+        /// <summary>The parent patch for which this patch was loaded, if any.</summary>
+        IPatch ParentPatch { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
         ManagedContentPack ContentPack { get; }
@@ -33,6 +33,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
         ITokenString RawTargetAsset { get; }
+
+        /// <summary>When the patch should be updated.</summary>
+        UpdateRate UpdateRate { get; }
 
         /// <summary>The conditions which determine whether this patch should be applied.</summary>
         Condition[] Conditions { get; }
