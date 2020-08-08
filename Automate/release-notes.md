@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed bushes harvested out of season in some cases.
 * Fixed berry bushes not applying forage level bonus.
 
 ## 1.17.1

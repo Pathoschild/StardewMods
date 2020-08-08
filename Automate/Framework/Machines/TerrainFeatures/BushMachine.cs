@@ -10,6 +10,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
     internal class BushMachine : BaseMachine<Bush>
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>The season for which <see cref="BushMachine.InSeasonImpl"/> applies.</summary>
+        private string LastSeason;
+
+        /// <summary>The day of month for which <see cref="BushMachine.InSeasonImpl"/> applies.</summary>
+        private int LastDay;
+
+        /// <summary>Whether the bush was in-season as of the last check.</summary>
+        private bool InSeasonImpl;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -35,12 +48,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Machine.tileSheetOffset.Value == 1)
-                return MachineState.Done;
+            if (!this.InSeason())
+                return MachineState.Disabled;
 
-            return this.Machine.inBloom(Game1.currentSeason, Game1.dayOfMonth)
-                ? MachineState.Processing
-                : MachineState.Disabled;
+            return this.Machine.tileSheetOffset.Value == 1
+                ? MachineState.Done
+                : MachineState.Processing;
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -83,6 +96,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
                 width: box.Width / Game1.tileSize,
                 height: box.Height / Game1.tileSize
             );
+        }
+
+        /// <summary>Get whether the bush is currently in-season to produce berries or tea leaves.</summary>
+        private bool InSeason()
+        {
+            if (this.LastSeason != Game1.currentSeason || this.LastDay != Game1.dayOfMonth)
+            {
+                this.InSeasonImpl = this.Machine.inBloom(Game1.currentSeason, Game1.dayOfMonth);
+                this.LastSeason = Game1.currentSeason;
+                this.LastDay = Game1.dayOfMonth;
+            }
+
+            return this.InSeasonImpl;
         }
     }
 }
