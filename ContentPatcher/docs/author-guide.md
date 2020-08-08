@@ -717,9 +717,13 @@ that leads to a different location each day:
 </dl>
 
 ### `Include`
-`"Action": "Include"` reads patches from another JSON file, as if you'd added them directly to the
-current position. You can have any number of `Include` patches, and files can be included
-recursively (i.e. include a file which includes another file).
+`"Action": "Include"` reads patches from another JSON file, and adds them in the current position.
+The included patches work just as if you'd pasted them into that position yourself; for example,
+they have full access to all the tokens and conditions (including dynamic tokens) available in your
+`content.json`.
+
+You can have any number of `Include` patches, and files can be included recursively (i.e. include a
+file which includes another file).
 
 <table>
 <tr>
