@@ -77,9 +77,9 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add a dynamic token value to the context.</summary>
         /// <param name="name">The token name.</param>
-        /// <param name="value">The token value to set.</param>
+        /// <param name="rawValue">The token value to set.</param>
         /// <param name="conditions">The conditions that must match to set this value.</param>
-        public void AddDynamicToken(string name, IManagedTokenString value, IEnumerable<Condition> conditions)
+        public void AddDynamicToken(string name, IManagedTokenString rawValue, IEnumerable<Condition> conditions)
         {
             // validate
             if (this.ParentContext.Contains(name, enforceContext: false))
@@ -95,13 +95,17 @@ namespace ContentPatcher.Framework
                 this.DynamicContext.Save(managed.Token);
             }
 
+            // create token value handler
+            var tokenValue = new DynamicTokenValue(managed, rawValue, conditions);
+            string[] tokensUsed = tokenValue.GetTokensUsed().ToArray();
+
             // save value info
-            managed.ValueProvider.AddTokensUsed(value.GetTokensUsed());
-            managed.ValueProvider.AddAllowedValues(value);
-            this.DynamicTokenValues.Add(new DynamicTokenValue(managed, value, conditions));
+            managed.ValueProvider.AddTokensUsed(tokensUsed);
+            managed.ValueProvider.AddAllowedValues(rawValue);
+            this.DynamicTokenValues.Add(tokenValue);
 
             // track tokens which should trigger an update to this token
-            Queue<string> tokenQueue = new Queue<string>(value.GetTokensUsed());
+            Queue<string> tokenQueue = new Queue<string>(tokensUsed);
             InvariantHashSet visited = new InvariantHashSet();
             while (tokenQueue.Any())
             {
@@ -130,20 +134,23 @@ namespace ContentPatcher.Framework
             if (!globalChangedTokens.Any() && !this.PendingTokens.Any())
                 return;
 
-            // get dynamic tokens which need an update
-            InvariantHashSet affectedTokens = this.GetTokensToUpdate(globalChangedTokens);
-            if (!affectedTokens.Any())
-                return;
-
             // update local standard tokens
-            foreach (var token in this.LocalContext.Tokens.Values)
             {
-                if (token.IsMutable && affectedTokens.Contains(token.Name))
-                    token.UpdateContext(this);
+                InvariantHashSet affectedTokens = this.GetLocalTokensToUpdate(globalChangedTokens);
+                foreach (string name in affectedTokens)
+                {
+                    IToken token = this.LocalContext.GetToken(name, enforceContext: false);
+                    if (token?.IsMutable == true)
+                        token.UpdateContext(this);
+                }
             }
 
             // reset dynamic tokens
-            // note: since token values are affected by the order they're defined, only updating tokens affected by globalChangedTokens is not trivial.
+            //
+            // Since dynamic token values are affected by the order they're defined, only updating
+            // tokens affected by globalChangedTokens isn't trivial. Instead we track which global
+            // tokens are used indirectly through dynamic tokens via AddDynamicToken, and use that
+            // to decide which patches to update.
             foreach (ManagedManualToken managed in this.DynamicTokens.Values)
             {
                 managed.ValueProvider.SetValue(null);
@@ -230,9 +237,9 @@ namespace ContentPatcher.Framework
             yield return this.DynamicContext;
         }
 
-        /// <summary>Get the tokens which need a context update.</summary>
+        /// <summary>Get the standard local tokens which need a context update.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
-        private InvariantHashSet GetTokensToUpdate(InvariantHashSet globalChangedTokens)
+        private InvariantHashSet GetLocalTokensToUpdate(InvariantHashSet globalChangedTokens)
         {
             // add tokens which depend on a changed global token
             InvariantHashSet affectedTokens = new InvariantHashSet();
