@@ -130,44 +130,46 @@ namespace ContentPatcher.Framework
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(InvariantHashSet globalChangedTokens)
         {
-            // nothing to do
-            if (!globalChangedTokens.Any() && !this.PendingTokens.Any())
-                return;
-
             // update local standard tokens
+            //
+            // Some local tokens may change independently (e.g. Random), so we need to update all
+            // standard tokens here.
+            bool localTokensChanged = false;
+            foreach (IToken token in this.LocalContext.GetTokens(enforceContext: false))
             {
-                InvariantHashSet affectedTokens = this.GetLocalTokensToUpdate(globalChangedTokens);
-                foreach (string name in affectedTokens)
-                {
-                    IToken token = this.LocalContext.GetToken(name, enforceContext: false);
-                    if (token?.IsMutable == true)
-                        token.UpdateContext(this);
-                }
+                if (token.IsMutable)
+                    localTokensChanged |= token.UpdateContext(this);
             }
 
             // reset dynamic tokens
             //
-            // Since dynamic token values are affected by the order they're defined, only updating
-            // tokens affected by globalChangedTokens isn't trivial. Instead we track which global
-            // tokens are used indirectly through dynamic tokens via AddDynamicToken, and use that
-            // to decide which patches to update.
-            foreach (ManagedManualToken managed in this.DynamicTokens.Values)
+            // Since dynamic token values are affected by the order they're defined (e.g. one
+            // dynamic token can use the value of another), only updating tokens affected by
+            // globalChangedTokens isn't trivial. Instead we track which global tokens are used
+            // indirectly through dynamic tokens via AddDynamicToken, and use that to decide which
+            // patches to update.
+            if (globalChangedTokens.Any() || localTokensChanged)
             {
-                managed.ValueProvider.SetValue(null);
-                managed.ValueProvider.SetReady(false);
-            }
-            foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
-            {
-                tokenValue.UpdateContext(this);
-                if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
+                foreach (ManagedManualToken managed in this.DynamicTokens.Values)
                 {
-                    ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+                    managed.ValueProvider.SetValue(null);
+                    managed.ValueProvider.SetReady(false);
+                }
 
-                    valueProvider.SetValue(tokenValue.Value);
-                    valueProvider.SetReady(true);
+                foreach (DynamicTokenValue tokenValue in this.DynamicTokenValues)
+                {
+                    tokenValue.UpdateContext(this);
+                    if (tokenValue.IsReady && tokenValue.Conditions.All(p => p.IsMatch))
+                    {
+                        ManualValueProvider valueProvider = tokenValue.ParentToken.ValueProvider;
+
+                        valueProvider.SetValue(tokenValue.Value);
+                        valueProvider.SetReady(true);
+                    }
                 }
             }
 
+            // reset tracking
             this.PendingTokens.Clear();
         }
 
@@ -235,25 +237,6 @@ namespace ContentPatcher.Framework
             yield return this.ParentContext;
             yield return this.LocalContext;
             yield return this.DynamicContext;
-        }
-
-        /// <summary>Get the standard local tokens which need a context update.</summary>
-        /// <param name="globalChangedTokens">The global token values which changed.</param>
-        private InvariantHashSet GetLocalTokensToUpdate(InvariantHashSet globalChangedTokens)
-        {
-            // add tokens which depend on a changed global token
-            InvariantHashSet affectedTokens = new InvariantHashSet();
-            foreach (string globalToken in globalChangedTokens)
-            {
-                foreach (string affectedToken in this.GetTokensAffectedBy(globalToken))
-                    affectedTokens.Add(affectedToken);
-            }
-
-            // add uninitialized tokens
-            foreach (string patch in this.PendingTokens)
-                affectedTokens.Add(patch);
-
-            return affectedTokens;
         }
     }
 }
