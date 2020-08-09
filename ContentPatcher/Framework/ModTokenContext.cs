@@ -155,7 +155,7 @@ namespace ContentPatcher.Framework
             {
                 foreach (ManagedManualToken managed in this.DynamicTokens.Values)
                 {
-                    managed.ValueProvider.SetValue(null);
+                    managed.ValueProvider.SetValue((ITokenString)null);
                     managed.ValueProvider.SetReady(false);
                 }
 

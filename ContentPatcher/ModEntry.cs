@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Common.Integrations.GenericModConfigMenu;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
@@ -367,15 +368,45 @@ namespace ContentPatcher
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
                         configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                        GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenuIntegration = null;
                         if (config.Any())
+                        {
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
+
+                            configMenuIntegration = new GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>>(
+                                modRegistry: this.Helper.ModRegistry,
+                                monitor: this.Monitor,
+                                consumerManifest: current.Manifest,
+                                getConfig: () => config,
+                                reset: () =>
+                                {
+                                    foreach (ConfigField configField in config.Values)
+                                        configField.Value = new InvariantHashSet(configField.DefaultValues);
+                                },
+                                saveAndApply: () =>
+                                {
+                                    configFileHandler.Save(current.ManagedPack, config, this.Helper);
+
+                                    this.PatchLoader.UnloadPatchesLoadedBy(current, false);
+                                    this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
+
+                                }
+                            );
+                            if (configMenuIntegration.IsLoaded)
+                                configMenuIntegration.RegisterConfig();
+                        }
 
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
                         {
                             ConfigField field = pair.Value;
-                            IValueProvider valueProvider = new ImmutableValueProvider(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+                            ManualValueProvider valueProvider = new ManualValueProvider(pair.Key);
+                            valueProvider.AddAllowedValues(field.AllowValues);
+                            valueProvider.SetValue(field.Value);
+                            valueProvider.SetReady(true);
                             modContext.AddLocalToken(new Token(valueProvider, scope: current.Manifest.UniqueID));
+
+                            this.RegisterConfigMenuField(configMenuIntegration, pair.Key, field, valueProvider);
                         }
 
                         // load dynamic tokens
@@ -473,6 +504,72 @@ namespace ContentPatcher
                 select value.Trim()
             );
             return new InvariantHashSet(values);
+        }
+
+        /// <summary>
+        /// Register a config menu field with a given GMCM integration.
+        /// </summary>
+        /// <param name="configMenuIntegration">The GMCM integration.</param>
+        /// <param name="configName">The config field name.</param>
+        /// <param name="configField">The config field itself.</param>
+        /// <param name="valueProvider">The value provider for the config token.</param>
+        private void RegisterConfigMenuField(GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenuIntegration, string configName, ConfigField configField, ManualValueProvider valueProvider)
+        {
+            if (configField.AllowValues.Any())
+            {
+                if (configField.AllowMultiple)
+                {
+                    // Whitelist + multiple options = fake with multiple checkboxes
+                    foreach (string allowedValue in configField.AllowValues)
+                    {
+                        Func<InvariantDictionary<ConfigField>, bool> get = (config) => configField.Value.Contains(allowedValue);
+                        Action<InvariantDictionary<ConfigField>, bool> set = (config, val) =>
+                        {
+                            InvariantHashSet values = new InvariantHashSet(configField.Value);
+                            if (val && !values.Contains(allowedValue))
+                                values.Add(allowedValue);
+                            if (!val && values.Contains(allowedValue))
+                                values.Remove(allowedValue);
+
+                            if (values.Count == 0 && !configField.AllowBlank)
+                                values = configField.DefaultValues;
+
+                            configField.Value = values;
+                            valueProvider.SetValue(values);
+                        };
+                        configMenuIntegration.AddCheckbox($"{configName}.{allowedValue}", null, get, set);
+                    }
+                }
+                else
+                {
+                    // Whitelist + single value = drop down
+                    // Need an extra option when blank is allowed
+                    List<string> choices = new List<string>(configField.AllowValues);
+                    if (configField.AllowBlank)
+                        choices.Insert(0, "");
+
+                    Func<InvariantDictionary<ConfigField>, string> get = (config) => configField.Value.Count > 0 ? configField.Value.First() : "";
+                    Action<InvariantDictionary<ConfigField>, string> set = (config, val) =>
+                    {
+                        InvariantHashSet values = new InvariantHashSet(val);
+                        configField.Value = values;
+                        valueProvider.SetValue(values);
+                    };
+                    configMenuIntegration.AddDropdown(configName, null, get, set, choices.ToArray());
+                }
+            }
+            else
+            {
+                // No whitelist = text field
+                Func<InvariantDictionary<ConfigField>, string> get = (config) => string.Join(", ", configField.Value.ToArray());
+                Action<InvariantDictionary<ConfigField>, string> set = (config, val) =>
+                {
+                    InvariantHashSet values = configField.AllowMultiple ? this.ParseCommaDelimitedField(val) : new InvariantHashSet(val);
+                    configField.Value = values;
+                    valueProvider.SetValue(values);
+                };
+                configMenuIntegration.AddTextbox(configName, null, get, set);
+            }
         }
     }
 }
