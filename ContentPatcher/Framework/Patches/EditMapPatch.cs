@@ -10,6 +10,7 @@ using xTile;
 using xTile.Layers;
 using xTile.Tiles;
 using Location = xTile.Dimensions.Location;
+using Size = xTile.Dimensions.Size;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -21,6 +22,9 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
+
+        /// <summary>Simplifies access to private code.</summary>
+        private readonly IReflectionHelper Reflection;
 
         /// <summary>The map area from which to read tiles.</summary>
         private readonly TokenRectangle FromArea;
@@ -57,8 +61,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditMap,
@@ -76,6 +81,7 @@ namespace ContentPatcher.Framework.Patches
             this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.MapTiles = mapTiles?.ToArray() ?? new EditMapPatchTile[0];
             this.Monitor = monitor;
+            this.Reflection = reflection;
 
             this.Contextuals
                 .Add(this.FromArea)
@@ -172,16 +178,16 @@ namespace ContentPatcher.Framework.Patches
             string sourceAreaLabel = this.FromArea != null ? $"{nameof(this.FromArea)}" : "source map";
             string targetAreaLabel = this.ToArea != null ? $"{nameof(this.ToArea)}" : "target map";
             Point sourceMapSize = new Point(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));
-            Point targetMapSize = new Point(target.Layers.Max(p => p.LayerWidth), target.Layers.Max(p => p.LayerHeight));
 
             if (!this.TryValidateArea(sourceArea, sourceMapSize, "source", out error))
                 return this.Fail(error, out error);
-            if (!this.TryValidateArea(targetArea, targetMapSize, "target", out error))
+            if (!this.TryValidateArea(targetArea, null, "target", out error))
                 return this.Fail(error, out error);
             if (sourceArea.Width != targetArea.Width || sourceArea.Height != targetArea.Height)
                 return this.Fail($"{sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", out error);
 
             // apply source map
+            this.ExtendMap(target, minWidth: targetArea.Right, minHeight: targetArea.Bottom);
             targetAsset.PatchMap(source: source, sourceArea: sourceArea, targetArea: targetArea);
 
             error = null;
@@ -294,18 +300,18 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Validate an area's values.</summary>
         /// <param name="area">The area to validate.</param>
-        /// <param name="maxSize">The maximum map size.</param>
+        /// <param name="maxSize">The maximum map size, if any.</param>
         /// <param name="name">The label for the area (e.g. 'source' or 'target').</param>
         /// <param name="error">An error indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing the tile succeeded.</returns>
-        private bool TryValidateArea(Rectangle area, Point maxSize, string name, out string error)
+        private bool TryValidateArea(Rectangle area, Point? maxSize, string name, out string error)
         {
             string errorPrefix = $"{name} area (X:{area.X}, Y:{area.Y}, Width:{area.Width}, Height:{area.Height})";
 
             if (area.X < 0 || area.Y < 0 || area.Width < 0 || area.Height < 0)
                 return this.Fail($"{errorPrefix} has negative values, which isn't valid.", out error);
 
-            if (area.Right > maxSize.X || area.Bottom > maxSize.Y)
+            if (maxSize.HasValue && (area.Right > maxSize.Value.X || area.Bottom > maxSize.Value.Y))
                 return this.Fail($"{errorPrefix} extends past the edges of the {name} map, which isn't allowed.", out error);
 
             error = null;
@@ -328,6 +334,46 @@ namespace ContentPatcher.Framework.Patches
             }
 
             return new Rectangle(0, 0, maxWidth, maxHeight);
+        }
+
+        /// <summary>Extend the map if needed to fit the given size. Note that this is an expensive operation.</summary>
+        /// <param name="map">The map to resize.</param>
+        /// <param name="minWidth">The minimum map width in tiles.</param>
+        /// <param name="minHeight">The minimum map height in tiles.</param>
+        /// <returns>Whether the map was resized.</returns>
+        private bool ExtendMap(Map map, int minWidth, int minHeight)
+        {
+            bool resized = false;
+
+            // resize layers
+            foreach (Layer layer in map.Layers)
+            {
+                // check if resize needed
+                if (layer.LayerWidth >= minWidth && layer.LayerHeight >= minHeight)
+                    continue;
+                resized = true;
+
+                // build new tile matrix
+                int width = Math.Max(minWidth, layer.LayerWidth);
+                int height = Math.Max(minHeight, layer.LayerHeight);
+                Tile[,] tiles = new Tile[width, height];
+                for (int x = 0; x < layer.LayerWidth; x++)
+                {
+                    for (int y = 0; y < layer.LayerHeight; y++)
+                        tiles[x, y] = layer.Tiles[x, y];
+                }
+
+                // update fields
+                this.Reflection.GetField<Tile[,]>(layer, "m_tiles").SetValue(tiles);
+                this.Reflection.GetField<TileArray>(layer, "m_tileArray").SetValue(new TileArray(layer, tiles));
+                this.Reflection.GetField<Size>(layer, "m_layerSize").SetValue(new Size(width, height));
+            }
+
+            // resize map
+            if (resized)
+                this.Reflection.GetMethod(map, "UpdateDisplaySize").Invoke();
+
+            return resized;
         }
 
         /// <summary>A utility method for returning false with an out error.</summary>

@@ -7,6 +7,7 @@
 * First step towards towards realtime changes:
   * Tokens and patches can now [update on location change](docs/author-guide.md#update-rate).
   * `patch summary` now shows troubleshooting hints related to update rate.
+* Content packs can now resize maps automatically using `EditMap` just by patching past the bottom or right edges.
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
 * Removed legacy token API obsolete since Content Patcher 1.12.
 * Internal changes to prepare for realtime content updates.
