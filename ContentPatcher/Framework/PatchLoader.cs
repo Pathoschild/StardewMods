@@ -103,17 +103,18 @@ namespace ContentPatcher.Framework
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given patch.</summary>
         /// <param name="parentPatch">The parent patch for which to unload descendants.</param>
-        /// <param name="reindex">Whether to reindex the patch list immediately.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
         public void UnloadPatchesLoadedBy(IPatch parentPatch, bool reindex)
         {
-            foreach (var patch in this.PatchManager.GetPatches())
-            {
-                if (this.IsDescendant(parent: parentPatch, child: patch))
-                    this.PatchManager.Remove(patch, reindex: false);
-            }
+            this.UnloadPatches(patch => this.IsDescendant(parent: parentPatch, child: patch), reindex);
+        }
 
-            if (reindex)
-                this.PatchManager.Reindex(patchListChanged: true);
+        /// <summary>Unload patches loaded (directly or indirectly) by the given content pack.</summary>
+        /// <param name="pack">The content pack for which to unload descendants.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
+        public void UnloadPatchesLoadedBy(RawContentPack pack, bool reindex)
+        {
+            this.UnloadPatches(patch => patch.ContentPack == pack.ManagedPack, reindex);
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>
@@ -209,6 +210,22 @@ namespace ContentPatcher.Framework
                 int i = 0;
                 foreach (PatchConfig patch in patchGroup)
                     patch.LogName += $" #{++i}";
+            }
+        }
+
+        /// <summary>Unload patches matching a condition.</summary>
+        /// <param name="where">Matches patches to unload.</param>
+        /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
+        private void UnloadPatches(Func<IPatch, bool> where, bool reindex)
+        {
+            IPatch[] removePatches = this.PatchManager.GetPatches().Where(where).ToArray();
+            if (removePatches.Any())
+            {
+                foreach (IPatch patch in removePatches)
+                    this.PatchManager.Remove(patch, reindex: false);
+
+                if (reindex)
+                    this.PatchManager.Reindex(patchListChanged: true);
             }
         }
 
