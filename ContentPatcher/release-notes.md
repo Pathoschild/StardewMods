@@ -5,6 +5,9 @@
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
 -->
 
+## Upcoming release
+* Fixed 'collection was modified' error when unloading `Action: Include` patches.
+
 ## 1.16.3
 Released 08 August 2020.
 
