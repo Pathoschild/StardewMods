@@ -917,7 +917,6 @@ Example Content Pack:
 This is mainly useful if you change conditions through the console (like the date), and want to
 update patches without going to bed.
 
-<!--
 #### patch reload
 `patch reload` reloads all patches (but not config schema or dynamic tokens) in a content pack's
 `content.json`. That lets you change the `content.json` while the game is running, and see them
@@ -930,7 +929,6 @@ For example:
 > patch reload "LemonEx.HobbitHouse"
 Content pack reloaded.
 ```
--->
 
 #### patch export
 `patch export` saves a copy of a given asset to your game folder, which lets you see what it looks

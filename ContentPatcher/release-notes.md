@@ -1,9 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-<!--
+## Upcoming release
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
--->
 
 ## 1.16.4
 Released 12 August 2020.
