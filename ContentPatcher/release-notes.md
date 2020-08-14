@@ -10,6 +10,7 @@
 * Content packs can now resize maps automatically using `EditMap` just by patching past the bottom or right edges.
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
 * Removed legacy token API obsolete since Content Patcher 1.12.
+* Fixed ambiguous-method detection in advanced API.
 * Internal changes to prepare for realtime content updates.
 
 **Update note for mod authors:**  
