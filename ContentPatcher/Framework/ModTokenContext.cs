@@ -37,8 +37,8 @@ namespace ContentPatcher.Framework
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
         private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new InvariantDictionary<InvariantHashSet>();
 
-        /// <summary>The new tokens which haven't received a context update yet.</summary>
-        private readonly InvariantHashSet PendingTokens = new InvariantHashSet();
+        /// <summary>Whether any tokens haven't received a context update yet.</summary>
+        private bool HasNewTokens;
 
 
         /*********
@@ -72,7 +72,7 @@ namespace ContentPatcher.Framework
                 throw new InvalidOperationException($"The '{token.Name}' token is already registered.");
 
             this.LocalContext.Save(token);
-            this.PendingTokens.Add(token.Name);
+            this.HasNewTokens = true;
         }
 
         /// <summary>Add a dynamic token value to the context.</summary>
@@ -124,6 +124,9 @@ namespace ContentPatcher.Framework
                     this.TokenDependents.Add(usedToken.Name, used = new InvariantHashSet());
                 used.Add(name);
             }
+
+            // track new token
+            this.HasNewTokens = true;
         }
 
         /// <summary>Update the current context.</summary>
@@ -148,7 +151,7 @@ namespace ContentPatcher.Framework
             // globalChangedTokens isn't trivial. Instead we track which global tokens are used
             // indirectly through dynamic tokens via AddDynamicToken, and use that to decide which
             // patches to update.
-            if (globalChangedTokens.Any() || localTokensChanged)
+            if (globalChangedTokens.Any() || localTokensChanged || this.HasNewTokens)
             {
                 foreach (ManagedManualToken managed in this.DynamicTokens.Values)
                 {
@@ -170,7 +173,7 @@ namespace ContentPatcher.Framework
             }
 
             // reset tracking
-            this.PendingTokens.Clear();
+            this.HasNewTokens = false;
         }
 
         /// <summary>Get the tokens affected by changes to a given token.</summary>
