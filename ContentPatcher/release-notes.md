@@ -1,9 +1,22 @@
 [← back to readme](README.md)
 
 # Release notes
-<!--
+## 1.17
+Released 16 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
+
+* Patches can now optionally [update on location change](docs/author-guide.md#update-rate), including all tokens (not only location-specific tokens).
+* Patches can now resize maps automatically using `Action: EditMap` (just patch past the bottom or right edges).
+* Added `TargetPathOnly` token (the target field value for the current patch, without the filename).
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
--->
+* Added troubleshooting hints related to update rate in `patch summary` console command.
+* Removed legacy token API obsolete since Content Patcher 1.12.
+* Fixed ambiguous-method detection in advanced API.
+* Internal changes to prepare for realtime content updates.
+
+**Update note for mod authors:**  
+If you use the `LocationName` or `IsOutdoors` token/condition, updating the `Format` field to
+`1.17.0` or later requires changes to your `content.json`. See the
+[migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.16.4
 Released 12 August 2020.
@@ -38,7 +51,7 @@ Released 02 August 2020. See the [release highlights for mod authors](https://ww
 * Fixed auto-generated patch names not normalising path separators.
 * Fixed `patch summary` showing duplicate target paths in some cases.
 * Fixed string sorting/comparison for some special characters.
-* Internal changes to prepare for upcoming features.
+* Internal changes to prepare for realtime content updates.
 
 **Update note for mod authors:**  
 Using `"Action": "EditData"` with a `FromFile` field is now deprecated, though it still works.

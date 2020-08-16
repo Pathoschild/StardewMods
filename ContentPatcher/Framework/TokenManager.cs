@@ -42,6 +42,13 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
+        /// <summary>The tokens which are linked to the player's current location.</summary>
+        public IEnumerable<string> LocationTokens { get; } = new InvariantHashSet
+        {
+            ConditionType.LocationName.ToString(),
+            ConditionType.IsOutdoors.ToString()
+        };
+
 
         /*********
         ** Public methods
@@ -58,9 +65,9 @@ namespace ContentPatcher.Framework
             this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
-                this.GlobalContext.Save(new HigherLevelTokenWrapper(modToken));
+                this.GlobalContext.Save(modToken);
             foreach (IValueProvider valueProvider in this.GetGlobalValueProviders(contentHelper, installedMods))
-                this.GlobalContext.Save(new HigherLevelTokenWrapper(new GenericToken(valueProvider)));
+                this.GlobalContext.Save(new Token(valueProvider));
         }
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
@@ -73,7 +80,7 @@ namespace ContentPatcher.Framework
             {
                 this.LocalTokens[pack.Pack] = localTokens = new ModTokenContext(scope, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
-                    localTokens.Add(new HigherLevelTokenWrapper(new GenericToken(valueProvider, scope)));
+                    localTokens.AddLocalToken(new Token(valueProvider, scope));
             }
 
             return localTokens;
@@ -95,15 +102,14 @@ namespace ContentPatcher.Framework
 
         /// <summary>Update the current context.</summary>
         /// <param name="changedGlobalTokens">The global tokens which changed value.</param>
-        /// <param name="onlyTokens">Only update the context for the given global tokens, or <c>null</c> to update all tokens.</param>
-        public void UpdateContext(out InvariantHashSet changedGlobalTokens, InvariantHashSet onlyTokens = null)
+        public void UpdateContext(out InvariantHashSet changedGlobalTokens)
         {
             // update global tokens
             changedGlobalTokens = new InvariantHashSet();
             foreach (IToken token in this.GlobalContext.Tokens.Values)
             {
                 bool changed =
-                    (token.IsMutable && onlyTokens?.Contains(token.Name) != false && token.UpdateContext(this)) // token changed state/value
+                    (token.IsMutable && token.UpdateContext(this)) // token changed state/value
                     || (this.IsFirstUpdate && token.IsReady); // tokens implicitly change to ready on their first update, even if they were ready from creation
                 if (changed)
                     changedGlobalTokens.Add(token.Name);

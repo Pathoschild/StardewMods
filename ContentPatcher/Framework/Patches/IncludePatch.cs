@@ -34,24 +34,26 @@ namespace ContentPatcher.Framework.Patches
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="path">The path to the patch from the root content file.</param>
-        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
-        /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromFile">The normalized asset key from which to load entries (if applicable), including tokens.</param>
+        /// <param name="updateRate">When the patch should be updated.</param>
+        /// <param name="contentPack">The content pack which requested the patch.</param>
+        /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="patchLoader">Handles loading and unloading patches for content packs.</param>
-        public IncludePatch(LogPathBuilder path, IPatch parentPatch, RawContentPack contentPack, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, Func<string, string> normalizeAssetName, IMonitor monitor, PatchLoader patchLoader)
+        public IncludePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IMonitor monitor, PatchLoader patchLoader)
             : base(
                 path: path,
                 type: PatchType.Include,
-                contentPack: contentPack.ManagedPack,
                 assetName: assetName,
                 conditions: conditions,
-                normalizeAssetName: normalizeAssetName,
+                fromAsset: fromFile,
+                updateRate: updateRate,
                 parentPatch: parentPatch,
-                fromAsset: fromFile
+                contentPack: contentPack.ManagedPack,
+                normalizeAssetName: normalizeAssetName
             )
         {
             this.RawContentPack = contentPack;

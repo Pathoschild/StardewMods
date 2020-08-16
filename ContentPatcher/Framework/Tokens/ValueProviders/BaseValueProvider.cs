@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public virtual IEnumerable<string> GetTokensUsed()
         {
             return Enumerable.Empty<string>();
         }

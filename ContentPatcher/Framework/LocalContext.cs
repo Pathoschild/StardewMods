@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -19,7 +18,7 @@ namespace ContentPatcher.Framework
         private IContext LastParentContext;
 
         /// <summary>The local token values.</summary>
-        private readonly InvariantDictionary<IHigherLevelToken<DynamicToken>> LocalTokens = new InvariantDictionary<IHigherLevelToken<DynamicToken>>();
+        private readonly InvariantDictionary<ManagedManualToken> LocalTokens = new InvariantDictionary<ManagedManualToken>();
 
 
         /*********
@@ -43,8 +42,8 @@ namespace ContentPatcher.Framework
         {
             this.LastParentContext = parentContext;
 
-            foreach (DynamicToken token in this.LocalTokens.Values.Select(p => p.Token))
-                token.SetReady(false);
+            foreach (ManagedManualToken managed in this.LocalTokens.Values)
+                managed.ValueProvider.SetReady(false);
         }
 
         /// <inheritdoc />
@@ -62,16 +61,16 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            return this.LocalTokens.TryGetValue(name, out var token)
-                ? token
+            return this.LocalTokens.TryGetValue(name, out ManagedManualToken managed)
+                ? managed.Token
                 : this.LastParentContext?.GetToken(name, enforceContext);
         }
 
         /// <inheritdoc />
         public IEnumerable<IToken> GetTokens(bool enforceContext)
         {
-            foreach (var token in this.LocalTokens.Values)
-                yield return token;
+            foreach (ManagedManualToken managed in this.LocalTokens.Values)
+                yield return managed.Token;
 
             if (this.LastParentContext != null)
             {
@@ -87,7 +86,7 @@ namespace ContentPatcher.Framework
             return token?.GetValues(input) ?? new string[0];
         }
 
-        /// <summary>Set a dynamic token value.</summary>
+        /// <summary>Set a local token value.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="value">The token value.</param>
         public void SetLocalValue(string name, string value)
@@ -95,22 +94,21 @@ namespace ContentPatcher.Framework
             this.SetLocalValue(name, new LiteralString(value, new LogPathBuilder(nameof(LocalContext), this.Scope, name)));
         }
 
-        /// <summary>Set a dynamic token value.</summary>
+        /// <summary>Set a local token value.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="value">The token value.</param>
         public void SetLocalValue(string name, ITokenString value)
         {
             // get or create token
-            DynamicToken token;
+            ManagedManualToken managed;
             {
-                if (!this.LocalTokens.TryGetValue(name, out IHigherLevelToken<DynamicToken> wrapper))
-                    this.LocalTokens[name] = wrapper = new HigherLevelTokenWrapper<DynamicToken>(new DynamicToken(name, this.Scope));
-                token = wrapper.Token;
+                if (!this.LocalTokens.TryGetValue(name, out managed))
+                    this.LocalTokens[name] = managed = new ManagedManualToken(name, this.Scope);
             }
 
             // update values
-            token.SetValue(value);
-            token.SetReady(true);
+            managed.ValueProvider.SetValue(value);
+            managed.ValueProvider.SetReady(true);
         }
     }
 }

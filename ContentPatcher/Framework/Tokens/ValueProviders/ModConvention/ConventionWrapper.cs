@@ -265,7 +265,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                 MethodInfo[] candidates = instance.GetType().GetMethods().Where(p => p.Name == name).ToArray();
                 if (candidates.Length == 0)
                     return false;
-                if (candidates.Length > 2)
+                if (candidates.Length > 1)
                     return Fail($"method {name} has multiple implementations.", out error);
             }
 

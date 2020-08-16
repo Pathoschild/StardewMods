@@ -112,8 +112,8 @@ namespace ContentPatcher.Framework.Commands
                 case "export":
                     return this.HandleExport(subcommandArgs);
 
-                //case "reload":
-                //    return this.HandleReload(subcommandArgs);
+                case "reload":
+                    return this.HandleReload(subcommandArgs);
 
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.", LogLevel.Debug);
@@ -141,7 +141,7 @@ namespace ContentPatcher.Framework.Commands
                 ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches.",
                 ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
                 ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'.",
-                //["reload"] = $"{this.CommandName} reload\n   Usage: {this.CommandName} reload \"<content pack ID>\"\n   Reloads the patches of the content.json of a content pack. Config schema changes and dynamic token changes are unsupported."
+                ["reload"] = $"{this.CommandName} reload\n   Usage: {this.CommandName} reload \"<content pack ID>\"\n   Reloads the patches of the content.json of a content pack. Config schema changes and dynamic token changes are unsupported."
             };
 
             // build output
@@ -364,7 +364,7 @@ namespace ContentPatcher.Framework.Commands
                     if (errorReason != null)
                         output.Append($"  // {errorReason}");
 
-                    // log common issues
+                    // log common issues if not applied
                     if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
                     {
                         string assetName = patch.ParsedTargetAsset.Value;
@@ -382,6 +382,19 @@ namespace ContentPatcher.Framework.Commands
 
                         if (issues.Any())
                             output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
+                    }
+
+                    // log possible token issues
+                    if (patch.Patch != null)
+                    {
+                        // location tokens used with daily patch
+                        if (patch.Patch.UpdateRate == UpdateRate.OnDayStart)
+                        {
+                            var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+                            string[] locationTokensUsed = this.TokenManager.LocationTokens.Where(p => tokensUsed.Contains(p)).ToArray();
+                            if (locationTokensUsed.Any())
+                                output.Append($" // hint: patch uses location tokens, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{UpdateRate.OnLocationChange}\".");
+                        }
                     }
 
                     // end line
@@ -585,7 +598,9 @@ namespace ContentPatcher.Framework.Commands
             return true;
         }
 
-
+        /// <summary>Handle the 'patch reload' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
+        /// <returns>Returns whether the command was handled.</returns>
         private bool HandleReload(string[] args)
         {
             // get pack ID

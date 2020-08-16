@@ -338,7 +338,7 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`. This [does not affect dialogue](author-guide.md#known-limitations).
+Whether the player is outdoors. Possible values: `true`, `false`.
 
 </td>
 </tr>
@@ -348,7 +348,6 @@ Whether the player is outdoors. Possible values: `true`, `false`. This [does not
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
-This [does not affect dialogue](author-guide.md#known-limitations).
 
 </td>
 </tr>
@@ -801,6 +800,23 @@ This is mainly useful for patches which specify multiple targets:
 </tr>
 
 <tr valign="top">
+<td>TargetPathOnly</td>
+<td>
+
+Equivalent to `Target`, but only the part before the last path separator:
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{TargetPathOnly}}/recolor.png" // assets/Characters/recolor.png *or* assets/Portraits/recolor.png
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>TargetWithoutPath</td>
 <td>
 
@@ -890,7 +906,7 @@ You can calculate mathematical expressions in patches using the `query` token (i
 tokens which return a number):
 ```js
 {
-   "Format": "1.16.0",
+   "Format": "1.17.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1111,7 +1127,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.16.0",
+   "Format": "1.17.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1156,7 +1172,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.16.0",
+   "Format": "1.17.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1200,7 +1216,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.16.0",
+   "Format": "1.17.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1220,7 +1236,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.16.0",
+     "Format": "1.17.0",
      "Changes": [
         {
            "Action": "EditData",
