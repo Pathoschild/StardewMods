@@ -800,6 +800,23 @@ This is mainly useful for patches which specify multiple targets:
 </tr>
 
 <tr valign="top">
+<td>TargetPathOnly</td>
+<td>
+
+Equivalent to `Target`, but only the part before the last path separator:
+
+```js
+{
+   "Action": "EditImage",
+   "Target": "Characters/Abigail, Portraits/Abigail",
+   "FromFile": "assets/{{TargetPathOnly}}/recolor.png" // assets/Characters/recolor.png *or* assets/Portraits/recolor.png
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>TargetWithoutPath</td>
 <td>
 

@@ -1,14 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added new tokens:
-  * `TargetPathOnly`: the target field value for the current patch, without the filename.
-* First step towards towards realtime changes:
-  * Tokens and patches can now [update on location change](docs/author-guide.md#update-rate).
-  * `patch summary` now shows troubleshooting hints related to update rate.
-* Content packs can now resize maps automatically using `EditMap` just by patching past the bottom or right edges.
+## 1.17
+Released 16 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
+
+* Patches can now optionally [update on location change](docs/author-guide.md#update-rate), including all tokens (not only location-specific tokens).
+* Patches can now resize maps automatically using `Action: EditMap` (just patch past the bottom or right edges).
+* Added `TargetPathOnly` token (the target field value for the current patch, without the filename).
 * Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
+* Added troubleshooting hints related to update rate in `patch summary` console command.
 * Removed legacy token API obsolete since Content Patcher 1.12.
 * Fixed ambiguous-method detection in advanced API.
 * Internal changes to prepare for realtime content updates.

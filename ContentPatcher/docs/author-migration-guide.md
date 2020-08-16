@@ -70,6 +70,8 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
 
 ### 1.17
+Released 16 August 2020.
+
 * **Patch updates on location change:** using `LocationName` or `IsOutdoors` as a condition/token
   no longer automatically updates the patch when the player changes location. You can add this
   patch field to enable that:
