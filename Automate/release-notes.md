@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed seed maker not recognizing crops added after the initial `Data/Crops` load.
+
 ## 1.17.2
 Released 08 August 2020.
 
