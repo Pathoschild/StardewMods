@@ -409,9 +409,9 @@ namespace ContentPatcher.Framework
         /// <param name="assetType">The asset type.</param>
         private PatchType? GetEditType(Type assetType)
         {
-            if (assetType == typeof(Texture2D))
+            if (typeof(Texture2D).IsAssignableFrom(assetType))
                 return PatchType.EditImage;
-            if (assetType == typeof(Map))
+            if (typeof(Map).IsAssignableFrom(assetType))
                 return PatchType.EditMap;
             else
                 return PatchType.EditData;

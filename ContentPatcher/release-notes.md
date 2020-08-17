@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error editing an image previously loaded through the Scale Up mod.
+
 ## 1.17
 Released 16 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
 
