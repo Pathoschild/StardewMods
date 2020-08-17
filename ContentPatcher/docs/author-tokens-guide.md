@@ -340,6 +340,8 @@ Whether the player is the main player. Possible values: `true`, `false`.
 
 Whether the player is outdoors. Possible values: `true`, `false`.
 
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
 </td>
 </tr>
 
@@ -348,6 +350,8 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 <td>
 
 The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
 </tr>
