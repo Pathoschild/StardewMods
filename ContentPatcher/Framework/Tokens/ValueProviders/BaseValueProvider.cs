@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
 
@@ -319,7 +320,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get all social NPCs.</summary>
         protected IEnumerable<NPC> GetSocialVillagers()
         {
-            foreach (NPC npc in Utility.getAllCharacters())
+            foreach (NPC npc in this.GetAllCharacters())
             {
                 bool isSocial =
                     npc.CanSocialize
@@ -328,6 +329,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (isSocial)
                     yield return npc;
             }
+        }
+
+        /// <summary>Get all characters in reachable locations.</summary>
+        /// <remarks>This is similar to <see cref="Utility.getAllCharacters()"/>, but doesn't sometimes crash when a farmhand warps and <see cref="Game1.currentLocation"/> isn't set yet.</remarks>
+        protected IEnumerable<NPC> GetAllCharacters()
+        {
+            return CommonHelper
+                .GetLocations()
+                .SelectMany(p => p.characters)
+                .Distinct(new ObjectReferenceComparer<NPC>());
         }
 
         /// <summary>Get whether the values in a collection changed.</summary>
