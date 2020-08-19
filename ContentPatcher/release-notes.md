@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17.1
+Released 19 August 2020.
+
+* Made 'multiple patches want to load asset' errors more user-friendly.
+* Fixed error in some cases when warping to a new location as a farmhand in multiplayer.
+* Fixed error editing an image previously loaded through the Scale Up mod.
+
 ## 1.17
 Released 16 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
 

@@ -148,9 +148,9 @@ namespace ContentPatcher.Framework.Patches
         public override void Edit<T>(IAssetData asset)
         {
             // throw on invalid type
-            if (typeof(T) == typeof(Texture2D) || typeof(T) == typeof(Map))
+            if (typeof(Texture2D).IsAssignableFrom(typeof(T)) || typeof(Map).IsAssignableFrom(typeof(T)))
             {
-                this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: this file isn't a data file (found {(typeof(T) == typeof(Texture2D) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
+                this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: this file isn't a data file (found {(typeof(Texture2D).IsAssignableFrom(typeof(T)) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
                 return;
             }
 

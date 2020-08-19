@@ -80,7 +80,25 @@ namespace ContentPatcher.Framework
             // validate
             if (patches.Length > 1)
             {
-                this.Monitor.Log($"Multiple patches want to load {asset.AssetName} ({string.Join(", ", from entry in patches orderby entry.Path select entry.Path)}). None will be applied.", LogLevel.Error);
+                // show simple error for most common cases
+                string[] modNames = patches.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByIgnoreCase(p => p).ToArray();
+                string[] patchNames = patches.Select(p => p.Path.ToString()).OrderByIgnoreCase(p => p).ToArray();
+                switch (modNames.Length)
+                {
+                    case 1:
+                        this.Monitor.Log($"'{modNames[0]}' has multiple patches which load the '{asset.AssetName}' asset at the same time ({string.Join(", ", patchNames)}). None will be applied. You should report this to the content pack author.", LogLevel.Error);
+                        break;
+
+                    case 2:
+                        this.Monitor.Log($"Two content packs want to load the '{asset.AssetName}' asset ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}", LogLevel.Trace);
+                        break;
+
+                    default:
+                        this.Monitor.Log($"Multiple content packs want to load the '{asset.AssetName}' asset ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}", LogLevel.Trace);
+                        break;
+                }
                 return false;
             }
             if (patches.Length == 1 && !patches[0].FromAssetExists())
@@ -409,9 +427,9 @@ namespace ContentPatcher.Framework
         /// <param name="assetType">The asset type.</param>
         private PatchType? GetEditType(Type assetType)
         {
-            if (assetType == typeof(Texture2D))
+            if (typeof(Texture2D).IsAssignableFrom(assetType))
                 return PatchType.EditImage;
-            if (assetType == typeof(Map))
+            if (typeof(Map).IsAssignableFrom(assetType))
                 return PatchType.EditMap;
             else
                 return PatchType.EditData;
