@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Made 'multiple patches want to load asset' errors more user-friendly.
 * Fixed error in some cases when warping to a new location as a farmhand in multiplayer.
 * Fixed error editing an image previously loaded through the Scale Up mod.
 
