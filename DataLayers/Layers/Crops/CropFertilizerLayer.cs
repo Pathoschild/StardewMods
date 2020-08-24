@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             foreach (Vector2 tile in visibleTiles)
             {
                 HoeDirt dirt = this.GetDirt(location, tile);
-                if (dirt != null && states.Contains(dirt.fertilizer.Value))
+                if (dirt != null && !this.IsDeadCrop(dirt) && states.Contains(dirt.fertilizer.Value))
                     yield return tile;
             }
         }

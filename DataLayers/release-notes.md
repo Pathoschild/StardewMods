@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Dead crops are now ignored in the crop fertiliser, harvest, and watered layers.
+
 ## 1.12.1
 Released 03 July 2020.
 
