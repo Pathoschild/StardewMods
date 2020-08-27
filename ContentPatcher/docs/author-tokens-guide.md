@@ -231,7 +231,11 @@ argument).
 <td>
 
 The flags set for the current player (or the player specified with a [`PlayerType`](#playertype)
-argument), including letters received and world state IDs.
+argument). That includes...
+
+* letter IDs sent to the player (including letters they haven't read, or those added to the mailbox for tomorrow);
+* non-letter mail flags (used to track game info);
+* world state IDs.
 
 Some useful flags:
 
