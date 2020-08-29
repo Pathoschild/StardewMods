@@ -354,8 +354,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 .AddCheckbox(
                     label: "Clear Dead Crops",
                     description: "Whether melee weapons clear dead crops. Default true.",
-                    get: config => config.StandardAttachments.MeleeWeapon.AttackMonsters,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.AttackMonsters = value
+                    get: config => config.StandardAttachments.MeleeWeapon.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.MeleeWeapon.ClearDeadCrops = value
                 )
                 .AddCheckbox(
                     label: "Break Mine Containers",
@@ -369,8 +369,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 .AddCheckbox(
                     label: "Enable Milk Pail",
                     description: "Whether to collect milk from farm animals using the milk pail. Default true.",
-                    get: config => config.StandardAttachments.GrassStarter.Enable,
-                    set: (config, value) => config.StandardAttachments.GrassStarter.Enable = value
+                    get: config => config.StandardAttachments.MilkPail.Enable,
+                    set: (config, value) => config.StandardAttachments.MilkPail.Enable = value
                 )
                 .AddCheckbox(
                     label: "Enable Shears",

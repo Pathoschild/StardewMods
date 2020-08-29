@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             {
                 // get crop
                 Crop crop = this.GetDirt(location, tile)?.crop;
-                if (crop == null)
+                if (crop == null || crop.dead.Value)
                     continue;
                 CropDataParser data = new CropDataParser(crop, isPlanted: true);
 

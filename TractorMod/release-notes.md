@@ -1,4 +1,9 @@
 # Release notes
+## 4.11.1
+Released 28 August 2020.
+
+* Fixed incorrectly mapped options in Generic Mod Config Menu.
+
 ## 4.11
 Released 04 July 2020.
 

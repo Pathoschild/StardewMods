@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.17.2
+Released 28 August 2020.
+
+* Fixed patches not always updated if they depend on mod-provided tokens that incorrectly change outside a context update.
+
 ## 1.17.1
 Released 19 August 2020.
 

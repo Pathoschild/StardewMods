@@ -73,5 +73,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
             return null;
         }
+
+        /// <summary>Get whether dirt contains a dead crop.</summary>
+        /// <param name="dirt">The dirt to check.</param>
+        protected bool IsDeadCrop(HoeDirt dirt)
+        {
+            return dirt?.crop?.dead.Value == true;
+        }
     }
 }
