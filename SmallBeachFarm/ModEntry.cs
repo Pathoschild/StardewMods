@@ -4,7 +4,9 @@ using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
+using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -22,6 +24,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Fields
         *********/
+        /// <summary>The MD5 hash for the default data.json file.</summary>
+        private const string DataFileHash = "641585fd329fac69e377cb911cf70862";
+
         /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
         private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
 
@@ -30,6 +35,9 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>The relative path to the folder containing tilesheet overlays.</summary>
         private readonly string OverlaysPath = Path.Combine("assets", "overlays");
+
+        /// <summary>The asset name for the map to replace.</summary>
+        private string FarmMapAssetName;
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
@@ -52,9 +60,27 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            // read data
+            this.Data = this.Helper.Data.ReadJsonFile<ModData>("assets/data.json");
+            {
+                string dataPath = Path.Combine(this.Helper.DirectoryPath, "assets", "data.json");
+                if (this.Data == null || !File.Exists(dataPath))
+                {
+                    this.Monitor.Log("The mod's 'assets/data.json' file is missing, so this mod can't work correctly. Please reinstall the mod to fix this.", LogLevel.Error);
+                    return;
+                }
+                if (CommonHelper.GetFileHash(dataPath) != ModEntry.DataFileHash)
+                    this.Monitor.Log("Found edits to 'assets/data.json'.");
+            }
+
             // read config
-            this.Config = helper.ReadConfig<ModConfig>();
-            this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
+            this.Config = this.Helper.ReadConfig<ModConfig>();
+            this.FarmMapAssetName = this.Data.FarmMaps.FirstOrDefault(p => p.ID == this.Config.ReplaceFarmID)?.Map;
+            if (this.FarmMapAssetName == null)
+            {
+                this.Monitor.Log("You have an invalid farm ID in the 'config.json' file. You can delete the file to reset it. This mod will be disabled.", LogLevel.Error);
+                return;
+            }
 
             // hook events
             helper.Events.Player.Warped += this.OnWarped;
@@ -76,8 +102,11 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
+            if (this.FarmMapAssetName == null)
+                return false;
+
             return
-                asset.AssetNameEquals("Maps/Farm_Fishing")
+                asset.AssetNameEquals(this.FarmMapAssetName)
                 || asset.AssetName.StartsWith(this.FakeAssetPrefix);
         }
 
@@ -86,7 +115,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         public T Load<T>(IAssetInfo asset)
         {
             // load map
-            if (asset.AssetNameEquals("Maps/Farm_Fishing"))
+            if (asset.AssetNameEquals(this.FarmMapAssetName))
             {
                 // load map
                 Map map = this.Helper.Content.Load<Map>("assets/farm.tmx");
@@ -224,7 +253,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="farm">The farm instance.</param>
         private bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
-            if (Game1.whichFarm == Farm.riverlands_layout && location is Farm farmInstance && farmInstance.Name == "Farm")
+            if (Game1.whichFarm == this.Config.ReplaceFarmID && location is Farm farmInstance && farmInstance.Name == "Farm")
             {
                 farm = farmInstance;
                 return true;

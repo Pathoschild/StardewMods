@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Input;
@@ -421,6 +423,20 @@ namespace Pathoschild.Stardew.Common
             detailedVerb ??= verb;
             monitor.Log($"Something went wrong {detailedVerb}:\n{ex}", LogLevel.Error);
             CommonHelper.ShowErrorMessage($"Huh. Something went wrong {verb}. The error log has the technical details.");
+        }
+
+        /****
+        ** File handling
+        ****/
+        /// <summary>Get the MD5 hash for a file.</summary>
+        /// <param name="absolutePath">The absolute file path.</param>
+        public static string GetFileHash(string absolutePath)
+        {
+            using FileStream stream = File.OpenRead(absolutePath);
+            using MD5 md5 = MD5.Create();
+
+            byte[] hash = md5.ComputeHash(stream);
+            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
     }
 }
