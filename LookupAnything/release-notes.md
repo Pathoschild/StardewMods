@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.27.5
+Released 28 August 2020.
+
 * Improved translations. Thanks to wally232 on Nexus (updated Korean)!
 
 ## 1.27.4
