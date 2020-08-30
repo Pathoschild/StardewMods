@@ -37,6 +37,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [Verbose log](#verbose-log)
 * [FAQs](#faqs)
   * [Are Content Patcher updates backwards-compatible?](#are-content-patcher-updates-backwards-compatible)
+  * [How do I change assets in another language?](#how-do-i-change-assets-in-another-language)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
 * [Configure](#configure)
@@ -138,8 +139,11 @@ the next section.
 
 The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside
 your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to
-edit `Content/Animals/Dinosaur.xnb`). Your changes are applied in all languages unless you specify a language
-[condition](#advanced).
+edit `Content/Animals/Dinosaur.xnb`).
+
+Your changes are applied in all languages unless you specify a language [condition](#advanced). See
+_[How do I change assets in another language?](#how-do-i-change-assets-in-another-language)_ for
+more info.
 
 This field supports [tokens](#advanced) and capitalisation doesn't matter.
 
@@ -1038,6 +1042,52 @@ and then search the SMAPI log file for that name. Particular questions to ask:
 ## FAQs
 ### Are Content Patcher updates backwards-compatible?
 Yep. See the [author migration guide](author-migration-guide.md) for more info.
+
+### How do I change assets in another language?
+**Your patches affect every language by default.**
+
+The asset name in the `Target` field doesn't include the language. For example,
+`"Target": "Characters/Dialogue/Abigail"` (the asset name) will change the content loaded from
+`Content/Characters/Dialogue/Abigail.de-DE.xnb` (the file path) when playing in German. If you want
+to make the same change in every language, you don't need to do anything else.
+
+To target a specific language, you can add a language condition:
+```js
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.de.json",
+   "When": {
+      "Language": "de"
+   }
+}
+```
+
+You can also load the translated version automatically if it exists. That way you can just add
+translated files to your content pack, and it'll default to the untranslated version if no
+translation exists:
+
+```js
+// use translated version if it exists in the content pack
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.{{language}}.json",
+   "When": {
+      "HasFile:{{FromFile}}": true
+   }
+},
+
+// otherwise use untranslated version
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.json",
+   "When": {
+      "HasFile: assets/cursors.{{language}}.json": false
+   }
+},
+```
 
 ### How multiple patches interact
 Any number of patches can be applied to the same file. `Action: Load` always happens before other
