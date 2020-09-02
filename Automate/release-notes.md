@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added `automate summary` console command.
+
 ## 1.17.3
 Released 19 August 2020.
 

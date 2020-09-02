@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Constructs machine groups.</summary>
         private MachineGroupFactory Factory;
 
+        /// <summary>Handles console commands from players.</summary>
+        private CommandHandler CommandHandler;
+
         /// <summary>Whether to enable automation for the current save.</summary>
         private bool EnableAutomation => Context.IsMainPlayer;
 
@@ -86,6 +89,7 @@ namespace Pathoschild.Stardew.Automate
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
                 pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
+            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.ActiveMachineGroups);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -97,6 +101,9 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
+
+            // hook commands
+            helper.ConsoleCommands.Add("automate", "Run commands from the Automate mod. Enter 'automate help' for more info.", this.CommandHandler.HandleCommand);
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");

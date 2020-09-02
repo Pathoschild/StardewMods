@@ -13,6 +13,9 @@ automatically pull raw items from the chest and push processed items into it.
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
 * [Compatibility](#compatibility)
+* [Troubleshooting](#troubleshooting)
+  * [In-game overlay](#in-game-overlay)
+  * [Console command](#console-command)
 * [FAQs](#faqs)
 * [See also](#see-also)
 
@@ -330,6 +333,19 @@ Automate is compatible with...
   'CFAutomate' download to enable automation).
 * [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) (with the
   [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038) addon).
+
+## Troubleshooting
+### In-game overlay
+Press `U` in-game ([configurable](#configure)) to toggle the automation overlay. This highlights
+machines, containers, and connectors which are automated (green) or automateable but not currently
+automated (red):
+
+> ![](screenshots/connectors.png)
+
+### Console command
+Enter `automate summary` directly in the SMAPI console to view a summary of your machine groups:
+
+> ![](screenshots/console-command.png)
 
 ## FAQs
 ### Why did my chests/machines disappear?
