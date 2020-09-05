@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.Automate
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
                 pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
-            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.ActiveMachineGroups);
+            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.Factory, this.ActiveMachineGroups);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;

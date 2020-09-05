@@ -88,6 +88,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             return this.GetEntityFor(location, tile, building) != null;
         }
 
+        /// <summary>Get the registered automation factories.</summary>
+        public IEnumerable<IAutomationFactory> GetFactories()
+        {
+            return this.AutomationFactories.Select(p => p);
+        }
+
 
         /*********
         ** Private methods

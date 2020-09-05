@@ -20,6 +20,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Constructs machine groups.</summary>
+        private readonly MachineGroupFactory Factory;
+
         /// <summary>The machines to process.</summary>
         private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups;
 
@@ -30,11 +33,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Writes messages to the console.</param>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="factory">Constructs machine groups.</param>
         /// <param name="activeMachineGroups">The machines to process.</param>
-        public CommandHandler(IMonitor monitor, ModConfig config, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups)
+        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups)
         {
             this.Monitor = monitor;
             this.Config = config;
+            this.Factory = factory;
             this.ActiveMachineGroups = activeMachineGroups;
         }
 
@@ -90,14 +95,20 @@ namespace Pathoschild.Stardew.Automate.Framework
                     report.AppendLine($"      '{name}'");
             }
             report.AppendLine();
+            report.AppendLine();
 
             // summary
             report.AppendLine("Summary:\n------------------------------");
             {
                 MachineGroup[] allGroups = this.ActiveMachineGroups.SelectMany(p => p.Value).ToArray();
+                IAutomationFactory[] customFactories = this.Factory.GetFactories().Where(p => p.GetType() != typeof(AutomationFactory)).ToArray();
+
                 report.AppendLine($"Found {allGroups.Length} machine groups in {this.ActiveMachineGroups.Count} locations, containing {allGroups.Sum(p => p.Machines.Length)} automated machines connected to {allGroups.Sum(p => p.Containers.Length)} containers.");
-                report.AppendLine();
+                if (customFactories.Any())
+                    report.AppendLine($"Custom automation factories found: {string.Join(", ", customFactories.Select(p => p.GetType().FullName).OrderBy(p => p))}.");
             }
+            report.AppendLine();
+            report.AppendLine();
 
             // machine groups
             report.AppendLine("Automated machine groups:\n------------------------------");
