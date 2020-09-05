@@ -9,9 +9,9 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework
 {

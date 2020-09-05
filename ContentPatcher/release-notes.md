@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Update for new SMAPI 3.7 features.
+
 ## 1.17.2
 Released 28 August 2020.
 

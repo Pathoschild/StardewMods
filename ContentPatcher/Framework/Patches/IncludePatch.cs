@@ -5,8 +5,8 @@ using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Patches
 {

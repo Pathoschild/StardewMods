@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework
 {

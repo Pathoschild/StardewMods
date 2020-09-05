@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Commands
 {
