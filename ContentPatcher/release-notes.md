@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Update for new SMAPI 3.7 features.
+* Updated for new SMAPI 3.7 features.
+* Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
 
 ## 1.17.2
 Released 28 August 2020.
