@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Updated for new SMAPI 3.7 features.
+* Patches now update immediately when you change language.
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
 
 ## 1.17.2

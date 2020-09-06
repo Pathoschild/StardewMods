@@ -101,6 +101,7 @@ namespace ContentPatcher
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
@@ -204,6 +205,15 @@ namespace ContentPatcher
                 this.IsFirstTick = false;
                 this.Initialize();
             }
+        }
+
+        /// <summary>Raised after the game language is changed, and after SMAPI handles the change.</summary>
+        /// <param name="code">The new language code.</param>
+        private void OnLocaleChanged(LocalizedContentManager.LanguageCode code)
+        {
+            // update if locale changes after initialization
+            if (!this.IsFirstTick)
+                this.UpdateContext(ContextUpdateType.All);
         }
 
         /****
