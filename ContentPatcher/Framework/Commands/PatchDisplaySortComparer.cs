@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string includeFrom = patch.ParsedFromAsset?.Value ?? patch.RawFromAsset;
                 if (includeFrom != null)
-                    path = new LogPathBuilder(path.Segments.Take(path.Segments.Length - 1)).With(PathUtilities.NormalizePathSeparators(includeFrom));
+                    path = new LogPathBuilder(path.Segments.Take(path.Segments.Length - 1)).With(PathUtilities.NormalizePath(includeFrom));
             }
 
             return path.Segments;

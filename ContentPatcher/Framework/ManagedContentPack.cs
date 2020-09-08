@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework
         /// <param name="key">The case-insensitive asset key.</param>
         private string GetRealPath(string key)
         {
-            key = PathUtilities.NormalizePathSeparators(key);
+            key = PathUtilities.NormalizePath(key);
 
             // cache file paths
             if (this.RelativePaths == null)

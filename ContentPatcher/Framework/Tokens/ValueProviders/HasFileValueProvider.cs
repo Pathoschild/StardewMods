@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 return false;
 
             // get normalized path
-            path = PathUtilities.NormalizePathSeparators(path);
+            path = PathUtilities.NormalizePath(path);
 
             // validate
             if (Path.IsPathRooted(path))

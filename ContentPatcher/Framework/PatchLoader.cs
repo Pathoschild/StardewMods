@@ -204,9 +204,9 @@ namespace ContentPatcher.Framework
                 if (string.IsNullOrWhiteSpace(patch.LogName))
                 {
                     if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include)
-                        patch.LogName = $"{type} {PathUtilities.NormalizePathSeparators(patch.FromFile)}";
+                        patch.LogName = $"{type} {PathUtilities.NormalizePath(patch.FromFile)}";
                     else
-                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePathSeparators(patch.Target)}";
+                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePath(patch.Target)}";
                 }
             }
 
