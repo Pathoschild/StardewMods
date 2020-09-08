@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added `automate summary` console command.
+* Fixed wrong default value for `MachinePriority` field in `config.json`. Existing config files will be updated automatically.
 
 ## 1.17.3
 Released 19 August 2020.

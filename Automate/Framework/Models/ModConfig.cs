@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>The priority order in which to process machines. Machines have a default priority of 0, and higher values are processed first.</summary>
         public IDictionary<string, int> MachinePriority = new Dictionary<string, int>
         {
-            [nameof(ShippingBinMachine)] = -1
+            [BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = -1
         };
     }
 }

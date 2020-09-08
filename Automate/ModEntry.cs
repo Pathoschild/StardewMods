@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
@@ -73,8 +74,7 @@ namespace Pathoschild.Stardew.Automate
             }
 
             // read config
-            this.Config = helper.ReadConfig<ModConfig>();
-            this.Config.MachinePriority = new Dictionary<string, int>(this.Config.MachinePriority, StringComparer.OrdinalIgnoreCase);
+            this.Config = this.LoadConfig();
 
             // init
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
@@ -310,6 +310,29 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
+        /// <summary>Read the config file, migrating legacy settings if applicable.</summary>
+        private ModConfig LoadConfig()
+        {
+            // read raw config
+            var config = this.Helper.ReadConfig<ModConfig>();
+            config.MachinePriority = new Dictionary<string, int>(config.MachinePriority ?? new Dictionary<string, int>(), StringComparer.OrdinalIgnoreCase);
+            bool changed = false;
+
+            // migrate shipping bin priority (wrong default set before 1.18)
+            if (config.MachinePriority.TryGetValue("ShippingBinMachine", out int shippingBinPriority))
+            {
+                config.MachinePriority.Remove("ShippingBinMachine");
+                config.MachinePriority[BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = shippingBinPriority;
+                changed = true;
+            }
+
+            // resave changes
+            if (changed)
+                this.Helper.WriteConfig(config);
+
+            return config;
+        }
+
         /// <summary>Get the active machine groups in every location.</summary>
         private IEnumerable<MachineGroup> GetActiveMachineGroups()
         {
