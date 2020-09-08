@@ -3,7 +3,8 @@
 # Release notes
 ## Upcoming release
 * Added `automate summary` console command.
-* Fixed wrong default value for `MachinePriority` field in `config.json`. Existing config files will be updated automatically.
+* Added support for disabling individual machine types.
+* Fixed default machine priority in `config.json` using the wrong shipping bin ID. Existing config files will be corrected automatically.
 
 ## 1.17.3
 Released 19 August 2020.

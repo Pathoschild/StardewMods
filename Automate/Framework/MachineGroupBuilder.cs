@@ -82,9 +82,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Create a group from the saved data.</summary>
         public MachineGroup Build()
         {
-            IMachine[] machines = this.Machines
-                .OrderByDescending(machine => this.GetPriority(machine.MachineTypeID))
-                .Select(machine => (IMachine)new MachineWrapper(machine))
+            IMachine[] machines =
+                (
+                    from machine in this.Machines
+                    let config = this.Config.GetMachineOverrides(machine.MachineTypeID) ?? new ModConfigMachine()
+                    orderby config.Priority
+                    select (IMachine)new MachineWrapper(machine)
+                )
                 .ToArray();
 
             return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray());
@@ -96,15 +100,6 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Machines.Clear();
             this.Containers.Clear();
             this.Tiles.Clear();
-        }
-
-        /// <summary>Get the priority in which a machine should be processed.</summary>
-        /// <param name="key">The machine type key.</param>
-        private int GetPriority(string key)
-        {
-            return this.Config.MachinePriority.TryGetValue(key, out int priority)
-                ? priority
-                : 0;
         }
     }
 }

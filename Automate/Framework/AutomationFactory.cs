@@ -32,9 +32,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The object names through which machines can connect, but which have no other automation properties.</summary>
         private readonly HashSet<string> Connectors;
 
-        /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
-        private readonly bool AutomateShippingBin;
-
         /// <summary>The tile area on the farm matching the shipping bin.</summary>
         private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
 
@@ -56,17 +53,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
-        /// <param name="automateShippingBin">Whether to treat the shipping bin as a machine that can be automated.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="data">The internal Automate data that can't be derived automatically.</param>
         /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
         /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
         /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public AutomationFactory(string[] connectors, bool automateShippingBin, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
+        public AutomationFactory(string[] connectors, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
         {
             this.Connectors = new HashSet<string>(connectors, StringComparer.OrdinalIgnoreCase);
-            this.AutomateShippingBin = automateShippingBin;
             this.Monitor = monitor;
             this.Reflection = reflection;
             this.Data = data;
@@ -186,7 +181,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
             if (building is Mill mill)
                 return new MillMachine(mill, location);
-            if (this.AutomateShippingBin && building is ShippingBin bin)
+            if (building is ShippingBin bin)
                 return new ShippingBinMachine(bin, location, Game1.getFarm());
             if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine(building, location);
@@ -201,10 +196,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
         {
             // shipping bin
-            if (this.AutomateShippingBin && location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
-            {
+            if (location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
                 return new ShippingBinMachine(farm, this.ShippingBinArea);
-            }
 
             // garbage can
             if (location is Town town)

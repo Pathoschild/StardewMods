@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Models;
@@ -81,7 +82,6 @@ namespace Pathoschild.Stardew.Automate
             this.Factory = new MachineGroupFactory(this.Config);
             this.Factory.Add(new AutomationFactory(
                 connectors: this.Config.ConnectorNames,
-                automateShippingBin: this.Config.AutomateShippingBin,
                 monitor: this.Monitor,
                 reflection: helper.Reflection,
                 data: data,
@@ -315,14 +315,50 @@ namespace Pathoschild.Stardew.Automate
         {
             // read raw config
             var config = this.Helper.ReadConfig<ModConfig>();
-            config.MachinePriority = new Dictionary<string, int>(config.MachinePriority ?? new Dictionary<string, int>(), StringComparer.OrdinalIgnoreCase);
             bool changed = false;
 
-            // migrate shipping bin priority (wrong default set before 1.18)
-            if (config.MachinePriority.TryGetValue("ShippingBinMachine", out int shippingBinPriority))
+            // normalize machine settings
+            config.MachineOverrides = new Dictionary<string, ModConfigMachine>(config.MachineOverrides ?? new Dictionary<string, ModConfigMachine>(), StringComparer.OrdinalIgnoreCase);
+            foreach (string key in config.MachineOverrides.Where(p => p.Value == null).Select(p => p.Key).ToArray())
             {
-                config.MachinePriority.Remove("ShippingBinMachine");
-                config.MachinePriority[BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = shippingBinPriority;
+                config.MachineOverrides.Remove(key);
+                changed = true;
+            }
+
+            // migrate legacy fields
+            if (config.ExtensionFields != null)
+            {
+                // migrate AutomateShippingBin (1.10.4–1.17.3)
+                try
+                {
+                    if (config.ExtensionFields.TryGetValue("AutomateShippingBin", out JToken raw))
+                        config.GetOrAddMachineOverrides(ShippingBinMachine.ShippingBinId).Enabled = raw.ToObject<bool>();
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Failed migrating legacy 'AutomateShippingBin' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
+                }
+
+                // migrate MachinePriority field (1.17–1.17.3) to MachineSettings
+                // (and fix wrong "ShippingBinMachine" default value)
+                try
+                {
+                    if (config.ExtensionFields.TryGetValue("MachinePriority", out JToken raw))
+                    {
+                        var priorities = raw.ToObject<Dictionary<string, int>>() ?? new Dictionary<string, int>();
+                        foreach (var pair in priorities)
+                        {
+                            string key = pair.Key == "ShippingBinMachine" ? ShippingBinMachine.ShippingBinId : pair.Key;
+                            config.GetOrAddMachineOverrides(key).Priority = pair.Value;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Failed migrating legacy 'MachinePriority' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
+                }
+
+                config.ExtensionFields.Clear();
                 changed = true;
             }
 

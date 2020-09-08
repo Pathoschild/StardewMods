@@ -20,13 +20,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Get the unique ID for the shipping bin machine.</summary>
+        internal static string ShippingBinId { get; } = BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine));
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="farm">The farm containing the shipping bin.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
         public ShippingBinMachine(Farm farm, Rectangle tileArea)
-            : base(farm, tileArea)
+            : base(farm, tileArea, ShippingBinMachine.ShippingBinId)
         {
             this.Farm = farm;
             this.Bin = null;
