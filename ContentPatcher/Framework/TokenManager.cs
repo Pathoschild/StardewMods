@@ -208,6 +208,7 @@ namespace ContentPatcher.Framework
 
             // number manipulation
             yield return new QueryValueProvider();
+            yield return new RandomValueProvider();
             yield return new RangeValueProvider();
             yield return new RoundValueProvider();
 
@@ -226,7 +227,6 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetLocalValueProviders(ManagedContentPack contentPack)
         {
             yield return new HasFileValueProvider(contentPack.HasFile);
-            yield return new RandomValueProvider(); // per-pack for more reproducible selection when troubleshooting
         }
 
         /// <summary>Get a constant for a given value.</summary>

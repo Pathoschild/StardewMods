@@ -4,6 +4,7 @@
 ## Upcoming release
 * Patches now update immediately when you change language.
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
+* Fixed patches not always updated for a `Random` token reroll.
 
 ## 1.17.2
 Released 28 August 2020.
