@@ -214,6 +214,16 @@ namespace ContentPatcher.Framework.Patches
             return true;
         }
 
+        /// <summary>A utility method for returning false with an out error.</summary>
+        /// <param name="inError">The error message.</param>
+        /// <param name="outError">The input error.</param>
+        /// <returns>Return false.</returns>
+        protected bool Fail(string inError, out string outError)
+        {
+            outError = inError;
+            return false;
+        }
+
         /// <summary>Update the target path, and add the relevant tokens to the patch context.</summary>
         /// <param name="context">The local patch context (already updated from the parent context).</param>
         /// <returns>Returns whether the field changed.</returns>

@@ -274,12 +274,13 @@ field      | purpose
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
+`TextOperations` | Change the value of an existing string entry; see _[text operations](#text-operations)_ for more info. The path format is `["Entries", "key"]`, where `"key"` should be replaced with the entry key you'd specify via `Entries`.
 `FromFile` | **This field was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**<br />~~The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.~~
 
-Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `FromFile`.
+Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, `TextOperations`, or `FromFile`.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
-`Entries`, `FromFile`, `Fields`, `MoveEntries`.
+`Entries`, `FromFile`, `Fields`, `MoveEntries`, `TextOperations`.
 
 <dl>
 <dt id="data-definitions">Definitions</dt>
@@ -626,9 +627,23 @@ and values.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`TextOperations`
+
+</td>
+<td>
+
+The `TextOperations` field lets you change the value for an existing map property (see _[text
+operations](#text-operations)_ for more info).
+
+</td>
+</tr>
 </table>
 
-For example, This changes the warp map property for the farm cave:
+For example, this replaces the warp map property for the farm cave:
 ```js
 {
    "Format": "1.17.0",
@@ -637,8 +652,30 @@ For example, This changes the warp map property for the farm cave:
          "Action": "EditMap",
          "Target": "Maps/FarmCave",
          "MapProperties": {
-            "Warp": "8 12 Farm 34 6"
+            "Warp": "10 10 Town 0 30"
          }
+      },
+   ]
+}
+```
+
+Here's the same example, but using `TextOperations` to append a warp to the property instead:
+
+```js
+{
+   "Format": "1.17.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/FarmCave",
+         "TextOperations": [
+            {
+               "Operation": "Append",
+               "Target": [ "MapProperty", "Warp" ],
+               "Value": "10 10 Town 0 30",
+               "Delimiter": " " // if the property already has a value, add this between the previous & inserted values
+            }
+         ]
       },
    ]
 }
@@ -825,7 +862,8 @@ circular include loop). In that case the patches are duplicated for each inclusi
 copied & pasted them into each place. This may negatively impact performance though, since each
 patch will be reapplied multiple times.
 
-## <span id="advanced"></span>Advanced: conditions & tokens
+## Advanced
+### Conditions & tokens
 The previous sections explain how to make static changes, but that's only scratching the surface of
 what you can do with Content Patcher. You can use conditions and tokens to make _dynamic_ changes.
 
@@ -837,6 +875,115 @@ For example, you can...
 * and more.
 
 See the [conditions & tokens guide](author-tokens-guide.md) for more info.
+
+### Text operations
+<dl>
+<dt>Overview:</dt>
+<dd>
+
+Text operations let you change a text field based on its current value, instead of just setting the
+new value. For example, you can append or prepend text to the current value. They're set using the
+`TextOperations` field for an `EditData` or `EditMap` patch.
+
+Text operations are only recommended when setting the value directly isn't suitable, since they
+complicate your content pack and have less validation than other fields (since Content Patcher
+can't precalculate the result ahead of time).
+
+</dd>
+
+<dt>Example:</dt>
+<dd>
+
+First, here's an example of setting a map warp **_without_** text operations. This overwrites any
+previous warps, so only the new warp remains:
+
+```js
+{
+    "Action": "EditMap",
+    "Target": "Maps/Town",
+    "MapProperties": {
+        "Warp": "8 12 Farm 34 6" // replaces current value (any other warps removed)
+    }
+}
+```
+
+Here's the same example, but appending to any current warps using a text operation instead:
+
+```js
+{
+    "Action": "EditMap",
+    "Target": "Maps/Town",
+    "TextOperations": [
+        {
+            "Operation": "Append",
+            "Target": ["MapProperties", "Warp"],
+            "Value": "8 12 Farm 34 6",
+            "Delimiter": " " // if there are already warps, add a space between them and the new one
+        }
+    ]
+}
+```
+
+</dd>
+
+<dt>Format:</dt>
+<dd>
+
+Each text operation has four fields:
+
+<table>
+<tr>
+  <th>field</th>
+  <th>purpose</th>
+</tr>
+
+<tr>
+<td><code>Operation</code></td>
+<td>
+
+The text operation to perform. One of `Append` (add text after the current value) or `Prepend` (add text before the current value).
+
+</td>
+</tr>
+
+<tr>
+<td><code>Target</code></td>
+<td>
+
+The specific text field to change as a [breadcrumb path](https://en.wikipedia.org/wiki/Breadcrumb_navigation).
+Each path value represents a field to navigate into. The possible path values depend on the patch
+type; see the `TextOperations` field for the patch type under _[actions](#actions)_ for more info.
+
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Value</code></td>
+<td>
+
+The value to append or prepend. Just like all other Content Patcher fields, **whitespace is trimmed
+from the start and end**; use the `Delimiter` field if you need a space between the current and new
+values.
+
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Delimiter</code></td>
+<td>
+
+_(optional)_ If the target field already has a value, text to add between the previous and inserted
+values.
+
+</td>
+</tr>
+</table>
+</dd>
+</dl>
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general

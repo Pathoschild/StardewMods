@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -30,6 +31,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         private EditDataPatchMoveRecord[] MoveRecords;
+
+        /// <summary>The text operations to apply to existing values.</summary>
+        private readonly TextOperation[] TextOperations;
 
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
@@ -63,13 +67,14 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="records">The data records to edit.</param>
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
+        /// <param name="textOperations">The text operations to apply to existing values.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 path: path,
                 type: PatchType.EditData,
@@ -86,6 +91,7 @@ namespace ContentPatcher.Framework.Patches
             this.Records = records?.ToArray();
             this.Fields = fields?.ToArray();
             this.MoveRecords = moveRecords?.ToArray();
+            this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
             this.Monitor = monitor;
             this.TryParseFields = tryParseFields;
 
@@ -94,6 +100,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Records)
                 .Add(this.Fields)
                 .Add(this.MoveRecords)
+                .Add(this.TextOperations)
                 .Add(this.Conditions);
         }
 
@@ -214,6 +221,9 @@ namespace ContentPatcher.Framework.Patches
 
             if (this.MoveRecords?.Any() == true)
                 yield return "reordered entries";
+
+            if (this.TextOperations.Any())
+                yield return "applied text operations";
         }
 
 
@@ -396,6 +406,7 @@ namespace ContentPatcher.Framework.Patches
                 int i = 0;
                 foreach (EditDataPatchRecord record in this.Records)
                 {
+                    string errorPrefix = $"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}";
                     i++;
 
                     // get key
@@ -409,7 +420,7 @@ namespace ContentPatcher.Framework.Patches
                         else if (record.Value.Value is JValue field)
                             setEntry(key, field.Value<TValue>());
                         else
-                            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                            this.Monitor.Log($"{errorPrefix}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
 
                     // apply object
@@ -420,7 +431,7 @@ namespace ContentPatcher.Framework.Patches
                         else if (record.Value.Value is JObject field)
                             setEntry(key, field.ToObject<TValue>());
                         else
-                            this.Monitor.Log($"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                            this.Monitor.Log($"{errorPrefix}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                     }
                 }
             }
@@ -430,11 +441,13 @@ namespace ContentPatcher.Framework.Patches
             {
                 foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value))
                 {
+                    string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
+
                     // get key
                     TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
                     if (!hasEntry(key))
                     {
-                        this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
+                        this.Monitor.Log($"{errorPrefix}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                         continue;
                     }
 
@@ -446,12 +459,12 @@ namespace ContentPatcher.Framework.Patches
                         {
                             if (!int.TryParse(field.FieldKey.Value, out int index))
                             {
-                                this.Monitor.Log($"Can't apply data field \"{this.Path}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
+                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
                                 continue;
                             }
                             if (index < 0 || index > actualFields.Length - 1)
                             {
-                                this.Monitor.Log($"Can't apply data field \"{this.Path}\" to {this.TargetAsset}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldKey} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldKey} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                                 continue;
                             }
 
@@ -469,11 +482,79 @@ namespace ContentPatcher.Framework.Patches
                             obj[field.FieldKey.Value] = field.Value.Value;
 
                         JsonSerializer serializer = new JsonSerializer();
-                        using (JsonReader reader = obj.CreateReader())
-                            serializer.Populate(reader, getEntry(key));
+                        using JsonReader reader = obj.CreateReader();
+                        serializer.Populate(reader, getEntry(key));
                     }
                 }
             }
+
+            // apply text operations
+            for (int i = 0; i < this.TextOperations.Length; i++)
+            {
+                if (!this.TryApplyTextOperation(this.TextOperations[i], hasEntry, getEntry, removeEntry, setEntry, out string error))
+                    this.Monitor.Log($"Can't data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
+            }
+        }
+
+        /// <summary>Try to apply a text operation.</summary>
+        /// <param name="operation">The text operation to apply.</param>
+        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
+        /// <param name="getEntry">Get an entry from the collection.</param>
+        /// <param name="removeEntry">Remove an entry from the collection.</param>
+        /// <param name="setEntry">Add or replace an entry in the collection.</param>
+        /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
+        /// <returns>Returns whether applying the operation succeeded.</returns>
+        private bool TryApplyTextOperation<TKey, TValue>(TextOperation operation, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry, out string error)
+        {
+            var targetRoot = operation.GetTargetRoot();
+            switch (targetRoot)
+            {
+                case TextOperationTargetRoot.Entries:
+                    {
+                        // validate
+                        if (typeof(TValue) != typeof(string))
+                            return this.Fail($"an '{TextOperationTargetRoot.Entries}' text operation can only be used for string entries. For data model entries, use '{TextOperationTargetRoot.Fields}' instead.", out error);
+                        if (operation.Target.Length > 2)
+                            return this.Fail($"an '{TextOperationTargetRoot.Entries}' path must only have one other segment for the property name.", out error);
+
+                        // get key
+                        string rawKey = operation.Target[1].Value;
+                        TKey key;
+                        if (typeof(TKey) == typeof(string))
+                            key = (TKey)(object)rawKey;
+                        else if (typeof(TKey) == typeof(int))
+                        {
+                            if (!int.TryParse(rawKey, out int intKey))
+                                return this.Fail($"can't use value '{rawKey}' as an entry key because this asset uses numeric keys.", out error);
+                            key = (TKey)(object)intKey;
+                        }
+                        else
+                            return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
+
+                        // get value
+                        string value = string.Empty;
+                        if (hasEntry(key))
+                            value = (string)(object)getEntry(key);
+
+                        // set value
+                        setEntry(key, (TValue)(object)operation.Apply(value));
+                    }
+                    break;
+
+                case TextOperationTargetRoot.Fields:
+                    throw new NotImplementedException("TODO");
+
+                default:
+                    return this.Fail(
+                        targetRoot == null
+                            ? $"unknown path root '{operation.Target[0]}'."
+                            : $"path root '{targetRoot}' isn't valid for an {nameof(PatchType.EditMap)} patch",
+                        out error
+                    );
+            }
+
+            error = null;
+            return true;
         }
 
         /// <summary>Get the key for a list asset entry.</summary>
