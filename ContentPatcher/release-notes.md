@@ -6,6 +6,12 @@
 * Patches now update immediately when you change language.
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
 * Fixed patches not always updated for a `Random` token reroll.
+* Removed support for `FromFile` in `EditData` patches in newer format versions.
+
+**Update note for mod authors:**  
+If you use the `FromFile` field with `EditData` patches, updating the `Format` field to `1.18.0` or
+later requires changes to your `content.json`. See the
+[migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.17.2
 Released 28 August 2020.

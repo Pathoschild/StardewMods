@@ -382,10 +382,22 @@ namespace ContentPatcher.Framework
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && fromAsset == null && entry.TextOperations?.Any() != true)
-                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, {nameof(PatchConfig.TextOperations)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
-                            if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
-                                return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
+                            bool fromFileAllowed = rawContentPack.Content.Format.IsOlderThan("1.18.0");
+                            bool missingRequiredFields = entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.TextOperations?.Any() != true;
+                            if (fromFileAllowed)
+                            {
+                                if (missingRequiredFields && fromAsset == null)
+                                    return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, {nameof(PatchConfig.TextOperations)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
+                                if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                                    return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
+                            }
+                            else
+                            {
+                                if (fromAsset != null)
+                                    return TrackSkip($"the {nameof(PatchConfig.FromFile)} field can't be used with an '{action}' patch");
+                                if (missingRequiredFields)
+                                    return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.TextOperations)} must be specified for an '{action}' change");
+                            }
 
                             // parse data changes
                             bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string parseError)

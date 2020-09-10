@@ -19,7 +19,6 @@ This document helps mod authors create a content pack for Content Patcher.
   * [`EditData`](#editdata)
     * [Definitions](#data-definitions)
     * [Basic changes](#data-basic-changes)
-    * [Load changes from a file](#data-load-changes-from-a-file)
     * [Edit data model assets](#data-edit-data-model-assets)
     * [Edit list assets](#data-edit-list-assets)
   * [`EditMap`](#editmap)
@@ -28,7 +27,9 @@ This document helps mod authors create a content pack for Content Patcher.
     * [Tiles and tile properties](#tiles-and-tile-properties)
     * [Known limitations](#map-known-limitations)
   * [`Include`](#include)
-* [Advanced: conditions & tokens](#advanced)
+* [Advanced](#advanced)
+  * [Conditions & tokens](#conditions--tokens)
+  * [Text operations](#text-operations)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Schema validator](#schema-validator)
@@ -275,9 +276,8 @@ field      | purpose
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
 `TextOperations` | Change the value of an existing string entry; see _[text operations](#text-operations)_ for more info. The path format is `["Entries", "key"]`, where `"key"` should be replaced with the entry key you'd specify via `Entries`.
-`FromFile` | **This field was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**<br />~~The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.~~
 
-Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, `TextOperations`, or `FromFile`.
+Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `TextOperations`.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
 `Entries`, `FromFile`, `Fields`, `MoveEntries`, `TextOperations`.
@@ -337,61 +337,6 @@ used to change event conditions:
             "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
             "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
          }
-      }
-   ]
-}
-```
-
-</dd>
-
-<dt id="data-load-changes-from-a-file"><s>Load changes from a file</s></dt>
-<dd>
-
-**This was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**
-
-~~You can optionally load changes from a separate JSON file in your content pack. The file can contain
-`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
-the patch.~~
-
-~~For example, this patch in `content.json`:~~
-```js
-{
-   "Format": "1.18.0",
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Data/ObjectInformation",
-         "FromFile": "assets/jade.json"
-      }
-   ]
-}
-```
-
-~~Loads changes from this `assets/jade.json` file:~~
-```js
-{
-   "Entries": {
-      "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
-   },
-   "Fields": {
-      "70": {
-         4: "Normal Jade",
-         5: "A pale green ornamental stone with no sheen."
-      }
-   }
-}
-```
-
-~~The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
-this single patch loads a dialogue file for multiple NPCs:~~
-```js
-{
-   "Format": "1.18.0",
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Characters/Dialogue/Abigail, Characters/Dialogue/Alex, Characters/Dialogue/Caroline",
-         "FromFile": "assets/dialogue/{{TargetWithoutPath}}.json"
       }
    ]
 }
