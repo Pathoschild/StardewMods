@@ -29,6 +29,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [`Include`](#include)
 * [Advanced](#advanced)
   * [Conditions & tokens](#conditions--tokens)
+  * [Translations](#translations)
   * [Text operations](#text-operations)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
@@ -821,6 +822,55 @@ For example, you can...
 
 See the [conditions & tokens guide](author-tokens-guide.md) for more info.
 
+### Translations
+You can store translations in an `i18n` subfolder of your content pack, and access them through the
+`i18n` token. The functionality and file structure is identical to [SMAPI mod
+translations](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Translation); see that page
+for more info.
+
+For example, if your `i18n` files contain a translation with the key `rainy-day`, you can access it
+in any Content Patcher field that allows tokens:
+
+```js
+{
+   "Format": "1.18.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/MarriageDialogueAbigail",
+         "Entries": {
+            "Rainy_Day_4": "{{i18n: rainy-day}}"
+         }
+      }
+   ]
+}
+```
+
+Content Patcher tokens don't work directly inside `i18n` files, but you can use SMAPI's translation
+placeholders. For example, if you wanted to show the player name in a message, you can do this in
+the `i18n` files:
+```js
+{
+    "rainy-day": "Hey {{name}}! Maybe I'll boot up Visual Studio today... one of these days I swear I'll release my SMAPI mod.$h",
+}
+```
+
+And then pass the value as an input argument:
+```js
+{
+   "Format": "1.18.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/MarriageDialogueAbigail",
+         "Entries": {
+            "Rainy_Day_4": "{{i18n: rainy-day |name={{PlayerName}} }}"
+         }
+      }
+   ]
+}
+```
+
 ### Text operations
 <dl>
 <dt>Overview:</dt>
@@ -844,11 +894,11 @@ previous warps, so only the new warp remains:
 
 ```js
 {
-    "Action": "EditMap",
-    "Target": "Maps/Town",
-    "MapProperties": {
-        "Warp": "8 12 Farm 34 6" // replaces current value (any other warps removed)
-    }
+   "Action": "EditMap",
+   "Target": "Maps/Town",
+   "MapProperties": {
+      "Warp": "8 12 Farm 34 6" // replaces current value (any other warps removed)
+   }
 }
 ```
 
@@ -856,16 +906,16 @@ Here's the same example, but appending to any current warps using a text operati
 
 ```js
 {
-    "Action": "EditMap",
-    "Target": "Maps/Town",
-    "TextOperations": [
-        {
-            "Operation": "Append",
-            "Target": ["MapProperties", "Warp"],
-            "Value": "8 12 Farm 34 6",
-            "Delimiter": " " // if there are already warps, add a space between them and the new one
-        }
-    ]
+   "Action": "EditMap",
+   "Target": "Maps/Town",
+   "TextOperations": [
+      {
+         "Operation": "Append",
+         "Target": ["MapProperties", "Warp"],
+         "Value": "8 12 Farm 34 6",
+         "Delimiter": " " // if there are already warps, add a space between them and the new one
+      }
+   ]
 }
 ```
 

@@ -727,6 +727,16 @@ return true if the resulting string is non-blank:
 </tr>
 
 <tr valign="top">
+<td>i18n</td>
+<td>
+
+Get text from the content pack's `i18n` translation files. See [_Translations_ in the author
+guide](author-guide.md#Translations) for more info.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Language</td>
 <td>
 

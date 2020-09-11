@@ -227,6 +227,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetLocalValueProviders(ManagedContentPack contentPack)
         {
             yield return new HasFileValueProvider(contentPack.HasFile);
+            yield return new TranslationValueProvider(contentPack.Pack.Translation);
         }
 
         /// <summary>Get a constant for a given value.</summary>

@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace ContentPatcher.Framework.Conditions
 {
     /// <summary>The condition types that can be checked.</summary>
@@ -146,6 +148,10 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>Whether a given value is non-blank.</summary>
         HasValue,
+
+        /// <summary>A translation from the mod's <c>i18n</c> folder.</summary>
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Deliberately named to match the Stardew Valley modding convention and folder name.")]
+        I18n,
 
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,

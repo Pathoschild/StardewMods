@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added [content pack translation](docs/author-guide.md#translations) support using `i18n` files.
 * Added [_text operations_](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
 * Patches now update immediately when you change language.
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
