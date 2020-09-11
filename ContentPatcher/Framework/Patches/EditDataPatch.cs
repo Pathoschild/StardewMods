@@ -468,7 +468,7 @@ namespace ContentPatcher.Framework.Patches
                             }
                             if (index < 0 || index > actualFields.Length - 1)
                             {
-                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {field.FieldKey} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
+                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} has no field with index {index} (must be 0 to {actualFields.Length - 1}).", LogLevel.Warn);
                                 continue;
                             }
 

@@ -8,6 +8,7 @@
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
 * Fixed patches not always updated for a `Random` token reroll.
 * Fixed field delimiter when editing `Data\Achievements`.
+* Fixed error text when an `EditData` patch uses an invalid field index.
 * Removed support for `FromFile` in `EditData` patches in newer format versions.
 
 **Update note for mod authors:**  
