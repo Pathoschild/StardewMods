@@ -289,6 +289,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply field/record edits
             this.ApplyCollection<TKey, TValue>(
+                asset,
                 hasEntry: key => data.ContainsKey(key),
                 getEntry: key => data[key],
                 setEntry: (key, value) => data[key] = value,
@@ -311,6 +312,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply field/record edits
             this.ApplyCollection<string, TValue>(
+                asset,
                 hasEntry: key => GetByKey(key) != null,
                 getEntry: key => GetByKey(key),
                 setEntry: (key, value) =>
@@ -394,11 +396,12 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Apply the patch to a dictionary asset.</summary>
         /// <typeparam name="TKey">The dictionary key type.</typeparam>
         /// <typeparam name="TValue">The dictionary value type.</typeparam>
+        /// <param name="asset">The asset being edited.</param>
         /// <param name="hasEntry">Get whether the collection has the given entry.</param>
         /// <param name="getEntry">Get an entry from the collection.</param>
         /// <param name="removeEntry">Remove an entry from the collection.</param>
         /// <param name="setEntry">Add or replace an entry in the collection.</param>
-        private void ApplyCollection<TKey, TValue>(Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
+        private void ApplyCollection<TKey, TValue>(IAssetInfo asset, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
         {
             // apply records
             if (this.Records != null)
@@ -439,6 +442,7 @@ namespace ContentPatcher.Framework.Patches
             // apply fields
             if (this.Fields != null)
             {
+                char fieldDelimiter = this.GetStringFieldDelimiter(asset);
                 foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value))
                 {
                     string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
@@ -454,7 +458,7 @@ namespace ContentPatcher.Framework.Patches
                     // apply string
                     if (typeof(TValue) == typeof(string))
                     {
-                        string[] actualFields = ((string)(object)getEntry(key)).Split('/');
+                        string[] actualFields = ((string)(object)getEntry(key)).Split(fieldDelimiter);
                         foreach (EditDataPatchField field in recordGroup)
                         {
                             if (!int.TryParse(field.FieldKey.Value, out int index))
@@ -563,6 +567,15 @@ namespace ContentPatcher.Framework.Patches
         private string GetKey<TValue>(TValue entity)
         {
             return InternalConstants.GetListAssetKey(entity);
+        }
+
+        /// <summary>Get the delimiter used in string entries for an asset.</summary>
+        /// <param name="asset">The asset being edited.</param>
+        private char GetStringFieldDelimiter(IAssetInfo asset)
+        {
+            return asset.AssetNameEquals("Data/Achievements")
+                ? '^'
+                : '/';
         }
     }
 }
