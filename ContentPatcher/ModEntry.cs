@@ -577,9 +577,11 @@ namespace ContentPatcher
                     get: config => string.Join(", ", configField.Value.ToArray()),
                     set: (config, newValue) =>
                     {
-                        configField.Value = configField.AllowMultiple
-                            ? this.ParseCommaDelimitedField(newValue)
-                            : new InvariantHashSet(newValue);
+                        configField.Value = this.ParseCommaDelimitedField(newValue);
+
+                        if (!configField.AllowMultiple && configField.Value.Count > 1)
+                            configField.Value = new InvariantHashSet(configField.Value.Take(1));
+
                         resetToken();
                     }
                 );
