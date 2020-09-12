@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.8
+Released 12 September 2020.
+
+* You can now choose a different farm to replace in the mod settings.
+* You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed.
+
 ## 1.7.1
 Released 05 May 2020.
 

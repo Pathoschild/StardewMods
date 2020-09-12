@@ -37,6 +37,12 @@ namespace ContentPatcher.Framework.ConfigModels
         public InvariantDictionary<string> When { get; set; }
 
         /****
+        ** Multiple actions
+        ****/
+        /// <summary>The text operations to apply.</summary>
+        public TextOperationConfig[] TextOperations { get; set; }
+
+        /****
         ** EditImage
         ****/
         /// <summary>The sprite area from which to read an image.</summary>
@@ -88,6 +94,9 @@ namespace ContentPatcher.Framework.ConfigModels
             this.FromFile = other.FromFile;
             this.Enabled = other.Enabled;
             this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
+
+            // multiple actions
+            this.TextOperations = other.TextOperations?.Select(p => new TextOperationConfig(p)).ToArray();
 
             // EditImage
             this.FromArea = other.FromArea != null ? new PatchRectangleConfig(other.FromArea) : null;

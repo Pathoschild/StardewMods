@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -204,9 +205,9 @@ namespace ContentPatcher.Framework
                 if (string.IsNullOrWhiteSpace(patch.LogName))
                 {
                     if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include)
-                        patch.LogName = $"{type} {PathUtilities.NormalizePathSeparators(patch.FromFile)}";
+                        patch.LogName = $"{type} {PathUtilities.NormalizePath(patch.FromFile)}";
                     else
-                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePathSeparators(patch.Target)}";
+                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePath(patch.Target)}";
                 }
             }
 
@@ -381,10 +382,22 @@ namespace ContentPatcher.Framework
                     case PatchType.EditData:
                         {
                             // validate
-                            if (entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && fromAsset == null)
-                                return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
-                            if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
-                                return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
+                            bool fromFileAllowed = rawContentPack.Content.Format.IsOlderThan("1.18.0");
+                            bool missingRequiredFields = entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.TextOperations?.Any() != true;
+                            if (fromFileAllowed)
+                            {
+                                if (missingRequiredFields && fromAsset == null)
+                                    return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, {nameof(PatchConfig.TextOperations)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
+                                if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                                    return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
+                            }
+                            else
+                            {
+                                if (fromAsset != null)
+                                    return TrackSkip($"the {nameof(PatchConfig.FromFile)} field can't be used with an '{action}' patch");
+                                if (missingRequiredFields)
+                                    return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, or {nameof(PatchConfig.TextOperations)} must be specified for an '{action}' change");
+                            }
 
                             // parse data changes
                             bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out string parseError)
@@ -400,6 +413,10 @@ namespace ContentPatcher.Framework
                                     return TrackSkip(error);
                             }
 
+                            // parse text operations
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string parseError))
+                                return TrackSkip(parseError);
+
                             // save
                             patch = new EditDataPatch(
                                 path: path,
@@ -409,6 +426,7 @@ namespace ContentPatcher.Framework
                                 records: entries,
                                 fields: fields,
                                 moveRecords: moveEntries,
+                                textOperations: textOperations,
                                 updateRate: updateRate,
                                 contentPack: pack,
                                 parentPatch: parentPatch,
@@ -542,6 +560,10 @@ namespace ContentPatcher.Framework
                                 }
                             }
 
+                            // parse text operations
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string parseError))
+                                return TrackSkip(parseError);
+
                             // read from/to asset areas
                             TokenRectangle fromArea = null;
                             if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out error, out fromArea))
@@ -551,8 +573,8 @@ namespace ContentPatcher.Framework
                                 return TrackSkip(error);
 
                             // validate
-                            if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any())
-                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, or {nameof(entry.MapTiles)}");
+                            if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !textOperations.Any())
+                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
                             if (fromAsset != null && entry.ToArea == null)
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
@@ -566,6 +588,7 @@ namespace ContentPatcher.Framework
                                 toArea: toArea,
                                 mapProperties: mapProperties,
                                 mapTiles: mapTiles,
+                                textOperations: textOperations,
                                 updateRate: updateRate,
                                 contentPack: pack,
                                 parentPatch: parentPatch,
@@ -595,6 +618,73 @@ namespace ContentPatcher.Framework
             }
         }
 
+        /// <summary>Parse the text operation fields for an <see cref="PatchType.EditData"/> or <see cref="PatchType.EditMap"/> patch.</summary>
+        /// <param name="patch">The patch whose text operations to parse.</param>
+        /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
+        /// <param name="textOperations">The parsed text operations.</param>
+        /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, out string error)
+        {
+            bool Fail(string reason, out string outReason)
+            {
+                outReason = reason;
+                return false;
+            }
+
+            // get empty list
+            textOperations = new List<TextOperation>();
+            if (patch.TextOperations?.Any() != true)
+            {
+                error = null;
+                return true;
+            }
+
+            // parse entries
+            int i = 0;
+            foreach (TextOperationConfig operation in patch.TextOperations)
+            {
+                LogPathBuilder localPath = path.With(i++.ToString());
+                string errorPrefix = $"{nameof(patch.TextOperations)} > {i} is invalid";
+
+                // parse type
+                if (!Enum.TryParse(operation.Operation, true, out TextOperationType operationType))
+                {
+                    return Fail(
+                        string.IsNullOrWhiteSpace(operation.Operation)
+                            ? $"{errorPrefix}: the {nameof(operation.Operation)} must be set"
+                            : $"{errorPrefix}: invalid {nameof(operation.Operation)} value '{operation.Operation}', expected one of: {string.Join(", ", Enum.GetNames(typeof(TextOperationType)))}",
+                        out error
+                    );
+                }
+
+                // parse target
+                List<IManagedTokenString> target = new List<IManagedTokenString>();
+                foreach (string field in operation.Target ?? new string[0])
+                {
+                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string targetError, out IManagedTokenString parsed))
+                        return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
+                    target.Add(parsed);
+                }
+                if (target.Count == 0)
+                    return Fail($"{errorPrefix}: the {nameof(operation.Target)} value must be set.", out error);
+                if (target.Count == 1)
+                    return Fail($"{errorPrefix}: the {nameof(operation.Target)} value must specify at least two segments.", out error);
+
+                // parse value
+                if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string valueError, out IManagedTokenString value))
+                    return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
+
+                // create text operation entry
+                textOperations.Add(new TextOperation(operationType, target.ToArray(), value, operation.Delimiter));
+            }
+
+            error = null;
+            return true;
+        }
+
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         /// <param name="entry">The change to load.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
@@ -605,7 +695,7 @@ namespace ContentPatcher.Framework
         /// <param name="moveEntries">The parsed move entry records.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        bool TryParseEditDataFields(PatchConfig entry, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        private bool TryParseEditDataFields(PatchConfig entry, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
         {
             entries = new List<EditDataPatchRecord>();
             fields = new List<EditDataPatchField>();

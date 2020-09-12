@@ -88,6 +88,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             return this.GetEntityFor(location, tile, building) != null;
         }
 
+        /// <summary>Get the registered automation factories.</summary>
+        public IEnumerable<IAutomationFactory> GetFactories()
+        {
+            return this.AutomationFactories.Select(p => p);
+        }
+
 
         /*********
         ** Private methods
@@ -142,10 +148,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         private bool TryAddEntity(MachineGroupBuilder group, GameLocation location, LocationFloodFillIndex locationIndex, in Vector2 tile)
         {
-            switch (this.GetEntity(location, locationIndex, tile))
+            IAutomatable entity = this.GetEntity(location, locationIndex, tile);
+            switch (entity)
             {
+                case null:
+                    return false;
+
                 case IMachine machine:
-                    group.Add(machine);
+                    if (this.Config.GetMachineOverrides(machine.MachineTypeID)?.Enabled != false)
+                        group.Add(machine);
                     return true;
 
                 case IContainer container:
@@ -156,12 +167,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                     }
                     return false;
 
-                case IAutomatable connector:
-                    group.Add(connector.TileArea);
-                    return true;
-
                 default:
-                    return false;
+                    group.Add(entity.TileArea); // connector
+                    return true;
             }
         }
 

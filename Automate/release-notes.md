@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18
+Released 12 September 2020.
+
+* Added [`automate summary` console command](README.md#console-command).
+* You can now [disable automation for specific machine types](README.md#per-machine-settings).
+* Fixed shipping bins not having a lower priority than other machines by default as intended. Affected `config.json` will be corrected automatically.
+
 ## 1.17.3
 Released 19 August 2020.
 

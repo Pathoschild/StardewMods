@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
@@ -28,6 +30,9 @@ namespace Pathoschild.Stardew.Automate
 
         /// <summary>Constructs machine groups.</summary>
         private MachineGroupFactory Factory;
+
+        /// <summary>Handles console commands from players.</summary>
+        private CommandHandler CommandHandler;
 
         /// <summary>Whether to enable automation for the current save.</summary>
         private bool EnableAutomation => Context.IsMainPlayer;
@@ -70,15 +75,13 @@ namespace Pathoschild.Stardew.Automate
             }
 
             // read config
-            this.Config = helper.ReadConfig<ModConfig>();
-            this.Config.MachinePriority = new Dictionary<string, int>(this.Config.MachinePriority, StringComparer.OrdinalIgnoreCase);
+            this.Config = this.LoadConfig();
 
             // init
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Factory = new MachineGroupFactory(this.Config);
             this.Factory.Add(new AutomationFactory(
                 connectors: this.Config.ConnectorNames,
-                automateShippingBin: this.Config.AutomateShippingBin,
                 monitor: this.Monitor,
                 reflection: helper.Reflection,
                 data: data,
@@ -86,6 +89,7 @@ namespace Pathoschild.Stardew.Automate
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
                 pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
+            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.Factory, this.ActiveMachineGroups);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -97,6 +101,9 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
+
+            // hook commands
+            helper.ConsoleCommands.Add("automate", "Run commands from the Automate mod. Enter 'automate help' for more info.", this.CommandHandler.HandleCommand);
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
@@ -303,6 +310,65 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
+        /// <summary>Read the config file, migrating legacy settings if applicable.</summary>
+        private ModConfig LoadConfig()
+        {
+            // read raw config
+            var config = this.Helper.ReadConfig<ModConfig>();
+            bool changed = false;
+
+            // normalize machine settings
+            config.MachineOverrides = new Dictionary<string, ModConfigMachine>(config.MachineOverrides ?? new Dictionary<string, ModConfigMachine>(), StringComparer.OrdinalIgnoreCase);
+            foreach (string key in config.MachineOverrides.Where(p => p.Value == null).Select(p => p.Key).ToArray())
+            {
+                config.MachineOverrides.Remove(key);
+                changed = true;
+            }
+
+            // migrate legacy fields
+            if (config.ExtensionFields != null)
+            {
+                // migrate AutomateShippingBin (1.10.4–1.17.3)
+                try
+                {
+                    if (config.ExtensionFields.TryGetValue("AutomateShippingBin", out JToken raw))
+                        config.GetOrAddMachineOverrides(ShippingBinMachine.ShippingBinId).Enabled = raw.ToObject<bool>();
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Failed migrating legacy 'AutomateShippingBin' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
+                }
+
+                // migrate MachinePriority field (1.17–1.17.3) to MachineSettings
+                // (and fix wrong "ShippingBinMachine" default value)
+                try
+                {
+                    if (config.ExtensionFields.TryGetValue("MachinePriority", out JToken raw))
+                    {
+                        var priorities = raw.ToObject<Dictionary<string, int>>() ?? new Dictionary<string, int>();
+                        foreach (var pair in priorities)
+                        {
+                            string key = pair.Key == "ShippingBinMachine" ? ShippingBinMachine.ShippingBinId : pair.Key;
+                            config.GetOrAddMachineOverrides(key).Priority = pair.Value;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Failed migrating legacy 'MachinePriority' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
+                }
+
+                config.ExtensionFields.Clear();
+                changed = true;
+            }
+
+            // resave changes
+            if (changed)
+                this.Helper.WriteConfig(config);
+
+            return config;
+        }
+
         /// <summary>Get the active machine groups in every location.</summary>
         private IEnumerable<MachineGroup> GetActiveMachineGroups()
         {
@@ -350,8 +416,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Enable the overlay.</summary>
         private void EnableOverlay()
         {
-            if (this.CurrentOverlay == null)
-                this.CurrentOverlay = new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Factory.GetMachineGroups(Game1.currentLocation));
+            this.CurrentOverlay ??= new OverlayMenu(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Factory.GetMachineGroups(Game1.currentLocation));
         }
 
         /// <summary>Reset the overlay if it's being shown.</summary>

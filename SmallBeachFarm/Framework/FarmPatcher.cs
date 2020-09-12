@@ -101,7 +101,13 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     return false;
                 }
                 else
-                    return true; // run default riverlands logic
+                {
+                    // match riverland farm behavior
+                    __result = Game1.random.NextDouble() < 0.3
+                        ? __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Forest")
+                        : __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Town");
+                    return false;
+                }
             }
             finally
             {

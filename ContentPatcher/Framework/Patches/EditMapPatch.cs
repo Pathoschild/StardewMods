@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using xTile;
 using xTile.Layers;
+using xTile.ObjectModel;
 using xTile.Tiles;
 using Location = xTile.Dimensions.Location;
 using Size = xTile.Dimensions.Size;
@@ -38,6 +40,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The map tiles to change when editing a map.</summary>
         private readonly EditMapPatchTile[] MapTiles;
 
+        /// <summary>The text operations to apply to existing values.</summary>
+        private readonly TextOperation[] TextOperations;
+
         /// <summary>Whether the patch applies a map patch.</summary>
         private bool AppliesMapPatch => this.RawFromAsset != null;
 
@@ -56,6 +61,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fromArea">The map area from which to read tiles.</param>
         /// <param name="toArea">The map area to overwrite.</param>
         /// <param name="mapProperties">The map properties to change when editing a map, if any.</param>
+        /// <param name="textOperations">The text operations to apply to existing values.</param>
         /// <param name="mapTiles">The map tiles to change when editing a map.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
@@ -63,7 +69,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditMap,
@@ -80,6 +86,7 @@ namespace ContentPatcher.Framework.Patches
             this.ToArea = toArea;
             this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.MapTiles = mapTiles?.ToArray() ?? new EditMapPatchTile[0];
+            this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
             this.Monitor = monitor;
             this.Reflection = reflection;
 
@@ -87,7 +94,8 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.FromArea)
                 .Add(this.ToArea)
                 .Add(this.MapProperties)
-                .Add(this.MapTiles);
+                .Add(this.MapTiles)
+                .Add(this.TextOperations);
         }
 
         /// <inheritdoc />
@@ -127,7 +135,7 @@ namespace ContentPatcher.Framework.Patches
                 {
                     i++;
                     if (!this.TryApplyTile(target, tilePatch, out string error))
-                        this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.MapTiles)} > entry {i + 1} couldn't be applied: {error}", LogLevel.Warn);
+                        this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.MapTiles)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
                 }
             }
 
@@ -142,6 +150,13 @@ namespace ContentPatcher.Framework.Patches
                 else
                     target.Properties[key] = value;
             }
+
+            // apply text operations
+            for (int i = 0; i < this.TextOperations.Length; i++)
+            {
+                if (!this.TryApplyTextOperation(target, this.TextOperations[i], out string error))
+                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.TextOperations)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
+            }
         }
 
         /// <inheritdoc />
@@ -152,6 +167,9 @@ namespace ContentPatcher.Framework.Patches
 
             if (this.MapProperties.Any())
                 yield return "changed map properties";
+
+            if (this.TextOperations.Any())
+                yield return "applied text operations";
         }
 
 
@@ -238,6 +256,45 @@ namespace ContentPatcher.Framework.Patches
                 foreach (var pair in setProperties)
                     tile.Properties[pair.Key] = pair.Value;
                 layer.Tiles[position] = tile;
+            }
+
+            error = null;
+            return true;
+        }
+
+        /// <summary>Try to apply a text operation.</summary>
+        /// <param name="target">The target map to change.</param>
+        /// <param name="operation">The text operation to apply.</param>
+        /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
+        /// <returns>Returns whether applying the operation succeeded.</returns>
+        private bool TryApplyTextOperation(Map target, TextOperation operation, out string error)
+        {
+            var targetRoot = operation.GetTargetRoot();
+            switch (targetRoot)
+            {
+                case TextOperationTargetRoot.MapProperties:
+                    {
+                        // validate
+                        if (operation.Target.Length > 2)
+                            return this.Fail($"a '{TextOperationTargetRoot.MapProperties}' path must only have one other segment for the property name.", out error);
+
+                        // get key/value
+                        string key = operation.Target[1].Value;
+                        if (!target.Properties.TryGetValue(key, out PropertyValue value))
+                            value = new PropertyValue("");
+
+                        // apply
+                        target.Properties[key] = operation.Apply(value);
+                    }
+                    break;
+
+                default:
+                    return this.Fail(
+                        targetRoot == null
+                            ? $"unknown path root '{operation.Target[0]}'."
+                            : $"path root '{targetRoot}' isn't valid for an {nameof(PatchType.EditMap)} patch",
+                        out error
+                    );
             }
 
             error = null;
@@ -374,16 +431,6 @@ namespace ContentPatcher.Framework.Patches
                 this.Reflection.GetMethod(map, "UpdateDisplaySize").Invoke();
 
             return resized;
-        }
-
-        /// <summary>A utility method for returning false with an out error.</summary>
-        /// <param name="inError">The error message.</param>
-        /// <param name="outError">The input error.</param>
-        /// <returns>Return false.</returns>
-        private bool Fail(string inError, out string outError)
-        {
-            outError = inError;
-            return false;
         }
     }
 }

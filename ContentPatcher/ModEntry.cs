@@ -50,7 +50,8 @@ namespace ContentPatcher
             new Migration_1_15_Prevalidation(),
             new Migration_1_15_Rewrites(content),
             new Migration_1_16(),
-            new Migration_1_17()
+            new Migration_1_17(),
+            new Migration_1_18()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -101,6 +102,7 @@ namespace ContentPatcher
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
@@ -204,6 +206,15 @@ namespace ContentPatcher
                 this.IsFirstTick = false;
                 this.Initialize();
             }
+        }
+
+        /// <summary>Raised after the game language is changed, and after SMAPI handles the change.</summary>
+        /// <param name="code">The new language code.</param>
+        private void OnLocaleChanged(LocalizedContentManager.LanguageCode code)
+        {
+            // update if locale changes after initialization
+            if (!this.IsFirstTick)
+                this.UpdateContext(ContextUpdateType.All);
         }
 
         /****
@@ -361,10 +372,18 @@ namespace ContentPatcher
 
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
+                            this.AddConfigToken(pair.Key, pair.Value, modContext, current);
+
+                        // register with Generic Mod Config Menu
+                        if (config.Any())
                         {
-                            ConfigField field = pair.Value;
-                            IValueProvider valueProvider = new ImmutableValueProvider(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
-                            modContext.AddLocalToken(new Token(valueProvider, scope: current.Manifest.UniqueID));
+                            GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(this.Helper.ModRegistry, this.Monitor, current.Manifest, this.ParseCommaDelimitedField, config, saveAndApply: () =>
+                            {
+                                configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                                this.PatchLoader.UnloadPatchesLoadedBy(current, false);
+                                this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
+                            });
+                            configMenu.Register((name, field) => this.AddConfigToken(name, field, modContext, current));
                         }
 
                         // load dynamic tokens
@@ -451,7 +470,7 @@ namespace ContentPatcher
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
         /// <param name="field">The field value to parse.</param>
-        public InvariantHashSet ParseCommaDelimitedField(string field)
+        private InvariantHashSet ParseCommaDelimitedField(string field)
         {
             if (string.IsNullOrWhiteSpace(field))
                 return new InvariantHashSet();
@@ -462,6 +481,20 @@ namespace ContentPatcher
                 select value.Trim()
             );
             return new InvariantHashSet(values);
+        }
+
+        /// <summary>Register a config token for a content pack.</summary>
+        /// <param name="name">The field name.</param>
+        /// <param name="field">The config field.</param>
+        /// <param name="modContext">The mod context to which to add the token.</param>
+        /// <param name="contentPack">The content pack for which to add the token.</param>
+        private void AddConfigToken(string name, ConfigField field, ModTokenContext modContext, RawContentPack contentPack)
+        {
+            modContext.RemoveLocalToken(name); // only needed when resetting a token for Generic Mod Config Menu, but has no effect otherwise
+
+            IValueProvider valueProvider = new ImmutableValueProvider(name, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+            IToken token = new Token(valueProvider, scope: contentPack.Manifest.UniqueID);
+            modContext.AddLocalToken(token);
         }
     }
 }

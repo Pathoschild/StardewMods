@@ -12,7 +12,11 @@ automatically pull raw items from the chest and push processed items into it.
 * [Configure](#configure)
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
+  * [Per-machine settings](#per-machine-settings)
 * [Compatibility](#compatibility)
+* [Troubleshooting](#troubleshooting)
+  * [In-game overlay](#in-game-overlay)
+  * [Console command](#console-command)
 * [FAQs](#faqs)
 * [See also](#see-also)
 
@@ -113,101 +117,24 @@ Workbenches are the only connectors by default. You can edit the `config.json` t
 (see _[configure](#configure)_ below).
 
 ### Machine priority
-<dl>
-<dt>overview</dt>
-<dd>
-
 The default order that machines are processed is unpredictable and subject to change, except that
 shipping bins are processed last by default.
 
-You can change that by setting machine priority in [the `config.json`](#configure). All machines
-have a default priority of 0, and higher values are processed first (for both input and output).
-
-</dd>
-
-<dt>example</dt>
-<dd>
-
 For example, let's say you have this machine setup and you place two tomatoes in the chest:
 ```
-┌──────────┐┌──────────┐┌──────────┐┌──────────┐
-│  chest   ││   keg    ││   keg    ││ preserves│
-│          ││          ││          ││   jar    │
-└──────────┘└──────────┘└──────────┘└──────────┘
-┌──────────┐
-│ shipping │
-│   bin    │
-└──────────┘
+┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+│  chest   ││   keg    ││   keg    ││ shipping ││ preserves│
+│          ││          ││          ││   bin    ││   jar    │
+└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
 ```
 
 By default, all of the tomatoes will go into the kegs or preserves jar (since the shipping bin has
-a lower priority), but you won't know which ones.
+a lower priority), but you won't know which ones will get them first. You can [change per-machine
+settings](#per-machine-settings) to set the priority for individual machine types and make them
+predictable.
 
-If you wanted kegs to process input before preserves jars, you'd set this in the `config.json`:
-```js
-"MachinePriority": {
-   "Keg": 1,
-   "ShippingBin": -1
-}
-```
-
-Now the two tomatoes would always go into the kegs. If you put five tomatoes at once into the chest,
-the kegs and preserves jar would each get one, and the remaining tomatoes would go into the
-shipping bin.
-
-</dd>
-
-<dt>machine codes</dt>
-<dd>
-
-The `MachinePriority` option needs the unique machine code. Here are the codes for the default
-machines:
-
-<details><summary>expand</summary>
-
-machine type | code
------------- | ----
-auto-grabbers | `AutoGrabber`
-bee houses | `BeeHouse`
-bushes | `Bush`
-casks | `Cask`
-charcoal kilns | `CharcoalKiln`
-cheese presses | `CheesePress`
-crab pots | `CrabPot`
-crystalariums | `Crystalarium`
-fish ponds | `FishPond`
-fruit trees | `FruitTree`
-furnaces | `Furnace`
-garbage cans | `TrashCan`
-hay hoppers | `FeedHopper`
-Junimo huts | `JunimoHut`
-incubators (for eggs) | `CoopIncubator`
-kegs | `Keg`
-lightning rods | `LightningRod`
-looms | `Loom`
-mayonnaise machines | `MayonnaiseMachine`
-mills | `Mill`
-mushroom boxes | `MushroomBox`
-oil makers | `OilMaker`
-preserves jars | `PreservesJar`
-recycling machines | `RecyclingMachine`
-seed makers | `SeedMaker`
-shipping bins | `ShippingBin`
-silos | `FeedHopper` (same as hay hoppers)
-slime egg-presses | `SlimeEggPress`
-slime incubators | `SlimeIncubator`
-soda machines | `SodaMachine`
-statues of endless fortune | `StatueOfEndlessFortune`
-statues of perfection | `StatueOfPerfection`
-tappers | `Tapper`
-wood chippers | `WoodChipper`
-worm bins | `WormBin`
-
-</details>
-</dd>
-</dl>
-
-For custom machines added by other mods, see their documentation or ask their mod authors.
+Note that if all higher-priority machines are busy, any remaining items may go into lower-priority
+machines.
 
 ## Configure
 ### config.json
@@ -231,14 +158,6 @@ The default value is `U` to toggle the automation overlay.
 
 You can separate bindings with commas (like `U, LeftShoulder` for either one), and set multi-key
 bindings with plus signs (like `LeftShift + U`).
-
-  </td>
-</tr>
-<tr>
-  <td><code>AutomateShippingBin</code></td>
-  <td>
-
-Whether the shipping bin should automatically pull items out of connected chests. Default `true`.
 
   </td>
 </tr>
@@ -278,11 +197,12 @@ Contains `Workbench` by default.
   </td>
 </tr>
 <tr>
-  <td><code>MachinePriority</code></td>
+  <td><code>MachineOverrides</code></td>
   <td>
 
-The relative priority with which to process machine inputs and outputs; see
-_[machine priority](#machine-priority)_ for more info. Defaults to `ShippingBin` at -1 priority.
+The configuration to override for specific machine IDs. See [_per-machine settings_](#per-machine-settings)
+for more info.
+
   </td>
 </tr>
 <tr>
@@ -315,6 +235,39 @@ This adds four options for automate:
 
 (To do this without Chests Anywhere, see the [technical documentation](technical.md).)
 
+### Per-machine settings
+_This is advanced; most players won't need to configure Automate to this extent._
+
+You can set some options for individual machine types by [editing the `config.json`](#config.json),
+and adding an entry to the `MachineOverrides` field. If a machine isn't listed in that field, it'll
+use the default values. This works for all automated machines, including those added by other mods.
+
+Each entry in `MachineOverrides` is identified by the internal machine type ID (_not_ the machine
+name you see in-game). You can [run the `automate summary` command](#console-command) to see a list
+of machines being automated; the names shown in the list are the machine type IDs.
+
+
+For example:
+```js
+"MachineOverrides": {
+    "ShippingBin": {
+        "Enabled": true,
+        "Priority": -1
+    },
+    "Tapper": {
+        "Enabled": true,
+        "Priority": 0
+    },
+}
+```
+
+Available options for each machine:
+
+field | purpose
+----- | -------
+`Enabled` | Whether the machine type should be automated (default `true`).
+`Priority` | The order in which this machine should be processed relative to other machines (default `0`). Higher values are processed first for both input and output.
+
 ## Compatibility
 Automate is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer. In multiplayer mode, only the main player can automate machines; other players can
@@ -330,6 +283,19 @@ Automate is compatible with...
   'CFAutomate' download to enable automation).
 * [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) (with the
   [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038) addon).
+
+## Troubleshooting
+### In-game overlay
+Press `U` in-game ([configurable](#configure)) to toggle the automation overlay. This highlights
+machines, containers, and connectors which are automated (green) or automateable but not currently
+automated (red):
+
+> ![](screenshots/connectors.png)
+
+### Console command
+Enter `automate summary` directly in the SMAPI console to view a summary of your machine groups:
+
+> ![](screenshots/console-command.png)
 
 ## FAQs
 ### Why did my chests/machines disappear?

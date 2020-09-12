@@ -101,6 +101,32 @@ namespace Common.Integrations.GenericModConfigMenu
             return this;
         }
 
+        /// <summary>Add a dropdown to the form.</summary>
+        /// <param name="label">The label text.</param>
+        /// <param name="description">A description shown on hover, if any.</param>
+        /// <param name="get">Get the current value.</param>
+        /// <param name="set">Set a new value.</param>
+        /// <param name="choices">The choices to choose from.</param>
+        /// <param name="enable">Whether the field is enabled.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddDropdown(string label, string description, Func<TConfig, string> get, Action<TConfig, string> set, string[] choices, bool enable = true)
+        {
+            this.AssertLoaded();
+
+            if (enable)
+            {
+                this.ModApi.RegisterChoiceOption(
+                    mod: this.ConsumerManifest,
+                    optionName: label,
+                    optionDesc: description,
+                    optionGet: () => get(this.GetConfig()),
+                    optionSet: val => set(this.GetConfig(), val),
+                    choices: choices
+                );
+            }
+
+            return this;
+        }
+
         /// <summary>Add a checkbox to the form.</summary>
         /// <param name="label">The label text.</param>
         /// <param name="description">A description shown on hover, if any.</param>

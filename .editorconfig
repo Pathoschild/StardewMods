@@ -66,3 +66,10 @@ csharp_style_inlined_variable_declaration = true:warning
 
 # avoid superfluous braces
 csharp_prefer_braces = false:suggestion
+
+##########
+## Column guidelines
+## documentation: https://marketplace.visualstudio.com/items?itemName=PaulHarrington.EditorGuidelines
+##########
+[*.md]
+guidelines = 100

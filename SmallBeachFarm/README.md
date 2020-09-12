@@ -1,6 +1,6 @@
-**Small Beach Farm** is a [Stardew Valley](http://stardewvalley.net/) mod which replaces the
-riverlands farm with a fertile pocket beach suitable for slower/challenge runs, and lets you
-catch both river and ocean fish. You can optionally enable islands and beach sounds.
+**Small Beach Farm** is a [Stardew Valley](http://stardewvalley.net/) mod which adds a fertile
+pocket beach farm suitable for slower/challenge runs, and lets you catch both river and ocean fish.
+You can optionally enable islands and beach sounds.
 
 > ![](docs/farm.png)
 
@@ -10,7 +10,8 @@ catch both river and ocean fish. You can optionally enable islands and beach sou
 3. Run the game using SMAPI.
 
 ## Usage
-Just load a save with the riverlands farm, and you'll see the new map!
+Just load a save with the riverlands farm, and you'll see the new map! You can change which farm is
+replaced in the [configuration](#configure).
 
 A few highlights:
 
@@ -37,6 +38,14 @@ Tips:
   > ![](docs/automate-crabpots.png)
 
 ## Configure
+### In-game settings
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+you can click the cog button (⚙) on the title screen to configure the mod. Hover the cursor over
+a field for details, or see the next section.
+
+![](docs/generic-config-menu.png)
+
+### `config.json` file
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
@@ -47,6 +56,7 @@ setting         | default | what it affects
 `AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
 `EnableIslands` | `false` | Whether to add ocean islands with extra land area.
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
+`ReplaceFarmID` | `1`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), and `5` (four corners).
 
 ## FAQs
 ### Can I use this with an existing save?
@@ -56,7 +66,7 @@ for suggested fixes (skip the part about editing the save file).
 
 ### Compatibility
 This is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
-multiplayer. It can't be combined with other mods that replace the riverlands farm.
+multiplayer. It can't be combined with other mods that replace the same farm.
 
 The farm map will recolor automatically if you have one of these installed:
 * A Wittily Named Recolor;

@@ -1,6 +1,24 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18
+Released 12 September 2020. See the [release highlights](https://www.patreon.com/posts/41527845).
+
+* Added [content pack translation](docs/author-guide.md#translations) support using `i18n` files.
+* Added [text operations](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
+* You can now [configure content packs in-game](README.md#configure-content-packs) if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed (thanks to a collaboration with spacechase0!). This works automatically for any content pack that has configuration options, no changes needed by mod authors.
+* You can now edit fields via `EditData` for `Data\Achievements` too.
+* Patches now update immediately when you change language.
+* Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
+* Fixed patches not always updated for a `Random` token reroll.
+* Fixed error text when an `EditData` patch uses an invalid field index.
+* Removed support for `FromFile` in `EditData` patches in newer format versions.
+
+**Update note for mod authors:**  
+If you use the `FromFile` field with `EditData` patches, updating the `Format` field to `1.18.0` or
+later requires changes to your `content.json`. See the
+[migration guide](docs/author-migration-guide.md) for more info.
+
 ## 1.17.2
 Released 28 August 2020.
 

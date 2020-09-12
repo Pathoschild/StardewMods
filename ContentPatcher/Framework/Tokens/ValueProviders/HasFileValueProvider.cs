@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 return false;
 
             // get normalized path
-            path = PathUtilities.NormalizePathSeparators(path);
+            path = PathUtilities.NormalizePath(path);
 
             // validate
             if (Path.IsPathRooted(path))

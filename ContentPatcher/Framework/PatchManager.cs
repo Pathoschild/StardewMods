@@ -41,7 +41,7 @@ namespace ContentPatcher.Framework
         private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new InvariantDictionary<HashSet<IPatch>>();
 
         /// <summary>The patches to apply, indexed by asset name.</summary>
-        private InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
+        private readonly InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
 
         /// <summary>The new patches which haven't received a context update yet.</summary>
         private readonly HashSet<IPatch> PendingPatches = new HashSet<IPatch>();
@@ -91,12 +91,12 @@ namespace ContentPatcher.Framework
 
                     case 2:
                         this.Monitor.Log($"Two content packs want to load the '{asset.AssetName}' asset ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}", LogLevel.Trace);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
                         break;
 
                     default:
                         this.Monitor.Log($"Multiple content packs want to load the '{asset.AssetName}' asset ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}", LogLevel.Trace);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
                         break;
                 }
                 return false;
@@ -138,7 +138,7 @@ namespace ContentPatcher.Framework
             if (this.Monitor.IsVerbose)
                 this.Monitor.VerboseLog($"Patch \"{patch.Path}\" loaded {asset.AssetName}.");
             else
-                this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.", LogLevel.Trace);
+                this.Monitor.Log($"{patch.ContentPack.Manifest.Name} loaded {asset.AssetName}.");
 
             T data = patch.Load<T>(asset);
 
@@ -169,7 +169,7 @@ namespace ContentPatcher.Framework
                 if (this.Monitor.IsVerbose)
                     this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.AssetName}.");
                 else if (loggedContentPacks.Add(patch.ContentPack.Manifest.Name))
-                    this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.", LogLevel.Trace);
+                    this.Monitor.Log($"{patch.ContentPack.Manifest.Name} edited {asset.AssetName}.");
 
                 try
                 {
@@ -224,7 +224,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // track old values
-                string wasAssetName = patch.TargetAsset;
+                string wasFromAsset = patch.FromAsset;
+                string wasTargetAsset = patch.TargetAsset;
                 bool wasReady = patch.IsReady && !this.PendingPatches.Contains(patch);
 
                 // update patch
@@ -237,10 +238,21 @@ namespace ContentPatcher.Framework
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"Patch error: {patch.Path} failed on context update (see log file for details).\n{ex.Message}", LogLevel.Error);
-                    this.Monitor.Log(ex.ToString(), LogLevel.Trace);
+                    this.Monitor.Log(ex.ToString());
                     changed = false;
                 }
                 bool isReady = patch.IsReady;
+
+                // force reindex
+                // This is only needed for EditData patches which use FromFile, since the loaded
+                // file may include tokens which couldn't be analyzed when the patch was added.
+                // This scenario was deprecated in Content Patcher 1.16, when Include patches were
+                // added.
+                if (patch.Type == PatchType.EditData && patch.FromAsset != wasFromAsset)
+                {
+                    this.RemovePatchFromIndexes(patch);
+                    this.IndexPatch(patch, indexByToken: true);
+                }
 
                 // track patches to reload
                 bool reloadAsset = isReady != wasReady || (isReady && changed);
@@ -248,7 +260,7 @@ namespace ContentPatcher.Framework
                 {
                     patch.IsApplied = false;
                     if (wasReady)
-                        reloadAssetNames.Add(wasAssetName);
+                        reloadAssetNames.Add(wasTargetAsset);
                     if (isReady)
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
@@ -259,8 +271,8 @@ namespace ContentPatcher.Framework
                     IList<string> changes = new List<string>();
                     if (wasReady != isReady)
                         changes.Add(isReady ? "enabled" : "disabled");
-                    if (wasAssetName != patch.TargetAsset)
-                        changes.Add($"target: {wasAssetName} => {patch.TargetAsset}");
+                    if (wasTargetAsset != patch.TargetAsset)
+                        changes.Add($"target: {wasTargetAsset} => {patch.TargetAsset}");
                     string changesStr = string.Join(", ", changes);
 
                     this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.Path}: {(changes.Any() ? changesStr : "OK")}");
@@ -334,30 +346,14 @@ namespace ContentPatcher.Framework
         /// <param name="patchListChanged">Whether patches were added or removed.</param>
         public void Reindex(bool patchListChanged)
         {
-            // rebuild target asset lookup
-            this.PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>(
-                from patchGroup in this.Patches.GroupByIgnoreCase(p => p.TargetAsset)
-                where patchGroup.Key != null // ignore include tokens for target lookups
-                select new KeyValuePair<string, HashSet<IPatch>>(patchGroup.Key, new HashSet<IPatch>(patchGroup))
-            );
-
-            // rebuild affected-by-tokens lookup
+            // reset
+            this.PatchesByCurrentTarget.Clear();
             if (patchListChanged)
-            {
-                foreach (IPatch patch in this.Patches)
-                {
-                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
+                this.PatchesAffectedByToken.Clear();
 
-                    InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
-                    foreach (string tokenName in tokensUsed)
-                        this.TrackPatchAffectedByToken(patch, tokenName);
-                    foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
-                    {
-                        if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
-                            this.TrackPatchAffectedByToken(patch, token.Name);
-                    }
-                }
-            }
+            // reindex
+            foreach (IPatch patch in this.Patches)
+                this.IndexPatch(patch, indexByToken: patchListChanged);
         }
 
         /// <summary>Add a patch that's permanently disabled for this session.</summary>
@@ -413,16 +409,6 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Track that a given token may cause the patch to update.</summary>
-        /// <param name="patch">The affected patch.</param>
-        /// <param name="tokenName">The token name.</param>
-        private void TrackPatchAffectedByToken(IPatch patch, string tokenName)
-        {
-            if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
-                this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
-            affected.Add(patch);
-        }
-
         /// <summary>Get the patch type which applies when editing a given asset type.</summary>
         /// <param name="assetType">The asset type.</param>
         private PatchType? GetEditType(Type assetType)
@@ -459,6 +445,63 @@ namespace ContentPatcher.Framework
                 patches.Add(patch);
 
             return patches;
+        }
+
+        /// <summary>Add a patch to the lookup indexes.</summary>
+        /// <param name="patch">The patch to index.</param>
+        /// <param name="indexByToken">Whether to also index by tokens used.</param>
+        private void IndexPatch(IPatch patch, bool indexByToken)
+        {
+            // index by target asset
+            if (patch.TargetAsset != null)
+            {
+                if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> list))
+                    this.PatchesByCurrentTarget[patch.TargetAsset] = list = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+                list.Add(patch);
+            }
+
+            // index by tokens used
+            if (indexByToken)
+            {
+                void IndexForToken(string tokenName)
+                {
+                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
+                        this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+                    affected.Add(patch);
+                }
+
+                // get direct tokens
+                InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+                foreach (string tokenName in tokensUsed)
+                    IndexForToken(tokenName);
+
+                // get indirect tokens
+                ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
+                foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
+                {
+                    if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))
+                        IndexForToken(token.Name);
+                }
+            }
+        }
+
+        /// <summary>Whether to remove a patch from the indexes. Normally the indexes should be cleared and rebuilt instead; this method should only be used when forcefully reindexing a patch, which is only needed if it couldn't be analyzed when the patch was added, which in turn should only be the case for <see cref="PatchType.EditData"/> patches which use <see cref="PatchConfig.FromFile"/> (which was deprecated in Content Patcher 1.16).</summary>
+        /// <param name="patch">The patch to remove.</param>
+        private void RemovePatchFromIndexes(IPatch patch)
+        {
+            foreach (var lookup in new[] { this.PatchesByCurrentTarget, this.PatchesAffectedByToken })
+            {
+                foreach (string key in lookup.Keys.ToArray())
+                {
+                    ISet<IPatch> list = lookup[key];
+                    if (list.Contains(patch))
+                    {
+                        list.Remove(patch);
+                        if (!list.Any())
+                            lookup.Remove(key);
+                    }
+                }
+            }
         }
     }
 }

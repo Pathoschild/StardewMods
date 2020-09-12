@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework.Commands
             {
                 string includeFrom = patch.ParsedFromAsset?.Value ?? patch.RawFromAsset;
                 if (includeFrom != null)
-                    path = new LogPathBuilder(path.Segments.Take(path.Segments.Length - 1)).With(PathUtilities.NormalizePathSeparators(includeFrom));
+                    path = new LogPathBuilder(path.Segments.Take(path.Segments.Length - 1)).With(PathUtilities.NormalizePath(includeFrom));
             }
 
             return path.Segments;

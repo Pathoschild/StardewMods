@@ -19,7 +19,6 @@ This document helps mod authors create a content pack for Content Patcher.
   * [`EditData`](#editdata)
     * [Definitions](#data-definitions)
     * [Basic changes](#data-basic-changes)
-    * [Load changes from a file](#data-load-changes-from-a-file)
     * [Edit data model assets](#data-edit-data-model-assets)
     * [Edit list assets](#data-edit-list-assets)
   * [`EditMap`](#editmap)
@@ -28,7 +27,11 @@ This document helps mod authors create a content pack for Content Patcher.
     * [Tiles and tile properties](#tiles-and-tile-properties)
     * [Known limitations](#map-known-limitations)
   * [`Include`](#include)
-* [Advanced: conditions & tokens](#advanced)
+* [Advanced](#advanced)
+  * [Conditions & tokens](#conditions--tokens)
+  * [Player config](#player-config)
+  * [Translations](#translations)
+  * [Text operations](#text-operations)
 * [Release a content pack](#release-a-content-pack)
 * [Troubleshoot](#troubleshoot)
   * [Schema validator](#schema-validator)
@@ -37,6 +40,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [Verbose log](#verbose-log)
 * [FAQs](#faqs)
   * [Are Content Patcher updates backwards-compatible?](#are-content-patcher-updates-backwards-compatible)
+  * [How do I change assets in another language?](#how-do-i-change-assets-in-another-language)
   * [How multiple patches interact](#how-multiple-patches-interact)
   * [Known limitations](#known-limitations)
 * [Configure](#configure)
@@ -88,7 +92,7 @@ The `content.json` file has three main fields:
 
 field          | purpose
 -------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.17.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Format`       | The format version. You should always use the latest version (currently `1.18.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
 
@@ -96,7 +100,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "Load",
@@ -138,8 +142,11 @@ the next section.
 
 The game asset you want to patch (or multiple comma-delimited assets). This is the file path inside
 your game's `Content` folder, without the file extension or language (like `Animals/Dinosaur` to
-edit `Content/Animals/Dinosaur.xnb`). Your changes are applied in all languages unless you specify a language
-[condition](#advanced).
+edit `Content/Animals/Dinosaur.xnb`).
+
+Your changes are applied in all languages unless you specify a language [condition](#advanced). See
+_[How do I change assets in another language?](#how-do-i-change-assets-in-another-language)_ for
+more info.
 
 This field supports [tokens](#advanced) and capitalisation doesn't matter.
 
@@ -217,7 +224,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "Load",
@@ -248,7 +255,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -270,12 +277,12 @@ field      | purpose
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
-`FromFile` | **This field was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**<br />~~The relative path to a JSON file in your content pack folder containing the `Fields`, `Entries`, and `MoveEntries`. The field and file contents can contain [tokens](#advanced). Mutually exclusive with `Fields`, `Entries`, and `MoveEntries`. See _load changes from a file_ below for an example.~~
+`TextOperations` | Change the value of an existing string entry; see _[text operations](#text-operations)_ for more info. The path format is `["Entries", "key"]`, where `"key"` should be replaced with the entry key you'd specify via `Entries`.
 
-Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `FromFile`.
+Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `TextOperations`.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
-`Entries`, `FromFile`, `Fields`, `MoveEntries`.
+`Entries`, `FromFile`, `Fields`, `MoveEntries`, `TextOperations`.
 
 <dl>
 <dt id="data-definitions">Definitions</dt>
@@ -300,7 +307,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -323,7 +330,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -332,61 +339,6 @@ used to change event conditions:
             "733330/f Sam 750/w sunny/t 700 1500/z winter/y 1": null,
             "733330/f Sam 750/w sunny/t 700 1500/z winter": "[snipped: long event script here]"
          }
-      }
-   ]
-}
-```
-
-</dd>
-
-<dt id="data-load-changes-from-a-file"><s>Load changes from a file</s></dt>
-<dd>
-
-**This was deprecated in Content Patcher 1.16. New content packs should use [`Action: Include`](#include) instead.**
-
-~~You can optionally load changes from a separate JSON file in your content pack. The file can contain
-`Entries`, `Fields`, and `MoveEntries`. It can use any tokens that would work if used directly in
-the patch.~~
-
-~~For example, this patch in `content.json`:~~
-```js
-{
-   "Format": "1.17.0",
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Data/ObjectInformation",
-         "FromFile": "assets/jade.json"
-      }
-   ]
-}
-```
-
-~~Loads changes from this `assets/jade.json` file:~~
-```js
-{
-   "Entries": {
-      "900": "Crimson Jade/400/-300/Minerals -2/Crimson Jade/A pale green ornamental stone with a strange crimson sheen."
-   },
-   "Fields": {
-      "70": {
-         4: "Normal Jade",
-         5: "A pale green ornamental stone with no sheen."
-      }
-   }
-}
-```
-
-~~The `FromFile` field can contain tokens, so you can dynamically load a different file. For example,
-this single patch loads a dialogue file for multiple NPCs:~~
-```js
-{
-   "Format": "1.17.0",
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Characters/Dialogue/Abigail, Characters/Dialogue/Alex, Characters/Dialogue/Caroline",
-         "FromFile": "assets/dialogue/{{TargetWithoutPath}}.json"
       }
    ]
 }
@@ -404,7 +356,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -461,7 +413,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -573,7 +525,7 @@ Its fields may contain tokens.
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -622,19 +574,55 @@ and values.
 
 </td>
 </tr>
+
+<tr>
+<td>
+
+`TextOperations`
+
+</td>
+<td>
+
+The `TextOperations` field lets you change the value for an existing map property (see _[text
+operations](#text-operations)_ for more info).
+
+</td>
+</tr>
 </table>
 
-For example, This changes the warp map property for the farm cave:
+For example, this replaces the warp map property for the farm cave:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditMap",
          "Target": "Maps/FarmCave",
          "MapProperties": {
-            "Warp": "8 12 Farm 34 6"
+            "Warp": "10 10 Town 0 30"
          }
+      },
+   ]
+}
+```
+
+Here's the same example, but using `TextOperations` to append a warp to the property instead:
+
+```js
+{
+   "Format": "1.18.0",
+   "Changes": [
+      {
+         "Action": "EditMap",
+         "Target": "Maps/FarmCave",
+         "TextOperations": [
+            {
+               "Operation": "Append",
+               "Target": [ "MapProperty", "Warp" ],
+               "Value": "10 10 Town 0 30",
+               "Delimiter": " " // if the property already has a value, add this between the previous & inserted values
+            }
+         ]
       },
    ]
 }
@@ -690,7 +678,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -711,7 +699,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -785,7 +773,7 @@ In the simplest case, you can use this to organize your patches into subfiles:
 
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "Include",
@@ -803,7 +791,7 @@ You can combine this with tokens and conditions to load files dynamically:
 
 ```js
 {
-   "Format": "1.17.0",
+   "Format": "1.18.0",
    "Changes": [
       {
          "Action": "Include",
@@ -821,18 +809,183 @@ circular include loop). In that case the patches are duplicated for each inclusi
 copied & pasted them into each place. This may negatively impact performance though, since each
 patch will be reapplied multiple times.
 
-## <span id="advanced"></span>Advanced: conditions & tokens
+## Advanced
+### Conditions & tokens
 The previous sections explain how to make static changes, but that's only scratching the surface of
 what you can do with Content Patcher. You can use conditions and tokens to make _dynamic_ changes.
 
 For example, you can...
 * change patches with a wide variety of factors (e.g. use a different image each season, change
   dialogue depending on story progression or previous answers, etc);
-* let players configure your content pack;
 * use randomization and arithmetic;
 * and more.
 
 See the [conditions & tokens guide](author-tokens-guide.md) for more info.
+
+### Player config
+You can let players configure your mod using a `config.json` file. If the player has [Generic Mod
+Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed, they'll also be able to
+configure the mod through an in-game options menu on the title screen.
+
+See [_player config_ in the tokens guide](author-tokens-guide.md#player-config) for more info.
+
+### Translations
+You can store translations in an `i18n` subfolder of your content pack, and access them through the
+`i18n` token. The functionality and file structure is identical to [SMAPI mod
+translations](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Translation); see that page
+for more info.
+
+For example, if your `i18n` files contain a translation with the key `rainy-day`, you can access it
+in any Content Patcher field that allows tokens:
+
+```js
+{
+   "Format": "1.18.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/MarriageDialogueAbigail",
+         "Entries": {
+            "Rainy_Day_4": "{{i18n: rainy-day}}"
+         }
+      }
+   ]
+}
+```
+
+Content Patcher tokens don't work directly inside `i18n` files, but you can use SMAPI's translation
+placeholders. For example, if you wanted to show the player name in a message, you can do this in
+the `i18n` files:
+```js
+{
+    "rainy-day": "Hey {{name}}! Maybe I'll boot up Visual Studio today... one of these days I swear I'll release my SMAPI mod.$h",
+}
+```
+
+And then pass the value as an input argument:
+```js
+{
+   "Format": "1.18.0",
+   "Changes": [
+      {
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/MarriageDialogueAbigail",
+         "Entries": {
+            "Rainy_Day_4": "{{i18n: rainy-day |name={{PlayerName}} }}"
+         }
+      }
+   ]
+}
+```
+
+### Text operations
+<dl>
+<dt>Overview:</dt>
+<dd>
+
+Text operations let you change a text field based on its current value, instead of just setting the
+new value. For example, you can append or prepend text to the current value. They're set using the
+`TextOperations` field for an `EditData` or `EditMap` patch.
+
+Text operations are only recommended when setting the value directly isn't suitable, since they
+complicate your content pack and have less validation than other fields (since Content Patcher
+can't precalculate the result ahead of time).
+
+</dd>
+
+<dt>Example:</dt>
+<dd>
+
+First, here's an example of setting a map warp **_without_** text operations. This overwrites any
+previous warps, so only the new warp remains:
+
+```js
+{
+   "Action": "EditMap",
+   "Target": "Maps/Town",
+   "MapProperties": {
+      "Warp": "8 12 Farm 34 6" // replaces current value (any other warps removed)
+   }
+}
+```
+
+Here's the same example, but appending to any current warps using a text operation instead:
+
+```js
+{
+   "Action": "EditMap",
+   "Target": "Maps/Town",
+   "TextOperations": [
+      {
+         "Operation": "Append",
+         "Target": ["MapProperties", "Warp"],
+         "Value": "8 12 Farm 34 6",
+         "Delimiter": " " // if there are already warps, add a space between them and the new one
+      }
+   ]
+}
+```
+
+</dd>
+
+<dt>Format:</dt>
+<dd>
+
+Each text operation has four fields:
+
+<table>
+<tr>
+  <th>field</th>
+  <th>purpose</th>
+</tr>
+
+<tr>
+<td><code>Operation</code></td>
+<td>
+
+The text operation to perform. One of `Append` (add text after the current value) or `Prepend` (add text before the current value).
+
+</td>
+</tr>
+
+<tr>
+<td><code>Target</code></td>
+<td>
+
+The specific text field to change as a [breadcrumb path](https://en.wikipedia.org/wiki/Breadcrumb_navigation).
+Each path value represents a field to navigate into. The possible path values depend on the patch
+type; see the `TextOperations` field for the patch type under _[actions](#actions)_ for more info.
+
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Value</code></td>
+<td>
+
+The value to append or prepend. Just like all other Content Patcher fields, **whitespace is trimmed
+from the start and end**; use the `Delimiter` field if you need a space between the current and new
+values.
+
+This field supports [tokens](#advanced) and capitalisation doesn't matter.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Delimiter</code></td>
+<td>
+
+_(optional)_ If the target field already has a value, text to add between the previous and inserted
+values.
+
+</td>
+</tr>
+</table>
+</dd>
+</dl>
 
 ## Release a content pack
 See [content packs](https://stardewvalleywiki.com/Modding:Content_packs) on the wiki for general
@@ -1038,6 +1191,52 @@ and then search the SMAPI log file for that name. Particular questions to ask:
 ## FAQs
 ### Are Content Patcher updates backwards-compatible?
 Yep. See the [author migration guide](author-migration-guide.md) for more info.
+
+### How do I change assets in another language?
+**Your patches affect every language by default.**
+
+The asset name in the `Target` field doesn't include the language. For example,
+`"Target": "Characters/Dialogue/Abigail"` (the asset name) will change the content loaded from
+`Content/Characters/Dialogue/Abigail.de-DE.xnb` (the file path) when playing in German. If you want
+to make the same change in every language, you don't need to do anything else.
+
+To target a specific language, you can add a language condition:
+```js
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.de.json",
+   "When": {
+      "Language": "de"
+   }
+}
+```
+
+You can also load the translated version automatically if it exists. That way you can just add
+translated files to your content pack, and it'll default to the untranslated version if no
+translation exists:
+
+```js
+// use translated version if it exists in the content pack
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.{{language}}.json",
+   "When": {
+      "HasFile:{{FromFile}}": true
+   }
+},
+
+// otherwise use untranslated version
+{
+   "Action": "EditImage",
+   "Target": "LooseSprites/Cursors",
+   "FromFile": "assets/cursors.json",
+   "When": {
+      "HasFile: assets/cursors.{{language}}.json": false
+   }
+},
+```
 
 ### How multiple patches interact
 Any number of patches can be applied to the same file. `Action: Load` always happens before other

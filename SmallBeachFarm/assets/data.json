@@ -9,5 +9,41 @@
             "Width": 9,
             "Height": 7
         }
+    ],
+
+    /**
+     * The farm maps that can be replaced.
+     */
+    "FarmMaps": [
+        {
+            "ID": 0,
+            "Name": "Standard",
+            "Map": "Maps/Farm"
+        },
+        {
+            "ID": 1,
+            "Name": "Riverland",
+            "Map": "Maps/Farm_Fishing"
+        },
+        {
+            "ID": 2,
+            "Name": "Forest",
+            "Map": "Maps/Farm_Foraging"
+        },
+        {
+            "ID": 3,
+            "Name": "Hilltop",
+            "Map": "Maps/Farm_Mining"
+        },
+        {
+            "ID": 4,
+            "Name": "Wilderness",
+            "Map": "Maps/Farm_Combat"
+        },
+        {
+            "ID": 5,
+            "Name": "Four Corners",
+            "Map": "Maps/Farm_FourCorners"
+        }
     ]
 }

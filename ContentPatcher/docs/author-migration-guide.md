@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [1.18](#118)
   * [1.17](#117)
   * [1.15](#115)
   * [1.7](#17)
@@ -68,6 +69,59 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
+
+### 1.18
+Released 12 September 2020.
+
+* **Using the `FromFile` field with an `EditData` patch is no longer supported.** This worked
+  differently than `FromFile` on any other patch type and often caused confusion, so it's been
+  deprecated since 1.16.
+
+  This has no effect on using `FromFile` with a non-`EditData` patch, or on `EditData` patches
+  which don't use `FromFile`.
+
+  If you have a patch like this:
+
+  ```js
+  // in content.json
+  {
+     "Action": "EditData",
+     "Target": "Characters/Dialogue/Abigail",
+     "FromFile": "assets/abigail.json"
+  }
+
+  // assets/abigail.json
+  {
+     "Entries": {
+        "4": "Oh, hi.",
+        "Sun_17": "Hmm, interesting..."
+     }
+  }
+  ```
+
+  You can migrate it to this:
+
+  ```js
+  // in content.json
+  {
+     "Action": "Include",
+     "FromFile": "assets/abigail.json"
+  }
+
+  // assets/abigail.json
+  {
+     "Changes": [
+        {
+           "Action": "EditData",
+           "Target": "Characters/Dialogue/Abigail",
+           "Entries": {
+              "4": "Oh, hi.",
+              "Sun_17": "Hmm, interesting..."
+           }
+        }
+     ]
+  }
+  ```
 
 ### 1.17
 Released 16 August 2020.

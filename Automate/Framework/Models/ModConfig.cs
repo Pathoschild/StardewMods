@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
@@ -9,9 +11,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether to treat the shipping bin as a machine that can be automated.</summary>
-        public bool AutomateShippingBin { get; set; } = true;
-
         /// <summary>Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.</summary>
         public bool PullGemstonesFromJunimoHuts { get; set; } = false;
 
@@ -27,10 +26,39 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>Options affecting compatibility with other mods.</summary>
         public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
 
-        /// <summary>The priority order in which to process machines. Machines have a default priority of 0, and higher values are processed first.</summary>
-        public IDictionary<string, int> MachinePriority = new Dictionary<string, int>
+        /// <summary>The configuration for specific machines by ID.</summary>
+        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>
         {
-            [nameof(ShippingBinMachine)] = -1
+            [BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = new ModConfigMachine { Priority = -1 }
         };
+
+        /// <summary>The fields read from JSON which don't match any model field.</summary>
+        [JsonExtensionData]
+        public IDictionary<string, JToken> ExtensionFields { get; set; }
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Get the settings for a machine.</summary>
+        /// <param name="id">The unique machine ID.</param>
+        public ModConfigMachine GetMachineOverrides(string id)
+        {
+            return this.MachineOverrides.TryGetValue(id, out ModConfigMachine config)
+                ? config
+                : null;
+        }
+
+        /// <summary>Get the settings for a machine, creating a new entry if missing.</summary>
+        /// <param name="id">The unique machine ID.</param>
+        public ModConfigMachine GetOrAddMachineOverrides(string id)
+        {
+            ModConfigMachine config = this.GetMachineOverrides(id);
+
+            if (config == null)
+                this.MachineOverrides[id] = config = new ModConfigMachine();
+
+            return config;
+        }
     }
 }

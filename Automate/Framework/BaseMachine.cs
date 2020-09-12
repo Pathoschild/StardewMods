@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
@@ -35,6 +36,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether the machine started processing an item.</returns>
         public abstract bool SetInput(IStorage input);
 
+        /// <summary>Get the default ID for an Automate machine type.</summary>
+        internal static string GetDefaultMachineId(Type machineType)
+        {
+            string id = machineType.Name;
+            if (id.EndsWith("Machine"))
+                id = id.Substring(0, id.Length - "Machine".Length);
+
+            return id;
+        }
 
         /*********
         ** Protected methods
@@ -67,12 +77,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the default ID for the machine type.</summary>
         private string GetDefaultMachineId()
         {
-            string id = this.GetType().Name;
-
-            if (id.EndsWith("Machine"))
-                id = id.Substring(0, id.Length - "Machine".Length);
-
-            return id;
+            return BaseMachine.GetDefaultMachineId(this.GetType());
         }
     }
 

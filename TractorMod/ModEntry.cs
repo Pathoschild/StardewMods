@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod
         private readonly string BlueprintBuildingType = "TractorGarage";
 
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
-        private readonly string MinHostVersion = "4.7-alpha.2";
+        private readonly string MinHostVersion = "4.7.0";
 
         /// <summary>A request from a farmhand to warp a tractor to the given player.</summary>
         private readonly string RequestTractorMessageID = "TractorRequest";
@@ -298,7 +298,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // fix: warping onto a magic warp while mounted causes an infinite warp loop
             Vector2 tile = CommonHelper.GetPlayerTile(Game1.player);
-            string touchAction = Game1.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
+            string touchAction = Game1.player.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
             if (this.TractorManager.IsCurrentPlayerRiding && touchAction != null && touchAction.StartsWith("MagicWarp "))
                 Game1.currentLocation.lastTouchActionLocation = tile;
 

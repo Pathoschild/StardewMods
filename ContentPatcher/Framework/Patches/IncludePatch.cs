@@ -5,8 +5,8 @@ using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Patches
 {
@@ -163,8 +163,8 @@ namespace ContentPatcher.Framework.Patches
             if (left == null || right == null)
                 return false;
 
-            left = PathUtilities.NormalizePathSeparators(left);
-            right = PathUtilities.NormalizePathSeparators(right);
+            left = PathUtilities.NormalizePath(left);
+            right = PathUtilities.NormalizePath(right);
             return left.EqualsIgnoreCase(right);
         }
 
@@ -187,9 +187,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="filePath">The file path being loaded.</param>
         private LogPathBuilder GetIncludedLogPath(string filePath)
         {
-            filePath = PathUtilities.NormalizePathSeparators(filePath);
+            filePath = PathUtilities.NormalizePath(filePath);
 
-            string logName = PathUtilities.NormalizePathSeparators(this.Path.Segments.Last());
+            string logName = PathUtilities.NormalizePath(this.Path.Segments.Last());
             return logName.ContainsIgnoreCase(filePath)
                 ? this.Path // no need to add file to path if it's already in the name
                 : this.Path.With(filePath);

@@ -1,4 +1,9 @@
 # Release notes
+## 4.11.2
+Released 12 September 2020.
+
+* Fixed error in some cases when a multiplayer farmhand warps while riding a tractor.
+
 ## 4.11.1
 Released 28 August 2020.
 
@@ -7,7 +12,7 @@ Released 28 August 2020.
 ## 4.11
 Released 04 July 2020.
 
-* Added support for Generic Mod Config Menu (thanks to collaboration with NexusFlight!).
+* You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed (thanks to collaboration with NexusFlight!).
 * Added compatibility with boulders and stumps added by Farm Type Manager.
 * Fixed warp loop when riding the tractor onto the Witch's Hut warp runes.
 * Fixed broken event when riding the tractor into the event for the Cryptic Note quest.
