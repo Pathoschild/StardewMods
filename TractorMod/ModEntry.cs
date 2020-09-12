@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod
         private readonly string BlueprintBuildingType = "TractorGarage";
 
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
-        private readonly string MinHostVersion = "4.7-alpha.2";
+        private readonly string MinHostVersion = "4.7.0";
 
         /// <summary>A request from a farmhand to warp a tractor to the given player.</summary>
         private readonly string RequestTractorMessageID = "TractorRequest";
