@@ -12,7 +12,7 @@ Released 03 July 2020.
 * Added support for...
   * horse mount/dismount animations;
   * crop harvest animations.
-* Added integration with Generic Mod Config Menu.
+* You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed.
 
 ## 1.8
 Released 02 May 2020.

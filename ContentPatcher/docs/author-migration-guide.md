@@ -71,9 +71,14 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
 
 ### 1.18
-* **Loading `EditData` patch entries/fields from a file using `FromFile` is no longer supported.**
-  This worked differently than `FromFile` on any other patch type and often caused confusion, so
-  it's been deprecated since 1.16.
+Released 12 September 2020.
+
+* **Using the `FromFile` field with an `EditData` patch is no longer supported.** This worked
+  differently than `FromFile` on any other patch type and often caused confusion, so it's been
+  deprecated since 1.16.
+
+  This has no effect on using `FromFile` with a non-`EditData` patch, or on `EditData` patches
+  which don't use `FromFile`.
 
   If you have a patch like this:
 
