@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed error in some cases when a multiplayer farmhand warps while riding a tractor.
+
 ## 4.11.1
 Released 28 August 2020.
 

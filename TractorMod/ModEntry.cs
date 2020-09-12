@@ -298,7 +298,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // fix: warping onto a magic warp while mounted causes an infinite warp loop
             Vector2 tile = CommonHelper.GetPlayerTile(Game1.player);
-            string touchAction = Game1.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
+            string touchAction = Game1.player.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
             if (this.TractorManager.IsCurrentPlayerRiding && touchAction != null && touchAction.StartsWith("MagicWarp "))
                 Game1.currentLocation.lastTouchActionLocation = tile;
 
