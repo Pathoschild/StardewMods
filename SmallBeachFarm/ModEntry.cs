@@ -85,6 +85,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             // hook events
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
             // hook Harmony patch
             var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
@@ -200,6 +201,27 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Private methods
         *********/
+        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForSmallBeachFarm(
+                getConfig: () => this.Config,
+                modData: this.Data,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                },
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
         /// <summary>Raised after a player warps to a new location.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>

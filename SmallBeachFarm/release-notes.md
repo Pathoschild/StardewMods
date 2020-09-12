@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * You can now choose a different farm to replace in the mod settings.
+* Added support for Generic Mod Config Menu for in-game settings.
 
 ## 1.7.1
 Released 05 May 2020.
