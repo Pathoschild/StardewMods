@@ -539,7 +539,7 @@ namespace ContentPatcher
 
                                 // set default if blank
                                 if (!configField.AllowBlank && !configField.Value.Any())
-                                    configField.Value = configField.DefaultValues;
+                                    configField.Value = new InvariantHashSet(configField.DefaultValues);
 
                                 // update token
                                 resetToken();
