@@ -45,6 +45,13 @@ namespace ContentPatcher.Framework
             this.Tokens[token.Name] = token;
         }
 
+        /// <summary>Remove a token from the context.</summary>
+        /// <param name="name">The token name to remove.</param>
+        public void Remove(string name)
+        {
+            this.Tokens.Remove(name);
+        }
+
         /// <inheritdoc />
         public bool Contains(string name, bool enforceContext)
         {
