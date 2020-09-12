@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Common.Integrations.GenericModConfigMenu;
 using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
@@ -368,50 +367,23 @@ namespace ContentPatcher
                         // load config.json
                         InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
                         configFileHandler.Save(current.ManagedPack, config, this.Helper);
-                        GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenuIntegration = null;
                         if (config.Any())
-                        {
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
-
-                            configMenuIntegration = new GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>>(
-                                modRegistry: this.Helper.ModRegistry,
-                                monitor: this.Monitor,
-                                consumerManifest: current.Manifest,
-                                getConfig: () => config,
-                                reset: () =>
-                                {
-                                    foreach (ConfigField configField in config.Values)
-                                        configField.Value = new InvariantHashSet(configField.DefaultValues);
-                                },
-                                saveAndApply: () =>
-                                {
-                                    configFileHandler.Save(current.ManagedPack, config, this.Helper);
-
-                                    this.PatchLoader.UnloadPatchesLoadedBy(current, false);
-                                    this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
-
-                                }
-                            );
-                            if (configMenuIntegration.IsLoaded)
-                                configMenuIntegration.RegisterConfig();
-                        }
 
                         // load config tokens
                         foreach (KeyValuePair<string, ConfigField> pair in config)
-                        {
-                            void AddConfigToken()
-                            {
-                                ConfigField field = pair.Value;
-                                IValueProvider valueProvider = new ImmutableValueProvider(pair.Key, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
-                                modContext.AddLocalToken(new Token(valueProvider, scope: current.Manifest.UniqueID));
-                            }
+                            this.AddConfigToken(pair.Key, pair.Value, modContext, current);
 
-                            AddConfigToken();
-                            this.RegisterConfigMenuField(configMenuIntegration, pair.Key, pair.Value, resetToken: () =>
+                        // register with Generic Mod Config Menu
+                        if (config.Any())
+                        {
+                            GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(this.Helper.ModRegistry, this.Monitor, current.Manifest, this.ParseCommaDelimitedField, config, saveAndApply: () =>
                             {
-                                modContext.RemoveLocalToken(pair.Key);
-                                AddConfigToken();
+                                configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                                this.PatchLoader.UnloadPatchesLoadedBy(current, false);
+                                this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
                             });
+                            configMenu.Register((name, field) => this.AddConfigToken(name, field, modContext, current));
                         }
 
                         // load dynamic tokens
@@ -498,7 +470,7 @@ namespace ContentPatcher
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
         /// <param name="field">The field value to parse.</param>
-        public InvariantHashSet ParseCommaDelimitedField(string field)
+        private InvariantHashSet ParseCommaDelimitedField(string field)
         {
             if (string.IsNullOrWhiteSpace(field))
                 return new InvariantHashSet();
@@ -511,81 +483,18 @@ namespace ContentPatcher
             return new InvariantHashSet(values);
         }
 
-        /// <summary>Register a config menu field with Generic Mod Config Menu.</summary>
-        /// <param name="configMenu">The Generic Mod Config Menu integration.</param>
-        /// <param name="name">The config field name.</param>
-        /// <param name="field">The config field instance.</param>
-        /// <param name="resetToken">Remove and re-register the config token.</param>
-        private void RegisterConfigMenuField(GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenu, string name, ConfigField field, Action resetToken)
+        /// <summary>Register a config token for a content pack.</summary>
+        /// <param name="name">The field name.</param>
+        /// <param name="field">The config field.</param>
+        /// <param name="modContext">The mod context to which to add the token.</param>
+        /// <param name="contentPack">The content pack for which to add the token.</param>
+        private void AddConfigToken(string name, ConfigField field, ModTokenContext modContext, RawContentPack contentPack)
         {
-            if (field.AllowValues.Any())
-            {
-                if (field.AllowMultiple)
-                {
-                    // Whitelist + multiple options = fake with multiple checkboxes
-                    foreach (string value in field.AllowValues)
-                    {
-                        configMenu.AddCheckbox(
-                            label: $"{name}.{value}",
-                            description: null,
-                            get: config => field.Value.Contains(value),
-                            set: (config, selected) =>
-                            {
-                                // toggle value
-                                if (selected)
-                                    field.Value.Add(value);
-                                else
-                                    field.Value.Remove(value);
+            modContext.RemoveLocalToken(name); // only needed when resetting a token for Generic Mod Config Menu, but has no effect otherwise
 
-                                // set default if blank
-                                if (!field.AllowBlank && !field.Value.Any())
-                                    field.Value = new InvariantHashSet(field.DefaultValues);
-
-                                // update token
-                                resetToken();
-                            }
-                        );
-                    }
-                }
-                else
-                {
-                    // Whitelist + single value = drop down
-                    // Need an extra option when blank is allowed
-                    List<string> choices = new List<string>(field.AllowValues);
-                    if (field.AllowBlank)
-                        choices.Insert(0, "");
-
-                    configMenu.AddDropdown(
-                        label: name,
-                        description: null,
-                        get: config => field.Value.FirstOrDefault() ?? "",
-                        set: (config, newValue) =>
-                        {
-                            field.Value = new InvariantHashSet(newValue);
-                            resetToken();
-                        },
-                        choices.ToArray()
-                    );
-                }
-            }
-            else
-            {
-                // No whitelist = text field
-                configMenu.AddTextbox(
-                    label: name,
-                    description: null,
-                    get: config => string.Join(", ", field.Value.ToArray()),
-                    set: (config, newValue) =>
-                    {
-                        field.Value = this.ParseCommaDelimitedField(newValue);
-
-                        if (!field.AllowMultiple && field.Value.Count > 1)
-                            field.Value = new InvariantHashSet(field.Value.Take(1));
-
-                        resetToken();
-                    }
-                );
-            }
+            IValueProvider valueProvider = new ImmutableValueProvider(name, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+            IToken token = new Token(valueProvider, scope: contentPack.Manifest.UniqueID);
+            modContext.AddLocalToken(token);
         }
     }
 }
