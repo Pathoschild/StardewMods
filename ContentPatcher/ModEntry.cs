@@ -523,24 +523,25 @@ namespace ContentPatcher
                 if (configField.AllowMultiple)
                 {
                     // Whitelist + multiple options = fake with multiple checkboxes
-                    foreach (string allowedValue in configField.AllowValues)
+                    foreach (string value in configField.AllowValues)
                     {
                         configMenuIntegration.AddCheckbox(
-                            label: $"{configName}.{allowedValue}",
+                            label: $"{configName}.{value}",
                             description: null,
-                            get: config => configField.Value.Contains(allowedValue),
-                            set: (config, val) =>
+                            get: config => configField.Value.Contains(value),
+                            set: (config, selected) =>
                             {
-                                InvariantHashSet values = new InvariantHashSet(configField.Value);
-                                if (val && !values.Contains(allowedValue))
-                                    values.Add(allowedValue);
-                                if (!val && values.Contains(allowedValue))
-                                    values.Remove(allowedValue);
+                                // toggle value
+                                if (selected)
+                                    configField.Value.Add(value);
+                                else
+                                    configField.Value.Remove(value);
 
-                                if (values.Count == 0 && !configField.AllowBlank)
-                                    values = configField.DefaultValues;
+                                // set default if blank
+                                if (!configField.AllowBlank && !configField.Value.Any())
+                                    configField.Value = configField.DefaultValues;
 
-                                configField.Value = values;
+                                // update token
                                 resetToken();
                             }
                         );
@@ -557,11 +558,10 @@ namespace ContentPatcher
                     configMenuIntegration.AddDropdown(
                         label: configName,
                         description: null,
-                        get: config => configField.Value.Count > 0 ? configField.Value.First() : "",
-                        set: (config, val) =>
+                        get: config => configField.Value.FirstOrDefault() ?? "",
+                        set: (config, newValue) =>
                         {
-                            InvariantHashSet values = new InvariantHashSet(val);
-                            configField.Value = values;
+                            configField.Value = new InvariantHashSet(newValue);
                             resetToken();
                         },
                         choices.ToArray()
@@ -575,10 +575,11 @@ namespace ContentPatcher
                     label: configName,
                     description: null,
                     get: config => string.Join(", ", configField.Value.ToArray()),
-                    set: (config, val) =>
+                    set: (config, newValue) =>
                     {
-                        InvariantHashSet values = configField.AllowMultiple ? this.ParseCommaDelimitedField(val) : new InvariantHashSet(val);
-                        configField.Value = values;
+                        configField.Value = configField.AllowMultiple
+                            ? this.ParseCommaDelimitedField(newValue)
+                            : new InvariantHashSet(newValue);
                         resetToken();
                     }
                 );
