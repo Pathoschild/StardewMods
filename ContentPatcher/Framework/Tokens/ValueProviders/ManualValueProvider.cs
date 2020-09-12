@@ -48,16 +48,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             // get possible values from literal token
             InvariantHashSet splitValues = possibleValues.SplitValuesUnique();
-            this.AddAllowedValues(splitValues);
-        }
-        
-        /// <summary>Add a set of possible values.</summary>
-        /// <param name="possibleValues">The possible values to add.</param>
-        public void AddAllowedValues(InvariantHashSet possibleValues)
-        {
-            foreach (string value in possibleValues )
+            foreach (string value in splitValues)
                 this.AllowedRootValues.Add(value.Trim());
-            this.MayReturnMultipleValuesForRoot = this.MayReturnMultipleValuesForRoot || possibleValues.Count > 1;
+            this.MayReturnMultipleValuesForRoot = this.MayReturnMultipleValuesForRoot || splitValues.Count > 1;
         }
 
         /// <summary>Add token names which this token may depend on.</summary>
@@ -73,13 +66,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public void SetValue(ITokenString values)
         {
             this.Values = values.SplitValuesUnique();
-        }
-
-        /// <summary>Set the current values.</summary>
-        /// <param name="values">The values to set.</param>
-        public void SetValue(InvariantHashSet values)
-        {
-            this.Values = values;
         }
 
         /// <summary>Set whether the token is valid for the current context.</summary>

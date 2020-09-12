@@ -75,6 +75,14 @@ namespace ContentPatcher.Framework
             this.HasNewTokens = true;
         }
 
+        /// <summary>Remove a registered local token.</summary>
+        /// <param name="name">The config token to remove.</param>
+        public void RemoveLocalToken(string name)
+        {
+            this.LocalContext.Remove(name);
+            this.HasNewTokens = true; // update dynamic tokens
+        }
+
         /// <summary>Add a dynamic token value to the context.</summary>
         /// <param name="name">The token name.</param>
         /// <param name="rawValue">The token value to set.</param>
@@ -155,7 +163,7 @@ namespace ContentPatcher.Framework
             {
                 foreach (ManagedManualToken managed in this.DynamicTokens.Values)
                 {
-                    managed.ValueProvider.SetValue((ITokenString)null);
+                    managed.ValueProvider.SetValue(null);
                     managed.ValueProvider.SetReady(false);
                 }
 
