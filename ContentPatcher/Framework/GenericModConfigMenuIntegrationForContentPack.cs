@@ -112,6 +112,22 @@ namespace ContentPatcher.Framework
                         );
                     }
                 }
+                else if (field.IsBoolean() && !field.AllowBlank)
+                {
+                    // true/false only = checkbox
+                    this.ConfigMenu.AddCheckbox(
+                        label: name,
+                        description: null,
+                        get: config => field.Value.Contains(true.ToString()),
+                        set: (config, selected) =>
+                        {
+                            field.Value.Clear();
+                            field.Value.Add(selected.ToString().ToLower());
+
+                            resetToken();
+                        }
+                    );
+                }
                 else
                 {
                     // Whitelist + single value = drop down

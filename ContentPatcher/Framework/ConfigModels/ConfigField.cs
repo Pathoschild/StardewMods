@@ -39,5 +39,14 @@ namespace ContentPatcher.Framework.ConfigModels
             this.AllowBlank = allowBlank;
             this.AllowMultiple = allowMultiple;
         }
+
+        /// <summary>Get whether the field represents a boolean value.</summary>
+        public bool IsBoolean()
+        {
+            return
+                this.AllowValues.Count == 2
+                && this.AllowValues.Contains(true.ToString())
+                && this.AllowValues.Contains(false.ToString());
+        }
     }
 }
