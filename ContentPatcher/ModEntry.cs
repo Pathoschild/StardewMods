@@ -512,34 +512,34 @@ namespace ContentPatcher
         }
 
         /// <summary>Register a config menu field with Generic Mod Config Menu.</summary>
-        /// <param name="configMenuIntegration">The Generic Mod Config Menu integration.</param>
-        /// <param name="configName">The config field name.</param>
-        /// <param name="configField">The config field itself.</param>
+        /// <param name="configMenu">The Generic Mod Config Menu integration.</param>
+        /// <param name="name">The config field name.</param>
+        /// <param name="field">The config field instance.</param>
         /// <param name="resetToken">Remove and re-register the config token.</param>
-        private void RegisterConfigMenuField(GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenuIntegration, string configName, ConfigField configField, Action resetToken)
+        private void RegisterConfigMenuField(GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>> configMenu, string name, ConfigField field, Action resetToken)
         {
-            if (configField.AllowValues.Any())
+            if (field.AllowValues.Any())
             {
-                if (configField.AllowMultiple)
+                if (field.AllowMultiple)
                 {
                     // Whitelist + multiple options = fake with multiple checkboxes
-                    foreach (string value in configField.AllowValues)
+                    foreach (string value in field.AllowValues)
                     {
-                        configMenuIntegration.AddCheckbox(
-                            label: $"{configName}.{value}",
+                        configMenu.AddCheckbox(
+                            label: $"{name}.{value}",
                             description: null,
-                            get: config => configField.Value.Contains(value),
+                            get: config => field.Value.Contains(value),
                             set: (config, selected) =>
                             {
                                 // toggle value
                                 if (selected)
-                                    configField.Value.Add(value);
+                                    field.Value.Add(value);
                                 else
-                                    configField.Value.Remove(value);
+                                    field.Value.Remove(value);
 
                                 // set default if blank
-                                if (!configField.AllowBlank && !configField.Value.Any())
-                                    configField.Value = new InvariantHashSet(configField.DefaultValues);
+                                if (!field.AllowBlank && !field.Value.Any())
+                                    field.Value = new InvariantHashSet(field.DefaultValues);
 
                                 // update token
                                 resetToken();
@@ -551,17 +551,17 @@ namespace ContentPatcher
                 {
                     // Whitelist + single value = drop down
                     // Need an extra option when blank is allowed
-                    List<string> choices = new List<string>(configField.AllowValues);
-                    if (configField.AllowBlank)
+                    List<string> choices = new List<string>(field.AllowValues);
+                    if (field.AllowBlank)
                         choices.Insert(0, "");
 
-                    configMenuIntegration.AddDropdown(
-                        label: configName,
+                    configMenu.AddDropdown(
+                        label: name,
                         description: null,
-                        get: config => configField.Value.FirstOrDefault() ?? "",
+                        get: config => field.Value.FirstOrDefault() ?? "",
                         set: (config, newValue) =>
                         {
-                            configField.Value = new InvariantHashSet(newValue);
+                            field.Value = new InvariantHashSet(newValue);
                             resetToken();
                         },
                         choices.ToArray()
@@ -571,16 +571,16 @@ namespace ContentPatcher
             else
             {
                 // No whitelist = text field
-                configMenuIntegration.AddTextbox(
-                    label: configName,
+                configMenu.AddTextbox(
+                    label: name,
                     description: null,
-                    get: config => string.Join(", ", configField.Value.ToArray()),
+                    get: config => string.Join(", ", field.Value.ToArray()),
                     set: (config, newValue) =>
                     {
-                        configField.Value = this.ParseCommaDelimitedField(newValue);
+                        field.Value = this.ParseCommaDelimitedField(newValue);
 
-                        if (!configField.AllowMultiple && configField.Value.Count > 1)
-                            configField.Value = new InvariantHashSet(configField.Value.Take(1));
+                        if (!field.AllowMultiple && field.Value.Count > 1)
+                            field.Value = new InvariantHashSet(field.Value.Take(1));
 
                         resetToken();
                     }
