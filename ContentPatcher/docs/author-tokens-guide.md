@@ -1174,13 +1174,17 @@ You can let players configure your mod using a `config.json` file. Content Patch
 automatically create and load the file, and you can use the config values as
 [tokens & conditions](#introduction). Config fields are not case-sensitive.
 
+If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
+installed, they'll be able to configure the mod through an in-game options menu on the title
+screen.
+
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
 Available fields for each field:
 
    field               | meaning
    ------------------- | -------
-   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** for a boolean flag, use `"true, false"`.
+   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
    `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
    `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
    `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.

@@ -3,7 +3,8 @@
 # Release notes
 ## Upcoming release
 * Added [content pack translation](docs/author-guide.md#translations) support using `i18n` files.
-* Added [_text operations_](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
+* Added [text operations](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
+* You can now [configure content packs in-game](README.md#configure-content-packs) through Generic Mod Config Menu (thanks to a collaboration with spacechase0!). This works automatically for any content pack that has configuration options, no changes needed by mod authors.
 * Patches now update immediately when you change language.
 * Fixed `EditData` patches not always updated if they use `FromFile` to load a file containing tokens.
 * Fixed patches not always updated for a `Random` token reroll.

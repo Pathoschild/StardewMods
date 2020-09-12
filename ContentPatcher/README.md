@@ -5,6 +5,7 @@ to change the game's data, images, and maps without replacing game files.
 * [For players](#for-players)
   * [Install](#install)
   * [Compatibility](#compatibility)
+  * [Configure content packs](#configure-content-packs)
   * [Multiplayer](#multiplayer)
 * [For mod authors](#for-mod-authors)
 * [See also](#see-also)
@@ -21,6 +22,16 @@ That's it! Content packs unzipped into `Mods` will be loaded and applied automat
 ### Compatibility
 Content Patcher is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
 multiplayer.
+
+### Configure content packs
+Many content packs can be configured using a `config.json` file, which Content Patcher will create
+the first time you launch the game with that content pack installed. (If no `config.json` appears,
+the mod probably isn't configurable.)
+
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+Content Patcher will automatically add configurable content packs to its in-game menu:
+
+![](docs/screenshots/generic-config-menu.png)
 
 ### Multiplayer
 Content Patcher works fine in multiplayer. It's best if all players have the same content packs,

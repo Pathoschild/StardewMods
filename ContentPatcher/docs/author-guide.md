@@ -29,6 +29,7 @@ This document helps mod authors create a content pack for Content Patcher.
   * [`Include`](#include)
 * [Advanced](#advanced)
   * [Conditions & tokens](#conditions--tokens)
+  * [Player config](#player-config)
   * [Translations](#translations)
   * [Text operations](#text-operations)
 * [Release a content pack](#release-a-content-pack)
@@ -816,11 +817,17 @@ what you can do with Content Patcher. You can use conditions and tokens to make 
 For example, you can...
 * change patches with a wide variety of factors (e.g. use a different image each season, change
   dialogue depending on story progression or previous answers, etc);
-* let players configure your content pack;
 * use randomization and arithmetic;
 * and more.
 
 See the [conditions & tokens guide](author-tokens-guide.md) for more info.
+
+### Player config
+You can let players configure your mod using a `config.json` file. If the player has [Generic Mod
+Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed, they'll also be able to
+configure the mod through an in-game options menu on the title screen.
+
+See [_player config_ in the tokens guide](author-tokens-guide.md#player-config) for more info.
 
 ### Translations
 You can store translations in an `i18n` subfolder of your content pack, and access them through the
