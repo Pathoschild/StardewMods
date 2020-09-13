@@ -536,9 +536,9 @@ namespace ContentPatcher.Framework.Patches
                             return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
 
                         // get value
-                        string value = string.Empty;
-                        if (hasEntry(key))
-                            value = (string)(object)getEntry(key);
+                        string value = hasEntry(key)
+                            ? (string)(object)getEntry(key)
+                            : null;
 
                         // set value
                         setEntry(key, (TValue)(object)operation.Apply(value));

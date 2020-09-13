@@ -94,13 +94,17 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="text">The input to modify.</param>
         public string Apply(string text)
         {
+            string delimiter = string.IsNullOrEmpty(text)
+                ? ""
+                : this.Delimiter;
+
             switch (this.Operation)
             {
                 case TextOperationType.Append:
-                    return text + this.Delimiter + this.Value.Value;
+                    return text + delimiter + this.Value.Value;
 
                 case TextOperationType.Prepend:
-                    return this.Value.Value + this.Delimiter + text;
+                    return this.Value.Value + delimiter + text;
 
                 default:
                     throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.");

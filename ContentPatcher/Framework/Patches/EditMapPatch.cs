@@ -280,8 +280,9 @@ namespace ContentPatcher.Framework.Patches
 
                         // get key/value
                         string key = operation.Target[1].Value;
-                        if (!target.Properties.TryGetValue(key, out PropertyValue value))
-                            value = new PropertyValue("");
+                        string value = target.Properties.TryGetValue(key, out PropertyValue property)
+                            ? property.ToString()
+                            : null;
 
                         // apply
                         target.Properties[key] = operation.Apply(value);
