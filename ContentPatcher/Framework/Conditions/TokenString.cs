@@ -160,6 +160,14 @@ namespace ContentPatcher.Framework.Conditions
             return this.State.Clone();
         }
 
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return this.IsReady
+                ? this.Value
+                : this.Raw;
+        }
+
 
         /*********
         ** Private methods

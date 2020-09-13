@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             min = 0;
             max = 0;
-            string errorPrefix = $"invalid input ('{input.TokenString.Value}')";
+            string errorPrefix = $"invalid input ('{input.TokenString}')";
 
             // check if input provided
             if (!input.HasPositionalArgs)

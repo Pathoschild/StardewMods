@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
+
 ## 1.18.1
 Released 13 September 2020.
 

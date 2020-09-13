@@ -89,14 +89,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     // check if input allowed
                     if (!this.AllowsPositionalInput)
                     {
-                        error = $"invalid input arguments ({input.TokenString.Value}), token {this.Name} doesn't allow input.";
+                        error = $"invalid input arguments ({input.TokenString}), token {this.Name} doesn't allow input.";
                         return false;
                     }
 
                     // check argument count
                     if (input.PositionalArgs.Length > this.MaxPositionalArgs)
                     {
-                        error = $"invalid input arguments ({input.TokenString.Value}), token {this.Name} doesn't allow more than {this.MaxPositionalArgs} argument{(this.MaxPositionalArgs == 1 ? "" : "s")}.";
+                        error = $"invalid input arguments ({input.TokenString}), token {this.Name} doesn't allow more than {this.MaxPositionalArgs} argument{(this.MaxPositionalArgs == 1 ? "" : "s")}.";
                         return false;
                     }
 

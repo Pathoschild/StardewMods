@@ -537,7 +537,7 @@ namespace ContentPatcher.Framework.Commands
             output.AppendLine("----------------");
             output.AppendLine(!tokenStr.IsReady
                 ? "The token string is invalid or unready."
-                : $"   The token string is valid and ready. Parsed value: \"{tokenStr.Value}\""
+                : $"   The token string is valid and ready. Parsed value: \"{tokenStr}\""
             );
 
             this.Monitor.Log(output.ToString(), LogLevel.Debug);

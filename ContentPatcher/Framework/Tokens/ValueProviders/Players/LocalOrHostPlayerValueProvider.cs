@@ -133,7 +133,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             {
                 if (!Enum.TryParse(arg, ignoreCase: true, out PlayerType type))
                 {
-                    error = $"invalid input arguments ({input.TokenString.Value}) for {this.Name} token, expected any of {string.Join(", ", this.Values.Keys.Select(p => p.ToString()))}.";
+                    error = $"invalid input arguments ({input.TokenString}) for {this.Name} token, expected any of {string.Join(", ", this.Values.Keys.Select(p => p.ToString()))}.";
                     return false;
                 }
 

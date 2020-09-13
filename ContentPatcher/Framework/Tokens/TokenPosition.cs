@@ -102,7 +102,7 @@ namespace ContentPatcher.Framework.Tokens
 
             if (!int.TryParse(raw.Value, out parsed))
             {
-                error = $"{name} value '{raw.Value}' can't be parsed as an integer";
+                error = $"{name} value '{raw}' can't be parsed as an integer";
                 return false;
             }
 

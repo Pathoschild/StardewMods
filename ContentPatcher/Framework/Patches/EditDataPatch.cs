@@ -135,7 +135,7 @@ namespace ContentPatcher.Framework.Patches
                     this.MoveRecords = moveEntries.ToArray();
                 }
                 else
-                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
+                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
 
                 this.AttemptedDataLoad = true;
             }
@@ -343,7 +343,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 if (!moveRecord.IsReady)
                     continue;
-                string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID.Value}\"";
+                string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID}\"";
 
                 // get entry
                 TValue entry = GetByKey(moveRecord.ID.Value);
