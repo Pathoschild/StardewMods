@@ -23,6 +23,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The value read from the player settings.</summary>
         public InvariantHashSet Value { get; set; }
 
+        /// <summary>An optional explanation of the config field for players.</summary>
+        public string Description { get; set; }
+
 
         /*********
         ** Public methods
@@ -32,12 +35,14 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="defaultValues">The default values if the field is missing or (if <paramref name="allowBlank"/> is <c>false</c>) blank.</param>
         /// <param name="allowBlank">Whether to allow blank values.</param>
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
-        public ConfigField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple)
+        /// <param name="description">An optional explanation of the config field for players.</param>
+        public ConfigField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple, string description)
         {
             this.AllowValues = allowValues;
             this.DefaultValues = defaultValues;
             this.AllowBlank = allowBlank;
             this.AllowMultiple = allowMultiple;
+            this.Description = description;
         }
 
         /// <summary>Get whether the field represents a boolean value.</summary>

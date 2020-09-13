@@ -14,5 +14,8 @@ namespace ContentPatcher.Framework.ConfigModels
 
         /// <summary>Whether the player can specify multiple values for this field.</summary>
         public bool AllowMultiple { get; set; } = false;
+
+        /// <summary>An optional explanation of the config field for players.</summary>
+        public string Description { get; set; }
     }
 }

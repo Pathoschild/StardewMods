@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework
                     {
                         this.ConfigMenu.AddCheckbox(
                             label: $"{name}.{value}",
-                            description: null,
+                            description: field.Description,
                             get: config => field.Value.Contains(value),
                             set: (config, selected) =>
                             {
@@ -117,7 +117,7 @@ namespace ContentPatcher.Framework
                     // true/false only = checkbox
                     this.ConfigMenu.AddCheckbox(
                         label: name,
-                        description: null,
+                        description: field.Description,
                         get: config => field.Value.Contains(true.ToString()),
                         set: (config, selected) =>
                         {
@@ -138,7 +138,7 @@ namespace ContentPatcher.Framework
 
                     this.ConfigMenu.AddDropdown(
                         label: name,
-                        description: null,
+                        description: field.Description,
                         get: config => field.Value.FirstOrDefault() ?? "",
                         set: (config, newValue) =>
                         {
@@ -154,7 +154,7 @@ namespace ContentPatcher.Framework
                 // No whitelist = text field
                 this.ConfigMenu.AddTextbox(
                     label: name,
-                    description: null,
+                    description: field.Description,
                     get: config => string.Join(", ", field.Value.ToArray()),
                     set: (config, newValue) =>
                     {

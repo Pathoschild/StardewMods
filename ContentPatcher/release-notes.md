@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* `ConfigSchema` options can now have an optional `Description` field, which will be shown in UIs like Generic Mod Config Menu.
 * Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
 
 ## 1.18.1
