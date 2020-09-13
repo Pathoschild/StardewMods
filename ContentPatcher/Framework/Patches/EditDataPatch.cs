@@ -475,7 +475,7 @@ namespace ContentPatcher.Framework.Patches
                             actualFields[index] = field.Value.Value.Value<string>();
                         }
 
-                        setEntry(key, (TValue)(object)string.Join("/", actualFields));
+                        setEntry(key, (TValue)(object)string.Join(fieldDelimiter.ToString(), actualFields));
                     }
 
                     // apply object
