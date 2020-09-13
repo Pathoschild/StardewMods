@@ -453,8 +453,8 @@ last will take effect for the overlapping portions.
 <dt id="map-overlay">Map overlay</dt>
 <dd>
 
-A 'map overlay' copies tiles, properties, and tilesheets from a source map into the target. The
-target area will be fully overwritten with the source area.
+A 'map overlay' copies tiles, properties, and tilesheets from a source map into the target.
+Matching layers in the target area will be fully overwritten with the source area.
 
 <table>
 <tr>
@@ -537,6 +537,9 @@ For example, this replaces the town square with the one in another map:
    ]
 }
 ```
+
+Note that only layers which exist in the source map are changed, which lets you overlay changes
+onto a map without needing to redefine all the tiles.
 
 </dd>
 
