@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.18.1
+Released 13 September 2020.
+
 * Fixed format issue when applying field edits to `Data\Achievements`.
 
 ## 1.18
