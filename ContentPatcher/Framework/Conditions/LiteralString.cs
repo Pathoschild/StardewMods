@@ -79,5 +79,11 @@ namespace ContentPatcher.Framework.Conditions
         {
             return new ContextualState();
         }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return this.Value;
+        }
     }
 }

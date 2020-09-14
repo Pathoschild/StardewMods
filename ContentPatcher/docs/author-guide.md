@@ -621,7 +621,7 @@ Here's the same example, but using `TextOperations` to append a warp to the prop
          "TextOperations": [
             {
                "Operation": "Append",
-               "Target": [ "MapProperty", "Warp" ],
+               "Target": [ "MapProperties", "Warp" ],
                "Value": "10 10 Town 0 30",
                "Delimiter": " " // if the property already has a value, add this between the previous & inserted values
             }

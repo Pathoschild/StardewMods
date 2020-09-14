@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18.2
+Released 13 September 2020.
+
+* `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like Generic Mod Config Menu.
+* Fixed `TextOperations` incorrectly adding delimiters when there's no previous value.
+* Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
+
 ## 1.18.1
 Released 13 September 2020.
 

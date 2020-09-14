@@ -280,8 +280,9 @@ namespace ContentPatcher.Framework.Patches
 
                         // get key/value
                         string key = operation.Target[1].Value;
-                        if (!target.Properties.TryGetValue(key, out PropertyValue value))
-                            value = new PropertyValue("");
+                        string value = target.Properties.TryGetValue(key, out PropertyValue property)
+                            ? property.ToString()
+                            : null;
 
                         // apply
                         target.Properties[key] = operation.Apply(value);
@@ -329,13 +330,13 @@ namespace ContentPatcher.Framework.Patches
             if (tile.SetIndex.IsMeaningful())
             {
                 if (!int.TryParse(tile.SetIndex.Value, out int parsed))
-                    return this.Fail($"{nameof(PatchMapTileConfig.SetIndex)} specifies '{tile.SetIndex.Value}', which isn't a valid number.", out error);
+                    return this.Fail($"{nameof(PatchMapTileConfig.SetIndex)} specifies '{tile.SetIndex}', which isn't a valid number.", out error);
                 setIndex = parsed;
             }
 
             // position
             if (!tile.Position.TryGetLocation(out position, out error))
-                return this.Fail($"{nameof(PatchMapTileConfig.Position)} specifies '{tile.Position.X.Value}, {tile.Position.Y.Value}', which isn't a valid position.", out error);
+                return this.Fail($"{nameof(PatchMapTileConfig.Position)} specifies '{tile.Position.X}, {tile.Position.Y}', which isn't a valid position.", out error);
 
             // tile properties
             if (tile.SetProperties != null)
@@ -348,7 +349,7 @@ namespace ContentPatcher.Framework.Patches
             if (tile.Remove.IsMeaningful())
             {
                 if (!bool.TryParse(tile.Remove.Value, out remove))
-                    return this.Fail($"{nameof(PatchMapTileConfig.Remove)} specifies '{tile.Remove.Value}', which isn't a valid boolean value (must be 'true' or 'false').", out error);
+                    return this.Fail($"{nameof(PatchMapTileConfig.Remove)} specifies '{tile.Remove}', which isn't a valid boolean value (must be 'true' or 'false').", out error);
             }
 
             error = null;

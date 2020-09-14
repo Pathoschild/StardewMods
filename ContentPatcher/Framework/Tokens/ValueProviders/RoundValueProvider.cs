@@ -81,7 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.AssertInput(input);
 
             if (!this.TryParseAndRound(input, out decimal value, out string parseError))
-                throw new InvalidOperationException($"Invalid input value '{input.TokenString.Value}': {parseError}"); // should never happen
+                throw new InvalidOperationException($"Invalid input value '{input.TokenString}': {parseError}"); // should never happen
 
             yield return value.ToString(CultureInfo.InvariantCulture);
         }
@@ -155,7 +155,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             string[] args = input.PositionalArgs;
             if (args.Length < 1 || args.Length > 3)
             {
-                parseError = $"input '{input.TokenString.Value}' must have 1-3 comma-separated arguments.";
+                parseError = $"input '{input.TokenString}' must have 1-3 comma-separated arguments.";
                 return false;
             }
             if (!decimal.TryParse(args[0], out value))

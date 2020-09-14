@@ -1188,6 +1188,7 @@ Available fields for each field:
    `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
    `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
    `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
+   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
 
 For example: this `content.json` defines a `Material` config field and uses it to change which
 patch is applied. See below for more details.
@@ -1198,7 +1199,8 @@ patch is applied. See below for more details.
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
-         "Default": "Wood"
+         "Default": "Wood",
+         "Description": "The material style for the billboard background."
       }
    },
    "Changes": [

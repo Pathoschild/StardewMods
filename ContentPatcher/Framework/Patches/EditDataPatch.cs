@@ -135,7 +135,7 @@ namespace ContentPatcher.Framework.Patches
                     this.MoveRecords = moveEntries.ToArray();
                 }
                 else
-                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset.Value}': {error}.", LogLevel.Warn);
+                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
 
                 this.AttemptedDataLoad = true;
             }
@@ -343,7 +343,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 if (!moveRecord.IsReady)
                     continue;
-                string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID.Value}\"";
+                string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID}\"";
 
                 // get entry
                 TValue entry = GetByKey(moveRecord.ID.Value);
@@ -536,9 +536,9 @@ namespace ContentPatcher.Framework.Patches
                             return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
 
                         // get value
-                        string value = string.Empty;
-                        if (hasEntry(key))
-                            value = (string)(object)getEntry(key);
+                        string value = hasEntry(key)
+                            ? (string)(object)getEntry(key)
+                            : null;
 
                         // set value
                         setEntry(key, (TValue)(object)operation.Apply(value));
