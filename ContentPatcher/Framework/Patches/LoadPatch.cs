@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public LoadPatch(LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName)
+        public LoadPatch(LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName)
             : base(
                   path: path,
                   type: PatchType.Load,
@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override T Load<T>(IAssetInfo asset)
         {
-            return this.ContentPack.Load<T>(this.FromAsset);
+            return this.ContentPack.LoadAsset<T>(this.FromAsset);
         }
 
         /// <inheritdoc />

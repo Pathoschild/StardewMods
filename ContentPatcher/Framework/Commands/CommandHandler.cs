@@ -623,7 +623,7 @@ namespace ContentPatcher.Framework.Commands
             this.PatchLoader.UnloadPatchesLoadedBy(pack, false);
 
             // load pack patches
-            var changes = pack.ManagedPack.ReadJsonFile<ContentConfig>("content.json").Changes;
+            var changes = pack.ContentPack.ReadJsonFile<ContentConfig>("content.json").Changes;
             pack.Content.Changes = changes;
 
             // reload patches

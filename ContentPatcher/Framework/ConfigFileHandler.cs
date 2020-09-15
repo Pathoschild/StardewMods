@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework
         private readonly Func<string, InvariantHashSet> ParseCommaDelimitedField;
 
         /// <summary>A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</summary>
-        private readonly Action<ManagedContentPack, string, string> LogWarning;
+        private readonly Action<IContentPack, string, string> LogWarning;
 
 
         /*********
@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework
         /// <param name="filename">The name of the config file.</param>
         /// <param name="parseCommandDelimitedField">Parse a comma-delimited set of case-insensitive condition values.</param>
         /// <param name="logWarning">A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</param>
-        public ConfigFileHandler(string filename, Func<string, InvariantHashSet> parseCommandDelimitedField, Action<ManagedContentPack, string, string> logWarning)
+        public ConfigFileHandler(string filename, Func<string, InvariantHashSet> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
         {
             this.Filename = filename;
             this.ParseCommaDelimitedField = parseCommandDelimitedField;
@@ -43,7 +43,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack.</param>
         /// <param name="rawSchema">The raw config schema from the mod's <c>content.json</c>.</param>
         /// <param name="formatVersion">The content format version.</param>
-        public InvariantDictionary<ConfigField> Read(ManagedContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, ISemanticVersion formatVersion)
+        public InvariantDictionary<ConfigField> Read(IContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, ISemanticVersion formatVersion)
         {
             InvariantDictionary<ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason), formatVersion);
             this.LoadConfigValues(contentPack, config, logWarning: (field, reason) => this.LogWarning(contentPack, $"{this.Filename} > {field}", reason));
@@ -54,7 +54,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack.</param>
         /// <param name="config">The configuration to save.</param>
         /// <param name="modHelper">The mod helper through which to save the file.</param>
-        public void Save(ManagedContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
+        public void Save(IContentPack contentPack, InvariantDictionary<ConfigField> config, IModHelper modHelper)
         {
             // save if settings valid
             if (config.Any())
@@ -162,7 +162,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack whose config file to read.</param>
         /// <param name="config">The config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
-        private void LoadConfigValues(ManagedContentPack contentPack, InvariantDictionary<ConfigField> config, Action<string, string> logWarning)
+        private void LoadConfigValues(IContentPack contentPack, InvariantDictionary<ConfigField> config, Action<string, string> logWarning)
         {
             if (!config.Any())
                 return;

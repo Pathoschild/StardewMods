@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Commands
 {
@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Commands
         public Condition[] ParsedConditions { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        public ManagedContentPack ContentPack { get; }
+        public IContentPack ContentPack { get; }
 
         /// <summary>Whether the patch is loaded.</summary>
         public bool IsLoaded { get; }

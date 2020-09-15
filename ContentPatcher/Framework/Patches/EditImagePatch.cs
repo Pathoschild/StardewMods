@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMode patchMode, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditImage,
@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework.Patches
 
             // fetch data
             IAssetDataForImage editor = asset.AsImage();
-            Texture2D source = this.ContentPack.Load<Texture2D>(this.FromAsset);
+            Texture2D source = this.ContentPack.LoadAsset<Texture2D>(this.FromAsset);
             if (!this.TryReadArea(this.FromArea, 0, 0, source.Width, source.Height, out Rectangle sourceArea, out string error))
             {
                 this.Monitor.Log($"{errorPrefix}: the source area is invalid: {error}.", LogLevel.Warn);

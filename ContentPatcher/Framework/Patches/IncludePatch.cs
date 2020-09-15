@@ -52,7 +52,7 @@ namespace ContentPatcher.Framework.Patches
                 fromAsset: fromFile,
                 updateRate: updateRate,
                 parentPatch: parentPatch,
-                contentPack: contentPack.ManagedPack,
+                contentPack: contentPack.ContentPack,
                 normalizeAssetName: normalizeAssetName
             )
         {
@@ -108,7 +108,7 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     // load raw file
-                    var content = this.ContentPack.Load<ContentConfig>(this.FromAsset);
+                    var content = this.ContentPack.LoadAsset<ContentConfig>(this.FromAsset);
 
                     // validate fields
                     string[] invalidFields = this.GetInvalidFields(content).ToArray();

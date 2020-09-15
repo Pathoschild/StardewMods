@@ -72,13 +72,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the tokens which are defined for a specific content pack. This returns a reference to the list, which can be held for a live view of the tokens. If the content pack isn't currently tracked, this will add it.</summary>
         /// <param name="pack">The content pack to manage.</param>
-        public ModTokenContext TrackLocalTokens(ManagedContentPack pack)
+        public ModTokenContext TrackLocalTokens(IContentPack pack)
         {
             string scope = pack.Manifest.UniqueID;
 
-            if (!this.LocalTokens.TryGetValue(pack.Pack, out ModTokenContext localTokens))
+            if (!this.LocalTokens.TryGetValue(pack, out ModTokenContext localTokens))
             {
-                this.LocalTokens[pack.Pack] = localTokens = new ModTokenContext(scope, this);
+                this.LocalTokens[pack] = localTokens = new ModTokenContext(scope, this);
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
                     localTokens.AddLocalToken(new Token(valueProvider, scope));
             }
@@ -224,10 +224,10 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the local value providers with which to initialize a local context.</summary>
         /// <param name="contentPack">The content pack for which to get tokens.</param>
-        private IEnumerable<IValueProvider> GetLocalValueProviders(ManagedContentPack contentPack)
+        private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
             yield return new HasFileValueProvider(contentPack.HasFile);
-            yield return new TranslationValueProvider(contentPack.Pack.Translation);
+            yield return new TranslationValueProvider(contentPack.Translation);
         }
 
         /// <summary>Get a constant for a given value.</summary>

@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework
         public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, LogPathBuilder path, bool reindex, Patch parentPatch)
         {
             // get fake patch context (so patch tokens are available in patch validation)
-            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ManagedPack);
+            ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
             fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
             fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
@@ -121,7 +121,7 @@ namespace ContentPatcher.Framework
         /// <param name="reindex">Whether to reindex the patch list immediately if it changed.</param>
         public void UnloadPatchesLoadedBy(RawContentPack pack, bool reindex)
         {
-            this.UnloadPatches(patch => patch.ContentPack == pack.ManagedPack, reindex);
+            this.UnloadPatches(patch => patch.ContentPack == pack.ContentPack, reindex);
         }
 
         /// <summary>Normalize and parse the given condition values.</summary>
@@ -246,7 +246,7 @@ namespace ContentPatcher.Framework
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
         private bool LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
         {
-            var pack = rawContentPack.ManagedPack;
+            var pack = rawContentPack.ContentPack;
             PatchType? action = null;
 
             bool TrackSkip(string reason, bool warn = true)
