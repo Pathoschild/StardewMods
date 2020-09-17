@@ -550,8 +550,8 @@
     "tile.tile-index": "{{layerName}}：地格号",
     "tile.tilesheet": "{{layerName}}: 地格层",
     "tile.blend-mode": "{{layerName}}: 混合模式",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
+    "tile.index-property": "{{layerName}}: 指数属性: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: 属性: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "此处无地格",
