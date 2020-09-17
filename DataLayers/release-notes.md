@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Enaium (updated Chinese)!
+
 ## 1.12.2
 Released 28 August 2020.
 

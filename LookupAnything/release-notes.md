@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Enaium (updated Chinese)!
+
 ## 1.27.5
 Released 28 August 2020.
 
