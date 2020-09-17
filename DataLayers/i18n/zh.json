@@ -1,16 +1,16 @@
 {
     // accessible
-    "accessible.name": "能否抵达",
+    "accessible.name": "抵达",
     "accessible.clear": "可通过",
     "accessible.occupied": "被占用",
     "accessible.impassable": "不可通过",
     "accessible.warp": "传送点",
 
     // buildable
-    "buildable.name": "能否兴建建筑",
-    "buildable.buildable": "可兴建在这",
+    "buildable.name": "建造",
+    "buildable.buildable": "可以",
     "buildable.occupied": "被占用",
-    "buildable.not-buildable": "不可兴建在这",
+    "buildable.not-buildable": "不可以",
 
     // coverage: bee houses
     "bee-houses.name": "覆盖范围：蜂房",
@@ -60,7 +60,7 @@
     "machines.finished": "已完成",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "网格",
 
     // tillable
     "tillable.name": "能否耕地",
