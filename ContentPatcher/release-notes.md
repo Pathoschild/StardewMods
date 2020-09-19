@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+<!--
+
+
+STOP RIGHT THERE.
+When releasing a format change, don't forget to update the smapi.io/json schema!
+
+
+-->
 ## 1.18.2
 Released 13 September 2020.
 
