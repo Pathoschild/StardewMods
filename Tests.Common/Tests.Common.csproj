@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Pathoschild.Stardew.Tests.Common</AssemblyName>
@@ -22,6 +22,6 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="$(SolutionDir)\common.targets" />
+  <Import Project="..\_build\common.targets" />
 
 </Project>
