@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
 {

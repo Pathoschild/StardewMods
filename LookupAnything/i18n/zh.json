@@ -293,7 +293,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "因相邻的物体无法生长",
     "fruit-tree.growth.summary": "将于 {{date}} 成熟",
-    "fruit-tree.next-fruit.struck-by-lighting": "被闪电击中！将在 {{count}} 天后复原。",
+    "fruit-tree.next-fruit.struck-by-lightning": "被闪电击中！将在 {{count}} 天后复原。",
     "fruit-tree.next-fruit.out-of-season": "过季",
     "fruit-tree.next-fruit.max-fruit": "收获这批水果之前无法再次结果",
     "fruit-tree.next-fruit.too-young": "树龄太小无法结果",

@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewValley;
 using xTile.Layers;
 using xTile.ObjectModel;
@@ -34,9 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public TileSubject(SubjectFactory codex, GameHelper gameHelper, GameLocation location, Vector2 position, ITranslationHelper translations)
-            : base(codex, gameHelper, $"({position.X}, {position.Y})", L10n.Tile.Description(), L10n.Types.Tile(), translations)
+        public TileSubject(SubjectFactory codex, GameHelper gameHelper, GameLocation location, Vector2 position)
+            : base(codex, gameHelper, $"({position.X}, {position.Y})", L10n.Tile_Description(), L10n.Type_MapTile())
         {
             this.Location = location;
             this.Position = position;
@@ -46,13 +43,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData()
         {
             // yield map data
-            yield return new GenericField(this.GameHelper, L10n.Tile.MapName(), this.Location.Name);
+            yield return new GenericField(this.GameHelper, L10n.Tile_MapName(), this.Location.Name);
 
             // get tiles
             Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
             if (!tiles.Any())
             {
-                yield return new GenericField(this.GameHelper, L10n.Tile.TileField(), L10n.Tile.TileFieldNoneFound());
+                yield return new GenericField(this.GameHelper, L10n.Tile_Tile(), L10n.Tile_Tile_NoneHere());
                 yield break;
             }
 
@@ -60,13 +57,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             foreach (Tile tile in tiles)
             {
                 string layerName = tile.Layer.Id;
-                yield return new GenericField(this.GameHelper, L10n.Tile.TileIndex(layerName: layerName), this.Stringify(tile.TileIndex));
-                yield return new GenericField(this.GameHelper, L10n.Tile.TileSheet(layerName: layerName), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
-                yield return new GenericField(this.GameHelper, L10n.Tile.BlendMode(layerName: layerName), this.Stringify(tile.BlendMode));
+                yield return new GenericField(this.GameHelper, L10n.Tile_TileIndex(layerName: layerName), this.Stringify(tile.TileIndex));
+                yield return new GenericField(this.GameHelper, L10n.Tile_Tilesheet(layerName: layerName), tile.TileSheet.ImageSource.Replace("\\", ": ").Replace("/", ": "));
+                yield return new GenericField(this.GameHelper, L10n.Tile_BlendMode(layerName: layerName), this.Stringify(tile.BlendMode));
                 foreach (KeyValuePair<string, PropertyValue> property in tile.TileIndexProperties)
-                    yield return new GenericField(this.GameHelper, L10n.Tile.IndexProperty(layerName: layerName, propertyName: property.Key), property.Value);
+                    yield return new GenericField(this.GameHelper, L10n.Tile_IndexProperty(layerName: layerName, propertyName: property.Key), property.Value);
                 foreach (KeyValuePair<string, PropertyValue> property in tile.Properties)
-                    yield return new GenericField(this.GameHelper, L10n.Tile.TileProperty(layerName: layerName, propertyName: property.Key), property.Value);
+                    yield return new GenericField(this.GameHelper, L10n.Tile_TileProperty(layerName: layerName, propertyName: property.Key), property.Value);
             }
         }
 

@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 
@@ -28,10 +27,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="animal">The lookup target.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(SubjectFactory codex, GameHelper gameHelper, FarmAnimal animal, ITranslationHelper translations)
-            : base(codex, gameHelper, animal.displayName, null, animal.type.Value, translations)
+        public FarmAnimalSubject(SubjectFactory codex, GameHelper gameHelper, FarmAnimal animal)
+            : base(codex, gameHelper, animal.displayName, null, animal.type.Value)
         {
             this.Target = animal;
         }
@@ -52,14 +50,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // yield fields
-            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal.Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal), this.Text);
-            yield return new PercentageBarField(this.GameHelper, L10n.Animal.Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic.Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
-            yield return new GenericField(this.GameHelper, L10n.Animal.Mood(), animal.getMoodMessage());
-            yield return new GenericField(this.GameHelper, L10n.Animal.Complaints(), this.GetMoodReason(animal));
-            yield return new ItemIconField(this.GameHelper, L10n.Animal.ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
+            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
+            yield return new PercentageBarField(this.GameHelper, L10n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new GenericField(this.GameHelper, L10n.Animal_Mood(), animal.getMoodMessage());
+            yield return new GenericField(this.GameHelper, L10n.Animal_Complaints(), this.GetMoodReason(animal));
+            yield return new ItemIconField(this.GameHelper, L10n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, L10n.Animal.Growth(), $"{L10n.Generic.Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
-            yield return new GenericField(this.GameHelper, L10n.Animal.SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1, this.Text));
+                yield return new GenericField(this.GameHelper, L10n.Animal_Growth(), $"{L10n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+            yield return new GenericField(this.GameHelper, L10n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -102,28 +100,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // winter without heat
             if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)
-                factors.Add(L10n.Animal.ComplaintsNoHeater());
+                factors.Add(L10n.Animal_Complaints_NoHeater());
 
             // mood
             switch (animal.moodMessage.Value)
             {
                 case FarmAnimal.newHome:
-                    factors.Add(L10n.Animal.ComplaintsNewHome());
+                    factors.Add(L10n.Animal_Complaints_NewHome());
                     break;
                 case FarmAnimal.hungry:
-                    factors.Add(L10n.Animal.ComplaintsHungry());
+                    factors.Add(L10n.Animal_Complaints_Hungry());
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add(L10n.Animal.ComplaintsWildAnimalAttack());
+                    factors.Add(L10n.Animal_Complaints_WildAnimalAttack());
                     break;
                 case FarmAnimal.leftOutAtNight:
-                    factors.Add(L10n.Animal.ComplaintsLeftOut());
+                    factors.Add(L10n.Animal_Complaints_LeftOut());
                     break;
             }
 
             // not pet
             if (!animal.wasPet.Value)
-                factors.Add(L10n.Animal.ComplaintsNotPetted());
+                factors.Add(L10n.Animal_Complaints_NotPetted());
 
             // return factors
             return string.Join(", ", factors);

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -47,8 +46,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             int pointsForNextLevel = nextLevelExp > 0 ? nextLevelExp - this.CurrentValue : 0;
             int currentLevel = nextLevelExp > 0 ? Array.IndexOf(pointsPerLevel, nextLevelExp) : pointsPerLevel.Length;
             string text = pointsForNextLevel > 0
-                ? L10n.Player.SkillProgress(level: currentLevel, expNeeded: pointsForNextLevel)
-                : L10n.Player.SkillProgressLast(level: currentLevel);
+                ? L10n.Player_Skill_Progress(level: currentLevel, expNeeded: pointsForNextLevel)
+                : L10n.Player_Skill_ProgressLast(level: currentLevel);
 
             // draw bars
             const int barWidth = 25;

@@ -4,11 +4,9 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
@@ -41,9 +39,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="building">The lookup target.</param>
         /// <param name="sourceRectangle">The building's source rectangle in its spritesheet.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public BuildingSubject(SubjectFactory codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle, ITranslationHelper translations)
-            : base(codex, gameHelper, building.buildingType.Value, null, L10n.Types.Building(), translations)
+        public BuildingSubject(SubjectFactory codex, GameHelper gameHelper, Building building, Rectangle sourceRectangle)
+            : base(codex, gameHelper, building.buildingType.Value, null, L10n.Type_Building())
         {
             // init
             this.Target = building;
@@ -65,8 +62,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Get the data to display for this subject.</summary>
         public override IEnumerable<ICustomField> GetData()
         {
-            var text = this.Text;
-
             // get info
             Building building = this.Target;
             bool built = !building.isUnderConstruction();
@@ -77,15 +72,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 int daysLeft = building.isUnderConstruction() ? building.daysOfConstructionLeft.Value : building.daysUntilUpgrade.Value;
                 SDate readyDate = SDate.Now().AddDays(daysLeft);
-                yield return new GenericField(this.GameHelper, L10n.Building.Construction(), L10n.Building.ConstructionSummary(date: readyDate));
+                yield return new GenericField(this.GameHelper, L10n.Building_Construction(), L10n.Building_Construction_Summary(date: readyDate));
             }
 
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, L10n.Building.Owner(), owner.Name, () => this.Codex.GetPlayer(owner));
+                yield return new LinkField(this.GameHelper, L10n.Building_Owner(), owner.Name, () => this.Codex.GetPlayer(owner));
             else if (building.indoors.Value is Cabin)
-                yield return new GenericField(this.GameHelper, L10n.Building.Owner(), L10n.Building.OwnerNone());
+                yield return new GenericField(this.GameHelper, L10n.Building_Owner(), L10n.Building_Owner_None());
 
             // stable horse
             if (built && building is Stable stable)
@@ -93,8 +88,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, L10n.Building.Horse(), horse.Name, () => this.Codex.GetCharacter(horse));
-                    yield return new GenericField(this.GameHelper, L10n.Building.HorseLocation(), L10n.Building.HorseLocationSummary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
+                    yield return new LinkField(this.GameHelper, L10n.Building_Horse(), horse.Name, () => this.Codex.GetCharacter(horse));
+                    yield return new GenericField(this.GameHelper, L10n.Building_HorseLocation(), L10n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
 
@@ -102,15 +97,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (built && building.indoors.Value is AnimalHouse animalHouse)
             {
                 // animal counts
-                yield return new GenericField(this.GameHelper, L10n.Building.Animals(), L10n.Building.AnimalsSummary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
+                yield return new GenericField(this.GameHelper, L10n.Building_Animals(), L10n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
 
                 // feed trough
                 if ((building is Barn || building is Coop) && upgradeLevel >= 2)
-                    yield return new GenericField(this.GameHelper, L10n.Building.FeedTrough(), L10n.Building.FeedTroughAutomated());
+                    yield return new GenericField(this.GameHelper, L10n.Building_FeedTrough(), L10n.Building_FeedTrough_Automated());
                 else
                 {
                     this.GetFeedMetrics(animalHouse, out int totalFeedSpaces, out int filledFeedSpaces);
-                    yield return new GenericField(this.GameHelper, L10n.Building.FeedTrough(), L10n.Building.FeedTroughSummary(filled: filledFeedSpaces, max: totalFeedSpaces));
+                    yield return new GenericField(this.GameHelper, L10n.Building_FeedTrough(), L10n.Building_FeedTrough_Summary(filled: filledFeedSpaces, max: totalFeedSpaces));
                 }
             }
 
@@ -119,10 +114,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 // slime count
                 int slimeCount = slimeHutch.characters.OfType<GreenSlime>().Count();
-                yield return new GenericField(this.GameHelper, L10n.Building.Slimes(), L10n.Building.SlimesSummary(count: slimeCount, max: 20));
+                yield return new GenericField(this.GameHelper, L10n.Building_Slimes(), L10n.Building_Slimes_Summary(count: slimeCount, max: 20));
 
                 // water trough
-                yield return new GenericField(this.GameHelper, L10n.Building.WaterTrough(), L10n.Building.WaterTroughSummary(filled: slimeHutch.waterSpots.Count(p => p), max: slimeHutch.waterSpots.Count));
+                yield return new GenericField(this.GameHelper, L10n.Building_WaterTrough(), L10n.Building_WaterTrough_Summary(filled: slimeHutch.waterSpots.Count(p => p), max: slimeHutch.waterSpots.Count));
             }
 
             // upgrade level
@@ -130,7 +125,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 var upgradeLevelSummary = this.GetUpgradeLevelSummary(building, upgradeLevel).ToArray();
                 if (upgradeLevelSummary.Any())
-                    yield return new CheckboxListField(this.GameHelper, L10n.Building.Upgrades(), upgradeLevelSummary);
+                    yield return new CheckboxListField(this.GameHelper, L10n.Building_Upgrades(), upgradeLevelSummary);
             }
 
             // specific buildings
@@ -141,7 +136,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     // fish pond
                     case FishPond pond:
                         if (pond.fishType.Value <= -1)
-                            yield return new GenericField(this.GameHelper, L10n.Building.FishPondPopulation(), L10n.Building.FishPondPopulationEmpty());
+                            yield return new GenericField(this.GameHelper, L10n.Building_FishPond_Population(), L10n.Building_FishPond_Population_Empty());
                         else
                         {
                             // get fish population
@@ -151,39 +146,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // population field
                             {
-                                string populationStr = $"{fish.DisplayName} ({L10n.Generic.Ratio(pond.FishCount, pond.maxOccupants.Value)})";
+                                string populationStr = $"{fish.DisplayName} ({L10n.Generic_Ratio(pond.FishCount, pond.maxOccupants.Value)})";
                                 if (pond.FishCount < pond.maxOccupants.Value)
                                 {
                                     SDate nextSpawn = SDate.Now().AddDays(pondData.SpawnTime - pond.daysSinceSpawn.Value);
-                                    populationStr += Environment.NewLine + L10n.Building.FishPondPopulationNextSpawn(relativeDate: this.GetRelativeDateStr(nextSpawn));
+                                    populationStr += Environment.NewLine + L10n.Building_FishPond_Population_NextSpawn(relativeDate: this.GetRelativeDateStr(nextSpawn));
                                 }
 
-                                yield return new ItemIconField(this.GameHelper, L10n.Building.FishPondPopulation(), fish, text: populationStr);
+                                yield return new ItemIconField(this.GameHelper, L10n.Building_FishPond_Population(), fish, text: populationStr);
                             }
 
                             // output
-                            yield return new ItemIconField(this.GameHelper, L10n.Building.OutputReady(), pond.output.Value);
+                            yield return new ItemIconField(this.GameHelper, L10n.Building_OutputReady(), pond.output.Value);
 
                             // drops
                             int chanceOfAnyDrop = (int)Math.Round(Utility.Lerp(0.15f, 0.95f, pond.currentOccupants.Value / 10f) * 100);
-                            yield return new FishPondDropsField(this.GameHelper, L10n.Building.FishPondDrops(), pond.currentOccupants.Value, pondData, preface: L10n.Building.FishPondDropsPreface(chance: chanceOfAnyDrop.ToString()));
+                            yield return new FishPondDropsField(this.GameHelper, L10n.Building_FishPond_Drops(), pond.currentOccupants.Value, pondData, preface: L10n.Building_FishPond_Drops_Preface(chance: chanceOfAnyDrop.ToString()));
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
-                                yield return new CheckboxListField(this.GameHelper, L10n.Building.FishPondQuests(), this.GetPopulationGates(pond, pondData));
+                                yield return new CheckboxListField(this.GameHelper, L10n.Building_FishPond_Quests(), this.GetPopulationGates(pond, pondData));
                         }
                         break;
 
                     // Junimo hut
                     case JunimoHut hut:
-                        yield return new GenericField(this.GameHelper, L10n.Building.JunimoHarvestingEnabled(), text.Stringify(!hut.noHarvest.Value));
-                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), hut.output.Value?.items, showStackSize: true);
+                        yield return new GenericField(this.GameHelper, L10n.Building_JunimoHarvestingEnabled(), L10n.Stringify(!hut.noHarvest.Value));
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building_OutputReady(), hut.output.Value?.items, showStackSize: true);
                         break;
 
                     // mill
                     case Mill mill:
-                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputProcessing(), mill.input.Value?.items, showStackSize: true);
-                        yield return new ItemIconListField(this.GameHelper, L10n.Building.OutputReady(), mill.output.Value?.items, showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building_OutputProcessing(), mill.input.Value?.items, showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, L10n.Building_OutputReady(), mill.output.Value?.items, showStackSize: true);
                         break;
 
                     // silo
@@ -196,10 +191,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                             int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
                             yield return new GenericField(
                                 this.GameHelper,
-                                L10n.Building.StoredHay(),
+                                L10n.Building_StoredHay(),
                                 siloCount == 1
-                                    ? L10n.Building.StoredHaySummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
-                                    : L10n.Building.StoredHaySummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
+                                    ? L10n.Building_StoredHay_SummaryOneSilo(hayCount: hayCount, maxHay: maxHay)
+                                    : L10n.Building_StoredHay_SummaryMultipleSilos(hayCount: hayCount, maxHay: maxHay, siloCount: siloCount)
                             );
                         }
                         break;
@@ -310,15 +305,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (building is Barn)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn0()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Barn_0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn1()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Barn_1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesBarn2()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Barn_2()) },
                     value: upgradeLevel >= 2
                 );
             }
@@ -327,15 +322,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else if (building.indoors.Value is Cabin)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin0()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Cabin_0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin1()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Cabin_1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCabin2()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Cabin_2()) },
                     value: upgradeLevel >= 2
                 );
             }
@@ -344,15 +339,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             else if (building is Coop)
             {
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop0()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Coop_0()) },
                     value: true
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop1()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Coop_1()) },
                     value: upgradeLevel >= 1
                 );
                 yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(L10n.Building.UpgradesCoop2()) },
+                    key: new IFormattedText[] { new FormattedText(L10n.Building_Upgrades_Coop_2()) },
                     value: upgradeLevel >= 2
                 );
             }
@@ -372,7 +367,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
                 {
                     yield return new KeyValuePair<IFormattedText[], bool>(
-                        key: new IFormattedText[] { new FormattedText(L10n.Building.FishPondQuestsDone(count: newPopulation)) },
+                        key: new IFormattedText[] { new FormattedText(L10n.Building_FishPond_Quests_Done(count: newPopulation)) },
                         value: true
                     );
                     continue;
@@ -386,7 +381,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         SObject obj = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
                         string summary = obj.DisplayName;
                         if (drop.MinCount != drop.MaxCount)
-                            summary += $" ({L10n.Generic.Range(min: drop.MinCount, max: drop.MaxCount)})";
+                            summary += $" ({L10n.Generic_Range(min: drop.MinCount, max: drop.MaxCount)})";
                         else if (drop.MinCount > 1)
                             summary += $" ({drop.MinCount})";
 
@@ -398,8 +393,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 // display requirements
                 string itemList = string.Join(", ", requiredItems);
                 string result = requiredItems.Length > 1
-                    ? L10n.Building.FishPondQuestsIncompleteRandom(newPopulation, itemList)
-                    : L10n.Building.FishPondQuestsIncompleteOne(newPopulation, requiredItems[0]);
+                    ? L10n.Building_FishPond_Quests_IncompleteRandom(newPopulation, itemList)
+                    : L10n.Building_FishPond_Quests_IncompleteOne(newPopulation, requiredItems[0]);
 
                 // show next quest
                 if (!foundNextQuest)
@@ -409,7 +404,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     int nextQuestDays = data.SpawnTime
                         + (data.SpawnTime * (pond.maxOccupants.Value - pond.currentOccupants.Value))
                         - pond.daysSinceSpawn.Value;
-                    result += $"; {L10n.Building.FishPondQuestsAvailable(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
+                    result += $"; {L10n.Building_FishPond_Quests_Available(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
                 }
                 yield return new KeyValuePair<IFormattedText[], bool>(key: new IFormattedText[] { new FormattedText(result) }, value: false);
             }

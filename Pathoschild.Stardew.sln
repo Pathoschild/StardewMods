@@ -55,6 +55,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{183A028A-D606-4BA6-A211-51C966B98613}"
 	ProjectSection(SolutionItems) = preProject
 		_build\common.targets = _build\common.targets
+		_build\TranslationClassBuilder.ttinclude = _build\TranslationClassBuilder.ttinclude
 	EndProjectSection
 EndProject
 Global

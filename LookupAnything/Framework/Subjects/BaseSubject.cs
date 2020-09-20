@@ -4,11 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
@@ -19,9 +17,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /*********
         ** Fields
         *********/
-        /// <summary>Provides translations stored in the mod folder.</summary>
-        protected ITranslationHelper Text { get; }
-
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         protected GameHelper GameHelper { get; }
 
@@ -71,12 +66,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <summary>Construct an instance.</summary>
         /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper, ITranslationHelper translations)
+        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper)
         {
             this.Codex = codex;
             this.GameHelper = gameHelper;
-            this.Text = translations;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -85,9 +78,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="name">The display name.</param>
         /// <param name="description">The object description (if applicable).</param>
         /// <param name="type">The object type.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper, string name, string description, string type, ITranslationHelper translations)
-            : this(codex, gameHelper, translations)
+        protected BaseSubject(SubjectFactory codex, GameHelper gameHelper, string name, string description, string type)
+            : this(codex, gameHelper)
         {
             this.Initialize(name, description, type);
         }
@@ -145,7 +137,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="value">The underlying value.</param>
         protected string Stringify(object value)
         {
-            return this.Text.Stringify(value);
+            return L10n.Stringify(value);
         }
 
         /// <summary>Get a relative date value like 'tomorrow' or 'in 5 days'.</summary>
@@ -162,18 +154,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (days)
             {
                 case -1:
-                    return L10n.Generic.Yesterday();
+                    return L10n.Generic_Yesterday();
 
                 case 0:
-                    return L10n.Generic.Now();
+                    return L10n.Generic_Now();
 
                 case 1:
-                    return L10n.Generic.Tomorrow();
+                    return L10n.Generic_Tomorrow();
 
                 default:
-                    if (days > 0)
-                        return L10n.Generic.InXDays(count: days);
-                    return L10n.Generic.XDaysAgo(count: -days);
+                    return days > 0
+                        ? L10n.Generic_InXDays(count: days)
+                        : L10n.Generic_XDaysAgo(count: -days);
             }
         }
 

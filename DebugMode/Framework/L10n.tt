@@ -1,0 +1,6 @@
+<#@ include file="../../_build/TranslationClassBuilder.ttinclude" #><#=
+
+TranslationClassBuilder.GenerateClass(
+    jsonPath: this.Host.ResolvePath("../i18n/default.json")
+)
+#>

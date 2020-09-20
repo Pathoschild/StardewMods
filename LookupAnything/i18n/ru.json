@@ -293,7 +293,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "не может расти из-за соседних объектов",
     "fruit-tree.growth.summary": "созреет через {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Поражено молнией! Восстановится через {{count}} дн.",
+    "fruit-tree.next-fruit.struck-by-lightning": "Поражено молнией! Восстановится через {{count}} дн.",
     "fruit-tree.next-fruit.out-of-season": "Вне сезона",
     "fruit-tree.next-fruit.max-fruit": "больше нет места, соберите то что уже есть.",
     "fruit-tree.next-fruit.too-young": "слишком молодое для сбора",

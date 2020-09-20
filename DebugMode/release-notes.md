@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming version
+* Internal refactor to translation handling.
+
 ## 1.12.1
 Released 02 May 2020.
 

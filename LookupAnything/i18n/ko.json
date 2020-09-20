@@ -293,7 +293,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "주변의 물체가 방해해서 자랄 수 없음",
     "fruit-tree.growth.summary": "{{date}}일에 다 자람.",
-    "fruit-tree.next-fruit.struck-by-lighting": "벼락에 맞았다! {{count}}일 후 원상태로 회복.",
+    "fruit-tree.next-fruit.struck-by-lightning": "벼락에 맞았다! {{count}}일 후 원상태로 회복.",
     "fruit-tree.next-fruit.out-of-season": "제철이 아님",
     "fruit-tree.next-fruit.max-fruit": "현재 열린 열매들을 수확하지 않는다면 추가적인 열매를 맺지 않음",
     "fruit-tree.next-fruit.too-young": "열매를 맺기엔 너무 어림",

@@ -294,7 +294,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "隣になにかあって成長できなかった",
     "fruit-tree.growth.summary": "{{date}}に成熟",
-    "fruit-tree.next-fruit.struck-by-lighting": "雷に打たれた! {{count}}日で復旧",
+    "fruit-tree.next-fruit.struck-by-lightning": "雷に打たれた! {{count}}日で復旧",
     "fruit-tree.next-fruit.out-of-season": "季節外",
     "fruit-tree.next-fruit.max-fruit": "収穫するまで新しい果実を収穫できない",
     "fruit-tree.next-fruit.too-young": "果実を実らせるには若すぎる",

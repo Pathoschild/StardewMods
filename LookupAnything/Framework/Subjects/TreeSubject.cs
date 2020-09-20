@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -33,9 +32,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public TreeSubject(SubjectFactory codex, GameHelper gameHelper, Tree tree, Vector2 tile, ITranslationHelper translations)
-            : base(codex, gameHelper, TreeSubject.GetName(tree), null, L10n.Types.Tree(), translations)
+        public TreeSubject(SubjectFactory codex, GameHelper gameHelper, Tree tree, Vector2 tile)
+            : base(codex, gameHelper, TreeSubject.GetName(tree), null, L10n.Type_Tree())
         {
             this.Target = tree;
             this.Tile = tile;
@@ -50,30 +48,30 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-            yield return new GenericField(this.GameHelper, L10n.Tree.Stage(), isFullyGrown
-                ? L10n.Tree.StageDone()
-                : L10n.Tree.StagePartial(stageName: L10n.For(stage), step: (int)stage, max: (int)WildTreeGrowthStage.Tree)
+            yield return new GenericField(this.GameHelper, L10n.Tree_Stage(), isFullyGrown
+                ? L10n.Tree_Stage_Done()
+                : L10n.Tree_Stage_Partial(stageName: L10n.For(stage), step: (int)stage, max: (int)WildTreeGrowthStage.Tree)
             );
 
             // get growth schedule
             if (!isFullyGrown)
             {
-                string label = L10n.Tree.NextGrowth();
+                string label = L10n.Tree_NextGrowth();
                 if (Game1.IsWinter && !Game1.currentLocation.IsGreenhouse)
-                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthWinter());
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree_NextGrowth_Winter());
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
-                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthAdjacentTrees());
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree_NextGrowth_AdjacentTrees());
                 else
-                    yield return new GenericField(this.GameHelper, label, L10n.Tree.NextGrowthChance(stage: L10n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
+                    yield return new GenericField(this.GameHelper, label, L10n.Tree_NextGrowth_Chance(stage: L10n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
             }
 
             // get fertilizer
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, L10n.Tree.IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({L10n.Tree.IsFertilizedEffects()})" : ""));
+                yield return new GenericField(this.GameHelper, L10n.Tree_IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({L10n.Tree_IsFertilized_Effects()})" : ""));
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField(this.GameHelper, L10n.Tree.HasSeed(), this.Stringify(tree.hasSeed.Value));
+                yield return new GenericField(this.GameHelper, L10n.Tree_HasSeed(), this.Stringify(tree.hasSeed.Value));
 
         }
 
@@ -115,17 +113,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (type)
             {
                 case TreeType.Maple:
-                    return L10n.Tree.NameMaple();
+                    return L10n.Tree_Name_Maple();
                 case TreeType.Oak:
-                    return L10n.Tree.NameOak();
+                    return L10n.Tree_Name_Oak();
                 case TreeType.Pine:
-                    return L10n.Tree.NamePine();
+                    return L10n.Tree_Name_Pine();
                 case TreeType.Palm:
-                    return L10n.Tree.NamePalm();
+                    return L10n.Tree_Name_Palm();
                 case TreeType.BigMushroom:
-                    return L10n.Tree.NameBigMushroom();
+                    return L10n.Tree_Name_BigMushroom();
                 default:
-                    return L10n.Tree.NameUnknown();
+                    return L10n.Tree_Name_Unknown();
             }
         }
 

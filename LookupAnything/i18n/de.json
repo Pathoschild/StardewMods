@@ -293,7 +293,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
     "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
+    "fruit-tree.next-fruit.struck-by-lightning": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
     "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
     "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
     "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",

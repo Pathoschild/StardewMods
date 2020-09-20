@@ -1,7 +1,8 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## Upcoming version
+* Internal refactor to translation handling.
 * Improved translations. Thanks to Enaium (updated Chinese)!
 
 ## 1.27.5

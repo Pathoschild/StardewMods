@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI;
@@ -33,20 +32,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="codex">Provides subject entries for target values.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public BushSubject(SubjectFactory codex, GameHelper gameHelper, Bush bush, ITranslationHelper translations, IReflectionHelper reflection)
-            : base(codex, gameHelper, translations)
+        public BushSubject(SubjectFactory codex, GameHelper gameHelper, Bush bush, IReflectionHelper reflection)
+            : base(codex, gameHelper)
         {
             this.Target = bush;
             this.Reflection = reflection;
 
             if (this.IsBerryBush(bush))
-                this.Initialize(L10n.Bush.BerryName(), L10n.Bush.BerryDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush_Name_Berry(), L10n.Bush_Description_Berry(), L10n.Type_Bush());
             else if (this.IsTeaBush(bush))
-                this.Initialize(L10n.Bush.TeaName(), L10n.Bush.TeaDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush_Name_Tea(), L10n.Bush_Description_Tea(), L10n.Type_Bush());
             else
-                this.Initialize(L10n.Bush.PlainName(), L10n.Bush.PlainDescription(), L10n.Types.Bush());
+                this.Initialize(L10n.Bush_Name_Plain(), L10n.Bush_Description_Plain(), L10n.Type_Bush());
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -63,11 +61,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 SDate nextHarvest = this.GetNextHarvestDate(bush);
                 string nextHarvestStr = nextHarvest == today
-                    ? L10n.Generic.Now()
+                    ? L10n.Generic_Now()
                     : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
-                string harvestSchedule = isTeaBush ? L10n.Bush.ScheduleTea() : L10n.Bush.ScheduleBerry();
+                string harvestSchedule = isTeaBush ? L10n.Bush_Schedule_Tea() : L10n.Bush_Schedule_Berry();
 
-                yield return new GenericField(this.GameHelper, L10n.Bush.NextHarvest(), $"{nextHarvestStr}{Environment.NewLine}{harvestSchedule}");
+                yield return new GenericField(this.GameHelper, L10n.Bush_NextHarvest(), $"{nextHarvestStr}{Environment.NewLine}{harvestSchedule}");
             }
 
             // date planted + grown
@@ -77,11 +75,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 int daysOld = SDate.Now().DaysSinceStart - datePlanted.DaysSinceStart; // bush.getAge() not reliable, e.g. for Caroline's tea bush
                 SDate dateGrown = this.GetDateFullyGrown(bush);
 
-                yield return new GenericField(this.GameHelper, L10n.Bush.DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
+                yield return new GenericField(this.GameHelper, L10n.Bush_DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
                 if (dateGrown > today)
                 {
-                    string grownOnDateText = L10n.Bush.GrowthSummary(date: this.Stringify(dateGrown));
-                    yield return new GenericField(this.GameHelper, L10n.Bush.Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dateGrown)})");
+                    string grownOnDateText = L10n.Bush_Growth_Summary(date: this.Stringify(dateGrown));
+                    yield return new GenericField(this.GameHelper, L10n.Bush_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dateGrown)})");
                 }
             }
         }

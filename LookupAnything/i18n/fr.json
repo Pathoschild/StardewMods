@@ -292,7 +292,7 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "ne peut grandir car il y a des objets adjacents",
     "fruit-tree.growth.summary": "prêt le {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "touché par la foudre ! Récupérera dans {{count}} jours.",
+    "fruit-tree.next-fruit.struck-by-lightning": "touché par la foudre ! Récupérera dans {{count}} jours.",
     "fruit-tree.next-fruit.out-of-season": "en dehors de la saison",
     "fruit-tree.next-fruit.max-fruit": "ne produira aucun autre fruit jusqu'à ce que vous récoltiez ceux déjà présents",
     "fruit-tree.next-fruit.too-young": "trop jeune pour avoir des fruits",

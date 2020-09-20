@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming version
+* Internal refactor to translation handling.
+
 ## 4.11.2
 Released 12 September 2020.
 

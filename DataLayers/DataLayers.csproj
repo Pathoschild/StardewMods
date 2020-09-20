@@ -12,6 +12,12 @@
     <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <None Update="Framework\L10n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="L10n.cs" />
+    <Compile Update="Framework\L10n.cs" DesignTime="True" AutoGen="True" DependentUpon="L10n.tt" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
 

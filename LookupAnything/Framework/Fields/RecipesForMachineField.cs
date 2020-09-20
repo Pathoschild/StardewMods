@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -251,15 +250,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get name + count
             string text;
             if (minCount != maxCount)
-                text = L10n.Item.RecipesForMachineMultipleItems(name: name, minCount: minCount, maxCount: maxCount);
+                text = L10n.Item_RecipesForMachine_MultipleItems(name: name, count: L10n.Generic_Range(min: minCount, max: maxCount));
             else if (minCount > 1)
-                text = L10n.Item.RecipesForMachineMultipleItems(name: name, count: minCount);
+                text = L10n.Item_RecipesForMachine_MultipleItems(name: name, count: minCount);
             else
                 text = name;
 
             // add chance
             if (chance > 0 && chance < 100)
-                text += " (" + L10n.Generic.Percent(chance) + ")";
+                text += " (" + L10n.Generic_Percent(chance) + ")";
 
             return text;
         }
