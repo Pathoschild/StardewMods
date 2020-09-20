@@ -35,6 +35,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Constructs subjects for target values.</summary>
         private readonly SubjectFactory Codex;
 
+        /// <summary>Whether to show raw tile info like tilesheets and tile indexes.</summary>
+        private readonly Func<bool> ShowRawTileInfo;
+
 
         /*********
         ** Public methods
@@ -47,13 +50,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="codex">Constructs subjects for target values.</param>
-        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets, SubjectFactory codex)
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets, SubjectFactory codex, Func<bool> showRawTileInfo)
         {
             this.Reflection = reflection;
             this.GameHelper = gameHelper;
             this.JsonAssets = jsonAssets;
             this.GameHelper = gameHelper;
             this.Codex = codex;
+            this.ShowRawTileInfo = showRawTileInfo;
         }
 
         /****
@@ -62,9 +67,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="originTile">The tile from which to search for targets.</param>
-        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
         /// <remarks>Related to <see cref="SubjectFactory.GetSearchSubjects"/>.</remarks>
-        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool includeMapTile)
+        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool? showRawTileInfo = null)
         {
             // NPCs
             foreach (NPC npc in location.characters)
@@ -178,18 +183,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             }
 
             // tiles
-            if (includeMapTile)
+            if (TileSubject.EnableLookup(location, originTile, showRawTileInfo ?? this.ShowRawTileInfo()))
                 yield return new TileTarget(this.GameHelper, originTile);
         }
 
         /// <summary>Get the target on the specified tile.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
-        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile, bool includeMapTile)
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
+        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile, bool? showRawTileInfo = null)
         {
             return (
-                from target in this.GetNearbyTargets(location, tile, includeMapTile)
+                from target in this.GetNearbyTargets(location, tile, showRawTileInfo)
                 where
                     target.Type != SubjectType.Unknown
                     && target.IsAtTile(tile)
@@ -201,13 +206,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative pixel coordinate to search.</param>
-        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
-        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool includeMapTile)
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
+        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool? showRawTileInfo = null)
         {
             // get target sprites which might overlap cursor position (first approximation)
             Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
             var candidates = (
-                from target in this.GetNearbyTargets(location, tile, includeMapTile)
+                from target in this.GetNearbyTargets(location, tile, showRawTileInfo)
                 let spriteArea = target.GetWorldArea()
                 let isAtTile = target.IsAtTile(tile)
                 where
@@ -233,18 +238,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get metadata for a Stardew object at the specified position.</summary>
         /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
-        /// <param name="includeMapTile">Whether to allow matching the map tile itself.</param>
         /// <param name="hasCursor">Whether the player has a visible cursor.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool includeMapTile, bool hasCursor)
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool hasCursor, bool? showRawTileInfo = null)
         {
             // get target
             ITarget target;
             if (hasCursor)
-                target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), includeMapTile);
+                target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), showRawTileInfo);
             else
             {
                 Vector2 tile = this.GetFacingTile(player);
-                target = this.GetTargetFromTile(location, tile, includeMapTile);
+                target = this.GetTargetFromTile(location, tile, showRawTileInfo);
             }
 
             // get subject
@@ -301,7 +306,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // tile
                 case SubjectType.Tile:
-                    return this.Codex.GetTile(Game1.currentLocation, target.GetValue<Vector2>());
+                    return this.Codex.GetTile(Game1.currentLocation, target.GetValue<Vector2>(), this.ShowRawTileInfo());
             }
 
             return null;

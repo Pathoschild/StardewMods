@@ -125,7 +125,7 @@ namespace Pathoschild.Stardew.LookupAnything
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
             this.SubjectFactory = new SubjectFactory(this.Metadata, this.Helper.Reflection, this.GameHelper, this.Config);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory, () => this.Config.EnableTileLookups);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -364,7 +364,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // world
             logMessage.Append(" searching the world...");
-            return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, this.Config.EnableTileLookups, hasCursor);
+            return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, hasCursor);
         }
 
         /// <summary>Push a new menu onto the display stack, saving the previous menu if needed.</summary>

@@ -136,9 +136,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get a bush subject.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="position">The tile position.</param>
-        public ISubject GetTile(GameLocation location, Vector2 position)
+        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
+        public ISubject GetTile(GameLocation location, Vector2 position, bool showRawTileInfo)
         {
-            return new TileSubject(this, this.GameHelper, location, position);
+            return new TileSubject(this, this.GameHelper, location, position, showRawTileInfo);
         }
 
         /****
