@@ -33,13 +33,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public BuildableLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.Buildable_Name(), config, input, monitor)
+            : base(I18n.Buildable_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Buildable = new LegendEntry(L10n.Keys.Buildable_Buildable, Color.Green),
-                this.Occupied = new LegendEntry(L10n.Keys.Buildable_Occupied, Color.Orange),
-                this.NonBuildable = new LegendEntry(L10n.Keys.Buildable_NotBuildable, Color.Red)
+                this.Buildable = new LegendEntry(I18n.Keys.Buildable_Buildable, Color.Green),
+                this.Occupied = new LegendEntry(I18n.Keys.Buildable_Occupied, Color.Orange),
+                this.NonBuildable = new LegendEntry(I18n.Keys.Buildable_NotBuildable, Color.Red)
             };
         }
 

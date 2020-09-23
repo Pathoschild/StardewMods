@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // load translations
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
 
             // load & validate database
             this.LoadMetadata();

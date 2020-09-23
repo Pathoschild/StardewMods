@@ -116,7 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             : this(
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
-                displayType: recipe.isCookingRecipe ? L10n.RecipeType_Cooking() : L10n.RecipeType_Crafting(),
+                displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
                 ingredients: reflectionHelper
                     .GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue()
                     .Select(p => new RecipeIngredientModel(p.Key, p.Value)),

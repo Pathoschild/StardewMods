@@ -1,3 +1,4 @@
+using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
@@ -8,7 +9,7 @@ namespace Pathoschild.Stardew.DebugMode.Framework
     /// <remarks>This is auto-generated from the <c>i18n/default.json</c> file when the T4 template is saved.</remarks>
     [GeneratedCode("TextTemplatingFileGenerator", "1.0.0")]
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Deliberately named for consistency and to match translation conventions.")]
-    internal class L10n
+    internal static class I18n
     {
         /*********
         ** Fields
@@ -24,61 +25,76 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         /// <param name="translations">The mod's translation helper.</param>
         public static void Init(ITranslationHelper translations)
         {
-            L10n.Translations = translations;
+            I18n.Translations = translations;
         }
 
         /// <summary>Get a translation equivalent to "tile".</summary>
         public static string Label_Tile()
         {
-            return L10n.Translations.Get("label.tile");
+            return I18n.GetByKey("label.tile");
         }
 
         /// <summary>Get a translation equivalent to "map".</summary>
         public static string Label_Map()
         {
-            return L10n.Translations.Get("label.map");
+            return I18n.GetByKey("label.map");
         }
 
         /// <summary>Get a translation equivalent to "menu".</summary>
         public static string Label_Menu()
         {
-            return L10n.Translations.Get("label.menu");
+            return I18n.GetByKey("label.menu");
         }
 
         /// <summary>Get a translation equivalent to "submenu".</summary>
         public static string Label_Submenu()
         {
-            return L10n.Translations.Get("label.submenu");
+            return I18n.GetByKey("label.submenu");
         }
 
         /// <summary>Get a translation equivalent to "minigame".</summary>
         public static string Label_Minigame()
         {
-            return L10n.Translations.Get("label.minigame");
+            return I18n.GetByKey("label.minigame");
         }
 
         /// <summary>Get a translation equivalent to "festival".</summary>
         public static string Label_FestivalName()
         {
-            return L10n.Translations.Get("label.festival-name");
+            return I18n.GetByKey("label.festival-name");
         }
 
         /// <summary>Get a translation equivalent to "event ID".</summary>
         public static string Label_EventId()
         {
-            return L10n.Translations.Get("label.event-id");
+            return I18n.GetByKey("label.event-id");
         }
 
         /// <summary>Get a translation equivalent to "event script".</summary>
         public static string Label_EventScript()
         {
-            return L10n.Translations.Get("label.event-script");
+            return I18n.GetByKey("label.event-script");
         }
 
         /// <summary>Get a translation equivalent to "song".</summary>
         public static string Label_Song()
         {
-            return L10n.Translations.Get("label.song");
+            return I18n.GetByKey("label.song");
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get a translation by its key.</summary>
+        /// <param name="key">The translation key.</param>
+        /// <param name="tokens">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
+        private static string GetByKey(string key, object tokens = null)
+        {
+            if (I18n.Translations == null)
+                throw new InvalidOperationException($"You must call {nameof(I18n)}.{nameof(I18n.Init)} from your mod's entry method before reading translations.");
+            return I18n.Translations.Get(key, tokens);
         }
     }
 }
+

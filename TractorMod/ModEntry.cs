@@ -91,7 +91,7 @@ namespace Pathoschild.Stardew.TractorMod
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // init
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
             this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection);
             this.UpdateConfig();
 
@@ -737,8 +737,8 @@ namespace Pathoschild.Stardew.TractorMod
         {
             return new BluePrint("Stable")
             {
-                displayName = L10n.Garage_Name(),
-                description = L10n.Garage_Description(),
+                displayName = I18n.Garage_Name(),
+                description = I18n.Garage_Description(),
                 maxOccupants = this.MaxOccupantsID,
                 moneyRequired = this.Config.BuildPrice,
                 tilesWidth = 4,

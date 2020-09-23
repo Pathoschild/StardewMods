@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     );
                     Vector2 textSize = spriteBatch.DrawTextBlock(
                         font: Game1.smallFont,
-                        text: L10n.Building_FishPond_Drops_MinFish(count: drop.MinPopulation),
+                        text: I18n.Building_FishPond_Drops_MinFish(count: drop.MinPopulation),
                         position: new Vector2(position.X + outerIndent + checkboxSize + 7, position.Y + height),
                         wrapWidth: wrapWidth - checkboxSize - 7,
                         color: disabled ? Color.Gray : Color.Black
@@ -113,9 +113,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     spriteBatch.DrawSpriteWithin(drop.Sprite, position.X + innerIndent, position.Y + height, iconSize, Color.White * (disabled ? 0.5f : 1f));
 
                     // draw text
-                    string text = L10n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
+                    string text = I18n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: drop.SampleItem.DisplayName);
                     if (drop.MinDrop != drop.MaxDrop)
-                        text += $" ({L10n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
+                        text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                     else if (drop.MinDrop > 1)
                         text += $" ({drop.MinDrop})";
                     Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(innerIndent + iconSize.X + 5, height + 5), wrapWidth, disabled ? Color.Gray : Color.Black);

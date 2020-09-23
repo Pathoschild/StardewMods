@@ -243,10 +243,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             else
             {
                 // get translations
-                string locationLabel = L10n.Label_Location() + ":";
-                string nameLabel = L10n.Label_Name() + ":";
-                string categoryLabel = L10n.Label_Category() + ":";
-                string orderLabel = L10n.Label_Order() + ":";
+                string locationLabel = I18n.Label_Location() + ":";
+                string nameLabel = I18n.Label_Name() + ":";
+                string categoryLabel = I18n.Label_Category() + ":";
+                string orderLabel = I18n.Label_Order() + ":";
 
                 // get initial measurements
                 SpriteFont font = Game1.smallFont;
@@ -263,7 +263,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     string locationName = this.Chest.Location.Name;
                     if (this.Chest.Tile != Vector2.Zero)
-                        locationName += " (" + L10n.Label_Location_Tile(x: this.Chest.Tile.X, y: this.Chest.Tile.Y) + ")";
+                        locationName += " (" + I18n.Label_Location_Tile(x: this.Chest.Tile.X, y: this.Chest.Tile.Y) + ")";
 
                     Vector2 labelSize = batch.DrawTextBlock(font, locationLabel, new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(locationLabel).X), bounds.Y + topOffset), bounds.Width);
                     batch.DrawTextBlock(font, locationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
@@ -289,20 +289,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 }
 
                 // checkboxes
-                topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? L10n.Label_HideChestHidden() : L10n.Label_HideChest()).Y;
+                topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest()).Y;
                 if (this.ShowAutomateOptions)
                 {
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, L10n.Label_AutomateStore(), defaultValue: true).Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateStore(), defaultValue: true).Y;
                     if (this.EditAutomateStoreItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, L10n.Label_AutomateStoreFirst()).Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, L10n.Label_AutomateTake(), defaultValue: true).Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateStoreFirst()).Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateTake(), defaultValue: true).Y;
                     if (this.EditAutomateTakeItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, L10n.Label_AutomateTakeFirst()).Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateTakeFirst()).Y;
                 }
 
                 // buttons
-                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, L10n.Button_Save(), Color.DarkGreen, out Rectangle saveButtonBounds);
-                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, L10n.Button_Reset(), Color.DarkRed, out _);
+                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Button_Save(), Color.DarkGreen, out Rectangle saveButtonBounds);
+                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, I18n.Button_Reset(), Color.DarkRed, out _);
 
                 // exit button
                 this.EditExitButton.draw(batch);
@@ -587,7 +587,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, L10n.Button_EditChest(), Sprites.Icons.Sheet, sprite, zoom);
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form

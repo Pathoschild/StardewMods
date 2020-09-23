@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             : base(codex, gameHelper)
         {
             this.Target = item;
-            this.Initialize(item.DisplayName, item.getDescription(), L10n.Type_Other());
+            this.Initialize(item.DisplayName, item.getDescription(), I18n.Type_Other());
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (date != null)
             {
                 string taste = MovieTheater.GetConcessionTasteForCharacter(date, item);
-                yield return new GenericField(this.GameHelper, L10n.Item_MovieSnackPreference(), L10n.ForMovieTasteLabel(taste, date.Name));
+                yield return new GenericField(this.GameHelper, I18n.Item_MovieSnackPreference(), I18n.ForMovieTasteLabel(taste, date.Name));
             }
         }
 

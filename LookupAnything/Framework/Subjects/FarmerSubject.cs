@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="farmer">The lookup target.</param>
         /// <param name="isLoadMenu">Whether this is being displayed on the load menu, before the save data is fully initialized.</param>
         public FarmerSubject(SubjectFactory codex, GameHelper gameHelper, SFarmer farmer, bool isLoadMenu = false)
-            : base(codex, gameHelper, farmer.Name, null, L10n.Type_Player())
+            : base(codex, gameHelper, farmer.Name, null, I18n.Type_Player())
         {
             this.Target = farmer;
             this.IsLoadMenu = isLoadMenu;
@@ -52,32 +52,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             SFarmer target = this.Target;
 
             // basic info
-            yield return new GenericField(this.GameHelper, L10n.Player_Gender(), target.IsMale ? L10n.Player_Gender_Male() : L10n.Player_Gender_Female());
-            yield return new GenericField(this.GameHelper, L10n.Player_FarmName(), target.farmName.Value);
-            yield return new GenericField(this.GameHelper, L10n.Player_FarmMap(), this.GetFarmType());
-            yield return new GenericField(this.GameHelper, L10n.Player_FavoriteThing(), target.favoriteThing.Value);
-            yield return new GenericField(this.GameHelper, Game1.player.spouse == "Krobus" ? L10n.Player_Housemate() : L10n.Player_Spouse(), this.GetSpouseName());
+            yield return new GenericField(this.GameHelper, I18n.Player_Gender(), target.IsMale ? I18n.Player_Gender_Male() : I18n.Player_Gender_Female());
+            yield return new GenericField(this.GameHelper, I18n.Player_FarmName(), target.farmName.Value);
+            yield return new GenericField(this.GameHelper, I18n.Player_FarmMap(), this.GetFarmType());
+            yield return new GenericField(this.GameHelper, I18n.Player_FavoriteThing(), target.favoriteThing.Value);
+            yield return new GenericField(this.GameHelper, Game1.player.spouse == "Krobus" ? I18n.Player_Housemate() : I18n.Player_Spouse(), this.GetSpouseName());
 
             // saw a movie this week
             if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater"))
-                yield return new GenericField(this.GameHelper, L10n.Player_WatchedMovieThisWeek(), this.Stringify(target.lastSeenMovieWeek.Value >= Game1.Date.TotalSundayWeeks));
+                yield return new GenericField(this.GameHelper, I18n.Player_WatchedMovieThisWeek(), this.Stringify(target.lastSeenMovieWeek.Value >= Game1.Date.TotalSundayWeeks));
 
             // skills
             int maxSkillPoints = this.Constants.PlayerMaxSkillPoints;
             int[] skillPointsPerLevel = this.Constants.PlayerSkillPointsPerLevel;
-            yield return new SkillBarField(this.GameHelper, L10n.Player_FarmingSkill(), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField(this.GameHelper, L10n.Player_MiningSkill(), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField(this.GameHelper, L10n.Player_ForagingSkill(), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField(this.GameHelper, L10n.Player_FishingSkill(), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
-            yield return new SkillBarField(this.GameHelper, L10n.Player_CombatSkill(), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, I18n.Player_FarmingSkill(), target.experiencePoints[SFarmer.farmingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, I18n.Player_MiningSkill(), target.experiencePoints[SFarmer.miningSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, I18n.Player_ForagingSkill(), target.experiencePoints[SFarmer.foragingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, I18n.Player_FishingSkill(), target.experiencePoints[SFarmer.fishingSkill], maxSkillPoints, skillPointsPerLevel);
+            yield return new SkillBarField(this.GameHelper, I18n.Player_CombatSkill(), target.experiencePoints[SFarmer.combatSkill], maxSkillPoints, skillPointsPerLevel);
 
             // luck
-            string luckSummary = L10n.Player_Luck_Summary(percent: (Game1.player.DailyLuck >= 0 ? "+" : "") + Math.Round(Game1.player.DailyLuck * 100, 2));
-            yield return new GenericField(this.GameHelper, L10n.Player_Luck(), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
+            string luckSummary = I18n.Player_Luck_Summary(percent: (Game1.player.DailyLuck >= 0 ? "+" : "") + Math.Round(Game1.player.DailyLuck * 100, 2));
+            yield return new GenericField(this.GameHelper, I18n.Player_Luck(), $"{this.GetSpiritLuckMessage()}{Environment.NewLine}({luckSummary})");
 
             // save version
             if (this.IsLoadMenu)
-                yield return new GenericField(this.GameHelper, L10n.Player_SaveFormat(), this.GetSaveFormat(this.RawSaveData.Value));
+                yield return new GenericField(this.GameHelper, I18n.Player_SaveFormat(), this.GetSaveFormat(this.RawSaveData.Value));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -168,7 +168,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return Game1.content.LoadString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
 
                 default:
-                    return L10n.Player_FarmMap_Custom();
+                    return I18n.Player_FarmMap_Custom();
             }
         }
 

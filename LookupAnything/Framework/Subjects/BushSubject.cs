@@ -40,11 +40,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             this.Reflection = reflection;
 
             if (this.IsBerryBush(bush))
-                this.Initialize(L10n.Bush_Name_Berry(), L10n.Bush_Description_Berry(), L10n.Type_Bush());
+                this.Initialize(I18n.Bush_Name_Berry(), I18n.Bush_Description_Berry(), I18n.Type_Bush());
             else if (this.IsTeaBush(bush))
-                this.Initialize(L10n.Bush_Name_Tea(), L10n.Bush_Description_Tea(), L10n.Type_Bush());
+                this.Initialize(I18n.Bush_Name_Tea(), I18n.Bush_Description_Tea(), I18n.Type_Bush());
             else
-                this.Initialize(L10n.Bush_Name_Plain(), L10n.Bush_Description_Plain(), L10n.Type_Bush());
+                this.Initialize(I18n.Bush_Name_Plain(), I18n.Bush_Description_Plain(), I18n.Type_Bush());
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -61,11 +61,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 SDate nextHarvest = this.GetNextHarvestDate(bush);
                 string nextHarvestStr = nextHarvest == today
-                    ? L10n.Generic_Now()
+                    ? I18n.Generic_Now()
                     : $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
-                string harvestSchedule = isTeaBush ? L10n.Bush_Schedule_Tea() : L10n.Bush_Schedule_Berry();
+                string harvestSchedule = isTeaBush ? I18n.Bush_Schedule_Tea() : I18n.Bush_Schedule_Berry();
 
-                yield return new GenericField(this.GameHelper, L10n.Bush_NextHarvest(), $"{nextHarvestStr}{Environment.NewLine}{harvestSchedule}");
+                yield return new GenericField(this.GameHelper, I18n.Bush_NextHarvest(), $"{nextHarvestStr}{Environment.NewLine}{harvestSchedule}");
             }
 
             // date planted + grown
@@ -75,11 +75,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 int daysOld = SDate.Now().DaysSinceStart - datePlanted.DaysSinceStart; // bush.getAge() not reliable, e.g. for Caroline's tea bush
                 SDate dateGrown = this.GetDateFullyGrown(bush);
 
-                yield return new GenericField(this.GameHelper, L10n.Bush_DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
+                yield return new GenericField(this.GameHelper, I18n.Bush_DatePlanted(), $"{this.Stringify(datePlanted)} ({this.GetRelativeDateStr(-daysOld)})");
                 if (dateGrown > today)
                 {
-                    string grownOnDateText = L10n.Bush_Growth_Summary(date: this.Stringify(dateGrown));
-                    yield return new GenericField(this.GameHelper, L10n.Bush_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dateGrown)})");
+                    string grownOnDateText = I18n.Bush_Growth_Summary(date: this.Stringify(dateGrown));
+                    yield return new GenericField(this.GameHelper, I18n.Bush_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dateGrown)})");
                 }
             }
         }

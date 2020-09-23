@@ -77,10 +77,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 if (unrevealed > 0)
-                    yield return new FormattedText(L10n.Npc_UndiscoveredGiftTasteAppended(count: unrevealed), Color.Gray);
+                    yield return new FormattedText(I18n.Npc_UndiscoveredGiftTasteAppended(count: unrevealed), Color.Gray);
             }
             else
-                yield return new FormattedText(L10n.Npc_UndiscoveredGiftTaste(count: unrevealed), Color.Gray);
+                yield return new FormattedText(I18n.Npc_UndiscoveredGiftTaste(count: unrevealed), Color.Gray);
         }
     }
 }

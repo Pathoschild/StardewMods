@@ -43,14 +43,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public JunimoHutLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(L10n.JunimoHuts_Name(), config, input, monitor)
+            : base(I18n.JunimoHuts_Name(), config, input, monitor)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(L10n.Keys.JunimoHuts_CanHarvest, Color.Green),
-                this.NotCovered = new LegendEntry(L10n.Keys.JunimoHuts_CannotHarvest, Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.JunimoHuts_CanHarvest, Color.Green),
+                this.NotCovered = new LegendEntry(I18n.Keys.JunimoHuts_CannotHarvest, Color.Red)
             };
 
             // set max radius

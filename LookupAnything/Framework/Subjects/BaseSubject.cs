@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="value">The underlying value.</param>
         protected string Stringify(object value)
         {
-            return L10n.Stringify(value);
+            return I18n.Stringify(value);
         }
 
         /// <summary>Get a relative date value like 'tomorrow' or 'in 5 days'.</summary>
@@ -154,18 +154,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             switch (days)
             {
                 case -1:
-                    return L10n.Generic_Yesterday();
+                    return I18n.Generic_Yesterday();
 
                 case 0:
-                    return L10n.Generic_Now();
+                    return I18n.Generic_Now();
 
                 case 1:
-                    return L10n.Generic_Tomorrow();
+                    return I18n.Generic_Tomorrow();
 
                 default:
                     return days > 0
-                        ? L10n.Generic_InXDays(count: days)
-                        : L10n.Generic_XDaysAgo(count: -days);
+                        ? I18n.Generic_InXDays(count: days)
+                        : I18n.Generic_XDaysAgo(count: -days);
             }
         }
 

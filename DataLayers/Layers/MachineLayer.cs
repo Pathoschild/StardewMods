@@ -35,13 +35,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public MachineLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(L10n.Machines_Name(), config, input, monitor)
+            : base(I18n.Machines_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Empty = new LegendEntry(L10n.Keys.Machines_Empty, Color.Red),
-                this.Processing = new LegendEntry(L10n.Keys.Machines_Processing, Color.Orange),
-                this.Finished = new LegendEntry(L10n.Keys.Machines_Finished, Color.Green)
+                this.Empty = new LegendEntry(I18n.Keys.Machines_Empty, Color.Red),
+                this.Processing = new LegendEntry(I18n.Keys.Machines_Processing, Color.Orange),
+                this.Finished = new LegendEntry(I18n.Keys.Machines_Finished, Color.Green)
             };
             this.Mods = mods;
         }

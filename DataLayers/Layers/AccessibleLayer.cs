@@ -47,14 +47,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public AccessibleLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.Accessible_Name(), config, input, monitor)
+            : base(I18n.Accessible_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Clear = new LegendEntry(L10n.Keys.Accessible_Clear, Color.Green),
-                this.Occupied = new LegendEntry(L10n.Keys.Accessible_Occupied, L10n.Accessible_Occupied(), Color.Orange),
-                this.Impassable = new LegendEntry(L10n.Keys.Accessible_Impassable, L10n.Accessible_Impassable(), Color.Red),
-                this.Warp = new LegendEntry(L10n.Keys.Accessible_Warp, L10n.Accessible_Warp(), Color.Blue)
+                this.Clear = new LegendEntry(I18n.Keys.Accessible_Clear, Color.Green),
+                this.Occupied = new LegendEntry(I18n.Keys.Accessible_Occupied, I18n.Accessible_Occupied(), Color.Orange),
+                this.Impassable = new LegendEntry(I18n.Keys.Accessible_Impassable, I18n.Accessible_Impassable(), Color.Red),
+                this.Warp = new LegendEntry(I18n.Keys.Accessible_Warp, I18n.Accessible_Warp(), Color.Blue)
             };
         }
 

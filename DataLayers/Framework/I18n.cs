@@ -1,3 +1,4 @@
+using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
@@ -8,7 +9,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
     /// <remarks>This is auto-generated from the <c>i18n/default.json</c> file when the T4 template is saved.</remarks>
     [GeneratedCode("TextTemplatingFileGenerator", "1.0.0")]
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Deliberately named for consistency and to match translation conventions.")]
-    internal class L10n
+    internal static class I18n
     {
         /*********
         ** Fields
@@ -165,278 +166,282 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="translations">The mod's translation helper.</param>
         public static void Init(ITranslationHelper translations)
         {
-            L10n.Translations = translations;
-        }
-        /// <summary>Get a translation by its key.</summary>
-        /// <param name="key">The translation key.</param>
-        /// <param name="tokens">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
-        public static string GetRaw(string key, object tokens = null)
-        {
-            return L10n.Translations.Get(key, tokens);
+            I18n.Translations = translations;
         }
 
         /// <summary>Get a translation equivalent to "Accessible".</summary>
         public static string Accessible_Name()
         {
-            return L10n.Translations.Get(Keys.Accessible_Name);
+            return I18n.GetByKey(Keys.Accessible_Name);
         }
 
         /// <summary>Get a translation equivalent to "Clear".</summary>
         public static string Accessible_Clear()
         {
-            return L10n.Translations.Get(Keys.Accessible_Clear);
+            return I18n.GetByKey(Keys.Accessible_Clear);
         }
 
         /// <summary>Get a translation equivalent to "Occupied".</summary>
         public static string Accessible_Occupied()
         {
-            return L10n.Translations.Get(Keys.Accessible_Occupied);
+            return I18n.GetByKey(Keys.Accessible_Occupied);
         }
 
         /// <summary>Get a translation equivalent to "Impassable".</summary>
         public static string Accessible_Impassable()
         {
-            return L10n.Translations.Get(Keys.Accessible_Impassable);
+            return I18n.GetByKey(Keys.Accessible_Impassable);
         }
 
         /// <summary>Get a translation equivalent to "Warp".</summary>
         public static string Accessible_Warp()
         {
-            return L10n.Translations.Get(Keys.Accessible_Warp);
+            return I18n.GetByKey(Keys.Accessible_Warp);
         }
 
         /// <summary>Get a translation equivalent to "Buildable".</summary>
         public static string Buildable_Name()
         {
-            return L10n.Translations.Get(Keys.Buildable_Name);
+            return I18n.GetByKey(Keys.Buildable_Name);
         }
 
         /// <summary>Get a translation equivalent to "Can Build here".</summary>
         public static string Buildable_Buildable()
         {
-            return L10n.Translations.Get(Keys.Buildable_Buildable);
+            return I18n.GetByKey(Keys.Buildable_Buildable);
         }
 
         /// <summary>Get a translation equivalent to "Occupied".</summary>
         public static string Buildable_Occupied()
         {
-            return L10n.Translations.Get(Keys.Buildable_Occupied);
+            return I18n.GetByKey(Keys.Buildable_Occupied);
         }
 
         /// <summary>Get a translation equivalent to "Can't Build Here".</summary>
         public static string Buildable_NotBuildable()
         {
-            return L10n.Translations.Get(Keys.Buildable_NotBuildable);
+            return I18n.GetByKey(Keys.Buildable_NotBuildable);
         }
 
         /// <summary>Get a translation equivalent to "Coverage: Bee Houses".</summary>
         public static string BeeHouses_Name()
         {
-            return L10n.Translations.Get(Keys.BeeHouses_Name);
+            return I18n.GetByKey(Keys.BeeHouses_Name);
         }
 
         /// <summary>Get a translation equivalent to "Flower Range".</summary>
         public static string BeeHouses_Range()
         {
-            return L10n.Translations.Get(Keys.BeeHouses_Range);
+            return I18n.GetByKey(Keys.BeeHouses_Range);
         }
 
         /// <summary>Get a translation equivalent to "Coverage: Junimo Huts".</summary>
         public static string JunimoHuts_Name()
         {
-            return L10n.Translations.Get(Keys.JunimoHuts_Name);
+            return I18n.GetByKey(Keys.JunimoHuts_Name);
         }
 
         /// <summary>Get a translation equivalent to "Can Harvest".</summary>
         public static string JunimoHuts_CanHarvest()
         {
-            return L10n.Translations.Get(Keys.JunimoHuts_CanHarvest);
+            return I18n.GetByKey(Keys.JunimoHuts_CanHarvest);
         }
 
         /// <summary>Get a translation equivalent to "Can't Harvest".</summary>
         public static string JunimoHuts_CannotHarvest()
         {
-            return L10n.Translations.Get(Keys.JunimoHuts_CannotHarvest);
+            return I18n.GetByKey(Keys.JunimoHuts_CannotHarvest);
         }
 
         /// <summary>Get a translation equivalent to "Coverage: Scarecrows".</summary>
         public static string Scarecrows_Name()
         {
-            return L10n.Translations.Get(Keys.Scarecrows_Name);
+            return I18n.GetByKey(Keys.Scarecrows_Name);
         }
 
         /// <summary>Get a translation equivalent to "Protected".</summary>
         public static string Scarecrows_Protected()
         {
-            return L10n.Translations.Get(Keys.Scarecrows_Protected);
+            return I18n.GetByKey(Keys.Scarecrows_Protected);
         }
 
         /// <summary>Get a translation equivalent to "Exposed".</summary>
         public static string Scarecrows_Exposed()
         {
-            return L10n.Translations.Get(Keys.Scarecrows_Exposed);
+            return I18n.GetByKey(Keys.Scarecrows_Exposed);
         }
 
         /// <summary>Get a translation equivalent to "Coverage: Sprinklers".</summary>
         public static string Sprinklers_Name()
         {
-            return L10n.Translations.Get(Keys.Sprinklers_Name);
+            return I18n.GetByKey(Keys.Sprinklers_Name);
         }
 
         /// <summary>Get a translation equivalent to "Covered".</summary>
         public static string Sprinklers_Covered()
         {
-            return L10n.Translations.Get(Keys.Sprinklers_Covered);
+            return I18n.GetByKey(Keys.Sprinklers_Covered);
         }
 
         /// <summary>Get a translation equivalent to "Dry Crops".</summary>
         public static string Sprinklers_DryCrops()
         {
-            return L10n.Translations.Get(Keys.Sprinklers_DryCrops);
+            return I18n.GetByKey(Keys.Sprinklers_DryCrops);
         }
 
         /// <summary>Get a translation equivalent to "Crops: Ready to Harvest".</summary>
         public static string CropHarvest_Name()
         {
-            return L10n.Translations.Get(Keys.CropHarvest_Name);
+            return I18n.GetByKey(Keys.CropHarvest_Name);
         }
 
         /// <summary>Get a translation equivalent to "Ready".</summary>
         public static string CropHarvest_Ready()
         {
-            return L10n.Translations.Get(Keys.CropHarvest_Ready);
+            return I18n.GetByKey(Keys.CropHarvest_Ready);
         }
 
         /// <summary>Get a translation equivalent to "Not Ready".</summary>
         public static string CropHarvest_NotReady()
         {
-            return L10n.Translations.Get(Keys.CropHarvest_NotReady);
+            return I18n.GetByKey(Keys.CropHarvest_NotReady);
         }
 
         /// <summary>Get a translation equivalent to "Not Enough Time".</summary>
         public static string CropHarvest_NotEnoughTime()
         {
-            return L10n.Translations.Get(Keys.CropHarvest_NotEnoughTime);
+            return I18n.GetByKey(Keys.CropHarvest_NotEnoughTime);
         }
 
         /// <summary>Get a translation equivalent to "Crops: Watered".</summary>
         public static string CropWater_Name()
         {
-            return L10n.Translations.Get(Keys.CropWater_Name);
+            return I18n.GetByKey(Keys.CropWater_Name);
         }
 
         /// <summary>Get a translation equivalent to "Watered Crop".</summary>
         public static string CropWater_Watered()
         {
-            return L10n.Translations.Get(Keys.CropWater_Watered);
+            return I18n.GetByKey(Keys.CropWater_Watered);
         }
 
         /// <summary>Get a translation equivalent to "Dry Crop".</summary>
         public static string CropWater_Dry()
         {
-            return L10n.Translations.Get(Keys.CropWater_Dry);
+            return I18n.GetByKey(Keys.CropWater_Dry);
         }
 
         /// <summary>Get a translation equivalent to "Crops: Water for Paddy Crops".</summary>
         public static string CropPaddyWater_Name()
         {
-            return L10n.Translations.Get(Keys.CropPaddyWater_Name);
+            return I18n.GetByKey(Keys.CropPaddyWater_Name);
         }
 
         /// <summary>Get a translation equivalent to "Near Water".</summary>
         public static string CropPaddyWater_InRange()
         {
-            return L10n.Translations.Get(Keys.CropPaddyWater_InRange);
+            return I18n.GetByKey(Keys.CropPaddyWater_InRange);
         }
 
         /// <summary>Get a translation equivalent to "Dry Land".</summary>
         public static string CropPaddyWater_NotInRange()
         {
-            return L10n.Translations.Get(Keys.CropPaddyWater_NotInRange);
+            return I18n.GetByKey(Keys.CropPaddyWater_NotInRange);
         }
 
         /// <summary>Get a translation equivalent to "Crops: Fertilized".</summary>
         public static string CropFertilizer_Name()
         {
-            return L10n.Translations.Get(Keys.CropFertilizer_Name);
+            return I18n.GetByKey(Keys.CropFertilizer_Name);
         }
 
         /// <summary>Get a translation equivalent to "Fertilizer".</summary>
         public static string CropFertilizer_Fertilizer()
         {
-            return L10n.Translations.Get(Keys.CropFertilizer_Fertilizer);
+            return I18n.GetByKey(Keys.CropFertilizer_Fertilizer);
         }
 
         /// <summary>Get a translation equivalent to "Retaining Soil".</summary>
         public static string CropFertilizer_RetainingSoil()
         {
-            return L10n.Translations.Get(Keys.CropFertilizer_RetainingSoil);
+            return I18n.GetByKey(Keys.CropFertilizer_RetainingSoil);
         }
 
         /// <summary>Get a translation equivalent to "Speed-Gro".</summary>
         public static string CropFertilizer_SpeedGro()
         {
-            return L10n.Translations.Get(Keys.CropFertilizer_SpeedGro);
+            return I18n.GetByKey(Keys.CropFertilizer_SpeedGro);
         }
 
         /// <summary>Get a translation equivalent to "Machine Processing".</summary>
         public static string Machines_Name()
         {
-            return L10n.Translations.Get(Keys.Machines_Name);
+            return I18n.GetByKey(Keys.Machines_Name);
         }
 
         /// <summary>Get a translation equivalent to "Empty".</summary>
         public static string Machines_Empty()
         {
-            return L10n.Translations.Get(Keys.Machines_Empty);
+            return I18n.GetByKey(Keys.Machines_Empty);
         }
 
         /// <summary>Get a translation equivalent to "Processing".</summary>
         public static string Machines_Processing()
         {
-            return L10n.Translations.Get(Keys.Machines_Processing);
+            return I18n.GetByKey(Keys.Machines_Processing);
         }
 
         /// <summary>Get a translation equivalent to "Finished".</summary>
         public static string Machines_Finished()
         {
-            return L10n.Translations.Get(Keys.Machines_Finished);
+            return I18n.GetByKey(Keys.Machines_Finished);
         }
 
         /// <summary>Get a translation equivalent to "Tile Grid".</summary>
         public static string Grid_Name()
         {
-            return L10n.Translations.Get(Keys.Grid_Name);
+            return I18n.GetByKey(Keys.Grid_Name);
         }
 
         /// <summary>Get a translation equivalent to "Tillable".</summary>
         public static string Tillable_Name()
         {
-            return L10n.Translations.Get(Keys.Tillable_Name);
+            return I18n.GetByKey(Keys.Tillable_Name);
         }
 
         /// <summary>Get a translation equivalent to "Tillable".</summary>
         public static string Tillable_Tillable()
         {
-            return L10n.Translations.Get(Keys.Tillable_Tillable);
+            return I18n.GetByKey(Keys.Tillable_Tillable);
         }
 
         /// <summary>Get a translation equivalent to "Tilled".</summary>
         public static string Tillable_Tilled()
         {
-            return L10n.Translations.Get(Keys.Tillable_Tilled);
+            return I18n.GetByKey(Keys.Tillable_Tilled);
         }
 
         /// <summary>Get a translation equivalent to "Occupied".</summary>
         public static string Tillable_Occupied()
         {
-            return L10n.Translations.Get(Keys.Tillable_Occupied);
+            return I18n.GetByKey(Keys.Tillable_Occupied);
         }
 
         /// <summary>Get a translation equivalent to "Not Tillable".</summary>
         public static string Tillable_NotTillable()
         {
-            return L10n.Translations.Get(Keys.Tillable_NotTillable);
+            return I18n.GetByKey(Keys.Tillable_NotTillable);
+        }
+
+        /// <summary>Get a translation by its key.</summary>
+        /// <param name="key">The translation key.</param>
+        /// <param name="tokens">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
+        public static string GetByKey(string key, object tokens = null)
+        {
+            if (I18n.Translations == null)
+                throw new InvalidOperationException($"You must call {nameof(I18n)}.{nameof(I18n.Init)} from your mod's entry method before reading translations.");
+            return I18n.Translations.Get(key, tokens);
         }
     }
 }
+

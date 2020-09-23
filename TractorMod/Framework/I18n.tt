@@ -1,0 +1,9 @@
+<#@ template hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="$(TargetDir)\Pathoschild.Stardew.ModTranslationClassBuilder.dll"#>
+<#@ import namespace="Pathoschild.Stardew.ModTranslationClassBuilder" #>
+<#=
+TranslationClassBuilder.Generate(
+    jsonPath: this.Host.ResolvePath("../i18n/default.json")
+)
+#>

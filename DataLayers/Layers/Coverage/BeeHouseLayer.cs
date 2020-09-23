@@ -37,11 +37,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public BeeHouseLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.BeeHouses_Name(), config, input, monitor)
+            : base(I18n.BeeHouses_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(L10n.Keys.BeeHouses_Range, Color.Green)
+                this.Covered = new LegendEntry(I18n.Keys.BeeHouses_Range, Color.Green)
             };
 
             this.RelativeRange = BeeHouseLayer

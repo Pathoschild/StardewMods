@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.DebugMode
         public override void Entry(IModHelper helper)
         {
             // init
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
@@ -216,8 +216,8 @@ namespace Pathoschild.Stardew.DebugMode
             {
                 Vector2 tile = Game1.currentCursorTile;
 
-                yield return $"{L10n.Label_Tile()}: {tile.X}, {tile.Y}";
-                yield return $"{L10n.Label_Map()}:  {Game1.currentLocation.Name}";
+                yield return $"{I18n.Label_Tile()}: {tile.X}, {tile.Y}";
+                yield return $"{I18n.Label_Map()}:  {Game1.currentLocation.Name}";
             }
 
             // menu
@@ -227,9 +227,9 @@ namespace Pathoschild.Stardew.DebugMode
                 Type submenuType = this.GetSubmenu(Game1.activeClickableMenu)?.GetType();
                 string vanillaNamespace = typeof(TitleMenu).Namespace;
 
-                yield return $"{L10n.Label_Menu()}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
+                yield return $"{I18n.Label_Menu()}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
                 if (submenuType != null)
-                    yield return $"{L10n.Label_Submenu()}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
+                    yield return $"{I18n.Label_Submenu()}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
             }
 
             // minigame
@@ -238,7 +238,7 @@ namespace Pathoschild.Stardew.DebugMode
                 Type minigameType = Game1.currentMinigame.GetType();
                 string vanillaNamespace = typeof(AbigailGame).Namespace;
 
-                yield return $"{L10n.Label_Minigame()}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
+                yield return $"{I18n.Label_Minigame()}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
             }
 
             // event
@@ -251,18 +251,18 @@ namespace Pathoschild.Stardew.DebugMode
                 double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
 
                 if (isFestival)
-                    yield return $"{L10n.Label_FestivalName()}: {festivalName}";
+                    yield return $"{I18n.Label_FestivalName()}: {festivalName}";
                 else
                 {
-                    yield return $"{L10n.Label_EventId()}: {eventID}";
+                    yield return $"{I18n.Label_EventId()}: {eventID}";
                     if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
-                        yield return $"{L10n.Label_EventScript()}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
+                        yield return $"{I18n.Label_EventScript()}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
                 }
             }
 
             // music
             if (Game1.currentSong?.Name != null && Game1.currentSong.IsPlaying)
-                yield return $"{L10n.Label_Song()}: {Game1.currentSong.Name}";
+                yield return $"{I18n.Label_Song()}: {Game1.currentSong.Name}";
         }
 
         /// <summary>Get the submenu for the current menu, if any.</summary>

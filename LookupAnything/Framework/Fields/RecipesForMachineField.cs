@@ -250,15 +250,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get name + count
             string text;
             if (minCount != maxCount)
-                text = L10n.Item_RecipesForMachine_MultipleItems(name: name, count: L10n.Generic_Range(min: minCount, max: maxCount));
+                text = I18n.Item_RecipesForMachine_MultipleItems(name: name, count: I18n.Generic_Range(min: minCount, max: maxCount));
             else if (minCount > 1)
-                text = L10n.Item_RecipesForMachine_MultipleItems(name: name, count: minCount);
+                text = I18n.Item_RecipesForMachine_MultipleItems(name: name, count: minCount);
             else
                 text = name;
 
             // add chance
             if (chance > 0 && chance < 100)
-                text += " (" + L10n.Generic_Percent(chance) + ")";
+                text += " (" + I18n.Generic_Percent(chance) + ")";
 
             return text;
         }

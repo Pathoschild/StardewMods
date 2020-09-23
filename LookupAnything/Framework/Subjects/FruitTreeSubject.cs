@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         public FruitTreeSubject(SubjectFactory codex, GameHelper gameHelper, FruitTree tree, Vector2 tile)
-            : base(codex, gameHelper, L10n.FruitTree_Name(fruitName: gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName), null, L10n.Type_FruitTree())
+            : base(codex, gameHelper, I18n.FruitTree_Name(fruitName: gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName), null, I18n.Type_FruitTree())
         {
             this.Target = tree;
             this.Tile = tile;
@@ -56,34 +56,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             {
                 SDate nextFruit = SDate.Now().AddDays(1);
 
-                string label = L10n.FruitTree_NextFruit();
+                string label = I18n.FruitTree_NextFruit();
                 if (isStruckByLightning)
-                    yield return new GenericField(this.GameHelper, label, L10n.FruitTree_NextFruit_StruckByLightning(count: tree.struckByLightningCountdown.Value));
+                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_StruckByLightning(count: tree.struckByLightningCountdown.Value));
                 else if (!tree.GreenHouseTree && nextFruit.Season != tree.fruitSeason.Value)
-                    yield return new GenericField(this.GameHelper, label, L10n.FruitTree_NextFruit_OutOfSeason());
+                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_OutOfSeason());
                 else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
-                    yield return new GenericField(this.GameHelper, label, L10n.FruitTree_NextFruit_MaxFruit());
+                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_MaxFruit());
                 else
-                    yield return new GenericField(this.GameHelper, label, L10n.Generic_Tomorrow());
+                    yield return new GenericField(this.GameHelper, label, I18n.Generic_Tomorrow());
             }
 
             // show growth data
             if (!isMature)
             {
                 SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature.Value);
-                string grownOnDateText = L10n.FruitTree_Growth_Summary(date: this.Stringify(dayOfMaturity));
+                string grownOnDateText = I18n.FruitTree_Growth_Summary(date: this.Stringify(dayOfMaturity));
 
-                yield return new GenericField(this.GameHelper, L10n.FruitTree_NextFruit(), L10n.FruitTree_NextFruit_TooYoung());
-                yield return new GenericField(this.GameHelper, L10n.FruitTree_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
+                yield return new GenericField(this.GameHelper, I18n.FruitTree_NextFruit(), I18n.FruitTree_NextFruit_TooYoung());
+                yield return new GenericField(this.GameHelper, I18n.FruitTree_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
                 if (this.HasAdjacentObjects(this.Tile))
-                    yield return new GenericField(this.GameHelper, L10n.FruitTree_Complaints(), L10n.FruitTree_Complaints_AdjacentObjects());
+                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Complaints(), I18n.FruitTree_Complaints_AdjacentObjects());
             }
             else
             {
                 // get quality schedule
                 ItemQuality currentQuality = this.GetCurrentQuality(tree, this.Constants.FruitTreeQualityGrowthTime);
                 if (currentQuality == ItemQuality.Iridium)
-                    yield return new GenericField(this.GameHelper, L10n.FruitTree_Quality(), L10n.FruitTree_Quality_Now(quality: currentQuality));
+                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Quality(), I18n.FruitTree_Quality_Now(quality: currentQuality));
                 else
                 {
                     string[] summary = this
@@ -98,15 +98,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                             // generate summary line
                             if (daysLeft <= 0)
-                                return $"-{L10n.FruitTree_Quality_Now(quality: quality)}";
+                                return $"-{I18n.FruitTree_Quality_Now(quality: quality)}";
 
                             string line;
                             if (yearOffset == 0)
-                                line = $"-{L10n.FruitTree_Quality_OnDate(quality: quality, date: this.Stringify(date))}";
+                                line = $"-{I18n.FruitTree_Quality_OnDate(quality: quality, date: this.Stringify(date))}";
                             else if (yearOffset == 1)
-                                line = $"-{L10n.FruitTree_Quality_OnDateNextYear(quality: quality, date: this.Stringify(date))}";
+                                line = $"-{I18n.FruitTree_Quality_OnDateNextYear(quality: quality, date: this.Stringify(date))}";
                             else
-                                line = $"-{L10n.FruitTree_Quality_OnDate(quality: quality, date: date.ToLocaleString(withYear: true))}";
+                                line = $"-{I18n.FruitTree_Quality_OnDate(quality: quality, date: date.ToLocaleString(withYear: true))}";
 
                             line += $" ({this.GetRelativeDateStr(daysLeft)})";
 
@@ -114,12 +114,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         })
                         .ToArray();
 
-                    yield return new GenericField(this.GameHelper, L10n.FruitTree_Quality(), string.Join(Environment.NewLine, summary));
+                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Quality(), string.Join(Environment.NewLine, summary));
                 }
             }
 
             // show season
-            yield return new GenericField(this.GameHelper, L10n.FruitTree_Season(), L10n.FruitTree_Season_Summary(L10n.GetSeasonName(tree.fruitSeason.Value)));
+            yield return new GenericField(this.GameHelper, I18n.FruitTree_Season(), I18n.FruitTree_Season_Summary(I18n.GetSeasonName(tree.fruitSeason.Value)));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>

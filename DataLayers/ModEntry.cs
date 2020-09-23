@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.DataLayers
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // init
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
 
             // hook up events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

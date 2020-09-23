@@ -32,13 +32,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public CropHarvestLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.CropHarvest_Name(), config, input, monitor)
+            : base(I18n.CropHarvest_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Ready = new LegendEntry(L10n.Keys.CropHarvest_Ready, Color.Green),
-                this.NotReady = new LegendEntry(L10n.Keys.CropHarvest_NotReady, Color.Black),
-                this.NotEnoughTime = new LegendEntry(L10n.Keys.CropHarvest_NotEnoughTime, Color.Red)
+                this.Ready = new LegendEntry(I18n.Keys.CropHarvest_Ready, Color.Green),
+                this.NotReady = new LegendEntry(I18n.Keys.CropHarvest_NotReady, Color.Black),
+                this.NotEnoughTime = new LegendEntry(I18n.Keys.CropHarvest_NotEnoughTime, Color.Red)
             };
         }
 

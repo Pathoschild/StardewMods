@@ -39,14 +39,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public TillableLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.Tillable_Name(), config, input, monitor)
+            : base(I18n.Tillable_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Tilled = new LegendEntry(L10n.Keys.Tillable_Tilled, Color.DarkMagenta),
-                this.Tillable = new LegendEntry(L10n.Keys.Tillable_Tillable, Color.Green),
-                this.Occupied = new LegendEntry(L10n.Keys.Tillable_Occupied, Color.Orange),
-                this.NonTillable = new LegendEntry(L10n.Keys.Tillable_NotTillable, Color.Red)
+                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, Color.DarkMagenta),
+                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, Color.Green),
+                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, Color.Orange),
+                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, Color.Red)
             };
         }
 

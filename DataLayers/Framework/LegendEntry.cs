@@ -36,6 +36,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="id">The unique identifier and translation key the legend entry.</param>
         /// <param name="color">The tile color.</param>
         public LegendEntry(string id, Color color)
-            : this(id, L10n.GetRaw(id), color) { }
+            : this(id, I18n.GetByKey(id), color) { }
     }
 }

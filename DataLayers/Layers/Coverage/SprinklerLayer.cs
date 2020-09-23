@@ -45,14 +45,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public SprinklerLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(L10n.Sprinklers_Name(), config, input, monitor)
+            : base(I18n.Sprinklers_Name(), config, input, monitor)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                this.Wet = new LegendEntry(L10n.Keys.Sprinklers_Covered, Color.Green),
-                this.Dry = new LegendEntry(L10n.Keys.Sprinklers_DryCrops, Color.Red)
+                this.Wet = new LegendEntry(I18n.Keys.Sprinklers_Covered, Color.Green),
+                this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, Color.Red)
             };
 
             // get static sprinkler coverage

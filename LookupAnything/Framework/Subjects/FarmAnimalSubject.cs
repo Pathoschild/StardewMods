@@ -50,14 +50,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // yield fields
-            yield return new CharacterFriendshipField(this.GameHelper, L10n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
-            yield return new PercentageBarField(this.GameHelper, L10n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, L10n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
-            yield return new GenericField(this.GameHelper, L10n.Animal_Mood(), animal.getMoodMessage());
-            yield return new GenericField(this.GameHelper, L10n.Animal_Complaints(), this.GetMoodReason(animal));
-            yield return new ItemIconField(this.GameHelper, L10n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
+            yield return new CharacterFriendshipField(this.GameHelper, I18n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
+            yield return new PercentageBarField(this.GameHelper, I18n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, I18n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new GenericField(this.GameHelper, I18n.Animal_Mood(), animal.getMoodMessage());
+            yield return new GenericField(this.GameHelper, I18n.Animal_Complaints(), this.GetMoodReason(animal));
+            yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, L10n.Animal_Growth(), $"{L10n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
-            yield return new GenericField(this.GameHelper, L10n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+                yield return new GenericField(this.GameHelper, I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+            yield return new GenericField(this.GameHelper, I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -100,28 +100,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
             // winter without heat
             if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)
-                factors.Add(L10n.Animal_Complaints_NoHeater());
+                factors.Add(I18n.Animal_Complaints_NoHeater());
 
             // mood
             switch (animal.moodMessage.Value)
             {
                 case FarmAnimal.newHome:
-                    factors.Add(L10n.Animal_Complaints_NewHome());
+                    factors.Add(I18n.Animal_Complaints_NewHome());
                     break;
                 case FarmAnimal.hungry:
-                    factors.Add(L10n.Animal_Complaints_Hungry());
+                    factors.Add(I18n.Animal_Complaints_Hungry());
                     break;
                 case FarmAnimal.disturbedByDog:
-                    factors.Add(L10n.Animal_Complaints_WildAnimalAttack());
+                    factors.Add(I18n.Animal_Complaints_WildAnimalAttack());
                     break;
                 case FarmAnimal.leftOutAtNight:
-                    factors.Add(L10n.Animal_Complaints_LeftOut());
+                    factors.Add(I18n.Animal_Complaints_LeftOut());
                     break;
             }
 
             // not pet
             if (!animal.wasPet.Value)
-                factors.Add(L10n.Animal_Complaints_NotPetted());
+                factors.Add(I18n.Animal_Complaints_NotPetted());
 
             // return factors
             return string.Join(", ", factors);

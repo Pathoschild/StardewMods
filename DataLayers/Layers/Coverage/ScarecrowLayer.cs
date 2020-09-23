@@ -44,12 +44,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public ScarecrowLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(L10n.Scarecrows_Name(), config, input, monitor)
+            : base(I18n.Scarecrows_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(L10n.Keys.Scarecrows_Protected, Color.Green),
-                this.Exposed = new LegendEntry(L10n.Keys.Scarecrows_Exposed, Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.Scarecrows_Protected, Color.Green),
+                this.Exposed = new LegendEntry(I18n.Keys.Scarecrows_Exposed, Color.Red)
             };
             this.ModObjectIds = this.GetModScarecrowIDs(mods).ToArray();
         }

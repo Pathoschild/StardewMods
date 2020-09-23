@@ -47,24 +47,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // not caught uet
             if (spawnRules.IsUnique)
-                yield return this.GetCondition(L10n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fishID));
+                yield return this.GetCondition(I18n.Item_FishSpawnRules_NotCaughtYet(), !Game1.player.fishCaught.ContainsKey(fishID));
 
             // fishing level
             if (spawnRules.MinFishingLevel > 0)
-                yield return this.GetCondition(L10n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
+                yield return this.GetCondition(I18n.Item_FishSpawnRules_MinFishingLevel(level: spawnRules.MinFishingLevel), Game1.player.FishingLevel >= spawnRules.MinFishingLevel);
 
             // weather
             if (spawnRules.Weather == FishSpawnWeather.Sunny)
-                yield return this.GetCondition(L10n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
+                yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherSunny(), !Game1.isRaining);
             else if (spawnRules.Weather == FishSpawnWeather.Rainy)
-                yield return this.GetCondition(L10n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
+                yield return this.GetCondition(I18n.Item_FishSpawnRules_WeatherRainy(), Game1.isRaining);
 
             // time of day
             if (spawnRules.TimesOfDay.Any())
             {
                 yield return this.GetCondition(
-                    label: L10n.Item_FishSpawnRules_Time(
-                        times: string.Join(", ", spawnRules.TimesOfDay.Select(p => L10n.Generic_Range(gameHelper.FormatMilitaryTime(p.MinTime), gameHelper.FormatMilitaryTime(p.MaxTime)).ToString()))
+                    label: I18n.Item_FishSpawnRules_Time(
+                        times: string.Join(", ", spawnRules.TimesOfDay.Select(p => I18n.Generic_Range(gameHelper.FormatMilitaryTime(p.MinTime), gameHelper.FormatMilitaryTime(p.MaxTime)).ToString()))
                     ),
                     isMet: spawnRules.TimesOfDay.Any(p => Game1.timeOfDay >= p.MinTime && Game1.timeOfDay <= p.MaxTime)
                 );
@@ -77,11 +77,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // seasons
                 if (firstLocation.Seasons.Count == 4)
-                    yield return this.GetCondition(L10n.Item_FishSpawnRules_SeasonAny(), true);
+                    yield return this.GetCondition(I18n.Item_FishSpawnRules_SeasonAny(), true);
                 else
                 {
                     yield return this.GetCondition(
-                        label: L10n.Item_FishSpawnRules_SeasonList(
+                        label: I18n.Item_FishSpawnRules_SeasonList(
                             seasons: string.Join(", ", firstLocation.Seasons.Select(gameHelper.TranslateSeason))
                         ),
                         isMet: firstLocation.Seasons.Contains(Game1.currentSeason)
@@ -90,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // locations
                 yield return this.GetCondition(
-                    label: L10n.Item_FishSpawnRules_Locations(
+                    label: I18n.Item_FishSpawnRules_Locations(
                         locations: string.Join(", ", spawnRules.Locations.Select(p => p.LocationDisplayName).OrderBy(p => p))
                     ),
                     isMet: spawnRules.MatchesLocation(Game1.currentLocation.Name)
@@ -107,13 +107,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     .GroupBy(p => p.Season, p => p.LocationName)
                     .ToDictionary(p => p.Key, p => p.ToArray());
 
-                var summary = new List<IFormattedText> { new FormattedText(L10n.Item_FishSpawnRules_LocationsBySeason_Label()) };
+                var summary = new List<IFormattedText> { new FormattedText(I18n.Item_FishSpawnRules_LocationsBySeason_Label()) };
                 foreach (string season in this.Seasons)
                 {
                     if (locationsBySeason.TryGetValue(season, out string[] locationNames))
                     {
                         summary.Add(new FormattedText(
-                            text: Environment.NewLine + L10n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: locationNames),
+                            text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: locationNames),
                             color: season == Game1.currentSeason ? Color.Black : Color.Gray
                         ));
                     }

@@ -31,13 +31,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <param name="config">The data layer settings.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public CropFertilizerLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.CropFertilizer_Name(), config, input, monitor)
+            : base(I18n.CropFertilizer_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Fertilizer = new LegendEntry(L10n.Keys.CropFertilizer_Fertilizer, Color.Green),
-                this.RetainingSoil = new LegendEntry(L10n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
-                this.SpeedGro = new LegendEntry(L10n.Keys.CropFertilizer_SpeedGro, Color.Magenta)
+                this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, Color.Green),
+                this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
+                this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, Color.Magenta)
             };
         }
 

@@ -16,7 +16,7 @@ using StardewValley.Network;
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    internal partial class L10n
+    internal partial class I18n
     {
         /*********
         ** Public methods
@@ -25,14 +25,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="stage">The tree growth stage.</param>
         public static string For(WildTreeGrowthStage stage)
         {
-            return L10n.GetRaw($"tree.stages.{stage}");
+            return I18n.GetByKey($"tree.stages.{stage}");
         }
 
         /// <summary>Get a translation for an enum value.</summary>
         /// <param name="quality">The item quality.</param>
         public static string For(ItemQuality quality)
         {
-            return L10n.GetRaw($"quality.{quality.GetName()}");
+            return I18n.GetByKey($"quality.{quality.GetName()}");
         }
 
         /// <summary>Get a translation for an enum value.</summary>
@@ -41,15 +41,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string For(FriendshipStatus status, bool wasHousemate)
         {
             if (wasHousemate && status == FriendshipStatus.Divorced)
-                return L10n.GetRaw("friendship-status.kicked-out");
-            return L10n.GetRaw($"friendship-status.{status.ToString().ToLower()}");
+                return I18n.GetByKey("friendship-status.kicked-out");
+            return I18n.GetByKey($"friendship-status.{status.ToString().ToLower()}");
         }
 
         /// <summary>Get a translation for an enum value.</summary>
         /// <param name="age">The child age.</param>
         public static string For(ChildAge age)
         {
-            return L10n.GetRaw($"npc.child.age.{age.ToString().ToLower()}");
+            return I18n.GetByKey($"npc.child.age.{age.ToString().ToLower()}");
         }
 
         /// <summary>Get a value like <c>{{name}} loves this</c>, <c>{{name}} likes this</c>, etc.</summary>
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="name">The NPC name.</param>
         public static string ForMovieTasteLabel(string taste, string name)
         {
-            return L10n.GetRaw($"item.movie-snack-preference.{taste}", new { name });
+            return I18n.GetByKey($"item.movie-snack-preference.{taste}", new { name });
         }
 
         /// <summary>Select the correct translation based on the plural form.</summary>
@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static IEnumerable<string> GetSeasonNames(IEnumerable<string> seasons)
         {
             foreach (string season in seasons)
-                yield return L10n.GetSeasonName(season);
+                yield return I18n.GetSeasonName(season);
         }
 
         /// <summary>The overridden translations for location names.</summary>
@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             /// <summary>The translated name for a location, or the internal name if no translation is available.</summary>
             public static string LocationName(string locationName)
             {
-                return L10n.Translations.Get($"location.{locationName}").Default(locationName);
+                return I18n.Translations.Get($"location.{locationName}").Default(locationName);
             }
 
             /// <summary>The translated name for a fishing area.</summary>
@@ -104,14 +104,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             {
                 // mine level
                 if (string.Equals(locationName, "UndergroundMine", StringComparison.OrdinalIgnoreCase))
-                    return L10n.Location_UndergroundMine_Level(level: id);
+                    return I18n.Location_UndergroundMine_Level(level: id);
 
                 // dynamic area override
-                Translation areaTranslation = L10n.Translations.Get(int.TryParse(id, out int _)
+                Translation areaTranslation = I18n.Translations.Get(int.TryParse(id, out int _)
                     ? $"location.{locationName}.fish-area-{id}"
                     : $"location.{locationName}.{id}");
                 return areaTranslation
-                    .Default(L10n.Location_UnknownFishArea(locationName: L10n.LocationOverrides.LocationName(locationName), id: id));
+                    .Default(I18n.Location_UnknownFishArea(locationName: I18n.LocationOverrides.LocationName(locationName), id: id));
             }
         }
 
@@ -126,39 +126,39 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // net types
                 case NetBool net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetByte net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetColor net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetDancePartner net:
-                    return L10n.Stringify(net.Value?.Name);
+                    return I18n.Stringify(net.Value?.Name);
                 case NetDouble net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetFloat net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetGuid net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetInt net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetLocationRef net:
-                    return L10n.Stringify(net.Value?.NameOrUniqueName);
+                    return I18n.Stringify(net.Value?.NameOrUniqueName);
                 case NetLong net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetPoint net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetPosition net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetRectangle net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetString net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
                 case NetVector2 net:
-                    return L10n.Stringify(net.Value);
+                    return I18n.Stringify(net.Value);
 
                 // core types
                 case bool boolean:
-                    return boolean ? L10n.Generic_Yes() : L10n.Generic_No();
+                    return boolean ? I18n.Generic_Yes() : I18n.Generic_No();
                 case Color color:
                     return $"(r:{color.R} g:{color.G} b:{color.B} a:{color.A})";
                 case SDate date:
@@ -167,11 +167,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         List<string> parts = new List<string>();
                         if (span.Days > 0)
-                            parts.Add(L10n.Generic_Days(span.Days));
+                            parts.Add(I18n.Generic_Days(span.Days));
                         if (span.Hours > 0)
-                            parts.Add(L10n.Generic_Hours(span.Hours));
+                            parts.Add(I18n.Generic_Hours(span.Hours));
                         if (span.Minutes > 0)
-                            parts.Add(L10n.Generic_Minutes(span.Minutes));
+                            parts.Add(I18n.Generic_Minutes(span.Minutes));
                         return string.Join(", ", parts);
                     }
                 case Vector2 vector:
@@ -181,21 +181,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                 // game types
                 case AnimatedSprite sprite:
-                    return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{L10n.Stringify(sprite.sourceRect)})";
+                    return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
                 case MarriageDialogueReference dialogue:
-                    return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {L10n.Stringify(dialogue.Substitutions)})";
+                    return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();
                         foreach (FieldInfo field in stats.GetType().GetFields())
-                            str.AppendLine($"- {field.Name}: {L10n.Stringify(field.GetValue(stats))}");
+                            str.AppendLine($"- {field.Name}: {I18n.Stringify(field.GetValue(stats))}");
                         return str.ToString();
                     }
 
                 // enumerable
                 case IEnumerable array when !(value is string):
                     {
-                        string[] values = (from val in array.Cast<object>() select L10n.Stringify(val)).ToArray();
+                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val)).ToArray();
                         return "(" + string.Join(", ", values) + ")";
                     }
 
@@ -209,12 +209,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             if (genericType == typeof(NetDictionary<,,,,>))
                             {
                                 object dict = type.GetProperty("FieldDict").GetValue(value);
-                                return L10n.Stringify(dict);
+                                return I18n.Stringify(dict);
                             }
                             if (genericType == typeof(KeyValuePair<,>))
                             {
-                                string k = L10n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
-                                string v = L10n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                                string k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
+                                string v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
                                 return $"({k}: {v})";
                             }
                         }

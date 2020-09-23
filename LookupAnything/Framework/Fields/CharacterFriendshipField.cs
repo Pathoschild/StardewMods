@@ -43,7 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // draw status
             float leftOffset = 0;
             {
-                string statusText = L10n.For(friendship.Status, friendship.CanHousemate);
+                string statusText = I18n.For(friendship.Status, friendship.CanHousemate);
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, statusText, new Vector2(position.X + leftOffset, position.Y), wrapWidth - leftOffset);
                 leftOffset += textSize.X + DrawHelper.GetSpaceWidth(font);
             }
@@ -87,12 +87,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get caption text
             string caption = null;
             if (this.Friendship.EmptyHearts == 0 && this.Friendship.LockedHearts > 0)
-                caption = $"({L10n.Npc_Friendship_NeedBouquet()})";
+                caption = $"({I18n.Npc_Friendship_NeedBouquet()})";
             else
             {
                 int pointsToNext = this.Friendship.GetPointsToNext();
                 if (pointsToNext > 0)
-                    caption = $"({L10n.Npc_Friendship_NeedPoints(pointsToNext)})";
+                    caption = $"({I18n.Npc_Friendship_NeedPoints(pointsToNext)})";
             }
 
             // draw caption

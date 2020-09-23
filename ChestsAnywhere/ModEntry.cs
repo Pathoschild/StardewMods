@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         public override void Entry(IModHelper helper)
         {
             // initialize
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
@@ -228,7 +228,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // handle disabled location
             if (this.IsDisabledLocation(Game1.currentLocation))
             {
-                CommonHelper.ShowInfoMessage(L10n.Errors_DisabledFromHere(), duration: 1000);
+                CommonHelper.ShowInfoMessage(I18n.Errors_DisabledFromHere(), duration: 1000);
                 return;
             }
 
@@ -303,12 +303,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private string GetNoChestsFoundError()
         {
             if (this.Config.Range == ChestRange.CurrentLocation || !Context.IsMainPlayer)
-                return L10n.Errors_NoChestsInLocation();
+                return I18n.Errors_NoChestsInLocation();
 
             if (this.Config.Range != ChestRange.Unlimited)
-                return L10n.Errors_NoChestsInRange();
+                return I18n.Errors_NoChestsInRange();
 
-            return L10n.Errors_NoChests();
+            return I18n.Errors_NoChests();
         }
     }
 }

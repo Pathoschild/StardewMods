@@ -42,12 +42,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public CropPaddyWaterLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.CropPaddyWater_Name(), config, input, monitor)
+            : base(I18n.CropPaddyWater_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.InRange = new LegendEntry(L10n.Keys.CropPaddyWater_InRange, Color.Green),
-                this.NotInRange = new LegendEntry(L10n.Keys.CropPaddyWater_NotInRange, Color.Red)
+                this.InRange = new LegendEntry(I18n.Keys.CropPaddyWater_InRange, Color.Green),
+                this.NotInRange = new LegendEntry(I18n.Keys.CropPaddyWater_NotInRange, Color.Red)
             };
         }
 

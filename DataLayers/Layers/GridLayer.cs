@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         public GridLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(L10n.Grid_Name(), config, input, monitor)
+            : base(I18n.Grid_Name(), config, input, monitor)
         {
             this.Legend = new LegendEntry[0];
             this.AlwaysShowGrid = true;

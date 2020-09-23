@@ -14,8 +14,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
 
         /// <summary>The location's translated name.</summary>
         public string LocationDisplayName => this.Area != null
-            ? L10n.LocationOverrides.AreaName(this.LocationName, this.Area)
-            : L10n.LocationOverrides.LocationName(this.LocationName);
+            ? I18n.LocationOverrides.AreaName(this.LocationName, this.Area)
+            : I18n.LocationOverrides.LocationName(this.LocationName);
 
         /// <summary>The area ID within the location, if applicable.</summary>
         public string Area { get; }
