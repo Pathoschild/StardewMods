@@ -22,6 +22,7 @@
     <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
     <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
   </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
 

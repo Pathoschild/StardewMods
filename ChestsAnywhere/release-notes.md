@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming version
 * Internal refactor to translation handling.
+* Improved translations. Thanks to Macskasajt05 (updated Hungarian)!
 
 ## 1.19.5
 Released 02 August 2020.
