@@ -5,10 +5,12 @@
     "default-name.fridge": "Hűtőszekrény",
     "default-name.junimo-hut": "Junimo kunyhó #{{number}}",
     "default-name.shipping-bin": "Szállítmányos láda",
+    "default-name.shipping-bin.store": "Szállítmányos láda (Tárgyak elszállítása)",
+    "default-name.shipping-bin.take": "Szállítmányos láda (Tárgyak visszaszerzése)",
 
     // default category names
     "default-category.owned-cabin": "Kunyhó ({{owner}})",
-    "default-category.unowned-cabin": "Kunyhó (empty)",
+    "default-category.unowned-cabin": "Kunyhó (üres)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels
