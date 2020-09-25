@@ -43,10 +43,9 @@
     "crop-water.dry": "물 주지않은 작물",
 
     // crops: water for paddy crops
-    // TODO
-    "crop-paddy-water.name": "Crops: Water for Paddy Crops",
-    "crop-paddy-water.in-range": "Near Water",
-    "crop-paddy-water.not-in-range": "Dry Land",
+    "crop-paddy-water.name": "작물: 논농사 가능 여부",
+    "crop-paddy-water.in-range": "물 근처",
+    "crop-paddy-water.not-in-range": "물에서 먼 땅",
 
     // crops: fertilized
     "crop-fertilizer.name": "작물: 비료줌 여부",
@@ -61,12 +60,12 @@
     "machines.finished": "완료됨",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "전체 격자무늬",
 
     // tillable
     "tillable.name": "경작 가능 여부",
     "tillable.tillable": "경작 가능",
-    "tillable.tilled": "Tilled", // TODO
+    "tillable.tilled": "경작중",
     "tillable.occupied": "공간 차지중",
     "tillable.not-tillable": "경작 불가능"
 }
