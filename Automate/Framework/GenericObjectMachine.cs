@@ -13,12 +13,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject.Value == null)
-                return MachineState.Empty;
-
-            return this.Machine.readyForHarvest.Value
-                ? MachineState.Done
-                : MachineState.Processing;
+            return this.GetGenericState();
         }
 
         /// <summary>Get the output item.</summary>
@@ -38,6 +33,18 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
         protected GenericObjectMachine(TMachine machine, GameLocation location, Vector2 tile, string machineTypeId = null)
             : base(machine, location, BaseMachine.GetTileAreaFor(tile), machineTypeId) { }
+
+        /// <summary>Get a generic machine state based on the machine's <see cref="SObject.heldObject"/> and <see cref="SObject.readyForHarvest"/> fields. This always returns one of three values: <see cref="MachineState.Empty"/>, <see cref="MachineState.Processing"/>, or <see cref="MachineState.Done"/>.</summary>
+        /// <param name="emptyState">The machine state if it's empty.</param>
+        protected MachineState GetGenericState(MachineState emptyState = MachineState.Empty)
+        {
+            if (this.Machine.heldObject.Value == null)
+                return emptyState;
+
+            return this.Machine.readyForHarvest.Value
+                ? MachineState.Done
+                : MachineState.Processing;
+        }
 
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>
         /// <param name="item">The output item that was taken.</param>
