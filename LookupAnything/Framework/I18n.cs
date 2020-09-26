@@ -1365,11 +1365,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("fruit-tree.growth.summary", new { date });
         }
 
-        /// <summary>Get a translation equivalent to "struck by lightning! Will recover in {{count}} days.".</summary>
-        /// <param name="count">The value to inject for the <c>{{count}}</c> token.</param>
-        public static string FruitTree_NextFruit_StruckByLightning(object count)
+        /// <summary>Get a translation equivalent to "won't grow any more fruit until you harvest those it has".</summary>
+        public static string FruitTree_NextFruit_MaxFruit()
         {
-            return I18n.GetByKey("fruit-tree.next-fruit.struck-by-lightning", new { count });
+            return I18n.GetByKey("fruit-tree.next-fruit.max-fruit");
         }
 
         /// <summary>Get a translation equivalent to "out of season".</summary>
@@ -1378,10 +1377,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("fruit-tree.next-fruit.out-of-season");
         }
 
-        /// <summary>Get a translation equivalent to "won't grow any more fruit until you harvest those it has".</summary>
-        public static string FruitTree_NextFruit_MaxFruit()
+        /// <summary>Get a translation equivalent to "struck by lightning! Will recover in {{count}} days.".</summary>
+        /// <param name="count">The value to inject for the <c>{{count}}</c> token.</param>
+        public static string FruitTree_NextFruit_StruckByLightning(object count)
         {
-            return I18n.GetByKey("fruit-tree.next-fruit.max-fruit");
+            return I18n.GetByKey("fruit-tree.next-fruit.struck-by-lightning", new { count });
         }
 
         /// <summary>Get a translation equivalent to "too young to bear fruit".</summary>

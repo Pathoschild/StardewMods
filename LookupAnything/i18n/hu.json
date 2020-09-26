@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "nem tud növekedni, mert a szomszédos 'négyzetek' foglaltak",
     "fruit-tree.growth.summary": "beérik ekkor: {{date}}",
-    "fruit-tree.next-fruit.struck-by-lightning": "belecsapott egy villám! {{count}} nap múlva gyógyul meg.",
-    "fruit-tree.next-fruit.out-of-season": "nincs szezonja",
     "fruit-tree.next-fruit.max-fruit": "nem tud több gyümölcsöt hozni, amíg nem szeded le a már megéretteket.",
+    "fruit-tree.next-fruit.out-of-season": "nincs szezonja",
+    "fruit-tree.next-fruit.struck-by-lightning": "belecsapott egy villám! {{count}} nap múlva gyógyul meg.",
     "fruit-tree.next-fruit.too-young": "túl fiatal, hogy gyümölcsöt hozzon",
     "fruit-tree.quality.now": "{{quality}} minőségű most",
     "fruit-tree.quality.on-date": "{{quality}} minőségű lesz ekkor: {{date}}",

@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "can't grow because there are adjacent objects",
     "fruit-tree.growth.summary": "mature on {{date}}",
-    "fruit-tree.next-fruit.struck-by-lightning": "struck by lightning! Will recover in {{count}} days.",
-    "fruit-tree.next-fruit.out-of-season": "out of season",
     "fruit-tree.next-fruit.max-fruit": "won't grow any more fruit until you harvest those it has",
+    "fruit-tree.next-fruit.out-of-season": "out of season",
+    "fruit-tree.next-fruit.struck-by-lightning": "struck by lightning! Will recover in {{count}} days.",
     "fruit-tree.next-fruit.too-young": "too young to bear fruit",
     "fruit-tree.quality.now": "{{quality}} now",
     "fruit-tree.quality.on-date": "{{quality}} on {{date}}",

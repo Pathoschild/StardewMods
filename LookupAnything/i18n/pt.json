@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "Não pode crescer pois há objetos ao lado",
     "fruit-tree.growth.summary": "Fica madura em {{date}}",
-    "fruit-tree.next-fruit.struck-by-lightning": "Atingida por um raio! Irá se recuperar em {{count}} dias.",
-    "fruit-tree.next-fruit.out-of-season": "fora da estação",
     "fruit-tree.next-fruit.max-fruit": "Não irá dar nenhuma fruta até você colher as que já estão ali.",
+    "fruit-tree.next-fruit.out-of-season": "fora da estação",
+    "fruit-tree.next-fruit.struck-by-lightning": "Atingida por um raio! Irá se recuperar em {{count}} dias.",
     "fruit-tree.next-fruit.too-young": "Muito nova pra produzir frutos",
     "fruit-tree.quality.now": "{{quality}} agora",
     "fruit-tree.quality.on-date": "{{quality}} em {{date}}",
