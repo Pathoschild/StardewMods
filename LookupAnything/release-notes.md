@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming version
 * Internal refactor to translation handling.
-* Improved translations. Thanks to Enaium (updated Chinese) and Macskasajt05 (added Hungarian)!
+* Improved translations. Thanks to Enaium (updated Chinese), Macskasajt05 (added Hungarian), and zhxxn (updated Korean)!
 
 ## 1.27.5
 Released 28 August 2020.
