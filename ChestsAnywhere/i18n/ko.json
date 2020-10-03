@@ -5,8 +5,8 @@
     "default-name.fridge": "냉장고",
     "default-name.junimo-hut": "주니모 오두막 #{{number}}",
     "default-name.shipping-bin": "출하 상자",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.shipping-bin.store": "출하 상자 (아이템 출하)",
+    "default-name.shipping-bin.take": "출하 상자 (아이템 회수)",
 
     // default category names
     "default-category.owned-cabin": "객실 ({{owner}})",

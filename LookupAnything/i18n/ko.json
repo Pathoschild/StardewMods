@@ -406,7 +406,7 @@
     "item.fish-spawn-rules.min-fishing-level": "최소 낚시 레벨: {{level}}",
     "item.fish-spawn-rules.not-caught-yet": "아직 잡히지 않음(한 번만 잡을 수 있음)",
     "item.fish-spawn-rules.locations": "장소: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:", // TODO
+    "item.fish-spawn-rules.locations-by-season.label": "장소:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
     "item.fish-spawn-rules.season-any": "모든 계절",
     "item.fish-spawn-rules.season-list": "계절: {{seasons}}",
