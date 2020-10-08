@@ -18,6 +18,10 @@
     <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\Automate\Framework\AutomateContainerPreference.cs" Link="Framework\AutomateContainerPreference.cs" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
 

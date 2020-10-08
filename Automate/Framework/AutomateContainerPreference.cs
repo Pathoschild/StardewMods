@@ -1,7 +1,7 @@
-namespace Pathoschild.Stardew.ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>How Automate should use a container.</summary>
-    internal enum ContainerAutomatePreference
+    internal enum AutomateContainerPreference
     {
         /// <summary>Allow input/output for this container.</summary>
         Allow,
@@ -13,21 +13,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         Disable
     }
 
-    /// <summary>Provides extension methods for <see cref="ContainerAutomatePreference"/>.</summary>
-    internal static class ContainerAutomatePreferenceExtensions
+    /// <summary>Provides extension methods for <see cref="AutomateContainerPreference"/>.</summary>
+    internal static class AutomateContainerPreferenceHelper
     {
         /// <summary>Get whether IO is enabled.</summary>
         /// <param name="preference">The IO preference.</param>
-        public static bool IsAllowed(this ContainerAutomatePreference preference)
+        public static bool IsAllowed(this AutomateContainerPreference preference)
         {
-            return preference != ContainerAutomatePreference.Disable;
+            return preference != AutomateContainerPreference.Disable;
         }
 
         /// <summary>Get whether IO is preferred.</summary>
         /// <param name="preference">The IO preference.</param>
-        public static bool IsPreferred(this ContainerAutomatePreference preference)
+        public static bool IsPreferred(this AutomateContainerPreference preference)
         {
-            return preference == ContainerAutomatePreference.Prefer;
+            return preference == AutomateContainerPreference.Prefer;
         }
     }
 }

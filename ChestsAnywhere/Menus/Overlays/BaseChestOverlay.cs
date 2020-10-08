@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
@@ -638,8 +639,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // update chest
-            ContainerAutomatePreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
-            ContainerAutomatePreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
+            AutomateContainerPreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
+            AutomateContainerPreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
             bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
             this.Chest.Update(
                 name: this.EditNameField.Text,
@@ -781,15 +782,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Get an Automate IO preference.</summary>
         /// <param name="allow">Whether IO is allowed.</param>
         /// <param name="prefer">Whether IO is preferred.</param>
-        private ContainerAutomatePreference GetAutomatePreference(bool allow, bool prefer)
+        private AutomateContainerPreference GetAutomatePreference(bool allow, bool prefer)
         {
             if (allow && prefer)
-                return ContainerAutomatePreference.Prefer;
+                return AutomateContainerPreference.Prefer;
 
             if (allow)
-                return ContainerAutomatePreference.Allow;
+                return AutomateContainerPreference.Allow;
 
-            return ContainerAutomatePreference.Disable;
+            return AutomateContainerPreference.Disable;
         }
     }
 }
