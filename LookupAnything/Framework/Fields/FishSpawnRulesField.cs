@@ -129,7 +129,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="isMet">Whether the condition is met.</param>
         private KeyValuePair<IFormattedText[], bool> GetCondition(string label, bool isMet)
         {
-            return new KeyValuePair<IFormattedText[], bool>(new IFormattedText[] { new FormattedText(label) }, isMet);
+            return CheckboxListField.Checkbox(text: label, value: isMet);
         }
 
         /// <summary>Get a condition formatted for checkbox rendering.</summary>
@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="isMet">Whether the condition is met.</param>
         private KeyValuePair<IFormattedText[], bool> GetCondition(IEnumerable<IFormattedText> label, bool isMet)
         {
-            return new KeyValuePair<IFormattedText[], bool>(label.ToArray(), isMet);
+            return CheckboxListField.Checkbox(text: label.ToArray(), value: isMet);
         }
 
         /// <summary>Get whether all locations specify the same seasons.</summary>

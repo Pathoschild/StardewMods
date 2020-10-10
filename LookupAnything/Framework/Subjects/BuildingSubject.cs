@@ -304,52 +304,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             // barn
             if (building is Barn)
             {
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Barn_0()) },
-                    value: true
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Barn_1()) },
-                    value: upgradeLevel >= 1
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Barn_2()) },
-                    value: upgradeLevel >= 2
-                );
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_0(), value: true);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_1(), value: upgradeLevel >= 1);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Barn_2(), value: upgradeLevel >= 2);
             }
 
             // cabin
             else if (building.indoors.Value is Cabin)
             {
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Cabin_0()) },
-                    value: true
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Cabin_1()) },
-                    value: upgradeLevel >= 1
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Cabin_2()) },
-                    value: upgradeLevel >= 2
-                );
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_0(), value: true);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_1(), value: upgradeLevel >= 1);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_2(), value: upgradeLevel >= 2);
             }
 
             // coop
             else if (building is Coop)
             {
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Coop_0()) },
-                    value: true
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Coop_1()) },
-                    value: upgradeLevel >= 1
-                );
-                yield return new KeyValuePair<IFormattedText[], bool>(
-                    key: new IFormattedText[] { new FormattedText(I18n.Building_Upgrades_Coop_2()) },
-                    value: upgradeLevel >= 2
-                );
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_0(), value: true);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_1(), value: upgradeLevel >= 1);
+                yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Coop_2(), value: upgradeLevel >= 2);
             }
         }
 
@@ -366,10 +339,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 // done
                 if (pond.lastUnlockedPopulationGate.Value >= gate.RequiredPopulation)
                 {
-                    yield return new KeyValuePair<IFormattedText[], bool>(
-                        key: new IFormattedText[] { new FormattedText(I18n.Building_FishPond_Quests_Done(count: newPopulation)) },
-                        value: true
-                    );
+                    yield return CheckboxListField.Checkbox(text: I18n.Building_FishPond_Quests_Done(count: newPopulation), value: true);
                     continue;
                 }
 
@@ -406,7 +376,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                         - pond.daysSinceSpawn.Value;
                     result += $"; {I18n.Building_FishPond_Quests_Available(relativeDate: this.GetRelativeDateStr(nextQuestDays))}";
                 }
-                yield return new KeyValuePair<IFormattedText[], bool>(key: new IFormattedText[] { new FormattedText(result) }, value: false);
+                yield return CheckboxListField.Checkbox(text: result, value: false);
             }
         }
     }
