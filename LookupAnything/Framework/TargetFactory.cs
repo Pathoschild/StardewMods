@@ -323,29 +323,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
             switch (targetMenu)
             {
-                // calendar
-                case Billboard billboard:
-                    {
-                        // get target day
-                        int selectedDay = -1;
-                        for (int i = 0; i < billboard.calendarDays.Count; i++)
-                        {
-                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
-                            {
-                                selectedDay = i + 1;
-                                break;
-                            }
-                        }
-                        if (selectedDay == -1)
-                            return null;
-
-                        // get villager with a birthday on that date
-                        NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
-                        if (target != null)
-                            return this.Codex.GetCharacter(target);
-                    }
-                    break;
-
+                /****
+                ** Inventory
+                ****/
                 // chest
                 case MenuWithInventory inventoryMenu:
                     {
@@ -364,6 +344,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
+                // shop
+                case ShopMenu shopMenu:
+                    {
+                        ISalable entry = shopMenu.hoveredItem;
+                        if (entry is Item item)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                        if (entry is MovieConcession snack)
+                            return this.Codex.GetMovieSnack(snack);
+                    }
+                    break;
+
+                // toolbar
+                case Toolbar _:
+                    {
+                        // find hovered slot
+                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        if (hoveredSlot == null)
+                            return null;
+
+                        // get inventory index
+                        int index = slots.IndexOf(hoveredSlot);
+                        if (index < 0 || index > Game1.player.Items.Count - 1)
+                            return null;
+
+                        // get hovered item
+                        Item item = Game1.player.Items[index];
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                    }
+                    break;
+
+
+                /****
+                ** GameMenu
+                ****/
                 // collections menu
                 // derived from CollectionsPage::performHoverAction
                 case CollectionsPage collectionsTab:
@@ -386,7 +402,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
-                // cooking or crafting menu
+                // crafting menu
                 case CraftingPage crafting:
                     {
                         // player inventory item
@@ -400,6 +416,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             return this.Codex.GetItem(recipe.createItem(), ObjectContext.Inventory);
                     }
                     break;
+
+                // profile tab
+                case ProfileMenu profileMenu:
+                    {
+                        // hovered item
+                        Item item = profileMenu.hoveredItem;
+                        if (item != null)
+                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+
+                        // NPC
+                        if (profileMenu.GetCharacter() is NPC npc)
+                            return this.Codex.GetCharacter(npc);
+                        break;
+                    }
+
+                // skills tab
+                case SkillsPage _:
+                    return this.Codex.GetPlayer(Game1.player);
 
                 // social tab
                 case SocialPage socialPage:
@@ -433,23 +467,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
-                // profile tab
-                case ProfileMenu profileMenu:
+
+                /****
+                ** Other menus
+                ****/
+                // calendar
+                case Billboard billboard:
                     {
-                        // hovered item
-                        Item item = profileMenu.hoveredItem;
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
+                        // get target day
+                        int selectedDay = -1;
+                        for (int i = 0; i < billboard.calendarDays.Count; i++)
+                        {
+                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            {
+                                selectedDay = i + 1;
+                                break;
+                            }
+                        }
+                        if (selectedDay == -1)
+                            return null;
 
-                        // NPC
-                        if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetCharacter(npc);
-                        break;
+                        // get villager with a birthday on that date
+                        NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
+                        if (target != null)
+                            return this.Codex.GetCharacter(target);
                     }
-
-                // skills tab
-                case SkillsPage _:
-                    return this.Codex.GetPlayer(Game1.player);
+                    break;
 
                 // Community Center bundle menu
                 case JunimoNoteMenu bundleMenu:
@@ -498,39 +541,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     }
                     break;
 
-                // shop
-                case ShopMenu shopMenu:
-                    {
-                        ISalable entry = shopMenu.hoveredItem;
-                        if (entry is Item item)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                        if (entry is MovieConcession snack)
-                            return this.Codex.GetMovieSnack(snack);
-                    }
-                    break;
-
-                // toolbar
-                case Toolbar _:
-                    {
-                        // find hovered slot
-                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
-                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
-                        if (hoveredSlot == null)
-                            return null;
-
-                        // get inventory index
-                        int index = slots.IndexOf(hoveredSlot);
-                        if (index < 0 || index > Game1.player.Items.Count - 1)
-                            return null;
-
-                        // get hovered item
-                        Item item = Game1.player.Items[index];
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                    }
-                    break;
-
-                // by convention (for mod support)
+                /****
+                ** Convention (for mod support)
+                ****/
                 default:
                     {
                         Item item = this.Reflection.GetField<Item>(menu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
