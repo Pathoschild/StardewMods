@@ -94,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             bool canSell = obj?.canBeShipped() == true || this.Metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
 
             // get overrides
-            bool showInventoryFields = true;
+            bool showInventoryFields = !this.IsSpawnedStoneNode();
             {
                 ObjectData objData = this.Metadata.GetObject(item, this.Context);
                 if (objData != null)
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     this.Name = objData.NameKey != null ? I18n.GetByKey(objData.NameKey) : this.Name;
                     this.Description = objData.DescriptionKey != null ? I18n.GetByKey(objData.DescriptionKey) : this.Description;
                     this.Type = objData.TypeKey != null ? I18n.GetByKey(objData.TypeKey) : this.Type;
-                    showInventoryFields = objData.ShowInventoryFields ?? true;
+                    showInventoryFields = objData.ShowInventoryFields ?? showInventoryFields;
                 }
             }
 
@@ -177,25 +177,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // recipes
-            switch (itemType)
+            if (showInventoryFields)
             {
-                // for ingredient
-                case ItemType.Object:
-                    {
-                        RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                        if (recipes.Any())
-                            yield return new RecipesForIngredientField(this.GameHelper, I18n.Item_Recipes(), item, recipes);
-                    }
-                    break;
+                switch (itemType)
+                {
+                    // for ingredient
+                    case ItemType.Object:
+                        {
+                            RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                            if (recipes.Any())
+                                yield return new RecipesForIngredientField(this.GameHelper, I18n.Item_Recipes(), item, recipes);
+                        }
+                        break;
 
-                // for machine
-                case ItemType.BigCraftable:
-                    {
-                        RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
-                        if (recipes.Any())
-                            yield return new RecipesForMachineField(this.GameHelper, I18n.Item_Recipes(), recipes);
-                    }
-                    break;
+                    // for machine
+                    case ItemType.BigCraftable:
+                        {
+                            RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
+                            if (recipes.Any())
+                                yield return new RecipesForMachineField(this.GameHelper, I18n.Item_Recipes(), recipes);
+                        }
+                        break;
+                }
             }
 
             // fish
@@ -264,7 +267,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // dyes
-            yield return new ColorField(this.GameHelper, I18n.Item_ProducesDye(), item);
+            if (showInventoryFields)
+                yield return new ColorField(this.GameHelper, I18n.Item_ProducesDye(), item);
 
             // owned and times cooked/crafted
             if (showInventoryFields && !isCrop)
@@ -759,6 +763,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             return this.GetIngredientsFromBundle(bundle, item)
                 .Where(p => this.IsIngredientNeeded(bundle, p))
                 .Sum(p => p.Stack);
+        }
+
+        /// <summary>Get whether the target is a spawned stone or mining node on the ground.</summary>
+        private bool IsSpawnedStoneNode()
+        {
+            return
+                this.Context == ObjectContext.World
+                && this.Target is SObject
+                && !(this.Target is Chest)
+                && this.Name == "Stone";
         }
     }
 }

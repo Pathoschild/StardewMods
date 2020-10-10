@@ -846,32 +846,28 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.stone.name",
             "TypeKey": "data.type.debris", // default is 'asdf'
-            "DescriptionKey": "data.item.stone.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.stone.description" // no meaningful default
         },
         {
             "SpriteID": [ 75 ],
             "Context": "World",
             "NameKey": "data.item.geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.geode.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.geode.description" // no meaningful default
         },
         {
             "SpriteID": [ 76 ],
             "Context": "World",
             "NameKey": "data.item.frozen-geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.frozen-geode.name", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.frozen-geode.name" // no meaningful default
         },
         {
             "SpriteID": [ 77 ],
             "Context": "World",
             "NameKey": "data.item.magma-geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.magma-geode.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.magma-geode.description" // no meaningful default
         },
 
         /****
@@ -1004,8 +1000,7 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.iron-node.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.iron-node.description",
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.iron-node.description"
         },
 
         /* generic stones */
