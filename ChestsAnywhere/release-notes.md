@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Internal refactor to translation handling.
+* Internal refactor to translation handling, and now uses game translations where possible.
 * Improved translations. Thanks to Macskasajt05 (updated Hungarian) and zhxxn (updated Korean)!
 
 ## 1.19.5

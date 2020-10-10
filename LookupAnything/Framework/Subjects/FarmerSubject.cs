@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewValley;
@@ -155,17 +156,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                     return null;
 
                 case Farm.combat_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine);
                 case Farm.default_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine);
                 case Farm.forest_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine);
                 case Farm.mountains_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
                 case Farm.riverlands_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
                 case Farm.fourCorners_layout:
-                    return Game1.content.LoadString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
+                    return GameI18n.GetString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
 
                 default:
                     return I18n.Player_FarmMap_Custom();

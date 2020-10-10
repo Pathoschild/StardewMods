@@ -28,46 +28,27 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             I18n.Translations = translations;
         }
 
-        /// <summary>Get a translation equivalent to "Auto-grabber #{{number}}".</summary>
-        /// <param name="number">The value to inject for the <c>{{number}}</c> token.</param>
-        public static string DefaultName_AutoGrabber(object number)
-        {
-            return I18n.GetByKey("default-name.auto-grabber", new { number });
-        }
-
-        /// <summary>Get a translation equivalent to "Chest #{{number}}".</summary>
-        /// <param name="number">The value to inject for the <c>{{number}}</c> token.</param>
-        public static string DefaultName_Chest(object number)
-        {
-            return I18n.GetByKey("default-name.chest", new { number });
-        }
-
         /// <summary>Get a translation equivalent to "Fridge".</summary>
         public static string DefaultName_Fridge()
         {
             return I18n.GetByKey("default-name.fridge");
         }
 
-        /// <summary>Get a translation equivalent to "Junimo hut #{{number}}".</summary>
+        /// <summary>Get a translation equivalent to "{{name}} #{{number}}".</summary>
+        /// <param name="name">The value to inject for the <c>{{name}}</c> token.</param>
         /// <param name="number">The value to inject for the <c>{{number}}</c> token.</param>
-        public static string DefaultName_JunimoHut(object number)
+        public static string DefaultName_Other(object name, object number)
         {
-            return I18n.GetByKey("default-name.junimo-hut", new { number });
+            return I18n.GetByKey("default-name.other", new { name, number });
         }
 
-        /// <summary>Get a translation equivalent to "Shipping bin".</summary>
-        public static string DefaultName_ShippingBin()
-        {
-            return I18n.GetByKey("default-name.shipping-bin");
-        }
-
-        /// <summary>Get a translation equivalent to "Shipping bin (ship items)".</summary>
+        /// <summary>Get a translation equivalent to "ship items".</summary>
         public static string DefaultName_ShippingBin_Store()
         {
             return I18n.GetByKey("default-name.shipping-bin.store");
         }
 
-        /// <summary>Get a translation equivalent to "Shipping bin (retrieve items)".</summary>
+        /// <summary>Get a translation equivalent to "retrieve items".</summary>
         public static string DefaultName_ShippingBin_Take()
         {
             return I18n.GetByKey("default-name.shipping-bin.take");

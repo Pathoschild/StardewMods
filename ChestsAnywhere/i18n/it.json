@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Auto-arraffona n.{{number}}",
-    "default-name.chest": "Baule n.{{number}}",
     "default-name.fridge": "Frigo",
-    "default-name.junimo-hut": "Capanno dei Junimo n.{{number}}",
-    "default-name.shipping-bin": "Bidone delle consegne",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.other": "{{name}} n.{{number}}",
+    "default-name.shipping-bin.store": "ship items", // TODO
+    "default-name.shipping-bin.take": "retrieve items", // TODO
 
     // default category names
     "default-category.owned-cabin": "Cabina ({{owner}})",

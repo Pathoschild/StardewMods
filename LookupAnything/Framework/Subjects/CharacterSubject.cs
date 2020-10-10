@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
@@ -213,7 +214,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (adventureGuildQuest != null)
             {
                 int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
-                string goalName = Game1.content.LoadString($@"Strings\Locations:AdventureGuild_KillList_{adventureGuildQuest.KillListKey}");
+                string goalName = GameI18n.GetString($@"Strings\Locations:AdventureGuild_KillList_{adventureGuildQuest.KillListKey}");
                 var checkbox = CheckboxListField.Checkbox(
                     text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: adventureGuildQuest.RequiredKills),
                     value: kills >= adventureGuildQuest.RequiredKills
@@ -350,7 +351,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
 
                 case SubjectType.Pet:
                     {
-                        string typeName = Game1.content.LoadString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
+                        string typeName = GameI18n.GetString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
                         if (typeName?.Length > 1)
                             typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
                         return typeName;

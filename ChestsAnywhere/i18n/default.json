@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Auto-grabber #{{number}}",
-    "default-name.chest": "Chest #{{number}}",
     "default-name.fridge": "Fridge",
-    "default-name.junimo-hut": "Junimo hut #{{number}}",
-    "default-name.shipping-bin": "Shipping bin",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)",
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "ship items",
+    "default-name.shipping-bin.take": "retrieve items",
 
     // default category names
     "default-category.owned-cabin": "Cabin ({{owner}})",
