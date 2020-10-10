@@ -60,7 +60,7 @@
     "machines.finished": "Terminé",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "Grille de cases",
 
     // tillable
     "tillable.name": "Labourable",

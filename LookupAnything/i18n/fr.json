@@ -543,11 +543,11 @@
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
     "tile.map-name": "Nom de la carte",
     "tile.tile": "Case",
-    "tile.tile-index": "{{layerName}}: tile index",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: blend mode",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.tile-index": "{{layerName}}: index de la case",
+    "tile.tilesheet": "{{layerName}}: feuille de sprite",
+    "tile.blend-mode": "{{layerName}}: mode de fusion",
+    "tile.index-property": "{{layerName}}: propriétés d'index: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: propriétés: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "pas de case ici",
