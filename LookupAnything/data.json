@@ -117,32 +117,26 @@ You shouldn't change this file unless you know what you're doing.
     *********/
     "Shops": [
         {
-            "LocationName": "AdventureGuild",
             "DisplayKey": "shop.adventure-guild",
             "BuysCategories": [ -28, -98, -97, -96 ]
         },
         {
-            "LocationName": "Blacksmith",
             "DisplayKey": "shop.clint",
             "BuysCategories": [ -12, -2, -15 ]
         },
         {
-            "LocationName": "AnimalShop",
             "DisplayKey": "shop.marnie",
             "BuysCategories": [ -18, -6, -5, -14 ]
         },
         {
-            "LocationName": "SeedShop",
             "DisplayKey": "shop.pierre",
             "BuysCategories": [ -81, -75, -79, -80, -74, -17, -18, -6, -26, -5, -14, -19, -7, -25 ]
         },
         {
-            "LocationName": "ScienceHouse",
             "DisplayKey": "shop.robin",
             "BuysCategories": [ -16 ]
         },
         {
-            "LocationName": "FishShop",
             "DisplayKey": "shop.willy",
             "BuysCategories": [ -4, -23, -21, -22 ]
         }
