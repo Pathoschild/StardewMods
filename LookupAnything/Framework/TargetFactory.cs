@@ -320,6 +320,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             IClickableMenu targetMenu =
                 (menu as GameMenu)?.GetCurrentPage()
                 ?? menu;
+            int cursorX = (int)cursorPos.X;
+            int cursorY = (int)cursorPos.Y;
 
             switch (targetMenu)
             {
@@ -360,7 +362,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     {
                         // find hovered slot
                         List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
-                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint(cursorX, cursorY));
                         if (hoveredSlot == null)
                             return null;
 
@@ -392,7 +394,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
                         foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
                         {
-                            if (component.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            if (component.containsPoint(cursorX, cursorY))
                             {
                                 int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
                                 SObject obj = new SObject(itemID, 1);
@@ -447,7 +449,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             .ToArray();
 
                         // find hovered villager
-                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (entry != null)
                         {
                             int index = Array.IndexOf(entries, entry) + scrollOffset;
@@ -478,7 +480,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         int selectedDay = -1;
                         for (int i = 0; i < billboard.calendarDays.Count; i++)
                         {
-                            if (billboard.calendarDays[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            if (billboard.calendarDays[i].containsPoint(cursorX, cursorY))
                             {
                                 selectedDay = i + 1;
                                 break;
@@ -507,7 +509,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // list of required ingredients
                         for (int i = 0; i < bundleMenu.ingredientList.Count; i++)
                         {
-                            if (bundleMenu.ingredientList[i].containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            if (bundleMenu.ingredientList[i].containsPoint(cursorX, cursorY))
                             {
                                 Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
                                 var ingredient = bundle.ingredients[i];
@@ -520,7 +522,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                         // list of submitted ingredients
                         foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
                         {
-                            if (slot.item != null && slot.containsPoint((int)cursorPos.X, (int)cursorPos.Y))
+                            if (slot.item != null && slot.containsPoint(cursorX, cursorY))
                                 return this.Codex.GetItem(slot.item, ObjectContext.Inventory);
                         }
                     }
@@ -529,7 +531,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // load menu
                 case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
-                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint((int)cursorPos.X, (int)cursorPos.Y));
+                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
                         {
                             int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
