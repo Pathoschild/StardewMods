@@ -572,11 +572,11 @@
     "tree.is-fertilized": "Está fertilizado",
 
     // values
+    "tree.name.big-mushroom": "Cogumelo gigante",
     "tree.name.maple": "Árvore de Ácer",
     "tree.name.oak": "Carvalho",
-    "tree.name.pine": "Pinheiro",
     "tree.name.palm": "Palmeira",
-    "tree.name.big-mushroom": "Cogumelo gigante",
+    "tree.name.pine": "Pinheiro",
     "tree.name.unknown": "Árvore desconhecida",
     "tree.stage.done": "Totalmente crescido",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",

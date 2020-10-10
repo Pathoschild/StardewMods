@@ -1961,7 +1961,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("monster.drops.nothing");
         }
 
-        /// <summary>Get a translation equivalent to "{{name}} eradication goal (killed {{count}} of {{requiredCount}})".</summary>
+        /// <summary>Get a translation equivalent to "eradication goal: {{name}} (killed {{count}} of {{requiredCount}})".</summary>
         /// <param name="name">The value to inject for the <c>{{name}}</c> token.</param>
         /// <param name="count">The value to inject for the <c>{{count}}</c> token.</param>
         /// <param name="requiredCount">The value to inject for the <c>{{requiredCount}}</c> token.</param>
@@ -2415,6 +2415,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("tree.is-fertilized");
         }
 
+        /// <summary>Get a translation equivalent to "Big Mushroom".</summary>
+        public static string Tree_Name_BigMushroom()
+        {
+            return I18n.GetByKey("tree.name.big-mushroom");
+        }
+
         /// <summary>Get a translation equivalent to "Maple Tree".</summary>
         public static string Tree_Name_Maple()
         {
@@ -2427,22 +2433,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("tree.name.oak");
         }
 
-        /// <summary>Get a translation equivalent to "Pine Tree".</summary>
-        public static string Tree_Name_Pine()
-        {
-            return I18n.GetByKey("tree.name.pine");
-        }
-
         /// <summary>Get a translation equivalent to "Palm Tree".</summary>
         public static string Tree_Name_Palm()
         {
             return I18n.GetByKey("tree.name.palm");
         }
 
-        /// <summary>Get a translation equivalent to "Big Mushroom".</summary>
-        public static string Tree_Name_BigMushroom()
+        /// <summary>Get a translation equivalent to "Pine Tree".</summary>
+        public static string Tree_Name_Pine()
         {
-            return I18n.GetByKey("tree.name.big-mushroom");
+            return I18n.GetByKey("tree.name.pine");
         }
 
         /// <summary>Get a translation equivalent to "Unknown Tree".</summary>

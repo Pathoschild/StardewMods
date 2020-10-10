@@ -572,11 +572,11 @@
     "tree.is-fertilized": "Megtermékenyített",
 
     // values
+    "tree.name.big-mushroom": "Nagy Gomba",
     "tree.name.maple": "Juharfa",
     "tree.name.oak": "Tölgyfa",
-    "tree.name.pine": "Fenyőfa",
     "tree.name.palm": "Pálmafa",
-    "tree.name.big-mushroom": "Nagy Gomba",
+    "tree.name.pine": "Fenyőfa",
     "tree.name.unknown": "Ismeretlen Fa",
     "tree.stage.done": "Teljesen megnőtt",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",

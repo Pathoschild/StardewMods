@@ -134,7 +134,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         {
             NPC npc = this.Target;
 
-            // use character portrait (most NPCs)
+            // use character portrait (most villager NPCs)
             if (npc.Portrait != null)
             {
                 spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);

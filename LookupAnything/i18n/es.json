@@ -572,11 +572,11 @@
     "tree.is-fertilized": "ha sido fertilizado",
 
     // values
+    "tree.name.big-mushroom": "Seta gigante",
     "tree.name.maple": "Arce",
     "tree.name.oak": "Roble",
-    "tree.name.pine": "Pino",
     "tree.name.palm": "Palmera",
-    "tree.name.big-mushroom": "Seta gigante",
+    "tree.name.pine": "Pino",
     "tree.name.unknown": "Árbol desconocido",
     "tree.stage.done": "Completamente maduro",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",

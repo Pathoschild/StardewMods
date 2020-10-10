@@ -572,11 +572,11 @@
     "tree.is-fertilized": "수정됨",
 
     // values
+    "tree.name.big-mushroom": "큰 버섯",
     "tree.name.maple": "단풍나무",
     "tree.name.oak": "참나무",
-    "tree.name.pine": "소나무",
     "tree.name.palm": "야자나무",
-    "tree.name.big-mushroom": "큰 버섯",
+    "tree.name.pine": "소나무",
     "tree.name.unknown": "알 수 없는 나무",
     "tree.stage.done": "다 자람",
     "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",

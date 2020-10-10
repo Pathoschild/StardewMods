@@ -571,11 +571,11 @@
     "tree.is-fertilized": "Est fertilisé",
 
     // values
+    "tree.name.big-mushroom": "Grand champignon",
     "tree.name.maple": "Erable",
     "tree.name.oak": "Chêne",
-    "tree.name.pine": "Pin",
     "tree.name.palm": "Palmier",
-    "tree.name.big-mushroom": "Grand champignon",
+    "tree.name.pine": "Pin",
     "tree.name.unknown": "Arbre inconnu",
     "tree.stage.done": "Taille adulte",
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",

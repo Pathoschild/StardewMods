@@ -1008,7 +1008,7 @@ You shouldn't change this file unless you know what you're doing.
             "ShowInventoryFields": false
         },
 
-        /* stones */
+        /* generic stones */
         {
             "SpriteID": [ 32 /*grey*/, 34 /*blue*/, 36 /*blue*/, 38 /*blue*/, 40 /*brown*/, 42 /*brown*/, 48 /*snowy*/, 50 /*snowy*/, 52 /*snowy*/, 54 /*snowy*/, 56 /*snowy*/, 58 /*snowy*/ ],
             "Context": "World",

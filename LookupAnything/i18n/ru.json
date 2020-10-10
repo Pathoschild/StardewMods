@@ -572,11 +572,11 @@
     "tree.is-fertilized": "Использовано удобрение",
 
     // values
+    "tree.name.big-mushroom": "Большой гриб",
     "tree.name.maple": "Клён",
     "tree.name.oak": "Дуб",
-    "tree.name.pine": "Сосна",
     "tree.name.palm": "Пальма",
-    "tree.name.big-mushroom": "Большой гриб",
+    "tree.name.pine": "Сосна",
     "tree.name.unknown": "Неизвестное дерево",
     "tree.stage.done": "полностью выросло",
     "tree.stage.partial": "{{stageName}} ({{step}} из {{max}})",

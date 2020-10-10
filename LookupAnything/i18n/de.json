@@ -572,11 +572,11 @@
     "tree.is-fertilized": "Ist gedüngt",
 
     // values
+    "tree.name.big-mushroom": "Großer Pilz",
     "tree.name.maple": "Ahornbaum",
     "tree.name.oak": "Eichenbaum",
-    "tree.name.pine": "Tannenbaum",
     "tree.name.palm": "Palme",
-    "tree.name.big-mushroom": "Großer Pilz",
+    "tree.name.pine": "Tannenbaum",
     "tree.name.unknown": "unbekannter Baum",
     "tree.stage.done": "Voll ausgewachsen",
     "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",

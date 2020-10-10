@@ -573,11 +573,11 @@
     "tree.is-fertilized": "播洒树肥",
 
     // values
+    "tree.name.big-mushroom": "大蘑菇",
     "tree.name.maple": "枫树",
     "tree.name.oak": "橡树",
-    "tree.name.pine": "松树",
     "tree.name.palm": "棕榈树",
-    "tree.name.big-mushroom": "大蘑菇",
+    "tree.name.pine": "松树",
     "tree.name.unknown": "未知",
     "tree.stage.done": "完全长成",
     "tree.stage.partial": "{{stageName}} (总共{{max}}个阶段中的第{{step}}阶段)",

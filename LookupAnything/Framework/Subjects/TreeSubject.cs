@@ -112,16 +112,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             TreeType type = (TreeType)tree.treeType.Value;
             switch (type)
             {
+                case TreeType.BigMushroom:
+                    return I18n.Tree_Name_BigMushroom();
                 case TreeType.Maple:
                     return I18n.Tree_Name_Maple();
                 case TreeType.Oak:
                     return I18n.Tree_Name_Oak();
-                case TreeType.Pine:
-                    return I18n.Tree_Name_Pine();
                 case TreeType.Palm:
                     return I18n.Tree_Name_Palm();
-                case TreeType.BigMushroom:
-                    return I18n.Tree_Name_BigMushroom();
+                case TreeType.Pine:
+                    return I18n.Tree_Name_Pine();
                 default:
                     return I18n.Tree_Name_Unknown();
             }

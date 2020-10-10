@@ -572,11 +572,11 @@
     "tree.is-fertilized": "Is fertilized",
 
     // values
+    "tree.name.big-mushroom": "Big Mushroom",
     "tree.name.maple": "Maple Tree",
     "tree.name.oak": "Oak Tree",
-    "tree.name.pine": "Pine Tree",
     "tree.name.palm": "Palm Tree",
-    "tree.name.big-mushroom": "Big Mushroom",
+    "tree.name.pine": "Pine Tree",
     "tree.name.unknown": "Unknown Tree",
     "tree.stage.done": "Fully grown",
     "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",

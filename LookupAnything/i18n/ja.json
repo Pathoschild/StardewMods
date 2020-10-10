@@ -579,11 +579,11 @@
     "tree.is-fertilized": "Is fertilized", // TODO
 
     // values
+    "tree.name.big-mushroom": "大きなキノコ",
     "tree.name.maple": "カエデの木",
     "tree.name.oak": "カシの木",
-    "tree.name.pine": "マツの木",
     "tree.name.palm": "ヤシの木",
-    "tree.name.big-mushroom": "大きなキノコ",
+    "tree.name.pine": "マツの木",
     "tree.name.unknown": "未知の木",
     "tree.stage.done": "成長完了",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
