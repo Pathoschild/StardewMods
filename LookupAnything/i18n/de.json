@@ -446,9 +446,7 @@
 
     // values
     "monster.drops.nothing": "nichts",
-    "monster.adventure-guild.complete": "abgeschlossen",
-    "monster.adventure-guild.incomplete": "in Arbeit",
-    "monster.adventure-guild.progress": "{{count}} von {{requiredCount}} getötet",
+    "monster.adventure-guild.eradication-goal": "Ziele für die Monsterjagd: {{name}} ({{count}} von {{requiredCount}} getötet)",
 
 
     /*********

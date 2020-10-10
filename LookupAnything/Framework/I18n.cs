@@ -1961,24 +1961,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("monster.drops.nothing");
         }
 
-        /// <summary>Get a translation equivalent to "complete".</summary>
-        public static string Monster_AdventureGuild_Complete()
-        {
-            return I18n.GetByKey("monster.adventure-guild.complete");
-        }
-
-        /// <summary>Get a translation equivalent to "in progress".</summary>
-        public static string Monster_AdventureGuild_Incomplete()
-        {
-            return I18n.GetByKey("monster.adventure-guild.incomplete");
-        }
-
-        /// <summary>Get a translation equivalent to "killed {{count}} of {{requiredCount}}".</summary>
+        /// <summary>Get a translation equivalent to "{{name}} eradication goal (killed {{count}} of {{requiredCount}})".</summary>
+        /// <param name="name">The value to inject for the <c>{{name}}</c> token.</param>
         /// <param name="count">The value to inject for the <c>{{count}}</c> token.</param>
         /// <param name="requiredCount">The value to inject for the <c>{{requiredCount}}</c> token.</param>
-        public static string Monster_AdventureGuild_Progress(object count, object requiredCount)
+        public static string Monster_AdventureGuild_EradicationGoal(object name, object count, object requiredCount)
         {
-            return I18n.GetByKey("monster.adventure-guild.progress", new { count, requiredCount });
+            return I18n.GetByKey("monster.adventure-guild.eradication-goal", new { name, count, requiredCount });
         }
 
         /// <summary>Get a translation equivalent to "Birthday".</summary>

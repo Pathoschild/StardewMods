@@ -446,9 +446,7 @@
 
     // values
     "monster.drops.nothing": "ничего",
-    "monster.adventure-guild.complete": "выполнено",
-    "monster.adventure-guild.incomplete": "в процессе",
-    "monster.adventure-guild.progress": "убито {{count}} из {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "План по истреблению чудовищ: {{name}} (убито {{count}} из {{requiredCount}})",
 
 
     /*********

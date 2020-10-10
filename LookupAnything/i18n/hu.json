@@ -446,9 +446,7 @@
 
     // values
     "monster.drops.nothing": "semmi",
-    "monster.adventure-guild.complete": "készen van",
-    "monster.adventure-guild.incomplete": "folyamatban",
-    "monster.adventure-guild.progress": "{{count}} / {{requiredCount}} öltél meg",
+    "monster.adventure-guild.eradication-goal": "Szörny Kiírtási Célok: {{name}} ({{count}} / {{requiredCount}} öltél meg)",
 
 
     /*********

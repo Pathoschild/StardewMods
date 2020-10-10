@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming version
+## Upcoming release
 * Internal refactor to translation handling.
 * Improved translations. Thanks to Macskasajt05 (updated Hungarian) and zhxxn (updated Korean)!
 

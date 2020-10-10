@@ -447,9 +447,7 @@
 
     // values
     "monster.drops.nothing": "无",
-    "monster.adventure-guild.complete": "完成",
-    "monster.adventure-guild.incomplete": "正在进行",
-    "monster.adventure-guild.progress": "击杀了总数{{requiredCount}}中的{{count}}",
+    "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}} (击杀了总数{{requiredCount}}中的{{count}})",
 
 
     /*********

@@ -213,7 +213,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             if (adventureGuildQuest != null)
             {
                 int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
-                yield return new GenericField(this.GameHelper, I18n.Monster_AdventureGuild(), $"{(kills >= adventureGuildQuest.RequiredKills ? I18n.Monster_AdventureGuild_Complete() : I18n.Monster_AdventureGuild_Incomplete())} ({I18n.Monster_AdventureGuild_Progress(count: kills, requiredCount: adventureGuildQuest.RequiredKills)})");
+                string goalName = Game1.content.LoadString($@"Strings\Locations:AdventureGuild_KillList_{adventureGuildQuest.KillListKey}");
+                var checkbox = CheckboxListField.Checkbox(
+                    text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: adventureGuildQuest.RequiredKills),
+                    value: kills >= adventureGuildQuest.RequiredKills
+                );
+                yield return new CheckboxListField(this.GameHelper, I18n.Monster_AdventureGuild(), checkbox);
             }
         }
 

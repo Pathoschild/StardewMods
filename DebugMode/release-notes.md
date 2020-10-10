@@ -1,7 +1,7 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming version
+## Upcoming release
 * Internal refactor to translation handling.
 
 ## 1.12.1

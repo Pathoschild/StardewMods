@@ -446,9 +446,7 @@
 
     // values
     "monster.drops.nothing": "개털(아무것도 안 줌)",
-    "monster.adventure-guild.complete": "토벌 완료",
-    "monster.adventure-guild.incomplete": "토벌 중",
-    "monster.adventure-guild.progress": "목표 {{requiredCount}} 중 {{count}} 처치.",
+    "monster.adventure-guild.eradication-goal": "몬스터 박멸 목표: {{name}} (목표 {{requiredCount}} 중 {{count}} 처치)",
 
 
     /*********

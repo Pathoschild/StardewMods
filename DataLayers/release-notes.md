@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming version
+## Upcoming release
 * Internal refactor to translation handling.
 * Improved translations. Thanks to Enaium (updated Chinese) and zhxxn (updated Korean)!
 

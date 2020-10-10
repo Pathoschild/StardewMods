@@ -451,9 +451,7 @@
 
     // values
     "monster.drops.nothing": "なし",
-    "monster.adventure-guild.complete": "完了",
-    "monster.adventure-guild.incomplete": "進行中",
-    "monster.adventure-guild.progress": "{{requiredCount}}のうち{{count}}匹倒した",
+    "monster.adventure-guild.eradication-goal": "モンスター討伐目標: {{name}} ({{requiredCount}}のうち{{count}}匹倒した)",
 
 
     /*********

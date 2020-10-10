@@ -1,5 +1,5 @@
 # Release notes
-## Upcoming version
+## Upcoming release
 * Internal refactor to translation handling.
 
 ## 4.11.2

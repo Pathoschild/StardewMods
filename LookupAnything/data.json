@@ -1057,46 +1057,57 @@ You shouldn't change this file unless you know what you're doing.
     *********/
     "AdventureGuildQuests": [
         {
+            "KillListKey": "Slimes",
             "Targets": [ "Green Slime", "Frost Jelly", "Sludge" ],
             "RequiredKills": 1000
         },
         {
+            "KillListKey": "VoidSpirits",
             "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute" ],
             "RequiredKills": 150
         },
         {
+            "KillListKey": "Skeletons",
             "Targets": [ "Skeleton", "Skeleton Mage" ],
             "RequiredKills": 50
         },
         {
+            "KillListKey": "RockCrabs",
             "Targets": [ "Rock Crab", "Lava Crab", "Iridium Crab" ],
             "RequiredKills": 60
         },
         {
+            "KillListKey": "CaveInsects",
             "Targets": [ "Grub", "Fly", "Bug" ],
             "RequiredKills": 125
         },
         {
+            "KillListKey": "Bats",
             "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
             "RequiredKills": 200
         },
         {
+            "KillListKey": "Duggies",
             "Targets": [ "Duggy" ],
             "RequiredKills": 30
         },
         {
+            "KillListKey": "DustSprites",
             "Targets": [ "Dust Spirit" ],
             "RequiredKills": 500
         },
         {
+            "KillListKey": "Mummies",
             "Targets": [ "Mummy" ],
             "RequiredKills": 100
         },
         {
+            "KillListKey": "PepperRex",
             "Targets": [ "Pepper Rex" ],
             "RequiredKills": 50
         },
         {
+            "KillListKey": "Serpent",
             "Targets": [ "Serpent" ],
             "RequiredKills": 250
         }

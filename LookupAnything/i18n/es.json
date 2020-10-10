@@ -445,9 +445,7 @@
 
     // values
     "monster.drops.nothing": "Nada",
-    "monster.adventure-guild.complete": "Completo",
-    "monster.adventure-guild.incomplete": "En progreso",
-    "monster.adventure-guild.progress": "Eliminados {{count}} de {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "Erradicación de monstruos: {{name}} (Eliminados {{count}} de {{requiredCount}})",
 
 
     /*********
