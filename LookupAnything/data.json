@@ -1016,7 +1016,7 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.mine-stone.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.mine-stone.name"
+            "DescriptionKey": "data.item.mine-stone.description"
         },
 
         /****
