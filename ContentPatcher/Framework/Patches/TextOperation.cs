@@ -98,17 +98,12 @@ namespace ContentPatcher.Framework.Patches
                 ? ""
                 : this.Delimiter;
 
-            switch (this.Operation)
+            return this.Operation switch
             {
-                case TextOperationType.Append:
-                    return text + delimiter + this.Value.Value;
-
-                case TextOperationType.Prepend:
-                    return this.Value.Value + delimiter + text;
-
-                default:
-                    throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.");
-            }
+                TextOperationType.Append => text + delimiter + this.Value.Value,
+                TextOperationType.Prepend => this.Value.Value + delimiter + text,
+                _ => throw new InvalidOperationException($"Unknown text operation type '{this.Operation}'.")
+            };
         }
     }
 }

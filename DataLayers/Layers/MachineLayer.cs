@@ -87,20 +87,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 LegendEntry type = null;
                 if (machineStates.TryGetValue(tile, out int state))
                 {
-                    switch (state)
+                    type = state switch
                     {
-                        case 1:
-                            type = this.Empty;
-                            break;
-
-                        case 2:
-                            type = this.Processing;
-                            break;
-
-                        case 3:
-                            type = this.Finished;
-                            break;
-                    }
+                        1 => this.Empty,
+                        2 => this.Processing,
+                        3 => this.Finished,
+                        _ => null
+                    };
                 }
 
                 if (type != null)

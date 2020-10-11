@@ -113,40 +113,21 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 
             if (trashCheck || random.NextDouble() < 0.2 + who.DailyLuck)
             {
-                int itemID = 168; // trash
-                switch (random.Next(10))
+                int itemID = random.Next(10) switch
                 {
-                    case 0:
-                        itemID = 168; // trash
-                        break;
-                    case 1:
-                        itemID = 167; // Joja Cola
-                        break;
-                    case 2:
-                        itemID = 170; // broken glasses
-                        break;
-                    case 3:
-                        itemID = 171; // broken CD
-                        break;
-                    case 4:
-                        itemID = 172; // soggy newspaper
-                        break;
-                    case 5:
-                        itemID = 216; // bread
-                        break;
-                    case 6:
-                        itemID = Utility.getRandomItemFromSeason(Game1.currentSeason, tileLocation.X * 653 + tileLocation.Y * 777, false); // seasonal item
-                        break;
-                    case 7:
-                        itemID = 403; // field snack
-                        break;
-                    case 8:
-                        itemID = 309 + random.Next(3); // acorn, maple seed, or pine cone
-                        break;
-                    case 9:
-                        itemID = 153; // green algae
-                        break;
-                }
+                    0 => 168, // trash
+                    1 => 167, // Joja Cola
+                    2 => 170, // broken glasses
+                    3 => 171, // broken CD
+                    4 => 172, // soggy newspaper
+                    5 => 216, // bread
+                    6 => Utility.getRandomItemFromSeason(Game1.currentSeason, tileLocation.X * 653 + tileLocation.Y * 777, false), // seasonal item
+                    7 => 403, // field snack
+                    8 => 309 + random.Next(3), // acorn, maple seed, or pine cone
+                    9 => 153, // green algae
+                    _ => 168 // trash
+                };
+
                 if (index == 3 && random.NextDouble() < 0.2 + who.DailyLuck)
                 {
                     itemID = 535; // geode

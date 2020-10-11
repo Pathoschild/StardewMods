@@ -108,12 +108,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
                 case FarmAnimal.newHome:
                     factors.Add(I18n.Animal_Complaints_NewHome());
                     break;
+
                 case FarmAnimal.hungry:
                     factors.Add(I18n.Animal_Complaints_Hungry());
                     break;
+
                 case FarmAnimal.disturbedByDog:
                     factors.Add(I18n.Animal_Complaints_WildAnimalAttack());
                     break;
+
                 case FarmAnimal.leftOutAtNight:
                     factors.Add(I18n.Animal_Complaints_LeftOut());
                     break;

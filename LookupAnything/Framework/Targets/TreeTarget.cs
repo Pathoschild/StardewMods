@@ -44,17 +44,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Targets
             // growing tree
             if (tree.growthStage.Value < 5)
             {
-                switch ((WildTreeGrowthStage)tree.growthStage.Value)
+                return (WildTreeGrowthStage)tree.growthStage.Value switch
                 {
-                    case WildTreeGrowthStage.Seed:
-                        return new Rectangle(32, 128, 16, 16);
-                    case WildTreeGrowthStage.Sprout:
-                        return new Rectangle(0, 128, 16, 16);
-                    case WildTreeGrowthStage.Sapling:
-                        return new Rectangle(16, 128, 16, 16);
-                    default:
-                        return new Rectangle(0, 96, 16, 32);
-                }
+                    WildTreeGrowthStage.Seed => new Rectangle(32, 128, 16, 16),
+                    WildTreeGrowthStage.Sprout => new Rectangle(0, 128, 16, 16),
+                    WildTreeGrowthStage.Sapling => new Rectangle(16, 128, 16, 16),
+                    _ => new Rectangle(0, 96, 16, 32)
+                };
             }
 
             // grown tree

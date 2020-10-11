@@ -568,19 +568,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             Vector2 tile = player.getTileLocation();
             FacingDirection direction = (FacingDirection)player.FacingDirection;
-            switch (direction)
+            return direction switch
             {
-                case FacingDirection.Up:
-                    return tile + new Vector2(0, -1);
-                case FacingDirection.Right:
-                    return tile + new Vector2(1, 0);
-                case FacingDirection.Down:
-                    return tile + new Vector2(0, 1);
-                case FacingDirection.Left:
-                    return tile + new Vector2(-1, 0);
-                default:
-                    throw new NotSupportedException($"Unknown facing direction {direction}");
-            }
+                FacingDirection.Up => tile + new Vector2(0, -1),
+                FacingDirection.Right => tile + new Vector2(1, 0),
+                FacingDirection.Down => tile + new Vector2(0, 1),
+                FacingDirection.Left => tile + new Vector2(-1, 0),
+                _ => throw new NotSupportedException($"Unknown facing direction {direction}")
+            };
         }
     }
 }

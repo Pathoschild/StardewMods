@@ -110,21 +110,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private static string GetName(Tree tree)
         {
             TreeType type = (TreeType)tree.treeType.Value;
-            switch (type)
+            return type switch
             {
-                case TreeType.BigMushroom:
-                    return I18n.Tree_Name_BigMushroom();
-                case TreeType.Maple:
-                    return I18n.Tree_Name_Maple();
-                case TreeType.Oak:
-                    return I18n.Tree_Name_Oak();
-                case TreeType.Palm:
-                    return I18n.Tree_Name_Palm();
-                case TreeType.Pine:
-                    return I18n.Tree_Name_Pine();
-                default:
-                    return I18n.Tree_Name_Unknown();
-            }
+                TreeType.BigMushroom => I18n.Tree_Name_BigMushroom(),
+                TreeType.Maple => I18n.Tree_Name_Maple(),
+                TreeType.Oak => I18n.Tree_Name_Oak(),
+                TreeType.Palm => I18n.Tree_Name_Palm(),
+                TreeType.Pine => I18n.Tree_Name_Pine(),
+                _ => I18n.Tree_Name_Unknown()
+            };
         }
 
         /// <summary>Whether there are adjacent trees that prevent growth.</summary>

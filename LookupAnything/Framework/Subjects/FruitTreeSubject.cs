@@ -171,19 +171,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         private ItemQuality GetCurrentQuality(FruitTree tree, int daysPerQuality)
         {
             int maturityLevel = Math.Max(0, Math.Min(3, -tree.daysUntilMature.Value / daysPerQuality));
-            switch (maturityLevel)
+            return maturityLevel switch
             {
-                case 0:
-                    return ItemQuality.Normal;
-                case 1:
-                    return ItemQuality.Silver;
-                case 2:
-                    return ItemQuality.Gold;
-                case 3:
-                    return ItemQuality.Iridium;
-                default:
-                    throw new NotSupportedException($"Unexpected quality level {maturityLevel}.");
-            }
+                0 => ItemQuality.Normal,
+                1 => ItemQuality.Silver,
+                2 => ItemQuality.Gold,
+                3 => ItemQuality.Iridium,
+                _ => throw new NotSupportedException($"Unexpected quality level {maturityLevel}.")
+            };
         }
 
         /// <summary>Get a schedule indicating when a fruit tree will begin producing higher-quality fruit.</summary>

@@ -50,19 +50,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            switch (this.Type)
+            yield return this.Type switch
             {
-                case ConditionType.Lowercase:
-                    yield return input.TokenString.Value.ToLowerInvariant();
-                    break;
-
-                case ConditionType.Uppercase:
-                    yield return input.TokenString.Value.ToUpperInvariant();
-                    break;
-
-                default:
-                    throw new NotSupportedException($"Unimplemented letter case type '{this.Type}'."); // should never happen
-            }
+                ConditionType.Lowercase => input.TokenString.Value.ToLowerInvariant(),
+                ConditionType.Uppercase => input.TokenString.Value.ToUpperInvariant(),
+                _ => throw new NotSupportedException($"Unimplemented letter case type '{this.Type}'.") // should never happen
+            };
         }
     }
 }

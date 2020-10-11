@@ -150,27 +150,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             }
 
             // get type name
-            switch (farmType)
+            return farmType switch
             {
-                case -1:
-                    return null;
+                -1 => null,
 
-                case Farm.combat_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine);
-                case Farm.default_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine);
-                case Farm.forest_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine);
-                case Farm.mountains_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine);
-                case Farm.riverlands_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine);
-                case Farm.fourCorners_layout:
-                    return GameI18n.GetString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine);
+                Farm.combat_layout => GameI18n.GetString("Strings\\UI:Character_FarmCombat").Replace("_", Environment.NewLine),
+                Farm.default_layout => GameI18n.GetString("Strings\\UI:Character_FarmStandard").Replace("_", Environment.NewLine),
+                Farm.forest_layout => GameI18n.GetString("Strings\\UI:Character_FarmForaging").Replace("_", Environment.NewLine),
+                Farm.mountains_layout => GameI18n.GetString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine),
+                Farm.riverlands_layout => GameI18n.GetString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine),
+                Farm.fourCorners_layout => GameI18n.GetString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine),
 
-                default:
-                    return I18n.Player_FarmMap_Custom();
-            }
+                _ => I18n.Player_FarmMap_Custom()
+            };
         }
 
         /// <summary>Get the player's spouse name, if they're married.</summary>

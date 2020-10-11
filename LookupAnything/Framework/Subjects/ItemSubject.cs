@@ -676,25 +676,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <param name="bundle">The bundle.</param>
         private string GetTranslatedBundleArea(BundleModel bundle)
         {
-            switch (bundle.Area)
+            return bundle.Area switch
             {
-                case "Pantry":
-                    return I18n.BundleArea_Pantry();
-                case "Crafts Room":
-                    return I18n.BundleArea_CraftsRoom();
-                case "Fish Tank":
-                    return I18n.BundleArea_FishTank();
-                case "Boiler Room":
-                    return I18n.BundleArea_BoilerRoom();
-                case "Vault":
-                    return I18n.BundleArea_Vault();
-                case "Bulletin Board":
-                    return I18n.BundleArea_BulletinBoard();
-                case "Abandoned Joja Mart":
-                    return I18n.BundleArea_AbandonedJojaMart();
-                default:
-                    return bundle.Area;
-            }
+                "Pantry" => I18n.BundleArea_Pantry(),
+                "Crafts Room" => I18n.BundleArea_CraftsRoom(),
+                "Fish Tank" => I18n.BundleArea_FishTank(),
+                "Boiler Room" => I18n.BundleArea_BoilerRoom(),
+                "Vault" => I18n.BundleArea_Vault(),
+                "Bulletin Board" => I18n.BundleArea_BulletinBoard(),
+                "Abandoned Joja Mart" => I18n.BundleArea_AbandonedJojaMart(),
+                _ => bundle.Area
+            };
         }
 
         /// <summary>Get the possible sale values for an item.</summary>

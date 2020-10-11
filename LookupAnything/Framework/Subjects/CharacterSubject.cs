@@ -82,25 +82,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         public override IEnumerable<ICustomField> GetData()
         {
             NPC npc = this.Target;
-            switch (this.TargetType)
+            return this.TargetType switch
             {
-                case SubjectType.Villager:
-                    if (npc is Child child)
-                        return this.GetDataForChild(child);
-                    else if (npc is TrashBear trashBear)
-                        return this.GetDataForTrashBear(trashBear);
-                    else
-                        return this.GetDataForVillager(npc);
-
-                case SubjectType.Pet:
-                    return this.GetDataForPet((Pet)npc);
-
-                case SubjectType.Monster:
-                    return this.GetDataForMonster((Monster)npc);
-
-                default:
-                    return Enumerable.Empty<ICustomField>();
-            }
+                SubjectType.Monster => this.GetDataForMonster((Monster)npc),
+                SubjectType.Pet => this.GetDataForPet((Pet) npc),
+                SubjectType.Villager => npc switch
+                {
+                    Child child => this.GetDataForChild(child),
+                    TrashBear trashBear => this.GetDataForTrashBear(trashBear),
+                    _ => this.GetDataForVillager(npc)
+                },
+                _ => Enumerable.Empty<ICustomField>()
+            };
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -381,17 +374,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
         /// <remarks>Derived from <see cref="Child.dayUpdate"/>.</remarks>
         private int GetDaysToNextChildGrowth(ChildAge stage, int daysOld)
         {
-            switch (stage)
+            return stage switch
             {
-                case ChildAge.Newborn:
-                    return 13 - daysOld;
-                case ChildAge.Baby:
-                    return 27 - daysOld;
-                case ChildAge.Crawler:
-                    return 55 - daysOld;
-                default:
-                    return -1;
-            }
+                ChildAge.Newborn => 13 - daysOld,
+                ChildAge.Baby => 27 - daysOld,
+                ChildAge.Crawler => 55 - daysOld,
+                _ => -1
+            };
         }
 
         /// <summary>Get the last day when the given player petted the pet.</summary>

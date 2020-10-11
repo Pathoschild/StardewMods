@@ -361,28 +361,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private void GetRadialAdjacentTile(Vector2 origin, Vector2 tile, out Vector2 adjacent, out int facingDirection)
         {
             facingDirection = Utility.getDirectionFromChange(tile, origin);
-            switch (facingDirection)
+            adjacent = facingDirection switch
             {
-                case Game1.up:
-                    adjacent = new Vector2(tile.X, tile.Y + 1);
-                    break;
-
-                case Game1.down:
-                    adjacent = new Vector2(tile.X, tile.Y - 1);
-                    break;
-
-                case Game1.left:
-                    adjacent = new Vector2(tile.X + 1, tile.Y);
-                    break;
-
-                case Game1.right:
-                    adjacent = new Vector2(tile.X - 1, tile.Y);
-                    break;
-
-                default:
-                    adjacent = tile;
-                    break;
-            }
+                Game1.up => new Vector2(tile.X, tile.Y + 1),
+                Game1.down => new Vector2(tile.X, tile.Y - 1),
+                Game1.left => new Vector2(tile.X + 1, tile.Y),
+                Game1.right => new Vector2(tile.X - 1, tile.Y),
+                _ => tile
+            };
         }
 
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>
