@@ -433,6 +433,14 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels

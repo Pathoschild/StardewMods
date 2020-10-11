@@ -432,6 +432,14 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Hauteur musicale",
+    "item.music-block.drum-type": "Type de tambour",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels

@@ -199,6 +199,7 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * furniture;
   * machines;
   * movie snacks;
+  * music blocks;
   * spawned objects in the world (e.g. mining nodes in the mines);
 * buildings:
   * barns/coops;

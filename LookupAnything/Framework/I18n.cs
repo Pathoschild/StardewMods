@@ -1913,6 +1913,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("item.movie-ticket.movie-this-week.none");
         }
 
+        /// <summary>Get a translation equivalent to "Pitch".</summary>
+        public static string Item_MusicBlock_Pitch()
+        {
+            return I18n.GetByKey("item.music-block.pitch");
+        }
+
+        /// <summary>Get a translation equivalent to "Drum type".</summary>
+        public static string Item_MusicBlock_DrumType()
+        {
+            return I18n.GetByKey("item.music-block.drum-type");
+        }
+
         /// <summary>Get a translation equivalent to "Invincible".</summary>
         public static string Monster_Invincible()
         {

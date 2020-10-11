@@ -132,6 +132,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Subjects
             foreach (ICustomField field in this.GetMachineOutputFields(obj))
                 yield return field;
 
+            // music blocks
+            if (obj?.Name == "Flute Block")
+                yield return new GenericField(this.GameHelper, I18n.Item_MusicBlock_Pitch(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 2300));
+            else if (obj?.Name == "Drum Block")
+                yield return new GenericField(this.GameHelper, I18n.Item_MusicBlock_DrumType(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 6));
+
             // item
             if (showInventoryFields)
             {
