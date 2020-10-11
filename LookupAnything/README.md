@@ -112,6 +112,21 @@ grayed-out text like this:
 
 The screenshots below are without progression mode, and may show spoilers.
 
+### Where you can look things up
+You can look things up by pointing at them...
+
+where | example
+----- | -------
+in the world | ![](screenshots/target-world.png)
+| on the toolbar | ![](screenshots/target-toolbar.png)
+| in the calendar | ![](screenshots/target-calendar.png)
+| in the social menu | ![](screenshots/target-social-menu.png)
+| in your inventory or chests | ![](screenshots/target-inventory.png)
+| in shops | ![](screenshots/target-shops.png)
+| in bundles<br /><small>(any item shown)</small> | ![](screenshots/target-bundle.png)
+
+And many other places.
+
 ### Sample lookups
 * See a villager's social data, friendship with you, and the gifts they like. This will highlight
   the gifts you're carrying (green) or own (black).
@@ -166,20 +181,38 @@ The screenshots below are without progression mode, and may show spoilers.
   > ![](screenshots/mine-ore.png)
   > ![](screenshots/mine-ice.png)
 
-* And much more!
+### Supported lookups
+And much more! Here's a rough list of things you can look up (not necessarily complete):
 
-### Where you can look things up
-You can look things up by pointing at them...
-
-where | example
------ | -------
-in the world | ![](screenshots/target-world.png)
-| on the toolbar | ![](screenshots/target-toolbar.png)
-| in the calendar | ![](screenshots/target-calendar.png)
-| in the social menu | ![](screenshots/target-social-menu.png)
-| in your inventory or chests | ![](screenshots/target-inventory.png)
-| in shops | ![](screenshots/target-shops.png)
-| in Community Center bundles<br /><small>(any item shown)</small> | ![](screenshots/target-bundle.png)
+* characters:
+  * monsters;
+  * players (and save slots);
+  * children and villagers;
+  * farm animals;
+  * horses;
+  * pets;
+  * special NPCs like Trash Bear;
+* objects and items, including...
+  * crops and seeds;
+  * fences;
+  * fish;
+  * furniture;
+  * machines;
+  * movie snacks;
+  * spawned objects in the world (e.g. mining nodes in the mines);
+* buildings:
+  * barns/coops;
+  * cabins;
+  * fish ponds;
+  * silos;
+  * slime hutches;
+  * stables;
+  * etc;
+* map tiles (if [enabled](#configure));
+* terrain features, including...
+  * bushes;
+  * crops;
+  * trees and fruit trees.
 
 ### Data mining fields (advanced)
 Are you a data miner or trying to figure out the game mechanics? [Enable data mining fields](#configuration)
