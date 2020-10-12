@@ -8,7 +8,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;

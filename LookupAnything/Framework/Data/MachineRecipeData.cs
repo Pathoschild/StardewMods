@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Metadata for a machine recipe.</summary>

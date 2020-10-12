@@ -4,8 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Pathoschild.Stardew.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -46,15 +45,15 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="searchSubjects">The subjects available to search.</param>
         /// <param name="showLookup">Show a lookup menu.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
-        public SearchMenu(SubjectFactory codex, Action<ISubject> showLookup, IMonitor monitor)
+        public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor)
         {
             // save data
             this.ShowLookup = showLookup;
             this.Monitor = monitor;
-            this.SearchLookup = codex.GetSearchSubjects().ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            this.SearchLookup = searchSubjects.ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
             // initialise
             this.UpdateLayout();

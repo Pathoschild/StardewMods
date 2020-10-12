@@ -11,7 +11,7 @@ using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -54,9 +54,6 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
-
-        /// <summary>Provides subject entries for target values.</summary>
-        private SubjectFactory SubjectFactory;
 
         /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
@@ -124,8 +121,7 @@ namespace Pathoschild.Stardew.LookupAnything
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
-            this.SubjectFactory = new SubjectFactory(this.Metadata, this.Helper.Reflection, this.GameHelper, this.Config);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory, () => this.Config.EnableTileLookups);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, this.Config, jsonAssets, () => this.Config.EnableTileLookups);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -285,7 +281,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void ShowSearch()
         {
             this.PushMenu(
-                new SearchMenu(this.SubjectFactory, this.ShowLookupFor, this.Monitor)
+                new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor)
             );
         }
 

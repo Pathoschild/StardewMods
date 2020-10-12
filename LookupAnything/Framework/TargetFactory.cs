@@ -4,39 +4,29 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
-using Pathoschild.Stardew.LookupAnything.Framework.Targets;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.TerrainFeatures;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
     /// <summary>Finds and analyzes lookup targets in the world.</summary>
-    internal class TargetFactory
+    internal class TargetFactory : ISubjectRegistry
     {
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
 
-        /// <summary>The Json Assets API.</summary>
-        private readonly JsonAssetsIntegration JsonAssets;
-
-        /// <summary>Constructs subjects for target values.</summary>
-        private readonly SubjectFactory Codex;
-
-        /// <summary>Whether to show raw tile info like tilesheets and tile indexes.</summary>
-        private readonly Func<bool> ShowRawTileInfo;
+        /// <summary>The instances which provides lookup data for in-game entities.</summary>
+        private readonly ILookupProvider[] LookupProviders;
 
 
         /*********
@@ -48,17 +38,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="config">The mod configuration.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        /// <param name="codex">Constructs subjects for target values.</param>
         /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets, SubjectFactory codex, Func<bool> showRawTileInfo)
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
         {
-            this.Reflection = reflection;
             this.GameHelper = gameHelper;
-            this.JsonAssets = jsonAssets;
-            this.GameHelper = gameHelper;
-            this.Codex = codex;
-            this.ShowRawTileInfo = showRawTileInfo;
+
+            ISubjectRegistry codex = this;
+            this.LookupProviders = new ILookupProvider[]
+            {
+                new BuildingLookupProvider(reflection, gameHelper, codex),
+                new CharacterLookupProvider(reflection, gameHelper, config),
+                new ItemLookupProvider(reflection, gameHelper, config, jsonAssets),
+                new TerrainFeatureLookupProvider(reflection, gameHelper, jsonAssets),
+                new TileLookupProvider(reflection, gameHelper, showRawTileInfo)
+            };
         }
 
         /****
@@ -67,137 +62,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get all potential lookup targets in the current location.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="originTile">The tile from which to search for targets.</param>
-        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
-        /// <remarks>Related to <see cref="SubjectFactory.GetSearchSubjects"/>.</remarks>
-        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile, bool? showRawTileInfo = null)
+        public IEnumerable<ITarget> GetNearbyTargets(GameLocation location, Vector2 originTile)
         {
-            // NPCs
-            foreach (NPC npc in location.characters)
-            {
-                if (!this.GameHelper.CouldSpriteOccludeTile(npc.getTileLocation(), originTile))
-                    continue;
+            var targets = this.LookupProviders
+                .SelectMany(p => p.GetTargets(location, originTile))
+                .Where(p => p != null);
 
-                yield return new CharacterTarget(this.GameHelper, this.Codex.GetSubjectType(npc), npc, npc.getTileLocation(), this.Reflection);
-            }
-
-            // animals
-            foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
-            {
-                if (!this.GameHelper.CouldSpriteOccludeTile(animal.getTileLocation(), originTile))
-                    continue;
-
-                yield return new FarmAnimalTarget(this.GameHelper, animal, animal.getTileLocation());
-            }
-
-            // map objects
-            foreach (KeyValuePair<Vector2, SObject> pair in location.objects.Pairs)
-            {
-                Vector2 spriteTile = pair.Key;
-                SObject obj = pair.Value;
-
-                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
-                    continue;
-
-                yield return new ObjectTarget(this.GameHelper, obj, spriteTile, this.Reflection);
-            }
-
-            // furniture
-            if (location is DecoratableLocation decoratableLocation)
-            {
-                foreach (var furniture in decoratableLocation.furniture)
-                    yield return new ObjectTarget(this.GameHelper, furniture, furniture.TileLocation, this.Reflection);
-            }
-
-            // terrain features
-            foreach (KeyValuePair<Vector2, TerrainFeature> pair in location.terrainFeatures.Pairs)
-            {
-                Vector2 spriteTile = pair.Key;
-                TerrainFeature feature = pair.Value;
-
-                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
-                    continue;
-
-                switch (feature)
-                {
-                    case Bush bush: // planted bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
-                        break;
-
-                    case HoeDirt dirt when dirt.crop != null:
-                        yield return new CropTarget(this.GameHelper, dirt, spriteTile, this.Reflection, this.JsonAssets);
-                        break;
-
-                    case FruitTree fruitTree:
-                        if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() < 0.8f)
-                            continue; // ignore when tree is faded out (so player can lookup things behind it)
-                        yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, spriteTile);
-                        break;
-
-                    case Tree wildTree:
-                        if (this.Reflection.GetField<float>(feature, "alpha").GetValue() < 0.8f)
-                            continue; // ignore when tree is faded out (so player can lookup things behind it)
-                        yield return new TreeTarget(this.GameHelper, wildTree, spriteTile, this.Reflection);
-                        break;
-
-                    default:
-                        yield return new UnknownTarget(this.GameHelper, feature, spriteTile);
-                        break;
-                }
-            }
-
-            // large terrain features
-            foreach (LargeTerrainFeature feature in location.largeTerrainFeatures)
-            {
-                Vector2 spriteTile = feature.tilePosition.Value;
-
-                if (!this.GameHelper.CouldSpriteOccludeTile(spriteTile, originTile))
-                    continue;
-
-                switch (feature)
-                {
-                    case Bush bush: // wild bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
-                        break;
-                }
-            }
-
-            // players
-            foreach (Farmer farmer in location.farmers)
-            {
-                if (!this.GameHelper.CouldSpriteOccludeTile(farmer.getTileLocation(), originTile))
-                    continue;
-
-                yield return new FarmerTarget(this.GameHelper, farmer);
-            }
-
-            // buildings
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    if (!this.GameHelper.CouldSpriteOccludeTile(new Vector2(building.tileX.Value, building.tileY.Value + building.tilesHigh.Value), originTile, Constant.MaxBuildingTargetSpriteSize))
-                        continue;
-
-                    yield return new BuildingTarget(this.GameHelper, building);
-                }
-            }
-
-            // tiles
-            if (TileSubject.EnableLookup(location, originTile, showRawTileInfo ?? this.ShowRawTileInfo()))
-                yield return new TileTarget(this.GameHelper, originTile);
+            foreach (ITarget target in targets)
+                yield return target;
         }
 
         /// <summary>Get the target on the specified tile.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
-        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile, bool? showRawTileInfo = null)
+        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile)
         {
             return (
-                from target in this.GetNearbyTargets(location, tile, showRawTileInfo)
-                where
-                    target.Type != SubjectType.Unknown
-                    && target.IsAtTile(tile)
+                from target in this.GetNearbyTargets(location, tile)
+                where target.Tile == tile
                 select target
             ).FirstOrDefault();
         }
@@ -206,22 +88,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative pixel coordinate to search.</param>
-        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
-        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position, bool? showRawTileInfo = null)
+        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position)
         {
             // get target sprites which might overlap cursor position (first approximation)
             Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
             var candidates = (
-                from target in this.GetNearbyTargets(location, tile, showRawTileInfo)
+                from target in this.GetNearbyTargets(location, tile)
                 let spriteArea = target.GetWorldArea()
-                let isAtTile = target.IsAtTile(tile)
-                where
-                    target.Type != SubjectType.Unknown
-                    && (isAtTile || spriteArea.Intersects(tileArea))
+                let isAtTile = target.Tile == tile
+                where (isAtTile || spriteArea.Intersects(tileArea))
                 orderby
                     target.Type != SubjectType.Tile ? 0 : 1, // Tiles are always under anything else.
-                    spriteArea.Y descending,                // A higher Y value is closer to the foreground, and will occlude any sprites behind it.
-                    spriteArea.X ascending                  // If two sprites at the same Y coordinate overlap, assume the left sprite occludes the right.
+                    spriteArea.Y descending,                 // A higher Y value is closer to the foreground, and will occlude any sprites behind it.
+                    spriteArea.X ascending                   // If two sprites at the same Y coordinate overlap, assume the left sprite occludes the right.
 
                 select new { target, spriteArea, isAtTile }
             ).ToArray();
@@ -239,77 +118,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
         /// <param name="hasCursor">Whether the player has a visible cursor.</param>
-        /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes, or <c>null</c> for the configured default.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool hasCursor, bool? showRawTileInfo = null)
+        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool hasCursor)
         {
-            // get target
-            ITarget target;
-            if (hasCursor)
-                target = this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor(), showRawTileInfo);
-            else
-            {
-                Vector2 tile = this.GetFacingTile(player);
-                target = this.GetTargetFromTile(location, tile, showRawTileInfo);
-            }
+            ITarget target = hasCursor
+                ? this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor())
+                : this.GetTargetFromTile(location, this.GetFacingTile(player));
 
-            // get subject
-            return target != null
-                ? this.GetSubjectFrom(target)
-                : null;
+            return this.GetSubjectFrom(target);
         }
 
         /// <summary>Get metadata for a Stardew object represented by a target.</summary>
         /// <param name="target">The target.</param>
         public ISubject GetSubjectFrom(ITarget target)
         {
-            switch (target.Type)
-            {
-                // NPC
-                case SubjectType.Horse:
-                case SubjectType.Junimo:
-                case SubjectType.Pet:
-                case SubjectType.Monster:
-                case SubjectType.Villager:
-                    return this.Codex.GetCharacter(target.GetValue<NPC>());
+            if (target == null)
+                return null;
 
-                // player
-                case SubjectType.Farmer:
-                    return this.Codex.GetPlayer(target.GetValue<Farmer>());
-
-                // animal
-                case SubjectType.FarmAnimal:
-                    return this.Codex.GetFarmAnimal(target.GetValue<FarmAnimal>());
-
-                // crop
-                case SubjectType.Crop:
-                    return this.Codex.GetCrop(target.GetValue<HoeDirt>().crop, ObjectContext.World);
-
-                // fruit tree
-                case SubjectType.FruitTree:
-                    return this.Codex.GetFruitTree(target.GetValue<FruitTree>(), target.GetTile());
-
-                // wild tree
-                case SubjectType.WildTree:
-                    return this.Codex.GetWildTree(target.GetValue<Tree>(), target.GetTile());
-
-                // inventory item
-                case SubjectType.InventoryItem:
-                case SubjectType.Object:
-                    return this.Codex.GetItem(target.GetValue<Item>(), target.Type == SubjectType.InventoryItem ? ObjectContext.Inventory : ObjectContext.World, knownQuality: false);
-
-                // building
-                case SubjectType.Building:
-                    return this.Codex.GetBuilding(target.GetValue<Building>(), target.GetSpritesheetArea());
-
-                case SubjectType.Bush:
-                    return this.Codex.GetBush(target.GetValue<Bush>());
-
-                // tile
-                case SubjectType.Tile:
-                    return this.Codex.GetTile(Game1.currentLocation, target.GetValue<Vector2>(), this.ShowRawTileInfo());
-            }
-
-            return null;
+            return this.LookupProviders
+                .Select(p => p.GetSubject(target))
+                .FirstOrDefault(p => p != null);
         }
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
@@ -317,245 +144,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
         public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
-            IClickableMenu targetMenu =
-                (menu as GameMenu)?.GetCurrentPage()
-                ?? menu;
             int cursorX = (int)cursorPos.X;
             int cursorY = (int)cursorPos.Y;
 
-            switch (targetMenu)
-            {
-                /****
-                ** Inventory
-                ****/
-                // chest
-                case MenuWithInventory inventoryMenu:
-                    {
-                        Item item = Game1.player.CursorSlotItem ?? inventoryMenu.heldItem ?? inventoryMenu.hoveredItem;
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                    }
-                    break;
+            return this.LookupProviders
+                .Select(p => p.GetSubject(menu, cursorX, cursorY))
+                .FirstOrDefault(p => p != null);
+        }
 
-                // inventory
-                case InventoryPage inventory:
-                    {
-                        Item item = Game1.player.CursorSlotItem ?? this.Reflection.GetField<Item>(inventory, "hoveredItem").GetValue();
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                    }
-                    break;
+        /// <summary>Get the subject for an in-game entity.</summary>
+        /// <param name="entity">The entity instance.</param>
+        public ISubject GetByEntity(object entity)
+        {
+            return this.LookupProviders
+                .Select(p => p.GetSubjectFor(entity))
+                .FirstOrDefault(p => p != null);
+        }
 
-                // shop
-                case ShopMenu shopMenu:
-                    {
-                        ISalable entry = shopMenu.hoveredItem;
-                        if (entry is Item item)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                        if (entry is MovieConcession snack)
-                            return this.Codex.GetMovieSnack(snack);
-                    }
-                    break;
-
-                // toolbar
-                case Toolbar _:
-                    {
-                        // find hovered slot
-                        List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();
-                        ClickableComponent hoveredSlot = slots.FirstOrDefault(slot => slot.containsPoint(cursorX, cursorY));
-                        if (hoveredSlot == null)
-                            return null;
-
-                        // get inventory index
-                        int index = slots.IndexOf(hoveredSlot);
-                        if (index < 0 || index > Game1.player.Items.Count - 1)
-                            return null;
-
-                        // get hovered item
-                        Item item = Game1.player.Items[index];
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                    }
-                    break;
-
-
-                /****
-                ** GameMenu
-                ****/
-                // collections menu
-                // derived from CollectionsPage::performHoverAction
-                case CollectionsPage collectionsTab:
-                    {
-                        int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
-                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
-                            break;
-
-                        int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
-
-                        foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
-                        {
-                            if (component.containsPoint(cursorX, cursorY))
-                            {
-                                int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
-                                SObject obj = new SObject(itemID, 1);
-                                return this.Codex.GetItem(obj, ObjectContext.Inventory, knownQuality: false);
-                            }
-                        }
-                    }
-                    break;
-
-                // crafting menu
-                case CraftingPage crafting:
-                    {
-                        // player inventory item
-                        Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-
-                        // crafting recipe
-                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
-                        if (recipe != null)
-                            return this.Codex.GetItem(recipe.createItem(), ObjectContext.Inventory);
-                    }
-                    break;
-
-                // profile tab
-                case ProfileMenu profileMenu:
-                    {
-                        // hovered item
-                        Item item = profileMenu.hoveredItem;
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-
-                        // NPC
-                        if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetCharacter(npc);
-                        break;
-                    }
-
-                // skills tab
-                case SkillsPage _:
-                    return this.Codex.GetPlayer(Game1.player);
-
-                // social tab
-                case SocialPage socialPage:
-                    {
-                        // get villagers on current page
-                        int scrollOffset = this.Reflection.GetField<int>(socialPage, "slotPosition").GetValue();
-                        ClickableTextureComponent[] entries = this.Reflection
-                            .GetField<List<ClickableTextureComponent>>(socialPage, "sprites")
-                            .GetValue()
-                            .Skip(scrollOffset)
-                            .ToArray();
-
-                        // find hovered villager
-                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
-                        if (entry != null)
-                        {
-                            int index = Array.IndexOf(entries, entry) + scrollOffset;
-                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[index];
-                            if (socialID is long playerID)
-                            {
-                                Farmer player = Game1.getFarmer(playerID);
-                                return this.Codex.GetPlayer(player);
-                            }
-                            else if (socialID is string villagerName)
-                            {
-                                NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
-                                if (npc != null)
-                                    return this.Codex.GetCharacter(npc);
-                            }
-                        }
-                    }
-                    break;
-
-
-                /****
-                ** Other menus
-                ****/
-                // calendar
-                case Billboard billboard:
-                    {
-                        // get target day
-                        int selectedDay = -1;
-                        for (int i = 0; i < billboard.calendarDays.Count; i++)
-                        {
-                            if (billboard.calendarDays[i].containsPoint(cursorX, cursorY))
-                            {
-                                selectedDay = i + 1;
-                                break;
-                            }
-                        }
-                        if (selectedDay == -1)
-                            return null;
-
-                        // get villager with a birthday on that date
-                        NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
-                        if (target != null)
-                            return this.Codex.GetCharacter(target);
-                    }
-                    break;
-
-                // Community Center bundle menu
-                case JunimoNoteMenu bundleMenu:
-                    {
-                        // hovered inventory item
-                        {
-                            Item item = this.Reflection.GetField<Item>(menu, "hoveredItem").GetValue();
-                            if (item != null)
-                                return this.Codex.GetItem(item, ObjectContext.Inventory);
-                        }
-
-                        // list of required ingredients
-                        for (int i = 0; i < bundleMenu.ingredientList.Count; i++)
-                        {
-                            if (bundleMenu.ingredientList[i].containsPoint(cursorX, cursorY))
-                            {
-                                Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
-                                var ingredient = bundle.ingredients[i];
-                                var item = this.GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
-                                item.Quality = ingredient.quality;
-                                return this.Codex.GetItem(item, ObjectContext.Inventory);
-                            }
-                        }
-
-                        // list of submitted ingredients
-                        foreach (ClickableTextureComponent slot in bundleMenu.ingredientSlots)
-                        {
-                            if (slot.item != null && slot.containsPoint(cursorX, cursorY))
-                                return this.Codex.GetItem(slot.item, ObjectContext.Inventory);
-                        }
-                    }
-                    break;
-
-                // load menu
-                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
-                    {
-                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
-                        if (button != null)
-                        {
-                            int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
-                            var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
-                            LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
-                            if (slot?.Farmer != null)
-                                return this.Codex.GetPlayer(slot.Farmer, isLoadMenu: true);
-                        }
-                    }
-                    break;
-
-                /****
-                ** Convention (for mod support)
-                ****/
-                default:
-                    {
-                        Item item = this.Reflection.GetField<Item>(menu, "HoveredItem", required: false)?.GetValue(); // ChestsAnywhere
-                        if (item != null)
-                            return this.Codex.GetItem(item, ObjectContext.Inventory);
-                    }
-                    break;
-            }
-
-            return null;
+        /// <summary>Get all known subjects for the search UI.</summary>
+        public IEnumerable<ISubject> GetSearchSubjects()
+        {
+            return this.LookupProviders
+                .SelectMany(p => p.GetSearchSubjects());
         }
 
 

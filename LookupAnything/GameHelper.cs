@@ -442,7 +442,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get whether a sprite on a given tile could occlude a specified tile position.</summary>
         /// <param name="spriteTile">The tile of the possible sprite.</param>
         /// <param name="occludeTile">The tile to check for possible occlusion.</param>
-        /// <param name="spriteSize">The largest expected sprite size (measured in tiles).</param>
+        /// <param name="spriteSize">The largest expected sprite size (measured in tiles), or <c>null</c> to use <see cref="Constant.MaxTargetSpriteSize"/>.</param>
         public bool CouldSpriteOccludeTile(Vector2 spriteTile, Vector2 occludeTile, Vector2? spriteSize = null)
         {
             spriteSize ??= Constant.MaxTargetSpriteSize;
