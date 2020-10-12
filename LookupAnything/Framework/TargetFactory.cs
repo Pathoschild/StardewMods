@@ -124,7 +124,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 ? this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor())
                 : this.GetTargetFromTile(location, this.GetFacingTile(player));
 
-            return target.GetSubject();
+            return target?.GetSubject();
         }
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>
