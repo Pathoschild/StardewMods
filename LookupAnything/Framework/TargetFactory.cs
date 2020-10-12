@@ -124,19 +124,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 ? this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor())
                 : this.GetTargetFromTile(location, this.GetFacingTile(player));
 
-            return this.GetSubjectFrom(target);
-        }
-
-        /// <summary>Get metadata for a Stardew object represented by a target.</summary>
-        /// <param name="target">The target.</param>
-        public ISubject GetSubjectFrom(ITarget target)
-        {
-            if (target == null)
-                return null;
-
-            return this.LookupProviders
-                .Select(p => p.GetSubject(target))
-                .FirstOrDefault(p => p != null);
+            return target.GetSubject();
         }
 
         /// <summary>Get metadata for a menu element at the specified position.</summary>

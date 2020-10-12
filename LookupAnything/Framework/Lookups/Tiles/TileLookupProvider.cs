@@ -32,18 +32,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <inheritdoc />
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
-            if (this.ShowRawTileInfo())
-                yield return new TileTarget(this.GameHelper, lookupTile);
+            ISubject subject = this.BuildSubject(location, lookupTile);
+            if (subject != null)
+                yield return new TileTarget(this.GameHelper, lookupTile, () => subject);
         }
 
-        /// <inheritdoc />
-        public override ISubject GetSubject(ITarget target)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Build a subject.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile being looked up.</param>
+        private ISubject BuildSubject(GameLocation location, Vector2 tile)
         {
-            return target switch
-            {
-                TileTarget tile => new TileSubject(this.GameHelper, Game1.currentLocation, tile.Value, this.ShowRawTileInfo()),
-                _ => null
-            };
+            if (this.ShowRawTileInfo())
+                return new TileSubject(this.GameHelper, location, tile, this.ShowRawTileInfo());
+
+            return null;
         }
     }
 }

@@ -28,8 +28,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, JsonAssetsIntegration jsonAssets, Vector2 tilePosition)
-            : base(gameHelper, SubjectType.FruitTree, value, tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public FruitTreeTarget(GameHelper gameHelper, FruitTree value, JsonAssetsIntegration jsonAssets, Vector2 tilePosition, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.FruitTree, value, tilePosition, getSubject)
         {
             this.GetSpriteSheet(value, jsonAssets, out this.Texture, out this.SourceRect);
         }

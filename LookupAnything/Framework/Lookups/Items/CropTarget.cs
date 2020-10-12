@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
@@ -32,8 +33,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, IReflectionHelper reflectionHelper, JsonAssetsIntegration jsonAssets)
-            : base(gameHelper, SubjectType.Crop, value, tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, IReflectionHelper reflectionHelper, JsonAssetsIntegration jsonAssets, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.Crop, value, tilePosition, getSubject)
         {
             this.Reflection = reflectionHelper;
 

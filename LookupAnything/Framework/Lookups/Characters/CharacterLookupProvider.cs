@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 Vector2 entityTile = npc.getTileLocation();
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, this.Reflection);
+                    yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(npc), npc, entityTile, this.Reflection, () => this.BuildSubject(npc));
             }
 
             // animals
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 Vector2 entityTile = animal.getTileLocation();
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile);
+                    yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
             }
 
             // players
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 Vector2 entityTile = farmer.getTileLocation();
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new FarmerTarget(this.GameHelper, farmer);
+                    yield return new FarmerTarget(this.GameHelper, farmer, () => this.BuildSubject(farmer));
             }
         }
 
@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ****/
                 // skills tab
                 case SkillsPage _:
-                    return this.GetSubjectFor(Game1.player);
+                    return this.BuildSubject(Game1.player);
 
                 // social tab
                 case SocialPage socialPage:
@@ -95,13 +95,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             if (socialID is long playerID)
                             {
                                 Farmer player = Game1.getFarmer(playerID);
-                                return this.GetSubjectFor(player);
+                                return this.BuildSubject(player);
                             }
                             else if (socialID is string villagerName)
                             {
                                 NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)
-                                    return this.GetSubjectFor(npc);
+                                    return this.BuildSubject(npc);
                             }
                         }
                     }
@@ -130,7 +130,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         // get villager with a birthday on that date
                         NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
                         if (target != null)
-                            return this.GetSubjectFor(target);
+                            return this.BuildSubject(target);
                     }
                     break;
 
@@ -154,25 +154,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         }
 
         /// <inheritdoc />
-        public override ISubject GetSubject(ITarget target)
-        {
-            return target switch
-            {
-                FarmerTarget player => this.GetSubjectFor(player.Value),
-                FarmAnimalTarget animal => this.GetSubjectFor(animal.Value),
-                CharacterTarget npc => this.GetSubjectFor(npc.Value),
-                _ => null
-            };
-        }
-
-        /// <inheritdoc />
         public override ISubject GetSubjectFor(object entity)
         {
             return entity switch
             {
-                FarmAnimal animal => new FarmAnimalSubject(this.GameHelper, animal),
-                Farmer player => new FarmerSubject(this.GameHelper, player),
-                NPC npc => new CharacterSubject(this.GameHelper, npc, this.GetSubjectType(npc), this.GameHelper.Metadata, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes),
+                FarmAnimal animal => this.BuildSubject(animal),
+                Farmer player => this.BuildSubject(player),
+                NPC npc => this.BuildSubject(npc),
                 _ => null
             };
         }
@@ -182,7 +170,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             // NPCs
             foreach (NPC npc in Utility.getAllCharacters())
-                yield return this.GetSubjectFor(npc);
+                yield return this.BuildSubject(npc);
 
             // animals
             foreach (var location in CommonHelper.GetLocations())
@@ -194,19 +182,40 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 if (animals != null)
                 {
                     foreach (var animal in animals)
-                        yield return this.GetSubjectFor(animal);
+                        yield return this.BuildSubject(animal);
                 }
             }
 
             // players
             foreach (Farmer player in Game1.getAllFarmers())
-                yield return this.GetSubjectFor(player);
+                yield return this.BuildSubject(player);
         }
 
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Build a subject.</summary>
+        /// <param name="player">The entity to look up.</param>
+        private ISubject BuildSubject(Farmer player)
+        {
+            return new FarmerSubject(this.GameHelper, player);
+        }
+
+        /// <summary>Build a subject.</summary>
+        /// <param name="animal">The entity to look up.</param>
+        private ISubject BuildSubject(FarmAnimal animal)
+        {
+            return new FarmAnimalSubject(this.GameHelper, animal);
+        }
+
+        /// <summary>Build a subject.</summary>
+        /// <param name="npc">The entity to look up.</param>
+        private ISubject BuildSubject(NPC npc)
+        {
+            return new CharacterSubject(this.GameHelper, npc, this.GetSubjectType(npc), this.GameHelper.Metadata, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
+        }
+
         /// <summary>Get the subject type for an NPC.</summary>
         /// <param name="npc">The NPC instance.</param>
         private SubjectType GetSubjectType(NPC npc)

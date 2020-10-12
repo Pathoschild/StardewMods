@@ -40,19 +40,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 {
                     Vector2 origin = new Vector2(building.tileX.Value, building.tileY.Value + building.tilesHigh.Value);
                     if (this.GameHelper.CouldSpriteOccludeTile(origin, lookupTile, Constant.MaxBuildingTargetSpriteSize))
-                        yield return new BuildingTarget(this.GameHelper, building);
+                        yield return new BuildingTarget(this.GameHelper, building, () => this.BuildSubject(building));
                 }
             }
         }
 
-        /// <inheritdoc />
-        public override ISubject GetSubject(ITarget target)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Build a subject.</summary>
+        /// <param name="building">The entity to look up.</param>
+        private ISubject BuildSubject(Building building)
         {
-            return target switch
-            {
-                BuildingTarget building => new BuildingSubject(this.Codex, this.GameHelper, building.Value, target.GetSpritesheetArea()),
-                _ => null
-            };
+            return new BuildingSubject(this.Codex, this.GameHelper, building, building.getSourceRectForMenu());
         }
     }
 }

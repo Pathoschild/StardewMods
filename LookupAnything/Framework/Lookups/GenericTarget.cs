@@ -20,13 +20,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         ** Accessors
         *********/
         /// <summary>The subject type.</summary>
-        public SubjectType Type { get; set; }
+        public SubjectType Type { get; protected set; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
-        public Vector2 Tile { get; set; }
+        public Vector2 Tile { get; protected set; }
 
         /// <summary>The underlying in-game object.</summary>
         public TValue Value { get; }
+
+        /// <summary>Get the subject info about the target.</summary>
+        public Func<ISubject> GetSubject { get; protected set; }
 
 
         /*********
@@ -75,12 +78,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /// <param name="type">The subject type.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        protected GenericTarget(GameHelper gameHelper, SubjectType type, TValue value, Vector2 tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        protected GenericTarget(GameHelper gameHelper, SubjectType type, TValue value, Vector2 tilePosition, Func<ISubject> getSubject)
         {
             this.GameHelper = gameHelper;
             this.Type = type;
             this.Value = value;
             this.Tile = tilePosition;
+            this.GetSubject = getSubject;
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite.</summary>

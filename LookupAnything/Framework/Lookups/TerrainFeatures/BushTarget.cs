@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
@@ -23,8 +24,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public BushTarget(GameHelper gameHelper, Bush value, IReflectionHelper reflectionHelper)
-            : base(gameHelper, SubjectType.Bush, value, value.tilePosition.Value)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public BushTarget(GameHelper gameHelper, Bush value, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.Bush, value, value.tilePosition.Value, getSubject)
         {
             this.Reflection = reflectionHelper;
         }

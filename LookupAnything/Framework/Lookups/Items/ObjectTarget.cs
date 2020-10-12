@@ -30,8 +30,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public ObjectTarget(GameHelper gameHelper, SObject value, Vector2 tilePosition, IReflectionHelper reflection)
-            : base(gameHelper, SubjectType.Object, value, tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public ObjectTarget(GameHelper gameHelper, SObject value, Vector2 tilePosition, IReflectionHelper reflection, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.Object, value, tilePosition, getSubject)
         {
             this.Reflection = reflection;
             this.CustomSprite = gameHelper.GetSprite(value, onlyCustom: true); // only get sprite if it's custom; else we'll use contextual logic (e.g. for fence direction)

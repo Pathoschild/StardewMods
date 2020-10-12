@@ -37,8 +37,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
-        public BuildingTarget(GameHelper gameHelper, Building value)
-            : base(gameHelper, SubjectType.Building, value, new Vector2(value.tileX.Value, value.tileY.Value))
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public BuildingTarget(GameHelper gameHelper, Building value, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.Building, value, new Vector2(value.tileX.Value, value.tileY.Value), getSubject)
         {
             this.TileArea = new Rectangle(value.tileX.Value, value.tileY.Value, value.tilesWide.Value, value.tilesHigh.Value);
         }

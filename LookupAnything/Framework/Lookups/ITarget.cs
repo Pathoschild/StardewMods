@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
@@ -9,10 +10,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         ** Accessors
         *********/
         /// <summary>The subject type.</summary>
-        SubjectType Type { get; set; }
+        SubjectType Type { get; }
 
         /// <summary>The object's tile position in the current location (if applicable).</summary>
-        Vector2 Tile { get; set; }
+        Vector2 Tile { get; }
+
+        /// <summary>Get the subject info about the target.</summary>
+        Func<ISubject> GetSubject { get; }
 
 
         /*********

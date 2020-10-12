@@ -29,12 +29,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         }
 
         /// <inheritdoc />
-        public virtual ISubject GetSubject(ITarget target)
-        {
-            return null;
-        }
-
-        /// <inheritdoc />
         public virtual ISubject GetSubject(IClickableMenu menu, int cursorX, int cursorY)
         {
             return null;

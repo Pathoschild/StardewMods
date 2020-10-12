@@ -26,8 +26,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public TreeTarget(GameHelper gameHelper, Tree value, Vector2 tilePosition, IReflectionHelper reflectionHelper)
-            : base(gameHelper, SubjectType.WildTree, value, tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public TreeTarget(GameHelper gameHelper, Tree value, Vector2 tilePosition, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.WildTree, value, tilePosition, getSubject)
         {
             this.Reflection = reflectionHelper;
         }

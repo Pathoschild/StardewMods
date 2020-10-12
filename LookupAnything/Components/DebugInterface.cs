@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 {
                     // get metadata
                     bool spriteAreaIntersects = target.GetWorldArea().Intersects(tileArea);
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(target);
+                    ISubject subject = target.GetSubject();
 
                     // draw tile
                     {

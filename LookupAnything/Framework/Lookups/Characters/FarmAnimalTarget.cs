@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -14,8 +15,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        public FarmAnimalTarget(GameHelper gameHelper, FarmAnimal value, Vector2 tilePosition)
-            : base(gameHelper, SubjectType.FarmAnimal, value, tilePosition) { }
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public FarmAnimalTarget(GameHelper gameHelper, FarmAnimal value, Vector2 tilePosition, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.FarmAnimal, value, tilePosition, getSubject) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()

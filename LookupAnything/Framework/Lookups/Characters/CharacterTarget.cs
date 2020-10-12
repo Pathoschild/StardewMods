@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -25,8 +26,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public CharacterTarget(GameHelper gameHelper, SubjectType type, NPC value, Vector2 tilePosition, IReflectionHelper reflectionHelper)
-            : base(gameHelper, type, value, tilePosition)
+        /// <param name="getSubject">Get the subject info about the target.</param>
+        public CharacterTarget(GameHelper gameHelper, SubjectType type, NPC value, Vector2 tilePosition, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
+            : base(gameHelper, type, value, tilePosition, getSubject)
         {
             this.Reflection = reflectionHelper;
         }

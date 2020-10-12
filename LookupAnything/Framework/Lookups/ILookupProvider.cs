@@ -17,10 +17,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         public IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile);
 
         /// <summary>Get a subject which provides lookup info.</summary>
-        /// <param name="target">The selected lookup target.</param>
-        public ISubject GetSubject(ITarget target);
-
-        /// <summary>Get a subject which provides lookup info.</summary>
         /// <param name="menu">The active menu.</param>
         /// <param name="cursorX">The cursor's viewport-relative X coordinate.</param>
         /// <param name="cursorY">The cursor's viewport-relative Y coordinate.</param>

@@ -18,13 +18,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         ** Fields
         *********/
         /// <summary>The game location.</summary>
-        private readonly GameLocation Location;
+        protected readonly GameLocation Location;
 
         /// <summary>The tile position.</summary>
-        private readonly Vector2 Position;
+        protected readonly Vector2 Position;
 
         /// <summary>Whether to show raw tile info like tilesheets and tile indexes.</summary>
-        private readonly bool ShowRawTileInfo;
+        protected readonly bool ShowRawTileInfo;
 
 
         /*********
@@ -46,13 +46,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <summary>Get the data to display for this subject.</summary>
         public override IEnumerable<ICustomField> GetData()
         {
-            // raw map data
             if (this.ShowRawTileInfo)
             {
                 // yield map data
                 yield return new GenericField(this.GameHelper, I18n.Tile_MapName(), this.Location.Name);
 
-                // get tiles
+                // get tile on each layer
                 Tile[] tiles = this.GetTiles(this.Location, this.Position).ToArray();
                 if (!tiles.Any())
                 {

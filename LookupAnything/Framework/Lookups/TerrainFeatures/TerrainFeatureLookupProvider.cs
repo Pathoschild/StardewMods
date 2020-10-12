@@ -46,16 +46,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 {
                     case FruitTree fruitTree:
                         if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
-                            yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, entityTile);
+                            yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, entityTile, () => this.BuildSubject(fruitTree, entityTile));
                         break;
 
                     case Tree tree:
                         if (this.Reflection.GetField<float>(tree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
-                            yield return new TreeTarget(this.GameHelper, tree, entityTile, this.Reflection);
+                            yield return new TreeTarget(this.GameHelper, tree, entityTile, this.Reflection, () => this.BuildSubject(tree, entityTile));
                         break;
 
                     case Bush bush: // planted bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection, () => this.BuildSubject(bush));
                         break;
                 }
             }
@@ -70,22 +70,37 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 switch (feature)
                 {
                     case Bush bush: // wild bush
-                        yield return new BushTarget(this.GameHelper, bush, this.Reflection);
+                        yield return new BushTarget(this.GameHelper, bush, this.Reflection, () => this.BuildSubject(bush));
                         break;
                 }
             }
         }
 
-        /// <inheritdoc />
-        public override ISubject GetSubject(ITarget target)
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Build a subject.</summary>
+        /// <param name="bush">The entity to look up.</param>
+        private ISubject BuildSubject(Bush bush)
         {
-            return target switch
-            {
-                BushTarget bush => new BushSubject(this.GameHelper, bush.Value, this.Reflection),
-                FruitTreeTarget tree => new FruitTreeSubject(this.GameHelper, tree.Value, target.Tile),
-                TreeTarget tree => new TreeSubject(this.GameHelper, tree.Value, target.Tile),
-                _ => null
-            };
+            return new BushSubject(this.GameHelper, bush, this.Reflection);
+        }
+
+        /// <summary>Build a subject.</summary>
+        /// <param name="tree">The entity to look up.</param>
+        /// <param name="tile">The tree tile.</param>
+        private ISubject BuildSubject(FruitTree tree, Vector2 tile)
+        {
+            return new FruitTreeSubject(this.GameHelper, tree, tile);
+        }
+
+        /// <summary>Build a subject.</summary>
+        /// <param name="tree">The entity to look up.</param>
+        /// <param name="tile">The tree tile.</param>
+        private ISubject BuildSubject(Tree tree, Vector2 tile)
+        {
+            return new TreeSubject(this.GameHelper, tree, tile);
         }
     }
 }
