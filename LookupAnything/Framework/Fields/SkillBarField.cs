@@ -20,13 +20,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="experience">The current progress value.</param>
         /// <param name="maxSkillPoints">The maximum experience points for a skill.</param>
         /// <param name="skillPointsPerLevel">The experience points needed for each skill level.</param>
-        public SkillBarField(GameHelper gameHelper, string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
-            : base(gameHelper, label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
+        public SkillBarField(string label, int experience, int maxSkillPoints, int[] skillPointsPerLevel)
+            : base(label, experience, maxSkillPoints, Color.Green, Color.Gray, null)
         {
             this.SkillPointsPerLevel = skillPointsPerLevel;
         }

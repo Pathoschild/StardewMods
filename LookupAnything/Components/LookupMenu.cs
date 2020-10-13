@@ -77,14 +77,13 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         ** Constructors
         ****/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="subject">The metadata to display.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
         /// <param name="showDebugFields">Whether to display debug fields.</param>
         /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-        public LookupMenu(GameHelper gameHelper, ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
+        public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
         {
             // save data
             this.Subject = subject;
@@ -102,8 +101,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 this.Fields = this.Fields
                     .Concat(new[]
                     {
-                        new DataMiningField(gameHelper, "debug (pinned)", debugFields.Where(p => p.IsPinned)),
-                        new DataMiningField(gameHelper, "debug (raw)", debugFields.Where(p => !p.IsPinned))
+                        new DataMiningField("debug (pinned)", debugFields.Where(p => p.IsPinned)),
+                        new DataMiningField("debug (raw)", debugFields.Where(p => !p.IsPinned))
                     })
                     .ToArray();
             }

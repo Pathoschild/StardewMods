@@ -26,11 +26,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="item">The dye-producing item.</param>
-        public ColorField(GameHelper gameHelper, string label, Item item)
-            : base(gameHelper, label)
+        public ColorField(string label, Item item)
+            : base(label)
         {
             // get color
             if (item.Name == "Prismatic Shard")

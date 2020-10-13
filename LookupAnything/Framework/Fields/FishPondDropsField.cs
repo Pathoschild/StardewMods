@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        protected GameHelper GameHelper;
+
         /// <summary>The possible drops.</summary>
         private readonly FishPondDrop[] Drops;
 
@@ -36,8 +39,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="data">The fish pond data.</param>
         /// <param name="preface">>The text to display before the list, if any.</param>
         public FishPondDropsField(GameHelper gameHelper, string label, int currentPopulation, FishPondData data, string preface)
-            : base(gameHelper, label)
+            : base(label)
         {
+            this.GameHelper = gameHelper;
             this.Drops = this.GetEntries(currentPopulation, data, gameHelper).ToArray();
             this.HasValue = this.Drops.Any();
             this.Preface = preface;

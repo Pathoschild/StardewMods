@@ -76,15 +76,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             {
                 int daysLeft = building.isUnderConstruction() ? building.daysOfConstructionLeft.Value : building.daysUntilUpgrade.Value;
                 SDate readyDate = SDate.Now().AddDays(daysLeft);
-                yield return new GenericField(this.GameHelper, I18n.Building_Construction(), I18n.Building_Construction_Summary(date: readyDate));
+                yield return new GenericField(I18n.Building_Construction(), I18n.Building_Construction_Summary(date: readyDate));
             }
 
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(this.GameHelper, I18n.Building_Owner(), owner.Name, () => this.Codex.GetByEntity(owner));
+                yield return new LinkField(I18n.Building_Owner(), owner.Name, () => this.Codex.GetByEntity(owner));
             else if (building.indoors.Value is Cabin)
-                yield return new GenericField(this.GameHelper, I18n.Building_Owner(), I18n.Building_Owner_None());
+                yield return new GenericField(I18n.Building_Owner(), I18n.Building_Owner_None());
 
             // stable horse
             if (built && building is Stable stable)
@@ -92,8 +92,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(this.GameHelper, I18n.Building_Horse(), horse.Name, () => this.Codex.GetByEntity(horse));
-                    yield return new GenericField(this.GameHelper, I18n.Building_HorseLocation(), I18n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
+                    yield return new LinkField(I18n.Building_Horse(), horse.Name, () => this.Codex.GetByEntity(horse));
+                    yield return new GenericField(I18n.Building_HorseLocation(), I18n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }
 
@@ -101,15 +101,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             if (built && building.indoors.Value is AnimalHouse animalHouse)
             {
                 // animal counts
-                yield return new GenericField(this.GameHelper, I18n.Building_Animals(), I18n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
+                yield return new GenericField(I18n.Building_Animals(), I18n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
 
                 // feed trough
                 if ((building is Barn || building is Coop) && upgradeLevel >= 2)
-                    yield return new GenericField(this.GameHelper, I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Automated());
+                    yield return new GenericField(I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Automated());
                 else
                 {
                     this.GetFeedMetrics(animalHouse, out int totalFeedSpaces, out int filledFeedSpaces);
-                    yield return new GenericField(this.GameHelper, I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Summary(filled: filledFeedSpaces, max: totalFeedSpaces));
+                    yield return new GenericField(I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Summary(filled: filledFeedSpaces, max: totalFeedSpaces));
                 }
             }
 
@@ -118,10 +118,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             {
                 // slime count
                 int slimeCount = slimeHutch.characters.OfType<GreenSlime>().Count();
-                yield return new GenericField(this.GameHelper, I18n.Building_Slimes(), I18n.Building_Slimes_Summary(count: slimeCount, max: 20));
+                yield return new GenericField(I18n.Building_Slimes(), I18n.Building_Slimes_Summary(count: slimeCount, max: 20));
 
                 // water trough
-                yield return new GenericField(this.GameHelper, I18n.Building_WaterTrough(), I18n.Building_WaterTrough_Summary(filled: slimeHutch.waterSpots.Count(p => p), max: slimeHutch.waterSpots.Count));
+                yield return new GenericField(I18n.Building_WaterTrough(), I18n.Building_WaterTrough_Summary(filled: slimeHutch.waterSpots.Count(p => p), max: slimeHutch.waterSpots.Count));
             }
 
             // upgrade level
@@ -129,7 +129,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             {
                 var upgradeLevelSummary = this.GetUpgradeLevelSummary(building, upgradeLevel).ToArray();
                 if (upgradeLevelSummary.Any())
-                    yield return new CheckboxListField(this.GameHelper, I18n.Building_Upgrades(), upgradeLevelSummary);
+                    yield return new CheckboxListField(I18n.Building_Upgrades(), upgradeLevelSummary);
             }
 
             // specific buildings
@@ -140,7 +140,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     // fish pond
                     case FishPond pond:
                         if (pond.fishType.Value <= -1)
-                            yield return new GenericField(this.GameHelper, I18n.Building_FishPond_Population(), I18n.Building_FishPond_Population_Empty());
+                            yield return new GenericField(I18n.Building_FishPond_Population(), I18n.Building_FishPond_Population_Empty());
                         else
                         {
                             // get fish population
@@ -169,13 +169,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
 
                             // quests
                             if (pondData.PopulationGates?.Any(gate => gate.Key > pond.lastUnlockedPopulationGate.Value) == true)
-                                yield return new CheckboxListField(this.GameHelper, I18n.Building_FishPond_Quests(), this.GetPopulationGates(pond, pondData));
+                                yield return new CheckboxListField(I18n.Building_FishPond_Quests(), this.GetPopulationGates(pond, pondData));
                         }
                         break;
 
                     // Junimo hut
                     case JunimoHut hut:
-                        yield return new GenericField(this.GameHelper, I18n.Building_JunimoHarvestingEnabled(), I18n.Stringify(!hut.noHarvest.Value));
+                        yield return new GenericField(I18n.Building_JunimoHarvestingEnabled(), I18n.Stringify(!hut.noHarvest.Value));
                         yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), hut.output.Value?.items, showStackSize: true);
                         break;
 
@@ -194,7 +194,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                             int hayCount = farm.piecesOfHay.Value;
                             int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
                             yield return new GenericField(
-                                this.GameHelper,
                                 I18n.Building_StoredHay(),
                                 siloCount == 1
                                     ? I18n.Building_StoredHay_SummaryOneSilo(hayCount: hayCount, maxHay: maxHay)

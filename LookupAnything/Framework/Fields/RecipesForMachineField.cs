@@ -60,11 +60,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="recipes">The recipe to list.</param>
         public RecipesForMachineField(GameHelper gameHelper, string label, RecipeModel[] recipes)
-            : base(gameHelper, label, hasValue: true)
+            : base(label, hasValue: true)
         {
             // get recipe data
             this.Recipes = this
-                .GetRecipeEntries(this.GameHelper, recipes)
+                .GetRecipeEntries(gameHelper, recipes)
                 .OrderBy(entry => string.Join(", ", entry.Inputs.SelectMany(input => input.DisplayText)))
                 .ThenBy(entry => entry.Output.DisplayText)
                 .ToArray();

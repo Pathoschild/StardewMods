@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
             bool isFullyGrown = stage == WildTreeGrowthStage.Tree;
-            yield return new GenericField(this.GameHelper, I18n.Tree_Stage(), isFullyGrown
+            yield return new GenericField(I18n.Tree_Stage(), isFullyGrown
                 ? I18n.Tree_Stage_Done()
                 : I18n.Tree_Stage_Partial(stageName: I18n.For(stage), step: (int)stage, max: (int)WildTreeGrowthStage.Tree)
             );
@@ -57,20 +57,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             {
                 string label = I18n.Tree_NextGrowth();
                 if (Game1.IsWinter && !Game1.currentLocation.IsGreenhouse)
-                    yield return new GenericField(this.GameHelper, label, I18n.Tree_NextGrowth_Winter());
+                    yield return new GenericField(label, I18n.Tree_NextGrowth_Winter());
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
-                    yield return new GenericField(this.GameHelper, label, I18n.Tree_NextGrowth_AdjacentTrees());
+                    yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());
                 else
-                    yield return new GenericField(this.GameHelper, label, I18n.Tree_NextGrowth_Chance(stage: I18n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
+                    yield return new GenericField(label, I18n.Tree_NextGrowth_Chance(stage: I18n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
             }
 
             // get fertilizer
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, I18n.Tree_IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({I18n.Tree_IsFertilized_Effects()})" : ""));
+                yield return new GenericField(I18n.Tree_IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({I18n.Tree_IsFertilized_Effects()})" : ""));
 
             // get seed
             if (isFullyGrown)
-                yield return new GenericField(this.GameHelper, I18n.Tree_HasSeed(), this.Stringify(tree.hasSeed.Value));
+                yield return new GenericField(I18n.Tree_HasSeed(), this.Stringify(tree.hasSeed.Value));
 
         }
 

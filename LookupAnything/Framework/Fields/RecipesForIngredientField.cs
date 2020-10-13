@@ -47,9 +47,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
         public RecipesForIngredientField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes)
-            : base(gameHelper, label, hasValue: true)
+            : base(label, hasValue: true)
         {
-            this.Recipes = this.GetRecipeEntries(this.GameHelper, ingredient, recipes).OrderBy(p => p.Type).ThenBy(p => p.Name).ToArray();
+            this.Recipes = this.GetRecipeEntries(gameHelper, ingredient, recipes).OrderBy(p => p.Type).ThenBy(p => p.Name).ToArray();
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>

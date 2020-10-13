@@ -22,21 +22,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="checkboxes">The checkbox labels and values to display.</param>
-        public CheckboxListField(GameHelper gameHelper, string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
-            : this(gameHelper, label)
+        public CheckboxListField(string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
+            : this(label)
         {
             this.Checkboxes = checkboxes.ToArray();
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="checkboxes">The checkbox labels and values to display.</param>
-        public CheckboxListField(GameHelper gameHelper, string label, params KeyValuePair<IFormattedText[], bool>[] checkboxes)
-            : this(gameHelper, label)
+        public CheckboxListField(string label, params KeyValuePair<IFormattedText[], bool>[] checkboxes)
+            : this(label)
         {
             this.Checkboxes = checkboxes;
         }
@@ -100,10 +98,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
-        protected CheckboxListField(GameHelper gameHelper, string label)
-            : base(gameHelper, label, hasValue: true)
+        protected CheckboxListField(string label)
+            : base(label, hasValue: true)
         {
             this.Checkboxes = new KeyValuePair<IFormattedText[], bool>[0];
         }

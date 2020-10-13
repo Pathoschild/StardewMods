@@ -49,14 +49,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // yield fields
-            yield return new CharacterFriendshipField(this.GameHelper, I18n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
-            yield return new PercentageBarField(this.GameHelper, I18n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, I18n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
-            yield return new GenericField(this.GameHelper, I18n.Animal_Mood(), animal.getMoodMessage());
-            yield return new GenericField(this.GameHelper, I18n.Animal_Complaints(), this.GetMoodReason(animal));
+            yield return new CharacterFriendshipField(I18n.Animal_Love(), this.GameHelper.GetFriendshipForAnimal(Game1.player, animal));
+            yield return new PercentageBarField(I18n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, I18n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
+            yield return new GenericField(I18n.Animal_Mood(), animal.getMoodMessage());
+            yield return new GenericField(I18n.Animal_Complaints(), this.GetMoodReason(animal));
             yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
             if (!isFullyGrown)
-                yield return new GenericField(this.GameHelper, I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
-            yield return new GenericField(this.GameHelper, I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
+                yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
+            yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>

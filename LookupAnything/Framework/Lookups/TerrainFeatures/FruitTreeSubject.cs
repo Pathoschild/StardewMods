@@ -57,13 +57,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
                 string label = I18n.FruitTree_NextFruit();
                 if (isStruckByLightning)
-                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_StruckByLightning(count: tree.struckByLightningCountdown.Value));
+                    yield return new GenericField(label, I18n.FruitTree_NextFruit_StruckByLightning(count: tree.struckByLightningCountdown.Value));
                 else if (!tree.GreenHouseTree && nextFruit.Season != tree.fruitSeason.Value)
-                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_OutOfSeason());
+                    yield return new GenericField(label, I18n.FruitTree_NextFruit_OutOfSeason());
                 else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
-                    yield return new GenericField(this.GameHelper, label, I18n.FruitTree_NextFruit_MaxFruit());
+                    yield return new GenericField(label, I18n.FruitTree_NextFruit_MaxFruit());
                 else
-                    yield return new GenericField(this.GameHelper, label, I18n.Generic_Tomorrow());
+                    yield return new GenericField(label, I18n.Generic_Tomorrow());
             }
 
             // show growth data
@@ -72,17 +72,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 SDate dayOfMaturity = SDate.Now().AddDays(tree.daysUntilMature.Value);
                 string grownOnDateText = I18n.FruitTree_Growth_Summary(date: this.Stringify(dayOfMaturity));
 
-                yield return new GenericField(this.GameHelper, I18n.FruitTree_NextFruit(), I18n.FruitTree_NextFruit_TooYoung());
-                yield return new GenericField(this.GameHelper, I18n.FruitTree_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
+                yield return new GenericField(I18n.FruitTree_NextFruit(), I18n.FruitTree_NextFruit_TooYoung());
+                yield return new GenericField(I18n.FruitTree_Growth(), $"{grownOnDateText} ({this.GetRelativeDateStr(dayOfMaturity)})");
                 if (this.HasAdjacentObjects(this.Tile))
-                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Complaints(), I18n.FruitTree_Complaints_AdjacentObjects());
+                    yield return new GenericField(I18n.FruitTree_Complaints(), I18n.FruitTree_Complaints_AdjacentObjects());
             }
             else
             {
                 // get quality schedule
                 ItemQuality currentQuality = this.GetCurrentQuality(tree, this.Constants.FruitTreeQualityGrowthTime);
                 if (currentQuality == ItemQuality.Iridium)
-                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Quality(), I18n.FruitTree_Quality_Now(quality: currentQuality));
+                    yield return new GenericField(I18n.FruitTree_Quality(), I18n.FruitTree_Quality_Now(quality: currentQuality));
                 else
                 {
                     string[] summary = this
@@ -113,12 +113,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                         })
                         .ToArray();
 
-                    yield return new GenericField(this.GameHelper, I18n.FruitTree_Quality(), string.Join(Environment.NewLine, summary));
+                    yield return new GenericField(I18n.FruitTree_Quality(), string.Join(Environment.NewLine, summary));
                 }
             }
 
             // show season
-            yield return new GenericField(this.GameHelper, I18n.FruitTree_Season(), I18n.FruitTree_Season_Summary(I18n.GetSeasonName(tree.fruitSeason.Value)));
+            yield return new GenericField(I18n.FruitTree_Season(), I18n.FruitTree_Season_Summary(I18n.GetSeasonName(tree.fruitSeason.Value)));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>

@@ -12,13 +12,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Accessors
         *********/
-        /// <summary>Provides utility methods for interacting with the game code.</summary>
-        protected GameHelper GameHelper;
-
-
-        /*********
-        ** Accessors
-        *********/
         /// <summary>A short field label.</summary>
         public string Label { get; protected set; }
 
@@ -33,34 +26,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, string value, bool? hasValue = null)
+        public GenericField(string label, string value, bool? hasValue = null)
         {
-            this.GameHelper = gameHelper;
             this.Label = label;
             this.Value = this.FormatValue(value);
             this.HasValue = hasValue ?? this.Value?.Any() == true;
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, IFormattedText value, bool? hasValue = null)
-            : this(gameHelper, label, new[] { value }, hasValue) { }
+        public GenericField(string label, IFormattedText value, bool? hasValue = null)
+            : this(label, new[] { value }, hasValue) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, IEnumerable<IFormattedText> value, bool? hasValue = null)
+        public GenericField(string label, IEnumerable<IFormattedText> value, bool? hasValue = null)
         {
-            this.GameHelper = gameHelper;
             this.Label = label;
             this.Value = value.ToArray();
             this.HasValue = hasValue ?? this.Value?.Any() == true;
@@ -82,11 +70,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="hasValue">Whether the field should be displayed.</param>
-        protected GenericField(GameHelper gameHelper, string label, bool hasValue = false)
-            : this(gameHelper, label, null as string, hasValue) { }
+        protected GenericField(string label, bool hasValue = false)
+            : this(label, null as string, hasValue) { }
 
         /// <summary>Wrap text into a list of formatted snippets.</summary>
         /// <param name="value">The text to wrap.</param>

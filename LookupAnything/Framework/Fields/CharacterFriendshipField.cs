@@ -21,11 +21,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="friendship">The player's current friendship data with the NPC.</param>
-        public CharacterFriendshipField(GameHelper gameHelper, string label, FriendshipModel friendship)
-            : base(gameHelper, label, hasValue: true)
+        public CharacterFriendshipField(string label, FriendshipModel friendship)
+            : base(label, hasValue: true)
         {
             this.Friendship = friendship;
         }

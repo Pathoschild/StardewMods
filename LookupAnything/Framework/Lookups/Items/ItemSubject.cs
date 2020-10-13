@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // don't show data for dead crop
             if (isDeadCrop)
             {
-                yield return new GenericField(this.GameHelper, I18n.Crop_Summary(), I18n.Crop_Summary_Dead());
+                yield return new GenericField(I18n.Crop_Summary(), I18n.Crop_Summary_Dead());
                 yield break;
             }
 
@@ -129,7 +129,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 if (potCrop != null)
                 {
                     Item drop = this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
-                    yield return new LinkField(this.GameHelper, I18n.Item_Contents(), drop.DisplayName, () => this.GetCropSubject(potCrop, ObjectContext.World));
+                    yield return new LinkField(I18n.Item_Contents(), drop.DisplayName, () => this.GetCropSubject(potCrop, ObjectContext.World));
                 }
             }
 
@@ -139,9 +139,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
             // music blocks
             if (obj?.Name == "Flute Block")
-                yield return new GenericField(this.GameHelper, I18n.Item_MusicBlock_Pitch(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 2300));
+                yield return new GenericField(I18n.Item_MusicBlock_Pitch(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 2300));
             else if (obj?.Name == "Drum Block")
-                yield return new GenericField(this.GameHelper, I18n.Item_MusicBlock_DrumType(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 6));
+                yield return new GenericField(I18n.Item_MusicBlock_DrumType(), I18n.Generic_Ratio(value: obj.preservedParentSheetIndex.Value, max: 6));
 
             // item
             if (showInventoryFields)
@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 {
                     // sale price
                     string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
-                    yield return new GenericField(this.GameHelper, I18n.Item_SellsFor(), saleValueSummary);
+                    yield return new GenericField(I18n.Item_SellsFor(), saleValueSummary);
 
                     // sell to
                     List<string> buyers = new List<string>();
@@ -168,22 +168,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         orderby name
                         select name
                     );
-                    yield return new GenericField(this.GameHelper, I18n.Item_SellsTo(), string.Join(", ", buyers));
+                    yield return new GenericField(I18n.Item_SellsTo(), string.Join(", ", buyers));
                 }
 
                 // clothing
                 if (item is Clothing clothing)
-                    yield return new GenericField(this.GameHelper, I18n.Item_CanBeDyed(), this.Stringify(clothing.dyeable.Value));
+                    yield return new GenericField(I18n.Item_CanBeDyed(), this.Stringify(clothing.dyeable.Value));
 
                 // gift tastes
                 IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item);
-                yield return new ItemGiftTastesField(this.GameHelper, I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                yield return new ItemGiftTastesField(this.GameHelper, I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                yield return new ItemGiftTastesField(I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                yield return new ItemGiftTastesField(I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
                 if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
                 {
-                    yield return new ItemGiftTastesField(this.GameHelper, I18n.Item_NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    yield return new ItemGiftTastesField(this.GameHelper, I18n.Item_DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    yield return new ItemGiftTastesField(this.GameHelper, I18n.Item_HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(I18n.Item_NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(I18n.Item_DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(I18n.Item_HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
                 }
             }
 
@@ -239,14 +239,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 // health
                 if (Game1.getFarm().isBuildingConstructed(Constant.BuildingNames.GoldClock))
-                    yield return new GenericField(this.GameHelper, healthLabel, I18n.Item_FenceHealth_GoldClock());
+                    yield return new GenericField(healthLabel, I18n.Item_FenceHealth_GoldClock());
                 else
                 {
                     float maxHealth = fence.isGate.Value ? fence.maxHealth.Value * 2 : fence.maxHealth.Value;
                     float health = fence.health.Value / maxHealth;
                     double daysLeft = Math.Round(fence.health.Value * this.Constants.FenceDecayRate / 60 / 24);
                     double percent = Math.Round(health * 100);
-                    yield return new PercentageBarField(this.GameHelper, healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, I18n.Item_FenceHealth_Summary(percent: (int)percent, count: (int)daysLeft));
+                    yield return new PercentageBarField(healthLabel, (int)fence.health.Value, (int)maxHealth, Color.Green, Color.Red, I18n.Item_FenceHealth_Summary(percent: (int)percent, count: (int)daysLeft));
                 }
             }
 
@@ -255,11 +255,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             {
                 MovieData movie = MovieTheater.GetMovieForDate(Game1.Date);
                 if (movie == null)
-                    yield return new GenericField(this.GameHelper, I18n.Item_MovieTicket_MovieThisWeek(), I18n.Item_MovieTicket_MovieThisWeek_None());
+                    yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), I18n.Item_MovieTicket_MovieThisWeek_None());
                 else
                 {
                     // movie this week
-                    yield return new GenericField(this.GameHelper, I18n.Item_MovieTicket_MovieThisWeek(), new IFormattedText[]
+                    yield return new GenericField(I18n.Item_MovieTicket_MovieThisWeek(), new IFormattedText[]
                     {
                         new FormattedText(movie.Title, bold: true),
                         new FormattedText(Environment.NewLine),
@@ -271,21 +271,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         .GroupBy(entry => entry.Value)
                         .ToDictionary(group => group.Key, group => group.Select(p => p.Key.Name).OrderBy(p => p).ToArray());
 
-                    yield return new MovieTastesField(this.GameHelper, I18n.Item_MovieTicket_LovesMovie(), tastes, GiftTaste.Love);
-                    yield return new MovieTastesField(this.GameHelper, I18n.Item_MovieTicket_LikesMovie(), tastes, GiftTaste.Like);
-                    yield return new MovieTastesField(this.GameHelper, I18n.Item_MovieTicket_DislikesMovie(), tastes, GiftTaste.Dislike);
+                    yield return new MovieTastesField(I18n.Item_MovieTicket_LovesMovie(), tastes, GiftTaste.Love);
+                    yield return new MovieTastesField(I18n.Item_MovieTicket_LikesMovie(), tastes, GiftTaste.Like);
+                    yield return new MovieTastesField(I18n.Item_MovieTicket_DislikesMovie(), tastes, GiftTaste.Dislike);
                 }
             }
 
             // dyes
             if (showInventoryFields)
-                yield return new ColorField(this.GameHelper, I18n.Item_ProducesDye(), item);
+                yield return new ColorField(I18n.Item_ProducesDye(), item);
 
             // owned and times cooked/crafted
             if (showInventoryFields && !isCrop)
             {
                 // owned
-                yield return new GenericField(this.GameHelper, I18n.Item_NumberOwned(), I18n.Item_NumberOwned_Summary(count: this.GameHelper.CountOwnedItems(item)));
+                yield return new GenericField(I18n.Item_NumberOwned(), I18n.Item_NumberOwned_Summary(count: this.GameHelper.CountOwnedItems(item)));
 
                 // times crafted
                 RecipeModel[] recipes = this.GameHelper
@@ -297,7 +297,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     string label = recipes.First().Type == RecipeType.Cooking ? I18n.Item_NumberCooked() : I18n.Item_NumberCrafted();
                     int timesCrafted = recipes.Sum(recipe => recipe.GetTimesCrafted(Game1.player));
                     if (timesCrafted >= 0) // negative value means not available for this recipe type
-                        yield return new GenericField(this.GameHelper, label, I18n.Item_NumberCrafted_Summary(count: timesCrafted));
+                        yield return new GenericField(label, I18n.Item_NumberCrafted_Summary(count: timesCrafted));
                 }
             }
 
@@ -310,7 +310,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (seeAlsoCrop)
             {
                 Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
-                yield return new LinkField(this.GameHelper, I18n.Item_SeeAlso(), drop.DisplayName, () => this.GetCropSubject(this.SeedForCrop, ObjectContext.Inventory));
+                yield return new LinkField(I18n.Item_SeeAlso(), drop.DisplayName, () => this.GetCropSubject(this.SeedForCrop, ObjectContext.Inventory));
             }
         }
 
@@ -440,7 +440,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 else
                     summary = $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";
 
-                yield return new GenericField(this.GameHelper, I18n.Crop_Harvest(), summary);
+                yield return new GenericField(I18n.Crop_Harvest(), summary);
             }
 
             // crop summary
@@ -467,7 +467,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 summary.Add(I18n.Crop_Summary_SellsFor(price: GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1)));
 
                 // generate field
-                yield return new GenericField(this.GameHelper, I18n.Crop_Summary(), "-" + string.Join($"{Environment.NewLine}-", summary));
+                yield return new GenericField(I18n.Crop_Summary(), "-" + string.Join($"{Environment.NewLine}-", summary));
             }
         }
 
@@ -511,7 +511,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     // display fields
                     yield return new ItemIconField(this.GameHelper, I18n.Item_Contents(), heldObj);
                     if (minutesLeft <= 0 || !schedule.Any())
-                        yield return new GenericField(this.GameHelper, I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: curQuality));
+                        yield return new GenericField(I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: curQuality));
                     else
                     {
                         string scheduleStr = string.Join(Environment.NewLine, (
@@ -519,7 +519,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             let str = I18n.GetPlural(entry.DaysLeft, I18n.Item_CaskSchedule_Tomorrow(quality: entry.Quality), I18n.Item_CaskSchedule_InXDays(quality: entry.Quality, count: entry.DaysLeft, date: entry.HarvestDate))
                             select $"-{str}"
                         ));
-                        yield return new GenericField(this.GameHelper, I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: curQuality)}{Environment.NewLine}{scheduleStr}");
+                        yield return new GenericField(I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: curQuality)}{Environment.NewLine}{scheduleStr}");
                     }
                 }
             }
@@ -533,9 +533,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     if (pot.bait.Value != null)
                         yield return new ItemIconField(this.GameHelper, I18n.Item_CrabpotBait(), pot.bait.Value);
                     else if (Game1.player.professions.Contains(11)) // no bait needed if luremaster
-                        yield return new GenericField(this.GameHelper, I18n.Item_CrabpotBait(), I18n.Item_CrabpotBaitNotNeeded());
+                        yield return new GenericField(I18n.Item_CrabpotBait(), I18n.Item_CrabpotBaitNotNeeded());
                     else
-                        yield return new GenericField(this.GameHelper, I18n.Item_CrabpotBait(), I18n.Item_CrabpotBaitNeeded());
+                        yield return new GenericField(I18n.Item_CrabpotBait(), I18n.Item_CrabpotBaitNeeded());
                 }
 
                 // output item
@@ -561,7 +561,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             else if (machine.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber)
             {
                 string readyText = I18n.Stringify(heldObj is Chest output && output.items.Any());
-                yield return new GenericField(this.GameHelper, I18n.Item_Contents(), readyText);
+                yield return new GenericField(I18n.Item_Contents(), readyText);
             }
 
             // generic machine
@@ -644,7 +644,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
             // yield
             if (neededFor.Any())
-                yield return new GenericField(this.GameHelper, I18n.Item_NeededFor(), string.Join(", ", neededFor));
+                yield return new GenericField(I18n.Item_NeededFor(), string.Join(", ", neededFor));
         }
 
         /// <summary>Get unfinished bundles which require this item.</summary>

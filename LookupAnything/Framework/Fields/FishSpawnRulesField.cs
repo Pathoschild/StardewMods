@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="fishID">The fish ID.</param>
         public FishSpawnRulesField(GameHelper gameHelper, string label, int fishID)
-            : base(gameHelper, label)
+            : base(label)
         {
             this.Checkboxes = this.GetConditions(gameHelper, fishID).ToArray();
             this.HasValue = this.Checkboxes.Any();

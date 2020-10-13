@@ -160,7 +160,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             // birthday
             SDate birthday = SDate.Now().AddDays(-child.daysOld.Value);
-            yield return new GenericField(this.GameHelper, I18n.Npc_Birthday(), birthday.ToLocaleString(withYear: true));
+            yield return new GenericField(I18n.Npc_Birthday(), birthday.ToLocaleString(withYear: true));
 
             // age
             {
@@ -174,15 +174,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     ? I18n.Npc_Child_Age_DescriptionGrown(label: stage)
                     : I18n.Npc_Child_Age_DescriptionPartial(label: stage, count: daysToNext, nextLabel: stage + 1);
 
-                yield return new PercentageBarField(this.GameHelper, I18n.Npc_Child_Age(), child.daysOld.Value, daysAtNext, Color.Green, Color.Gray, ageDesc);
+                yield return new PercentageBarField(I18n.Npc_Child_Age(), child.daysOld.Value, daysAtNext, Color.Green, Color.Gray, ageDesc);
             }
 
             // friendship
             if (Game1.player.friendshipData.ContainsKey(child.Name))
             {
                 FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, child, Game1.player.friendshipData[child.Name]);
-                yield return new CharacterFriendshipField(this.GameHelper, I18n.Npc_Friendship(), friendship);
-                yield return new GenericField(this.GameHelper, I18n.Npc_TalkedToday(), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
+                yield return new CharacterFriendshipField(I18n.Npc_Friendship(), friendship);
+                yield return new GenericField(I18n.Npc_TalkedToday(), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
             }
         }
 
@@ -194,12 +194,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // basic info
             bool canRerollDrops = Game1.player.isWearingRing(Ring.burglarsRing);
 
-            yield return new GenericField(this.GameHelper, I18n.Monster_Invincible(), I18n.Generic_Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
-            yield return new PercentageBarField(this.GameHelper, I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
+            yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
+            yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
             yield return new ItemDropListField(this.GameHelper, I18n.Monster_Drops(), this.GetMonsterDrops(monster), fadeNonGuaranteed: true, crossOutNonGuaranteed: !canRerollDrops, defaultText: I18n.Monster_Drops_Nothing());
-            yield return new GenericField(this.GameHelper, I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
-            yield return new GenericField(this.GameHelper, I18n.Monster_Defense(), this.Stringify(monster.resilience.Value));
-            yield return new GenericField(this.GameHelper, I18n.Monster_Attack(), this.Stringify(monster.DamageToFarmer));
+            yield return new GenericField(I18n.Monster_Experience(), this.Stringify(monster.ExperienceGained));
+            yield return new GenericField(I18n.Monster_Defense(), this.Stringify(monster.resilience.Value));
+            yield return new GenericField(I18n.Monster_Attack(), this.Stringify(monster.DamageToFarmer));
 
             // Adventure Guild quest
             AdventureGuildQuestData adventureGuildQuest = this.Metadata.GetAdventurerGuildQuest(monster.Name);
@@ -211,7 +211,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     text: I18n.Monster_AdventureGuild_EradicationGoal(name: goalName, count: kills, requiredCount: adventureGuildQuest.RequiredKills),
                     value: kills >= adventureGuildQuest.RequiredKills
                 );
-                yield return new CheckboxListField(this.GameHelper, I18n.Monster_AdventureGuild(), checkbox);
+                yield return new CheckboxListField(I18n.Monster_AdventureGuild(), checkbox);
             }
         }
 
@@ -223,21 +223,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             Farm farm = Game1.getFarm();
 
             // friendship
-            yield return new CharacterFriendshipField(this.GameHelper, I18n.Pet_Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet));
+            yield return new CharacterFriendshipField(I18n.Pet_Love(), this.GameHelper.GetFriendshipForPet(Game1.player, pet));
 
             // petted today / last petted
             int? lastDayPetted = this.GetLastDayPetted(pet, Game1.player.UniqueMultiplayerID);
-            yield return new GenericField(this.GameHelper, I18n.Pet_PettedToday(), lastDayPetted == Game1.Date.TotalDays ? I18n.Pet_LastPetted_Yes() : this.Stringify(false));
+            yield return new GenericField(I18n.Pet_PettedToday(), lastDayPetted == Game1.Date.TotalDays ? I18n.Pet_LastPetted_Yes() : this.Stringify(false));
             if (!lastDayPetted.HasValue)
-                yield return new GenericField(this.GameHelper, I18n.Pet_LastPetted(), I18n.Pet_LastPetted_Never());
+                yield return new GenericField(I18n.Pet_LastPetted(), I18n.Pet_LastPetted_Never());
             else if (lastDayPetted != Game1.Date.TotalDays)
             {
                 int daysSincePetted = Game1.Date.TotalDays - lastDayPetted.Value;
-                yield return new GenericField(this.GameHelper, I18n.Pet_LastPetted(), daysSincePetted == 1 ? I18n.Generic_Yesterday() : I18n.Pet_LastPetted_DaysAgo(daysSincePetted));
+                yield return new GenericField(I18n.Pet_LastPetted(), daysSincePetted == 1 ? I18n.Generic_Yesterday() : I18n.Pet_LastPetted_DaysAgo(daysSincePetted));
             }
 
             // water bowl
-            yield return new GenericField(this.GameHelper, I18n.Pet_WaterBowl(), farm.petBowlWatered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
+            yield return new GenericField(I18n.Pet_WaterBowl(), farm.petBowlWatered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
         }
 
         /// <summary>Get the fields to display for the trash bear.</summary>
@@ -266,7 +266,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // show progress
-            yield return new GenericField(this.GameHelper, I18n.TrashBear_QuestProgress(), I18n.Generic_Ratio(questsDone, maxQuests));
+            yield return new GenericField(I18n.TrashBear_QuestProgress(), I18n.Generic_Ratio(questsDone, maxQuests));
         }
 
         /// <summary>Get the fields to display for a villager NPC.</summary>
@@ -278,30 +278,30 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 // birthday
                 if (this.GameHelper.TryGetDate(npc.Birthday_Day, npc.Birthday_Season, out SDate birthday))
-                    yield return new GenericField(this.GameHelper, I18n.Npc_Birthday(), I18n.Stringify(birthday));
+                    yield return new GenericField(I18n.Npc_Birthday(), I18n.Stringify(birthday));
 
                 // friendship
                 if (Game1.player.friendshipData.ContainsKey(npc.Name))
                 {
                     // friendship/romance
                     FriendshipModel friendship = this.GameHelper.GetFriendshipForVillager(Game1.player, npc, Game1.player.friendshipData[npc.Name]);
-                    yield return new GenericField(this.GameHelper, I18n.Npc_CanRomance(), friendship.IsSpouse ? I18n.Npc_CanRomance_Married() : friendship.IsHousemate ? I18n.Npc_CanRomance_Housemate() : this.Stringify(friendship.CanDate));
-                    yield return new CharacterFriendshipField(this.GameHelper, I18n.Npc_Friendship(), friendship);
+                    yield return new GenericField(I18n.Npc_CanRomance(), friendship.IsSpouse ? I18n.Npc_CanRomance_Married() : friendship.IsHousemate ? I18n.Npc_CanRomance_Housemate() : this.Stringify(friendship.CanDate));
+                    yield return new CharacterFriendshipField(I18n.Npc_Friendship(), friendship);
 
                     // talked/gifted today
-                    yield return new GenericField(this.GameHelper, I18n.Npc_TalkedToday(), this.Stringify(friendship.TalkedToday));
-                    yield return new GenericField(this.GameHelper, I18n.Npc_GiftedToday(), this.Stringify(friendship.GiftsToday > 0));
+                    yield return new GenericField(I18n.Npc_TalkedToday(), this.Stringify(friendship.TalkedToday));
+                    yield return new GenericField(I18n.Npc_GiftedToday(), this.Stringify(friendship.GiftsToday > 0));
 
                     // kissed/hugged today
                     if (friendship.IsSpouse || friendship.IsHousemate)
-                        yield return new GenericField(this.GameHelper, friendship.IsSpouse ? I18n.Npc_KissedToday() : I18n.Npc_HuggedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
+                        yield return new GenericField(friendship.IsSpouse ? I18n.Npc_KissedToday() : I18n.Npc_HuggedToday(), this.Stringify(npc.hasBeenKissedToday.Value));
 
                     // gifted this week
                     if (!friendship.IsSpouse && !friendship.IsHousemate)
-                        yield return new GenericField(this.GameHelper, I18n.Npc_GiftedThisWeek(), I18n.Generic_Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
+                        yield return new GenericField(I18n.Npc_GiftedThisWeek(), I18n.Generic_Ratio(value: friendship.GiftsThisWeek, max: NPC.maxGiftsPerWeek));
                 }
                 else
-                    yield return new GenericField(this.GameHelper, I18n.Npc_Friendship(), I18n.Npc_Friendship_NotMet());
+                    yield return new GenericField(I18n.Npc_Friendship(), I18n.Npc_Friendship_NotMet());
 
                 // gift tastes
                 IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc);

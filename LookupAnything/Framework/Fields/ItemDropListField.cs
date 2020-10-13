@@ -15,6 +15,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        protected GameHelper GameHelper;
+
         /// <summary>The possible drops.</summary>
         private readonly Tuple<ItemDropData, SObject, SpriteInfo>[] Drops;
 
@@ -44,8 +47,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
         /// <param name="preface">The text to display before the list, if any.</param>
         public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string defaultText = null, string preface = null)
-            : base(gameHelper, label)
+            : base(label)
         {
+            this.GameHelper = gameHelper;
             this.Drops = this.GetEntries(drops, gameHelper).ToArray();
             if (sort)
                 this.Drops = this.Drops.OrderByDescending(p => p.Item1.Probability).ThenBy(p => p.Item2.DisplayName).ToArray();
