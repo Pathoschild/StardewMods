@@ -9,6 +9,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Added support for specifying a default value for an `i18n` token.
+* Fixed `i18n` token not accepting named arguments.
+
 ## 1.18.2
 Released 13 September 2020.
 

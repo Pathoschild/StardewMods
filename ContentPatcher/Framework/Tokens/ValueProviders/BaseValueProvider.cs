@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         protected bool MayReturnMultipleValuesForInput { get; set; }
 
         /// <summary>The named input arguments recognised by this value provider.</summary>
-        protected readonly ISet<string> ValidNamedArguments = new InvariantHashSet();
+        protected ISet<string> ValidNamedArguments = new InvariantHashSet();
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new ContextualState();

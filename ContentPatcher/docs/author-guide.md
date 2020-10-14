@@ -856,30 +856,58 @@ in any Content Patcher field that allows tokens:
 }
 ```
 
-Content Patcher tokens don't work directly inside `i18n` files, but you can use SMAPI's translation
-placeholders. For example, if you wanted to show the player name in a message, you can do this in
-the `i18n` files:
+Content Patcher tokens don't work directly inside `i18n` files, but you can pass values to
+translation placeholders as input arguments (see below).
+
+
+The `i18n` token accepts these input arguments:
+
+<table>
+<tr>
+  <th>argument</th>
+  <th>description</th>
+</tr>
+<tr>
+  <td><code>default</code></td>
+  <td>
+
+If a translation doesn't exist (in both the current language _and_ `default.json`), the token will
+return text like "missing translation: key". You can provide a different default value using the
+`default` argument:
 ```js
+"{{i18n:some-key |default=default text to display}}"
+```
+
+You can use tokens in the default text, so you can default to a different translation:
+```js
+"{{i18n:some-key |default={{i18n:another-key}} }}"
+```
+
+  </td>
+</tr>
+<tr>
+  <td>
+
+_any other_
+
+  </td>
+  <td>
+
+Any other arguments provide values for translation tokens. For example, if you have a translation
+like this:
+```json
 {
-    "rainy-day": "Hey {{name}}! Maybe I'll boot up Visual Studio today... one of these days I swear I'll release my SMAPI mod.$h",
+   "dialogue": "It's a beautiful {{day}} morning!"
 }
 ```
 
-And then pass the value as an input argument:
-```js
-{
-   "Format": "1.18.0",
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Characters/Dialogue/MarriageDialogueAbigail",
-         "Entries": {
-            "Rainy_Day_4": "{{i18n: rainy-day |name={{PlayerName}} }}"
-         }
-      }
-   ]
-}
+Then you can do this to provide a value for the token in your patch:
+```json
+"{{i18n: dialogue |day={{DayOfWeek}} }}"
 ```
+
+  </td>
+</table>
 
 ### Text operations
 <dl>
