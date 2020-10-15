@@ -9,11 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Added support for specifying a default value for an `i18n` token.
+## 1.18.3
+Released 15 October 2020.
+
+* Added support for setting the default value for an `i18n` token.
 * Fixed `i18n` token not accepting named arguments.
 * Fixed error-handling for invalid `Include` patches.
-* Fixed errors using a dynamic token set to the value of a token like `{{HasMod |contains=X}}` in some cases.
+* Fixed errors using a dynamic token in some cases when it's set to the value of an immutable token like `{{HasMod |contains=X}}`.
 
 ## 1.18.2
 Released 13 September 2020.

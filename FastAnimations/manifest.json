@@ -1,8 +1,8 @@
 {
     "Name": "Fast Animations",
     "Author": "Pathoschild",
-    "Version": "1.9.1",
-    "MinimumApiVersion": "3.6.0",
+    "Version": "1.9.2",
+    "MinimumApiVersion": "3.7.3",
     "Description": "Speeds up many animations in the game (configurable).",
     "UniqueID": "Pathoschild.FastAnimations",
     "EntryDll": "FastAnimations.dll",

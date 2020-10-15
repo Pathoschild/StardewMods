@@ -1,6 +1,8 @@
 # Release notes
-## Upcoming release
-* Internal refactor to translation handling.
+## 1.12.3
+Released 15 October 2020.
+
+* Refactored translation handling.
 * Improved translations. Thanks to Enaium (updated Chinese) and zhxxn (updated Korean)!
 
 ## 1.12.2

@@ -1,13 +1,16 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Improved eradication goal info in monster lookups.
+## 1.28
+Released 15 October 2020.
+
 * Added music block lookups.
+* Improved Adventurer's Guild eradication goal info in monster lookups.
 * Fixed spawned stones sometimes showing info for a different item.
 * Fixed description for some generic spawned stones.
 * Fixed Scorpion Carp showing 'contents: no' field.
-* Internal refactor to translation handling.
+* Refactored to prepare for future game updates.
+* Refactored translation handling.
 * Improved translations. Thanks to Enaium (updated Chinese), Macskasajt05 (added Hungarian), and zhxxn (updated Korean)!
 
 ## 1.27.5
