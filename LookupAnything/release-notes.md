@@ -6,6 +6,7 @@
 * Added music block lookups.
 * Fixed spawned stones sometimes showing info for a different item.
 * Fixed description for some generic spawned stones.
+* Fixed Scorpion Carp showing 'contents: no' field.
 * Internal refactor to translation handling.
 * Improved translations. Thanks to Enaium (updated Chinese), Macskasajt05 (added Hungarian), and zhxxn (updated Korean)!
 
