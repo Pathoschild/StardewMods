@@ -72,10 +72,10 @@ namespace ContentPatcher.Framework
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
-            fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "");
-            fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "");
-            fakePatchContext.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "");
-            fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "");
+            fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "$placeholder");
+            fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "$placeholder");
+            fakePatchContext.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "$placeholder");
+            fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "$placeholder");
 
             // get token parser for fake context
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);

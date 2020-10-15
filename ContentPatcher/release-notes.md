@@ -20,6 +20,7 @@ Released 13 September 2020.
 * `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like Generic Mod Config Menu.
 * Fixed `TextOperations` incorrectly adding delimiters when there's no previous value.
 * Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
+* Fixed error when using a field reference token as the only input to a token which requires input.
 
 ## 1.18.1
 Released 13 September 2020.
