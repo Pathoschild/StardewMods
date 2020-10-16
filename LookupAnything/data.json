@@ -117,32 +117,26 @@ You shouldn't change this file unless you know what you're doing.
     *********/
     "Shops": [
         {
-            "LocationName": "AdventureGuild",
             "DisplayKey": "shop.adventure-guild",
             "BuysCategories": [ -28, -98, -97, -96 ]
         },
         {
-            "LocationName": "Blacksmith",
             "DisplayKey": "shop.clint",
             "BuysCategories": [ -12, -2, -15 ]
         },
         {
-            "LocationName": "AnimalShop",
             "DisplayKey": "shop.marnie",
             "BuysCategories": [ -18, -6, -5, -14 ]
         },
         {
-            "LocationName": "SeedShop",
             "DisplayKey": "shop.pierre",
             "BuysCategories": [ -81, -75, -79, -80, -74, -17, -18, -6, -26, -5, -14, -19, -7, -25 ]
         },
         {
-            "LocationName": "ScienceHouse",
             "DisplayKey": "shop.robin",
             "BuysCategories": [ -16 ]
         },
         {
-            "LocationName": "FishShop",
             "DisplayKey": "shop.willy",
             "BuysCategories": [ -4, -23, -21, -22 ]
         }
@@ -852,32 +846,28 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.stone.name",
             "TypeKey": "data.type.debris", // default is 'asdf'
-            "DescriptionKey": "data.item.stone.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.stone.description" // no meaningful default
         },
         {
             "SpriteID": [ 75 ],
             "Context": "World",
             "NameKey": "data.item.geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.geode.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.geode.description" // no meaningful default
         },
         {
             "SpriteID": [ 76 ],
             "Context": "World",
             "NameKey": "data.item.frozen-geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.frozen-geode.name", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.frozen-geode.name" // no meaningful default
         },
         {
             "SpriteID": [ 77 ],
             "Context": "World",
             "NameKey": "data.item.magma-geode.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.magma-geode.description", // no meaningful default
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.magma-geode.description" // no meaningful default
         },
 
         /****
@@ -1010,11 +1000,10 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.iron-node.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.iron-node.description",
-            "ShowInventoryFields": false
+            "DescriptionKey": "data.item.iron-node.description"
         },
 
-        /* stones */
+        /* generic stones */
         {
             "SpriteID": [ 32 /*grey*/, 34 /*blue*/, 36 /*blue*/, 38 /*blue*/, 40 /*brown*/, 42 /*brown*/, 48 /*snowy*/, 50 /*snowy*/, 52 /*snowy*/, 54 /*snowy*/, 56 /*snowy*/, 58 /*snowy*/ ],
             "Context": "World",
@@ -1027,7 +1016,7 @@ You shouldn't change this file unless you know what you're doing.
             "Context": "World",
             "NameKey": "data.item.mine-stone.name",
             "TypeKey": "data.type.stone",
-            "DescriptionKey": "data.item.mine-stone.name"
+            "DescriptionKey": "data.item.mine-stone.description"
         },
 
         /****
@@ -1057,46 +1046,57 @@ You shouldn't change this file unless you know what you're doing.
     *********/
     "AdventureGuildQuests": [
         {
+            "KillListKey": "Slimes",
             "Targets": [ "Green Slime", "Frost Jelly", "Sludge" ],
             "RequiredKills": 1000
         },
         {
+            "KillListKey": "VoidSpirits",
             "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute" ],
             "RequiredKills": 150
         },
         {
+            "KillListKey": "Skeletons",
             "Targets": [ "Skeleton", "Skeleton Mage" ],
             "RequiredKills": 50
         },
         {
+            "KillListKey": "RockCrabs",
             "Targets": [ "Rock Crab", "Lava Crab", "Iridium Crab" ],
             "RequiredKills": 60
         },
         {
+            "KillListKey": "CaveInsects",
             "Targets": [ "Grub", "Fly", "Bug" ],
             "RequiredKills": 125
         },
         {
+            "KillListKey": "Bats",
             "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
             "RequiredKills": 200
         },
         {
+            "KillListKey": "Duggies",
             "Targets": [ "Duggy" ],
             "RequiredKills": 30
         },
         {
+            "KillListKey": "DustSprites",
             "Targets": [ "Dust Spirit" ],
             "RequiredKills": 500
         },
         {
+            "KillListKey": "Mummies",
             "Targets": [ "Mummy" ],
             "RequiredKills": 100
         },
         {
+            "KillListKey": "PepperRex",
             "Targets": [ "Pepper Rex" ],
             "RequiredKills": 50
         },
         {
+            "KillListKey": "Serpent",
             "Targets": [ "Serpent" ],
             "RequiredKills": 250
         }

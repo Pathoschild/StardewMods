@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "因相邻的物体无法生长",
     "fruit-tree.growth.summary": "将于 {{date}} 成熟",
-    "fruit-tree.next-fruit.struck-by-lighting": "被闪电击中！将在 {{count}} 天后复原。",
-    "fruit-tree.next-fruit.out-of-season": "过季",
     "fruit-tree.next-fruit.max-fruit": "收获这批水果之前无法再次结果",
+    "fruit-tree.next-fruit.out-of-season": "过季",
+    "fruit-tree.next-fruit.struck-by-lightning": "被闪电击中！将在 {{count}} 天后复原。",
     "fruit-tree.next-fruit.too-young": "树龄太小无法结果",
     "fruit-tree.quality.now": "目前{{quality}}",
     "fruit-tree.quality.on-date": "将于{{date}}获得{{quality}}",
@@ -434,6 +434,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -447,9 +456,7 @@
 
     // values
     "monster.drops.nothing": "无",
-    "monster.adventure-guild.complete": "完成",
-    "monster.adventure-guild.incomplete": "正在进行",
-    "monster.adventure-guild.progress": "击杀了总数{{requiredCount}}中的{{count}}",
+    "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}} (击杀了总数{{requiredCount}}中的{{count}})",
 
 
     /*********
@@ -550,8 +557,8 @@
     "tile.tile-index": "{{layerName}}：地格号",
     "tile.tilesheet": "{{layerName}}: 地格层",
     "tile.blend-mode": "{{layerName}}: 混合模式",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
+    "tile.index-property": "{{layerName}}: 指数属性: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: 属性: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "此处无地格",
@@ -575,11 +582,11 @@
     "tree.is-fertilized": "播洒树肥",
 
     // values
+    "tree.name.big-mushroom": "大蘑菇",
     "tree.name.maple": "枫树",
     "tree.name.oak": "橡树",
-    "tree.name.pine": "松树",
     "tree.name.palm": "棕榈树",
-    "tree.name.big-mushroom": "大蘑菇",
+    "tree.name.pine": "松树",
     "tree.name.unknown": "未知",
     "tree.stage.done": "完全长成",
     "tree.stage.partial": "{{stageName}} (总共{{max}}个阶段中的第{{step}}阶段)",

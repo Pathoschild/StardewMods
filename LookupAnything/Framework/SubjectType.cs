@@ -3,9 +3,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
     /// <summary>The type of an in-game entity for the mod's purposes.</summary>
     internal enum SubjectType
     {
-        /// <summary>The target type isn't recognized by the mod.</summary>
-        Unknown,
-
         /****
         ** NPCs
         ****/

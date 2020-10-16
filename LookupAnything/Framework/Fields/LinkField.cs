@@ -1,6 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
@@ -18,12 +18,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="text">The link text.</param>
         /// <param name="subject">Gets the subject the link points to.</param>
-        public LinkField(GameHelper gameHelper, string label, string text, Func<ISubject> subject)
-            : base(gameHelper, label, new FormattedText(text, Color.Blue))
+        public LinkField(string label, string text, Func<ISubject> subject)
+            : base(label, new FormattedText(text, Color.Blue))
         {
             this.Subject = subject;
         }

@@ -13,11 +13,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="fields">The debug fields to display.</param>
-        public DataMiningField(GameHelper gameHelper, string label, IEnumerable<IDebugField> fields)
-            : base(gameHelper, label)
+        public DataMiningField(string label, IEnumerable<IDebugField> fields)
+            : base(label)
         {
             IDebugField[] fieldArray = fields?.ToArray() ?? new IDebugField[0];
             this.HasValue = fieldArray.Any();

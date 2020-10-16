@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="items">The items to display.</param>
         /// <param name="showStackSize">Whether to draw the stack size on the item icon.</param>
         public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item> items, bool showStackSize)
-            : base(gameHelper, label, hasValue: items != null)
+            : base(label, hasValue: items != null)
         {
             if (items == null)
                 return;

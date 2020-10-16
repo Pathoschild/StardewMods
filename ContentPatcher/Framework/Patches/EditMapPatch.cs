@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, ManagedContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditMap,
@@ -122,7 +122,7 @@ namespace ContentPatcher.Framework.Patches
             // apply map area patch
             if (this.AppliesMapPatch)
             {
-                Map source = this.ContentPack.Load<Map>(this.FromAsset);
+                Map source = this.ContentPack.LoadAsset<Map>(this.FromAsset);
                 if (!this.TryApplyMapPatch(source, targetAsset, out string error))
                     this.Monitor.Log($"{errorPrefix}: map patch couldn't be applied: {error}", LogLevel.Warn);
             }

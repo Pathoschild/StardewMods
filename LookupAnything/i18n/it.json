@@ -292,9 +292,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "non può crescere perchè ci sono oggetti adiacenti",
     "fruit-tree.growth.summary": "maturerà il {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "colpito da un fulmine! Si riprenderà in {{count}} giorni.",
-    "fruit-tree.next-fruit.out-of-season": "fuori stagione",
     "fruit-tree.next-fruit.max-fruit": "non farà più crescere frutti fino a quando non raccoglierai quelli che ha ancora su di sé",
+    "fruit-tree.next-fruit.out-of-season": "fuori stagione",
+    "fruit-tree.next-fruit.struck-by-lightning": "colpito da un fulmine! Si riprenderà in {{count}} giorni.",
     "fruit-tree.next-fruit.too-young": "troppo giovane per fare frutti",
     "fruit-tree.quality.now": "qualità {{quality}} ora",
     "fruit-tree.quality.on-date": "qualità {{quality}} il {{date}}",
@@ -432,6 +432,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -445,9 +454,7 @@
 
     // values
     "monster.drops.nothing": "niente",
-    "monster.adventure-guild.complete": "completa",
-    "monster.adventure-guild.incomplete": "in corso",
-    "monster.adventure-guild.progress": "uccisi {{count}} su {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "Obiettivi Eradicazione Mostri: {{name}} (uccisi {{count}} su {{requiredCount}})",
 
 
     /*********
@@ -573,11 +580,11 @@
     "tree.is-fertilized": "È fertilizzato",
 
     // values
+    "tree.name.big-mushroom": "Fungo grande",
     "tree.name.maple": "Acero",
     "tree.name.oak": "Quercia",
-    "tree.name.pine": "Pino",
     "tree.name.palm": "Palma",
-    "tree.name.big-mushroom": "Fungo grande",
+    "tree.name.pine": "Pino",
     "tree.name.unknown": "Albero Sconosciuto",
     "tree.stage.done": "Completamente cresciuto",
     "tree.stage.partial": "{{stageName}} ({{step}} di {{max}})",

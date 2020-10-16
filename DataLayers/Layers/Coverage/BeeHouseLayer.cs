@@ -33,16 +33,15 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public BeeHouseLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("bee-houses.name"), config, input, monitor)
+        public BeeHouseLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(I18n.BeeHouses_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(translations, "bee-houses.range", Color.Green)
+                this.Covered = new LegendEntry(I18n.Keys.BeeHouses_Range, Color.Green)
             };
 
             this.RelativeRange = BeeHouseLayer
@@ -112,7 +111,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>Get a bee house tile radius.</summary>
         /// <param name="location">The bee house's location.</param>
         /// <param name="origin">The bee house's tile.</param>
-        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower(GameLocation, Vector2, int)"/>.</remarks>
+        /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower(GameLocation, Vector2)"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(GameLocation location, Vector2 origin)
         {
             if (!(location is Farm))

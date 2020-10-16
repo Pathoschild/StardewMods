@@ -11,16 +11,16 @@ namespace ContentPatcher.Framework
         ** Accessors
         *********/
         /// <summary>The managed content pack instance.</summary>
-        public ManagedContentPack ManagedPack { get; }
+        public IContentPack ContentPack { get; }
 
         /// <summary>The raw content configuration for this content pack.</summary>
         public ContentConfig Content { get; }
 
         /// <summary>The migrations to apply for the content pack version.</summary>
         public IMigration Migrator { get; }
-        
+
         /// <summary>The content pack's manifest.</summary>
-        public IManifest Manifest => this.ManagedPack.Manifest;
+        public IManifest Manifest => this.ContentPack.Manifest;
 
 
         /*********
@@ -30,9 +30,9 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The managed content pack instance.</param>
         /// <param name="content">The raw content configuration for this content pack.</param>
         /// <param name="migrator">The migrations to apply for the content pack version.</param>
-        public RawContentPack(ManagedContentPack contentPack, ContentConfig content, IMigration migrator)
+        public RawContentPack(IContentPack contentPack, ContentConfig content, IMigration migrator)
         {
-            this.ManagedPack = contentPack;
+            this.ContentPack = contentPack;
             this.Content = content;
             this.Migrator = migrator;
         }

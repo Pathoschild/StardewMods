@@ -10,7 +10,6 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Minigames;
-using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.DebugMode
 {
@@ -67,7 +66,8 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
-            // initialize
+            // init
+            I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
@@ -132,7 +132,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Correct the player's position when they warp into an area.</summary>
         /// <param name="location">The location the player entered.</param>
         /// <param name="player">The player who just warped.</param>
-        private void CorrectEntryPosition(GameLocation location, SFarmer player)
+        private void CorrectEntryPosition(GameLocation location, Farmer player)
         {
             switch (location.Name)
             {
@@ -158,7 +158,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="fromTile">The tile position from which to move the player.</param>
         /// <param name="toTile">The tile position to which to move the player.</param>
         /// <param name="facingDirection">The direction the player should be facing after they're moved.</param>
-        private void MovePlayerFrom(SFarmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
+        private void MovePlayerFrom(Farmer player, Vector2 fromTile, Vector2 toTile, PlayerDirection facingDirection)
         {
             if (player.getTileX() == (int)fromTile.X && player.getTileY() == (int)fromTile.Y)
             {
@@ -216,8 +216,8 @@ namespace Pathoschild.Stardew.DebugMode
             {
                 Vector2 tile = Game1.currentCursorTile;
 
-                yield return $"{this.Helper.Translation.Get("label.tile")}: {tile.X}, {tile.Y}";
-                yield return $"{this.Helper.Translation.Get("label.map")}:  {Game1.currentLocation.Name}";
+                yield return $"{I18n.Label_Tile()}: {tile.X}, {tile.Y}";
+                yield return $"{I18n.Label_Map()}:  {Game1.currentLocation.Name}";
             }
 
             // menu
@@ -227,9 +227,9 @@ namespace Pathoschild.Stardew.DebugMode
                 Type submenuType = this.GetSubmenu(Game1.activeClickableMenu)?.GetType();
                 string vanillaNamespace = typeof(TitleMenu).Namespace;
 
-                yield return $"{this.Helper.Translation.Get("label.menu")}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
+                yield return $"{I18n.Label_Menu()}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
                 if (submenuType != null)
-                    yield return $"{this.Helper.Translation.Get("label.submenu")}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
+                    yield return $"{I18n.Label_Submenu()}: {(submenuType.Namespace == vanillaNamespace ? submenuType.Name : submenuType.FullName)}";
             }
 
             // minigame
@@ -238,7 +238,7 @@ namespace Pathoschild.Stardew.DebugMode
                 Type minigameType = Game1.currentMinigame.GetType();
                 string vanillaNamespace = typeof(AbigailGame).Namespace;
 
-                yield return $"{this.Helper.Translation.Get("label.minigame")}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
+                yield return $"{I18n.Label_Minigame()}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
             }
 
             // event
@@ -251,18 +251,18 @@ namespace Pathoschild.Stardew.DebugMode
                 double progress = @event.CurrentCommand / (double)@event.eventCommands.Length;
 
                 if (isFestival)
-                    yield return $"{this.Helper.Translation.Get("label.festival-name")}: {festivalName}";
+                    yield return $"{I18n.Label_FestivalName()}: {festivalName}";
                 else
                 {
-                    yield return $"{this.Helper.Translation.Get("label.event-id")}: {eventID}";
+                    yield return $"{I18n.Label_EventId()}: {eventID}";
                     if (@event.CurrentCommand >= 0 && @event.CurrentCommand < @event.eventCommands.Length)
-                        yield return $"{this.Helper.Translation.Get("label.event-script")}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
+                        yield return $"{I18n.Label_EventScript()}: {@event.eventCommands[@event.CurrentCommand]} ({(int)(progress * 100)}%)";
                 }
             }
 
             // music
             if (Game1.currentSong?.Name != null && Game1.currentSong.IsPlaying)
-                yield return $"{this.Helper.Translation.Get("label.song")}: {Game1.currentSong.Name}";
+                yield return $"{I18n.Label_Song()}: {Game1.currentSong.Name}";
         }
 
         /// <summary>Get the submenu for the current menu, if any.</summary>

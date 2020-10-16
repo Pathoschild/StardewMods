@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Pathoschild.Stardew.Automate.Framework;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -28,10 +29,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public bool IsIgnored { get; set; }
 
         /// <summary>Whether Automate should take items from this container.</summary>
-        public ContainerAutomatePreference AutomateTakeItems { get; set; } = ContainerAutomatePreference.Allow;
+        public AutomateContainerPreference AutomateTakeItems { get; set; } = AutomateContainerPreference.Allow;
 
         /// <summary>Whether Automate should put items in this container.</summary>
-        public ContainerAutomatePreference AutomateStoreItems { get; set; } = ContainerAutomatePreference.Allow;
+        public AutomateContainerPreference AutomateStoreItems { get; set; } = AutomateContainerPreference.Allow;
 
         /// <summary>The sort value (if any).</summary>
         public int? Order { get; set; }
@@ -79,13 +80,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
                 // Automate options
                 else if (tag.ToLower() == "automate:no-store")
-                    data.AutomateStoreItems = ContainerAutomatePreference.Disable;
+                    data.AutomateStoreItems = AutomateContainerPreference.Disable;
                 else if (tag.ToLower() == "automate:prefer-store")
-                    data.AutomateStoreItems = ContainerAutomatePreference.Prefer;
+                    data.AutomateStoreItems = AutomateContainerPreference.Prefer;
                 else if (tag.ToLower() == "automate:no-take")
-                    data.AutomateTakeItems = ContainerAutomatePreference.Disable;
+                    data.AutomateTakeItems = AutomateContainerPreference.Disable;
                 else if (tag.ToLower() == "automate:prefer-take")
-                    data.AutomateTakeItems = ContainerAutomatePreference.Prefer;
+                    data.AutomateTakeItems = AutomateContainerPreference.Prefer;
             }
 
             // read display name
@@ -144,8 +145,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 || (this.Order.HasValue && this.Order != 0)
                 || this.IsIgnored
                 || !string.IsNullOrWhiteSpace(this.Category)
-                || this.AutomateTakeItems != ContainerAutomatePreference.Allow
-                || this.AutomateStoreItems != ContainerAutomatePreference.Allow;
+                || this.AutomateTakeItems != AutomateContainerPreference.Allow
+                || this.AutomateStoreItems != AutomateContainerPreference.Allow;
         }
 
         /// <summary>Reset all container data to the default.</summary>
@@ -155,8 +156,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             this.Order = null;
             this.IsIgnored = false;
             this.Category = null;
-            this.AutomateTakeItems = ContainerAutomatePreference.Allow;
-            this.AutomateStoreItems = ContainerAutomatePreference.Allow;
+            this.AutomateTakeItems = AutomateContainerPreference.Allow;
+            this.AutomateStoreItems = AutomateContainerPreference.Allow;
         }
     }
 }

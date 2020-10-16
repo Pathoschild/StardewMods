@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <AssemblyName>FastAnimations</AssemblyName>
-    <Version>1.9.1</Version>
+    <Version>1.9.2</Version>
     <RootNamespace>Pathoschild.Stardew.FastAnimations</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.2" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="$(SolutionDir)\common.targets" />
+  <Import Project="..\_build\common.targets" />
 
 </Project>

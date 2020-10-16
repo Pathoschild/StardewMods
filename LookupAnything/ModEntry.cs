@@ -11,8 +11,7 @@ using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -56,9 +55,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
 
-        /// <summary>Provides subject entries for target values.</summary>
-        private SubjectFactory SubjectFactory;
-
         /// <summary>Finds and analyzes lookup targets in the world.</summary>
         private TargetFactory TargetFactory;
 
@@ -78,7 +74,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // load translations
-            L10n.Init(helper.Translation);
+            I18n.Init(helper.Translation);
 
             // load & validate database
             this.LoadMetadata();
@@ -125,8 +121,7 @@ namespace Pathoschild.Stardew.LookupAnything
             var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
-            this.SubjectFactory = new SubjectFactory(this.Metadata, this.Helper.Translation, this.Helper.Reflection, this.GameHelper, this.Config);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, jsonAssets, this.SubjectFactory);
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, this.Config, jsonAssets, () => this.Config.EnableTileLookups);
             this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
         }
 
@@ -255,7 +250,7 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.");
                 this.PushMenu(
-                    new LookupMenu(this.GameHelper, subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
+                    new LookupMenu(subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
                 );
             });
         }
@@ -286,7 +281,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void ShowSearch()
         {
             this.PushMenu(
-                new SearchMenu(this.SubjectFactory, this.ShowLookupFor, this.Monitor)
+                new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor)
             );
         }
 
@@ -365,7 +360,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // world
             logMessage.Append(" searching the world...");
-            return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, this.Config.EnableTileLookups, hasCursor);
+            return this.TargetFactory.GetSubjectFrom(Game1.player, Game1.currentLocation, hasCursor);
         }
 
         /// <summary>Push a new menu onto the display stack, saving the previous menu if needed.</summary>

@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewValley;
 using StardewValley.Menus;
@@ -46,10 +47,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public bool IsIgnored => this.Container.Data.IsIgnored;
 
         /// <summary>Whether Automate should take items from this container.</summary>
-        public ContainerAutomatePreference AutomateTakeItems => this.Container.Data.AutomateTakeItems;
+        public AutomateContainerPreference AutomateTakeItems => this.Container.Data.AutomateTakeItems;
 
         /// <summary>Whether Automate should put items in this container.</summary>
-        public ContainerAutomatePreference AutomateStoreItems => this.Container.Data.AutomateStoreItems;
+        public AutomateContainerPreference AutomateStoreItems => this.Container.Data.AutomateStoreItems;
 
         /// <summary>The sort value (if any).</summary>
         public int? Order => this.Container.Data.Order;
@@ -86,7 +87,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="ignored">Whether the chest should be ignored.</param>
         /// <param name="automateStoreItems">Whether Automate should take items from this container.</param>
         /// <param name="automateTakeItems">Whether Automate should put items in this container.</param>
-        public void Update(string name, string category, int? order, bool ignored, ContainerAutomatePreference automateStoreItems, ContainerAutomatePreference automateTakeItems)
+        public void Update(string name, string category, int? order, bool ignored, AutomateContainerPreference automateStoreItems, AutomateContainerPreference automateTakeItems)
         {
             ContainerData data = this.Container.Data;
 

@@ -5,8 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework;
-using Pathoschild.Stardew.LookupAnything.Framework.Subjects;
-using Pathoschild.Stardew.LookupAnything.Framework.Targets;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -82,19 +81,17 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show targets within detection radius
                 Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(Game1.currentCursorTile);
-                IEnumerable<ITarget> targets = this.TargetFactory
-                    .GetNearbyTargets(currentLocation, cursorTile, includeMapTile: false)
-                    .OrderBy(p => p.Type == SubjectType.Unknown ? 0 : 1);
+                IEnumerable<ITarget> targets = this.TargetFactory.GetNearbyTargets(currentLocation, cursorTile).Where(p => p.Type != SubjectType.Tile);
                 // if targets overlap, prioritize info on known targets
                 foreach (ITarget target in targets)
                 {
                     // get metadata
                     bool spriteAreaIntersects = target.GetWorldArea().Intersects(tileArea);
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(target);
+                    ISubject subject = target.GetSubject();
 
                     // draw tile
                     {
-                        Rectangle tile = this.GameHelper.GetScreenCoordinatesFromTile(target.GetTile());
+                        Rectangle tile = this.GameHelper.GetScreenCoordinatesFromTile(target.Tile);
                         Color color = (subject != null ? Color.Green : Color.Red) * .5f;
                         spriteBatch.DrawLine(tile.X, tile.Y, new Vector2(tile.Width, tile.Height), color);
                     }
@@ -120,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show current target name (if any)
                 {
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, includeMapTile: false, hasCursor: Game1.wasMouseVisibleThisFrame);
+                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, hasCursor: Game1.wasMouseVisibleThisFrame);
                     if (subject != null)
                         this.GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
                 }

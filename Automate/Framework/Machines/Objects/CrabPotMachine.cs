@@ -45,16 +45,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
         {
-            if (this.Machine.heldObject.Value == null)
-            {
-                bool hasBait = this.Machine.bait.Value != null || Game1.player.professions.Contains(11); // no bait needed if luremaster
-                return hasBait
-                    ? MachineState.Processing
-                    : MachineState.Empty;
-            }
-            return this.Machine.readyForHarvest.Value
-                ? MachineState.Done
-                : MachineState.Processing;
+            MachineState state = this.GetGenericState();
+
+            if (state == MachineState.Empty && (this.Machine.bait.Value != null || !this.PlayerNeedsBait()))
+                state = MachineState.Processing;
+
+            return state;
         }
 
         /// <summary>Get the output item.</summary>
@@ -125,6 +121,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             this.Reflection.GetField<float>(pot, "lidFlapTimer").SetValue(60f);
             this.Reflection.GetField<Vector2>(pot, "shake").SetValue(Vector2.Zero);
             this.Reflection.GetField<float>(pot, "shakeTimer").SetValue(0f);
+        }
+
+        /// <summary>Get whether the current player needs to bait crab pots.</summary>
+        private bool PlayerNeedsBait()
+        {
+            return !Game1.player.professions.Contains(11); // no bait needed if luremaster
         }
     }
 }

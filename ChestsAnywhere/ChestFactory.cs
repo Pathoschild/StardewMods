@@ -33,9 +33,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Simplifies access to private code.</summary>
         private readonly IReflectionHelper Reflection;
 
-        /// <summary>Provides translations stored in the mod's folder.</summary>
-        private readonly ITranslationHelper Translations;
-
         /// <summary>Whether to support access to the shipping bin.</summary>
         private readonly bool EnableShippingBin;
 
@@ -47,14 +44,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
         /// <param name="multiplayer">Provides multiplayer utilities.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IDataHelper dataHelper, IMultiplayerHelper multiplayer, IReflectionHelper reflection, ITranslationHelper translations, bool enableShippingBin)
+        public ChestFactory(IDataHelper dataHelper, IMultiplayerHelper multiplayer, IReflectionHelper reflection, bool enableShippingBin)
         {
             this.DataHelper = dataHelper;
             this.Multiplayer = multiplayer;
             this.Reflection = reflection;
-            this.Translations = translations;
             this.EnableShippingBin = enableShippingBin;
         }
 
@@ -88,7 +83,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // get info
                     GameLocation location = entry.Location;
                     string category = defaultCategories.ContainsKey(entry.Category)
-                        ? this.Translations.Get("default-category.duplicate", new { locationName = entry.Category, number = ++defaultCategories[entry.Category] })
+                        ? I18n.DefaultCategory_Duplicate(locationName: entry.Category, number: ++defaultCategories[entry.Category])
                         : entry.Category;
 
                     // chests in location
@@ -107,7 +102,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
                                     location: location,
                                     tile: tile,
-                                    defaultDisplayName: this.Translations.Get("default-name.chest", new { number = ++namelessChests }),
+                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(130), number: ++namelessChests),
                                     defaultCategory: category
                                 );
                             }
@@ -119,7 +114,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
                                     location: location,
                                     tile: tile,
-                                    defaultDisplayName: this.Translations.Get("default-name.auto-grabber", new { number = ++namelessGrabbers }),
+                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(165), number: ++namelessGrabbers),
                                     defaultCategory: category
                                 );
                             }
@@ -136,7 +131,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ChestContainer(fridge, context: fridge, showColorPicker: false, this.Reflection),
                                 location: location,
                                 tile: Vector2.Zero,
-                                defaultDisplayName: this.Translations.Get("default-name.fridge"),
+                                defaultDisplayName: I18n.DefaultName_Fridge(),
                                 defaultCategory: category
                             );
                         }
@@ -172,7 +167,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     container: new JunimoHutContainer(hut, this.Reflection),
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
-                                    defaultDisplayName: this.Translations.Get("default-name.junimo-hut", new { number = ++namelessHuts }),
+                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBuildingName("Junimo Hut"), number: ++namelessHuts),
                                     defaultCategory: category
                                 );
                             }
@@ -182,20 +177,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // shipping bin
                     if (this.EnableShippingBin && location is Farm farm && object.ReferenceEquals(farm, Game1.getFarm()))
                     {
+                        string shippingBinLabel = GameI18n.GetBuildingName("Shipping Bin");
+
                         if (Constants.TargetPlatform == GamePlatform.Android)
                         {
                             yield return new ManagedChest(
                                 container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileStore),
                                 location: farm,
                                 tile: Vector2.Zero,
-                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin.store"),
+                                defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
                                 defaultCategory: category
                             );
                             yield return new ManagedChest(
                                 container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileTake),
                                 location: farm,
                                 tile: Vector2.Zero,
-                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin.take"),
+                                defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
                                 defaultCategory: category
                             );
                         }
@@ -205,7 +202,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.Normal),
                                 location: farm,
                                 tile: Vector2.Zero,
-                                defaultDisplayName: this.Translations.Get("default-name.shipping-bin"),
+                                defaultDisplayName: shippingBinLabel,
                                 defaultCategory: category
                             );
                         }
@@ -317,8 +314,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (location is Cabin cabin)
             {
                 return !string.IsNullOrWhiteSpace(cabin.owner?.Name)
-                    ? this.Translations.Get("default-category.owned-cabin", new { owner = cabin.owner?.Name })
-                    : this.Translations.Get("default-category.unowned-cabin");
+                    ? I18n.DefaultCategory_OwnedCabin(owner: cabin.owner?.Name)
+                    : I18n.DefaultCategory_UnownedCabin();
             }
 
             return location.Name;

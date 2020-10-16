@@ -30,7 +30,8 @@ namespace Pathoschild.Stardew.NoclipMode
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            // read config
+            // init
+            I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.ToggleKey = CommonHelper.ParseButtons(this.Config.ToggleKey, helper.Input, this.Monitor, nameof(this.Config.ToggleKey));
 
@@ -67,7 +68,7 @@ namespace Pathoschild.Stardew.NoclipMode
 
             // show message
             Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageID);
-            string text = this.Helper.Translation.Get(noclipEnabled ? "enabled-message" : "disabled-message", new { button = button });
+            string text = noclipEnabled ? I18n.EnabledMessage(button) : I18n.DisabledMessage(button);
             Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageID });
         }
 

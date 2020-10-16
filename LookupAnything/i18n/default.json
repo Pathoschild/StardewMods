@@ -164,7 +164,7 @@
     "location.forest": "forest",
     "location.forest.fish-area-0": "forest river",
     "location.forest.fish-area-1": "forest pond",
-    "location.forest.island-tip": "forest river (south tip of large island)", 
+    "location.forest.island-tip": "forest river (south tip of large island)",
     "location.mountain": "mountain",
     "location.railroad": "railroad",
     "location.sewer": "sewers",
@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "can't grow because there are adjacent objects",
     "fruit-tree.growth.summary": "mature on {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "struck by lightning! Will recover in {{count}} days.",
-    "fruit-tree.next-fruit.out-of-season": "out of season",
     "fruit-tree.next-fruit.max-fruit": "won't grow any more fruit until you harvest those it has",
+    "fruit-tree.next-fruit.out-of-season": "out of season",
+    "fruit-tree.next-fruit.struck-by-lightning": "struck by lightning! Will recover in {{count}} days.",
     "fruit-tree.next-fruit.too-young": "too young to bear fruit",
     "fruit-tree.quality.now": "{{quality}} now",
     "fruit-tree.quality.on-date": "{{quality}} on {{date}}",
@@ -433,6 +433,14 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -446,9 +454,7 @@
 
     // values
     "monster.drops.nothing": "nothing",
-    "monster.adventure-guild.complete": "complete",
-    "monster.adventure-guild.incomplete": "in progress",
-    "monster.adventure-guild.progress": "killed {{count}} of {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "eradication goal: {{name}} (killed {{count}} of {{requiredCount}})",
 
 
     /*********
@@ -574,11 +580,11 @@
     "tree.is-fertilized": "Is fertilized",
 
     // values
+    "tree.name.big-mushroom": "Big Mushroom",
     "tree.name.maple": "Maple Tree",
     "tree.name.oak": "Oak Tree",
-    "tree.name.pine": "Pine Tree",
     "tree.name.palm": "Palm Tree",
-    "tree.name.big-mushroom": "Big Mushroom",
+    "tree.name.pine": "Pine Tree",
     "tree.name.unknown": "Unknown Tree",
     "tree.stage.done": "Fully grown",
     "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",

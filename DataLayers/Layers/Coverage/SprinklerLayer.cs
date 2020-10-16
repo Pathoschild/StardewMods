@@ -40,20 +40,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public SprinklerLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("sprinklers.name"), config, input, monitor)
+        public SprinklerLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
+            : base(I18n.Sprinklers_Name(), config, input, monitor)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                this.Wet = new LegendEntry(translations, "sprinklers.covered", Color.Green),
-                this.Dry = new LegendEntry(translations, "sprinklers.dry-crops", Color.Red)
+                this.Wet = new LegendEntry(I18n.Keys.Sprinklers_Covered, Color.Green),
+                this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, Color.Red)
             };
 
             // get static sprinkler coverage

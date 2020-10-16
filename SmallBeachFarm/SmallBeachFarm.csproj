@@ -11,11 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.2" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-
-  <Import Project="$(SolutionDir)\common.targets" />
+  <Import Project="..\_build\common.targets" />
 
 </Project>

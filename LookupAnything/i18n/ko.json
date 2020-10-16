@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "주변의 물체가 방해해서 자랄 수 없음",
     "fruit-tree.growth.summary": "{{date}}일에 다 자람.",
-    "fruit-tree.next-fruit.struck-by-lighting": "벼락에 맞았다! {{count}}일 후 원상태로 회복.",
-    "fruit-tree.next-fruit.out-of-season": "제철이 아님",
     "fruit-tree.next-fruit.max-fruit": "현재 열린 열매들을 수확하지 않는다면 추가적인 열매를 맺지 않음",
+    "fruit-tree.next-fruit.out-of-season": "제철이 아님",
+    "fruit-tree.next-fruit.struck-by-lightning": "벼락에 맞았다! {{count}}일 후 원상태로 회복.",
     "fruit-tree.next-fruit.too-young": "열매를 맺기엔 너무 어림",
     "fruit-tree.quality.now": "현재 {{quality}}",
     "fruit-tree.quality.on-date": "{{date}}일에 {{quality}}",
@@ -406,7 +406,7 @@
     "item.fish-spawn-rules.min-fishing-level": "최소 낚시 레벨: {{level}}",
     "item.fish-spawn-rules.not-caught-yet": "아직 잡히지 않음(한 번만 잡을 수 있음)",
     "item.fish-spawn-rules.locations": "장소: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:", // TODO
+    "item.fish-spawn-rules.locations-by-season.label": "장소:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
     "item.fish-spawn-rules.season-any": "모든 계절",
     "item.fish-spawn-rules.season-list": "계절: {{seasons}}",
@@ -433,6 +433,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -446,9 +455,7 @@
 
     // values
     "monster.drops.nothing": "개털(아무것도 안 줌)",
-    "monster.adventure-guild.complete": "토벌 완료",
-    "monster.adventure-guild.incomplete": "토벌 중",
-    "monster.adventure-guild.progress": "목표 {{requiredCount}} 중 {{count}} 처치.",
+    "monster.adventure-guild.eradication-goal": "몬스터 박멸 목표: {{name}} (목표 {{requiredCount}} 중 {{count}} 처치)",
 
 
     /*********
@@ -574,11 +581,11 @@
     "tree.is-fertilized": "수정됨",
 
     // values
+    "tree.name.big-mushroom": "큰 버섯",
     "tree.name.maple": "단풍나무",
     "tree.name.oak": "참나무",
-    "tree.name.pine": "소나무",
     "tree.name.palm": "야자나무",
-    "tree.name.big-mushroom": "큰 버섯",
+    "tree.name.pine": "소나무",
     "tree.name.unknown": "알 수 없는 나무",
     "tree.stage.done": "다 자람",
     "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",

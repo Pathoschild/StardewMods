@@ -38,17 +38,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public CropPaddyWaterLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("crop-paddy-water.name"), config, input, monitor)
+        public CropPaddyWaterLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(I18n.CropPaddyWater_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.InRange = new LegendEntry(translations, "crop-paddy-water.in-range", Color.Green),
-                this.NotInRange = new LegendEntry(translations, "crop-paddy-water.not-in-range", Color.Red)
+                this.InRange = new LegendEntry(I18n.Keys.CropPaddyWater_InRange, Color.Green),
+                this.NotInRange = new LegendEntry(I18n.Keys.CropPaddyWater_NotInRange, Color.Red)
             };
         }
 

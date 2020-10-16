@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "자동-수확기 #{{number}}",
-    "default-name.chest": "상자 #{{number}}",
     "default-name.fridge": "냉장고",
-    "default-name.junimo-hut": "주니모 오두막 #{{number}}",
-    "default-name.shipping-bin": "출하 상자",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "아이템 출하",
+    "default-name.shipping-bin.take": "아이템 회수",
 
     // default category names
     "default-category.owned-cabin": "객실 ({{owner}})",

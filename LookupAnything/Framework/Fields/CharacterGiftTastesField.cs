@@ -22,7 +22,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
         /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
         public CharacterGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
-            : base(gameHelper, label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
+            : base(label, CharacterGiftTastesField.GetText(gameHelper, giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
 
 
         /*********
@@ -77,10 +77,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 if (unrevealed > 0)
-                    yield return new FormattedText(L10n.Npc.UndiscoveredVillagersAppend(count: unrevealed), Color.Gray);
+                    yield return new FormattedText(I18n.Npc_UndiscoveredGiftTasteAppended(count: unrevealed), Color.Gray);
             }
             else
-                yield return new FormattedText(L10n.Npc.UndiscoveredVillagers(count: unrevealed), Color.Gray);
+                yield return new FormattedText(I18n.Npc_UndiscoveredGiftTaste(count: unrevealed), Color.Gray);
         }
     }
 }

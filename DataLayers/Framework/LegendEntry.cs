@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
@@ -34,10 +33,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">The translation helper from which to get the display text based on the <paramref name="id"/>.</param>
-        /// <param name="id">A unique identifier for the legend entry.</param>
+        /// <param name="id">The unique identifier and translation key the legend entry.</param>
         /// <param name="color">The tile color.</param>
-        public LegendEntry(ITranslationHelper translations, string id, Color color)
-            : this(id, translations.Get(id), color) { }
+        public LegendEntry(string id, Color color)
+            : this(id, I18n.GetByKey(id), color) { }
     }
 }

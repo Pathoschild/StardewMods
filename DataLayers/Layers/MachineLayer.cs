@@ -30,19 +30,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public MachineLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("machines.name"), config, input, monitor)
+        public MachineLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
+            : base(I18n.Machines_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Empty = new LegendEntry(translations, "machines.empty", Color.Red),
-                this.Processing = new LegendEntry(translations, "machines.processing", Color.Orange),
-                this.Finished = new LegendEntry(translations, "machines.finished", Color.Green)
+                this.Empty = new LegendEntry(I18n.Keys.Machines_Empty, Color.Red),
+                this.Processing = new LegendEntry(I18n.Keys.Machines_Processing, Color.Orange),
+                this.Finished = new LegendEntry(I18n.Keys.Machines_Finished, Color.Green)
             };
             this.Mods = mods;
         }
@@ -88,20 +87,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 LegendEntry type = null;
                 if (machineStates.TryGetValue(tile, out int state))
                 {
-                    switch (state)
+                    type = state switch
                     {
-                        case 1:
-                            type = this.Empty;
-                            break;
-
-                        case 2:
-                            type = this.Processing;
-                            break;
-
-                        case 3:
-                            type = this.Finished;
-                            break;
-                    }
+                        1 => this.Empty,
+                        2 => this.Processing,
+                        3 => this.Finished,
+                        _ => null
+                    };
                 }
 
                 if (type != null)

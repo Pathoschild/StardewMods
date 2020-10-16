@@ -292,9 +292,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "No puede crecer porque hay objetos a su alrededor",
     "fruit-tree.growth.summary": "Madura en {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "¡Alcanzado por un rayo! Se recuperará en {{count}} días.",
-    "fruit-tree.next-fruit.out-of-season": "Fuera de temporada",
     "fruit-tree.next-fruit.max-fruit": "No generará más frutas hasta que coseches las que ya tiene",
+    "fruit-tree.next-fruit.out-of-season": "Fuera de temporada",
+    "fruit-tree.next-fruit.struck-by-lightning": "¡Alcanzado por un rayo! Se recuperará en {{count}} días.",
     "fruit-tree.next-fruit.too-young": "Demasiado joven para dar frutas",
     "fruit-tree.quality.now": "{{quality}} ahora",
     "fruit-tree.quality.on-date": "{{quality}} en {{date}}",
@@ -432,6 +432,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -445,9 +454,7 @@
 
     // values
     "monster.drops.nothing": "Nada",
-    "monster.adventure-guild.complete": "Completo",
-    "monster.adventure-guild.incomplete": "En progreso",
-    "monster.adventure-guild.progress": "Eliminados {{count}} de {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "Erradicación de monstruos: {{name}} (Eliminados {{count}} de {{requiredCount}})",
 
 
     /*********
@@ -574,11 +581,11 @@
     "tree.is-fertilized": "ha sido fertilizado",
 
     // values
+    "tree.name.big-mushroom": "Seta gigante",
     "tree.name.maple": "Arce",
     "tree.name.oak": "Roble",
-    "tree.name.pine": "Pino",
     "tree.name.palm": "Palmera",
-    "tree.name.big-mushroom": "Seta gigante",
+    "tree.name.pine": "Pino",
     "tree.name.unknown": "Árbol desconocido",
     "tree.stage.done": "Completamente maduro",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",

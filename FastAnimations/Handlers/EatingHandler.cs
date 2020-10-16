@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -116,8 +117,8 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             {
                 string actualLine = this.Reflection.GetField<List<string>>(dialogue, "dialogues").GetValue().FirstOrDefault();
                 bool isConfirmation =
-                    actualLine == Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3159", Game1.player.itemToEat.DisplayName) // drink
-                    || actualLine == Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName); // eat
+                    actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3159", Game1.player.itemToEat.DisplayName) // drink
+                    || actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName); // eat
 
                 if (isConfirmation)
                 {

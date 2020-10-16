@@ -77,68 +77,102 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
-            // chest container 
+            // chest container
             if (obj is Chest chest && chest.playerChest.Value)
                 return new ChestContainer(chest, location, tile, this.Reflection);
 
-            // machine
-            if (obj.ParentSheetIndex == 165)
-                return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
-            if (obj.name == "Bee House")
-                return new BeeHouseMachine(obj, location, tile);
-            if (obj is Cask cask)
-                return new CaskMachine(cask, location, tile);
-            if (obj.name == "Charcoal Kiln")
-                return new CharcoalKilnMachine(obj, location, tile);
-            if (obj.name == "Cheese Press")
-                return new CheesePressMachine(obj, location, tile);
-            if (obj is CrabPot pot)
-                return new CrabPotMachine(pot, location, tile, this.Monitor, this.Reflection);
-            if (obj.Name == "Crystalarium")
-                return new CrystalariumMachine(obj, location, tile, this.Reflection);
-            if (obj.name == "Feed Hopper")
-                return new FeedHopperMachine(location, tile);
-            if (obj.Name == "Furnace")
-                return new FurnaceMachine(obj, location, tile);
-            if (obj.name == "Incubator")
-                return new CoopIncubatorMachine(obj, location, tile);
-            if (obj.Name == "Keg")
-                return new KegMachine(obj, location, tile);
-            if (obj.name == "Lightning Rod")
-                return new LightningRodMachine(obj, location, tile);
-            if (obj.name == "Loom")
-                return new LoomMachine(obj, location, tile);
-            if (obj.name == "Mayonnaise Machine")
-                return new MayonnaiseMachine(obj, location, tile);
-            if (obj.Name == "Mushroom Box")
-                return new MushroomBoxMachine(obj, location, tile);
-            if (obj.name == "Oil Maker")
-                return new OilMakerMachine(obj, location, tile);
-            if (obj.name == "Preserves Jar")
-                return new PreservesJarMachine(obj, location, tile);
-            if (obj.name == "Recycling Machine")
-                return new RecyclingMachine(obj, location, tile);
-            if (obj.name == "Seed Maker")
-                return new SeedMakerMachine(obj, location, tile);
-            if (obj.name == "Slime Egg-Press")
-                return new SlimeEggPressMachine(obj, location, tile);
-            if (obj.name == "Slime Incubator")
-                return new SlimeIncubatorMachine(obj, location, tile);
-            if (obj.name == "Soda Machine")
-                return new SodaMachine(obj, location, tile);
-            if (obj.name == "Statue Of Endless Fortune")
-                return new StatueOfEndlessFortuneMachine(obj, location, tile);
-            if (obj.name == "Statue Of Perfection")
-                return new StatueOfPerfectionMachine(obj, location, tile);
-            if (obj.name == "Tapper")
+            // machine by type
+            switch (obj)
             {
-                if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
-                    return new TapperMachine(obj, location, tile, tree.treeType.Value);
+                case Cask cask:
+                    return new CaskMachine(cask, location, tile);
+
+                case CrabPot pot:
+                    return new CrabPotMachine(pot, location, tile, this.Monitor, this.Reflection);
+
+                case WoodChipper woodChipper:
+                    return new WoodChipperMachine(woodChipper, location, tile);
             }
-            if (obj is WoodChipper woodChipper)
-                return new WoodChipperMachine(woodChipper, location, tile);
-            if (obj.name == "Worm Bin")
-                return new WormBinMachine(obj, location, tile);
+
+            // machine by index
+            switch (obj.ParentSheetIndex)
+            {
+                case 165:
+                    return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+            }
+
+            // machine by name
+            switch (obj.name)
+            {
+                case "Bee House":
+                    return new BeeHouseMachine(obj, location, tile);
+
+                case "Charcoal Kiln":
+                    return new CharcoalKilnMachine(obj, location, tile);
+
+                case "Cheese Press":
+                    return new CheesePressMachine(obj, location, tile);
+
+                case "Crystalarium":
+                    return new CrystalariumMachine(obj, location, tile, this.Reflection);
+
+                case "Feed Hopper":
+                    return new FeedHopperMachine(location, tile);
+
+                case "Furnace":
+                    return new FurnaceMachine(obj, location, tile);
+
+                case "Incubator":
+                    return new CoopIncubatorMachine(obj, location, tile);
+
+                case "Keg":
+                    return new KegMachine(obj, location, tile);
+
+                case "Lightning Rod":
+                    return new LightningRodMachine(obj, location, tile);
+
+                case "Loom":
+                    return new LoomMachine(obj, location, tile);
+
+                case "Mayonnaise Machine":
+                    return new MayonnaiseMachine(obj, location, tile);
+
+                case "Mushroom Box":
+                    return new MushroomBoxMachine(obj, location, tile);
+
+                case "Oil Maker":
+                    return new OilMakerMachine(obj, location, tile);
+
+                case "Preserves Jar":
+                    return new PreservesJarMachine(obj, location, tile);
+
+                case "Recycling Machine":
+                    return new RecyclingMachine(obj, location, tile);
+
+                case "Seed Maker":
+                    return new SeedMakerMachine(obj, location, tile);
+
+                case "Slime Egg-Press":
+                    return new SlimeEggPressMachine(obj, location, tile);
+
+                case "Slime Incubator":
+                    return new SlimeIncubatorMachine(obj, location, tile);
+
+                case "Soda Machine":
+                    return new SodaMachine(obj, location, tile);
+
+                case "Statue Of Endless Fortune":
+                    return new StatueOfEndlessFortuneMachine(obj, location, tile);
+
+                case "Statue Of Perfection":
+                    return new StatueOfPerfectionMachine(obj, location, tile);
+
+                case "Tapper" when (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree):
+                    return new TapperMachine(obj, location, tile, tree.treeType.Value);
+
+                case "Worm Bin":
+                    return new WormBinMachine(obj, location, tile);
+            }
 
             // connector
             if (this.IsConnector(obj))
@@ -155,10 +189,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
         {
             // machine
-            if (feature is FruitTree fruitTree)
-                return new FruitTreeMachine(fruitTree, location, tile);
-            if (feature is Bush bush && BushMachine.CanAutomate(bush))
-                return new BushMachine(bush, location);
+            switch (feature)
+            {
+                case FruitTree fruitTree:
+                    return new FruitTreeMachine(fruitTree, location, tile);
+
+                case Bush bush when BushMachine.CanAutomate(bush):
+                    return new BushMachine(bush, location);
+            }
 
             // connector
             if (this.IsConnector(feature))
@@ -174,17 +212,26 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
         {
-            // machine
-            if (building is FishPond pond)
-                return new FishPondMachine(pond, location);
-            if (building is JunimoHut hut)
-                return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
-            if (building is Mill mill)
-                return new MillMachine(mill, location);
-            if (building is ShippingBin bin)
-                return new ShippingBinMachine(bin, location, Game1.getFarm());
+            // building by type
+            switch (building)
+            {
+                case FishPond pond:
+                    return new FishPondMachine(pond, location);
+
+                case JunimoHut hut:
+                    return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
+
+                case Mill mill:
+                    return new MillMachine(mill, location);
+
+                case ShippingBin bin:
+                    return new ShippingBinMachine(bin, location, Game1.getFarm());
+            }
+
+            // building by buildingType
             if (building.buildingType.Value == "Silo")
                 return new FeedHopperMachine(building, location);
+
             return null;
         }
 

@@ -43,10 +43,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="input">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
-        public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, ITranslationHelper translations, bool showAutomateOptions)
-            : base(menu, chest, chests, config, keys, events, input, reflection, translations, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu, topOffset: -Game1.pixelZoom * 9)
+        public ChestOverlay(ItemGrabMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions)
+            : base(menu, chest, chests, config, keys, events, input, reflection, showAutomateOptions, keepAlive: () => Game1.activeClickableMenu is ItemGrabMenu, topOffset: -Game1.pixelZoom * 9)
         {
             this.Menu = menu;
             this.MenuInventoryMenu = menu.ItemsToGrabMenu;
@@ -134,7 +133,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 ClickableTextureComponent okButton = this.Menu.okButton;
                 float zoom = Game1.pixelZoom;
                 Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, this.Translations.Get("button.sort-inventory"), Sprites.Icons.Sheet, sprite, zoom);
+                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, I18n.Button_SortInventory(), Sprites.Icons.Sheet, sprite, zoom);
 
                 // adjust menu to fit
                 this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;

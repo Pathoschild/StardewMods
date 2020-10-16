@@ -330,7 +330,7 @@ namespace ContentPatcher
                     }
 
                     // init
-                    rawContentPack = new RawContentPack(new ManagedContentPack(contentPack), content, migrator);
+                    rawContentPack = new RawContentPack(contentPack, content, migrator);
                 }
                 catch (Exception ex)
                 {
@@ -361,12 +361,12 @@ namespace ContentPatcher
                     ContentConfig content = current.Content;
 
                     // load tokens
-                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ManagedPack);
+                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ContentPack);
                     TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
                     {
                         // load config.json
-                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ManagedPack, content.ConfigSchema, current.Content.Format);
-                        configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ContentPack, content.ConfigSchema, current.Content.Format);
+                        configFileHandler.Save(current.ContentPack, config, this.Helper);
                         if (config.Any())
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
 
@@ -379,7 +379,7 @@ namespace ContentPatcher
                         {
                             GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(this.Helper.ModRegistry, this.Monitor, current.Manifest, this.ParseCommaDelimitedField, config, saveAndApply: () =>
                             {
-                                configFileHandler.Save(current.ManagedPack, config, this.Helper);
+                                configFileHandler.Save(current.ContentPack, config, this.Helper);
                                 this.PatchLoader.UnloadPatchesLoadedBy(current, false);
                                 this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
                             });

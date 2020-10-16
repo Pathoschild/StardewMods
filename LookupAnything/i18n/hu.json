@@ -1,0 +1,604 @@
+{
+    /*********
+    ** Generic translations
+    *********/
+    // date names
+    "generic.now": "most",
+    "generic.tomorrow": "holnap",
+    "generic.yesterday": "tegnap",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% eséllyel {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} / {{max}})",
+    "generic.ratio": "{{value}} / {{max}}",
+    "generic.range": "{{min}} és {{max}} között",
+    "generic.yes": "igen",
+    "generic.no": "nem",
+    "generic.seconds": "{{count}} másodperc",
+    "generic.minutes": "{{count}} perc",
+    "generic.hours": "{{count}} óra",
+    "generic.days": "{{count}} nap",
+    "generic.in-x-days": "{{count}} nap múlva",
+    "generic.x-days-ago": "{{count}} napja",
+    "generic.price": "{{price}}g",
+    "generic.price-for-quality": "{{price}}g ({{quality}})",
+    "generic.price-for-stack": "{{price}}g {{count}} rakásért",
+
+    // types
+    "type.building": "Építmény",
+    "type.bush": "Bokor",
+    "type.fruit-tree": "Gyümölcsfa",
+    "type.map-tile": "Térkép Elem",
+    "type.monster": "Szörny",
+    "type.player": "Játékos",
+    "type.tree": "Fa",
+    "type.villager": "Falusi",
+    "type.other": "Egyéb", // default type
+
+    // item qualities
+    "quality.normal": "sima",
+    "quality.silver": "ezüst",
+    "quality.gold": "arany",
+    "quality.iridium": "irídium",
+
+    // NPC friendship
+    "friendship-status.friendly": "Barát",
+    "friendship-status.dating": "Randi",
+    "friendship-status.engaged": "Jegyes",
+    "friendship-status.married": "Házas",
+    "friendship-status.divorced": "Elvált",
+    "friendship-status.kicked-out": "Kirúgott",
+
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Éléskamra",
+    "bundle-area.crafts-room": "Barkácsszoba",
+    "bundle-area.fish-tank": "Akvárium",
+    "bundle-area.boiler-room": "Kazánház",
+    "bundle-area.vault": "Széf",
+    "bundle-area.bulletin-board": "Faliújság",
+    "bundle-area.abandoned-joja-mart": "Elhagyatott Joja Mart",
+
+    // shop names
+    "shop.adventure-guild": "Kalandorok Céhe",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.willy": "Willy",
+
+    // recipe types
+    "recipe-type.cooking": "Ételek",
+    "recipe-type.crafting": "Barkácsolás",
+
+    // NPC descriptions
+    "data.npc.pet.description": "A hűséges háziállatod.",
+    "data.npc.horse.description": "A hűséges hátasod.",
+    "data.npc.junimo.description": "Egy erdeőlélek a lelkek világból. Nagyon keveset tudunk róluk.",
+    "data.npc.trashbear.description": "Egy barátságos lélek, aki összeszedi a szemetet.",
+
+    // item types
+    "data.type.debris": "Törmelék",
+    "data.type.stone": "Kő",
+    "data.type.container": "Tartály",
+
+    // farm items
+    "data.item.egg-incubator.description": "Csibéket és pipéket keltet ki a tojásokból.",
+    "data.item.broken-branch.name": "Törött Ág",
+    "data.item.broken-branch.description": "Egy törött ág. Aprítsd fel egy baltával, hogy faanyagot szerezhess.",
+    "data.item.stone.name": "Kő",
+    "data.item.stone.description": "Egy meghatározhatatlan szürke kő. Törd szét, hogy kőhöz juss.",
+    "data.item.geode.name": "Geódát Tartalmazó Kőzet",
+    "data.item.geode.description": "Törd szét, hogy geódához juss.",
+    "data.item.frozen-geode.name": "Fagyos Geódát Tartalmazó Kőzet",
+    "data.item.frozen-geode.description": "Törd szét, hogy fagyos geódához juss.",
+    "data.item.magma-geode.name": "Magma Geódát Tartalmazó Kőzet",
+    "data.item.magma-geode.description": "Törd szét, hogy magma geódához juss.",
+
+    // weeds & crystals
+    "data.item.weed.name": "Gyom",
+    "data.item.weed.description": "Egy meghatározhatatlan gyom. Lehet, hogy tartalmaz növényi rostot, vagy kevert magvakat.",
+    "data.item.fertile-weed.name": "Termékeny Gyom",
+    "data.item.fertile-weed.description": "Garantáltan tartalmaz kevert magvakat.",
+    "data.item.ice-crystal.name": "Jégkristály",
+    "data.item.ice-crystal.description": "Egy meghatározhatatlan jégkristály. Nagyon kicsi eséllyel tartalmazhat finomított kvarcot.",
+
+    // mine gems
+    "data.item.amethyst-node.name": "Ametisztet Tartalmazó Kőzet",
+    "data.item.amethyst-node.description": "Törd szét, hogy ametiszthez juss.",
+    "data.item.aquamarine-node.name": "Akvamarint Tartalmaző Kőzet",
+    "data.item.aquamarine-node.description": "Törd szét, hogy akvamarinhoz juss.",
+    "data.item.diamond-node.name": "Gyémántot Tartalmazó Kőzet",
+    "data.item.diamond-node.description": "Törd szét, hogy gyémánthoz juss.",
+    "data.item.emerald-node.name": "Smaragdot Tartalmazó Kőzet",
+    "data.item.emerald-node.description": "Törd szét, hogy smaragdhoz juss.",
+    "data.item.gem-node.name": "Drágakövet Tartalmazó Kőzet",
+    "data.item.gem-node.description": "Törd szét, hogy smaragdhoz, akvamarinhoz, rubinhoz, ametiszthez, topázhoz, jádéhoz, vagy gyémánthoz juss.",
+    "data.item.jade-node.name": "Jádét Tartalmazó Kőzet",
+    "data.item.jade-node.description": "Törd szét, hogy jádéhoz juss.",
+    "data.item.mystic-stone.name": "Misztikus Kőzet",
+    "data.item.mystic-stone.description": "Törd szét, hogy ritka drágakövekhez, ércekhez, valamint prizmás töredékhez juss.",
+    "data.item.prismatic-node.name": "Prizmás Kőzet",
+    "data.item.prismatic-node.description": "Törd szét, hogy prizmás töredékhez juss.",
+    "data.item.ruby-node.name": "Rubint Tartalmazó Kőzet",
+    "data.item.ruby-node.description": "Törd szét, hogy rubinhoz juss.",
+    "data.item.topaz-node.name": "Topázt tartalmazó Kőzet",
+    "data.item.topaz-node.description": "Törd szét, hogy topázhoz juss.",
+
+    // mine ores
+    "data.item.copper-node.name": "Rézércet Tartalmazó Kőzet",
+    "data.item.copper-node.description": "Törd szét, hogy rézérchez juss.",
+    "data.item.gold-node.name": "Aranyércet Tartalmazó Kőzet",
+    "data.item.gold-node.description": "Törd szét, hogy aranyérchez juss.",
+    "data.item.iridium-node.name": "Irídiumot Tartalmazó Kőzet",
+    "data.item.iridium-node.description": "Törd szét, hogy irídiumhoz juss.",
+    "data.item.iron-node.name": "Vasércet Tartalmazó Kőzet",
+    "data.item.iron-node.description": "Törd szét, hogy vasérchez juss.",
+
+    // mine stones
+    "data.item.colored-stone.name": "Színes Kő",
+    "data.item.colored-stone.description": "Egy meghatározhatatlan kő. Lehet, hogy tartalmaz követ, érceket, vagy geódákat.",
+    "data.item.mine-stone.name": "Kő",
+    "data.item.mine-stone.description": "Törd szét, hogy kőhöz juss.",
+
+    // mine containers
+    "data.item.barrel.name": "Hordó",
+    "data.item.barrel.description": "Törd szét, hogy különböző tárgyakhoz juss.",
+    "data.item.box.name": "Doboz",
+    "data.item.box.description": "Törd szét, hogy különböző tárgyakhoz juss.",
+
+    // location names
+    "location.backwoods": "hátsó erdő",
+    "location.beach": "tengerpart",
+    "location.beach.east-pier": "tengerpart (keleti móló)",
+    "location.bugLand": "mutáns rovar odú",
+    "location.busStop": "buszmegálló",
+    "location.desert": "sivatag",
+    "location.farm": "farm",
+    "location.farmCave": "farmbarlang",
+    "location.farmHouse": "parasztház",
+    "location.forest": "erdő",
+    "location.forest.fish-area-0": "erdei folyó",
+    "location.forest.fish-area-1": "erdei tó",
+    "location.forest.island-tip": "erdei folyó (nagy sziget déli csücske)",
+    "location.mountain": "hegy",
+    "location.railroad": "vasút",
+    "location.sewer": "szennyvízcsatorna",
+    "location.submarine": "Éjszakai Piac tengeralattjáró",
+    "location.town": "város",
+    "location.town.northmost-bridge": "város (legészakibb híd)",
+    "location.tunnel": "buszalagút",
+    "location.undergroundMine": "bányák",
+    "location.undergroundMine.level": "bánya {{level}}. szintje",
+    "location.witchSwamp": "boszorkány mocsár",
+    "location.woods": "titkos erdő",
+    "location.unknown-fish-area": "{{locationName}} (Horgászhely: {{id}})",
+
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Szeretet",
+    "animal.happiness": "Boldogság",
+    "animal.mood": "Mai hangulat",
+    "animal.complaints": "Panaszok",
+    "animal.produce-ready": "Kész a termék",
+    "animal.growth": "Növekedés",
+    "animal.sells-for": "Ára",
+
+    // values
+    "animal.complaints.hungry": "nem evett tegnap",
+    "animal.complaints.left-out": "kint marad éjjel",
+    "animal.complaints.new-home": "új otthona lett",
+    "animal.complaints.no-heater": "nincs radiátor télen",
+    "animal.complaints.not-petted": "nem kapott simogatást",
+    "animal.complaints.wild-animal-attack": "vadállatok támadtak rá éjjel",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Állatok",
+    "building.construction": "Építkezés",
+    "building.feed-trough": "Etetővályú",
+    "building.horse": "Ló",
+    "building.horse-location": "Ló elhelyezkedése",
+    "building.owner": "Tulajdonos",
+    "building.slimes": "Ragacsok",
+    "building.stored-hay": "Eltárolt Széna",
+    "building.upgrades": "Fejlesztések",
+    "building.water-trough": "Itatóvályú",
+
+    // values
+    "building.animals.summary": "{{count}} / {{max}} állat",
+    "building.construction.summary": "készen lesz a hónap {{date}} napján",
+    "building.feed-trough.automated": "automatizált",
+    "building.feed-trough.summary": "{{filled}} / {{max}} etető hely van feltöltve",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Aratás engedélyezett",
+    "building.owner.none": "nincs tulajdonos",
+    "building.output-processing": "Termék feldolgozás alatt",
+    "building.output-ready": "Termék kész",
+    "building.slimes.summary": "{{count}} / {{max}} ragacs",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} széna (maximum kapacitás: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} / {{siloCount}} széna a silókban (maximum kapacitás: {{maxHay}})",
+    "building.upgrades.barn.0": "maximum 4 állat fér el, elérhetőek lesznek a tehenek",
+    "building.upgrades.barn.1": "maximum 8 állat fér el, elérhetőek lesznek a kecskék és a vemhesség",
+    "building.upgrades.barn.2": "maximum 12 állat fér el, elérhetőek lesznek a disznók, juhok és az automatikus etetőrendszer",
+    "building.upgrades.cabin.0": "kezdő hunyhó",
+    "building.upgrades.cabin.1": "elérhető a konyha, lehetséges a házasság",
+    "building.upgrades.cabin.2": "gyerekek elérhetőek",
+    "building.upgrades.coop.0": "maximum 4 állat fér el, elérhetőek lesznek a csirkék",
+    "building.upgrades.coop.1": "maximum 8 állat fér el, elérhetőek lesznek a dínók, kacsák és az inkubátor",
+    "building.upgrades.coop.2": "maximum 12 állat fér el, elérhetőek lesznek a nyulak és az automatikus etetőrendszer",
+    "building.water-trough.summary": "{{filled}} / {{max}} itatóvályú van feltőltve",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Populáció",
+    "building.fish-pond.drops": "Termékek",
+    "building.fish-pond.quests": "Küldetések",
+
+    // values
+    "building.fish-pond.population.empty": "Helyezzen bele egy halat, hogy beindítsa a tavat",
+    "building.fish-pond.population.next-spawn": "Új halak keletkezése {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% esély van rá minden nap, hogy termeljen a megadott termékből:",
+    "building.fish-pond.drops.min-fish": "{{count}} darab hallal:",
+    "building.fish-pond.quests.done": "{{count}} hal",
+    "building.fish-pond.quests.incomplete-one": "{{count}} hal: szüksége van a következőre: {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} hal: szüksége van egyre a következőkből: {{itemList}}",
+    "building.fish-pond.quests.available": "elérhető ekkortól: {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Bogyós Bokor",
+    "bush.name.plain": "Sima Bokor",
+    "bush.name.tea": "Tea Cserje",
+    "bush.description.berry": "Egy bokor, melyen díszszeder, és feketeszeder nő.",
+    "bush.description.plain": "Egy sima bokor, melyen semmi se nő.",
+    "bush.description.Tea": "Egy bokor, melyen tealevelek nőnek.",
+    "bush.date-planted": "Elültetés dátuma",
+    "bush.growth": "Növekedés",
+    "bush.next-harvest": "Következő aratás",
+
+    // values
+    "bush.growth.summary": "megérik ekkor: {{date}}",
+    "bush.schedule.berry": "20% esélye van, hogy díszszedret terem tavasz 15-18. napja között, valamint feketeszedret ősz 8-11. napja között.",
+    "bush.schedule.tea": "Tealevél nő rajta minden évszak 22. napjától (telet kivéve, hacsak nem üvegházban van).",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Panaszok",
+    "fruit-tree.name": "{{fruitName}}Fa",
+    "fruit-tree.growth": "Növekedés",
+    "fruit-tree.next-fruit": "Következő Gyümölcs",
+    "fruit-tree.season": "Szezon",
+    "fruit-tree.quality": "Minőség",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "nem tud növekedni, mert a szomszédos 'négyzetek' foglaltak",
+    "fruit-tree.growth.summary": "beérik ekkor: {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "nem tud több gyümölcsöt hozni, amíg nem szeded le a már megéretteket.",
+    "fruit-tree.next-fruit.out-of-season": "nincs szezonja",
+    "fruit-tree.next-fruit.struck-by-lightning": "belecsapott egy villám! {{count}} nap múlva gyógyul meg.",
+    "fruit-tree.next-fruit.too-young": "túl fiatal, hogy gyümölcsöt hozzon",
+    "fruit-tree.quality.now": "{{quality}} minőségű most",
+    "fruit-tree.quality.on-date": "{{quality}} minőségű lesz ekkor: {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} minőségű lesz a következő év ezen napján: {{date}}",
+    "fruit-tree.season.summary": "{{season}} (vagy bármikor, ha üvegházban van)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Növény",
+    "crop.harvest": "Aratás",
+
+    // values
+    "crop.summary.dead": "Ez a növény halott.",
+    "crop.summary.drops-X": "{{count}} darabot termel",
+    "crop.summary.drops-X-to-Y": "{{min}} és {{max}} darab között termel ({{percent}}% esély van extrára)",
+    "crop.summary.harvest-once": "begyűjthető {{daysToFirstHarvest}} nap múlva",
+    "crop.summary.harvest-multi": "begyűjthető {{daysToFirstHarvest}} nap múlva, és utána pedig {{daysToNextHarvests}} naponként újra terem",
+    "crop.summary.seasons": "a következő évszakban nő: {{seasons}}",
+    "crop.summary.sells-for": "ára: {{price}}",
+    "crop.harvest.too-late": "ebben az évszakban már nincs ideje teremni (a következő termőnap ekkor lenne: {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "Tartalom",
+    "item.loves-this": "Imádja",
+    "item.likes-this": "Szereti",
+    "item.neutral-about-this": "Semleges számára",
+    "item.dislikes-this": "Nem szereti",
+    "item.hates-this": "Utálja",
+    "item.needed-for": "Szükséges",
+    "item.number-owned": "Birtokodban van",
+    "item.number-cooked": "Főzött",
+    "item.number-crafted": "Barkácsolt",
+    "item.recipes": "Receptek",
+    "item.see-also": "Lásd még",
+    "item.sells-for": "Ára",
+    "item.sells-to": "Eladható",
+    "item.can-be-dyed": "Színezhető",
+    "item.produces-dye": "Festéket termel",
+
+    // values
+    "item.contents.placed": "{{name}} lehelyezett",
+    "item.contents.ready": "{{name}} elkészült",
+    "item.contents.partial": "{{name}} elkészül {{time}} múlva",
+    "item.undiscovered-gift-taste": "{{count}} ismeretlen falusi",
+    "item.undiscovered-gift-taste-appended": ", és {{count}} ismeretlen falusi",
+    "item.needed-for.community-center": "kulturház ({{bundles}})",
+    "item.needed-for.full-shipment": "teljes szállítmány teljesítmény (értékesíts egyet)",
+    "item.needed-for.polyculture": "polikultúra teljseítmény (értékesíts még ennyit: {{count}})",
+    "item.needed-for.full-collection": "teljes gyűjtemény teljesítmény (adományozz egyet a múzeumnak)",
+    "item.needed-for.gourmet-chef": "ínyenc szakács teljesítmény (készíts még: {{recipes}})",
+    "item.needed-for.craft-master": "kézműves mester teljesítmény (készíts még: {{recipes}})",
+    "item.sells-to.shipping-box": "szállítmányos láda",
+    "item.recipes-for-ingredient.entry": "{{name}} (szükséges: {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "ennyit birtokolsz ebből: {{count}}",
+    "item.number-crafted.summary": "ennyit készítettél ebből: {{count}}",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Tartalom",
+    "item.cask-schedule": "Érlelés",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} elkészült",
+    "item.cask-schedule.now-partial": "{{quality}} minőségű most (használj csákányt az érlelés kihagyásához)",
+    "item.cask-schedule.tomorrow": "{{quality}} minőségű lesz holnap",
+    "item.cask-schedule.in-x-days": "{{quality}} minőségű lesz {{count}} nap múlva ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Csali",
+    "item.crabpot-bait-needed": "Csali szükséges!",
+    "item.crabpot-bait-not-needed": "Nem szükséges a szakmád miatt.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Életerő",
+
+    // values
+    "item.fence-health.gold-clock": "az Arany Óra miatt nincs rongálódás",
+    "item.fence-health.summary": "{{percent}}% (durván {{count}} nap van hátra)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Halastó termékek",
+    "item.fish-spawn-rules": "keletkezési szabályok",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "minimum horgász szint: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "nem fogtál még (csak egyszer lehet elkapni)",
+    "item.fish-spawn-rules.locations": "helyszínek: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "helyszínek:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "bármely évszakban",
+    "item.fish-spawn-rules.season-list": "szezonok: {{seasons}}",
+    "item.fish-spawn-rules.time": "napszak: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "időjárás: napos",
+    "item.fish-spawn-rules.weather-rainy": "időjárás: esős",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Preferencia",
+    "item.movie-ticket.movie-this-week": "Film a héten",
+    "item.movie-ticket.loves-movie": "Imádja a filmet",
+    "item.movie-ticket.likes-movie": "Szereti a filmet",
+    "item.movie-ticket.dislikes-movie": "Nem szereti a filmet",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} imádja ezt",
+    "item.movie-snack-preference.like": "{{name}} szereti ezt",
+    "item.movie-snack-preference.dislike": "{{name}} nem szereti ezt",
+    "item.movie-ticket.movie-this-week.none": "Ezen a héten nem vetítenek filmet",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Láthatatlan",
+    "monster.health": "Életerő",
+    "monster.drops": "Zsákmány",
+    "monster.experience": "Tapasztalat Pont",
+    "monster.defense": "Védekezés",
+    "monster.attack": "Támadás",
+    "monster.adventure-guild": "Kalandorok Céhe",
+
+    // values
+    "monster.drops.nothing": "semmi",
+    "monster.adventure-guild.eradication-goal": "Szörny Kiírtási Célok: {{name}} ({{count}} / {{requiredCount}} öltél meg)",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "Születésnap",
+    "npc.can-romance": "Nyitott kapcsolatra",
+    "npc.friendship": "Barátság",
+    "npc.talked-today": "Beszéltél ma már vele",
+    "npc.gifted-today": "Adtál ma már neki ajándékot",
+    "npc.gifted-this-week": "Adtál már ezen a héten neki ajándékot",
+    "npc.kissed-today": "Csókolóztál ma már vele",
+    "npc.hugged-today": "Megölelted ma már",
+    "npc.loves-gifts": "Kedvenc ajándékok",
+    "npc.likes-gifts": "Ajándékok, melyeket szeret",
+    "npc.neutral-gifts": "Semleges ajándékok",
+    "npc.dislikes-gifts": "Ajándékok, melyeket nem szeret",
+    "npc.hates-gifts": "Ajándékok, melyeket utál",
+
+    // values
+    "npc.can-romance.married": "Házastársak vagytok! <", // < turns into a heart
+    "npc.can-romance.housemate": "Lakótársak vagytok!",
+    "npc.friendship.not-met": "Még nem találkoztál vele.",
+    "npc.friendship.need-bouquet": "a következőhöz adjál neki virágcsokrot.",
+    "npc.friendship.need-points": "Következő szint {{count}} pont múlva",
+    "npc.undiscovered-gift-taste": "{{count}} fel nem fedezett dolog",
+    "npc.undiscovered-gift-taste-appended": ", és {{count}} fel nem fedezett dolog",
+
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Kor",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} ({{count}} nap múlva lesz {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "újszülött",
+    "npc.child.age.baby": "baba",
+    "npc.child.age.crawler": "mászó",
+    "npc.child.age.toddler": "totyogó",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Szeretet",
+    "pet.petted-today": "Simogatták ma már",
+    "pet.last-petted": "Utoljára simogatták",
+    "pet.water-bowl": "Vizestál",
+
+    // values
+    "pet.last-petted.yes": "igen (+12 szeretet)",
+    "pet.last-petted.days-ago": "{{days}} napja",
+    "pet.last-petted.never": "soha",
+    "pet.water-bowl.empty": "üres",
+    "pet.water-bowl.filled": "tele (+6 szeretet)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Farm neve",
+    "player.farm-map": "Farmtípus",
+    "player.favorite-thing": "Kedvenc dolog",
+    "player.gender": "Nem",
+    "player.housemate": "Lakótárs",
+    "player.spouse": "Házastárs",
+    "player.watched-movie-this-week": "Nézett ezen a héten filmet",
+    "player.combat-skill": "Harc",
+    "player.farming-skill": "Farmerkedés",
+    "player.fishing-skill": "Horgászás",
+    "player.foraging-skill": "Gyűjtögetés",
+    "player.mining-skill": "Bányászás",
+    "player.luck": "Szerencse",
+    "player.save-format": "Formátum mentése",
+
+    // values
+    "player.farm-map.custom": "Egyedi",
+    "player.gender.male": "férfi",
+    "player.gender.female": "nő",
+    "player.luck.summary": "{{percent}}% esély sok véletlenszerű ellenőrzéshez",
+    "player.skill.progress": "{{level}}. szint ({{expNeeded}} TP a következőhöz)",
+    "player.skill.progress-last": "{{level}}. szint",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
+    "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
+    "tile.map-name": "Térkép neve",
+    "tile.tile": "Négyzet",
+    "tile.tile-index": "{{layerName}}: négyzetmutató",
+    "tile.tilesheet": "{{layerName}}: négyzet",
+    "tile.blend-mode": "{{layerName}}: keverési mód",
+    "tile.index-property": "{{layerName}}: ix tulajdonságok: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: tulajdonságok: {{propertyName}}",
+
+    // values
+    "tile.tile.none-here": "itt nem található négyzet",
+
+
+    /*********
+    ** Trash bear lookups
+    *********/
+    // labels
+    "trash-bear.item-wanted": "Keresett tárgy",
+    "trash-bear.quest-progress": "Küldetés állása",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Növekedési fázis",
+    "tree.next-growth": "Következő növekedés",
+    "tree.has-seed": "Van magja",
+    "tree.is-fertilized": "Megtermékenyített",
+
+    // values
+    "tree.name.big-mushroom": "Nagy Gomba",
+    "tree.name.maple": "Juharfa",
+    "tree.name.oak": "Tölgyfa",
+    "tree.name.palm": "Pálmafa",
+    "tree.name.pine": "Fenyőfa",
+    "tree.name.unknown": "Ismeretlen Fa",
+    "tree.stage.done": "Teljesen megnőtt",
+    "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
+    "tree.next-growth.winter": "télen nem tud növekedni, csak ha üvegházban van",
+    "tree.next-growth.adjacent-trees": "nem tud nőni, mert egy vagy több fa túl közel van",
+    "tree.next-growth.chance": "{{chance}}% eséllyel lesz {{stage}} holnapra",
+    "tree.is-fertilized.effects": "garantáltan naponta növekszik, még télen is",
+
+    // growth stages
+    "tree.stages.seed": "mag",
+    "tree.stages.sprout": "hajtás",
+    "tree.stages.sapling": "csemete",
+    "tree.stages.bush": "bokor",
+    "tree.stages.smallTree": "kicsi fa",
+    "tree.stages.tree": "fa"
+}

@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Patches
         IPatch ParentPatch { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
-        ManagedContentPack ContentPack { get; }
+        IContentPack ContentPack { get; }
 
         /// <summary>The normalized asset key from which to load the local asset (if applicable).</summary>
         string FromAsset { get; }

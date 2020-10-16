@@ -294,9 +294,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "隣になにかあって成長できなかった",
     "fruit-tree.growth.summary": "{{date}}に成熟",
-    "fruit-tree.next-fruit.struck-by-lighting": "雷に打たれた! {{count}}日で復旧",
-    "fruit-tree.next-fruit.out-of-season": "季節外",
     "fruit-tree.next-fruit.max-fruit": "収穫するまで新しい果実を収穫できない",
+    "fruit-tree.next-fruit.out-of-season": "季節外",
+    "fruit-tree.next-fruit.struck-by-lightning": "雷に打たれた! {{count}}日で復旧",
     "fruit-tree.next-fruit.too-young": "果実を実らせるには若すぎる",
     "fruit-tree.quality.now": "現在{{quality}}",
     "fruit-tree.quality.on-date": "{{date}}に{{quality}}",
@@ -438,6 +438,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -451,9 +460,7 @@
 
     // values
     "monster.drops.nothing": "なし",
-    "monster.adventure-guild.complete": "完了",
-    "monster.adventure-guild.incomplete": "進行中",
-    "monster.adventure-guild.progress": "{{requiredCount}}のうち{{count}}匹倒した",
+    "monster.adventure-guild.eradication-goal": "モンスター討伐目標: {{name}} ({{requiredCount}}のうち{{count}}匹倒した)",
 
 
     /*********
@@ -581,11 +588,11 @@
     "tree.is-fertilized": "Is fertilized", // TODO
 
     // values
+    "tree.name.big-mushroom": "大きなキノコ",
     "tree.name.maple": "カエデの木",
     "tree.name.oak": "カシの木",
-    "tree.name.pine": "マツの木",
     "tree.name.palm": "ヤシの木",
-    "tree.name.big-mushroom": "大きなキノコ",
+    "tree.name.pine": "マツの木",
     "tree.name.unknown": "未知の木",
     "tree.stage.done": "成長完了",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",

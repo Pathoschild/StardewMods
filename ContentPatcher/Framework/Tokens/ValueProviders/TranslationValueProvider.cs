@@ -30,6 +30,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.LastLocale = translationHelper.LocaleEnum;
 
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
+            this.ValidNamedArguments = null; // allow any named argument
             this.MarkReady(true);
 
         }
@@ -50,6 +51,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.AssertInput(input);
 
             Translation translation = this.TranslationHelper.Get(input.GetFirstPositionalArg());
+
+            if (input.NamedArgs.TryGetValue("default", out IInputArgumentValue defaultValue))
+            {
+                translation = translation
+                    .Default(string.Join(", ", defaultValue.Parsed))
+                    .UsePlaceholder(false); // allow setting a blank default
+            }
+
             yield return translation;
         }
     }

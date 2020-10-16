@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
@@ -26,18 +26,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
         /// <param name="current">The current quality.</param>
         public static ItemQuality GetNext(this ItemQuality current)
         {
-            switch (current)
+            return current switch
             {
-                case ItemQuality.Normal:
-                    return ItemQuality.Silver;
-                case ItemQuality.Silver:
-                    return ItemQuality.Gold;
-                case ItemQuality.Gold:
-                case ItemQuality.Iridium:
-                    return ItemQuality.Iridium;
-                default:
-                    throw new NotSupportedException($"Unknown quality '{current}'.");
-            }
+                ItemQuality.Normal => ItemQuality.Silver,
+                ItemQuality.Silver => ItemQuality.Gold,
+                ItemQuality.Gold => ItemQuality.Iridium,
+                ItemQuality.Iridium => ItemQuality.Iridium,
+                _ => throw new NotSupportedException($"Unknown quality '{current}'.")
+            };
         }
     }
 }

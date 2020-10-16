@@ -13,14 +13,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTaste">The gift taste to show.</param>
         /// <param name="onlyRevealed">Only show gift tastes the player has discovered for themselves.</param>
         /// <param name="highlightUnrevealed">Whether to highlight items which haven't been revealed in the NPC profile yet.</param>
-        public ItemGiftTastesField(GameHelper gameHelper, string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
-            : base(gameHelper, label, ItemGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
+        public ItemGiftTastesField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste showTaste, bool onlyRevealed, bool highlightUnrevealed)
+            : base(label, ItemGiftTastesField.GetText(giftTastes, showTaste, onlyRevealed, highlightUnrevealed)) { }
 
 
         /*********
@@ -63,10 +62,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 if (unrevealed > 0)
-                    yield return new FormattedText(L10n.Item.UndiscoveredVillagersAppend(count: unrevealed), Color.Gray);
+                    yield return new FormattedText(I18n.Item_UndiscoveredGiftTasteAppended(count: unrevealed), Color.Gray);
             }
             else
-                yield return new FormattedText(L10n.Item.UndiscoveredVillagers(count: unrevealed), Color.Gray);
+                yield return new FormattedText(I18n.Item_UndiscoveredGiftTaste(count: unrevealed), Color.Gray);
         }
     }
 }

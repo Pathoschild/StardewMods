@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Pathoschild.Stardew.Tests.Common</AssemblyName>
@@ -14,7 +14,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.9.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +22,6 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="$(SolutionDir)\common.targets" />
+  <Import Project="..\_build\common.targets" />
 
 </Project>

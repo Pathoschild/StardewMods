@@ -31,15 +31,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="currentValue">The current progress value.</param>
         /// <param name="maxValue">The maximum progress value.</param>
         /// <param name="filledColor">The color of the filled bar.</param>
         /// <param name="emptyColor">The color of the empty bar.</param>
         /// <param name="text">The text to show next to the progress bar (if any).</param>
-        public PercentageBarField(GameHelper gameHelper, string label, int currentValue, int maxValue, Color filledColor, Color emptyColor, string text)
-            : base(gameHelper, label, hasValue: true)
+        public PercentageBarField(string label, int currentValue, int maxValue, Color filledColor, Color emptyColor, string text)
+            : base(label, hasValue: true)
         {
             this.CurrentValue = currentValue;
             this.MaxValue = maxValue;

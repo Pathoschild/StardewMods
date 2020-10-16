@@ -28,17 +28,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public CropFertilizerLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("crop-fertilizer.name"), config, input, monitor)
+        public CropFertilizerLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(I18n.CropFertilizer_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Fertilizer = new LegendEntry(translations, "crop-fertilizer.fertilizer", Color.Green),
-                this.RetainingSoil = new LegendEntry(translations, "crop-fertilizer.retaining-soil", Color.Blue),
-                this.SpeedGro = new LegendEntry(translations, "crop-fertilizer.speed-gro", Color.Magenta)
+                this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, Color.Green),
+                this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
+                this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, Color.Magenta)
             };
         }
 

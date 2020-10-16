@@ -38,20 +38,19 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public JunimoHutLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("junimo-huts.name"), config, input, monitor)
+        public JunimoHutLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
+            : base(I18n.JunimoHuts_Name(), config, input, monitor)
         {
             // init
             this.Mods = mods;
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(translations, "junimo-huts.can-harvest", Color.Green),
-                this.NotCovered = new LegendEntry(translations, "junimo-huts.cannot-harvest", Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.JunimoHuts_CanHarvest, Color.Green),
+                this.NotCovered = new LegendEntry(I18n.Keys.JunimoHuts_CannotHarvest, Color.Red)
             };
 
             // set max radius

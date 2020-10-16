@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "Não pode crescer pois há objetos ao lado",
     "fruit-tree.growth.summary": "Fica madura em {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Atingida por um raio! Irá se recuperar em {{count}} dias.",
-    "fruit-tree.next-fruit.out-of-season": "fora da estação",
     "fruit-tree.next-fruit.max-fruit": "Não irá dar nenhuma fruta até você colher as que já estão ali.",
+    "fruit-tree.next-fruit.out-of-season": "fora da estação",
+    "fruit-tree.next-fruit.struck-by-lightning": "Atingida por um raio! Irá se recuperar em {{count}} dias.",
     "fruit-tree.next-fruit.too-young": "Muito nova pra produzir frutos",
     "fruit-tree.quality.now": "{{quality}} agora",
     "fruit-tree.quality.on-date": "{{quality}} em {{date}}",
@@ -433,6 +433,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -446,9 +455,7 @@
 
     // values
     "monster.drops.nothing": "Nada",
-    "monster.adventure-guild.complete": "Completo",
-    "monster.adventure-guild.incomplete": "Em andamento",
-    "monster.adventure-guild.progress": "Matou {{count}} de {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "Metas de Erradicação de Monstros: {{name}} (Matou {{count}} de {{requiredCount}})",
 
 
     /*********
@@ -574,11 +581,11 @@
     "tree.is-fertilized": "Está fertilizado",
 
     // values
+    "tree.name.big-mushroom": "Cogumelo gigante",
     "tree.name.maple": "Árvore de Ácer",
     "tree.name.oak": "Carvalho",
-    "tree.name.pine": "Pinheiro",
     "tree.name.palm": "Palmeira",
-    "tree.name.big-mushroom": "Cogumelo gigante",
+    "tree.name.pine": "Pinheiro",
     "tree.name.unknown": "Árvore desconhecida",
     "tree.stage.done": "Totalmente crescido",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",

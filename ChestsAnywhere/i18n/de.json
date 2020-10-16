@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Automatischer Greifer #{{number}}",
-    "default-name.chest": "Kiste #{{number}}",
     "default-name.fridge": "Kühlschrank",
-    "default-name.junimo-hut": "Junimo-Hütte #{{number}}",
-    "default-name.shipping-bin": "Versandbehälter",
-    "default-name.shipping-bin.store": "Versandbehälter (verschicken)",
-    "default-name.shipping-bin.take": "Versandbehälter (zurückholen)",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "verschicken",
+    "default-name.shipping-bin.take": "zurückholen",
 
     // default category names
     "default-category.owned-cabin": "Hütte ({{owner}})",

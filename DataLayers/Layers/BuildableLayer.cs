@@ -29,18 +29,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public BuildableLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("buildable.name"), config, input, monitor)
+        public BuildableLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(I18n.Buildable_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Buildable = new LegendEntry(translations, "buildable.buildable", Color.Green),
-                this.Occupied = new LegendEntry(translations, "buildable.occupied", Color.Orange),
-                this.NonBuildable = new LegendEntry(translations, "buildable.not-buildable", Color.Red)
+                this.Buildable = new LegendEntry(I18n.Keys.Buildable_Buildable, Color.Green),
+                this.Occupied = new LegendEntry(I18n.Keys.Buildable_Occupied, Color.Orange),
+                this.NonBuildable = new LegendEntry(I18n.Keys.Buildable_NotBuildable, Color.Red)
             };
         }
 

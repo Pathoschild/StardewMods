@@ -29,9 +29,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The number of ticks between each tractor action check.</summary>
         private readonly int TicksPerAction = 12; // roughly five times per second
 
-        /// <summary>Provides translations from the mod's i18n folder.</summary>
-        private readonly ITranslationHelper Translation;
-
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -76,13 +73,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod settings.</param>
         /// <param name="keys">The configured key bindings.</param>
-        /// <param name="translation">Provides translations from the mod's i18n folder.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(ModConfig config, ModConfigKeys keys, ITranslationHelper translation, IReflectionHelper reflection)
+        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection)
         {
             this.Config = config;
             this.Keys = keys;
-            this.Translation = translation;
             this.Reflection = reflection;
         }
 
@@ -126,7 +121,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Update tractor effects and actions in the game.</summary>
         public void Update()
         {
-            // update when player mounts or unmounts
+            // update when player mounts or dismounts
             if (this.IsCurrentPlayerRiding != this.WasRiding)
             {
                 this.WasRiding = this.IsCurrentPlayerRiding;
@@ -240,7 +235,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Buff buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (buff == null)
             {
-                buff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", this.Translation.Get("buff.name")) { which = this.BuffUniqueID };
+                buff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", I18n.Buff_Name()) { which = this.BuffUniqueID };
                 Game1.buffsDisplay.addOtherBuff(buff);
             }
             buff.millisecondsDuration = 100;
@@ -366,28 +361,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private void GetRadialAdjacentTile(Vector2 origin, Vector2 tile, out Vector2 adjacent, out int facingDirection)
         {
             facingDirection = Utility.getDirectionFromChange(tile, origin);
-            switch (facingDirection)
+            adjacent = facingDirection switch
             {
-                case Game1.up:
-                    adjacent = new Vector2(tile.X, tile.Y + 1);
-                    break;
-
-                case Game1.down:
-                    adjacent = new Vector2(tile.X, tile.Y - 1);
-                    break;
-
-                case Game1.left:
-                    adjacent = new Vector2(tile.X + 1, tile.Y);
-                    break;
-
-                case Game1.right:
-                    adjacent = new Vector2(tile.X - 1, tile.Y);
-                    break;
-
-                default:
-                    adjacent = tile;
-                    break;
-            }
+                Game1.up => new Vector2(tile.X, tile.Y + 1),
+                Game1.down => new Vector2(tile.X, tile.Y - 1),
+                Game1.left => new Vector2(tile.X + 1, tile.Y),
+                Game1.right => new Vector2(tile.X - 1, tile.Y),
+                _ => tile
+            };
         }
 
         /// <summary>Temporarily dismount and set up the player to interact with a tile, then return it to the previous state afterwards.</summary>

@@ -76,20 +76,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="quality">The input quality.</param>
         private float GetProbabilityOfDoubleOutput(int quality)
         {
-            switch (quality)
+            return quality switch
             {
-                case SObject.lowQuality:
-                    return 0;
-
-                case SObject.highQuality:
-                    return 0.25f;
-
-                case SObject.bestQuality:
-                    return 0.5f;
-
-                default:
-                    return 0.1f;
-            }
+                SObject.lowQuality => 0,
+                SObject.highQuality => 0.25f,
+                SObject.bestQuality => 0.5f,
+                _ => 0.1f
+            };
         }
 
         /// <summary>Reset the machine so it's ready to accept a new input.</summary>

@@ -49,6 +49,9 @@ namespace Pathoschild.Stardew.DataLayers
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
+            // init
+            I18n.Init(helper.Translation);
+
             // hook up events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -81,7 +84,7 @@ namespace Pathoschild.Stardew.DataLayers
         {
             // init layers
             // need to do this after the save is loaded so translations use the selected language
-            this.Layers = this.GetLayers(this.Config, this.Helper.Input, this.Helper.Translation, this.Mods).ToArray();
+            this.Layers = this.GetLayers(this.Config, this.Helper.Input, this.Mods).ToArray();
             foreach (ILayer layer in this.Layers)
             {
                 if (layer.ShortcutKey.ToString() != SButton.None.ToString())
@@ -92,40 +95,39 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>Get the enabled data layers.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="input">The API for checking input state.</param>
-        /// <param name="translation">Provides translations for the mod.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        private IEnumerable<ILayer> GetLayers(ModConfig config, IInputHelper input, ITranslationHelper translation, ModIntegrations mods)
+        private IEnumerable<ILayer> GetLayers(ModConfig config, IInputHelper input, ModIntegrations mods)
         {
             ModConfig.LayerConfigs layers = config.Layers;
 
             if (layers.Accessible.IsEnabled())
-                yield return new AccessibleLayer(translation, layers.Accessible, input, this.Monitor);
+                yield return new AccessibleLayer(layers.Accessible, input, this.Monitor);
             if (layers.Buildable.IsEnabled())
-                yield return new BuildableLayer(translation, layers.Buildable, input, this.Monitor);
+                yield return new BuildableLayer(layers.Buildable, input, this.Monitor);
             if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(translation, layers.CoverageForBeeHouses, input, this.Monitor);
+                yield return new BeeHouseLayer(layers.CoverageForBeeHouses, input, this.Monitor);
             if (layers.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowLayer(translation, layers.CoverageForScarecrows, mods, input, this.Monitor);
+                yield return new ScarecrowLayer(layers.CoverageForScarecrows, mods, input, this.Monitor);
             if (layers.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerLayer(translation, layers.CoverageForSprinklers, mods, input, this.Monitor);
+                yield return new SprinklerLayer(layers.CoverageForSprinklers, mods, input, this.Monitor);
             if (layers.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutLayer(translation, layers.CoverageForJunimoHuts, mods, input, this.Monitor);
+                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, mods, input, this.Monitor);
             if (layers.CropWater.IsEnabled())
-                yield return new CropWaterLayer(translation, layers.CropWater, input, this.Monitor);
+                yield return new CropWaterLayer(layers.CropWater, input, this.Monitor);
             if (layers.CropPaddyWater.IsEnabled())
-                yield return new CropPaddyWaterLayer(translation, layers.CropPaddyWater, input, this.Monitor);
+                yield return new CropPaddyWaterLayer(layers.CropPaddyWater, input, this.Monitor);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(translation, layers.CropFertilizer, input, this.Monitor);
+                yield return new CropFertilizerLayer(layers.CropFertilizer, input, this.Monitor);
             if (layers.CropHarvest.IsEnabled())
-                yield return new CropHarvestLayer(translation, layers.CropHarvest, input, this.Monitor);
+                yield return new CropHarvestLayer(layers.CropHarvest, input, this.Monitor);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
-                yield return new MachineLayer(translation, layers.Machines, mods, input, this.Monitor);
+                yield return new MachineLayer(layers.Machines, mods, input, this.Monitor);
             if (layers.Tillable.IsEnabled())
-                yield return new TillableLayer(translation, layers.Tillable, input, this.Monitor);
+                yield return new TillableLayer(layers.Tillable, input, this.Monitor);
 
             // add separate grid layer if grid isn't enabled for all layers
             if (!config.ShowGrid && layers.TileGrid.IsEnabled())
-                yield return new GridLayer(translation, layers.TileGrid, input, this.Monitor);
+                yield return new GridLayer(layers.TileGrid, input, this.Monitor);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>

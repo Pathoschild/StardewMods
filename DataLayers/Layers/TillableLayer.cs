@@ -35,19 +35,18 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public TillableLayer(ITranslationHelper translations, LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("tillable.name"), config, input, monitor)
+        public TillableLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
+            : base(I18n.Tillable_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Tilled = new LegendEntry(translations, "tillable.tilled", Color.DarkMagenta),
-                this.Tillable = new LegendEntry(translations, "tillable.tillable", Color.Green),
-                this.Occupied = new LegendEntry(translations, "tillable.occupied", Color.Orange),
-                this.NonTillable = new LegendEntry(translations, "tillable.not-tillable", Color.Red)
+                this.Tilled = new LegendEntry(I18n.Keys.Tillable_Tilled, Color.DarkMagenta),
+                this.Tillable = new LegendEntry(I18n.Keys.Tillable_Tillable, Color.Green),
+                this.Occupied = new LegendEntry(I18n.Keys.Tillable_Occupied, Color.Orange),
+                this.NonTillable = new LegendEntry(I18n.Keys.Tillable_NotTillable, Color.Red)
             };
         }
 

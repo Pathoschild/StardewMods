@@ -90,8 +90,9 @@ namespace Pathoschild.Stardew.TractorMod
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
-            // init tractor logic
-            this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Translation, this.Helper.Reflection);
+            // init
+            I18n.Init(helper.Translation);
+            this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection);
             this.UpdateConfig();
 
             // hook events
@@ -736,8 +737,8 @@ namespace Pathoschild.Stardew.TractorMod
         {
             return new BluePrint("Stable")
             {
-                displayName = this.Helper.Translation.Get("garage.name"),
-                description = this.Helper.Translation.Get("garage.description"),
+                displayName = I18n.Garage_Name(),
+                description = I18n.Garage_Description(),
                 maxOccupants = this.MaxOccupantsID,
                 moneyRequired = this.Config.BuildPrice,
                 tilesWidth = 4,

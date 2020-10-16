@@ -19,6 +19,9 @@ indent_size = 2
 charset = utf-8-bom
 insert_final_newline = false
 
+[*.{ttinclude,tt}]
+insert_final_newline = false
+
 ##########
 ## C# formatting
 ## documentation: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference

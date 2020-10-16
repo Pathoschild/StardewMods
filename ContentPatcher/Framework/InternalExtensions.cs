@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -111,8 +112,16 @@ namespace ContentPatcher.Framework
         }
 
         /****
-        ** Mod manifest
+        ** Content packs
         ****/
+        /// <summary>Get the raw absolute path for a path within the content pack.</summary>
+        /// <param name="contentPack">The content pack for which to get a path.</param>
+        /// <param name="relativePath">The path relative to the content pack folder.</param>
+        public static string GetFullPath(this IContentPack contentPack, string relativePath)
+        {
+            return Path.Combine(contentPack.DirectoryPath, relativePath);
+        }
+
         /// <summary>Get whether the manifest lists a given mod ID as a dependency.</summary>
         /// <param name="manifest">The manifest.</param>
         /// <param name="modID">The mod ID.</param>

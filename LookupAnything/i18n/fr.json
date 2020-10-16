@@ -292,9 +292,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "ne peut grandir car il y a des objets adjacents",
     "fruit-tree.growth.summary": "prêt le {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "touché par la foudre ! Récupérera dans {{count}} jours.",
-    "fruit-tree.next-fruit.out-of-season": "en dehors de la saison",
     "fruit-tree.next-fruit.max-fruit": "ne produira aucun autre fruit jusqu'à ce que vous récoltiez ceux déjà présents",
+    "fruit-tree.next-fruit.out-of-season": "en dehors de la saison",
+    "fruit-tree.next-fruit.struck-by-lightning": "touché par la foudre ! Récupérera dans {{count}} jours.",
     "fruit-tree.next-fruit.too-young": "trop jeune pour avoir des fruits",
     "fruit-tree.quality.now": "{{quality}} maintenant",
     "fruit-tree.quality.on-date": "{{quality}} le {{date}}",
@@ -432,6 +432,14 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Hauteur musicale",
+    "item.music-block.drum-type": "Type de tambour",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -445,9 +453,7 @@
 
     // values
     "monster.drops.nothing": "rien",
-    "monster.adventure-guild.complete": "complté",
-    "monster.adventure-guild.incomplete": "en cours",
-    "monster.adventure-guild.progress": "tué {{count}} sur {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "Objectifs d'élimination de monstres: {{name}} (tué {{count}} sur {{requiredCount}})",
 
 
     /*********
@@ -545,11 +551,11 @@
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
     "tile.map-name": "Nom de la carte",
     "tile.tile": "Case",
-    "tile.tile-index": "{{layerName}}: tile index",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: blend mode",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.tile-index": "{{layerName}}: index de la case",
+    "tile.tilesheet": "{{layerName}}: feuille de sprite",
+    "tile.blend-mode": "{{layerName}}: mode de fusion",
+    "tile.index-property": "{{layerName}}: propriétés d'index: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: propriétés: {{propertyName}}",
 
     // values
     "tile.tile.none-here": "pas de case ici",
@@ -573,11 +579,11 @@
     "tree.is-fertilized": "Est fertilisé",
 
     // values
+    "tree.name.big-mushroom": "Grand champignon",
     "tree.name.maple": "Erable",
     "tree.name.oak": "Chêne",
-    "tree.name.pine": "Pin",
     "tree.name.palm": "Palmier",
-    "tree.name.big-mushroom": "Grand champignon",
+    "tree.name.pine": "Pin",
     "tree.name.unknown": "Arbre inconnu",
     "tree.stage.done": "Taille adulte",
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",

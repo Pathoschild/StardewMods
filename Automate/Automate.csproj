@@ -2,17 +2,17 @@
 
   <PropertyGroup>
     <AssemblyName>Automate</AssemblyName>
-    <Version>1.18.0</Version>
+    <Version>1.18.1</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.2" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
-  <Import Project="$(SolutionDir)\common.targets" />
+  <Import Project="..\_build\common.targets" />
 
 </Project>

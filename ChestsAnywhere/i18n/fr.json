@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Récolteur-automatique #{{number}}",
-    "default-name.chest": "Coffre #{{number}}",
     "default-name.fridge": "Réfrigérateur",
-    "default-name.junimo-hut": "Hutte Junimo #{{number}}",
-    "default-name.shipping-bin": "Bac d'expédition",
-    "default-name.shipping-bin.store": "Shipping bin (ship items)", // TODO
-    "default-name.shipping-bin.take": "Shipping bin (retrieve items)", // TODO
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "ajouter des objets",
+    "default-name.shipping-bin.take": "récupérer des objets",
 
     // default category names
     "default-category.owned-cabin": "Cabane de {{owner}}",

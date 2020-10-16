@@ -1,12 +1,9 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Авто-сборщик №{{number}}",
-    "default-name.chest": "Сундук №{{number}}",
     "default-name.fridge": "Холодильник",
-    "default-name.junimo-hut": "Хижина Джунимо №{{number}}",
-    "default-name.shipping-bin": "Отгрузочный ящик",
-    "default-name.shipping-bin.store": "Отгрузочный ящик (отправленные предметы)",
-    "default-name.shipping-bin.take": "Отгрузочный ящик (принятые предметы)",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "отправленные предметы",
+    "default-name.shipping-bin.take": "принятые предметы",
 
     // default category names
     "default-category.owned-cabin": "В данном домике проживает {{owner}}.",

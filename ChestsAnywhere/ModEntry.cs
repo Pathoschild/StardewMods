@@ -52,10 +52,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         public override void Entry(IModHelper helper)
         {
             // initialize
+            I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Data, helper.Multiplayer, helper.Reflection, helper.Translation, this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Data, helper.Multiplayer, helper.Reflection, this.Config.EnableShippingBin);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -203,11 +204,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             switch (menu)
             {
                 case ItemGrabMenu chestMenu:
-                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
 
                 case ShopMenu shopMenu:
-                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Helper.Translation, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
             }
             this.CurrentOverlay.OnChestSelected += selected =>
@@ -227,7 +228,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // handle disabled location
             if (this.IsDisabledLocation(Game1.currentLocation))
             {
-                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get("errors.disabled-from-here"), duration: 1000);
+                CommonHelper.ShowInfoMessage(I18n.Errors_DisabledFromHere(), duration: 1000);
                 return;
             }
 
@@ -242,8 +243,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // show error
             if (selectedChest == null)
             {
-                string translationKey = this.GetNoChestsFoundErrorKey();
-                CommonHelper.ShowInfoMessage(this.Helper.Translation.Get(translationKey), duration: 1000);
+                CommonHelper.ShowInfoMessage(this.GetNoChestsFoundError(), duration: 1000);
                 return;
             }
 
@@ -299,16 +299,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             return new RangeHandler(this.Data.WorldAreas, range, Game1.currentLocation);
         }
 
-        /// <summary>Get the error translation key to show if no chests were found.</summary>
-        private string GetNoChestsFoundErrorKey()
+        /// <summary>Get the error translation to show if no chests were found.</summary>
+        private string GetNoChestsFoundError()
         {
             if (this.Config.Range == ChestRange.CurrentLocation || !Context.IsMainPlayer)
-                return "errors.no-chests-in-location";
+                return I18n.Errors_NoChestsInLocation();
 
             if (this.Config.Range != ChestRange.Unlimited)
-                return "errors.no-chests-in-range";
+                return I18n.Errors_NoChestsInRange();
 
-            return "errors.no-chests";
+            return I18n.Errors_NoChests();
         }
     }
 }

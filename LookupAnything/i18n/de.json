@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "Kann nicht wachsen weil angrenzende Objekte zu nahe sind",
     "fruit-tree.growth.summary": "Ausgewachsen am {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
-    "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
     "fruit-tree.next-fruit.max-fruit": "Wird keine neuen Früchte tragen, bis die aktuellen geerntet wurden.",
+    "fruit-tree.next-fruit.out-of-season": "Außerhalb der Jahreszeit",
+    "fruit-tree.next-fruit.struck-by-lightning": "Wurde von einem Blitz getroffen! Erhohlt sich in {{count}} Tagen.",
     "fruit-tree.next-fruit.too-young": "Zu jung um Früchte zu tragen",
     "fruit-tree.quality.now": "{{quality}} jetzt",
     "fruit-tree.quality.on-date": "{{quality}} am {{date}}",
@@ -433,6 +433,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -446,9 +455,7 @@
 
     // values
     "monster.drops.nothing": "nichts",
-    "monster.adventure-guild.complete": "abgeschlossen",
-    "monster.adventure-guild.incomplete": "in Arbeit",
-    "monster.adventure-guild.progress": "{{count}} von {{requiredCount}} getötet",
+    "monster.adventure-guild.eradication-goal": "Ziele für die Monsterjagd: {{name}} ({{count}} von {{requiredCount}} getötet)",
 
 
     /*********
@@ -574,11 +581,11 @@
     "tree.is-fertilized": "Ist gedüngt",
 
     // values
+    "tree.name.big-mushroom": "Großer Pilz",
     "tree.name.maple": "Ahornbaum",
     "tree.name.oak": "Eichenbaum",
-    "tree.name.pine": "Tannenbaum",
     "tree.name.palm": "Palme",
-    "tree.name.big-mushroom": "Großer Pilz",
+    "tree.name.pine": "Tannenbaum",
     "tree.name.unknown": "unbekannter Baum",
     "tree.stage.done": "Voll ausgewachsen",
     "tree.stage.partial": "{{stageName}} ({{step}} von {{max}})",

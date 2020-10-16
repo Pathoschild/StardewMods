@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using SObject = StardewValley.Object;
 
@@ -16,6 +15,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
+        /// <summary>Provides utility methods for interacting with the game code.</summary>
+        protected GameHelper GameHelper;
+
         /// <summary>The possible drops.</summary>
         private readonly Tuple<ItemDropData, SObject, SpriteInfo>[] Drops;
 
@@ -45,8 +47,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
         /// <param name="preface">The text to display before the list, if any.</param>
         public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string defaultText = null, string preface = null)
-            : base(gameHelper, label)
+            : base(label)
         {
+            this.GameHelper = gameHelper;
             this.Drops = this.GetEntries(drops, gameHelper).ToArray();
             if (sort)
                 this.Drops = this.Drops.OrderByDescending(p => p.Item1.Probability).ThenBy(p => p.Item2.DisplayName).ToArray();
@@ -94,9 +97,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, shouldFade ? Color.White * 0.5f : Color.White);
 
                 // draw text
-                string text = isGuaranteed ? item.DisplayName : L10n.Generic.PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: item.DisplayName);
+                string text = isGuaranteed ? item.DisplayName : I18n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: item.DisplayName);
                 if (drop.MinDrop != drop.MaxDrop)
-                    text += $" ({L10n.Generic.Range(min: drop.MinDrop, max: drop.MaxDrop)})";
+                    text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
                     text += $" ({drop.MinDrop})";
                 Vector2 textSize = spriteBatch.DrawTextBlock(font, text, position + new Vector2(iconSize.X + 5, height + 5), wrapWidth, shouldFade ? Color.Gray : Color.Black);

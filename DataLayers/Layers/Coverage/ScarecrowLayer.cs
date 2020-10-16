@@ -39,18 +39,17 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="translations">Provides translations in stored in the mod folder's i18n folder.</param>
         /// <param name="config">The data layer settings.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
         /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public ScarecrowLayer(ITranslationHelper translations, LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
-            : base(translations.Get("scarecrows.name"), config, input, monitor)
+        public ScarecrowLayer(LayerConfig config, ModIntegrations mods, IInputHelper input, IMonitor monitor)
+            : base(I18n.Scarecrows_Name(), config, input, monitor)
         {
             this.Legend = new[]
             {
-                this.Covered = new LegendEntry(translations, "scarecrows.protected", Color.Green),
-                this.Exposed = new LegendEntry(translations, "scarecrows.exposed", Color.Red)
+                this.Covered = new LegendEntry(I18n.Keys.Scarecrows_Protected, Color.Green),
+                this.Exposed = new LegendEntry(I18n.Keys.Scarecrows_Exposed, Color.Red)
             };
             this.ModObjectIds = this.GetModScarecrowIDs(mods).ToArray();
         }

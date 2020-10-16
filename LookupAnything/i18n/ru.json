@@ -293,9 +293,9 @@
     // values
     "fruit-tree.complaints.adjacent-objects": "не может расти из-за соседних объектов",
     "fruit-tree.growth.summary": "созреет через {{date}}",
-    "fruit-tree.next-fruit.struck-by-lighting": "Поражено молнией! Восстановится через {{count}} дн.",
-    "fruit-tree.next-fruit.out-of-season": "Вне сезона",
     "fruit-tree.next-fruit.max-fruit": "больше нет места, соберите то что уже есть.",
+    "fruit-tree.next-fruit.out-of-season": "Вне сезона",
+    "fruit-tree.next-fruit.struck-by-lightning": "Поражено молнией! Восстановится через {{count}} дн.",
     "fruit-tree.next-fruit.too-young": "слишком молодое для сбора",
     "fruit-tree.quality.now": "{{quality}} сейчас",
     "fruit-tree.quality.on-date": "{{quality}} на {{date}}",
@@ -433,6 +433,15 @@
 
 
     /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    // TODO
+    "item.music-block.pitch": "Pitch",
+    "item.music-block.drum-type": "Drum type",
+
+
+    /*********
     ** Monster lookups
     *********/
     // labels
@@ -446,9 +455,7 @@
 
     // values
     "monster.drops.nothing": "ничего",
-    "monster.adventure-guild.complete": "выполнено",
-    "monster.adventure-guild.incomplete": "в процессе",
-    "monster.adventure-guild.progress": "убито {{count}} из {{requiredCount}}",
+    "monster.adventure-guild.eradication-goal": "План по истреблению чудовищ: {{name}} (убито {{count}} из {{requiredCount}})",
 
 
     /*********
@@ -574,11 +581,11 @@
     "tree.is-fertilized": "Использовано удобрение",
 
     // values
+    "tree.name.big-mushroom": "Большой гриб",
     "tree.name.maple": "Клён",
     "tree.name.oak": "Дуб",
-    "tree.name.pine": "Сосна",
     "tree.name.palm": "Пальма",
-    "tree.name.big-mushroom": "Большой гриб",
+    "tree.name.pine": "Сосна",
     "tree.name.unknown": "Неизвестное дерево",
     "tree.stage.done": "полностью выросло",
     "tree.stage.partial": "{{stageName}} ({{step}} из {{max}})",

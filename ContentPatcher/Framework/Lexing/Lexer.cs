@@ -40,29 +40,14 @@ namespace ContentPatcher.Framework.Lexing
                 if (part == "")
                     continue; // split artifact
 
-                LexBitType type;
-                switch (part)
+                LexBitType type = part switch
                 {
-                    case "{{":
-                        type = LexBitType.StartToken;
-                        break;
-
-                    case "}}":
-                        type = LexBitType.EndToken;
-                        break;
-
-                    case InternalConstants.PositionalInputArgSeparator:
-                        type = LexBitType.PositionalInputArgSeparator;
-                        break;
-
-                    case InternalConstants.NamedInputArgSeparator:
-                        type = LexBitType.NamedInputArgSeparator;
-                        break;
-
-                    default:
-                        type = LexBitType.Literal;
-                        break;
-                }
+                    "{{" => LexBitType.StartToken,
+                    "}}" => LexBitType.EndToken,
+                    InternalConstants.PositionalInputArgSeparator => LexBitType.PositionalInputArgSeparator,
+                    InternalConstants.NamedInputArgSeparator => LexBitType.NamedInputArgSeparator,
+                    _ => LexBitType.Literal
+                };
 
                 yield return new LexBit(type, part);
             }

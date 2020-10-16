@@ -1,14 +1,13 @@
 {
     // default chest names
-    "default-name.auto-grabber": "Auto-gyűjtögető #{{number}}",
-    "default-name.chest": "Láda #{{number}}",
     "default-name.fridge": "Hűtőszekrény",
-    "default-name.junimo-hut": "Junimo kunyhó #{{number}}",
-    "default-name.shipping-bin": "Szállítmányos láda",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "Tárgyak elszállítása",
+    "default-name.shipping-bin.take": "Tárgyak visszaszerzése",
 
     // default category names
     "default-category.owned-cabin": "Kunyhó ({{owner}})",
-    "default-category.unowned-cabin": "Kunyhó (empty)",
+    "default-category.unowned-cabin": "Kunyhó (üres)",
     "default-category.duplicate": "{{locationName}} #{{number}}",
 
     // edit-chest labels

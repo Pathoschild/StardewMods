@@ -3,20 +3,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A generic metadata field shown as an extended property in the lookup UI.</summary>
     internal class GenericField : ICustomField
     {
-        /*********
-        ** Accessors
-        *********/
-        /// <summary>Provides utility methods for interacting with the game code.</summary>
-        protected GameHelper GameHelper;
-
-
         /*********
         ** Accessors
         *********/
@@ -34,34 +26,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, string value, bool? hasValue = null)
+        public GenericField(string label, string value, bool? hasValue = null)
         {
-            this.GameHelper = gameHelper;
             this.Label = label;
             this.Value = this.FormatValue(value);
             this.HasValue = hasValue ?? this.Value?.Any() == true;
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, IFormattedText value, bool? hasValue = null)
-            : this(gameHelper, label, new[] { value }, hasValue) { }
+        public GenericField(string label, IFormattedText value, bool? hasValue = null)
+            : this(label, new[] { value }, hasValue) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(GameHelper gameHelper, string label, IEnumerable<IFormattedText> value, bool? hasValue = null)
+        public GenericField(string label, IEnumerable<IFormattedText> value, bool? hasValue = null)
         {
-            this.GameHelper = gameHelper;
             this.Label = label;
             this.Value = value.ToArray();
             this.HasValue = hasValue ?? this.Value?.Any() == true;
@@ -83,11 +70,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="hasValue">Whether the field should be displayed.</param>
-        protected GenericField(GameHelper gameHelper, string label, bool hasValue = false)
-            : this(gameHelper, label, null as string, hasValue) { }
+        protected GenericField(string label, bool hasValue = false)
+            : this(label, null as string, hasValue) { }
 
         /// <summary>Wrap text into a list of formatted snippets.</summary>
         /// <param name="value">The text to wrap.</param>
@@ -101,17 +87,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValue">The flat sale price.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        /// <param name="translations">Provides translations stored in the mod folder.</param>
-        public static string GetSaleValueString(int saleValue, int stackSize, ITranslationHelper translations)
+        public static string GetSaleValueString(int saleValue, int stackSize)
         {
-            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize, translations);
+            return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize);
         }
 
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        /// <param name="translations">Provides methods for fetching translations and generating text.</param>
-        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize, ITranslationHelper translations)
+        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))
@@ -120,9 +104,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // one quality
             if (saleValues.Count == 1)
             {
-                string result = L10n.Generic.Price(price: saleValues.First().Value);
+                string result = I18n.Generic_Price(price: saleValues.First().Value);
                 if (stackSize > 1 && stackSize <= Constant.MaxStackSizeForPricing)
-                    result += $" ({L10n.Generic.PriceForStack(price: saleValues.First().Value * stackSize, count: stackSize)})";
+                    result += $" ({I18n.Generic_PriceForStack(price: saleValues.First().Value * stackSize, count: stackSize)})";
                 return result;
             }
 
@@ -133,8 +117,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 if (saleValues.ContainsKey(quality))
                 {
                     priceStrings.Add(quality == ItemQuality.Normal
-                        ? L10n.Generic.Price(price: saleValues[quality])
-                        : L10n.Generic.PriceForQuality(price: saleValues[quality], quality: quality)
+                        ? I18n.Generic_Price(price: saleValues[quality])
+                        : I18n.Generic_PriceForQuality(price: saleValues[quality], quality: quality)
                     );
                 }
 

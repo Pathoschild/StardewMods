@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="item">The item for which to display an icon.</param>
         /// <param name="text">The text to display (if not the item name).</param>
         public ItemIconField(GameHelper gameHelper, string label, Item item, string text = null)
-            : base(gameHelper, label, hasValue: item != null)
+            : base(label, hasValue: item != null)
         {
             this.Sprite = gameHelper.GetSprite(item);
             if (item != null)

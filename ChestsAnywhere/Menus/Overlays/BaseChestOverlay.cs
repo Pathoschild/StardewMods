@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
@@ -23,9 +24,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /****
         ** Data
         ****/
-        /// <summary>Provides translations stored in the mod's folder.</summary>
-        protected readonly ITranslationHelper Translations;
-
         /// <summary>The available chests.</summary>
         private readonly ManagedChest[] Chests;
 
@@ -190,20 +188,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="events">The SMAPI events available for mods.</param>
         /// <param name="input">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="translations">Provides translations stored in the mod's folder.</param>
         /// <param name="showAutomateOptions">Whether to show Automate options.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
         /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
-        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, ITranslationHelper translations, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
+        protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
             : base(events, input, reflection, keepAlive)
         {
             // data
             this.ForMenuInstance = menu;
             this.ShowAutomateOptions = showAutomateOptions;
             this.TopOffset = topOffset;
-
-            // helpers
-            this.Translations = translations;
 
             // menu
             this.Menu = menu;
@@ -250,10 +244,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             else
             {
                 // get translations
-                string locationLabel = this.Translations.Get("label.location") + ":";
-                string nameLabel = this.Translations.Get("label.name") + ":";
-                string categoryLabel = this.Translations.Get("label.category") + ":";
-                string orderLabel = this.Translations.Get("label.order") + ":";
+                string locationLabel = I18n.Label_Location() + ":";
+                string nameLabel = I18n.Label_Name() + ":";
+                string categoryLabel = I18n.Label_Category() + ":";
+                string orderLabel = I18n.Label_Order() + ":";
 
                 // get initial measurements
                 SpriteFont font = Game1.smallFont;
@@ -270,7 +264,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 {
                     string locationName = this.Chest.Location.Name;
                     if (this.Chest.Tile != Vector2.Zero)
-                        locationName += " (" + this.Translations.Get("label.location.tile", new { x = this.Chest.Tile.X, y = this.Chest.Tile.Y }) + ")";
+                        locationName += " (" + I18n.Label_Location_Tile(x: this.Chest.Tile.X, y: this.Chest.Tile.Y) + ")";
 
                     Vector2 labelSize = batch.DrawTextBlock(font, locationLabel, new Vector2(bounds.X + padding + (int)(maxLabelWidth - font.MeasureString(locationLabel).X), bounds.Y + topOffset), bounds.Width);
                     batch.DrawTextBlock(font, locationName, new Vector2(bounds.X + padding + maxLabelWidth + gutter, bounds.Y + topOffset), bounds.Width);
@@ -296,20 +290,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 }
 
                 // checkboxes
-                topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? "label.hide-chest-hidden" : "label.hide-chest").Y;
+                topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest()).Y;
                 if (this.ShowAutomateOptions)
                 {
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-store", defaultValue: true).Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateStore(), defaultValue: true).Y;
                     if (this.EditAutomateStoreItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-store-first").Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, "label.automate-take", defaultValue: true).Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateStoreFirst()).Y;
+                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateTake(), defaultValue: true).Y;
                     if (this.EditAutomateTakeItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, "label.automate-take-first").Y;
+                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateTakeFirst()).Y;
                 }
 
                 // buttons
-                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, "button.save", Color.DarkGreen, out Rectangle saveButtonBounds);
-                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, "button.reset", Color.DarkRed, out _);
+                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Button_Save(), Color.DarkGreen, out Rectangle saveButtonBounds);
+                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, I18n.Button_Reset(), Color.DarkRed, out _);
 
                 // exit button
                 this.EditExitButton.draw(batch);
@@ -594,7 +588,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 Rectangle sprite = Sprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, this.Translations.Get("button.edit-chest"), Sprites.Icons.Sheet, sprite, zoom);
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), Sprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form
@@ -645,8 +639,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // update chest
-            ContainerAutomatePreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
-            ContainerAutomatePreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
+            AutomateContainerPreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
+            AutomateContainerPreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
             bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
             this.Chest.Update(
                 name: this.EditNameField.Text,
@@ -747,15 +741,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="checkbox">The checkbox to draw.</param>
         /// <param name="x">The top-left X position to start drawing from.</param>
         /// <param name="y">The top-left Y position to start drawing from.</param>
-        /// <param name="textKey">The translation key for the checkbox label.</param>
+        /// <param name="label">The translation for the checkbox label.</param>
         /// <param name="defaultValue">The default value.</param>
-        private Vector2 DrawAndPositionCheckbox(SpriteBatch batch, SpriteFont font, Checkbox checkbox, int x, int y, string textKey, bool defaultValue = false)
+        private Vector2 DrawAndPositionCheckbox(SpriteBatch batch, SpriteFont font, Checkbox checkbox, int x, int y, string label, bool defaultValue = false)
         {
             checkbox.X = x;
             checkbox.Y = y;
             checkbox.Width = 24;
             checkbox.Draw(batch);
-            string label = this.Translations.Get(textKey);
             Vector2 labelSize = batch.DrawTextBlock(font, label, new Vector2(x + 7 + checkbox.Width, y), this.Menu.width, checkbox.Value != defaultValue ? Color.Red : Color.Black);
 
             return new Vector2(checkbox.Width + 7 + checkbox.Width + labelSize.X, Math.Max(checkbox.Width, labelSize.Y));
@@ -767,13 +760,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="clickArea">The clickable area to draw.</param>
         /// <param name="x">The top-left X position to start drawing from.</param>
         /// <param name="y">The top-left Y position to start drawing from.</param>
-        /// <param name="textKey">The translation key for the checkbox label.</param>
+        /// <param name="label">The translation for the checkbox label.</param>
         /// <param name="color">The text color to draw.</param>
         /// <param name="bounds">The button's outer bounds.</param>
-        private Vector2 DrawButton(SpriteBatch batch, SpriteFont font, ClickableComponent clickArea, int x, int y, string textKey, in Color color, out Rectangle bounds)
+        private Vector2 DrawButton(SpriteBatch batch, SpriteFont font, ClickableComponent clickArea, int x, int y, string label, in Color color, out Rectangle bounds)
         {
             // get text
-            string label = this.Translations.Get(textKey);
             Vector2 labelSize = font.MeasureString(label);
 
             // draw button
@@ -790,15 +782,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Get an Automate IO preference.</summary>
         /// <param name="allow">Whether IO is allowed.</param>
         /// <param name="prefer">Whether IO is preferred.</param>
-        private ContainerAutomatePreference GetAutomatePreference(bool allow, bool prefer)
+        private AutomateContainerPreference GetAutomatePreference(bool allow, bool prefer)
         {
             if (allow && prefer)
-                return ContainerAutomatePreference.Prefer;
+                return AutomateContainerPreference.Prefer;
 
             if (allow)
-                return ContainerAutomatePreference.Allow;
+                return AutomateContainerPreference.Allow;
 
-            return ContainerAutomatePreference.Disable;
+            return AutomateContainerPreference.Disable;
         }
     }
 }

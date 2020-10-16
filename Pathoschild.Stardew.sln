@@ -8,7 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{775A00CB-7
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		common.targets = common.targets
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -52,6 +51,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TractorMod", "TractorMod\TractorMod.csproj", "{DDF905ED-320B-48AF-91A5-2A5563F256FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "archived", "archived", "{864DC187-9307-4DAF-9EEE-0A36A8C6E19E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{183A028A-D606-4BA6-A211-51C966B98613}"
+	ProjectSection(SolutionItems) = preProject
+		_build\common.targets = _build\common.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -155,6 +159,7 @@ Global
 		{EF4F1A38-6601-4441-B7B1-E9C26B312192} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{8FE9BD36-31EB-4A47-9C98-C216FF361664} = {864DC187-9307-4DAF-9EEE-0A36A8C6E19E}
+		{183A028A-D606-4BA6-A211-51C966B98613} = {775A00CB-71CD-49BF-BB1B-B09951ABD325}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EF4A4878-3839-48F1-B4C1-43D0570BCCB4}

@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.6
+Released 15 October 2020.
+
+* Refactored translation handling to prepare for future updates and use game translations where possible.
+* Improved translations. Thanks to Macskasajt05 (updated Hungarian) and zhxxn (updated Korean)!
+
 ## 1.19.5
 Released 02 August 2020.
 

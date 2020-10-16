@@ -1,12 +1,29 @@
 [← back to readme](README.md)
 
 # Release notes
+<!--
+
+
+STOP RIGHT THERE.
+When releasing a format change, don't forget to update the smapi.io/json schema!
+
+
+-->
+## 1.18.3
+Released 15 October 2020.
+
+* Added support for setting the default value for an `i18n` token.
+* Fixed `i18n` token not accepting named arguments.
+* Fixed error-handling for invalid `Include` patches.
+* Fixed errors using a dynamic token in some cases when it's set to the value of an immutable token like `{{HasMod |contains=X}}`.
+
 ## 1.18.2
 Released 13 September 2020.
 
 * `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like Generic Mod Config Menu.
 * Fixed `TextOperations` incorrectly adding delimiters when there's no previous value.
 * Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
+* Fixed error when using a field reference token as the only input to a token which requires input.
 
 ## 1.18.1
 Released 13 September 2020.

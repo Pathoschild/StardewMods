@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -61,11 +60,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="recipes">The recipe to list.</param>
         public RecipesForMachineField(GameHelper gameHelper, string label, RecipeModel[] recipes)
-            : base(gameHelper, label, hasValue: true)
+            : base(label, hasValue: true)
         {
             // get recipe data
             this.Recipes = this
-                .GetRecipeEntries(this.GameHelper, recipes)
+                .GetRecipeEntries(gameHelper, recipes)
                 .OrderBy(entry => string.Join(", ", entry.Inputs.SelectMany(input => input.DisplayText)))
                 .ThenBy(entry => entry.Output.DisplayText)
                 .ToArray();
@@ -251,15 +250,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // get name + count
             string text;
             if (minCount != maxCount)
-                text = L10n.Item.RecipesForMachineMultipleItems(name: name, minCount: minCount, maxCount: maxCount);
+                text = I18n.Item_RecipesForMachine_MultipleItems(name: name, count: I18n.Generic_Range(min: minCount, max: maxCount));
             else if (minCount > 1)
-                text = L10n.Item.RecipesForMachineMultipleItems(name: name, count: minCount);
+                text = I18n.Item_RecipesForMachine_MultipleItems(name: name, count: minCount);
             else
                 text = name;
 
             // add chance
             if (chance > 0 && chance < 100)
-                text += " (" + L10n.Generic.Percent(chance) + ")";
+                text += " (" + I18n.Generic_Percent(chance) + ")";
 
             return text;
         }

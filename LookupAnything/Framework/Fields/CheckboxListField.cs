@@ -22,13 +22,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="checkboxes">The checkbox labels and values to display.</param>
-        public CheckboxListField(GameHelper gameHelper, string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
-            : this(gameHelper, label)
+        public CheckboxListField(string label, IEnumerable<KeyValuePair<IFormattedText[], bool>> checkboxes)
+            : this(label)
         {
             this.Checkboxes = checkboxes.ToArray();
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A short field label.</param>
+        /// <param name="checkboxes">The checkbox labels and values to display.</param>
+        public CheckboxListField(string label, params KeyValuePair<IFormattedText[], bool>[] checkboxes)
+            : this(label)
+        {
+            this.Checkboxes = checkboxes;
         }
 
         /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
@@ -69,15 +77,30 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             return new Vector2(wrapWidth, topOffset);
         }
 
+        /// <summary>Build a checkbox entry.</summary>
+        /// <param name="value">Whether the value is enabled.</param>
+        /// <param name="text">The checkbox text to display.</param>
+        public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, params IFormattedText[] text)
+        {
+            return new KeyValuePair<IFormattedText[], bool>(text, value);
+        }
+
+        /// <summary>Build a checkbox entry.</summary>
+        /// <param name="value">Whether the value is enabled.</param>
+        /// <param name="text">The checkbox text to display.</param>
+        public static KeyValuePair<IFormattedText[], bool> Checkbox(bool value, string text)
+        {
+            return CheckboxListField.Checkbox(value, new FormattedText(text));
+        }
+
 
         /*********
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
-        protected CheckboxListField(GameHelper gameHelper, string label)
-            : base(gameHelper, label, hasValue: true)
+        protected CheckboxListField(string label)
+            : base(label, hasValue: true)
         {
             this.Checkboxes = new KeyValuePair<IFormattedText[], bool>[0];
         }

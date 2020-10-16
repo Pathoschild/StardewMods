@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Items.ItemData;
-using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -117,7 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             : this(
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
-                displayType: recipe.isCookingRecipe ? L10n.RecipeTypes.Cooking() : L10n.RecipeTypes.Crafting(),
+                displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
                 ingredients: reflectionHelper
                     .GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue()
                     .Select(p => new RecipeIngredientModel(p.Key, p.Value)),
