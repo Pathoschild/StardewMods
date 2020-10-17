@@ -75,11 +75,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                     default:
                         bool canNavigate = this.CanCloseChest;
-                        if (canNavigate && this.Menu.okButton.containsPoint(x, y))
+
+                        // handle exit
+                        // (This fixes an issue where the game doesn't handle it correctly in some contexts, like the
+                        // Stardew Valley Fair fishing minigame. Note that the button may be null if removed by a mod like
+                        // ChestEx.)
+                        if (canNavigate && this.Menu.okButton?.containsPoint(x, y) == true)
                         {
-                            this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
+                            this.Exit();
                             return true;
                         }
+
+                        // handle sort
                         else if (this.SortInventoryButton?.containsPoint(x, y) == true)
                         {
                             this.SortInventory();

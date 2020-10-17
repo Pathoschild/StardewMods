@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed compatibility with recent ChestEx update.
+
 ## 1.19.6
 Released 15 October 2020.
 
