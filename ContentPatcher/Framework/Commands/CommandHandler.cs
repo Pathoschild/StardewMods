@@ -416,8 +416,7 @@ namespace ContentPatcher.Framework.Commands
                         if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet effects))
                             effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
 
-                        foreach (string effect in patch.GetChangeLabels())
-                            effects.Add(effect);
+                        effects.AddMany(patch.GetChangeLabels());
                     }
 
                     output.AppendLine();

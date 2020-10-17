@@ -154,10 +154,7 @@ namespace ContentPatcher.Framework
                 }
 
                 if (localImmutableRequiredModIDs != null)
-                {
-                    foreach (string id in localImmutableRequiredModIDs)
-                        immutableRequiredModIDs.Add(id);
-                }
+                    immutableRequiredModIDs.AddMany(localImmutableRequiredModIDs);
                 conditions.Add(condition);
             }
 

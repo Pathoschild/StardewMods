@@ -196,15 +196,11 @@ namespace ContentPatcher.Framework
             if (updateType.HasFlag((ContextUpdateType)UpdateRate.OnDayStart))
             {
                 globalChangedTokens = new InvariantHashSet(globalChangedTokens);
-                foreach (string token in this.QueuedDailyTokenChanges)
-                    globalChangedTokens.Add(token);
+                globalChangedTokens.AddMany(this.QueuedDailyTokenChanges);
                 this.QueuedDailyTokenChanges.Clear();
             }
             else
-            {
-                foreach (string token in globalChangedTokens)
-                    this.QueuedDailyTokenChanges.Add(token);
-            }
+                this.QueuedDailyTokenChanges.AddMany(globalChangedTokens);
 
             // get changes to apply
             HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
@@ -441,8 +437,7 @@ namespace ContentPatcher.Framework
             }
 
             // add uninitialized patches
-            foreach (var patch in this.PendingPatches)
-                patches.Add(patch);
+            patches.AddMany(this.PendingPatches);
 
             return patches;
         }

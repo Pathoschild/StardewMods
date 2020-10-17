@@ -57,8 +57,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="tokens">The token names used.</param>
         public void AddTokensUsed(IEnumerable<string> tokens)
         {
-            foreach (string name in tokens)
-                this.TokensUsed.Add(name);
+            this.TokensUsed.AddMany(tokens);
         }
 
         /// <summary>Set the current values.</summary>

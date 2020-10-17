@@ -81,10 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                             : Game1.player;
 
                         if (player != null)
-                        {
-                            foreach (string value in this.FetchValues(player))
-                                values.Add(value);
-                        }
+                            values.AddMany(this.FetchValues(player));
                     }
 
                     changed |= this.IsChanged(oldValues, values);

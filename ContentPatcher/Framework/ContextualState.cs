@@ -107,8 +107,7 @@ namespace ContentPatcher.Framework
             if (source == null)
                 return;
 
-            foreach (string value in source)
-                target.Add(value);
+            target.AddMany(source);
         }
     }
 }

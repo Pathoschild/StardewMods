@@ -271,8 +271,7 @@ namespace ContentPatcher.Framework.Conditions
                                 .ToArray();
                             if (unavailableInputTokens.Any())
                             {
-                                foreach (string tokenName in unavailableInputTokens)
-                                    unavailableTokens.Add(tokenName);
+                                unavailableTokens.AddMany(unavailableInputTokens);
                                 text = null;
                                 return false;
                             }
