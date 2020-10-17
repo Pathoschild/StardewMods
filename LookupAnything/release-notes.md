@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed 'number owned' field sometimes counting two of the same tool/weapon as different items.
+
 ## 1.28
 Released 15 October 2020.
 

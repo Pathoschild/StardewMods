@@ -586,22 +586,17 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="b">The second item to compare.</param>
         private bool AreEquivalent(Item a, Item b)
         {
-            if (a == null || b == null)
+            if (a == null || b == null || a.ParentSheetIndex != b.ParentSheetIndex)
                 return false;
 
-            // equivalent torches
-            // (torches change from SObject to Torch when placed)
-            if (a.ParentSheetIndex == b.ParentSheetIndex && new[] { a, b }.All(p => p is Torch || (p.ParentSheetIndex == 93 && p.GetItemType() == ItemType.Object)))
+            // special case: torches change from SObject to Torch when placed
+            if (new[] { a, b }.All(p => p is Torch || (p.ParentSheetIndex == 93 && p.GetItemType() == ItemType.Object)))
                 return true;
 
             // equivalent
             return
-                // same generic item type
-                a.GetType() == b.GetType()
-                && a.Category == b.Category
-                && a.ParentSheetIndex == b.ParentSheetIndex
-
-                // same discriminators
+                a.Category == b.Category
+                && a.GetType() == b.GetType()
                 && a.GetItemType() == b.GetItemType()
                 && (a as Boots)?.indexInTileSheet == (b as Boots)?.indexInTileSheet
                 && (a as BreakableContainer)?.Type == (b as BreakableContainer)?.Type
@@ -610,8 +605,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 && (a as Hat)?.which == (b as Hat)?.which
                 && (a as MeleeWeapon)?.type == (b as MeleeWeapon)?.type
                 && (a as Ring)?.indexInTileSheet == (b as Ring)?.indexInTileSheet
-                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex
-                && (a as Tool)?.CurrentParentTileIndex == (b as Tool)?.CurrentParentTileIndex;
+                && (a as Tool)?.InitialParentTileIndex == (b as Tool)?.InitialParentTileIndex;
         }
 
         /// <summary>Get all machine recipes, including those from mods like Producer Framework Mod.</summary>
