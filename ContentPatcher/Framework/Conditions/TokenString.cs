@@ -187,27 +187,19 @@ namespace ContentPatcher.Framework.Conditions
             this.State.Reset();
 
             // update value
-            InvariantHashSet unavailableTokens = new InvariantHashSet();
-            InvariantHashSet errors = new InvariantHashSet();
             {
                 StringBuilder str = new StringBuilder();
                 foreach (TokenStringPart part in this.Parts)
-                    str.Append(this.TryGetTokenText(context, part, unavailableTokens, errors, out string text) ? text : part.LexToken.ToString());
+                    str.Append(this.TryGetTokenText(context, part, this.State, out string text) ? text : part.LexToken.ToString());
 
-                this.Value = !unavailableTokens.Any() && !errors.Any()
+                this.Value = this.State.IsReady
                     ? str.ToString().Trim()
                     : null;
             }
 
-            // reapply
-            if (this.Value == null)
-            {
-                if (!unavailableTokens.Any() && !errors.Any())
-                    throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens or errors were reported."); // sanity check, should never happen
-
-                this.State.AddUnreadyTokens(unavailableTokens.ToArray());
-                this.State.AddErrors(errors.ToArray());
-            }
+            // sanity check (should never happen)
+            if (this.Value == null && this.State.IsReady)
+                throw new InvalidOperationException($"Could not apply tokens to string '{this.Raw}', but no invalid tokens or errors were reported.");
 
             return
                 this.Value != wasValue
@@ -239,21 +231,26 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Get the text representation of a token's values.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="part">The token string part whose value to fetch.</param>
-        /// <param name="unavailableTokens">A list of unavailable or unready token names to update if needed.</param>
-        /// <param name="errors">The errors which occurred (if any).</param>
+        /// <param name="state">The context state to update with errors, unavailable tokens, etc.</param>
         /// <param name="text">The text representation, if available.</param>
         /// <returns>Returns true if the token is ready and <paramref name="text"/> was set, else false.</returns>
-        private bool TryGetTokenText(IContext context, TokenStringPart part, InvariantHashSet unavailableTokens, InvariantHashSet errors, out string text)
+        private bool TryGetTokenText(IContext context, TokenStringPart part, ContextualState state, out string text)
         {
             switch (part.LexToken)
             {
                 case LexTokenToken lexToken:
                     {
                         // get token
-                        IToken token = context.GetToken(lexToken.Name, enforceContext: true);
-                        if (token == null || !token.IsReady)
+                        IToken token = context.GetToken(lexToken.Name, enforceContext: false);
+                        if (token == null)
                         {
-                            unavailableTokens.Add(lexToken.Name);
+                            state.AddInvalidTokens(lexToken.Name);
+                            text = null;
+                            return false;
+                        }
+                        if (!token.IsReady)
+                        {
+                            this.State.AddUnreadyTokens(lexToken.Name);
                             text = null;
                             return false;
                         }
@@ -261,17 +258,10 @@ namespace ContentPatcher.Framework.Conditions
                         // get token input
                         if (part.Input != null)
                         {
-                            // update input
                             part.Input.UpdateContext(context);
-
-                            // check for unavailable tokens
-                            string[] unavailableInputTokens = part.Input
-                                .GetTokensUsed()
-                                .Where(name => context.GetToken(name, enforceContext: true)?.IsReady != true)
-                                .ToArray();
-                            if (unavailableInputTokens.Any())
+                            if (!part.Input.IsReady)
                             {
-                                unavailableTokens.AddMany(unavailableInputTokens);
+                                state.MergeFrom(part.Input.GetDiagnosticState());
                                 text = null;
                                 return false;
                             }
@@ -280,7 +270,7 @@ namespace ContentPatcher.Framework.Conditions
                         // validate input
                         if (!token.TryValidateInput(part.InputArgs, out string error))
                         {
-                            errors.Add(error);
+                            state.AddErrors(error);
                             text = null;
                             return false;
                         }

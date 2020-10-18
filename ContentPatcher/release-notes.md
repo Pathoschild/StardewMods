@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed tokens which use input arguments failing to update silently in rare cases.
+
 ## 1.18.3
 Released 15 October 2020.
 
