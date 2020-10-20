@@ -511,15 +511,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     // display fields
                     yield return new ItemIconField(this.GameHelper, I18n.Item_Contents(), heldObj);
                     if (minutesLeft <= 0 || !schedule.Any())
-                        yield return new GenericField(I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: curQuality));
+                        yield return new GenericField(I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: I18n.For(curQuality)));
                     else
                     {
                         string scheduleStr = string.Join(Environment.NewLine, (
                             from entry in schedule
-                            let str = I18n.GetPlural(entry.DaysLeft, I18n.Item_CaskSchedule_Tomorrow(quality: entry.Quality), I18n.Item_CaskSchedule_InXDays(quality: entry.Quality, count: entry.DaysLeft, date: entry.HarvestDate))
+                            let str = I18n.GetPlural(entry.DaysLeft, I18n.Item_CaskSchedule_Tomorrow(quality: I18n.For(entry.Quality)), I18n.Item_CaskSchedule_InXDays(quality: I18n.For(entry.Quality), count: entry.DaysLeft, date: this.Stringify(entry.HarvestDate)))
                             select $"-{str}"
                         ));
-                        yield return new GenericField(I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: curQuality)}{Environment.NewLine}{scheduleStr}");
+                        yield return new GenericField(I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: I18n.For(curQuality))}{Environment.NewLine}{scheduleStr}");
                     }
                 }
             }

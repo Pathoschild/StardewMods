@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed 'number owned' field sometimes counting two of the same tool/weapon as different items.
+* Fixed some translation issues in 1.28.
 
 ## 1.28
 Released 15 October 2020.

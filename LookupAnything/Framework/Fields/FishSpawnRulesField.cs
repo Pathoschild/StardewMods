@@ -113,7 +113,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     if (locationsBySeason.TryGetValue(season, out string[] locationNames))
                     {
                         summary.Add(new FormattedText(
-                            text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: locationNames),
+                            text: Environment.NewLine + I18n.Item_FishSpawnRules_LocationsBySeason_SeasonLocations(season: gameHelper.TranslateSeason(season), locations: string.Join(", ", locationNames)),
                             color: season == Game1.currentSeason ? Color.Black : Color.Gray
                         ));
                     }

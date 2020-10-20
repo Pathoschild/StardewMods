@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             {
                 int daysLeft = building.isUnderConstruction() ? building.daysOfConstructionLeft.Value : building.daysUntilUpgrade.Value;
                 SDate readyDate = SDate.Now().AddDays(daysLeft);
-                yield return new GenericField(I18n.Building_Construction(), I18n.Building_Construction_Summary(date: readyDate));
+                yield return new GenericField(I18n.Building_Construction(), I18n.Building_Construction_Summary(date: this.Stringify(readyDate)));
             }
 
             // owner
