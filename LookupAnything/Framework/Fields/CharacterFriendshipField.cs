@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 
@@ -55,32 +55,32 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 Rectangle icon;
                 if (friendship.LockedHearts >= friendship.TotalHearts - i)
                 {
-                    icon = Sprites.Icons.FilledHeart;
+                    icon = CommonSprites.Icons.FilledHeart;
                     color = Color.Black * 0.35f;
                 }
                 else if (i >= friendship.FilledHearts)
                 {
-                    icon = Sprites.Icons.EmptyHeart;
+                    icon = CommonSprites.Icons.EmptyHeart;
                     color = Color.White;
                 }
                 else
                 {
-                    icon = Sprites.Icons.FilledHeart;
+                    icon = CommonSprites.Icons.FilledHeart;
                     color = Color.White;
                 }
 
                 // draw
-                spriteBatch.DrawSprite(Sprites.Icons.Sheet, icon, position.X + leftOffset, position.Y, color, Game1.pixelZoom);
-                leftOffset += Sprites.Icons.FilledHeart.Width * Game1.pixelZoom;
+                spriteBatch.DrawSprite(CommonSprites.Icons.Sheet, icon, position.X + leftOffset, position.Y, color, Game1.pixelZoom);
+                leftOffset += CommonSprites.Icons.FilledHeart.Width * Game1.pixelZoom;
             }
 
             // draw stardrop (if applicable)
             if (friendship.HasStardrop)
             {
                 leftOffset += 1;
-                float zoom = (Sprites.Icons.EmptyHeart.Height / (Sprites.Icons.Stardrop.Height * 1f)) * Game1.pixelZoom;
-                spriteBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.Stardrop, position.X + leftOffset, position.Y, Color.White * 0.25f, zoom);
-                leftOffset += Sprites.Icons.Stardrop.Width * zoom;
+                float zoom = (CommonSprites.Icons.EmptyHeart.Height / (CommonSprites.Icons.Stardrop.Height * 1f)) * Game1.pixelZoom;
+                spriteBatch.DrawSprite(CommonSprites.Icons.Sheet, CommonSprites.Icons.Stardrop, position.X + leftOffset, position.Y, Color.White * 0.25f, zoom);
+                leftOffset += CommonSprites.Icons.Stardrop.Width * zoom;
             }
 
             // get caption text
@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 if (caption != null)
                     textSize = spriteBatch.DrawTextBlock(font, caption, new Vector2(position.X + leftOffset + spaceSize, position.Y), wrapWidth - leftOffset);
 
-                return new Vector2(Sprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(Sprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
+                return new Vector2(CommonSprites.Icons.FilledHeart.Width * Game1.pixelZoom * this.Friendship.TotalHearts + textSize.X + spaceSize, Math.Max(CommonSprites.Icons.FilledHeart.Height * Game1.pixelZoom, textSize.Y));
             }
         }
     }

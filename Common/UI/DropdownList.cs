@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
+namespace Pathoschild.Stardew.Common.UI
 {
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>
-    internal class DropList<TItem> : ClickableComponent
+    internal class DropdownList<TItem> : ClickableComponent
         where TItem : class
     {
         /*********
@@ -33,7 +32,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         private TItem SelectedItem => this.Items.First(p => p.Index == this.SelectedIndex).Value;
 
         /// <summary>The items in the list.</summary>
-        private readonly DropListItem<TItem>[] Items;
+        private readonly DropListItem[] Items;
 
         /// <summary>The item index shown at the top of the list.</summary>
         private int FirstVisibleIndex;
@@ -74,13 +73,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="y">The Y-position from which to render the list.</param>
         /// <param name="toRight">Whether the dropdown should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
-        public DropList(TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, int x, int y, bool toRight, SpriteFont font)
-            : base(new Rectangle(), nameof(DropList<TItem>))
+        public DropdownList(TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, int x, int y, bool toRight, SpriteFont font)
+            : base(new Rectangle(), nameof(DropdownList<TItem>))
         {
             // save values
             this.SelectedIndex = Array.IndexOf(items, selectedItem);
             this.Items = items
-                .Select((item, index) => new DropListItem<TItem>(index, nameSelector(item), item))
+                .Select((item, index) => new DropListItem(index, nameSelector(item), item))
                 .ToArray();
             this.Font = font;
             this.FontHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
@@ -125,14 +124,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             {
                 // draw background
                 if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.HoverBackground, Color.White * opacity);
+                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.HoverBackground, Color.White * opacity);
                 else if (component.name.Equals(this.SelectedIndex.ToString()))
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.ActiveBackground, Color.White * opacity);
+                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.ActiveBackground, Color.White * opacity);
                 else
-                    sprites.Draw(Sprites.DropDown.Sheet, component.bounds, Sprites.DropDown.InactiveBackground, Color.White * opacity);
+                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.InactiveBackground, Color.White * opacity);
 
                 // draw text
-                DropListItem<TItem> item = this.Items.First(p => p.Index == int.Parse(component.name));
+                DropListItem item = this.Items.First(p => p.Index == int.Parse(component.name));
                 Vector2 position = this.ToRight
                         ? new Vector2(component.bounds.X + DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16)
                         : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X - DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16);
@@ -141,9 +140,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
 
             // draw up/down arrows
             if (this.FirstVisibleIndex > 0)
-                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y), Sprites.Icons.UpArrow, Color.White * opacity);
+                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y), CommonSprites.Icons.UpArrow, Color.White * opacity);
             if (this.FirstVisibleIndex < this.MaxFirstVisibleIndex)
-                sprites.Draw(Sprites.Icons.Sheet, new Vector2(this.bounds.X - Sprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - Sprites.Icons.DownArrow.Height), Sprites.Icons.DownArrow, Color.White * opacity);
+                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.DownArrow, Color.White * opacity);
         }
 
 
@@ -206,6 +205,41 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         private int GetValidFirstItem(int value, int maxIndex)
         {
             return Math.Max(Math.Min(value, maxIndex), 0);
+        }
+
+
+        /*********
+        ** Private models
+        *********/
+        /// <summary>An item in a drop list.</summary>
+        private class DropListItem
+        {
+            /*********
+            ** Accessors
+            *********/
+            /// <summary>The item's index in the list.</summary>
+            public int Index { get; }
+
+            /// <summary>The display name.</summary>
+            public string Name { get; }
+
+            /// <summary>The item value.</summary>
+            public TItem Value { get; }
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Construct an instance.</summary>
+            /// <param name="index">The item's index in the list.</param>
+            /// <param name="name">The display name.</param>
+            /// <param name="value">The item value.</param>
+            public DropListItem(int index, string name, TItem value)
+            {
+                this.Index = index;
+                this.Name = name;
+                this.Value = value;
+            }
         }
     }
 }

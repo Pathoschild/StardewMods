@@ -84,16 +84,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private readonly SpriteFont Font = Game1.smallFont;
 
         /// <summary>The chest selector tab.</summary>
-        protected Tab ChestTab;
+        protected Dropdown ChestTab;
 
         /// <summary>The category selector tab.</summary>
-        protected Tab CategoryTab;
+        protected Dropdown CategoryTab;
 
         /// <summary>The chest selector dropdown.</summary>
-        protected DropList<ManagedChest> ChestSelector;
+        protected DropdownList<ManagedChest> ChestSelector;
 
         /// <summary>The category selector dropdown.</summary>
-        protected DropList<string> CategorySelector;
+        protected DropdownList<string> CategorySelector;
 
         /// <summary>The edit button.</summary>
         protected ClickableTextureComponent EditButton;
@@ -561,34 +561,34 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             if (this.ShowCategoryDropdown)
             {
                 // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedCategory);
+                Vector2 tabSize = Dropdown.GetTabSize(this.Font, this.SelectedCategory);
                 this.CategoryTab = Constants.TargetPlatform == GamePlatform.Android
-                    ? new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y, true, this.Font)
-                    : new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
+                    ? new Dropdown(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y, true, this.Font)
+                    : new Dropdown(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
-                this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
+                this.CategorySelector = new DropdownList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
             }
 
             // chest dropdown
             {
                 // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.Chest.DisplayName);
+                Vector2 tabSize = Dropdown.GetTabSize(this.Font, this.Chest.DisplayName);
                 this.ChestTab = Constants.TargetPlatform == GamePlatform.Android
-                    ? new Tab(this.Chest.DisplayName, bounds.X, bounds.Y, true, this.Font)
-                    : new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
+                    ? new Dropdown(this.Chest.DisplayName, bounds.X, bounds.Y, true, this.Font)
+                    : new Dropdown(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
 
                 // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
-                this.ChestSelector = new DropList<ManagedChest>(this.Chest, chests, chest => chest.DisplayName, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
+                this.ChestSelector = new DropdownList<ManagedChest>(this.Chest, chests, chest => chest.DisplayName, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
             }
 
             // edit chest button overlay (based on chest dropdown position)
             {
-                Rectangle sprite = Sprites.Icons.SpeechBubble;
+                Rectangle sprite = CommonSprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), Sprites.Icons.Sheet, sprite, zoom);
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form
@@ -605,7 +605,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
             this.EditResetButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "reset-chest");
-            this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
+            this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, CommonSprites.Icons.ExitButton.Width * Game1.pixelZoom, CommonSprites.Icons.ExitButton.Height * Game1.pixelZoom), CommonSprites.Icons.Sheet, CommonSprites.Icons.ExitButton, Game1.pixelZoom);
         }
 
         /// <summary>Set the form values to match the underlying chest.</summary>

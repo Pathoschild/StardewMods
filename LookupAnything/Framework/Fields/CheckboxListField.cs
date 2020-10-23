@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything.Components;
+using Pathoschild.Stardew.Common.UI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
             float topOffset = 0;
-            float checkboxSize = Sprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
+            float checkboxSize = CommonSprites.Icons.FilledCheckbox.Width * (Game1.pixelZoom / 2);
             float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
             float checkboxOffset = (lineHeight - checkboxSize) / 2;
 
@@ -56,13 +56,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 // draw icon
                 spriteBatch.Draw(
-                    texture: Sprites.Icons.Sheet,
+                    texture: CommonSprites.Icons.Sheet,
                     position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
-                    sourceRectangle: entry.Value ? Sprites.Icons.FilledCheckbox : Sprites.Icons.EmptyCheckbox,
+                    sourceRectangle: entry.Value ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
                     color: Color.White,
                     rotation: 0,
                     origin: Vector2.Zero,
-                    scale: checkboxSize / Sprites.Icons.FilledCheckbox.Width,
+                    scale: checkboxSize / CommonSprites.Icons.FilledCheckbox.Width,
                     effects: SpriteEffects.None,
                     layerDepth: 1f
                 );

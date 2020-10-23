@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
@@ -192,9 +193,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                     // draw scroll icons
                     if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.UpArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height - gutter - Sprites.Icons.UpArrow.Height);
+                        contentBatch.DrawSprite(CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, x + gutter, y + contentHeight - CommonSprites.Icons.DownArrow.Height - gutter - CommonSprites.Icons.UpArrow.Height);
                     if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                        contentBatch.DrawSprite(Sprites.Icons.Sheet, Sprites.Icons.DownArrow, x + gutter, y + contentHeight - Sprites.Icons.DownArrow.Height);
+                        contentBatch.DrawSprite(CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, x + gutter, y + contentHeight - CommonSprites.Icons.DownArrow.Height);
 
                     // end draw
                     contentBatch.End();

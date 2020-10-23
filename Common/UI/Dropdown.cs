@@ -1,12 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.UI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
+namespace Pathoschild.Stardew.Common.UI
 {
     /// <summary>A tab UI component which lets the player trigger a dropdown list.</summary>
-    internal class Tab : ClickableComponent
+    internal class Dropdown : ClickableComponent
     {
         /*********
         ** Fields
@@ -23,14 +24,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="y">The Y-position at which to draw the tab.</param>
         /// <param name="toRight">Whether the tab should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
-        public Tab(string name, int x, int y, bool toRight, SpriteFont font)
+        public Dropdown(string name, int x, int y, bool toRight, SpriteFont font)
             : base(Rectangle.Empty, name)
         {
             // save values
             this.Font = font;
 
             // set bounds
-            Vector2 size = Tab.GetTabSize(font, name);
+            Vector2 size = Dropdown.GetTabSize(font, name);
             this.bounds.Width = (int)size.X;
             this.bounds.Height = (int)size.Y;
             this.bounds.X = x;
@@ -51,20 +52,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             int height = this.bounds.Height;
             int zoom = Game1.pixelZoom;
             Color color = Color.White * opacity;
-            int borderWidth = Sprites.Tab.Left.Width * zoom;
-            int cornerWidth = Sprites.Tab.TopLeft.Width * zoom;
+            int borderWidth = CommonSprites.Tab.Left.Width * zoom;
+            int cornerWidth = CommonSprites.Tab.TopLeft.Width * zoom;
 
             // draw
-            var sheet = Sprites.Tab.Sheet;
-            sprites.Draw(sheet, Sprites.Tab.Background, x + borderWidth, y + borderWidth, width - borderWidth * 2, height - borderWidth * 2, color);
-            sprites.Draw(sheet, Sprites.Tab.Top, x + cornerWidth, y, width - borderWidth * 2, borderWidth, color);
-            sprites.Draw(sheet, Sprites.Tab.Left, x, y + cornerWidth, borderWidth, height - borderWidth * 2, color);
-            sprites.Draw(sheet, Sprites.Tab.Right, x + width - borderWidth, y + cornerWidth, borderWidth, height - cornerWidth * 2, color);
-            sprites.Draw(sheet, Sprites.Tab.Bottom, x + cornerWidth, y + height - borderWidth, width - borderWidth * 2, borderWidth, color);
-            sprites.Draw(sheet, Sprites.Tab.TopLeft, x, y, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, Sprites.Tab.TopRight, x + width - cornerWidth, y, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, Sprites.Tab.BottomLeft, x, y + height - cornerWidth, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, Sprites.Tab.BottomRight, x + width - cornerWidth, y + height - cornerWidth, cornerWidth, cornerWidth, color);
+            var sheet = CommonSprites.Tab.Sheet;
+            sprites.Draw(sheet, CommonSprites.Tab.Background, x + borderWidth, y + borderWidth, width - borderWidth * 2, height - borderWidth * 2, color);
+            sprites.Draw(sheet, CommonSprites.Tab.Top, x + cornerWidth, y, width - borderWidth * 2, borderWidth, color);
+            sprites.Draw(sheet, CommonSprites.Tab.Left, x, y + cornerWidth, borderWidth, height - borderWidth * 2, color);
+            sprites.Draw(sheet, CommonSprites.Tab.Right, x + width - borderWidth, y + cornerWidth, borderWidth, height - cornerWidth * 2, color);
+            sprites.Draw(sheet, CommonSprites.Tab.Bottom, x + cornerWidth, y + height - borderWidth, width - borderWidth * 2, borderWidth, color);
+            sprites.Draw(sheet, CommonSprites.Tab.TopLeft, x, y, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, CommonSprites.Tab.TopRight, x + width - cornerWidth, y, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, CommonSprites.Tab.BottomLeft, x, y + height - cornerWidth, cornerWidth, cornerWidth, color);
+            sprites.Draw(sheet, CommonSprites.Tab.BottomRight, x + width - cornerWidth, y + height - cornerWidth, cornerWidth, cornerWidth, color);
             sprites.DrawString(this.Font, this.name, new Vector2(x + cornerWidth, y + cornerWidth), Color.Black * opacity);
         }
 
@@ -76,7 +77,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             return
                 font.MeasureString(name) // get font size
                 - new Vector2(0, 10) // adjust for font's broken measurement
-                + new Vector2(Sprites.Tab.TopLeft.Width * 2 * Game1.pixelZoom); // add space for borders
+                + new Vector2(CommonSprites.Tab.TopLeft.Width * 2 * Game1.pixelZoom); // add space for borders
         }
     }
 }
