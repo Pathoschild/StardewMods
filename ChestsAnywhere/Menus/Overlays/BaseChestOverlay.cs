@@ -550,23 +550,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // category dropdown
             if (this.ShowCategoryDropdown)
             {
-                Vector2 tabSize = Dropdown<string>.GetTabSize(this.Font, this.SelectedCategory);
-                int yOffset = Constants.TargetPlatform == GamePlatform.Android
-                    ? 0
-                    : -(int)tabSize.Y + this.TopOffset;
+                this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category);
 
-                this.CategoryDropdown = new Dropdown<string>(this.SelectedCategory, bounds.Right - Game1.tileSize, bounds.Y + yOffset, this.Font, this.SelectedCategory, this.Categories, category => category, rightAlign: true);
+                if (Constants.TargetPlatform != GamePlatform.Android)
+                    this.CategoryDropdown.bounds.Y = bounds.Y - this.CategoryDropdown.bounds.Height + this.TopOffset;
+                this.CategoryDropdown.bounds.X -= this.CategoryDropdown.bounds.Width; // right-align
+                this.CategoryDropdown.ReinitializeComponents();
             }
 
             // chest dropdown
             {
-                Vector2 tabSize = Dropdown<ManagedChest>.GetTabSize(this.Font, this.Chest.DisplayName);
-                int yOffset = Constants.TargetPlatform == GamePlatform.Android
-                    ? 0
-                    : -(int)tabSize.Y + this.TopOffset;
-
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
-                this.ChestDropdown = new Dropdown<ManagedChest>(this.Chest.DisplayName, bounds.X, bounds.Y + yOffset, this.Font, this.Chest, chests, chest => chest.DisplayName);
+                ManagedChest selected = chests.FirstOrDefault(p => p.Container.IsSameAs(this.Chest.Container));
+                this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName);
+
+                if (Constants.TargetPlatform != GamePlatform.Android)
+                {
+                    this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + this.TopOffset;
+                    this.ChestDropdown.ReinitializeComponents();
+                }
             }
 
             // edit chest button overlay (based on chest dropdown position)

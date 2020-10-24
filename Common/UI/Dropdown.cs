@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -18,43 +19,52 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The dropdown list.</summary>
         private readonly DropdownList<TItem> List;
 
+        /// <summary>The size of the rendered button borders.</summary>
+        private readonly int BorderWidth = CommonSprites.Tab.TopLeft.Width * 2 * Game1.pixelZoom;
+
+        /// <summary>The backing field for <see cref="IsExpanded"/>.</summary>
+        private bool IsExpandedImpl;
+
 
         /*********
         ** Accessors
         *********/
         /// <summary>Whether the dropdown list is expanded.</summary>
-        public bool IsExpanded { get; set; }
+        public bool IsExpanded
+        {
+            get => this.IsExpandedImpl;
+            set
+            {
+                this.IsExpandedImpl = value;
+                this.downNeighborID = value
+                    ? this.List.TopComponentId
+                    : this.DefaultDownNeighborId;
+            }
+        }
+
+        /// <summary>The downward neighbor ID when the dropdown is closed for controller snapping.</summary>
+        public int DefaultDownNeighborId { get; set; } = -99999;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="name">The displayed tab text.</param>
         /// <param name="x">The X-position at which to draw the tab.</param>
         /// <param name="y">The Y-position at which to draw the tab.</param>
         /// <param name="font">The font with which to render text.</param>
         /// <param name="selectedItem">The selected item.</param>
         /// <param name="items">The items in the list.</param>
-        /// <param name="nameSelector">A lambda which returns the display name for an item.</param>
-        /// <param name="rightAlign">Whether the button should be right-aligned, so it's left of the <paramref name="x"/> and <paramref name="y"/> position.</param>
-        public Dropdown(string name, int x, int y, SpriteFont font, TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, bool rightAlign = false)
-            : base(Rectangle.Empty, name)
+        /// <param name="getLabel">Get the display label for an item.</param>
+        public Dropdown(int x, int y, SpriteFont font, TItem selectedItem, TItem[] items, Func<TItem, string> getLabel)
+            : base(Rectangle.Empty, getLabel(selectedItem))
         {
-            // save values
             this.Font = font;
-
-            // set bounds
-            Vector2 size = Dropdown<TItem>.GetTabSize(font, name);
-            this.bounds.Width = (int)size.X;
-            this.bounds.Height = (int)size.Y;
+            this.List = new DropdownList<TItem>(selectedItem, items, getLabel, x, y, font);
             this.bounds.X = x;
-            if (rightAlign)
-                this.bounds.X -= this.bounds.Width;
             this.bounds.Y = y;
 
-            // create dropdown
-            this.List = new DropdownList<TItem>(selectedItem, items, nameSelector, this.bounds.X, this.bounds.Bottom, font);
+            this.ReinitializeComponents();
         }
 
         /// <summary>Get whether the dropdown contains the given UI pixel position.</summary>
@@ -81,6 +91,14 @@ namespace Pathoschild.Stardew.Common.UI
             return false;
         }
 
+        /// <summary>Select an item in the list matching the given value.</summary>
+        /// <param name="value">The value to search.</param>
+        /// <returns>Returns whether an item was selected.</returns>
+        public bool TrySelect(TItem value)
+        {
+            return this.List.TrySelect(value);
+        }
+
         /// <summary>A method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
         /// <param name="direction">The scroll direction.</param>
         public void ReceiveScrollWheelAction(int direction)
@@ -94,43 +112,39 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="opacity">The opacity at which to draw.</param>
         public void Draw(SpriteBatch sprites, float opacity = 1)
         {
-            // calculate
-            int x = this.bounds.X;
-            int y = this.bounds.Y;
-            int width = this.bounds.Width;
-            int height = this.bounds.Height;
-            int zoom = Game1.pixelZoom;
-            Color color = Color.White * opacity;
-            int borderWidth = CommonSprites.Tab.Left.Width * zoom;
-            int cornerWidth = CommonSprites.Tab.TopLeft.Width * zoom;
-
             // draw tab
-            var sheet = CommonSprites.Tab.Sheet;
-            sprites.Draw(sheet, CommonSprites.Tab.Background, x + borderWidth, y + borderWidth, width - borderWidth * 2, height - borderWidth * 2, color);
-            sprites.Draw(sheet, CommonSprites.Tab.Top, x + cornerWidth, y, width - borderWidth * 2, borderWidth, color);
-            sprites.Draw(sheet, CommonSprites.Tab.Left, x, y + cornerWidth, borderWidth, height - borderWidth * 2, color);
-            sprites.Draw(sheet, CommonSprites.Tab.Right, x + width - borderWidth, y + cornerWidth, borderWidth, height - cornerWidth * 2, color);
-            sprites.Draw(sheet, CommonSprites.Tab.Bottom, x + cornerWidth, y + height - borderWidth, width - borderWidth * 2, borderWidth, color);
-            sprites.Draw(sheet, CommonSprites.Tab.TopLeft, x, y, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, CommonSprites.Tab.TopRight, x + width - cornerWidth, y, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, CommonSprites.Tab.BottomLeft, x, y + height - cornerWidth, cornerWidth, cornerWidth, color);
-            sprites.Draw(sheet, CommonSprites.Tab.BottomRight, x + width - cornerWidth, y + height - cornerWidth, cornerWidth, cornerWidth, color);
-            sprites.DrawString(this.Font, this.name, new Vector2(x + cornerWidth, y + cornerWidth), Color.Black * opacity);
+            CommonHelper.DrawTab(sprites, this.bounds.X, this.bounds.Y, this.List.MaxLabelWidth, this.List.MaxLabelHeight, out Vector2 textPos);
+            sprites.DrawString(this.Font, this.List.SelectedLabel, textPos, Color.Black * opacity);
 
             // draw dropdown
             if (this.IsExpanded)
                 this.List.Draw(sprites, opacity);
         }
 
-        /// <summary>Get the size of the tab rendered for a given label.</summary>
-        /// <param name="font">The font with which to render text.</param>
-        /// <param name="name">The displayed tab text.</param>
-        public static Vector2 GetTabSize(SpriteFont font, string name)
+        /// <summary>Recalculate dimensions and components for rendering.</summary>
+        public void ReinitializeComponents()
         {
-            return
-                font.MeasureString(name) // get font size
-                - new Vector2(0, 10) // adjust for font's broken measurement
-                + new Vector2(CommonSprites.Tab.TopLeft.Width * 2 * Game1.pixelZoom); // add space for borders
+            this.bounds.Height = (int)this.Font.MeasureString("ABCDEFGHIJKLMNOPQRSTUVWXYZ").Y - 10 + this.BorderWidth; // adjust for font's broken measurement
+            this.bounds.Width = this.List.MaxLabelWidth + this.BorderWidth;
+
+            this.List.bounds.X = this.bounds.X;
+            this.List.bounds.Y = this.bounds.Bottom;
+            this.List.ReinitializeComponents();
+
+            this.ReinitializeControllerFlow();
+        }
+
+        /// <summary>Set the fields to support controller snapping.</summary>
+        public void ReinitializeControllerFlow()
+        {
+            this.List.ReinitializeControllerFlow();
+            this.IsExpanded = this.IsExpanded; // force-update down ID
+        }
+
+        /// <summary>Get the nested components for controller snapping.</summary>
+        public IEnumerable<ClickableComponent> GetChildComponents()
+        {
+            return this.List.GetChildComponents();
         }
     }
 }

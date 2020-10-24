@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Changed dropdown buttons to better fit UI.
 * Fixed compatibility with recent ChestEx update.
 
 ## 1.19.6
