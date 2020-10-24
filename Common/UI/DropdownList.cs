@@ -11,7 +11,6 @@ namespace Pathoschild.Stardew.Common.UI
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
     /// <typeparam name="TItem">The item type.</typeparam>
     internal class DropdownList<TItem> : ClickableComponent
-        where TItem : class
     {
         /*********
         ** Fields
@@ -20,7 +19,7 @@ namespace Pathoschild.Stardew.Common.UI
         ** Constants
         ****/
         /// <summary>The padding applied to dropdown lists.</summary>
-        private const int DROPDOWN_PADDING = 5;
+        private const int DropdownPadding = 5;
 
         /****
         ** Items
@@ -49,9 +48,6 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The dropdown's origin position.</summary>
         private readonly Vector2 Origin;
 
-        /// <summary>Whether the dropdown should be aligned right of the origin.</summary>
-        private readonly bool ToRight;
-
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;
 
@@ -71,9 +67,8 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="nameSelector">A lambda which returns the display name for an item.</param>
         /// <param name="x">The X-position from which to render the list.</param>
         /// <param name="y">The Y-position from which to render the list.</param>
-        /// <param name="toRight">Whether the dropdown should be aligned right of the origin.</param>
         /// <param name="font">The font with which to render text.</param>
-        public DropdownList(TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, int x, int y, bool toRight, SpriteFont font)
+        public DropdownList(TItem selectedItem, TItem[] items, Func<TItem, string> nameSelector, int x, int y, SpriteFont font)
             : base(new Rectangle(), nameof(DropdownList<TItem>))
         {
             // save values
@@ -83,7 +78,6 @@ namespace Pathoschild.Stardew.Common.UI
                 .ToArray();
             this.Font = font;
             this.FontHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
-            this.ToRight = toRight;
 
             // initialize UI
             this.Origin = new Vector2(x, y);
@@ -97,21 +91,25 @@ namespace Pathoschild.Stardew.Common.UI
             this.Scroll(direction > 0 ? -1 : 1); // scrolling down moves first item up
         }
 
-        /// <summary>Select an item in the list.</summary>
+        /// <summary>Select an item in the list if it's under the cursor.</summary>
         /// <param name="x">The X-position of the item in the UI.</param>
         /// <param name="y">The Y-position of the item in the UI.</param>
-        /// <returns>Returns the selected item, or <c>null</c> if the coordinate wasn't found.</returns>
-        public TItem Select(int x, int y)
+        /// <param name="selected">The selected item, if found.</param>
+        /// <returns>Returns whether an item was selected.</returns>
+        public bool TrySelect(int x, int y, out TItem selected)
         {
             foreach (ClickableComponent component in this.ItemComponents)
             {
                 if (component.containsPoint(x, y))
                 {
                     this.SelectedIndex = int.Parse(component.name);
-                    return this.SelectedItem;
+                    selected = this.SelectedItem;
+                    return true;
                 }
             }
-            return null;
+
+            selected = default;
+            return false;
         }
 
         /// <summary>Render the UI.</summary>
@@ -132,9 +130,7 @@ namespace Pathoschild.Stardew.Common.UI
 
                 // draw text
                 DropListItem item = this.Items.First(p => p.Index == int.Parse(component.name));
-                Vector2 position = this.ToRight
-                        ? new Vector2(component.bounds.X + DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16)
-                        : new Vector2(component.bounds.X + component.bounds.Width - this.Font.MeasureString(item.Name).X - DROPDOWN_PADDING, component.bounds.Y + Game1.tileSize / 16);
+                Vector2 position = new Vector2(component.bounds.X + DropdownList<TItem>.DropdownPadding, component.bounds.Y + Game1.tileSize / 16);
                 sprites.DrawString(this.Font, item.Name, position, Color.Black * opacity);
             }
 
@@ -154,7 +150,7 @@ namespace Pathoschild.Stardew.Common.UI
         {
             // get item size
             int minItemWidth = Game1.tileSize * 2;
-            int itemWidth = Math.Max((int)this.Items.Max(p => this.Font.MeasureString(p.Name).X), minItemWidth) + DROPDOWN_PADDING * 2;
+            int itemWidth = Math.Max((int)this.Items.Max(p => this.Font.MeasureString(p.Name).X), minItemWidth) + DropdownList<TItem>.DropdownPadding * 2;
             int itemHeight = this.FontHeight;
 
             // get pagination
@@ -166,7 +162,7 @@ namespace Pathoschild.Stardew.Common.UI
             // get dropdown size
             this.bounds.Width = itemWidth;
             this.bounds.Height = itemHeight * this.MaxItems;
-            this.bounds.X = (int)this.Origin.X - (this.ToRight ? 0 : itemWidth);
+            this.bounds.X = (int)this.Origin.X;
             this.bounds.Y = (int)this.Origin.Y;
 
             // generate components
