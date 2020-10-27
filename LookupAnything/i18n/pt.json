@@ -436,7 +436,6 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
     "item.music-block.pitch": "Tom",
     "item.music-block.drum-type": "Tipo de Bateria",
 
