@@ -294,12 +294,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="padding">The padding between the content and border.</param>
         public static void DrawContentBox(SpriteBatch spriteBatch, Texture2D texture, in Rectangle background, in Rectangle top, in Rectangle right, in Rectangle bottom, in Rectangle left, in Rectangle topLeft, in Rectangle topRight, in Rectangle bottomRight, in Rectangle bottomLeft, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding)
         {
-            int cornerWidth = topLeft.Width * Game1.pixelZoom;
-            int cornerHeight = topLeft.Height * Game1.pixelZoom;
-            int innerWidth = (int)(contentSize.X + padding * 2);
-            int innerHeight = (int)(contentSize.Y + padding * 2);
-            int outerWidth = innerWidth + cornerWidth * 2;
-            int outerHeight = innerHeight + cornerHeight * 2;
+            CommonHelper.GetContentBoxDimensions(topLeft, contentSize, padding, out int innerWidth, out int innerHeight, out int outerWidth, out int outerHeight, out int cornerWidth, out int cornerHeight);
             int x = (int)position.X;
             int y = (int)position.Y;
 
@@ -336,6 +331,40 @@ namespace Pathoschild.Stardew.Common
         public static void ShowErrorMessage(string message)
         {
             Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type));
+        }
+
+        /// <summary>Calculate the outer dimension for a content box.</summary>
+        /// <param name="contentSize">The size of the content within the box.</param>
+        /// <param name="padding">The padding within the content area.</param>
+        /// <param name="innerWidth">The width of the inner content area, including padding.</param>
+        /// <param name="innerHeight">The height of the inner content area, including padding.</param>
+        /// <param name="labelOuterWidth">The outer pixel width.</param>
+        /// <param name="outerHeight">The outer pixel height.</param>
+        /// <param name="borderWidth">The width of the left and right border textures.</param>
+        /// <param name="borderHeight">The height of the top and bottom border textures.</param>
+        public static void GetScrollDimensions(Vector2 contentSize, int padding, out int innerWidth, out int innerHeight, out int labelOuterWidth, out int outerHeight, out int borderWidth, out int borderHeight)
+        {
+            CommonHelper.GetContentBoxDimensions(CommonSprites.Scroll.TopLeft, contentSize, padding, out innerWidth, out innerHeight, out labelOuterWidth, out outerHeight, out borderWidth, out borderHeight);
+        }
+
+        /// <summary>Calculate the outer dimension for a content box.</summary>
+        /// <param name="topLeft">The source rectangle for the top-left corner of the content box.</param>
+        /// <param name="contentSize">The size of the content within the box.</param>
+        /// <param name="padding">The padding within the content area.</param>
+        /// <param name="innerWidth">The width of the inner content area, including padding.</param>
+        /// <param name="innerHeight">The height of the inner content area, including padding.</param>
+        /// <param name="outerWidth">The outer pixel width.</param>
+        /// <param name="outerHeight">The outer pixel height.</param>
+        /// <param name="borderWidth">The width of the left and right border textures.</param>
+        /// <param name="borderHeight">The height of the top and bottom border textures.</param>
+        public static void GetContentBoxDimensions(Rectangle topLeft, Vector2 contentSize, int padding, out int innerWidth, out int innerHeight, out int outerWidth, out int outerHeight, out int borderWidth, out int borderHeight)
+        {
+            borderWidth = topLeft.Width * Game1.pixelZoom;
+            borderHeight = topLeft.Height * Game1.pixelZoom;
+            innerWidth = (int)(contentSize.X + padding * 2);
+            innerHeight = (int)(contentSize.Y + padding * 2);
+            outerWidth = innerWidth + borderWidth * 2;
+            outerHeight = innerHeight + borderHeight * 2;
         }
 
         /****

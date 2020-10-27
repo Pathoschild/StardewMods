@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
@@ -64,11 +65,17 @@ namespace Pathoschild.Stardew.Common.UI
             /// <summary>The sprite sheet containing the icon sprites.</summary>
             public static Texture2D Sheet => Game1.mouseCursors;
 
-            /// <summary>A down arrow for scrolling content.</summary>
+            /// <summary>A down arrow.</summary>
             public static readonly Rectangle DownArrow = new Rectangle(12, 76, 40, 44);
 
-            /// <summary>An up arrow for scrolling content.</summary>
+            /// <summary>An up arrow.</summary>
             public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
+
+            /// <summary>A left arrow.</summary>
+            public static readonly Rectangle LeftArrow = new Rectangle(8, 268, 44, 40);
+
+            /// <summary>A right arrow.</summary>
+            public static readonly Rectangle RightArrow = new Rectangle(12, 204, 44, 40);
 
             /// <summary>A speech bubble icon.</summary>
             public static readonly Rectangle SpeechBubble = new Rectangle(66, 4, 14, 12);

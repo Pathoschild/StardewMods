@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Added arrow UI to navigate layers.
+
 ## 1.12.3
 Released 15 October 2020.
 
