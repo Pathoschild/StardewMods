@@ -161,7 +161,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                             // fruit products
                             case SObject.FruitsCategory:
                                 // wine
-                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + id, _ => new SObject(348, 1)
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + item.ParentSheetIndex, _ => new SObject(348, 1)
                                 {
                                     Name = $"{item.Name} Wine",
                                     Price = item.Price * 3,
@@ -170,7 +170,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                 });
 
                                 // jelly
-                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + id, _ => new SObject(344, 1)
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + item.ParentSheetIndex, _ => new SObject(344, 1)
                                 {
                                     Name = $"{item.Name} Jelly",
                                     Price = 50 + item.Price * 2,
@@ -182,7 +182,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                             // vegetable products
                             case SObject.VegetableCategory:
                                 // juice
-                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + id, _ => new SObject(350, 1)
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + item.ParentSheetIndex, _ => new SObject(350, 1)
                                 {
                                     Name = $"{item.Name} Juice",
                                     Price = (int)(item.Price * 2.25d),
@@ -191,7 +191,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                 });
 
                                 // pickled
-                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + id, _ => new SObject(342, 1)
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ => new SObject(342, 1)
                                 {
                                     Name = $"Pickled {item.Name}",
                                     Price = 50 + item.Price * 2,
@@ -202,7 +202,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
                             // flower honey
                             case SObject.flowersCategory:
-                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + id, _ =>
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ =>
                                 {
                                     SObject honey = new SObject(Vector2.Zero, 340, $"{item.Name} Honey", false, true, false, false)
                                     {
@@ -215,7 +215,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                 break;
 
                             // roe and aged roe (derived from FishPond.GetFishProduce)
-                            case SObject.sellAtFishShopCategory when id == 812:
+                            case SObject.sellAtFishShopCategory when item.ParentSheetIndex == 812:
                                 foreach (var pair in Game1.objectInformation)
                                 {
                                     // get input
@@ -226,7 +226,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
                                     // yield roe
                                     SObject roe = null;
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + id, _ =>
+                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
                                     {
                                         roe = new ColoredObject(812, 1, color)
                                         {
@@ -241,7 +241,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                     // aged roe
                                     if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
                                     {
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + id, _ => new ColoredObject(447, 1, color)
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
                                         {
                                             name = $"Aged {input.Name} Roe",
                                             Category = -27,
