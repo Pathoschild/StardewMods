@@ -259,7 +259,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="context">The context of the object being looked up.</param>
         private ISubject BuildSubject(Crop target, ObjectContext context)
         {
-            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(target.indexOfHarvest.Value), context, getCropSubject: this.BuildSubject, knownQuality: false, fromCrop: target);
+            int indexOfHarvest = target.indexOfHarvest.Value;
+            if (indexOfHarvest == 0 && target.forageCrop.Value)
+            {
+                indexOfHarvest = target.whichForageCrop.Value switch
+                {
+                    Crop.forageCrop_springOnion => 399,
+                    _ => indexOfHarvest
+                };
+            }
+
+            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest), context, getCropSubject: this.BuildSubject, knownQuality: false, fromCrop: target);
         }
     }
 }

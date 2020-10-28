@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed 'number owned' field sometimes counting two of the same tool/weapon as different items.
+* Fixed lookups on forage items.
 * Fixed some translation issues in 1.28.
 * Improved translations. Thanks to Caco-o-sapo (updated Portuguese)!
 

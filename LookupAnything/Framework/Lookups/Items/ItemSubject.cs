@@ -448,10 +448,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 List<string> summary = new List<string>();
 
                 // harvest
-                summary.Add(data.HasMultipleHarvests
-                    ? I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
-                    : I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
-                );
+                if (!crop.forageCrop.Value)
+                {
+                    summary.Add(data.HasMultipleHarvests
+                        ? I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
+                        : I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
+                    );
+                }
 
                 // seasons
                 summary.Add(I18n.Crop_Summary_Seasons(seasons: string.Join(", ", I18n.GetSeasonNames(data.Seasons))));
