@@ -721,16 +721,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // multiple qualities
-            int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
-            var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = GetPrice(new SObject(item.ParentSheetIndex, 1)),
-                [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
-            };
-            if (item.GetItemType() == ItemType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
-                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
-            return prices;
+                int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
+                var prices = new Dictionary<ItemQuality, int>();
+                var sample = (SObject)item.getOne();
+                foreach (ItemQuality quality in Enum.GetValues(typeof(ItemQuality)))
+                {
+                    if (quality == ItemQuality.Iridium && !iridiumItems.Contains(item.ParentSheetIndex) && !iridiumItems.Contains(item.Category))
+                        continue;
+
+                    sample.Quality = (int)quality;
+                    prices[quality] = GetPrice(sample);
+                }
+                return prices;
+            }
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
