@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using StardewValley;
+using StardewValley.GameData.FishPond;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -216,39 +217,48 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
                             // roe and aged roe (derived from FishPond.GetFishProduce)
                             case SObject.sellAtFishShopCategory when item.ParentSheetIndex == 812:
-                                foreach (var pair in Game1.objectInformation)
                                 {
-                                    // get input
-                                    SObject input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
-                                    if (input == null || input.Category != SObject.FishCategory)
-                                        continue;
-                                    Color color = this.GetRoeColor(input);
+                                    this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
 
-                                    // yield roe
-                                    SObject roe = null;
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
+                                    foreach (var pair in Game1.objectInformation)
                                     {
-                                        roe = new ColoredObject(812, 1, color)
-                                        {
-                                            name = $"{input.Name} Roe",
-                                            preserve = { Value = SObject.PreserveType.Roe },
-                                            preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                                        };
-                                        roe.Price += input.Price / 2;
-                                        return roe;
-                                    });
+                                        // get input
+                                        SObject input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
+                                        var inputTags = input?.GetContextTags();
+                                        if (inputTags?.Any() != true)
+                                            continue;
 
-                                    // aged roe
-                                    if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
-                                    {
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
+                                        // check if roe-producing fish
+                                        if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
+                                            continue;
+
+                                        // yield roe
+                                        SObject roe = null;
+                                        Color color = this.GetRoeColor(input);
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
                                         {
-                                            name = $"Aged {input.Name} Roe",
-                                            Category = -27,
-                                            preserve = { Value = SObject.PreserveType.AgedRoe },
-                                            preservedParentSheetIndex = { Value = input.ParentSheetIndex },
-                                            Price = roe.Price * 2
+                                            roe = new ColoredObject(812, 1, color)
+                                            {
+                                                name = $"{input.Name} Roe",
+                                                preserve = { Value = SObject.PreserveType.Roe },
+                                                preservedParentSheetIndex = { Value = input.ParentSheetIndex }
+                                            };
+                                            roe.Price += input.Price / 2;
+                                            return roe;
                                         });
+
+                                        // aged roe
+                                        if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
+                                        {
+                                            yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
+                                            {
+                                                name = $"Aged {input.Name} Roe",
+                                                Category = -27,
+                                                preserve = { Value = SObject.PreserveType.AgedRoe },
+                                                preservedParentSheetIndex = { Value = input.ParentSheetIndex },
+                                                Price = roe.Price * 2
+                                            });
+                                        }
                                     }
                                 }
                                 break;
@@ -264,6 +274,26 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /*********
         ** Private methods
         *********/
+        /// <summary>Get optimized lookups to match items which produce roe in a fish pond.</summary>
+        /// <param name="simpleTags">A lookup of simple singular tags which match a roe-producing fish.</param>
+        /// <param name="complexTags">A list of tag sets which match roe-producing fish.</param>
+        private void GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags)
+        {
+            simpleTags = new HashSet<string>();
+            complexTags = new List<List<string>>();
+
+            foreach (FishPondData data in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
+            {
+                if (data.ProducedItems.All(p => p.ItemID != 812))
+                    continue; // doesn't produce roe
+
+                if (data.RequiredTags.Count == 1 && !data.RequiredTags[0].StartsWith("!"))
+                    simpleTags.Add(data.RequiredTags[0]);
+                else
+                    complexTags.Add(data.RequiredTags);
+            }
+        }
+
         /// <summary>Try to load a data file, and return empty data if it's invalid.</summary>
         /// <typeparam name="TKey">The asset key type.</typeparam>
         /// <typeparam name="TValue">The asset value type.</typeparam>
