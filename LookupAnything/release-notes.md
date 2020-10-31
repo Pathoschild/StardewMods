@@ -7,7 +7,7 @@
 * Fixed search UI lookups on flavored items like wines showing incorrect prices.
 * Fixed search UI not showing Clam Roe, Sea Urchin Roe, and custom roe from mods.
 * Fixed some translation issues in 1.28.
-* Improved translations. Thanks to Caco-o-sapo (updated Portuguese)!
+* Improved translations. Thanks to Caco-o-sapo (updated Portuguese) and therealmate (updated Hungarian)!
 
 ## 1.28
 Released 15 October 2020.
