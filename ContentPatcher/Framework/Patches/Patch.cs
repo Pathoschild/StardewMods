@@ -242,7 +242,12 @@ namespace ContentPatcher.Framework.Patches
                 context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), System.IO.Path.GetFileName(this.TargetAsset));
             }
             else
+            {
                 this.TargetAsset = "";
+                context.SetLocalValue(ConditionType.Target.ToString(), "", ready: false);
+                context.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "", ready: false);
+                context.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "", ready: false);
+            }
 
             return changed;
         }
@@ -268,7 +273,11 @@ namespace ContentPatcher.Framework.Patches
                 context.SetLocalValue(ConditionType.FromFile.ToString(), this.FromAsset);
             }
             else
+            {
                 this.FromAsset = null;
+                context.SetLocalValue(ConditionType.FromFile.ToString(), "", ready: false);
+            }
+
             return changed;
         }
 

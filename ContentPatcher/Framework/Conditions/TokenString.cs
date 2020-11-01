@@ -178,7 +178,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <returns>Returns whether the context changed.</returns>
         private bool UpdateContext(IContext context, bool forceUpdate)
         {
-            if (!forceUpdate && (!this.IsMutable || this.State.InvalidTokens.Any() || this.State.UnavailableModTokens.Any()))
+            if (!forceUpdate && !this.ShouldUpdate())
                 return false;
 
             // reset
@@ -204,6 +204,21 @@ namespace ContentPatcher.Framework.Conditions
             return
                 this.Value != wasValue
                 || this.State.IsReady != wasReady;
+        }
+
+        /// <summary>Get whether the token string should be updated for the current state.</summary>
+        private bool ShouldUpdate()
+        {
+            // skip if immutable
+            if (!this.IsMutable)
+                return false;
+
+            // skip if we know it's still broken
+            if (this.State.InvalidTokens.Any() || this.State.UnavailableModTokens.Any())
+                return false;
+
+            // otherwise try to update
+            return true;
         }
 
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
