@@ -12,6 +12,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
 
 </Project>
