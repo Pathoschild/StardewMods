@@ -36,16 +36,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // broken glasses or broken CD => refined quartz
             new Recipe(
-                input: 170,
+                input: item => item.ParentSheetIndex == 170 || item.ParentSheetIndex == 171,
                 inputCount: 1,
                 output: input => new SObject(338, 1),
-                minutes: 60
-            ),
-            new Recipe(
-                input: 171,
-                inputCount: 1,
-                output: input => new SObject(338, 1),
-                minutes: 60
+                minutes: _ => 60
             ),
 
             // soggy newspaper => cloth/torch
