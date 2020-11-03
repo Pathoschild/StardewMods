@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * Added arrow UI to navigate layers.
+* Dropped support for abandoned Cobalt mod.
 
 ## 1.12.3
 Released 15 October 2020.

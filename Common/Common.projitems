@@ -22,8 +22,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterJunimos\IBetterJunimosApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Cobalt\CobaltIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\Cobalt\ICobaltApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\FarmExpansion\FarmExpansionIntegration.cs" />
