@@ -5,7 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A keg that accepts input and provides output.</summary>
-    /// <remarks>See the game's machine logic in <see cref="SObject.performObjectDropInAction"/> and <see cref="SObject.checkForAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> and <see cref="SObject.checkForAction"/> (search for 'Keg').</remarks>
     internal class KegMachine : GenericObjectMachine<SObject>
     {
         /*********

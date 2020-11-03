@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A charcoal kiln that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Charcoal Kiln').</remarks>
     internal class CharcoalKilnMachine : GenericObjectMachine<SObject>
     {
         /*********

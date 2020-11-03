@@ -5,7 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A loom that accepts input and provides output.</summary>
-    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Loom').</remarks>
     internal class LoomMachine : GenericObjectMachine<SObject>
     {
         /*********

@@ -7,7 +7,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A seed maker that accepts input and provides output.</summary>
-    /// <remarks>See the game's default logic in <see cref="SObject.performObjectDropInAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Seed Maker').</remarks>
     internal class SeedMakerMachine : GenericObjectMachine<SObject>
     {
         /*********

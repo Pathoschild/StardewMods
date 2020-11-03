@@ -3,10 +3,12 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A hay hopper that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Feed Hopper').</remarks>
     internal class FeedHopperMachine : BaseMachine
     {
         /*********

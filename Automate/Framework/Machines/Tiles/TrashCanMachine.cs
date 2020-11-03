@@ -11,6 +11,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 {
     /// <summary>A trash can that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="Town.checkAction"/>.</remarks>
     internal class TrashCanMachine : BaseMachine
     {
         /*********
@@ -88,7 +89,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 
         /// <summary>Get a random trash item ID.</summary>
         /// <param name="index">The trash can index.</param>
-        /// <remarks>Derived from <see cref="Town.checkAction"/>.</remarks>
         private Item GetRandomTrash(int index)
         {
             // Note: this code must match the exact sequence of random calls to produce the same output as the game code.

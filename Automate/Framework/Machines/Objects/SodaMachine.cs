@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A soda machine that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.DayUpdate"/> (search for 'case 117').</remarks>
     internal class SodaMachine : GenericObjectMachine<SObject>
     {
         /*********

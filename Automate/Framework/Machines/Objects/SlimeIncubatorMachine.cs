@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A slime incubator that accepts slime eggs and spawns slime monsters.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Slime Incubator').</remarks>
     internal class SlimeIncubatorMachine : GenericObjectMachine<SObject>
     {
         /*********

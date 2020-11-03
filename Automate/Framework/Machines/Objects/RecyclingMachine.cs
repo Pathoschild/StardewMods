@@ -6,7 +6,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A recycling machine that accepts input and provides output.</summary>
-    /// <remarks>This differs slightly from the game implementation in that it uses a more random RNG, due to a C# limitation which prevents us from accessing machine info from the cached recipe output functions for use in the RNG seed.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Recycling Machine'). This differs slightly from the game implementation in that it uses a more random RNG, due to a C# limitation which prevents us from accessing machine info from the cached recipe output functions for use in the RNG seed.</remarks>
     internal class RecyclingMachine : GenericObjectMachine<SObject>
     {
         /*********
