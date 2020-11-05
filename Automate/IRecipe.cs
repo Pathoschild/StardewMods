@@ -10,8 +10,8 @@ namespace Pathoschild.Stardew.Automate
         /*********
         ** Accessors
         *********/
-        /// <summary>The input item or category ID.</summary>
-        int InputID { get; }
+        /// <summary>Matches items that can be used as input.</summary>
+        Func<Item, bool> Input { get; }
 
         /// <summary>The number of inputs needed.</summary>
         int InputCount { get; }

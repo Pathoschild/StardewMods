@@ -5,13 +5,13 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A furnace that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Furnace').</remarks>
     internal class FurnaceMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Fields
         *********/
         /// <summary>The recipes to process.</summary>
-        /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
         private readonly IRecipe[] Recipes =
         {
             // copper => copper bar

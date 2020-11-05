@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>An oil maker that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Oil Maker').</remarks>
     internal class OilMakerMachine : GenericObjectMachine<SObject>
     {
         /*********

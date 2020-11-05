@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 // get quality schedule
                 ItemQuality currentQuality = this.GetCurrentQuality(tree, this.Constants.FruitTreeQualityGrowthTime);
                 if (currentQuality == ItemQuality.Iridium)
-                    yield return new GenericField(I18n.FruitTree_Quality(), I18n.FruitTree_Quality_Now(quality: currentQuality));
+                    yield return new GenericField(I18n.FruitTree_Quality(), I18n.FruitTree_Quality_Now(quality: I18n.For(currentQuality)));
                 else
                 {
                     string[] summary = this
@@ -97,16 +97,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
                             // generate summary line
                             if (daysLeft <= 0)
-                                return $"-{I18n.FruitTree_Quality_Now(quality: quality)}";
+                                return $"-{I18n.FruitTree_Quality_Now(quality: I18n.For(quality))}";
 
-                            string line;
-                            if (yearOffset == 0)
-                                line = $"-{I18n.FruitTree_Quality_OnDate(quality: quality, date: this.Stringify(date))}";
-                            else if (yearOffset == 1)
-                                line = $"-{I18n.FruitTree_Quality_OnDateNextYear(quality: quality, date: this.Stringify(date))}";
-                            else
-                                line = $"-{I18n.FruitTree_Quality_OnDate(quality: quality, date: date.ToLocaleString(withYear: true))}";
-
+                            string line = yearOffset == 1
+                                ? $"-{I18n.FruitTree_Quality_OnDateNextYear(quality: I18n.For(quality), date: this.Stringify(date))}"
+                                : $"-{I18n.FruitTree_Quality_OnDate(quality: I18n.For(quality), date: this.Stringify(date))}";
                             line += $" ({this.GetRelativeDateStr(daysLeft)})";
 
                             return line;

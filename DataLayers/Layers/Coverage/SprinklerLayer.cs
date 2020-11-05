@@ -160,10 +160,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 tiles[645] = iridiumTiles.ToArray();
             }
 
-            // Cobalt sprinkler
-            if (mods.Cobalt.IsLoaded)
-                tiles[mods.Cobalt.GetSprinklerId()] = mods.Cobalt.GetSprinklerTiles().ToArray();
-
             // Prismatic Sprinkler
             if (mods.PrismaticTools.IsLoaded)
                 tiles[mods.PrismaticTools.GetSprinklerID()] = mods.PrismaticTools.GetSprinklerCoverage().ToArray();

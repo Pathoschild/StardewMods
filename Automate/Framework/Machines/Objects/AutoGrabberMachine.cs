@@ -6,7 +6,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>An auto-grabber that provides output.</summary>
-    /// <remarks>See the game's default logic in <see cref="SObject.DayUpdate"/> and <see cref="SObject.checkForAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="SObject.DayUpdate"/> and <see cref="SObject.checkForAction"/> (search for 'case 165').</remarks>
     internal class AutoGrabberMachine : GenericObjectMachine<SObject>
     {
         /*********

@@ -13,8 +13,11 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <summary>The item type.</summary>
         public ItemType Type { get; }
 
-        /// <summary>The item instance.</summary>
+        /// <summary>A sample item instance.</summary>
         public Item Item { get; }
+
+        /// <summary>Create an item instance.</summary>
+        public Func<Item> CreateItem { get; }
 
         /// <summary>The item's unique ID for its type.</summary>
         public int ID { get; }
@@ -32,12 +35,23 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The item type.</param>
         /// <param name="id">The unique ID (if different from the item's parent sheet index).</param>
-        /// <param name="item">The item instance.</param>
-        public SearchableItem(ItemType type, int id, Item item)
+        /// <param name="createItem">Create an item instance.</param>
+        public SearchableItem(ItemType type, int id, Func<SearchableItem, Item> createItem)
         {
             this.Type = type;
             this.ID = id;
-            this.Item = item;
+            this.CreateItem = () => createItem(this);
+            this.Item = createItem(this);
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="item">The item metadata to copy.</param>
+        public SearchableItem(SearchableItem item)
+        {
+            this.Type = item.Type;
+            this.ID = item.ID;
+            this.CreateItem = item.CreateItem;
+            this.Item = item.Item;
         }
 
         /// <summary>Get whether the item name contains a case-insensitive substring.</summary>

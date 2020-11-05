@@ -85,6 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
+        /// <remarks>Derived from <see cref="Crop.draw"/>.</remarks>
         private void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
         {
             // get from Json Assets
@@ -93,7 +94,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
             // use vanilla logic
             texture = Game1.cropSpriteSheet;
-            sourceRect = this.Reflection.GetMethod(target, "getSourceRect").Invoke<Rectangle>(target.rowInSpriteSheet.Value);
+            sourceRect = this.Reflection.GetField<Rectangle>(target, "sourceRect").GetValue();
+            if (target.forageCrop.Value)
+                texture = Game1.mouseCursors;
         }
     }
 }

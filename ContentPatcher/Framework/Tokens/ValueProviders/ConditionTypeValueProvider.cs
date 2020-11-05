@@ -57,10 +57,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 this.Values.Clear();
                 if (this.MarkReady(this.IsValidInContextImpl == null || this.IsValidInContextImpl()))
-                {
-                    foreach (string value in this.FetchValues())
-                        this.Values.Add(value);
-                }
+                    this.Values.AddMany(this.FetchValues());
             });
         }
 

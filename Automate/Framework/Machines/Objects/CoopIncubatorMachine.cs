@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A coop incubator that accepts eggs and spawns chickens.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Incubator').</remarks>
     internal class CoopIncubatorMachine : GenericObjectMachine<SObject>
     {
         /*********

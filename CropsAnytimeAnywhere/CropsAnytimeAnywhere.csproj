@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>CropsAnytimeAnywhere</AssemblyName>
     <Version>1.2.1</Version>
@@ -13,5 +12,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
-
 </Project>

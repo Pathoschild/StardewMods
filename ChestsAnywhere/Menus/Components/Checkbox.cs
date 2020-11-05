@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.UI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
@@ -20,7 +21,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         public int Y { get; set; }
 
         /// <summary>The width of the rendered textbox.</summary>
-        public int Width { get; set; } = Sprites.Icons.EmptyCheckbox.Width * Game1.pixelZoom;
+        public int Width { get; set; } = CommonSprites.Icons.EmptyCheckbox.Width * Game1.pixelZoom;
 
 
         /*********
@@ -49,8 +50,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="batch">The sprite batch.</param>
         public void Draw(SpriteBatch batch)
         {
-            float scale = this.Width / (float)Sprites.Icons.FilledCheckbox.Width;
-            batch.Draw(Sprites.Icons.Sheet, new Vector2(this.X, this.Y), this.Value ? Sprites.Icons.FilledCheckbox : Sprites.Icons.EmptyCheckbox, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1f);
+            float scale = this.Width / (float)CommonSprites.Icons.FilledCheckbox.Width;
+            batch.Draw(CommonSprites.Icons.Sheet, new Vector2(this.X, this.Y), this.Value ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, 1f);
         }
     }
 }

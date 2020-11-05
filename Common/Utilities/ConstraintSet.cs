@@ -67,13 +67,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <returns>Returns <c>true</c> if any value was added; else <c>false</c> if all values were already present.</returns>
         public bool AddBound(IEnumerable<T> values)
         {
-            bool anyAdded = false;
-            foreach (T value in values)
-            {
-                if (this.RestrictToValues.Add(value))
-                    anyAdded = true;
-            }
-            return anyAdded;
+            return this.RestrictToValues.AddMany(values);
         }
 
         /// <summary>Add values to exclude.</summary>
@@ -89,13 +83,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <returns>Returns <c>true</c> if any value was added; else <c>false</c> if all values were already present.</returns>
         public bool Exclude(IEnumerable<T> values)
         {
-            bool anyAdded = false;
-            foreach (T value in values)
-            {
-                if (this.ExcludeValues.Add(value))
-                    anyAdded = true;
-            }
-            return anyAdded;
+            return this.ExcludeValues.AddMany(values);
         }
 
         /// <summary>Get whether this constraint allows some values that would be allowed by another.</summary>

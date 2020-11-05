@@ -9,7 +9,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A mill machine that accepts input and provides output.</summary>
-    /// <remarks>See the game's default logic in <see cref="Mill.doAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="Mill.doAction"/>.</remarks>
     internal class MillMachine : BaseMachine<Mill>
     {
         /*********

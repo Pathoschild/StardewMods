@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>ContentPatcher</AssemblyName>
-    <Version>1.18.3</Version>
+    <Version>1.18.4</Version>
     <RootNamespace>ContentPatcher</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
@@ -14,5 +13,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
-
 </Project>

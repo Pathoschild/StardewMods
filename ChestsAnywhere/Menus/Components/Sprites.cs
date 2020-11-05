@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
@@ -11,56 +12,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /*********
         ** Accessors
         *********/
-        /// <summary>Sprites used to draw a tab.</summary>
-        public static class Tab
-        {
-            /// <summary>The sprite sheet containing the tab sprites.</summary>
-            public static readonly Texture2D Sheet = Game1.mouseCursors;
-
-            /// <summary>The top-left corner.</summary>
-            public static readonly Rectangle TopLeft = new Rectangle(0, 384, 5, 5);
-
-            /// <summary>The top-right corner.</summary>
-            public static readonly Rectangle TopRight = new Rectangle(11, 384, 5, 5);
-
-            /// <summary>The bottom-left corner.</summary>
-            public static readonly Rectangle BottomLeft = new Rectangle(0, 395, 5, 5);
-
-            /// <summary>The bottom-right corner.</summary>
-            public static readonly Rectangle BottomRight = new Rectangle(11, 395, 5, 5);
-
-            /// <summary>The top edge.</summary>
-            public static readonly Rectangle Top = new Rectangle(4, 384, 1, 3);
-
-            /// <summary>The left edge.</summary>
-            public static readonly Rectangle Left = new Rectangle(0, 388, 3, 1);
-
-            /// <summary>The right edge.</summary>
-            public static readonly Rectangle Right = new Rectangle(13, 388, 3, 1);
-
-            /// <summary>The bottom edge.</summary>
-            public static readonly Rectangle Bottom = new Rectangle(4, 397, 1, 3);
-
-            /// <summary>The tab background.</summary>
-            public static readonly Rectangle Background = new Rectangle(5, 387, 1, 1);
-        }
-
-        /// <summary>Sprites used to draw a dropdown list.</summary>
-        public static class DropDown
-        {
-            /// <summary>The sprite sheet containing the menu sprites.</summary>
-            public static readonly Texture2D Sheet = Game1.mouseCursors;
-
-            /// <summary>The background for the selected item.</summary>
-            public static readonly Rectangle ActiveBackground = new Rectangle(258, 258, 4, 4);
-
-            /// <summary>The background for a non-selected, non-hovered item.</summary>
-            public static readonly Rectangle InactiveBackground = new Rectangle(269, 258, 4, 4);
-
-            /// <summary>The background for an item under the cursor.</summary>
-            public static readonly Rectangle HoverBackground = new Rectangle(161, 340, 4, 4);
-        }
-
         /// <summary>Sprites used to draw menus.</summary>
         public static class Menu
         {
@@ -127,49 +78,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             public static Texture2D Sheet => Game1.content.Load<Texture2D>("LooseSprites\\textBox");
         }
 
-        /// <summary>Sprites used to draw icons.</summary>
-        public static class Icons
-        {
-            /// <summary>The sprite sheet containing the icon sprites.</summary>
-            public static Texture2D Sheet => Game1.mouseCursors;
-
-            /// <summary>A down arrow for scrolling content.</summary>
-            public static readonly Rectangle DownArrow = new Rectangle(12, 76, 40, 44);
-
-            /// <summary>An up arrow for scrolling content.</summary>
-            public static readonly Rectangle UpArrow = new Rectangle(76, 72, 40, 44);
-
-            /// <summary>A speech bubble icon.</summary>
-            public static readonly Rectangle SpeechBubble = new Rectangle(66, 4, 14, 12);
-
-            /// <summary>An empty checkbox icon.</summary>
-            public static readonly Rectangle EmptyCheckbox = new Rectangle(227, 425, 9, 9);
-
-            /// <summary>A filled checkbox icon.</summary>
-            public static readonly Rectangle FilledCheckbox = new Rectangle(236, 425, 9, 9);
-
-            /// <summary>An exit button.</summary>
-            public static readonly Rectangle ExitButton = new Rectangle(337, 494, 12, 12);
-        }
-
 
         /*********
         ** Extensions
         *********/
-        /// <summary>Draw a sprite to the screen.</summary>
-        /// <param name="batch">The sprite batch.</param>
-        /// <param name="sheet">The sprite sheet containing the sprite.</param>
-        /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
-        /// <param name="x">The X-position at which to draw the sprite.</param>
-        /// <param name="y">The X-position at which to draw the sprite.</param>
-        /// <param name="width">The width to draw.</param>
-        /// <param name="height">The height to draw.</param>
-        /// <param name="color">The color to tint the sprite.</param>
-        public static void Draw(this SpriteBatch batch, Texture2D sheet, Rectangle sprite, int x, int y, int width, int height, Color? color = null)
-        {
-            batch.Draw(sheet, new Rectangle(x, y, width, height), sprite, color ?? Color.White);
-        }
-
         /// <summary>Draw a menu background within the specified bounds.</summary>
         /// <param name="batch">The sprite batch.</param>
         /// <param name="bounds">The menu bounds.</param>

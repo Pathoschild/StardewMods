@@ -50,9 +50,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Values, () =>
             {
                 this.Values.Clear();
-                foreach (string value in this.GetValueImpl() ?? Enumerable.Empty<string>())
-                    this.Values.Add(value);
-
+                this.Values.AddMany(this.GetValueImpl() ?? Enumerable.Empty<string>());
                 this.MarkReady(this.Values.Any());
             });
         }

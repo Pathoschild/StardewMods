@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18.2
+Released 04 November 2020.
+
+* Fixed machine priority inverted in 1.18.
+
 ## 1.18.1
 Released 15 October 2020.
 

@@ -32,6 +32,9 @@ namespace Pathoschild.Stardew.Common
             return pixel;
         });
 
+        /// <summary>The width of the borders drawn by <see cref="DrawTab"/>.</summary>
+        public const int ButtonBorderWidth = 4 * Game1.pixelZoom;
+
 
         /*********
         ** Accessors
@@ -150,6 +153,20 @@ namespace Pathoschild.Stardew.Common
         /****
         ** UI
         ****/
+        /// <summary>Draw a sprite to the screen.</summary>
+        /// <param name="batch">The sprite batch.</param>
+        /// <param name="sheet">The sprite sheet containing the sprite.</param>
+        /// <param name="sprite">The sprite coordinates and dimensions in the sprite sheet.</param>
+        /// <param name="x">The X-position at which to draw the sprite.</param>
+        /// <param name="y">The X-position at which to draw the sprite.</param>
+        /// <param name="width">The width to draw.</param>
+        /// <param name="height">The height to draw.</param>
+        /// <param name="color">The color to tint the sprite.</param>
+        public static void Draw(this SpriteBatch batch, Texture2D sheet, Rectangle sprite, int x, int y, int width, int height, Color? color = null)
+        {
+            batch.Draw(sheet, new Rectangle(x, y, width, height), sprite, color ?? Color.White);
+        }
+
         /// <summary>Draw a pretty hover box for the given text.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         /// <param name="label">The text to display.</param>
@@ -165,6 +182,39 @@ namespace Pathoschild.Stardew.Common
             spriteBatch.DrawTextBlock(Game1.smallFont, label, position + new Vector2(gutterSize), wrapWidth); // draw again over texture box
 
             return labelSize + new Vector2(paddingSize);
+        }
+
+        /// <summary>Draw a tab texture to the screen.</summary>
+        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
+        /// <param name="x">The X position at which to draw.</param>
+        /// <param name="y">The Y position at which to draw.</param>
+        /// <param name="innerWidth">The width of the button's inner content.</param>
+        /// <param name="innerHeight">The height of the button's inner content.</param>
+        /// <param name="innerDrawPosition">The position at which the content should be drawn.</param>
+        /// <param name="align">The button's horizontal alignment relative to <paramref name="x"/>. The possible values are 0 (left), 1 (center), or 2 (right).</param>
+        /// <param name="alpha">The button opacity, as a value from 0 (transparent) to 1 (opaque).</param>
+        /// <param name="forIcon">Whether the button will contain an icon instead of text.</param>
+        public static void DrawTab(SpriteBatch spriteBatch, int x, int y, int innerWidth, int innerHeight, out Vector2 innerDrawPosition, int align = 0, float alpha = 1, bool forIcon = false)
+        {
+            // calculate outer coordinates
+            int outerWidth = innerWidth + CommonHelper.ButtonBorderWidth * 2;
+            int outerHeight = innerHeight + Game1.tileSize / 3;
+            int offsetX = align switch
+            {
+                1 => -outerWidth / 2,
+                2 => -outerWidth,
+                _ => 0
+            };
+
+            // calculate inner coordinates
+            {
+                int iconOffsetX = forIcon ? -Game1.pixelZoom : 0;
+                int iconOffsetY = forIcon ? 2 * -Game1.pixelZoom : 0;
+                innerDrawPosition = new Vector2(x + CommonHelper.ButtonBorderWidth + offsetX + iconOffsetX, y + CommonHelper.ButtonBorderWidth + iconOffsetY);
+            }
+
+            // draw texture
+            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x + offsetX, y, outerWidth, outerHeight + Game1.tileSize / 16, Color.White * alpha);
         }
 
         /// <summary>Draw a button background.</summary>
@@ -244,12 +294,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="padding">The padding between the content and border.</param>
         public static void DrawContentBox(SpriteBatch spriteBatch, Texture2D texture, in Rectangle background, in Rectangle top, in Rectangle right, in Rectangle bottom, in Rectangle left, in Rectangle topLeft, in Rectangle topRight, in Rectangle bottomRight, in Rectangle bottomLeft, in Vector2 position, in Vector2 contentSize, out Vector2 contentPos, out Rectangle bounds, int padding)
         {
-            int cornerWidth = topLeft.Width * Game1.pixelZoom;
-            int cornerHeight = topLeft.Height * Game1.pixelZoom;
-            int innerWidth = (int)(contentSize.X + padding * 2);
-            int innerHeight = (int)(contentSize.Y + padding * 2);
-            int outerWidth = innerWidth + cornerWidth * 2;
-            int outerHeight = innerHeight + cornerHeight * 2;
+            CommonHelper.GetContentBoxDimensions(topLeft, contentSize, padding, out int innerWidth, out int innerHeight, out int outerWidth, out int outerHeight, out int cornerWidth, out int cornerHeight);
             int x = (int)position.X;
             int y = (int)position.Y;
 
@@ -286,6 +331,40 @@ namespace Pathoschild.Stardew.Common
         public static void ShowErrorMessage(string message)
         {
             Game1.addHUDMessage(new HUDMessage(message, HUDMessage.error_type));
+        }
+
+        /// <summary>Calculate the outer dimension for a content box.</summary>
+        /// <param name="contentSize">The size of the content within the box.</param>
+        /// <param name="padding">The padding within the content area.</param>
+        /// <param name="innerWidth">The width of the inner content area, including padding.</param>
+        /// <param name="innerHeight">The height of the inner content area, including padding.</param>
+        /// <param name="labelOuterWidth">The outer pixel width.</param>
+        /// <param name="outerHeight">The outer pixel height.</param>
+        /// <param name="borderWidth">The width of the left and right border textures.</param>
+        /// <param name="borderHeight">The height of the top and bottom border textures.</param>
+        public static void GetScrollDimensions(Vector2 contentSize, int padding, out int innerWidth, out int innerHeight, out int labelOuterWidth, out int outerHeight, out int borderWidth, out int borderHeight)
+        {
+            CommonHelper.GetContentBoxDimensions(CommonSprites.Scroll.TopLeft, contentSize, padding, out innerWidth, out innerHeight, out labelOuterWidth, out outerHeight, out borderWidth, out borderHeight);
+        }
+
+        /// <summary>Calculate the outer dimension for a content box.</summary>
+        /// <param name="topLeft">The source rectangle for the top-left corner of the content box.</param>
+        /// <param name="contentSize">The size of the content within the box.</param>
+        /// <param name="padding">The padding within the content area.</param>
+        /// <param name="innerWidth">The width of the inner content area, including padding.</param>
+        /// <param name="innerHeight">The height of the inner content area, including padding.</param>
+        /// <param name="outerWidth">The outer pixel width.</param>
+        /// <param name="outerHeight">The outer pixel height.</param>
+        /// <param name="borderWidth">The width of the left and right border textures.</param>
+        /// <param name="borderHeight">The height of the top and bottom border textures.</param>
+        public static void GetContentBoxDimensions(Rectangle topLeft, Vector2 contentSize, int padding, out int innerWidth, out int innerHeight, out int outerWidth, out int outerHeight, out int borderWidth, out int borderHeight)
+        {
+            borderWidth = topLeft.Width * Game1.pixelZoom;
+            borderHeight = topLeft.Height * Game1.pixelZoom;
+            innerWidth = (int)(contentSize.X + padding * 2);
+            innerHeight = (int)(contentSize.Y + padding * 2);
+            outerWidth = innerWidth + borderWidth * 2;
+            outerHeight = innerHeight + borderHeight * 2;
         }
 
         /****

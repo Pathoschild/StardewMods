@@ -171,8 +171,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 int daysAtNext = daysOld + (isGrown ? 0 : daysToNext);
 
                 string ageDesc = isGrown
-                    ? I18n.Npc_Child_Age_DescriptionGrown(label: stage)
-                    : I18n.Npc_Child_Age_DescriptionPartial(label: stage, count: daysToNext, nextLabel: stage + 1);
+                    ? I18n.Npc_Child_Age_DescriptionGrown(label: I18n.For(stage))
+                    : I18n.Npc_Child_Age_DescriptionPartial(label: I18n.For(stage), count: daysToNext, nextLabel: stage + 1);
 
                 yield return new PercentageBarField(I18n.Npc_Child_Age(), child.daysOld.Value, daysAtNext, Color.Green, Color.Gray, ageDesc);
             }

@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 (
                     from machine in this.Machines
                     let config = this.Config.GetMachineOverrides(machine.MachineTypeID) ?? new ModConfigMachine()
-                    orderby config.Priority
+                    orderby config.Priority descending
                     select (IMachine)new MachineWrapper(machine)
                 )
                 .ToArray();

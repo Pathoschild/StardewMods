@@ -6,7 +6,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A recycling machine that accepts input and provides output.</summary>
-    /// <remarks>This differs slightly from the game implementation in that it uses a more random RNG, due to a C# limitation which prevents us from accessing machine info from the cached recipe output functions for use in the RNG seed.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Recycling Machine'). This differs slightly from the game implementation in that it uses a more random RNG, due to a C# limitation which prevents us from accessing machine info from the cached recipe output functions for use in the RNG seed.</remarks>
     internal class RecyclingMachine : GenericObjectMachine<SObject>
     {
         /*********
@@ -36,16 +36,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // broken glasses or broken CD => refined quartz
             new Recipe(
-                input: 170,
+                input: item => item.ParentSheetIndex == 170 || item.ParentSheetIndex == 171,
                 inputCount: 1,
                 output: input => new SObject(338, 1),
-                minutes: 60
-            ),
-            new Recipe(
-                input: 171,
-                inputCount: 1,
-                output: input => new SObject(338, 1),
-                minutes: 60
+                minutes: _ => 60
             ),
 
             // soggy newspaper => cloth/torch

@@ -6,6 +6,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A crystalarium that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Crystalarium').</remarks>
     internal class CrystalariumMachine : GenericObjectMachine<SObject>
     {
         /*********

@@ -13,8 +13,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The item type to accept, or <c>null</c> to accept any.</summary>
         public ItemType? Type { get; } = ItemType.Object;
 
-        /// <summary>The input item or category ID.</summary>
-        public int InputID { get; }
+        /// <summary>Matches items that can be used as input.</summary>
+        public Func<Item, bool> Input { get; }
 
         /// <summary>The number of inputs needed.</summary>
         public int InputCount { get; }
@@ -43,8 +43,16 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="output">The output to generate (given an input).</param>
         /// <param name="minutes">The time needed to prepare an output (given an input).</param>
         public Recipe(int input, int inputCount, Func<Item, SObject> output, Func<Item, int> minutes)
+            : this(item => Recipe.MatchesInputId(item, input), inputCount, output, minutes) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="input">The input to accept.</param>
+        /// <param name="inputCount">The number of inputs needed.</param>
+        /// <param name="output">The output to generate (given an input).</param>
+        /// <param name="minutes">The time needed to prepare an output (given an input).</param>
+        public Recipe(Func<Item, bool> input, int inputCount, Func<Item, SObject> output, Func<Item, int> minutes)
         {
-            this.InputID = input;
+            this.Input = input;
             this.InputCount = inputCount;
             this.Output = output;
             this.Minutes = minutes;
@@ -56,7 +64,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             return
                 (this.Type == null || stack.Type == this.Type)
-                && (stack.Sample.ParentSheetIndex == this.InputID || stack.Sample.Category == this.InputID);
+                && this.Input(stack.Sample);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether an item matches the given ID.</summary>
+        /// <param name="item">The item to check.</param>
+        /// <param name="inputId">The input item or category ID.</param>
+        private static bool MatchesInputId(Item item, int inputId)
+        {
+            return item.ParentSheetIndex == inputId || item.Category == inputId;
         }
     }
 }

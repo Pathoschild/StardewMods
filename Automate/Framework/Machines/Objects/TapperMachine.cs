@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A tapper that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.checkForAction"/> (search for 'Tapper').</remarks>
     internal class TapperMachine : GenericObjectMachine<SObject>
     {
         /*********

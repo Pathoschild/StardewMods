@@ -448,10 +448,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 List<string> summary = new List<string>();
 
                 // harvest
-                summary.Add(data.HasMultipleHarvests
-                    ? I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
-                    : I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
-                );
+                if (!crop.forageCrop.Value)
+                {
+                    summary.Add(data.HasMultipleHarvests
+                        ? I18n.Crop_Summary_HarvestOnce(daysToFirstHarvest: data.DaysToFirstHarvest)
+                        : I18n.Crop_Summary_HarvestMulti(daysToFirstHarvest: data.DaysToFirstHarvest, daysToNextHarvests: data.DaysToSubsequentHarvest)
+                    );
+                }
 
                 // seasons
                 summary.Add(I18n.Crop_Summary_Seasons(seasons: string.Join(", ", I18n.GetSeasonNames(data.Seasons))));
@@ -511,15 +514,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     // display fields
                     yield return new ItemIconField(this.GameHelper, I18n.Item_Contents(), heldObj);
                     if (minutesLeft <= 0 || !schedule.Any())
-                        yield return new GenericField(I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: curQuality));
+                        yield return new GenericField(I18n.Item_CaskSchedule(), I18n.Item_CaskSchedule_Now(quality: I18n.For(curQuality)));
                     else
                     {
                         string scheduleStr = string.Join(Environment.NewLine, (
                             from entry in schedule
-                            let str = I18n.GetPlural(entry.DaysLeft, I18n.Item_CaskSchedule_Tomorrow(quality: entry.Quality), I18n.Item_CaskSchedule_InXDays(quality: entry.Quality, count: entry.DaysLeft, date: entry.HarvestDate))
+                            let str = I18n.GetPlural(entry.DaysLeft, I18n.Item_CaskSchedule_Tomorrow(quality: I18n.For(entry.Quality)), I18n.Item_CaskSchedule_InXDays(quality: I18n.For(entry.Quality), count: entry.DaysLeft, date: this.Stringify(entry.HarvestDate)))
                             select $"-{str}"
                         ));
-                        yield return new GenericField(I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: curQuality)}{Environment.NewLine}{scheduleStr}");
+                        yield return new GenericField(I18n.Item_CaskSchedule(), $"{I18n.Item_CaskSchedule_NowPartial(quality: I18n.For(curQuality))}{Environment.NewLine}{scheduleStr}");
                     }
                 }
             }
@@ -718,16 +721,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // multiple qualities
-            int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
-            var prices = new Dictionary<ItemQuality, int>
             {
-                [ItemQuality.Normal] = GetPrice(new SObject(item.ParentSheetIndex, 1)),
-                [ItemQuality.Silver] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Silver)),
-                [ItemQuality.Gold] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Gold))
-            };
-            if (item.GetItemType() == ItemType.Object && (iridiumItems.Contains(item.Category) || iridiumItems.Contains(item.ParentSheetIndex)))
-                prices[ItemQuality.Iridium] = GetPrice(new SObject(item.ParentSheetIndex, 1, quality: (int)ItemQuality.Iridium));
-            return prices;
+                int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
+                var prices = new Dictionary<ItemQuality, int>();
+                var sample = (SObject)item.getOne();
+                foreach (ItemQuality quality in Enum.GetValues(typeof(ItemQuality)))
+                {
+                    if (quality == ItemQuality.Iridium && !iridiumItems.Contains(item.ParentSheetIndex) && !iridiumItems.Contains(item.Category))
+                        continue;
+
+                    sample.Quality = (int)quality;
+                    prices[quality] = GetPrice(sample);
+                }
+                return prices;
+            }
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>

@@ -274,21 +274,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected FarmAnimal GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
         {
             // get animals in the location
-            IEnumerable<FarmAnimal> animals;
-            switch (location)
+            IEnumerable<FarmAnimal> animals = location switch
             {
-                case Farm farm:
-                    animals = farm.animals.Values;
-                    break;
-
-                case AnimalHouse house:
-                    animals = house.animals.Values;
-                    break;
-
-                default:
-                    animals = location.characters.OfType<FarmAnimal>();
-                    break;
-            }
+                Farm farm => farm.animals.Values,
+                AnimalHouse house => house.animals.Values,
+                _ => location.characters.OfType<FarmAnimal>()
+            };
 
             // get best harvestable animal
             Vector2 useAt = this.GetToolPixelPosition(tile);
@@ -314,9 +305,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool TryGetHoeDirt(TerrainFeature tileFeature, SObject tileObj, out HoeDirt dirt, out bool isCoveredByObj, out IndoorPot pot)
         {
             // garden pot
-            if (tileObj is IndoorPot _pot)
+            if (tileObj is IndoorPot foundPot)
             {
-                pot = _pot;
+                pot = foundPot;
                 dirt = pot.hoeDirt.Value;
                 isCoveredByObj = false;
                 return true;

@@ -5,7 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A mayonnaise that accepts input and provides output.</summary>
-    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/>.</remarks>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Mayonnaise Machine').</remarks>
     internal class MayonnaiseMachine : GenericObjectMachine<SObject>
     {
         /*********
@@ -40,36 +40,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // white/brown egg => normal mayonnaise
             new Recipe(
-                input: 176,
+                input: item => item.ParentSheetIndex == 176 || item.ParentSheetIndex == 180,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false),
-                minutes: 180
-            ),
-            new Recipe(
-                input: 180,
-                inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false),
-                minutes: 180
+                minutes: _ => 180
             ),
             
             // dinosaur or large white/brown egg => gold-quality mayonnaise
             new Recipe(
-                input: 107,
+                input: item => item.ParentSheetIndex == 107 || item.ParentSheetIndex == 174 || item.ParentSheetIndex == 182,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
-                minutes: 180
-            ),
-            new Recipe(
-                input: 174,
-                inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
-                minutes: 180
-            ),
-            new Recipe(
-                input: 182,
-                inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
-                minutes: 180
+                minutes: _ => 180
             )
         };
 

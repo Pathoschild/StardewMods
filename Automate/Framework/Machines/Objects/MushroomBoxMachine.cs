@@ -5,6 +5,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
     /// <summary>A mushroom box that accepts input and provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.DayUpdate"/> (search for 'case 128') and <see cref="SObject.minutesElapsed"/> (search for 'Mushroom Box').</remarks>
     internal class MushroomBoxMachine : GenericObjectMachine<SObject>
     {
         /*********

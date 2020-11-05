@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
+using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -75,11 +76,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                     default:
                         bool canNavigate = this.CanCloseChest;
-                        if (canNavigate && this.Menu.okButton.containsPoint(x, y))
+
+                        // handle exit
+                        // (This fixes an issue where the game doesn't handle it correctly in some contexts, like the
+                        // Stardew Valley Fair fishing minigame. Note that the button may be null if removed by a mod like
+                        // ChestEx.)
+                        if (canNavigate && this.Menu.okButton?.containsPoint(x, y) == true)
                         {
-                            this.Exit(); // in some cases the game won't handle this correctly (e.g. Stardew Valley Fair fishing minigame)
+                            this.Exit();
                             return true;
                         }
+
+                        // handle sort
                         else if (this.SortInventoryButton?.containsPoint(x, y) == true)
                         {
                             this.SortInventory();
@@ -133,7 +141,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 ClickableTextureComponent okButton = this.Menu.okButton;
                 float zoom = Game1.pixelZoom;
                 Rectangle buttonBounds = new Rectangle(okButton.bounds.X, (int)(okButton.bounds.Y - sprite.Height * zoom - 5 * zoom), (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, I18n.Button_SortInventory(), Sprites.Icons.Sheet, sprite, zoom);
+                this.SortInventoryButton = new ClickableTextureComponent("sort-inventory", buttonBounds, null, I18n.Button_SortInventory(), CommonSprites.Icons.Sheet, sprite, zoom);
 
                 // adjust menu to fit
                 this.Menu.trashCan.bounds.Y = this.SortInventoryButton.bounds.Y - this.Menu.trashCan.bounds.Height - 2 * Game1.pixelZoom;

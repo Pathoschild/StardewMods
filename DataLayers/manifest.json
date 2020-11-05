@@ -1,7 +1,7 @@
 {
     "Name": "Data Layers",
     "Author": "Pathoschild",
-    "Version": "1.12.3",
+    "Version": "1.13.0",
     "MinimumApiVersion": "3.7.3",
     "Description": "Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc.",
     "UniqueID": "Pathoschild.DataLayers",

@@ -49,7 +49,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             set
             {
                 this._activeElement = value;
-                this.SetItemsClickable(this._activeElement == Element.Menu);
+                this.OnActiveElementChanged(value);
             }
         }
 
@@ -83,17 +83,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font = Game1.smallFont;
 
-        /// <summary>The chest selector tab.</summary>
-        protected Tab ChestTab;
+        /// <summary>The chest dropdown.</summary>
+        protected Dropdown<ManagedChest> ChestDropdown;
 
-        /// <summary>The category selector tab.</summary>
-        protected Tab CategoryTab;
-
-        /// <summary>The chest selector dropdown.</summary>
-        protected DropList<ManagedChest> ChestSelector;
-
-        /// <summary>The category selector dropdown.</summary>
-        protected DropList<string> CategorySelector;
+        /// <summary>The category dropdown.</summary>
+        protected Dropdown<string> CategoryDropdown;
 
         /// <summary>The edit button.</summary>
         protected ClickableTextureComponent EditButton;
@@ -225,15 +219,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             {
                 float navOpacity = this.CanCloseChest ? 1f : 0.5f;
 
-                // tabs
-                this.ChestTab.Draw(batch, navOpacity);
-                this.CategoryTab?.Draw(batch, navOpacity);
-
-                // tab dropdowns
-                if (this.ActiveElement == Element.ChestList)
-                    this.ChestSelector.Draw(batch, navOpacity);
-                if (this.ActiveElement == Element.CategoryList)
-                    this.CategorySelector.Draw(batch, navOpacity);
+                // dropdowns
+                this.ChestDropdown.Draw(batch, navOpacity);
+                this.CategoryDropdown?.Draw(batch, navOpacity);
 
                 // edit button
                 if (this.Chest.CanEdit)
@@ -402,11 +390,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     return false;
 
                 case Element.ChestList:
-                    this.ChestSelector.ReceiveScrollWheelAction(amount);
+                    this.ChestDropdown.ReceiveScrollWheelAction(amount);
                     return true;
 
                 case Element.CategoryList:
-                    this.CategorySelector?.ReceiveScrollWheelAction(amount);
+                    this.CategoryDropdown?.ReceiveScrollWheelAction(amount);
                     return true;
 
                 case Element.EditForm:
@@ -473,35 +461,31 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // chest list
                 case Element.ChestList:
-                    // close dropdown
-                    this.ActiveElement = Element.Menu;
-
-                    // select chest
-                    if (this.ChestSelector.containsPoint(x, y))
                     {
-                        ManagedChest chest = this.ChestSelector.Select(x, y);
-                        if (chest != null)
+                        // select chest
+                        if (this.ChestDropdown.TrySelect(x, y, out ManagedChest chest))
                         {
                             this.SelectChest(chest);
                             this.ReinitializeComponents();
                         }
+
+                        // close dropdown
+                        this.ActiveElement = Element.Menu;
                     }
                     return true; // handle all clicks while open
 
                 // category list
                 case Element.CategoryList:
-                    // close dropdown
-                    this.ActiveElement = Element.Menu;
-
-                    // select category
-                    if (this.CategorySelector.containsPoint(x, y))
                     {
-                        string category = this.CategorySelector.Select(x, y);
-                        if (category != null && category != this.SelectedCategory)
+                        // select category
+                        if (this.CategoryDropdown.containsPoint(x, y) && this.CategoryDropdown.TrySelect(x, y, out string category) && category != this.SelectedCategory)
                         {
                             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
                             this.ReinitializeComponents();
                         }
+
+                        // close dropdown
+                        this.ActiveElement = Element.Menu;
                     }
                     return true; // handle all clicks while open
 
@@ -510,10 +494,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.ChestTab.containsPoint(x, y) && canNavigate)
+                    else if (this.ChestDropdown.containsPoint(x, y) && canNavigate)
+                    {
+                        this.ChestDropdown.IsExpanded = true;
                         this.ActiveElement = Element.ChestList;
-                    else if (this.CategoryTab?.containsPoint(x, y) == true && canNavigate)
+                    }
+                    else if (this.CategoryDropdown?.containsPoint(x, y) == true && canNavigate)
+                    {
+                        this.CategoryDropdown.IsExpanded = true;
                         this.ActiveElement = Element.CategoryList;
+                    }
                     else
                         return false;
                     return true;
@@ -560,35 +550,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // category dropdown
             if (this.ShowCategoryDropdown)
             {
-                // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.SelectedCategory);
-                this.CategoryTab = Constants.TargetPlatform == GamePlatform.Android
-                    ? new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y, true, this.Font)
-                    : new Tab(this.SelectedCategory, bounds.Right - (int)tabSize.X - Game1.tileSize, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
+                this.CategoryDropdown = new Dropdown<string>(bounds.Right - Game1.tileSize, bounds.Y, this.Font, this.SelectedCategory, this.Categories, category => category);
 
-                // dropdown
-                this.CategorySelector = new DropList<string>(this.SelectedCategory, this.Categories, category => category, this.CategoryTab.bounds.Right, this.CategoryTab.bounds.Bottom, false, this.Font);
+                if (Constants.TargetPlatform != GamePlatform.Android)
+                    this.CategoryDropdown.bounds.Y = bounds.Y - this.CategoryDropdown.bounds.Height + this.TopOffset;
+                this.CategoryDropdown.bounds.X -= this.CategoryDropdown.bounds.Width; // right-align
+                this.CategoryDropdown.ReinitializeComponents();
             }
 
             // chest dropdown
             {
-                // tab
-                Vector2 tabSize = Tab.GetTabSize(this.Font, this.Chest.DisplayName);
-                this.ChestTab = Constants.TargetPlatform == GamePlatform.Android
-                    ? new Tab(this.Chest.DisplayName, bounds.X, bounds.Y, true, this.Font)
-                    : new Tab(this.Chest.DisplayName, bounds.X, bounds.Y - (int)tabSize.Y + this.TopOffset, true, this.Font);
-
-                // dropdown
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
-                this.ChestSelector = new DropList<ManagedChest>(this.Chest, chests, chest => chest.DisplayName, this.ChestTab.bounds.X, this.ChestTab.bounds.Bottom, true, this.Font);
+                ManagedChest selected = chests.FirstOrDefault(p => p.Container.IsSameAs(this.Chest.Container));
+                this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName);
+
+                if (Constants.TargetPlatform != GamePlatform.Android)
+                {
+                    this.ChestDropdown.bounds.Y = bounds.Y - this.ChestDropdown.bounds.Height + this.TopOffset;
+                    this.ChestDropdown.ReinitializeComponents();
+                }
             }
 
             // edit chest button overlay (based on chest dropdown position)
             {
-                Rectangle sprite = Sprites.Icons.SpeechBubble;
+                Rectangle sprite = CommonSprites.Icons.SpeechBubble;
                 float zoom = Game1.pixelZoom / 2f;
-                Rectangle buttonBounds = new Rectangle(this.ChestTab.bounds.X + this.ChestTab.bounds.Width, this.ChestTab.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), Sprites.Icons.Sheet, sprite, zoom);
+                Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
+                this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form
@@ -605,7 +593,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
             this.EditResetButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "reset-chest");
-            this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, Sprites.Icons.ExitButton.Width * Game1.pixelZoom, Sprites.Icons.ExitButton.Height * Game1.pixelZoom), Sprites.Icons.Sheet, Sprites.Icons.ExitButton, Game1.pixelZoom);
+            this.EditExitButton = new ClickableTextureComponent(new Rectangle(bounds.Right - 9 * Game1.pixelZoom, bounds.Y - Game1.pixelZoom * 2, CommonSprites.Icons.ExitButton.Width * Game1.pixelZoom, CommonSprites.Icons.ExitButton.Height * Game1.pixelZoom), CommonSprites.Icons.Sheet, CommonSprites.Icons.ExitButton, Game1.pixelZoom);
         }
 
         /// <summary>Set the form values to match the underlying chest.</summary>
@@ -653,6 +641,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.OnChestSelected?.Invoke(this.Chest);
             if (automateChanged)
                 this.OnAutomateOptionsChanged?.Invoke(this.Chest);
+        }
+
+        /// <summary>Handle the active element changing.</summary>
+        /// <param name="value">The new value.</param>
+        private void OnActiveElementChanged(Element value)
+        {
+            // disable readonly mode
+            this.SetItemsClickable(value == Element.Menu);
+
+            // close open dropdowns
+            if (value != Element.CategoryList && value != Element.ChestList)
+            {
+                this.ChestDropdown.IsExpanded = false;
+                if (this.CategoryDropdown != null)
+                    this.CategoryDropdown.IsExpanded = false;
+            }
         }
 
         /// <summary>Exit the chest menu.</summary>

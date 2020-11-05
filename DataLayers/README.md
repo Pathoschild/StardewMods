@@ -161,7 +161,6 @@ mod installed     | effects
 Automate          | Shows whether your machines are empty, processing, or ready to harvest.
 Better Junimos    | Shows custom Junimo hut coverage.
 Better Sprinklers | Shows custom sprinkler coverage.
-Cobalt            | Shows cobalt sprinkler coverage.
 Line Sprinklers   | Shows line sprinkler coverage.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
 Prismatic Tools   | Shows prismatic sprinkler coverage.

@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.DataLayers.Framework.Components;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Menus;
 using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
@@ -21,30 +23,31 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*****
         ** Constants and config
         *****/
-        /// <summary>The pixel padding between the color box and its label.</summary>
-        private readonly int LegendColorPadding = 5;
+        /// <summary>The pixel margin above the displayed legend.</summary>
+        private readonly int TopMargin = 30;
 
-        /// <summary>The size of the margin around the displayed legend.</summary>
-        private readonly int Margin = 30;
+        /// <summary>The pixel margin left of the displayed legend.</summary>
+        private readonly int LeftMargin = 15;
 
-        /// <summary>The padding between the border and content.</summary>
-        private readonly int Padding = 5;
-
-        /// <summary>The pixel size of a color box in the legend.</summary>
-        private readonly int LegendColorSize;
-
-        /// <summary>The width of the top-left boxes.</summary>
-        private readonly int BoxContentWidth;
+        /// <summary>The number of pixels between the arrows and label.</summary>
+        private readonly int ArrowPadding = 10;
 
         /// <summary>Get whether the overlay should be drawn.</summary>
         private readonly Func<bool> DrawOverlay;
 
+
         /*****
-        ** State
+        ** Layer state
         *****/
         /// <summary>The available data layers.</summary>
         private readonly ILayer[] Layers;
 
+        /// <summary>The legend entries to show.</summary>
+        private LegendEntry[] LegendEntries;
+
+        /*****
+        ** Grid state
+        *****/
         /// <summary>When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</summary>
         private readonly bool CombineOverlappingBorders;
 
@@ -53,9 +56,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>An empty set of tile groups.</summary>
         private readonly TileGroup[] EmptyTileGroups = new TileGroup[0];
-
-        /// <summary>The legend entries to show.</summary>
-        private LegendEntry[] Legend;
 
         /// <summary>The visible tiles.</summary>
         private Vector2[] VisibleTiles;
@@ -66,9 +66,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>The tick countdown until the next layer update.</summary>
         private int UpdateCountdown;
 
-        /// <summary>The last visible area.</summary>
-        private Rectangle LastVisibleArea;
-
         /// <summary>Whether to show a tile grid by default.</summary>
         private readonly bool ShowGrid;
 
@@ -77,6 +74,27 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>The color of grid lines between tiles, if enabled.</summary>
         private readonly Color GridColor = Color.Black;
+
+        /*****
+        ** UI state
+        *****/
+        /// <summary>The last visible area.</summary>
+        private Rectangle LastVisibleArea;
+
+        /// <summary>Whether the game was paused last time the menu was updated.</summary>
+        private bool WasPaused;
+
+        /*****
+        ** Components
+        *****/
+        /// <summary>The UI component for the layer title and legend.</summary>
+        private LegendComponent Legend;
+
+        /// <summary>The clickable 'previous layer' icon.</summary>
+        private ClickableTextureComponent PrevButton;
+
+        /// <summary>The clickable 'next layer' icon.</summary>
+        private ClickableTextureComponent NextButton;
 
 
         /*********
@@ -105,10 +123,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
             this.Layers = layers.OrderBy(p => p.Name).ToArray();
             this.DrawOverlay = drawOverlay;
-            this.LegendColorSize = (int)Game1.smallFont.MeasureString("X").Y;
-            this.BoxContentWidth = this.GetMaxContentWidth(this.Layers, this.LegendColorSize);
             this.CombineOverlappingBorders = combineOverlappingBorders;
             this.ShowGrid = showGrid;
+
             this.SetLayer(this.Layers.First());
         }
 
@@ -135,32 +152,41 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         public void SetLayer(ILayer layer)
         {
             this.CurrentLayer = layer;
-            this.Legend = this.CurrentLayer.Legend.ToArray();
+            this.LegendEntries = this.CurrentLayer.Legend.ToArray();
             this.TileGroups = this.EmptyTileGroups;
             this.UpdateCountdown = 0;
+
+            this.ReinitializeComponents();
         }
 
         /// <summary>Update the overlay.</summary>
         public void Update()
         {
-            // no tiles to draw
+            // move UI if it overlaps pause message
+            if (this.WasPaused != Game1.HostPaused)
+            {
+                this.WasPaused = Game1.HostPaused;
+                this.ReinitializeComponents();
+            }
+
+            // get updated tiles
             if (Game1.currentLocation == null || this.CurrentLayer == null)
             {
                 this.VisibleTiles = this.EmptyTiles;
                 this.TileGroups = this.EmptyTileGroups;
-                return;
             }
-
-            // get updated tiles
-            Rectangle visibleArea = this.GetVisibleTileArea(Game1.viewport);
-            if (--this.UpdateCountdown <= 0 || (this.CurrentLayer.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
+            else
             {
-                GameLocation location = Game1.currentLocation;
-                Vector2 cursorTile = TileHelper.GetTileFromCursor();
-                this.VisibleTiles = visibleArea.GetTiles().ToArray();
-                this.TileGroups = this.CurrentLayer.Update(location, visibleArea, this.VisibleTiles, cursorTile).ToArray();
-                this.LastVisibleArea = visibleArea;
-                this.UpdateCountdown = this.CurrentLayer.UpdateTickRate;
+                Rectangle visibleArea = this.GetVisibleTileArea(Game1.viewport);
+                if (--this.UpdateCountdown <= 0 || (this.CurrentLayer.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
+                {
+                    GameLocation location = Game1.currentLocation;
+                    Vector2 cursorTile = TileHelper.GetTileFromCursor();
+                    this.VisibleTiles = visibleArea.GetTiles().ToArray();
+                    this.TileGroups = this.CurrentLayer.Update(location, visibleArea, this.VisibleTiles, cursorTile).ToArray();
+                    this.LastVisibleArea = visibleArea;
+                    this.UpdateCountdown = this.CurrentLayer.UpdateTickRate;
+                }
             }
         }
 
@@ -168,6 +194,39 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Protected methods
         *********/
+        /// <summary>The method invoked when the cursor is hovered.</summary>
+        /// <param name="x">The cursor's X position.</param>
+        /// <param name="y">The cursor's Y position.</param>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveCursorHover(int x, int y)
+        {
+            this.PrevButton.tryHover(x, y);
+            this.NextButton.tryHover(x, y);
+
+            return this.PrevButton.containsPoint(x, y) || this.NextButton.containsPoint(x, y);
+        }
+
+        /// <summary>The method invoked when the player left-clicks.</summary>
+        /// <param name="x">The X-position of the cursor.</param>
+        /// <param name="y">The Y-position of the cursor.</param>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        protected override bool ReceiveLeftClick(int x, int y)
+        {
+            if (this.PrevButton.containsPoint(x, y))
+            {
+                this.PrevLayer();
+                return true;
+            }
+
+            if (this.NextButton.containsPoint(x, y))
+            {
+                this.NextLayer();
+                return true;
+            }
+
+            return base.ReceiveLeftClick(x, y);
+        }
+
         /// <summary>Draw to the screen.</summary>
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void Draw(SpriteBatch spriteBatch)
@@ -226,41 +285,27 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 }
             }
 
-            // draw top-left boxes
-            {
-                // calculate dimensions
-                int topOffset = this.Margin;
-                if (Game1.HostPaused)
-                    topOffset += 96; // don't cover the 'paused' message (which has a hardcoded size)
+            // draw top-left UI
+            this.Legend.Draw(spriteBatch);
+            this.PrevButton.draw(spriteBatch);
+            this.NextButton.draw(spriteBatch);
+        }
 
-                int leftOffset = this.Margin;
+        /// <summary>Reinitialize the UI components.</summary>
+        private void ReinitializeComponents()
+        {
+            // move UI to avoid covering 'paused' message (which has a hardcoded size)
+            int topMargin = this.TopMargin;
+            if (Game1.HostPaused)
+                topMargin += 96;
 
-                // draw overlay label
-                {
-                    Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentLayer.Name);
-                    CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, labelSize.Y), out Vector2 contentPos, out Rectangle bounds);
+            // init UI
+            var leftArrow = CommonSprites.Icons.LeftArrow;
+            var rightArrow = CommonSprites.Icons.RightArrow;
 
-                    contentPos = contentPos + new Vector2((this.BoxContentWidth - labelSize.X) / 2, 0); // center label in box
-                    spriteBatch.DrawString(Game1.smallFont, this.CurrentLayer.Name, contentPos, Color.Black);
-
-                    topOffset += bounds.Height + this.Padding;
-                }
-
-                // draw legend
-                if (this.Legend.Any())
-                {
-                    CommonHelper.DrawScroll(spriteBatch, new Vector2(leftOffset, topOffset), new Vector2(this.BoxContentWidth, this.Legend.Length * this.LegendColorSize), out Vector2 contentPos, out Rectangle _);
-                    for (int i = 0; i < this.Legend.Length; i++)
-                    {
-                        LegendEntry value = this.Legend[i];
-                        int legendX = (int)contentPos.X;
-                        int legendY = (int)(contentPos.Y + i * this.LegendColorSize);
-
-                        spriteBatch.DrawLine(legendX, legendY, new Vector2(this.LegendColorSize), value.Color);
-                        spriteBatch.DrawString(Game1.smallFont, value.Name, new Vector2(legendX + this.LegendColorSize + this.LegendColorPadding, legendY + 2), Color.Black);
-                    }
-                }
-            }
+            this.PrevButton = new ClickableTextureComponent(new Rectangle(this.LeftMargin, this.TopMargin + 10, leftArrow.Width, leftArrow.Height), CommonSprites.Icons.Sheet, leftArrow, 1);
+            this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries);
+            this.NextButton = new ClickableTextureComponent(new Rectangle(this.Legend.bounds.Right + this.ArrowPadding, this.TopMargin + 10, rightArrow.Width, rightArrow.Height), CommonSprites.Icons.Sheet, rightArrow, 1);
         }
 
         /// <summary>Draw a tile border.</summary>
@@ -388,28 +433,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             int height = (int)Math.Ceiling(viewport.Height / (decimal)tileSize);
 
             return new Rectangle(left - 1, top - 1, width + 2, height + 2); // extend slightly off-screen to avoid tile pop-in at the edges
-        }
-
-        /// <summary>Get the maximum content width needed to render the layer labels and legends.</summary>
-        /// <param name="layers">The data layers to render.</param>
-        /// <param name="legendColorSize">The pixel size of a color box in the legend.</param>
-        private int GetMaxContentWidth(ILayer[] layers, int legendColorSize)
-        {
-            float labelWidth =
-                (
-                    from layer in layers
-                    select Game1.smallFont.MeasureString(layer.Name).X
-                )
-                .Max();
-            float legendContentWidth =
-                (
-                    from layer in layers
-                    from entry in layer.Legend
-                    select Game1.smallFont.MeasureString(entry.Name).X
-                )
-                .Max() + legendColorSize + this.LegendColorPadding;
-
-            return (int)Math.Max(labelWidth, legendContentWidth);
         }
     }
 }
