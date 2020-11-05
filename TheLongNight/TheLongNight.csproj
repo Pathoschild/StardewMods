@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>TheLongNight</AssemblyName>
     <Version>1.2.0</Version>
@@ -13,5 +12,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="$(SolutionDir)\common.targets" />
-
 </Project>

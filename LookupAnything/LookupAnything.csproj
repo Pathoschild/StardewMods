@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>LookupAnything</AssemblyName>
     <Version>1.28.0</Version>
@@ -25,5 +24,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
-
 </Project>

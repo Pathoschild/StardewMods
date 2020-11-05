@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <AssemblyName>TractorMod</AssemblyName>
     <Version>4.11.3</Version>
@@ -20,5 +19,4 @@
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
-
 </Project>
