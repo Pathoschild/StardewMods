@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed machine priority inverted in Automate 1.18.
+
 ## 1.18.1
 Released 15 October 2020.
 
