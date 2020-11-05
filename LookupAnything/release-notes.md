@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.28.1
+Released 04 November 2020.
+
 * Fixed 'number owned' field sometimes counting two of the same tool/weapon as different items.
 * Fixed lookups on forage items.
 * Fixed search UI lookups on flavored items like wines showing incorrect prices.

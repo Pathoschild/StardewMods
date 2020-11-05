@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.13
+Released 04 November 2020.
+
 * Added arrow UI to navigate layers.
 * Dropped support for abandoned Cobalt mod.
 

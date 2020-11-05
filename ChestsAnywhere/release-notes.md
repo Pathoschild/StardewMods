@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.19.7
+Released 04 November 2020.
+
 * Changed dropdown buttons to better fit UI.
 * Fixed compatibility with recent ChestEx update.
 * Improved translations. Thanks to Caco-o-sapo (updated Portuguese)!

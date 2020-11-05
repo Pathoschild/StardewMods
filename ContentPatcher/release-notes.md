@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.18.4
+Released 04 November 2020.
+
 * Fixed tokens which use input arguments failing to update silently in rare cases.
 * Fixed 'collection was modified' error in some cases when patching a data model asset.
 
