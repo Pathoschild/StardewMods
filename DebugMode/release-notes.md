@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to PanPan-p (added Turkish)!
+
 ## 1.12.2
 Released 15 October 2020.
 
