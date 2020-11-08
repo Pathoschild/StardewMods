@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added a warning when a custom-machine mod is installed without its separate Automate compatibility
+  patch. This can be disabled in `config.json`.
+
 ## 1.18.2
 Released 04 November 2020.
 

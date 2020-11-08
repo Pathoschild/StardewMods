@@ -1,4 +1,7 @@
 {
+    /**
+     * The floor IDs and names that can be used in the ConnectorNames field in config.json.
+     */
     "FloorNames": {
         "0": "Wood Floor",
         "1": "Stone Floor",
@@ -10,6 +13,47 @@
         "7": "Crystal Path",
         "8": "Cobblestone Path",
         "9": "Stepping Stone Path",
-        "10": "Brick Floor" 
-    }
+        "10": "Brick Floor"
+    },
+
+    /**
+     * Mods which add custom machine recipes and require a separate automation component.
+     */
+    "SuggestedIntegrations": [
+        {
+            "Name": "Custom Farming Redux",
+            "Id": "Platonymous.CustomFarming",
+            "SuggestedName": "CFAutomate",
+            "SuggestedId": "Platonymous.CFAutomate",
+            "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/991?tab=files"
+        },
+        {
+            "Name": "Industrial Furnace",
+            "Id": "Traktori.IndustrialFurnace",
+            "SuggestedName": "Industrial Furnace for Automate",
+            "SuggestedId": "Traktori.AM.IndustrialFurnace",
+            "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/5568?tab=files"
+        },
+        {
+            "Name": "Producer Framework Mod",
+            "Id": "Digus.ProducerFrameworkMod",
+            "SuggestedName": "PFMAutomate",
+            "SuggestedId": "Digus.PFMAutomate",
+            "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/5038"
+        },
+        {
+            "Name": "Puffer Eggs to Mayonnaise (part of Pufferfish Chickens)",
+            "Id": "GZhynko.PufferEggsToMayonnaise",
+            "SuggestedName": "PEMAutomate",
+            "SuggestedId": "GZhynko.PufferEggsToMayonnaise.Automate",
+            "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/6162?tab=files"
+        },
+        {
+            "Name": "Quality Scrubber",
+            "Id": "Traktori.QualityScrubber",
+            "SuggestedName": "Quality Scrubber for Automate",
+            "SuggestedId": "Traktori.AM.QualityScrubber",
+            "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/5663?tab=files"
+        }
+    ]
 }
