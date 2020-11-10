@@ -2,8 +2,8 @@
     // default chest names
     "default-name.fridge": "Buzdolabı",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "ship items", // TODO
-    "default-name.shipping-bin.take": "retrieve items", // TODO
+    "default-name.shipping-bin.store": "öğeleri gönder",
+    "default-name.shipping-bin.take": "öğeleri al",
 
     // default category names
     "default-category.owned-cabin": "Baraka ({{owner}})",
