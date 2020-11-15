@@ -52,6 +52,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)UI\CommonSprites.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\DropdownList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)UI\Dropdown.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\HumanSortComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\ConstraintSet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utilities\InvariantHashSet.cs" />

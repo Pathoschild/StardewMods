@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
@@ -199,7 +200,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chests & config
             this.Chest = chest;
             this.Chests = chests;
-            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
+            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p, HumanSortComparer.DefaultIgnoreCase).ToArray();
             this.Config = config;
             this.Keys = keys;
         }
