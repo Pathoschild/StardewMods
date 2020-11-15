@@ -42,12 +42,24 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The maximum index that can be shown at the top of the list.</summary>
         private int MaxFirstVisibleIndex => this.Options.Length - this.MaxItems;
 
+        /// <summary>Whether the player can scroll up in the list.</summary>
+        private bool CanScrollUp => this.FirstVisibleIndex > 0;
+
+        /// <summary>Whether the player can scroll down in the list.</summary>
+        private bool CanScrollDown => this.FirstVisibleIndex < this.MaxFirstVisibleIndex;
+
 
         /****
         ** Rendering
         ****/
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;
+
+        /// <summary>The up arrow to scroll results.</summary>
+        private ClickableTextureComponent UpArrow;
+
+        /// <summary>The bottom arrow to scroll results.</summary>
+        private ClickableTextureComponent DownArrow;
 
 
         /*********
@@ -108,22 +120,35 @@ namespace Pathoschild.Stardew.Common.UI
             this.Scroll(direction > 0 ? -1 : 1); // scrolling down moves first item up
         }
 
-        /// <summary>Select an item in the list if it's under the cursor.</summary>
-        /// <param name="x">The X-position of the item in the UI.</param>
-        /// <param name="y">The Y-position of the item in the UI.</param>
-        /// <param name="selected">The selected value, if found.</param>
-        /// <returns>Returns whether an item was selected.</returns>
-        public bool TrySelect(int x, int y, out TValue selected)
+        /// <summary>Handle a click at the given position, if applicable.</summary>
+        /// <param name="x">The X-position that was clicked.</param>
+        /// <param name="y">The Y-position that was clicked.</param>
+        /// <param name="itemClicked">Whether a dropdown item was clicked.</param>
+        /// <returns>Returns whether the click was handled.</returns>
+        public bool TryClick(int x, int y, out bool itemClicked)
         {
+            // dropdown value
             var option = this.Options.FirstOrDefault(p => p.visible && p.containsPoint(x, y));
             if (option != null)
             {
                 this.SelectedOption = option;
-                selected = option.Value;
+                itemClicked = true;
+                return true;
+            }
+            itemClicked = false;
+
+            // arrows
+            if (this.UpArrow.containsPoint(x, y))
+            {
+                this.Scroll(-1);
+                return true;
+            }
+            if (this.DownArrow.containsPoint(x, y))
+            {
+                this.Scroll(1);
                 return true;
             }
 
-            selected = default;
             return false;
         }
 
@@ -142,6 +167,17 @@ namespace Pathoschild.Stardew.Common.UI
 
             this.SelectedOption = entry;
             return true;
+        }
+
+        /// <summary>Get whether the dropdown list contains the given UI pixel position.</summary>
+        /// <param name="x">The UI X position.</param>
+        /// <param name="y">The UI Y position.</param>
+        public override bool containsPoint(int x, int y)
+        {
+            return
+                base.containsPoint(x, y)
+                || this.UpArrow.containsPoint(x, y)
+                || this.DownArrow.containsPoint(x, y);
         }
 
         /// <summary>Render the UI.</summary>
@@ -169,21 +205,24 @@ namespace Pathoschild.Stardew.Common.UI
             }
 
             // draw up/down arrows
-            if (this.FirstVisibleIndex > 0)
-                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y), CommonSprites.Icons.UpArrow, Color.White * opacity);
-            if (this.FirstVisibleIndex < this.MaxFirstVisibleIndex)
-                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.DownArrow, Color.White * opacity);
+            if (this.CanScrollUp)
+                this.UpArrow.draw(sprites, Color.White * opacity, 1);
+            if (this.CanScrollDown)
+                this.DownArrow.draw(sprites, Color.White * opacity, 1);
         }
 
         /// <summary>Recalculate dimensions and components for rendering.</summary>
         public void ReinitializeComponents()
         {
+            int x = this.bounds.X;
+            int y = this.bounds.Y;
+
             // get item size
             int itemWidth = this.MaxLabelWidth = Math.Max(this.Options.Max(p => p.LabelWidth), Game1.tileSize * 2) + DropdownList<TValue>.DropdownPadding * 2;
             int itemHeight = this.MaxLabelHeight;
 
             // get pagination
-            this.MaxItems = Math.Min((Game1.viewport.Height - this.bounds.Y) / itemHeight, this.Options.Length);
+            this.MaxItems = Math.Min((Game1.viewport.Height - y) / itemHeight, this.Options.Length);
             this.FirstVisibleIndex = this.GetValidFirstItem(this.FirstVisibleIndex, this.MaxFirstVisibleIndex);
 
             // get dropdown size
@@ -191,16 +230,26 @@ namespace Pathoschild.Stardew.Common.UI
             this.bounds.Height = itemHeight * this.MaxItems;
 
             // update components
-            int x = this.bounds.X;
-            int y = this.bounds.Y;
-            foreach (var option in this.Options)
             {
-                option.visible = option.Index >= this.FirstVisibleIndex && option.Index <= this.LastVisibleIndex;
-                if (option.visible)
+                int itemY = y;
+                foreach (var option in this.Options)
                 {
-                    option.bounds = new Rectangle(x, y, itemWidth, itemHeight);
-                    y += itemHeight;
+                    option.visible = option.Index >= this.FirstVisibleIndex && option.Index <= this.LastVisibleIndex;
+                    if (option.visible)
+                    {
+                        option.bounds = new Rectangle(x, itemY, itemWidth, itemHeight);
+                        itemY += itemHeight;
+                    }
                 }
+            }
+
+            // add arrows
+            {
+                Rectangle upSource = CommonSprites.Icons.UpArrow;
+                Rectangle downSource = CommonSprites.Icons.DownArrow;
+
+                this.UpArrow = new ClickableTextureComponent("up-arrow", new Rectangle(x - upSource.Width, y, upSource.Width, upSource.Height), "", "", CommonSprites.Icons.Sheet, upSource, 1);
+                this.DownArrow = new ClickableTextureComponent("down-arrow", new Rectangle(x - downSource.Width, y + this.bounds.Height - downSource.Height, downSource.Width, downSource.Height), "", "", CommonSprites.Icons.Sheet, downSource, 1);
             }
 
             // update controller flow

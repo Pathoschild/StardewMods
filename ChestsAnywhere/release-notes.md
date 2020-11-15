@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
+* You can now scroll dropdowns by clicking or tapping the arrow icons.
 * Fixed clicks on a scrolled dropdown selecting the wrong option.
 * Improved translations. Thanks to PanPan-p (updated Turkish)!
 
