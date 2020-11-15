@@ -194,7 +194,8 @@ namespace Pathoschild.Stardew.Common
         /// <param name="align">The button's horizontal alignment relative to <paramref name="x"/>. The possible values are 0 (left), 1 (center), or 2 (right).</param>
         /// <param name="alpha">The button opacity, as a value from 0 (transparent) to 1 (opaque).</param>
         /// <param name="forIcon">Whether the button will contain an icon instead of text.</param>
-        public static void DrawTab(SpriteBatch spriteBatch, int x, int y, int innerWidth, int innerHeight, out Vector2 innerDrawPosition, int align = 0, float alpha = 1, bool forIcon = false)
+        /// <param name="drawShadow">Whether to draw a shadow under the tab.</param>
+        public static void DrawTab(SpriteBatch spriteBatch, int x, int y, int innerWidth, int innerHeight, out Vector2 innerDrawPosition, int align = 0, float alpha = 1, bool forIcon = false, bool drawShadow = true)
         {
             // calculate outer coordinates
             int outerWidth = innerWidth + CommonHelper.ButtonBorderWidth * 2;
@@ -214,7 +215,7 @@ namespace Pathoschild.Stardew.Common
             }
 
             // draw texture
-            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x + offsetX, y, outerWidth, outerHeight + Game1.tileSize / 16, Color.White * alpha);
+            IClickableMenu.drawTextureBox(spriteBatch, Game1.menuTexture, new Rectangle(0, 256, 60, 60), x + offsetX, y, outerWidth, outerHeight + Game1.tileSize / 16, Color.White * alpha, drawShadow: drawShadow);
         }
 
         /// <summary>Draw a button background.</summary>
