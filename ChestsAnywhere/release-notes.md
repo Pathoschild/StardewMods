@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
+* Fixed clicks on a scrolled dropdown selecting the wrong option.
 * Improved translations. Thanks to PanPan-p (updated Turkish)!
 
 ## 1.19.7
