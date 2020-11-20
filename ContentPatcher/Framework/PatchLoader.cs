@@ -131,7 +131,7 @@ namespace ContentPatcher.Framework
         /// <param name="conditions">The normalized conditions.</param>
         /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
         /// <param name="error">An error message indicating why normalization failed.</param>
-        public bool TryParseConditions(InvariantDictionary<string> raw, TokenParser tokenParser, LogPathBuilder path, out IList<Condition> conditions, out InvariantHashSet immutableRequiredModIDs, out string error)
+        public bool TryParseConditions(IDictionary<string, string> raw, TokenParser tokenParser, LogPathBuilder path, out IList<Condition> conditions, out InvariantHashSet immutableRequiredModIDs, out string error)
         {
             conditions = new List<Condition>();
             immutableRequiredModIDs = new InvariantHashSet();

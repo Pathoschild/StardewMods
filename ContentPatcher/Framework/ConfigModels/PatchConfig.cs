@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -34,7 +33,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public string Enabled { get; set; } = "true";
 
         /// <summary>The criteria to apply. See readme for valid values.</summary>
-        public InvariantDictionary<string> When { get; set; }
+        public IDictionary<string, string> When { get; set; }
 
         /****
         ** Multiple actions
@@ -93,7 +92,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Update = other.Update;
             this.FromFile = other.FromFile;
             this.Enabled = other.Enabled;
-            this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
+            this.When = other.When?.ToDictionary(p => p.Key, p => p.Value);
 
             // multiple actions
             this.TextOperations = other.TextOperations?.Select(p => new TextOperationConfig(p)).ToArray();
@@ -104,8 +103,8 @@ namespace ContentPatcher.Framework.ConfigModels
             this.PatchMode = other.PatchMode;
 
             // EditData
-            this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
-            this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
+            this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value?.DeepClone());
+            this.Fields = other.Fields?.ToDictionary(field => field.Key, field => (IDictionary<string, JToken>)field.Value?.ToDictionary(p => p.Key, p => p.Value?.DeepClone()));
             this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToArray();
 
             // EditMap
