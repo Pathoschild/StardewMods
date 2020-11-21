@@ -37,23 +37,20 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.8 adds EditMap
+                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
                 {
-                    // 1.8 adds EditMap
-                    if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
-                    {
-                        error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
+                    return false;
+                }
 
-                    // 1.8 adds MoveEntries
-                    if (patch.MoveEntries?.Any() == true)
-                    {
-                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.MoveEntries)}");
-                        return false;
-                    }
+                // 1.8 adds MoveEntries
+                if (patch.MoveEntries.Any())
+                {
+                    error = this.GetNounPhraseError($"using {nameof(PatchConfig.MoveEntries)}");
+                    return false;
                 }
             }
 

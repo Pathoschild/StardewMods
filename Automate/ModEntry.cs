@@ -107,6 +107,8 @@ namespace Pathoschild.Stardew.Automate
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
+            if (this.Config.ModCompatibility.WarnForMissingBridgeMod)
+                this.ReportMissingBridgeMods(data?.SuggestedIntegrations);
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
@@ -365,6 +367,21 @@ namespace Pathoschild.Stardew.Automate
                 this.Helper.WriteConfig(config);
 
             return config;
+        }
+
+        /// <summary>Log warnings if custom-machine frameworks are installed without their automation component.</summary>
+        /// <param name="integrations">Mods which add custom machine recipes and require a separate automation component.</param>
+        private void ReportMissingBridgeMods(DataModelIntegration[] integrations)
+        {
+            if (integrations?.Any() != true)
+                return;
+
+            var registry = this.Helper.ModRegistry;
+            foreach (var integration in integrations)
+            {
+                if (registry.IsLoaded(integration.Id) && !registry.IsLoaded(integration.SuggestedId))
+                    this.Monitor.Log($"Machine recipes added by {integration.Name} aren't currently automated. Install {integration.SuggestedName} too to enable them: {integration.SuggestedUrl}.", LogLevel.Warn);
+            }
         }
 
         /// <summary>Get the active machine groups in every location.</summary>

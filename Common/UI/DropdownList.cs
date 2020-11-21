@@ -9,8 +9,8 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.Common.UI
 {
     /// <summary>A dropdown UI component which lets the player choose from a list of values.</summary>
-    /// <typeparam name="TItem">The item type.</typeparam>
-    internal class DropdownList<TItem> : ClickableComponent
+    /// <typeparam name="TValue">The item value type.</typeparam>
+    internal class DropdownList<TValue> : ClickableComponent
     {
         /*********
         ** Fields
@@ -24,14 +24,11 @@ namespace Pathoschild.Stardew.Common.UI
         /****
         ** Items
         ****/
-        /// <summary>The selected entry.</summary>
-        private DropListItem Selected;
+        /// <summary>The selected option.</summary>
+        private DropListOption SelectedOption;
 
-        /// <summary>The items in the list.</summary>
-        private readonly DropListItem[] Items;
-
-        /// <summary>The clickable components representing the list items.</summary>
-        private readonly List<ClickableComponent> ItemComponents = new List<ClickableComponent>();
+        /// <summary>The options in the list.</summary>
+        private readonly DropListOption[] Options;
 
         /// <summary>The item index shown at the top of the list.</summary>
         private int FirstVisibleIndex;
@@ -39,11 +36,17 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The maximum items to display.</summary>
         private int MaxItems;
 
-        /// <summary>The maximum index for the first item.</summary>
-        private int MaxFirstVisibleIndex;
+        /// <summary>The item index shown at the bottom of the list.</summary>
+        private int LastVisibleIndex => this.FirstVisibleIndex + this.MaxItems - 1;
 
-        /// <summary>Get the display name for a value.</summary>
-        private readonly Func<TItem, string> GetLabel;
+        /// <summary>The maximum index that can be shown at the top of the list.</summary>
+        private int MaxFirstVisibleIndex => this.Options.Length - this.MaxItems;
+
+        /// <summary>Whether the player can scroll up in the list.</summary>
+        private bool CanScrollUp => this.FirstVisibleIndex > 0;
+
+        /// <summary>Whether the player can scroll down in the list.</summary>
+        private bool CanScrollDown => this.FirstVisibleIndex < this.MaxFirstVisibleIndex;
 
 
         /****
@@ -52,15 +55,21 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The font with which to render text.</summary>
         private readonly SpriteFont Font;
 
+        /// <summary>The up arrow to scroll results.</summary>
+        private ClickableTextureComponent UpArrow;
+
+        /// <summary>The bottom arrow to scroll results.</summary>
+        private ClickableTextureComponent DownArrow;
+
 
         /*********
         ** Accessors
         *********/
-        /// <summary>The selected item.</summary>
-        public TItem SelectedItem => this.Selected.Value;
+        /// <summary>The selected value.</summary>
+        public TValue SelectedValue => this.SelectedOption.Value;
 
-        /// <summary>The display label for the selected item.</summary>
-        public string SelectedLabel => this.GetLabel(this.SelectedItem);
+        /// <summary>The display label for the selected value.</summary>
+        public string SelectedLabel => this.SelectedOption.label;
 
         /// <summary>The maximum height for the possible labels.</summary>
         public int MaxLabelHeight { get; }
@@ -69,35 +78,34 @@ namespace Pathoschild.Stardew.Common.UI
         public int MaxLabelWidth { get; private set; }
 
         /// <summary>The <see cref="ClickableComponent.myID"/> value for the top entry in the dropdown.</summary>
-        public int TopComponentId => this.ItemComponents[0].myID;
+        public int TopComponentId => this.Options.First(p => p.visible).myID;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="selectedItem">The selected item.</param>
+        /// <param name="selectedValue">The selected value.</param>
         /// <param name="items">The items in the list.</param>
         /// <param name="getLabel">Get the display label for an item.</param>
         /// <param name="x">The X-position from which to render the list.</param>
         /// <param name="y">The Y-position from which to render the list.</param>
         /// <param name="font">The font with which to render text.</param>
-        public DropdownList(TItem selectedItem, TItem[] items, Func<TItem, string> getLabel, int x, int y, SpriteFont font)
-            : base(new Rectangle(), nameof(DropdownList<TItem>))
+        public DropdownList(TValue selectedValue, TValue[] items, Func<TValue, string> getLabel, int x, int y, SpriteFont font)
+            : base(new Rectangle(), nameof(DropdownList<TValue>))
         {
             // save values
-            this.Items = items
-                .Select((item, index) => new DropListItem(index, getLabel(item), item))
+            this.Options = items
+                .Select((item, index) => new DropListOption(Rectangle.Empty, index, getLabel(item), item, font))
                 .ToArray();
             this.Font = font;
-            this.MaxLabelHeight = (int)font.MeasureString("abcdefghijklmnopqrstuvwxyz").Y;
-            this.GetLabel = getLabel;
+            this.MaxLabelHeight = this.Options.Max(p => p.LabelHeight);
 
             // set initial selection
-            int selectedIndex = Array.IndexOf(items, selectedItem);
-            this.Selected = selectedIndex >= 0
-                ? this.Items[selectedIndex]
-                : this.Items.First();
+            int selectedIndex = Array.IndexOf(items, selectedValue);
+            this.SelectedOption = selectedIndex >= 0
+                ? this.Options[selectedIndex]
+                : this.Options.First();
 
             // initialize UI
             this.bounds.X = x;
@@ -112,34 +120,44 @@ namespace Pathoschild.Stardew.Common.UI
             this.Scroll(direction > 0 ? -1 : 1); // scrolling down moves first item up
         }
 
-        /// <summary>Select an item in the list if it's under the cursor.</summary>
-        /// <param name="x">The X-position of the item in the UI.</param>
-        /// <param name="y">The Y-position of the item in the UI.</param>
-        /// <param name="selected">The selected item, if found.</param>
-        /// <returns>Returns whether an item was selected.</returns>
-        public bool TrySelect(int x, int y, out TItem selected)
+        /// <summary>Handle a click at the given position, if applicable.</summary>
+        /// <param name="x">The X-position that was clicked.</param>
+        /// <param name="y">The Y-position that was clicked.</param>
+        /// <param name="itemClicked">Whether a dropdown item was clicked.</param>
+        /// <returns>Returns whether the click was handled.</returns>
+        public bool TryClick(int x, int y, out bool itemClicked)
         {
-            for (int i = 0; i < this.ItemComponents.Count; i++)
+            // dropdown value
+            var option = this.Options.FirstOrDefault(p => p.visible && p.containsPoint(x, y));
+            if (option != null)
             {
-                var component = this.ItemComponents[i];
-                if (component.containsPoint(x, y))
-                {
-                    this.Selected = this.Items[i];
-                    selected = this.SelectedItem;
-                    return true;
-                }
+                this.SelectedOption = option;
+                itemClicked = true;
+                return true;
+            }
+            itemClicked = false;
+
+            // arrows
+            if (this.UpArrow.containsPoint(x, y))
+            {
+                this.Scroll(-1);
+                return true;
+            }
+            if (this.DownArrow.containsPoint(x, y))
+            {
+                this.Scroll(1);
+                return true;
             }
 
-            selected = default;
             return false;
         }
 
         /// <summary>Select an item in the list matching the given value.</summary>
         /// <param name="value">The value to search.</param>
         /// <returns>Returns whether an item was selected.</returns>
-        public bool TrySelect(TItem value)
+        public bool TrySelect(TValue value)
         {
-            var entry = this.Items.FirstOrDefault(p =>
+            var entry = this.Options.FirstOrDefault(p =>
                 (p.Value == null && value == null)
                 || p.Value?.Equals(value) == true
             );
@@ -147,8 +165,19 @@ namespace Pathoschild.Stardew.Common.UI
             if (entry == null)
                 return false;
 
-            this.Selected = entry;
+            this.SelectedOption = entry;
             return true;
+        }
+
+        /// <summary>Get whether the dropdown list contains the given UI pixel position.</summary>
+        /// <param name="x">The UI X position.</param>
+        /// <param name="y">The UI Y position.</param>
+        public override bool containsPoint(int x, int y)
+        {
+            return
+                base.containsPoint(x, y)
+                || this.UpArrow.containsPoint(x, y)
+                || this.DownArrow.containsPoint(x, y);
         }
 
         /// <summary>Render the UI.</summary>
@@ -157,57 +186,70 @@ namespace Pathoschild.Stardew.Common.UI
         public void Draw(SpriteBatch sprites, float opacity = 1)
         {
             // draw dropdown items
-            for (int i = 0; i < this.ItemComponents.Count; i++)
+            foreach (DropListOption option in this.Options)
             {
-                var component = this.ItemComponents[i];
+                if (!option.visible)
+                    continue;
 
                 // draw background
-                if (component.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
-                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.HoverBackground, Color.White * opacity);
-                else if (i == this.Selected.Index)
-                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.ActiveBackground, Color.White * opacity);
+                if (option.containsPoint(Game1.getMouseX(), Game1.getMouseY()))
+                    sprites.Draw(CommonSprites.DropDown.Sheet, option.bounds, CommonSprites.DropDown.HoverBackground, Color.White * opacity);
+                else if (option.Index == this.SelectedOption.Index)
+                    sprites.Draw(CommonSprites.DropDown.Sheet, option.bounds, CommonSprites.DropDown.ActiveBackground, Color.White * opacity);
                 else
-                    sprites.Draw(CommonSprites.DropDown.Sheet, component.bounds, CommonSprites.DropDown.InactiveBackground, Color.White * opacity);
+                    sprites.Draw(CommonSprites.DropDown.Sheet, option.bounds, CommonSprites.DropDown.InactiveBackground, Color.White * opacity);
 
                 // draw text
-                DropListItem item = this.Items.First(p => p.Index == int.Parse(component.name));
-                Vector2 position = new Vector2(component.bounds.X + DropdownList<TItem>.DropdownPadding, component.bounds.Y + Game1.tileSize / 16);
-                sprites.DrawString(this.Font, item.Name, position, Color.Black * opacity);
+                Vector2 position = new Vector2(option.bounds.X + DropdownList<TValue>.DropdownPadding, option.bounds.Y + Game1.tileSize / 16);
+                sprites.DrawString(this.Font, option.label, position, Color.Black * opacity);
             }
 
             // draw up/down arrows
-            if (this.FirstVisibleIndex > 0)
-                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y), CommonSprites.Icons.UpArrow, Color.White * opacity);
-            if (this.FirstVisibleIndex < this.MaxFirstVisibleIndex)
-                sprites.Draw(CommonSprites.Icons.Sheet, new Vector2(this.bounds.X - CommonSprites.Icons.UpArrow.Width, this.bounds.Y + this.bounds.Height - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.DownArrow, Color.White * opacity);
+            if (this.CanScrollUp)
+                this.UpArrow.draw(sprites, Color.White * opacity, 1);
+            if (this.CanScrollDown)
+                this.DownArrow.draw(sprites, Color.White * opacity, 1);
         }
 
         /// <summary>Recalculate dimensions and components for rendering.</summary>
         public void ReinitializeComponents()
         {
+            int x = this.bounds.X;
+            int y = this.bounds.Y;
+
             // get item size
-            int minItemWidth = Game1.tileSize * 2;
-            this.MaxLabelWidth = Math.Max((int)this.Items.Max(p => this.Font.MeasureString(p.Name).X), minItemWidth) + DropdownList<TItem>.DropdownPadding * 2;
+            int itemWidth = this.MaxLabelWidth = Math.Max(this.Options.Max(p => p.LabelWidth), Game1.tileSize * 2) + DropdownList<TValue>.DropdownPadding * 2;
             int itemHeight = this.MaxLabelHeight;
 
             // get pagination
-            int itemCount = this.Items.Length;
-            this.MaxItems = Math.Min((Game1.viewport.Height - (int)this.bounds.Y) / itemHeight, itemCount);
-            this.MaxFirstVisibleIndex = this.Items.Length - this.MaxItems;
+            this.MaxItems = Math.Min((Game1.viewport.Height - y) / itemHeight, this.Options.Length);
             this.FirstVisibleIndex = this.GetValidFirstItem(this.FirstVisibleIndex, this.MaxFirstVisibleIndex);
 
             // get dropdown size
-            this.bounds.Width = this.MaxLabelWidth;
+            this.bounds.Width = itemWidth;
             this.bounds.Height = itemHeight * this.MaxItems;
 
-            // generate components
-            this.ItemComponents.Clear();
-            int x = this.bounds.X;
-            int y = this.bounds.Y;
-            for (int i = this.FirstVisibleIndex; i < this.MaxItems; i++)
+            // update components
             {
-                this.ItemComponents.Add(new ClickableComponent(new Rectangle(x, y, this.MaxLabelWidth, itemHeight), i.ToString()));
-                y += this.MaxLabelHeight;
+                int itemY = y;
+                foreach (var option in this.Options)
+                {
+                    option.visible = option.Index >= this.FirstVisibleIndex && option.Index <= this.LastVisibleIndex;
+                    if (option.visible)
+                    {
+                        option.bounds = new Rectangle(x, itemY, itemWidth, itemHeight);
+                        itemY += itemHeight;
+                    }
+                }
+            }
+
+            // add arrows
+            {
+                Rectangle upSource = CommonSprites.Icons.UpArrow;
+                Rectangle downSource = CommonSprites.Icons.DownArrow;
+
+                this.UpArrow = new ClickableTextureComponent("up-arrow", new Rectangle(x - upSource.Width, y, upSource.Width, upSource.Height), "", "", CommonSprites.Icons.Sheet, upSource, 1);
+                this.DownArrow = new ClickableTextureComponent("down-arrow", new Rectangle(x - downSource.Width, y + this.bounds.Height - downSource.Height, downSource.Width, downSource.Height), "", "", CommonSprites.Icons.Sheet, downSource, 1);
             }
 
             // update controller flow
@@ -217,17 +259,21 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Set the fields to support controller snapping.</summary>
         public void ReinitializeControllerFlow()
         {
-            int initialId = 1_100_000;
-            for (int last = this.ItemComponents.Count - 1, i = last; i >= 0; i--)
-            {
-                var component = this.ItemComponents[i];
+            int firstIndex = this.FirstVisibleIndex;
+            int lastIndex = this.LastVisibleIndex;
 
-                component.myID = initialId + i;
-                component.upNeighborID = i != 0
-                    ? initialId + i - 1
+            int initialId = 1_100_000;
+            foreach (var option in this.Options)
+            {
+                int index = option.Index;
+                int id = initialId + index;
+
+                option.myID = id;
+                option.upNeighborID = index > firstIndex
+                    ? id - 1
                     : -99999;
-                component.downNeighborID = i != last
-                    ? initialId + i + 1
+                option.downNeighborID = index < lastIndex
+                    ? id + 1
                     : -1;
             }
         }
@@ -235,7 +281,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Get the nested components for controller snapping.</summary>
         public IEnumerable<ClickableComponent> GetChildComponents()
         {
-            return this.ItemComponents;
+            return this.Options;
         }
 
 
@@ -253,12 +299,7 @@ namespace Pathoschild.Stardew.Common.UI
             this.FirstVisibleIndex = firstItem;
 
             // update displayed items
-            int itemIndex = firstItem;
-            foreach (ClickableComponent current in this.ItemComponents)
-            {
-                current.name = itemIndex.ToString();
-                itemIndex++;
-            }
+            this.ReinitializeComponents();
         }
 
         /// <summary>Calculate a valid index for the first displayed item in the list.</summary>
@@ -273,34 +314,43 @@ namespace Pathoschild.Stardew.Common.UI
         /*********
         ** Private models
         *********/
-        /// <summary>An item in a drop list.</summary>
-        private class DropListItem
+        /// <summary>A clickable option in the dropdown.</summary>
+        private class DropListOption : ClickableComponent
         {
             /*********
             ** Accessors
             *********/
-            /// <summary>The item's index in the list.</summary>
+            /// <summary>The option's index in the list.</summary>
             public int Index { get; }
 
-            /// <summary>The display name.</summary>
-            public string Name { get; }
+            /// <summary>The option value.</summary>
+            public TValue Value { get; }
 
-            /// <summary>The item value.</summary>
-            public TItem Value { get; }
+            /// <summary>The label text width in pixels.</summary>
+            public int LabelWidth { get; }
+
+            /// <summary>The label text height in pixels.</summary>
+            public int LabelHeight { get; }
 
 
             /*********
             ** Public methods
             *********/
             /// <summary>Construct an instance.</summary>
-            /// <param name="index">The item's index in the list.</param>
-            /// <param name="name">The display name.</param>
-            /// <param name="value">The item value.</param>
-            public DropListItem(int index, string name, TItem value)
+            /// <param name="bounds">The pixel bounds on screen.</param>
+            /// <param name="index">The option's index in the list.</param>
+            /// <param name="label">The display text.</param>
+            /// <param name="value">The option value.</param>
+            /// <param name="font">The font with which to measure the label.</param>
+            public DropListOption(Rectangle bounds, int index, string label, TValue value, SpriteFont font)
+                : base(bounds: bounds, name: index.ToString(), label: label)
             {
                 this.Index = index;
-                this.Name = name;
                 this.Value = value;
+
+                Vector2 labelSize = font.MeasureString(label);
+                this.LabelWidth = (int)labelSize.X;
+                this.LabelHeight = (int)labelSize.Y;
             }
         }
     }

@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -58,10 +58,10 @@ namespace ContentPatcher.Framework.ConfigModels
         ** EditData
         ****/
         /// <summary>The data records to edit.</summary>
-        public IDictionary<string, JToken> Entries { get; set; }
+        public InvariantDictionary<JToken> Entries { get; set; }
 
         /// <summary>The individual fields to edit in data records.</summary>
-        public IDictionary<string, IDictionary<string, JToken>> Fields { get; set; }
+        public InvariantDictionary<InvariantDictionary<JToken>> Fields { get; set; }
 
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         public PatchMoveEntryConfig[] MoveEntries { get; set; }
@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.ConfigModels
         ** EditMap
         ****/
         /// <summary>The map properties to edit.</summary>
-        public IDictionary<string, string> MapProperties { get; set; }
+        public InvariantDictionary<string> MapProperties { get; set; }
 
         /// <summary>The map tiles to edit.</summary>
         public PatchMapTileConfig[] MapTiles { get; set; }
@@ -93,10 +93,10 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Update = other.Update;
             this.FromFile = other.FromFile;
             this.Enabled = other.Enabled;
-            this.When = other.When != null ? new InvariantDictionary<string>(other.When) : null;
+            this.When = other.When.Clone();
 
             // multiple actions
-            this.TextOperations = other.TextOperations?.Select(p => new TextOperationConfig(p)).ToArray();
+            this.TextOperations = other.TextOperations.Select(p => new TextOperationConfig(p)).ToArray();
 
             // EditImage
             this.FromArea = other.FromArea != null ? new PatchRectangleConfig(other.FromArea) : null;
@@ -104,13 +104,36 @@ namespace ContentPatcher.Framework.ConfigModels
             this.PatchMode = other.PatchMode;
 
             // EditData
-            this.Entries = other.Entries?.ToDictionary(p => p.Key, p => p.Value);
-            this.Fields = other.Fields?.ToDictionary(p => p.Key, p => p.Value);
-            this.MoveEntries = other.MoveEntries?.Select(p => new PatchMoveEntryConfig(p)).ToArray();
+            this.Entries = other.Entries.Clone(value => value?.DeepClone());
+            this.Fields = other.Fields.Clone(
+                entryFields => entryFields?.Clone(value => value?.DeepClone())
+            );
+            this.MoveEntries = other.MoveEntries.Select(p => new PatchMoveEntryConfig(p)).ToArray();
 
             // EditMap
-            this.MapProperties = other.MapProperties?.ToDictionary(p => p.Key, p => p.Value);
-            this.MapTiles = other.MapTiles?.Select(p => new PatchMapTileConfig(p)).ToArray();
+            this.MapProperties = other.MapProperties.Clone();
+            this.MapTiles = other.MapTiles.Select(p => new PatchMapTileConfig(p)).ToArray();
+        }
+
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            // all actions
+            this.When ??= new InvariantDictionary<string>();
+
+            // multiple actions
+            this.TextOperations ??= new TextOperationConfig[0];
+
+            // EditData
+            this.Entries ??= new InvariantDictionary<JToken>();
+            this.Fields ??= new InvariantDictionary<InvariantDictionary<JToken>>();
+            this.MoveEntries ??= new PatchMoveEntryConfig[0];
+
+            // EditMap
+            this.MapProperties ??= new InvariantDictionary<string>();
+            this.MapTiles ??= new PatchMapTileConfig[0];
         }
     }
 }

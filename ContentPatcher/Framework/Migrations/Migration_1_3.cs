@@ -26,30 +26,27 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.3 adds config.json
-            if (content.ConfigSchema?.Any() == true)
+            if (content.ConfigSchema.Any())
             {
                 error = this.GetNounPhraseError($"using the {nameof(ContentConfig.ConfigSchema)} field");
                 return false;
             }
 
             // check patch format
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.3 adds tokens in FromFile
+                if (patch.FromFile != null && patch.FromFile.Contains("{{"))
                 {
-                    // 1.3 adds tokens in FromFile
-                    if (patch.FromFile != null && patch.FromFile.Contains("{{"))
-                    {
-                        error = this.GetNounPhraseError($"using the {{{{token}}}} feature in {nameof(PatchConfig.FromFile)} fields");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using the {{{{token}}}} feature in {nameof(PatchConfig.FromFile)} fields");
+                    return false;
+                }
 
-                    // 1.3 adds When
-                    if (patch.When?.Any() == true)
-                    {
-                        error = this.GetNounPhraseError($"using the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field)");
-                        return false;
-                    }
+                // 1.3 adds When
+                if (patch.When.Any())
+                {
+                    error = this.GetNounPhraseError($"using the condition feature ({nameof(ContentConfig.Changes)}.{nameof(PatchConfig.When)} field)");
+                    return false;
                 }
             }
 

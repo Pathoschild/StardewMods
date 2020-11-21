@@ -702,22 +702,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="qualityIsKnown">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown)
         {
-            // get sale price
-            // derived from Utility.getSellToStorePriceOfItem
-            int GetPrice(Item i)
-            {
-                int price = (i as SObject)?.sellToStorePrice() ?? (i.salePrice() / 2);
-                return price > 0 ? price : 0;
-            }
+            SObject obj = item.getOne() as SObject;
 
             // single quality
-            if (!this.GameHelper.CanHaveQuality(item) || qualityIsKnown)
+            if (obj == null || !this.GameHelper.CanHaveQuality(item) || !qualityIsKnown)
             {
-                ItemQuality quality = qualityIsKnown && item is SObject obj
+                ItemQuality quality = qualityIsKnown && obj != null
                     ? (ItemQuality)obj.Quality
                     : ItemQuality.Normal;
-
-                return new Dictionary<ItemQuality, int> { [quality] = GetPrice(item) };
+                return new Dictionary<ItemQuality, int> { [quality] = this.GetRawSalePrice(item) };
             }
 
             // multiple qualities
@@ -731,10 +724,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         continue;
 
                     sample.Quality = (int)quality;
-                    prices[quality] = GetPrice(sample);
+                    prices[quality] = this.GetRawSalePrice(sample);
                 }
                 return prices;
             }
+        }
+
+        /// <summary>Get the sale price for a specific item instance.</summary>
+        /// <param name="item">The item instance.</param>
+        /// <remarks>Derived from <see cref="Utility.getSellToStorePriceOfItem(Item, bool)"/>.</remarks>
+        private int GetRawSalePrice(Item item)
+        {
+            int price = item is SObject obj
+                ? obj.sellToStorePrice()
+                : (item.salePrice() / 2);
+
+            return price > 0
+                ? price
+                : 0;
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>

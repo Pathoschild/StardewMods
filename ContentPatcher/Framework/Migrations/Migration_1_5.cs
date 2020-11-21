@@ -42,23 +42,20 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.5 adds dynamic tokens
-            if (content.DynamicTokens?.Any() == true)
+            if (content.DynamicTokens.Any())
             {
                 error = this.GetNounPhraseError($"using the {nameof(ContentConfig.DynamicTokens)} field");
                 return false;
             }
 
             // check patch format
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.5 adds multiple Target values
+                if (patch.Target?.Contains(",") == true)
                 {
-                    // 1.5 adds multiple Target values
-                    if (patch.Target?.Contains(",") == true)
-                    {
-                        error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
+                    return false;
                 }
             }
 

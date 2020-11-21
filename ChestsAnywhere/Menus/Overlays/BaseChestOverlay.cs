@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Utilities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
@@ -199,7 +200,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chests & config
             this.Chest = chest;
             this.Chests = chests;
-            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p).ToArray();
+            this.Categories = chests.Select(p => p.DisplayCategory).Distinct().OrderBy(p => p, HumanSortComparer.DefaultIgnoreCase).ToArray();
             this.Config = config;
             this.Keys = keys;
         }
@@ -463,14 +464,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.ChestList:
                     {
                         // select chest
-                        if (this.ChestDropdown.TrySelect(x, y, out ManagedChest chest))
+                        if (this.ChestDropdown.TryClick(x, y, out bool itemClicked, out bool dropdownToggled))
                         {
-                            this.SelectChest(chest);
-                            this.ReinitializeComponents();
+                            if (itemClicked)
+                            {
+                                this.SelectChest(this.ChestDropdown.Selected);
+                                this.ReinitializeComponents();
+                            }
+
+                            if (dropdownToggled)
+                                this.ActiveElement = this.ChestDropdown.IsExpanded ? Element.ChestList : Element.Menu;
                         }
 
                         // close dropdown
-                        this.ActiveElement = Element.Menu;
+                        else
+                            this.ActiveElement = Element.Menu;
                     }
                     return true; // handle all clicks while open
 
@@ -478,14 +486,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.CategoryList:
                     {
                         // select category
-                        if (this.CategoryDropdown.containsPoint(x, y) && this.CategoryDropdown.TrySelect(x, y, out string category) && category != this.SelectedCategory)
+                        if (this.CategoryDropdown.TryClick(x, y, out bool itemClicked, out bool dropdownToggled))
                         {
-                            this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
-                            this.ReinitializeComponents();
+                            if (itemClicked)
+                            {
+                                string category = this.CategoryDropdown.Selected;
+                                if (category != this.SelectedCategory)
+                                {
+                                    this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
+                                    this.ReinitializeComponents();
+                                }
+                            }
+
+                            if (dropdownToggled)
+                                this.ActiveElement = this.CategoryDropdown.IsExpanded ? Element.CategoryList : Element.Menu;
                         }
 
                         // close dropdown
-                        this.ActiveElement = Element.Menu;
+                        else
+                            this.ActiveElement = Element.Menu;
                     }
                     return true; // handle all clicks while open
 
@@ -494,12 +513,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.ChestDropdown.containsPoint(x, y) && canNavigate)
+                    else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
                     {
                         this.ChestDropdown.IsExpanded = true;
                         this.ActiveElement = Element.ChestList;
                     }
-                    else if (this.CategoryDropdown?.containsPoint(x, y) == true && canNavigate)
+                    else if (this.CategoryDropdown?.TryClick(x, y) == true && canNavigate)
                     {
                         this.CategoryDropdown.IsExpanded = true;
                         this.ActiveElement = Element.CategoryList;

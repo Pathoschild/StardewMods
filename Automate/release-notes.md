@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.18.3
+Released 22 November 2020.
+
+* When a mod adds custom machines but is missing something for Automate compatibility, Automate now shows a warning with instructions. This can be disabled in `config.json`.
+* Fixed constructed shipping bins triggering the main shipping bin's animation.
+* Fixed shipped items not added to existing stacks if possible.
+
 ## 1.18.2
 Released 04 November 2020.
 

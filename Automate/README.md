@@ -215,6 +215,7 @@ field | result
 ----- | ------
 `AutoGrabberMod` | If [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) is installed, auto-grabbers won't output fertilizer and seeds.
 `BetterJunimos` | If [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) is installed, Junimo huts won't output fertilizer and seeds.
+`WarnForMissingBridgeMod` | Whether to log a warning if you install a custom-machine mod that requires a separate compatibility patch which isn't installed.
 
   </td>
 </tr>

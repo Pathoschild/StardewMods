@@ -1,0 +1,12 @@
+{
+    // labels shown on the debug screen
+    "label.tile": "kordinat",
+    "label.map": "alan",
+    "label.menu": "menü",
+    "label.submenu": "açık menü",
+    "label.minigame": "oyun",
+    "label.festival-name": "festival",
+    "label.event-id": "etkinlik ID",
+    "label.event-script": "etkinlik senaryosu",
+    "label.song": "şarkı"
+}

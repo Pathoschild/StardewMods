@@ -57,31 +57,25 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.7 adds tokens in dynamic token values
-            if (content.DynamicTokens != null)
+            if (content.DynamicTokens.Any(p => p.Value?.Contains("{{") == true))
             {
-                if (content.DynamicTokens.Any(p => p.Value?.Contains("{{") == true))
-                {
-                    error = this.GetNounPhraseError("using tokens in dynamic token values");
-                    return false;
-                }
+                error = this.GetNounPhraseError("using tokens in dynamic token values");
+                return false;
             }
 
             // 1.7 adds tokens in field keys and condition values
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                if (patch.Fields.Keys.Any(key => key.Contains("{{")))
                 {
-                    if (patch.Fields != null && patch.Fields.Keys.Any(key => key.Contains("{{")))
-                    {
-                        error = this.GetNounPhraseError("using tokens in field keys");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError("using tokens in field keys");
+                    return false;
+                }
 
-                    if (patch.When != null && patch.When.Any(condition => condition.Value?.Contains("{{") == true && !condition.Value.ContainsIgnoreCase("HasFile")))
-                    {
-                        error = this.GetNounPhraseError("using tokens in condition values");
-                        return false;
-                    }
+                if (patch.When.Any(condition => condition.Value?.Contains("{{") == true && !condition.Value.ContainsIgnoreCase("HasFile")))
+                {
+                    error = this.GetNounPhraseError("using tokens in condition values");
+                    return false;
                 }
             }
 

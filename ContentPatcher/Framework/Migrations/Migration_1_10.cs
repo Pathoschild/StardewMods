@@ -38,23 +38,20 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.10 allows 'FromFile' with 'EditData' patches
+                if (patch.FromFile != null && Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditData)
                 {
-                    // 1.10 allows 'FromFile' with 'EditData' patches
-                    if (patch.FromFile != null && Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditData)
-                    {
-                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.FromFile)} with action {nameof(PatchType.EditData)}");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using {nameof(PatchConfig.FromFile)} with action {nameof(PatchType.EditData)}");
+                    return false;
+                }
 
-                    // 1.10 adds MapProperties
-                    if (patch.MapProperties != null)
-                    {
-                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.MapProperties)}");
-                        return false;
-                    }
+                // 1.10 adds MapProperties
+                if (patch.MapProperties.Any())
+                {
+                    error = this.GetNounPhraseError($"using {nameof(PatchConfig.MapProperties)}");
+                    return false;
                 }
             }
 

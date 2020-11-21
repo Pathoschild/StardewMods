@@ -789,7 +789,7 @@ This is mainly useful for checking if the path exists:
 {
    "Action": "EditImage",
    "Target": "Characters/Abigail",
-   "FromFile": "assets/Schedule/{{Season}}_{{Day}}.json",
+   "FromFile": "assets/{{Season}}_abigail.png",
    "When": {
       "HasFile:{{FromFile}}": true
    }

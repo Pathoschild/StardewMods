@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19.8
+Released 22 November 2020.
+
+* Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
+* You can now scroll dropdowns by clicking or tapping the arrow icons.
+* Fixed clicks on a scrolled dropdown selecting the wrong option.
+* Improved translations. Thanks to PanPan-p (updated Turkish)!
+
 ## 1.19.7
 Released 04 November 2020.
 

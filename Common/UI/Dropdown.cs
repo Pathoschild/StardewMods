@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -25,6 +26,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The backing field for <see cref="IsExpanded"/>.</summary>
         private bool IsExpandedImpl;
 
+        /// <summary>Whether the menu is being displayed on Android.</summary>
+        private bool IsAndroid => Constants.TargetPlatform == GamePlatform.Android;
+
 
         /*********
         ** Accessors
@@ -41,6 +45,9 @@ namespace Pathoschild.Stardew.Common.UI
                     : this.DefaultDownNeighborId;
             }
         }
+
+        /// <summary>The selected option.</summary>
+        public TItem Selected => this.List.SelectedValue;
 
         /// <summary>The downward neighbor ID when the dropdown is closed for controller snapping.</summary>
         public int DefaultDownNeighborId { get; set; } = -99999;
@@ -77,17 +84,46 @@ namespace Pathoschild.Stardew.Common.UI
                 || (this.IsExpanded && this.List.containsPoint(x, y));
         }
 
-        /// <summary>Select an item in the list if it's under the cursor.</summary>
-        /// <param name="x">The X-position of the item in the UI.</param>
-        /// <param name="y">The Y-position of the item in the UI.</param>
-        /// <param name="selected">The selected item, if found.</param>
-        /// <returns>Returns whether an item was selected.</returns>
-        public bool TrySelect(int x, int y, out TItem selected)
+        /// <summary>Handle a click at the given position, if applicable.</summary>
+        /// <param name="x">The X-position that was clicked.</param>
+        /// <param name="y">The Y-position that was clicked.</param>
+        /// <returns>Returns whether the click was handled.</returns>
+        public bool TryClick(int x, int y)
         {
-            if (this.IsExpanded)
-                return this.List.TrySelect(x, y, out selected);
+            return this.TryClick(x, y, out _, out _);
+        }
 
-            selected = default;
+        /// <summary>Handle a click at the given position, if applicable.</summary>
+        /// <param name="x">The X-position that was clicked.</param>
+        /// <param name="y">The Y-position that was clicked.</param>
+        /// <param name="itemClicked">Whether a dropdown item was clicked.</param>
+        /// <param name="dropdownToggled">Whether the dropdown was expanded or collapsed.</param>
+        /// <returns>Returns whether the click was handled.</returns>
+        public bool TryClick(int x, int y, out bool itemClicked, out bool dropdownToggled)
+        {
+            itemClicked = false;
+            dropdownToggled = false;
+
+            // click dropdown item
+            if (this.IsExpanded && this.List.TryClick(x, y, out itemClicked))
+            {
+                if (itemClicked)
+                {
+                    this.IsExpanded = false;
+                    dropdownToggled = true;
+                }
+                return true;
+            }
+
+            // toggle expansion
+            if (this.bounds.Contains(x, y) || this.IsExpanded)
+            {
+                this.IsExpanded = !this.IsExpanded;
+                dropdownToggled = true;
+                return true;
+            }
+
+            // not handled
             return false;
         }
 
@@ -113,7 +149,7 @@ namespace Pathoschild.Stardew.Common.UI
         public void Draw(SpriteBatch sprites, float opacity = 1)
         {
             // draw tab
-            CommonHelper.DrawTab(sprites, this.bounds.X, this.bounds.Y, this.List.MaxLabelWidth, this.List.MaxLabelHeight, out Vector2 textPos);
+            CommonHelper.DrawTab(sprites, this.bounds.X, this.bounds.Y, this.List.MaxLabelWidth, this.List.MaxLabelHeight, out Vector2 textPos, drawShadow: this.IsAndroid);
             sprites.DrawString(this.Font, this.List.SelectedLabel, textPos, Color.Black * opacity);
 
             // draw dropdown
@@ -129,8 +165,8 @@ namespace Pathoschild.Stardew.Common.UI
 
             this.List.bounds.X = this.bounds.X;
             this.List.bounds.Y = this.bounds.Bottom;
-            this.List.ReinitializeComponents();
 
+            this.List.ReinitializeComponents();
             this.ReinitializeControllerFlow();
         }
 

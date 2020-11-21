@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using StardewModdingAPI;
@@ -27,16 +26,13 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.16 adds Include
+                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.Include)
                 {
-                    // 1.16 adds Include
-                    if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.Include)
-                    {
-                        error = this.GetNounPhraseError($"using action {nameof(PatchType.Include)}");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using action {nameof(PatchType.Include)}");
+                    return false;
                 }
             }
 
