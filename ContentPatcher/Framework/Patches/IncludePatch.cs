@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -183,7 +184,11 @@ namespace ContentPatcher.Framework.Patches
                     continue;
 
                 object value = property.GetValue(content);
-                if (value != null)
+                bool hasValue = value is IEnumerable list
+                    ? list.Cast<object>().Any()
+                    : value != null;
+
+                if (hasValue)
                     yield return property.Name;
             }
         }

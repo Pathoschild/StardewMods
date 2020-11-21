@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.28.2
-Released 22 November 2020.
+Released 21 November 2020.
 
 * Fixed search UI lookups for certain item types causing an error.
 
