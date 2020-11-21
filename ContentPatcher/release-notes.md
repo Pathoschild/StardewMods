@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.18.6
+Released 21 November 2020.
+
 * Fixed validation for `Include` patches in 1.18.5.
 
 ## 1.18.5
