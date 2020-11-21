@@ -315,7 +315,7 @@ namespace ContentPatcher
                         this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
                         continue;
                     }
-                    if (content.Format == null || content.Changes == null)
+                    if (content.Format == null || !content.Changes.Any())
                     {
                         this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
                         continue;
@@ -388,7 +388,7 @@ namespace ContentPatcher
 
                         // load dynamic tokens
                         IDictionary<string, int> dynamicTokenCountByName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                        foreach (DynamicTokenConfig entry in content.DynamicTokens ?? new DynamicTokenConfig[0])
+                        foreach (DynamicTokenConfig entry in content.DynamicTokens)
                         {
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
 

@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -21,7 +22,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public string SetIndex { get; set; }
 
         /// <summary>The tile properties to set.</summary>
-        public IDictionary<string, string> SetProperties { get; set; }
+        public InvariantDictionary<string> SetProperties { get; set; }
 
         /// <summary>Whether to remove the current tile and all its properties.</summary>
         public string Remove { get; set; }
@@ -42,6 +43,14 @@ namespace ContentPatcher.Framework.ConfigModels
             this.SetIndex = other.SetIndex;
             this.SetTilesheet = other.SetTilesheet;
             this.SetProperties = other.SetProperties;
+        }
+
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.SetProperties ??= new InvariantDictionary<string>();
         }
     }
 }

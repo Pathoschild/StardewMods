@@ -257,9 +257,6 @@ namespace ContentPatcher.Framework
 
             try
             {
-                // normalize patch fields
-                entry.When ??= new InvariantDictionary<string>();
-
                 // parse action
                 {
                     if (!Enum.TryParse(entry.Action, true, out PatchType parsedAction))
@@ -380,12 +377,12 @@ namespace ContentPatcher.Framework
                         {
                             // validate
                             bool fromFileAllowed = rawContentPack.Content.Format.IsOlderThan("1.18.0");
-                            bool missingRequiredFields = entry.Entries == null && entry.Fields == null && entry.MoveEntries == null && entry.TextOperations?.Any() != true;
+                            bool missingRequiredFields = !entry.Entries.Any() && !entry.Fields.Any() && !entry.MoveEntries.Any() && !entry.TextOperations.Any();
                             if (fromFileAllowed)
                             {
                                 if (missingRequiredFields && fromAsset == null)
                                     return TrackSkip($"one of {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, {nameof(PatchConfig.MoveEntries)}, {nameof(PatchConfig.TextOperations)}, or {nameof(PatchConfig.FromFile)} must be specified for an '{action}' change");
-                                if (fromAsset != null && (entry.Entries != null || entry.Fields != null || entry.MoveEntries != null))
+                                if (fromAsset != null && (entry.Entries.Any() || entry.Fields.Any() || entry.MoveEntries.Any()))
                                     return TrackSkip($"{nameof(PatchConfig.FromFile)} is mutually exclusive with {nameof(PatchConfig.Entries)}, {nameof(PatchConfig.Fields)}, and {nameof(PatchConfig.MoveEntries)}");
                             }
                             else
@@ -481,80 +478,73 @@ namespace ContentPatcher.Framework
 
                             // read map properties
                             var mapProperties = new List<EditMapPatchProperty>();
-                            if (entry.MapProperties?.Any() == true)
+                            foreach (var pair in entry.MapProperties)
                             {
-                                foreach (var pair in entry.MapProperties)
-                                {
-                                    LogPathBuilder localPath = path.With(nameof(entry.MapProperties), pair.Key);
+                                LogPathBuilder localPath = path.With(nameof(entry.MapProperties), pair.Key);
 
-                                    if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString key))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
-                                    if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString value))
-                                        return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
+                                if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString key))
+                                    return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
+                                if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString value))
+                                    return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
-                                    mapProperties.Add(new EditMapPatchProperty(key, value));
-                                }
+                                mapProperties.Add(new EditMapPatchProperty(key, value));
                             }
 
                             // read map tiles
                             var mapTiles = new List<EditMapPatchTile>();
-                            if (entry.MapTiles?.Any() == true)
+                            for (int i = 0; i < entry.MapTiles.Length; i++)
                             {
-                                for (int i = 0; i < entry.MapTiles.Length; i++)
+                                PatchMapTileConfig tile = entry.MapTiles[i];
+                                LogPathBuilder localPath = path.With(nameof(entry.MapTiles), i.ToString());
+                                string errorPrefix = $"{nameof(PatchConfig.MapTiles)} > entry #{i + 1}";
+
+                                // layer
+                                if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIDs, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString layer))
+                                    return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Layer)} is invalid: {error}");
+
+                                // position
+                                if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Position)), out error, out TokenPosition position))
+                                    return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Position)} is invalid: {error}");
+
+                                // tilesheet
+                                IManagedTokenString tilesheet = null;
+                                if (tile.SetTilesheet != null && !tokenParser.TryParseString(tile.SetTilesheet, immutableRequiredModIDs, localPath.With(nameof(tile.SetTilesheet)), out error, out tilesheet))
+                                    return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
+
+                                // index
+                                IManagedTokenString index = null;
+                                if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out index))
+                                    return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
+
+                                // properties
+                                var tileProperties = new Dictionary<IManagedTokenString, IManagedTokenString>();
                                 {
-                                    PatchMapTileConfig tile = entry.MapTiles[i];
-                                    LogPathBuilder localPath = path.With(nameof(entry.MapTiles), i.ToString());
-                                    string errorPrefix = $"{nameof(PatchConfig.MapTiles)} > entry #{i + 1}";
-
-                                    // layer
-                                    if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIDs, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString layer))
-                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Layer)} is invalid: {error}");
-
-                                    // position
-                                    if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Position)), out error, out TokenPosition position))
-                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Position)} is invalid: {error}");
-
-                                    // tilesheet
-                                    IManagedTokenString tilesheet = null;
-                                    if (tile.SetTilesheet != null && !tokenParser.TryParseString(tile.SetTilesheet, immutableRequiredModIDs, localPath.With(nameof(tile.SetTilesheet)), out error, out tilesheet))
-                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
-
-                                    // index
-                                    IManagedTokenString index = null;
-                                    if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out index))
-                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
-
-                                    // properties
-                                    var tileProperties = new Dictionary<IManagedTokenString, IManagedTokenString>();
-                                    if (tile.SetProperties?.Any() == true)
+                                    int p = 0;
+                                    foreach (var pair in tile.SetProperties)
                                     {
-                                        int p = 0;
-                                        foreach (var pair in tile.SetProperties)
-                                        {
-                                            p++;
-                                            if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString key))
-                                                return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
-                                            if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString value))
-                                                return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
+                                        p++;
+                                        if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString key))
+                                            return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
+                                        if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString value))
+                                            return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
 
-                                            tileProperties[key] = value;
-                                        }
+                                        tileProperties[key] = value;
                                     }
-
-                                    // remove
-                                    IManagedTokenString remove = null;
-                                    if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Remove)), out error, out remove))
-                                        return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Remove)} is invalid: {error}");
-
-                                    mapTiles.Add(new EditMapPatchTile(
-                                        layer: layer,
-                                        position: position,
-                                        setIndex: index,
-                                        setTilesheet: tilesheet,
-                                        setProperties: tileProperties,
-                                        remove: remove
-                                    ));
                                 }
+
+                                // remove
+                                IManagedTokenString remove = null;
+                                if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Remove)), out error, out remove))
+                                    return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Remove)} is invalid: {error}");
+
+                                mapTiles.Add(new EditMapPatchTile(
+                                    layer: layer,
+                                    position: position,
+                                    setIndex: index,
+                                    setTilesheet: tilesheet,
+                                    setProperties: tileProperties,
+                                    remove: remove
+                                ));
                             }
 
                             // parse text operations
@@ -633,7 +623,7 @@ namespace ContentPatcher.Framework
 
             // get empty list
             textOperations = new List<TextOperation>();
-            if (patch.TextOperations?.Any() != true)
+            if (!patch.TextOperations.Any())
             {
                 error = null;
                 return true;
@@ -659,7 +649,7 @@ namespace ContentPatcher.Framework
 
                 // parse target
                 List<IManagedTokenString> target = new List<IManagedTokenString>();
-                foreach (string field in operation.Target ?? new string[0])
+                foreach (string field in operation.Target)
                 {
                     if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string targetError, out IManagedTokenString parsed))
                         return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
@@ -705,52 +695,45 @@ namespace ContentPatcher.Framework
             }
 
             // parse entries
-            if (entry.Entries != null)
+            foreach (KeyValuePair<string, JToken> pair in entry.Entries)
             {
-                foreach (KeyValuePair<string, JToken> pair in entry.Entries)
-                {
-                    LogPathBuilder localPath = path.With(nameof(entry.Entries), pair.Key);
+                LogPathBuilder localPath = path.With(nameof(entry.Entries), pair.Key);
 
-                    if (!tokenParser.TryParseString(pair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
-                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
-                    if (!tokenParser.TryParseJson(pair.Value, assumeModIds, localPath.With("value"), out string valueError, out TokenizableJToken value))
-                        return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
+                if (!tokenParser.TryParseString(pair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
+                    return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
+                if (!tokenParser.TryParseJson(pair.Value, assumeModIds, localPath.With("value"), out string valueError, out TokenizableJToken value))
+                    return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
 
-                    entries.Add(new EditDataPatchRecord(key, value));
-                }
+                entries.Add(new EditDataPatchRecord(key, value));
             }
 
             // parse fields
-            if (entry.Fields != null)
+            foreach (KeyValuePair<string, InvariantDictionary<JToken>> recordPair in entry.Fields)
             {
-                foreach (KeyValuePair<string, IDictionary<string, JToken>> recordPair in entry.Fields)
+                var localPath = path.With(nameof(entry.Fields), recordPair.Key);
+
+                // parse entry key
+                if (!tokenParser.TryParseString(recordPair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
+                    return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}", out error);
+
+                // parse fields
+                foreach (KeyValuePair<string, JToken> fieldPair in recordPair.Value)
                 {
-                    var localPath = path.With(nameof(entry.Fields), recordPair.Key);
+                    // parse field key
+                    if (!tokenParser.TryParseString(fieldPair.Key, assumeModIds, localPath.With(fieldPair.Key, "key"), out string fieldError, out IManagedTokenString fieldKey))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
 
-                    // parse entry key
-                    if (!tokenParser.TryParseString(recordPair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
-                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}", out error);
+                    // parse value
+                    if (!tokenParser.TryParseJson(fieldPair.Value, assumeModIds, localPath.With(fieldPair.Key, "value"), out string valueError, out TokenizableJToken value))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
+                    if (value?.IsString == true && value.GetTokenStrings().SelectMany(p => p.LexTokens).OfType<LexTokenLiteral>().Any(p => p.Text.Contains("/")))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
 
-                    // parse fields
-                    foreach (KeyValuePair<string, JToken> fieldPair in recordPair.Value)
-                    {
-                        // parse field key
-                        if (!tokenParser.TryParseString(fieldPair.Key, assumeModIds, localPath.With(fieldPair.Key, "key"), out string fieldError, out IManagedTokenString fieldKey))
-                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
-
-                        // parse value
-                        if (!tokenParser.TryParseJson(fieldPair.Value, assumeModIds, localPath.With(fieldPair.Key, "value"), out string valueError, out TokenizableJToken value))
-                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
-                        if (value?.IsString == true && value.GetTokenStrings().SelectMany(p => p.LexTokens).OfType<LexTokenLiteral>().Any(p => p.Text.Contains("/")))
-                            return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
-
-                        fields.Add(new EditDataPatchField(key, fieldKey, value));
-                    }
+                    fields.Add(new EditDataPatchField(key, fieldKey, value));
                 }
             }
 
             // parse move entries
-            if (entry.MoveEntries != null)
             {
                 int i = 0;
                 foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)

@@ -33,16 +33,13 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.18 adds 'TextOperations' field
+                if (patch.TextOperations.Any())
                 {
-                    // 1.18 adds 'TextOperations' field
-                    if (patch.TextOperations != null)
-                    {
-                        error = this.GetNounPhraseError($"using {nameof(patch.TextOperations)}");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using {nameof(patch.TextOperations)}");
+                    return false;
                 }
             }
 

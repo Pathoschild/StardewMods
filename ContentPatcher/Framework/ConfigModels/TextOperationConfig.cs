@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Runtime.Serialization;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -32,9 +33,17 @@ namespace ContentPatcher.Framework.ConfigModels
         public TextOperationConfig(TextOperationConfig other)
         {
             this.Operation = other.Operation;
-            this.Target = other.Target?.ToArray();
+            this.Target = other.Target.ToArray();
             this.Value = other.Value;
             this.Delimiter = other.Delimiter;
+        }
+
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.Target ??= new string[0];
         }
     }
 }

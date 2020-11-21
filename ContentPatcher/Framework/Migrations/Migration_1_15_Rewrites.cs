@@ -141,23 +141,17 @@ namespace ContentPatcher.Framework.Migrations
             InvariantHashSet names = new InvariantHashSet();
 
             // dynamic tokens
-            if (content.DynamicTokens?.Any() == true)
+            foreach (string name in content.DynamicTokens.Select(p => p.Name))
             {
-                foreach (string name in content.DynamicTokens.Select(p => p.Name))
-                {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        names.Add(name);
-                }
+                if (!string.IsNullOrWhiteSpace(name))
+                    names.Add(name);
             }
 
             // config schema
-            if (content.ConfigSchema != null)
+            foreach (string name in content.ConfigSchema.Select(p => p.Key))
             {
-                foreach (string name in content.ConfigSchema.Select(p => p.Key))
-                {
-                    if (!string.IsNullOrWhiteSpace(name))
-                        names.Add(name);
-                }
+                if (!string.IsNullOrWhiteSpace(name))
+                    names.Add(name);
             }
 
             // exclude tokens that conflict with a built-in condition, which will be ignored

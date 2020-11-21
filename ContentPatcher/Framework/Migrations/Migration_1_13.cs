@@ -33,16 +33,13 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            if (content.Changes?.Any() == true)
+            foreach (PatchConfig patch in content.Changes)
             {
-                foreach (PatchConfig patch in content.Changes)
+                // 1.13 adds map tile patches
+                if (patch.MapTiles.Any())
                 {
-                    // 1.13 adds map tile patches
-                    if (patch.MapTiles != null)
-                    {
-                        error = this.GetNounPhraseError($"using {nameof(PatchConfig.MapTiles)}");
-                        return false;
-                    }
+                    error = this.GetNounPhraseError($"using {nameof(PatchConfig.MapTiles)}");
+                    return false;
                 }
             }
 

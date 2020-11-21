@@ -109,9 +109,9 @@ namespace ContentPatcher.Framework.Patches
 
                     // load raw file
                     var content = this.ContentPack.LoadAsset<ContentConfig>(this.FromAsset);
-                    if (content?.Changes == null)
+                    if (!content.Changes.Any())
                     {
-                        this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't contain a {nameof(content.Changes)} field. Is the file formatted correctly?", LogLevel.Warn);
+                        this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?", LogLevel.Warn);
                         return true;
                     }
 
