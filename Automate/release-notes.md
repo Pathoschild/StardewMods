@@ -4,6 +4,8 @@
 ## Upcoming release
 * Added a warning when a custom-machine mod is installed without its separate Automate compatibility
   patch. This can be disabled in `config.json`.
+* Fixed constructed shipping bins triggering the main shipping bin's animation.
+* Fixed shipped items not added to existing stacks if possible.
 
 ## 1.18.2
 Released 04 November 2020.

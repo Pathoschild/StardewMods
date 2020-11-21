@@ -70,15 +70,24 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            ITrackedStack tracker = input.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()).Take(1).FirstOrDefault();
-            if (tracker != null)
+            foreach (ITrackedStack tracker in input.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()))
             {
-                SObject item = (SObject)tracker.Take(tracker.Count);
-                this.Farm.getShippingBin(Game1.MasterPlayer).Add(item);
-                this.Farm.lastItemShipped = item;
-                this.Farm.showShipment(item, false);
+                SObject added = (SObject)tracker.Take(tracker.Count);
+
+                Utility.addItemToThisInventoryList(
+                    i: added,
+                    list: this.Farm.getShippingBin(Game1.MasterPlayer),
+                    listMaxSpace: int.MaxValue
+                );
+
+                if (this.Bin != null)
+                    this.Bin.showShipment(added, false);
+                else
+                    this.Farm.showShipment(added, false);
+
                 return true;
             }
+
             return false;
         }
     }
