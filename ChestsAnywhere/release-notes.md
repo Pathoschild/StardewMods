@@ -2,7 +2,7 @@
 
 # Release notes
 ## 1.19.8
-Released 22 November 2020.
+Released 21 November 2020.
 
 * Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
 * You can now scroll dropdowns by clicking or tapping the arrow icons.
