@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.18.5
+Released 22 November 2020.
+
 * Improved error-handling for some content packs with invalid formats.
 * Fixed `EditData` patches with multiple targets sometimes applied incorrectly to some targets.
 
