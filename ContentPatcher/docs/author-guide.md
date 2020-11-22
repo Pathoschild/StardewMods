@@ -201,9 +201,18 @@ Your changes apply at the start of each day by default. For example, if you chan
 texture depending on your friendship level with your spouse, it'll use the friendship level at the
 start of the current day.
 
-You can optionally use the [`Update` field](#common-fields) to update patches each time the
-current player changes location (`OnLocationChange`), in which case they'll use the token values as
-of the last location change.
+You can optionally use the [`Update` field](#common-fields) to update more often:
+
+update rate  | effect
+------------ | ------
+`OnLocationChange` | The patch updates each time the player warps to a new location.
+`OnTimeChange` | The patch updates each time the in-game clock changes.
+
+You can also specify multiple values:
+
+```js
+"Update": "OnLocationChange, OnTimeChange"
+```
 
 ## Actions
 ### `Load`

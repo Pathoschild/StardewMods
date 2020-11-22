@@ -162,6 +162,38 @@ namespace ContentPatcher.Framework
             return true;
         }
 
+        /// <summary>Normalize and parse the given update rate.</summary>
+        /// <param name="raw">The raw update rate to normalize.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
+        /// <param name="updateRate">The normalized update rate.</param>
+        /// <param name="error">An error message indicating why parsing failed.</param>
+        public bool TryParseUpdateRate(string raw, LogPathBuilder path, out UpdateRate updateRate, out string error)
+        {
+            // base update rate
+            updateRate = UpdateRate.OnDayStart;
+            if (string.IsNullOrWhiteSpace(raw))
+            {
+                error = null;
+                return true;
+            }
+
+            // parse each value
+            string[] rawParts = raw.Split(',');
+            foreach (string part in rawParts)
+            {
+                if (!Enum.TryParse(part, ignoreCase: true, out UpdateRate parsed))
+                {
+                    error = $"Invalid {nameof(PatchConfig.Update)} value '{part}', expected one of: {string.Join(", ", Enum.GetNames(typeof(UpdateRate)))}";
+                    return false;
+                }
+
+                updateRate |= parsed;
+            }
+
+            error = null;
+            return true;
+        }
+
 
         /*********
         ** Private methods
@@ -295,11 +327,10 @@ namespace ContentPatcher.Framework
                 }
 
                 // parse update rate
-                UpdateRate updateRate = UpdateRate.OnDayStart;
-                if (entry.Update != null)
+                UpdateRate updateRate;
                 {
-                    if (!Enum.TryParse(entry.Update, true, out updateRate))
-                        return TrackSkip($"Invalid {nameof(PatchConfig.Update)} value '{entry.Update}', expected one of: {string.Join(", ", Enum.GetNames(typeof(UpdateRate)))}");
+                    if (!this.TryParseUpdateRate(entry.Update, path.With(nameof(entry.Update)), out updateRate, out string error))
+                        return TrackSkip(error);
                 }
 
                 // parse 'from file'

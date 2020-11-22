@@ -176,6 +176,15 @@ namespace ContentPatcher
             this.UpdateContext(ContextUpdateType.All);
         }
 
+        /// <summary>The method invoked when the in-game clock changes.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnTimeChanged(object sender, TimeChangedEventArgs e)
+        {
+            this.Monitor.VerboseLog("Updating context: clock changed.");
+            this.UpdateContext(ContextUpdateType.OnTimeChange);
+        }
+
         /// <summary>The method invoked when the player warps.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -264,6 +273,7 @@ namespace ContentPatcher
                 helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 

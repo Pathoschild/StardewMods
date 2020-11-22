@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Patches can now optionally [update on in-game clock change](docs/author-guide.md#update-rate).
+
 ## 1.18.6
 Released 21 November 2020.
 

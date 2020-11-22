@@ -388,7 +388,7 @@ namespace ContentPatcher.Framework.Commands
                     if (patch.Patch != null)
                     {
                         // location tokens used with daily patch
-                        if (patch.Patch.UpdateRate == UpdateRate.OnDayStart)
+                        if (patch.Patch.UpdateRate != UpdateRate.OnLocationChange)
                         {
                             var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
                             string[] locationTokensUsed = this.TokenManager.LocationTokens.Where(p => tokensUsed.Contains(p)).ToArray();
