@@ -113,6 +113,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>NPCs and players who are currently pregnant.</summary>
         Pregnant,
 
+        /// <summary>The in-game time of day.</summary>
+        Time,
+
         /****
         ** Number manipulation
         ****/

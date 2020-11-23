@@ -10,7 +10,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Patches can now optionally [update on in-game clock change](docs/author-guide.md#update-rate).
+* Added `Time` token.
+* Added support for updating patches [on in-game clock change](docs/author-guide.md#update-rate).
 * Custom mod tokens can now normalize raw values before they're compared with the token.
 
 ## 1.18.6

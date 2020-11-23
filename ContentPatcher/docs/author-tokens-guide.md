@@ -172,6 +172,21 @@ The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 </tr>
 
 <tr valign="top">
+<td>Time</td>
+<td>
+
+The in-game time of day, as a numeric value between `0600` (6am) and `2600` (2am before sleeping).
+This can also be used with range tokens:
+```js
+"When": {
+   "Time": "{{Range: 0600, 2600}}"
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>Weather</td>
 <td>
 
