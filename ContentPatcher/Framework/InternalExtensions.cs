@@ -114,7 +114,8 @@ namespace ContentPatcher.Framework
                 .Select(p => normalize != null
                     ? normalize(p.Trim())
                     : p.Trim()
-                );
+                )
+                .Where(p => p != string.Empty);
         }
 
         /****

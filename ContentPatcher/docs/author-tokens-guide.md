@@ -1243,8 +1243,8 @@ Expressions are case-insensitive, including when comparing text values.
 Query expressions are very powerful, but you should be aware of the caveats:
 
 * Query expressions have **very little validation**. An invalid expression generally won't show
-  warnings ahead of time, they'll just fail when the patch is applied. Make sure to carefully test
-  any content pack features which use it, and check new or edited expressions with
+  warnings ahead of time, it'll just fail when the patch is applied. Make sure to carefully test
+  any content pack features which use expressions, and check new or edited expressions with
   [`patch parse`](author-guide.md#patch-parse).
 * Query expressions **evaluate the expanded text**. For example, if the player name contains a
   single-quote like `D'Artagnan`, then this expression will fail due to a syntax error:

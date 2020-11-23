@@ -92,8 +92,8 @@ namespace ContentPatcher.Framework
                 .ToArray();
 
             // preprocess patches
-            patches = this.SplitPatches(patches).ToArray();
             this.NamePatches(patches);
+            patches = this.SplitPatches(patches).ToArray();
 
             // load patches
             foreach (PatchConfig patch in patches)
@@ -198,28 +198,44 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Split patches with multiple target values.</summary>
+        /// <summary>Split patches with multiple <see cref="PatchConfig.Target"/> and/or <see cref="PatchConfig.FromFile"/> values.</summary>
         /// <param name="patches">The patches to split.</param>
         private IEnumerable<PatchConfig> SplitPatches(IEnumerable<PatchConfig> patches)
         {
             foreach (PatchConfig patch in patches)
             {
-                if (string.IsNullOrWhiteSpace(patch.Target) || !patch.Target.Contains(","))
-                {
-                    yield return patch;
+                // split target and from-file values
+                string[] SplitValues(string str) => str.SplitValuesNonUnique().Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                string[] targets = SplitValues(patch.Target);
+                string[] fromFiles = SplitValues(patch.FromFile);
+                if (targets.Length <= 1 && fromFiles.Length <= 1)
                     continue;
-                }
 
-                foreach (string target in patch.Target.Split(',').Select(p => p.Trim()).Distinct(StringComparer.OrdinalIgnoreCase))
+                // split targets with a null FromFile if needed
+                if (!fromFiles.Any())
+                    fromFiles = new string[] { null };
+
+                // create new patches
+                foreach (string target in targets)
                 {
-                    if (string.IsNullOrWhiteSpace(target))
-                        continue;
-
-                    yield return new PatchConfig(patch)
+                    foreach (string fromFile in fromFiles)
                     {
-                        LogName = !string.IsNullOrWhiteSpace(patch.LogName) ? $"{patch.LogName} > {target}" : "",
-                        Target = target
-                    };
+                        var newPatch = new PatchConfig(patch);
+
+                        if (targets.Length > 1)
+                        {
+                            newPatch.LogName += $" > {target}";
+                            newPatch.Target = target;
+                        }
+
+                        if (fromFiles.Length > 1)
+                        {
+                            newPatch.LogName += $" from {fromFile}";
+                            newPatch.FromFile = fromFile;
+                        }
+
+                        yield return newPatch;
+                    }
                 }
             }
         }

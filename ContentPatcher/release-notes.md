@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added [query expressions](docs/author-tokens-guide.md#query-expressions).
 * Added `Time` token.
 * Added support for updating patches [on in-game clock change](docs/author-guide.md#update-rate).
+* Added support for multiple `FromFile` values.
 * Custom mod tokens can now normalize raw values before they're compared with the token.
 
 ## 1.18.6

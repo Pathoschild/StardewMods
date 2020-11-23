@@ -254,7 +254,7 @@ patching past the bottom (Content Patcher will expand the image to fit).
 field      | purpose
 ---------- | -------
 &nbsp;     | See _[common fields](#common-fields)_ above.
-`FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`). This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced) and capitalisation doesn't matter.
+`FromFile` | The relative path to the image in your content pack folder to patch into the target (like `assets/dinosaur.png`), or multiple comma-delimited paths. This can be a `.png` or `.xnb` file. This field supports [tokens](#advanced) and capitalisation doesn't matter.
 `FromArea` | The part of the source image to copy. Defaults to the whole source image. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. Its fields may contain tokens.
 `ToArea`   | The part of the target image to replace. Defaults to the `FromArea` size starting from the top-left corner. This is specified as an object with the X and Y pixel coordinates of the top-left corner, and the pixel width and height of the area. If you specify an area past the bottom or right edges of the image, the image will be resized automatically to fit. Its fields may contain tokens.
 `PatchMode`| How to apply `FromArea` to `ToArea`. Defaults to `Replace`. Possible values: <ul><li><code>Replace</code>: replace every pixel in the target area with your source image. If the source image has transparent pixels, the target image will become transparent there.</li><li><code>Overlay</code>: draw your source image over the target area. If the source image has transparent pixels, the target image will 'show through' those pixels. Semi-transparent or opaque pixels will replace the target pixels.</li></ul>For example, let's say your source image is a pufferchick with a transparent background, and the target image is a solid green square. Here's how they'll be combined with different `PatchMode` values:<br />![](screenshots/patch-mode-examples.png)
@@ -291,7 +291,7 @@ field      | purpose
 Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `TextOperations`.
 
 You can have any combination of those fields within one patch. They'll be applied in this order:
-`Entries`, `FromFile`, `Fields`, `MoveEntries`, `TextOperations`.
+`Entries`, `Fields`, `MoveEntries`, `TextOperations`.
 
 <dl>
 <dt id="data-definitions">Definitions</dt>
@@ -486,9 +486,9 @@ See _[common fields](#common-fields)_ above.
 </td>
 <td>
 
-The relative path to the map in your content pack folder from which to copy (like
-`assets/town.tmx`). This can be a `.tbin`, `.tmx`, or `.xnb` file. This field supports [tokens](#advanced)
-and capitalisation doesn't matter.
+The relative path to the map in your content pack folder from which to copy (like `assets/town.tmx`),
+or multiple comma-delimited paths. This can be a `.tbin`, `.tmx`, or `.xnb` file. This field
+supports [tokens](#advanced) and capitalisation doesn't matter.
 
 Content Patcher will handle tilesheets referenced by the `FromFile` map for you:
 * If a tilesheet isn't referenced by the target map, Content Patcher will add it for you (with a
@@ -769,9 +769,10 @@ See _[common fields](#common-fields)_ above.
 <td><code>FromFile</code></td>
 <td>
 
-The relative path to the JSON file containing patches in your content pack folder. The loaded JSON
-file uses the same format as `content.json`, except that _only_ the `Changes` field is allowed.
-This field supports [tokens](#advanced) and capitalisation doesn't matter.
+The relative path to the JSON file containing patches in your content pack folder, or multiple
+comma-delimited paths to load. The loaded JSON file uses the same format as `content.json`, except
+that _only_ the `Changes` field is allowed. This field supports [tokens](#advanced) and
+capitalisation doesn't matter.
 
 When including a file into an included file, the `FromFile` path is always **relative to your
 `content.json`**. For example, if `assets/A.json` includes `assets/B.json`, it would specify
