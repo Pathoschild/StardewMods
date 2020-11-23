@@ -22,11 +22,12 @@ This document lists the tokens available in Content Patcher packs.
 * [Global input arguments](#global-input-arguments)
   * [Token search](#token-search)
   * [Custom input value separator](#custom-input-value-separator)
-* [Arithmetic](#arithmetic)
-* [Randomization](#randomization)
-* [Dynamic tokens](#dynamic-tokens)
 * [Player config](#player-config)
-* [Mod-provided tokens](#mod-provided-tokens)
+* [Randomization](#randomization)
+* [Advanced](#advanced)
+  * [Dynamic tokens](#dynamic-tokens)
+  * [Arithmetic](#query)
+  * [Mod-provided tokens](#mod-provided-tokens)
 * [Constants](#constants)
 * [See also](#see-also)
 
@@ -932,52 +933,70 @@ For example, this can allow commas in random dialogue:
 The behavior when separators conflict with token syntax depends on implementation details that may
 change from one Content Patcher version to the next.
 
-## <span id="query"></span>Arithmetic
-_See also [number manipulation tokens](#number-manipulation)_.
+## Player config
+You can let players configure your mod using a `config.json` file. Content Patcher will
+automatically create and load the file, and you can use the config values as
+[tokens & conditions](#introduction). Config fields are not case-sensitive.
 
-You can calculate mathematical expressions in patches using the `query` token (including over
-tokens which return a number):
+If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
+installed, they'll be able to configure the mod through an in-game options menu on the title
+screen.
+
+To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
+them (see below for an example).
+Available fields for each field:
+
+   field               | meaning
+   ------------------- | -------
+   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
+   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
+   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
+   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
+   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
+
+For example: this `content.json` defines a `Material` config field and uses it to change which
+patch is applied. See below for more details.
+
 ```js
 {
    "Format": "1.18.0",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood",
+         "Description": "The material style for the billboard background."
+      }
+   },
    "Changes": [
+      // as a token
       {
-         "Action": "EditData",
-         "Target": "Characters/Dialogue/Abigail",
-         "Entries": {
-            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_{{material}}.png"
+      },
+
+      // as a condition
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_wood.png",
+         "When": {
+            "Material": "Wood"
          }
       }
    ]
 }
 ```
 
-This also works in conditions:
+When you run the game, a `config.json` file will appear automatically with text like this:
+
 ```js
 {
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-friendly.png",
-   "When": {
-      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
-   }
+  "Material": "Wood"
 }
 ```
 
-These operators are supported:
-
-symbol | operation
------- | ---------
-\+     | addition
-\-     | subtraction
-\*     | multiplication
-/      | division
-%      | modulus
-()     | grouping
-
-**Caution:** the query syntax allows some operations that aren't documented here. These are
-intended for future use, and may change without warning. Undocumented features shouldn't be used to
-avoid breaking changes.
+Players can edit it to configure your content pack.
 
 ## Randomization
 ### Overview
@@ -1135,7 +1154,8 @@ choose the same value (since same index = different value):
 </dd>
 </dl>
 
-## Dynamic tokens
+## Advanced
+### Dynamic tokens
 Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
 Each block in this section defines the value for a token using these fields:
 
@@ -1184,72 +1204,54 @@ crop sprites depending on the weather:
 }
 ```
 
-## Player config
-You can let players configure your mod using a `config.json` file. Content Patcher will
-automatically create and load the file, and you can use the config values as
-[tokens & conditions](#introduction). Config fields are not case-sensitive.
+### <span id="query"></span>Arithmetic
+_See also [number manipulation tokens](#number-manipulation)_.
 
-If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
-installed, they'll be able to configure the mod through an in-game options menu on the title
-screen.
-
-To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
-them (see below for an example).
-Available fields for each field:
-
-   field               | meaning
-   ------------------- | -------
-   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
-   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
-   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
-   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
-
-For example: this `content.json` defines a `Material` config field and uses it to change which
-patch is applied. See below for more details.
-
+You can calculate mathematical expressions in patches using the `query` token (including over
+tokens which return a number):
 ```js
 {
    "Format": "1.18.0",
-   "ConfigSchema": {
-      "Material": {
-         "AllowValues": "Wood, Metal",
-         "Default": "Wood",
-         "Description": "The material style for the billboard background."
-      }
-   },
    "Changes": [
-      // as a token
       {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_{{material}}.png"
-      },
-
-      // as a condition
-      {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_wood.png",
-         "When": {
-            "Material": "Wood"
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
          }
       }
    ]
 }
 ```
 
-When you run the game, a `config.json` file will appear automatically with text like this:
-
+This also works in conditions:
 ```js
 {
-  "Material": "Wood"
+   "Action": "Load",
+   "Target": "Characters/Abigail",
+   "FromFile": "assets/abigail-friendly.png",
+   "When": {
+      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
+   }
 }
 ```
 
-Players can edit it to configure your content pack.
+These operators are supported:
 
-## Mod-provided tokens
+symbol | operation
+------ | ---------
+\+     | addition
+\-     | subtraction
+\*     | multiplication
+/      | division
+%      | modulus
+()     | grouping
+
+**Caution:** the query syntax allows some operations that aren't documented here. These are
+intended for future use, and may change without warning. Undocumented features shouldn't be used to
+avoid breaking changes.
+
+### Mod-provided tokens
 SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
