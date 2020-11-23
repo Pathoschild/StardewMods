@@ -26,7 +26,7 @@ This document lists the tokens available in Content Patcher packs.
 * [Randomization](#randomization)
 * [Advanced](#advanced)
   * [Dynamic tokens](#dynamic-tokens)
-  * [Arithmetic](#query)
+  * [Query expressions](#query-expressions)
   * [Mod-provided tokens](#mod-provided-tokens)
 * [Constants](#constants)
 * [See also](#see-also)
@@ -586,7 +586,8 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <td>Query</td>
 <td>
 
-Perform arbitrary arithmetic operations; see [_arithmetic_](#arithmetic) for more info.
+Evaluate arbitrary arithmetic and logical operations; see [_query expressions_](#query-expressions)
+for more info.
 
 </td>
 </tr>
@@ -630,8 +631,10 @@ usage | result | description
 `Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
 `Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` to the given number of fractional digits. This overrides the default [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) behavior.
 
-This is mainly useful in combination with the [`Query`](#query) token. For example, monster HP must
-be a whole number, so this rounds the result of a calculation to the nearest whole number:
+This is mainly useful in combination with [query expressions](#query-expressions). For example,
+monster HP must be a whole number, so this rounds the result of a calculation to the nearest whole
+number:
+
 ```js
 {
   "Action": "EditData",
@@ -1204,11 +1207,13 @@ crop sprites depending on the weather:
 }
 ```
 
-### <span id="query"></span>Arithmetic
-_See also [number manipulation tokens](#number-manipulation)_.
+## Query expressions
+A _query expression_ is an arbitrary set of arithmetic and logical expressions which can be
+evaluated into a number, `true`/`false` value, or text.
 
-You can calculate mathematical expressions in patches using the `query` token (including over
-tokens which return a number):
+### Usage
+Query expressions are evaluated using the `Query` token. It can be used as a placeholder or condition,
+and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
    "Format": "1.18.0",
@@ -1217,39 +1222,118 @@ tokens which return a number):
          "Action": "EditData",
          "Target": "Characters/Dialogue/Abigail",
          "Entries": {
-            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
+            "Mon": "Hard to imagine you only arrived {{query: {{DaysPlayed}} / 28}} months ago!"
+         },
+         "When": {
+            "query: {{Hearts:Abigail}} >= 10": true
          }
       }
    ]
 }
 ```
 
-This also works in conditions:
+You can use text values in expressions if they're single-quoted (including tokens which return text):
 ```js
-{
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-friendly.png",
-   "When": {
-      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
-   }
+"Query: '{{Season}}' = 'spring'": true
+```
+
+Expressions are case-insensitive, including when comparing text values.
+
+### Caveats
+Query expressions are very powerful, but you should be aware of the caveats:
+
+* Query expressions have **very little validation**. An invalid expression generally won't show
+  warnings ahead of time, they'll just fail when the patch is applied. Make sure to carefully test
+  any content pack features which use it, and check new or edited expressions with
+  [`patch parse`](author-guide.md#patch-parse).
+* Query expressions **evaluate the expanded text**. For example, if the player name contains a
+  single-quote like `D'Artagnan`, then this expression will fail due to a syntax error:
+  ```js
+  "Query: '{{PlayerName}}' LIKE 'D*'": true // 'D'Artagnan' LIKE 'D*'
+  ```
+* Query expressions may return obscure or technical error messages when invalid.
+* Query expressions may make your content pack harder to read and understand.
+
+Consider using non-expression features instead where possible. For example:
+
+<table>
+<tr>
+<th>With query expression</th>
+<th>Without query expression</th>
+</tr>
+<tr>
+<td>
+
+```js
+"When": {
+   "Query: {{Time}} >= 0600 AND {{Time}} <= 1200": true
 }
 ```
 
-These operators are supported:
+</td>
+<td>
 
-symbol | operation
------- | ---------
-\+     | addition
-\-     | subtraction
-\*     | multiplication
-/      | division
-%      | modulus
-()     | grouping
+```js
+"When": {
+   "Time": "{{Range: 0600, 1200}}"
+}
+```
 
-**Caution:** the query syntax allows some operations that aren't documented here. These are
-intended for future use, and may change without warning. Undocumented features shouldn't be used to
-avoid breaking changes.
+</td>
+</tr>
+</table>
+
+### Operators
+The supported operators are listed below.
+
+* Perform arithmetic on numeric values (like `5 + 5`):
+
+  operator | effect
+  -------- | ---------
+  \+       | addition
+  \-       | subtraction
+  \*       | multiplication
+  /        | division
+  %        | modulus
+  ()       | grouping
+
+* Compare two values (like `5 < 10`):
+
+  operator | effect
+  -------- | ---------
+  `<`      | less than
+  `<=`     | less than or equal
+  `>`      | more than
+  `>=`     | more than or equal
+  `=`      | equal
+  `<>`     | not equal
+
+* Combine expressions using logical operators:
+
+  operator | effect
+  -------- | ------
+  `AND`    | both expressions are true, like `{{Time}} >= 0600 AND {{Time}} <= 1200`.
+  `OR`     | one or both expressions are true, like `{{Time}} <= 1200 OR {{Time}} >= 2400`.
+  `NOT`    | negate the following expression, like `NOT {{Time}} > 1200`.
+
+* Group sub-expressions using `()` to avoid an ambiguous order of operations:
+
+  ```js
+  "{{Query}}: ({{Time}} >= 0600 AND {{Time}} <= 1200) OR {{Time}} > 2400": true
+  ```
+
+* Check whether a value is `IN` or `NOT IN` a list:
+
+  ```js
+  "Query: '{{spouse}}' IN ('Abigail', 'Leah', 'Maru')": true
+  ```
+
+* Check text against a prefix/postfix using the `LIKE` or `NOT LIKE` operator. The wildcard `*` can
+  only be at the start/end of the string, and it can only be used with quoted text (e.g. `LIKE '1'` will work but `LIKE 1` will return an error).
+
+  ```js
+  "Query: '{{spouse}}' LIKE 'Abig*'": true
+  ```
 
 ### Mod-provided tokens
 SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),

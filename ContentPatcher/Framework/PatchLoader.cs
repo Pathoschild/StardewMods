@@ -917,15 +917,18 @@ namespace ContentPatcher.Framework
                     error = $"unknown token '{lexToken.Name}'.";
                     return false;
                 }
-                if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
+                if (!token.BypassesContextValidation)
                 {
-                    error = "that token isn't restricted to 'true' or 'false'.";
-                    return false;
-                }
-                if (token.CanHaveMultipleValues(input))
-                {
-                    error = "can't be treated as a true/false value because that token can have multiple values.";
-                    return false;
+                    if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
+                    {
+                        error = "that token isn't restricted to 'true' or 'false'.";
+                        return false;
+                    }
+                    if (token.CanHaveMultipleValues(input))
+                    {
+                        error = "can't be treated as a true/false value because that token can have multiple values.";
+                        return false;
+                    }
                 }
             }
 
@@ -1080,23 +1083,26 @@ namespace ContentPatcher.Framework
                 IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
 
                 // check token options
-                bool isIntegerBounded =
-                    token.HasBoundedRangeValues(input, out _, out _)
-                    || (
-                        token.HasBoundedValues(input, out InvariantHashSet allowedValues)
-                        && allowedValues != null
-                        && allowedValues.All(p => int.TryParse(p, out _))
-                    );
+                if (!token.BypassesContextValidation)
+                {
+                    bool isIntegerBounded =
+                        token.HasBoundedRangeValues(input, out _, out _)
+                        || (
+                            token.HasBoundedValues(input, out InvariantHashSet allowedValues)
+                            && allowedValues != null
+                            && allowedValues.All(p => int.TryParse(p, out _))
+                        );
 
-                if (!isIntegerBounded)
-                {
-                    error = "that token isn't restricted to integers.";
-                    return false;
-                }
-                if (token.CanHaveMultipleValues(input))
-                {
-                    error = "can't be treated as a number because that token can have multiple values.";
-                    return false;
+                    if (!isIntegerBounded)
+                    {
+                        error = "that token isn't restricted to integers.";
+                        return false;
+                    }
+                    if (token.CanHaveMultipleValues(input))
+                    {
+                        error = "can't be treated as a number because that token can have multiple values.";
+                        return false;
+                    }
                 }
             }
 

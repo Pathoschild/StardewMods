@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the value provider requires positional input arguments, and does not provide values without it (see <see cref="AllowsPositionalInput"/>).</summary>
         bool RequiresPositionalInput { get; }
 
+        /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
+        bool BypassesContextValidation { get; }
+
 
         /*********
         ** Public methods

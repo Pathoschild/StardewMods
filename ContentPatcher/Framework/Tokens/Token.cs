@@ -34,6 +34,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public bool RequiresInput => this.Values.RequiresPositionalInput;
 
+        /// <inheritdoc />
+        public bool BypassesContextValidation => this.Values.BypassesContextValidation;
+
 
         /*********
         ** Public methods
