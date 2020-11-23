@@ -209,7 +209,10 @@ namespace ContentPatcher.Framework
                 string[] targets = SplitValues(patch.Target);
                 string[] fromFiles = SplitValues(patch.FromFile);
                 if (targets.Length <= 1 && fromFiles.Length <= 1)
+                {
+                    yield return patch;
                     continue;
+                }
 
                 // split targets with a null FromFile if needed
                 if (!fromFiles.Any())
