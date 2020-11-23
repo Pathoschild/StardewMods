@@ -57,6 +57,10 @@ namespace ContentPatcher.Framework.Tokens
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedRangeValues(IInputArguments input, out int min, out int max);
 
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        string NormalizeValue(string value);
+
         /// <summary>Get the current token values.</summary>
         /// <param name="input">The input arguments.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>

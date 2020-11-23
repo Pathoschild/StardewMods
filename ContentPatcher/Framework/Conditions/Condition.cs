@@ -37,7 +37,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsMutable => this.Contextuals.IsMutable;
 
         /// <summary>Whether the instance is valid for the current context.</summary>
-        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady;
+        public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
 
         /// <summary>Whether the condition matches the current context.</summary>
         public bool IsMatch { get; set; }
@@ -59,10 +59,6 @@ namespace ContentPatcher.Framework.Conditions
             this.Contextuals = new AggregateContextual()
                 .Add(input)
                 .Add(values);
-
-            // init values
-            if (this.IsReady)
-                this.CurrentValues = this.Values.SplitValuesUnique();
         }
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
@@ -85,21 +81,24 @@ namespace ContentPatcher.Framework.Conditions
             // update contextuals
             bool changed = this.Contextuals.UpdateContext(context);
 
-            // check token name
-            if (!context.Contains(this.Name, enforceContext: true))
+            // get token
+            IToken token = context.GetToken(this.Name, enforceContext: true);
+            if (token == null)
                 this.State.AddUnreadyTokens(this.Name);
 
             // update values
-            this.CurrentValues = this.IsReady
-                ? this.Values.SplitValuesUnique()
-                : new InvariantHashSet();
-
-            // update match
-            this.IsMatch =
-                this.IsReady
-                && context
-                    .GetValues(this.Name, this.Input, enforceContext: true)
+            if (this.IsReady && token != null)
+            {
+                this.CurrentValues = this.Values.SplitValuesUnique(token.NormalizeValue);
+                this.IsMatch = token
+                    .GetValues(this.Input)
                     .Any(value => this.CurrentValues.Contains(value));
+            }
+            else
+            {
+                this.CurrentValues = new InvariantHashSet();
+                this.IsMatch = false;
+            }
 
             return
                 changed

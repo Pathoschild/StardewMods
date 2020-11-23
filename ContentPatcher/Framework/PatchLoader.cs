@@ -858,7 +858,7 @@ namespace ContentPatcher.Framework
                 return Fail($"can't parse condition {name}: {error}", out error, out condition, out immutableRequiredModIDs);
 
             // validate token keys & values
-            if (!values.IsMutable && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(), tokenParser.Context, out string customError))
+            if (!values.IsMutable && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string customError))
                 return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition, out immutableRequiredModIDs);
 
             // create condition

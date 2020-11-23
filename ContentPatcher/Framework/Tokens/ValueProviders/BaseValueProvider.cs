@@ -207,6 +207,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             yield break;
         }
 
+        /// <inheritdoc />
+        public virtual string NormalizeValue(string value)
+        {
+            return value;
+        }
+
 
         /*********
         ** Protected methods

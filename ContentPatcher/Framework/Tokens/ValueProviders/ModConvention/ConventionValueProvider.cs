@@ -97,6 +97,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
+        public string NormalizeValue(string value)
+        {
+            return this.Provider.NormalizeValue(value);
+        }
+
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             bool wasReady = this.IsReady;
