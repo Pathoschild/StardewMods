@@ -537,43 +537,26 @@ Its fields may contain tokens.
 </td>
 <td>
 
-How to apply `FromArea` to `ToArea`. Possible values (default is `ClearMissingTiles`):
+How to merge tiles into the target map. The default is `ReplaceByLayer`.
 
-* `Replace`: replace the target area with your source area. Target tiles with no matching source
-  layer/tile will be deleted.
-* `Overlay`: overlay the source area onto the target area. Target tiles with no matching source
-  layer/tile will be left as-is.
-* `ClearMissingLayers`: Same as `Overlay`, but remove target tiles if their layer doesn't exist in
-  the source map.
-* `ClearMissingTiles`: Same as `Overlay`, but remove target tiles if their layer exists in the
-  source map but there's no matching source tile.
-
-For example, let's say your source map is a mostly-empty 3x3 tile area, with one tile on the `Back`
-layer (red) and one on the `Buildings` layer (blue):
+For example, assume a mostly empty source map with two layers: `Back` (red) and `Buildings` (blue):
 
 ![](screenshots/map-patch-mode-source.png)
 
-Here's how it looks when patched into an outdoor area:
-
-* **`Replace`**  
-  All target tiles are replaced with the source area. The black is the empty void showing through
-  from under the map.  
-  ![](screenshots/map-patch-mode-replace.png)
+Here's how that would be merged with each patch mode (black areas are the empty void under the map):
 
 * **`Overlay`**  
-  Only matching tiles are replaced. The red `Back` tile replaces the ground on the `Back` layer, but
-  the ground is visible under the blue `Buildings` tile.  
+  Only matching tiles are replaced. The red tile replaces the ground on the `Back` layer, but the
+  ground is visible under the blue `Buildings` tile.  
   ![](screenshots/map-patch-mode-overlay.png)
 
-* **`ClearMissingLayers`**  
-  Only matching tiles are replaced, except layers that aren't in the source map are deleted within
-  the target area (like the `Front` layer with the tree canopy).  
-  ![](screenshots/map-patch-mode-clearMissingLayers.png)
+* **`ReplaceByLayer`** _(default)_  
+  All tiles are replaced, but only on layers that exist in the source map.  
+  ![](screenshots/map-patch-mode-replace-by-layer.png)
 
-* **`ClearMissingTiles`**  
-  All target tiles are replaced with the source area, except on layers that don't exist in the
-  source map (like the `Front` layer with the tree canopy).  
-  ![](screenshots/map-patch-mode-clearMissingTiles.png)
+* **`Replace`**  
+  All tiles are replaced.  
+  ![](screenshots/map-patch-mode-replace.png)
 
 </td>
 </tr>

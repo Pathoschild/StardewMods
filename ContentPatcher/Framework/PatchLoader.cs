@@ -610,7 +610,7 @@ namespace ContentPatcher.Framework
                                 return TrackSkip(error);
 
                             // read patch mode
-                            PatchMapMode patchMode = PatchMapMode.ClearMissingTiles;
+                            PatchMapMode patchMode = PatchMapMode.ReplaceByLayer;
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMapMode)))}]");
 

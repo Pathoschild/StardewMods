@@ -504,9 +504,8 @@ namespace ContentPatcher.Framework.Patches
             HashSet<Layer> orphanedTargetLayers = new HashSet<Layer>(target.Layers.Except(sourceToTargetLayers.Values));
 
             // apply tiles
-            bool isReplace = patchMode == PatchMapMode.Replace;
-            bool clearMissingLayers = patchMode == PatchMapMode.ClearMissingLayers;
-            bool clearMissingTiles = patchMode == PatchMapMode.ClearMissingTiles;
+            bool replaceAll = patchMode == PatchMapMode.Replace;
+            bool replaceByLayer = patchMode == PatchMapMode.ReplaceByLayer;
             for (int x = 0; x < sourceArea.Value.Width; x++)
             {
                 for (int y = 0; y < sourceArea.Value.Height; y++)
@@ -515,8 +514,8 @@ namespace ContentPatcher.Framework.Patches
                     Point sourcePos = new Point(sourceArea.Value.X + x, sourceArea.Value.Y + y);
                     Point targetPos = new Point(targetArea.Value.X + x, targetArea.Value.Y + y);
 
-                    // clear orphaned layers
-                    if (isReplace || clearMissingLayers)
+                    // replace tiles on target-only layers
+                    if (replaceAll)
                     {
                         foreach (Layer targetLayer in orphanedTargetLayers)
                             targetLayer.Tiles[targetPos.X, targetPos.Y] = null;
@@ -544,10 +543,8 @@ namespace ContentPatcher.Framework.Patches
                         newTile?.Properties.CopyFrom(sourceTile.Properties);
 
                         // replace tile
-                        if (newTile != null || clearMissingTiles)
+                        if (newTile != null || replaceByLayer || replaceAll)
                             targetLayer.Tiles[targetPos.X, targetPos.Y] = newTile;
-                        else if (isReplace)
-                            targetLayer.Tiles[targetPos.X, targetPos.Y] = null;
                     }
                 }
             }
