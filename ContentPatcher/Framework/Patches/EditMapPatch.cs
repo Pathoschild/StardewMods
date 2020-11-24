@@ -7,6 +7,7 @@ using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using xTile;
 using xTile.Layers;
 using xTile.ObjectModel;
@@ -34,6 +35,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The map area to overwrite.</summary>
         private readonly TokenRectangle ToArea;
 
+        /// <summary>Indicates how the map should be patched.</summary>
+        private readonly PatchMapMode PatchMode;
+
         /// <summary>The map properties to change when editing a map.</summary>
         private readonly EditMapPatchProperty[] MapProperties;
 
@@ -59,6 +63,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
         /// <param name="fromAsset">The asset key to load from the content pack instead.</param>
         /// <param name="fromArea">The map area from which to read tiles.</param>
+        /// <param name="patchMode">Indicates how the map should be patched.</param>
         /// <param name="toArea">The map area to overwrite.</param>
         /// <param name="mapProperties">The map properties to change when editing a map, if any.</param>
         /// <param name="textOperations">The text operations to apply to existing values.</param>
@@ -69,7 +74,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditMap,
@@ -84,6 +89,7 @@ namespace ContentPatcher.Framework.Patches
         {
             this.FromArea = fromArea;
             this.ToArea = toArea;
+            this.PatchMode = patchMode;
             this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.MapTiles = mapTiles?.ToArray() ?? new EditMapPatchTile[0];
             this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
@@ -206,7 +212,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply source map
             this.ExtendMap(target, minWidth: targetArea.Right, minHeight: targetArea.Bottom);
-            this.PatchMap(targetAsset, source: source, sourceArea: sourceArea, targetArea: targetArea);
+            this.PatchMap(targetAsset, source: source, patchMode: this.PatchMode, sourceArea: sourceArea, targetArea: targetArea);
 
             error = null;
             return true;
@@ -437,12 +443,13 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Copy layers, tiles, and tilesheets from another map onto the asset.</summary>
         /// <param name="asset">The asset being edited.</param>
         /// <param name="source">The map from which to copy.</param>
+        /// <param name="patchMode">Indicates how the map should be patched.</param>
         /// <param name="sourceArea">The tile area within the source map to copy, or <c>null</c> for the entire source map size. This must be within the bounds of the <paramref name="source"/> map.</param>
         /// <param name="targetArea">The tile area within the target map to overwrite, or <c>null</c> to patch the whole map. The original content within this area will be erased. This must be within the bounds of the existing map.</param>
         /// <remarks>
         /// This is temporarily duplicated from SMAPI's <see cref="IAssetDataForMap"/>, to add map overlay support before the feature is added to SMAPI.
         /// </remarks>
-        public void PatchMap(IAssetDataForMap asset, Map source, Rectangle? sourceArea = null, Rectangle? targetArea = null)
+        public void PatchMap(IAssetDataForMap asset, Map source, PatchMapMode patchMode, Rectangle? sourceArea = null, Rectangle? targetArea = null)
         {
             Map target = asset.Data;
 
@@ -492,10 +499,14 @@ namespace ContentPatcher.Framework.Patches
                 tilesheetMap[sourceSheet] = targetSheet;
             }
 
-            // get layer map
-            IDictionary<Layer, Layer> layerMap = source.Layers.ToDictionary(p => p, p => target.GetLayer(p.Id));
+            // get target layers
+            IDictionary<Layer, Layer> sourceToTargetLayers = source.Layers.ToDictionary(p => p, p => target.GetLayer(p.Id));
+            HashSet<Layer> orphanedTargetLayers = new HashSet<Layer>(target.Layers.Except(sourceToTargetLayers.Values));
 
             // apply tiles
+            bool isReplace = patchMode == PatchMapMode.Replace;
+            bool clearMissingLayers = patchMode == PatchMapMode.ClearMissingLayers;
+            bool clearMissingTiles = patchMode == PatchMapMode.ClearMissingTiles;
             for (int x = 0; x < sourceArea.Value.Width; x++)
             {
                 for (int y = 0; y < sourceArea.Value.Height; y++)
@@ -504,49 +515,69 @@ namespace ContentPatcher.Framework.Patches
                     Point sourcePos = new Point(sourceArea.Value.X + x, sourceArea.Value.Y + y);
                     Point targetPos = new Point(targetArea.Value.X + x, targetArea.Value.Y + y);
 
+                    // clear orphaned layers
+                    if (isReplace || clearMissingLayers)
+                    {
+                        foreach (Layer targetLayer in orphanedTargetLayers)
+                            targetLayer.Tiles[targetPos.X, targetPos.Y] = null;
+                    }
+
                     // merge layers
                     foreach (Layer sourceLayer in source.Layers)
                     {
                         // get layer
-                        Layer targetLayer = layerMap[sourceLayer];
+                        Layer targetLayer = sourceToTargetLayers[sourceLayer];
                         if (targetLayer == null)
                         {
                             target.AddLayer(targetLayer = new Layer(sourceLayer.Id, target, target.Layers[0].LayerSize, Layer.m_tileSize));
-                            layerMap[sourceLayer] = target.GetLayer(sourceLayer.Id);
+                            sourceToTargetLayers[sourceLayer] = target.GetLayer(sourceLayer.Id);
                         }
 
                         // copy layer properties
                         targetLayer.Properties.CopyFrom(sourceLayer.Properties);
 
-                        // copy tiles
+                        // create new tile
                         Tile sourceTile = sourceLayer.Tiles[sourcePos.X, sourcePos.Y];
-                        Tile targetTile;
-                        switch (sourceTile)
-                        {
-                            case StaticTile _:
-                                targetTile = new StaticTile(targetLayer, tilesheetMap[sourceTile.TileSheet], sourceTile.BlendMode, sourceTile.TileIndex);
-                                break;
+                        Tile newTile = sourceTile != null
+                            ? this.CreateTile(sourceTile, targetLayer, tilesheetMap[sourceTile.TileSheet])
+                            : null;
+                        newTile?.Properties.CopyFrom(sourceTile.Properties);
 
-                            case AnimatedTile animatedTile:
-                                {
-                                    StaticTile[] tileFrames = new StaticTile[animatedTile.TileFrames.Length];
-                                    for (int frame = 0; frame < animatedTile.TileFrames.Length; ++frame)
-                                    {
-                                        StaticTile frameTile = animatedTile.TileFrames[frame];
-                                        tileFrames[frame] = new StaticTile(targetLayer, tilesheetMap[frameTile.TileSheet], frameTile.BlendMode, frameTile.TileIndex);
-                                    }
-                                    targetTile = new AnimatedTile(targetLayer, tileFrames, animatedTile.FrameInterval);
-                                }
-                                break;
-
-                            default: // null or unhandled type
-                                targetTile = null;
-                                break;
-                        }
-                        targetTile?.Properties.CopyFrom(sourceTile.Properties);
-                        targetLayer.Tiles[targetPos.X, targetPos.Y] = targetTile;
+                        // replace tile
+                        if (newTile != null || clearMissingTiles)
+                            targetLayer.Tiles[targetPos.X, targetPos.Y] = newTile;
+                        else if (isReplace)
+                            targetLayer.Tiles[targetPos.X, targetPos.Y] = null;
                     }
                 }
+            }
+        }
+
+        /// <summary>Create a new tile for the target map.</summary>
+        /// <param name="sourceTile">The source tile to copy.</param>
+        /// <param name="targetLayer">The target layer.</param>
+        /// <param name="targetSheet">The target tilesheet.</param>
+        private Tile CreateTile(Tile sourceTile, Layer targetLayer, TileSheet targetSheet)
+        {
+            switch (sourceTile)
+            {
+                case StaticTile _:
+                    return new StaticTile(targetLayer, targetSheet, sourceTile.BlendMode, sourceTile.TileIndex);
+
+                case AnimatedTile animatedTile:
+                    {
+                        StaticTile[] tileFrames = new StaticTile[animatedTile.TileFrames.Length];
+                        for (int frame = 0; frame < animatedTile.TileFrames.Length; ++frame)
+                        {
+                            StaticTile frameTile = animatedTile.TileFrames[frame];
+                            tileFrames[frame] = new StaticTile(targetLayer, targetSheet, frameTile.BlendMode, frameTile.TileIndex);
+                        }
+
+                        return new AnimatedTile(targetLayer, tileFrames, animatedTile.FrameInterval);
+                    }
+
+                default: // null or unhandled type
+                    return null;
             }
         }
 

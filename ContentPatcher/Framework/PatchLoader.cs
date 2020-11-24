@@ -489,9 +489,9 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Load} patch.");
 
                             // read patch mode
-                            PatchMode patchMode = PatchMode.Replace;
+                            PatchImageMode patchMode = PatchImageMode.Replace;
                             if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
-                                return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMode)))}]");
+                                return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchImageMode)))}]");
 
                             // read from area
                             TokenRectangle fromArea = null;
@@ -609,6 +609,11 @@ namespace ContentPatcher.Framework
                             if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
                                 return TrackSkip(error);
 
+                            // read patch mode
+                            PatchMapMode patchMode = PatchMapMode.ClearMissingTiles;
+                            if (!string.IsNullOrWhiteSpace(entry.PatchMode) && !Enum.TryParse(entry.PatchMode, true, out patchMode))
+                                return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMapMode)))}]");
+
                             // validate
                             if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !textOperations.Any())
                                 return TrackSkip($"must specify at least one of {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
@@ -623,6 +628,7 @@ namespace ContentPatcher.Framework
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
                                 toArea: toArea,
+                                patchMode: patchMode,
                                 mapProperties: mapProperties,
                                 mapTiles: mapTiles,
                                 textOperations: textOperations,
