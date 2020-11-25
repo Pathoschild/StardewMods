@@ -1,3 +1,5 @@
+using System;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens.Json;
@@ -110,6 +112,24 @@ namespace ContentPatcher.Framework.Migrations
         protected string GetNounPhraseError(string nounPhrase)
         {
             return $"{nounPhrase} requires {nameof(ContentConfig.Format)} version {this.Version} or later";
+        }
+
+        /// <summary>Get the action type for a patch.</summary>
+        /// <param name="patch">The patch to parse.</param>
+        protected PatchType? GetAction(PatchConfig patch)
+        {
+            return this.GetEnum<PatchType>(patch.Action);
+        }
+
+        /// <summary>Get a parsed enum value, or <c>null</c> if it's not valid.</summary>
+        /// <typeparam name="TEnum">The enum type.</typeparam>
+        /// <param name="raw">The raw value.</param>
+        protected TEnum? GetEnum<TEnum>(string raw)
+            where TEnum : struct
+        {
+            return Enum.TryParse(raw, ignoreCase: true, out TEnum parsed)
+                ? parsed
+                : null as TEnum?;
         }
     }
 }

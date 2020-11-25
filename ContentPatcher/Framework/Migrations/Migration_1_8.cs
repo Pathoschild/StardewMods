@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -40,7 +39,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.8 adds EditMap
-                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
+                if (this.GetAction(patch) == PatchType.EditMap)
                 {
                     error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
                     return false;

@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -41,7 +40,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.10 allows 'FromFile' with 'EditData' patches
-                if (patch.FromFile != null && Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditData)
+                if (patch.FromFile != null && this.GetAction(patch) == PatchType.EditData)
                 {
                     error = this.GetNounPhraseError($"using {nameof(PatchConfig.FromFile)} with action {nameof(PatchType.EditData)}");
                     return false;

@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -29,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.16 adds Include
-                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.Include)
+                if (this.GetAction(patch) == PatchType.Include)
                 {
                     error = this.GetNounPhraseError($"using action {nameof(PatchType.Include)}");
                     return false;
