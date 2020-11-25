@@ -77,10 +77,7 @@ namespace ContentPatcher.Framework.Migrations
             this.LocalTokenNames = new Lazy<ISet<string>>(() => this.GetLocalTokenNames(content));
         }
 
-        /// <summary>Migrate a lexical token.</summary>
-        /// <param name="lexToken">The lexical token to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (!base.TryMigrate(lexToken, out error))

@@ -21,27 +21,21 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Accessors
         *********/
-        /// <summary>The format version to which this migration applies.</summary>
+        /// <inheritdoc />
         public ISemanticVersion Version { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(ContentConfig content, out string error)
         {
             error = null;
             return true;
         }
 
-        /// <summary>Migrate a lexical token.</summary>
-        /// <param name="lexToken">The lexical token to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (lexToken is LexTokenToken token)
@@ -69,10 +63,7 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a tokenized string.</summary>
-        /// <param name="tokenStr">The tokenized string to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
         {
             // no issue found
@@ -80,10 +71,7 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a tokenized JSON structure.</summary>
-        /// <param name="tokenStructure">The tokenized JSON structure to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public bool TryMigrate(TokenizableJToken tokenStructure, out string error)
         {
             foreach (IManagedTokenString str in tokenStructure.GetTokenStrings())
