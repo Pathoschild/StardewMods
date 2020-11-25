@@ -184,6 +184,8 @@ This can also be used with range tokens:
 }
 ```
 
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
 </td>
 </tr>
 
