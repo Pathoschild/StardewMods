@@ -70,6 +70,15 @@ namespace ContentPatcher.Framework.Lexing
             return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: false);
         }
 
+        /// <summary>Perform a quick check to see if the string might contain tokens. This is only a preliminary check for optimizations and may have false positives.</summary>
+        /// <param name="rawText">The raw text to check.</param>
+        public bool MightContainTokens(string rawText)
+        {
+            return
+                !string.IsNullOrEmpty(rawText)
+                && rawText.Contains("{{");
+        }
+
 
         /*********
         ** Private methods
