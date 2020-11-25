@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens.Json;
@@ -99,6 +100,21 @@ namespace ContentPatcher.Framework.Migrations
             foreach (IMigration migration in this.Migrations)
             {
                 if (!migration.TryMigrate(tokenStructure, out error))
+                    return false;
+            }
+
+            // no issues found
+            error = null;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public bool TryMigrate(Condition condition, out string error)
+        {
+            // apply migrations
+            foreach (IMigration migration in this.Migrations)
+            {
+                if (!migration.TryMigrate(condition, out error))
                     return false;
             }
 

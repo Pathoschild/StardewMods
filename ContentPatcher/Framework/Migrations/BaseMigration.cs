@@ -84,6 +84,13 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
+        /// <inheritdoc />
+        public virtual bool TryMigrate(Condition condition, out string error)
+        {
+            error = null;
+            return true;
+        }
+
 
         /*********
         ** Protected methods
