@@ -888,6 +888,8 @@ namespace ContentPatcher.Framework
 
             // create condition
             condition = new Condition(name: token.Name, input: keyInputStr, values: values);
+            if (!tokenParser.Migrator.TryMigrate(condition, out error))
+                return Fail(error, out error, out condition, out immutableRequiredModIDs);
 
             // extract HasMod required IDs if immutable
             immutableRequiredModIDs = null;

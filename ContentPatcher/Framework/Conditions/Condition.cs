@@ -59,6 +59,10 @@ namespace ContentPatcher.Framework.Conditions
             this.Contextuals = new AggregateContextual()
                 .Add(input)
                 .Add(values);
+
+            // init immutable values
+            if (this.Values.IsReady)
+                this.CurrentValues = this.Values.SplitValuesUnique();
         }
 
         /// <summary>Get whether the condition is for a given condition type.</summary>
