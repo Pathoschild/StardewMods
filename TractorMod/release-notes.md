@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* The scythe now harvests palm tree coconuts and tree seeds.
+
 ## 4.11.3
 Released 15 October 2020.
 
