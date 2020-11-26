@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed crop fields shown for forage crops.
+
 ## 1.28.2
 Released 21 November 2020.
 

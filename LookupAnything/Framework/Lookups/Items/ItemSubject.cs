@@ -444,6 +444,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // crop summary
+            if (crop.whichForageCrop.Value <= 0)
             {
                 List<string> summary = new List<string>();
 
