@@ -121,6 +121,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="crop">The crop to check.</param>
         private bool ShouldHarvest(Crop crop)
         {
+            // flower
+            if (this.IsFlower(crop))
+                return this.Config.HarvestFlowers;
+
+            // forage
+            if (crop.whichForageCrop.Value > 0)
+                return this.Config.HarvestForage;
+
+            // crop
+            return this.Config.HarvestCrops;
+        }
+
+        /// <summary>Get whether a crop counts as a flower.</summary>
+        /// <param name="crop">The crop to check.</param>
+        private bool IsFlower(Crop crop)
+        {
+            if (crop == null)
+                return false;
+
             int cropId = crop.indexOfHarvest.Value;
             if (!this.IsFlowerCache.TryGetValue(cropId, out bool isFlower))
             {
@@ -135,9 +154,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 this.IsFlowerCache[cropId] = isFlower;
             }
 
-            return isFlower
-                ? this.Config.HarvestFlowers
-                : this.Config.HarvestCrops;
+            return isFlower;
         }
 
         /// <summary>Harvest a bush if it's ready.</summary>
@@ -180,11 +197,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // harvest
-            if (this.ShouldHarvest(dirt.crop) && dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+            if (this.ShouldHarvest(dirt.crop))
             {
-                bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
-                dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
-                return true;
+                if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+                {
+                    bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
+                    dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
+                    return true;
+                }
             }
 
             return false;

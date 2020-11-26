@@ -1,6 +1,7 @@
 # Release notes
 ## Upcoming release
 * The scythe now harvests palm tree coconuts and tree seeds.
+* Fixed scythe harvesting spring onions based on 'harvest crops' option instead of 'harvest forage'.
 
 ## 4.11.3
 Released 15 October 2020.
