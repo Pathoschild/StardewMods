@@ -7,12 +7,14 @@ using Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures;
 using Pathoschild.Stardew.Automate.Framework.Machines.Tiles;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Automate.Framework.Storage;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using CommonItemType = Pathoschild.Stardew.Common.Items.ItemData.ItemType;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -95,10 +97,13 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // machine by index
-            switch (obj.ParentSheetIndex)
+            if (obj.GetItemType() == CommonItemType.BigCraftable)
             {
-                case 165:
-                    return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+                switch (obj.ParentSheetIndex)
+                {
+                    case 165:
+                        return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+                }
             }
 
             // machine by name
