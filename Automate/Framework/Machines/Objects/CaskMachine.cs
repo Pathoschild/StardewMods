@@ -72,18 +72,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 SObject ingredient = (SObject)consumable.Take(1);
 
                 cask.heldObject.Value = ingredient;
+                cask.MinutesUntilReady = 999999;
                 cask.agingRate.Value = agingRate;
                 cask.daysToMature.Value = ingredient.Quality switch
                 {
                     SObject.medQuality => 42,
                     SObject.highQuality => 28,
-                    SObject.bestQuality => 0,
                     _ => 56
-                };
-                cask.MinutesUntilReady = ingredient.Quality switch
-                {
-                    SObject.bestQuality => 1,
-                    _ => 999999
                 };
 
                 return true;
