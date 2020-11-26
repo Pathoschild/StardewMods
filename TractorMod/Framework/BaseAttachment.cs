@@ -327,5 +327,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             isCoveredByObj = false;
             return false;
         }
+
+        /// <summary>Break open a container using a tool, if applicable.</summary>
+        /// <param name="tile">The tile position</param>
+        /// <param name="tileObj">The object on the tile.</param>
+        /// <param name="tool">The tool selected by the player (if any).</param>
+        /// <param name="location">The current location.</param>
+        protected bool TryBreakContainer(Vector2 tile, SObject tileObj, Tool tool, GameLocation location)
+        {
+            if (tileObj is BreakableContainer)
+                return tileObj.performToolAction(tool, location);
+
+            return false;
+        }
     }
 }
