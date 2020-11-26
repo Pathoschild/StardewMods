@@ -706,7 +706,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             SObject obj = item.getOne() as SObject;
 
             // single quality
-            if (obj == null || !this.GameHelper.CanHaveQuality(item) || !qualityIsKnown)
+            if (obj == null || !this.GameHelper.CanHaveQuality(item) || qualityIsKnown)
             {
                 ItemQuality quality = qualityIsKnown && obj != null
                     ? (ItemQuality)obj.Quality

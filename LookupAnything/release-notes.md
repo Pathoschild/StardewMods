@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed crop fields shown for forage crops.
+* Fixed item lookups no longer showing iridium or stack prices.
 
 ## 1.28.2
 Released 21 November 2020.
