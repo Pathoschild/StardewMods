@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
@@ -63,27 +64,27 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            if (input.TryGetIngredient(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < 4 && this.AgingRates.ContainsKey(match.Sample.ParentSheetIndex), 1, out IConsumable consumable))
+            foreach (ITrackedStack consumable in input.GetItems().Where(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < SObject.bestQuality))
             {
-                SObject ingredient = (SObject)consumable.Take();
+                if (!this.AgingRates.TryGetValue(consumable.Sample.ParentSheetIndex, out float agingRate))
+                    continue;
+
+                SObject ingredient = (SObject)consumable.Take(1);
 
                 cask.heldObject.Value = ingredient;
-                cask.agingRate.Value = this.AgingRates[ingredient.ParentSheetIndex];
-                cask.daysToMature.Value = 56;
-                cask.MinutesUntilReady = 999999;
-                switch (ingredient.Quality)
+                cask.agingRate.Value = agingRate;
+                cask.daysToMature.Value = ingredient.Quality switch
                 {
-                    case SObject.medQuality:
-                        cask.daysToMature.Value = 42;
-                        break;
-                    case SObject.highQuality:
-                        cask.daysToMature.Value = 28;
-                        break;
-                    case SObject.bestQuality:
-                        cask.daysToMature.Value = 0;
-                        cask.MinutesUntilReady = 1;
-                        break;
-                }
+                    SObject.medQuality => 42,
+                    SObject.highQuality => 28,
+                    SObject.bestQuality => 0,
+                    _ => 56
+                };
+                cask.MinutesUntilReady = ingredient.Quality switch
+                {
+                    SObject.bestQuality => 1,
+                    _ => 999999
+                };
 
                 return true;
             }
