@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
@@ -208,8 +207,8 @@ namespace ContentPatcher.Framework
             foreach (PatchConfig patch in patches)
             {
                 // split target and from-file values
-                string[] targets = this.SplitLexically(patch.Target).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
-                string[] fromFiles = this.SplitLexically(patch.FromFile).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                string[] targets = this.Lexer.SplitLexically(patch.Target).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+                string[] fromFiles = this.Lexer.SplitLexically(patch.FromFile).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
                 if (targets.Length <= 1 && fromFiles.Length <= 1)
                 {
                     yield return patch;
@@ -1183,61 +1182,6 @@ namespace ContentPatcher.Framework
             }
 
             return false;
-        }
-
-        /// <summary>Split a raw comma-delimited string, using only commas at the top lexical level (i.e. <c>{{Random: a, b, c}}, d</c> gets split into two values).</summary>
-        /// <param name="str">The string to split.</param>
-        private IEnumerable<string> SplitLexically(string str)
-        {
-            static IEnumerable<string> RawSplit(Lexer lexer, string str)
-            {
-                // shortcut if no split needed
-                if (str == null || !str.Contains(","))
-                {
-                    yield return str;
-                    yield break;
-                }
-
-                // shortcut if no lexical parsing needed
-                if (!lexer.MightContainTokens(str))
-                {
-                    foreach (string substr in str.SplitValuesNonUnique())
-                        yield return substr;
-                    yield break;
-                }
-
-                // split lexically
-                StringBuilder cur = new StringBuilder(str.Length);
-                foreach (ILexToken bit in lexer.ParseBits(str, impliedBraces: false))
-                {
-                    // handle split character(s)
-                    if (bit is LexTokenLiteral literal && literal.Text.Contains(","))
-                    {
-                        string[] parts = literal.Text.Split(',');
-
-                        // yield up to comma
-                        cur.Append(parts[0]);
-                        yield return cur.ToString();
-                        cur.Clear();
-
-                        // yield inner values
-                        for (int i = 1; i < parts.Length - 1; i++)
-                            yield return parts[i];
-
-                        // start next string
-                        cur.Append(parts.Last());
-                    }
-
-                    // else continue accumulating string
-                    else
-                        cur.Append(bit.ToString());
-                }
-                yield return cur.ToString();
-            }
-
-            return RawSplit(this.Lexer, str)
-                .Select(p => p?.Trim())
-                .Where(p => !string.IsNullOrEmpty(p));
         }
     }
 }

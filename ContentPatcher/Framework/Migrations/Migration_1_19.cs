@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using ContentPatcher.Framework.Lexing.LexTokens;
+using ContentPatcher.Framework.Lexing;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -13,6 +13,13 @@ namespace ContentPatcher.Framework.Migrations
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "Named for clarity.")]
     internal class Migration_1_19 : BaseMigration
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>Handles parsing raw strings into tokens.</summary>
+        private readonly Lazy<Lexer> Lexer = new Lazy<Lexer>(() => new Lexer());
+
+
         /*********
         ** Public methods
         *********/
@@ -49,7 +56,7 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // 1.19 adds multiple FromFile values
-                if (patch.FromFile?.Contains(",") == true)
+                if (this.HasMultipleValues(patch.FromFile))
                 {
                     error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.FromFile)} values");
                     return false;
@@ -75,6 +82,25 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             return base.TryMigrate(condition, out error);
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether a value has multiple top-level lexical values.</summary>
+        /// <param name="raw">The raw unparsed value.</param>
+        private bool HasMultipleValues(string raw)
+        {
+            // quick check
+            if (raw?.Contains(",") != true)
+                return false;
+
+            // lexical check (this ensures a value like '{{Random: a, b}}' isn't incorrectly treated as two values)
+            return this.Lexer.Value
+                .SplitLexically(raw)
+                .Take(2)
+                .Count() > 1;
         }
     }
 }
