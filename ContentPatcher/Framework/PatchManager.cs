@@ -49,8 +49,13 @@ namespace ContentPatcher.Framework
         /// <summary>Assets for which patches were removed, which should be reloaded on the next context update.</summary>
         private readonly InvariantHashSet AssetsWithRemovedPatches = new InvariantHashSet();
 
-        /// <summary>The tokens which changed since the last daily update.</summary>
-        private readonly InvariantHashSet QueuedDailyTokenChanges = new InvariantHashSet();
+        /// <summary>The token changes queued for periodic update types.</summary>
+        private readonly IDictionary<ContextUpdateType, InvariantHashSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, InvariantHashSet>
+        {
+            [ContextUpdateType.OnTimeChange] = new InvariantHashSet(),
+            [ContextUpdateType.OnLocationChange] = new InvariantHashSet(),
+            [ContextUpdateType.All] = new InvariantHashSet()
+        };
 
 
         /*********
@@ -192,15 +197,31 @@ namespace ContentPatcher.Framework
         {
             this.Monitor.VerboseLog("Propagating context...");
 
-            // track token changes for the next start-of-day update
-            if (updateType.HasFlag((ContextUpdateType)UpdateRate.OnDayStart))
+            // Patches can have variable update rates, so we keep track of updated tokens here so
+            // we update patches at their next update point.
+            if (updateType == ContextUpdateType.All)
             {
+                // all token updates apply at day start
                 globalChangedTokens = new InvariantHashSet(globalChangedTokens);
-                globalChangedTokens.AddMany(this.QueuedDailyTokenChanges);
-                this.QueuedDailyTokenChanges.Clear();
+                foreach (var queue in this.QueuedTokenChanges.Values)
+                {
+                    globalChangedTokens.AddMany(queue);
+                    queue.Clear();
+                }
             }
             else
-                this.QueuedDailyTokenChanges.AddMany(globalChangedTokens);
+            {
+                // queue token changes for other update points
+                foreach (KeyValuePair<ContextUpdateType, InvariantHashSet> pair in this.QueuedTokenChanges)
+                {
+                    if (pair.Key != updateType)
+                        pair.Value.AddMany(globalChangedTokens);
+                }
+
+                // get queued changes for the current update point
+                globalChangedTokens.AddMany(this.QueuedTokenChanges[updateType]);
+                this.QueuedTokenChanges[updateType].Clear();
+            }
 
             // get changes to apply
             HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
@@ -430,7 +451,7 @@ namespace ContentPatcher.Framework
                 {
                     foreach (IPatch patch in affectedPatches)
                     {
-                        if (updateType.HasFlag((ContextUpdateType)patch.UpdateRate))
+                        if (updateType == ContextUpdateType.All || patch.UpdateRate.HasFlag((UpdateRate)updateType))
                             patches.Add(patch);
                     }
                 }

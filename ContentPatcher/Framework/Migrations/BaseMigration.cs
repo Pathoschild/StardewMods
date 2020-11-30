@@ -1,3 +1,5 @@
+using System;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens.Json;
@@ -19,27 +21,21 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Accessors
         *********/
-        /// <summary>The format version to which this migration applies.</summary>
+        /// <inheritdoc />
         public ISemanticVersion Version { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(ContentConfig content, out string error)
         {
             error = null;
             return true;
         }
 
-        /// <summary>Migrate a lexical token.</summary>
-        /// <param name="lexToken">The lexical token to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (lexToken is LexTokenToken token)
@@ -67,10 +63,7 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a tokenized string.</summary>
-        /// <param name="tokenStr">The tokenized string to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
         {
             // no issue found
@@ -78,10 +71,7 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a tokenized JSON structure.</summary>
-        /// <param name="tokenStructure">The tokenized JSON structure to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public bool TryMigrate(TokenizableJToken tokenStructure, out string error)
         {
             foreach (IManagedTokenString str in tokenStructure.GetTokenStrings())
@@ -90,6 +80,13 @@ namespace ContentPatcher.Framework.Migrations
                     return false;
             }
 
+            error = null;
+            return true;
+        }
+
+        /// <inheritdoc />
+        public virtual bool TryMigrate(Condition condition, out string error)
+        {
             error = null;
             return true;
         }
@@ -110,6 +107,24 @@ namespace ContentPatcher.Framework.Migrations
         protected string GetNounPhraseError(string nounPhrase)
         {
             return $"{nounPhrase} requires {nameof(ContentConfig.Format)} version {this.Version} or later";
+        }
+
+        /// <summary>Get the action type for a patch.</summary>
+        /// <param name="patch">The patch to parse.</param>
+        protected PatchType? GetAction(PatchConfig patch)
+        {
+            return this.GetEnum<PatchType>(patch.Action);
+        }
+
+        /// <summary>Get a parsed enum value, or <c>null</c> if it's not valid.</summary>
+        /// <typeparam name="TEnum">The enum type.</typeparam>
+        /// <param name="raw">The raw value.</param>
+        protected TEnum? GetEnum<TEnum>(string raw)
+            where TEnum : struct
+        {
+            return Enum.TryParse(raw, ignoreCase: true, out TEnum parsed)
+                ? parsed
+                : null as TEnum?;
         }
     }
 }

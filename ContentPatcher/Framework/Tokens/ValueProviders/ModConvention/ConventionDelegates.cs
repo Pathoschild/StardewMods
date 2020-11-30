@@ -58,6 +58,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <remarks>Default true.</remarks>
         internal delegate bool TryValidateValues(string input, IEnumerable<string> values, out string error);
 
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        internal delegate string NormalizeValue(string value);
+
 
         /****
         ** State

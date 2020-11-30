@@ -25,7 +25,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly TokenRectangle ToArea;
 
         /// <summary>Indicates how the image should be patched.</summary>
-        private readonly PatchMode PatchMode;
+        private readonly PatchImageMode PatchMode;
 
         /// <summary>Whether the patch extended the last image asset it was applied to.</summary>
         private bool ResizedLastImage;
@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(
                 path: path,
                 type: PatchType.EditImage,
@@ -129,7 +129,7 @@ namespace ContentPatcher.Framework.Patches
             this.ResizedLastImage = editor.ExtendImage(editor.Data.Width, targetArea.Bottom);
 
             // apply source image
-            editor.PatchImage(source, sourceArea, targetArea, this.PatchMode);
+            editor.PatchImage(source, sourceArea, targetArea, (PatchMode)this.PatchMode);
         }
 
         /// <inheritdoc />

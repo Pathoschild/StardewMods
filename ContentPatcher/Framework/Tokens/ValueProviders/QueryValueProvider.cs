@@ -27,6 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public QueryValueProvider()
             : base(ConditionType.Query, mayReturnMultipleValuesForRoot: false)
         {
+            this.BypassesContextValidation = true;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.MarkReady(true);
         }
@@ -57,15 +58,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.IsReady)
                 return this.TryCalculate(input.GetFirstPositionalArg(), out _, out error);
 
-            return true;
-        }
-
-        /// <inheritdoc />
-        public override bool HasBoundedRangeValues(IInputArguments input, out int min, out int max)
-        {
-            // TODO: update HasBoundedRangeValue to support double?
-            min = int.MinValue;
-            max = int.MaxValue;
             return true;
         }
 

@@ -22,11 +22,12 @@ This document lists the tokens available in Content Patcher packs.
 * [Global input arguments](#global-input-arguments)
   * [Token search](#token-search)
   * [Custom input value separator](#custom-input-value-separator)
-* [Arithmetic](#arithmetic)
-* [Randomization](#randomization)
-* [Dynamic tokens](#dynamic-tokens)
 * [Player config](#player-config)
-* [Mod-provided tokens](#mod-provided-tokens)
+* [Randomization](#randomization)
+* [Advanced](#advanced)
+  * [Dynamic tokens](#dynamic-tokens)
+  * [Query expressions](#query-expressions)
+  * [Mod-provided tokens](#mod-provided-tokens)
 * [Constants](#constants)
 * [See also](#see-also)
 
@@ -167,6 +168,23 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 <td>
 
 The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>Time</td>
+<td>
+
+The in-game time of day, as a numeric value between `0600` (6am) and `2600` (2am before sleeping).
+This can also be used with range tokens:
+```js
+"When": {
+   "Time": "{{Range: 0600, 2600}}"
+}
+```
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
 </tr>
@@ -570,7 +588,8 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <td>Query</td>
 <td>
 
-Perform arbitrary arithmetic operations; see [_arithmetic_](#arithmetic) for more info.
+Evaluate arbitrary arithmetic and logical operations; see [_query expressions_](#query-expressions)
+for more info.
 
 </td>
 </tr>
@@ -614,8 +633,10 @@ usage | result | description
 `Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
 `Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` to the given number of fractional digits. This overrides the default [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) behavior.
 
-This is mainly useful in combination with the [`Query`](#query) token. For example, monster HP must
-be a whole number, so this rounds the result of a calculation to the nearest whole number:
+This is mainly useful in combination with [query expressions](#query-expressions). For example,
+monster HP must be a whole number, so this rounds the result of a calculation to the nearest whole
+number:
+
 ```js
 {
   "Action": "EditData",
@@ -917,52 +938,70 @@ For example, this can allow commas in random dialogue:
 The behavior when separators conflict with token syntax depends on implementation details that may
 change from one Content Patcher version to the next.
 
-## <span id="query"></span>Arithmetic
-_See also [number manipulation tokens](#number-manipulation)_.
+## Player config
+You can let players configure your mod using a `config.json` file. Content Patcher will
+automatically create and load the file, and you can use the config values as
+[tokens & conditions](#introduction). Config fields are not case-sensitive.
 
-You can calculate mathematical expressions in patches using the `query` token (including over
-tokens which return a number):
+If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
+installed, they'll be able to configure the mod through an in-game options menu on the title
+screen.
+
+To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
+them (see below for an example).
+Available fields for each field:
+
+   field               | meaning
+   ------------------- | -------
+   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
+   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
+   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
+   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
+   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
+
+For example: this `content.json` defines a `Material` config field and uses it to change which
+patch is applied. See below for more details.
+
 ```js
 {
-   "Format": "1.18.0",
+   "Format": "1.19.0",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood",
+         "Description": "The material style for the billboard background."
+      }
+   },
    "Changes": [
+      // as a token
       {
-         "Action": "EditData",
-         "Target": "Characters/Dialogue/Abigail",
-         "Entries": {
-            "Mon": "You've played roughly {{query: {{DaysPlayed}} * 12}} minutes on this save!"
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_{{material}}.png"
+      },
+
+      // as a condition
+      {
+         "Action": "Load",
+         "Target": "LooseSprites/Billboard",
+         "FromFile": "assets/material_wood.png",
+         "When": {
+            "Material": "Wood"
          }
       }
    ]
 }
 ```
 
-This also works in conditions:
+When you run the game, a `config.json` file will appear automatically with text like this:
+
 ```js
 {
-   "Action": "Load",
-   "Target": "Characters/Abigail",
-   "FromFile": "assets/abigail-friendly.png",
-   "When": {
-      "query: {{Hearts:Abigail}} + {{Hearts:Caroline}}": "20"
-   }
+  "Material": "Wood"
 }
 ```
 
-These operators are supported:
-
-symbol | operation
------- | ---------
-\+     | addition
-\-     | subtraction
-\*     | multiplication
-/      | division
-%      | modulus
-()     | grouping
-
-**Caution:** the query syntax allows some operations that aren't documented here. These are
-intended for future use, and may change without warning. Undocumented features shouldn't be used to
-avoid breaking changes.
+Players can edit it to configure your content pack.
 
 ## Randomization
 ### Overview
@@ -1120,7 +1159,8 @@ choose the same value (since same index = different value):
 </dd>
 </dl>
 
-## Dynamic tokens
+## Advanced
+### Dynamic tokens
 Dynamic tokens are defined in a `DynamicTokens` section of your `content.json` (see example below).
 Each block in this section defines the value for a token using these fields:
 
@@ -1145,7 +1185,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.18.0",
+   "Format": "1.19.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1169,78 +1209,141 @@ crop sprites depending on the weather:
 }
 ```
 
-## Player config
-You can let players configure your mod using a `config.json` file. Content Patcher will
-automatically create and load the file, and you can use the config values as
-[tokens & conditions](#introduction). Config fields are not case-sensitive.
+## Query expressions
+A _query expression_ is an arbitrary set of arithmetic and logical expressions which can be
+evaluated into a number, `true`/`false` value, or text.
 
-If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
-installed, they'll be able to configure the mod through an in-game options menu on the title
-screen.
-
-To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
-them (see below for an example).
-Available fields for each field:
-
-   field               | meaning
-   ------------------- | -------
-   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
-   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
-   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
-   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
-
-For example: this `content.json` defines a `Material` config field and uses it to change which
-patch is applied. See below for more details.
-
+### Usage
+Query expressions are evaluated using the `Query` token. It can be used as a placeholder or condition,
+and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.18.0",
-   "ConfigSchema": {
-      "Material": {
-         "AllowValues": "Wood, Metal",
-         "Default": "Wood",
-         "Description": "The material style for the billboard background."
-      }
-   },
+   "Format": "1.19.0",
    "Changes": [
-      // as a token
       {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_{{material}}.png"
-      },
-
-      // as a condition
-      {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_wood.png",
+         "Action": "EditData",
+         "Target": "Characters/Dialogue/Abigail",
+         "Entries": {
+            "Mon": "Hard to imagine you only arrived {{query: {{DaysPlayed}} / 28}} months ago!"
+         },
          "When": {
-            "Material": "Wood"
+            "query: {{Hearts:Abigail}} >= 10": true
          }
       }
    ]
 }
 ```
 
-When you run the game, a `config.json` file will appear automatically with text like this:
+You can use text values in expressions if they're single-quoted (including tokens which return text):
+```js
+"Query: '{{Season}}' = 'spring'": true
+```
+
+Expressions are case-insensitive, including when comparing text values.
+
+### Caveats
+Query expressions are very powerful, but you should be aware of the caveats:
+
+* Query expressions have **very little validation**. An invalid expression generally won't show
+  warnings ahead of time, it'll just fail when the patch is applied. Make sure to carefully test
+  any content pack features which use expressions, and check new or edited expressions with
+  [`patch parse`](author-guide.md#patch-parse).
+* Query expressions **evaluate the expanded text**. For example, if the player name contains a
+  single-quote like `D'Artagnan`, then this expression will fail due to a syntax error:
+  ```js
+  "Query: '{{PlayerName}}' LIKE 'D*'": true // 'D'Artagnan' LIKE 'D*'
+  ```
+* Query expressions may return obscure or technical error messages when invalid.
+* Query expressions may make your content pack harder to read and understand.
+
+Consider using non-expression features instead where possible. For example:
+
+<table>
+<tr>
+<th>With query expression</th>
+<th>Without query expression</th>
+</tr>
+<tr>
+<td>
 
 ```js
-{
-  "Material": "Wood"
+"When": {
+   "Query: {{Time}} >= 0600 AND {{Time}} <= 1200": true
 }
 ```
 
-Players can edit it to configure your content pack.
+</td>
+<td>
 
-## Mod-provided tokens
+```js
+"When": {
+   "Time": "{{Range: 0600, 1200}}"
+}
+```
+
+</td>
+</tr>
+</table>
+
+### Operators
+The supported operators are listed below.
+
+* Perform arithmetic on numeric values (like `5 + 5`):
+
+  operator | effect
+  -------- | ---------
+  \+       | addition
+  \-       | subtraction
+  \*       | multiplication
+  /        | division
+  %        | modulus
+  ()       | grouping
+
+* Compare two values (like `5 < 10`):
+
+  operator | effect
+  -------- | ---------
+  `<`      | less than
+  `<=`     | less than or equal
+  `>`      | more than
+  `>=`     | more than or equal
+  `=`      | equal
+  `<>`     | not equal
+
+* Combine expressions using logical operators:
+
+  operator | effect
+  -------- | ------
+  `AND`    | both expressions are true, like `{{Time}} >= 0600 AND {{Time}} <= 1200`.
+  `OR`     | one or both expressions are true, like `{{Time}} <= 1200 OR {{Time}} >= 2400`.
+  `NOT`    | negate the following expression, like `NOT {{Time}} > 1200`.
+
+* Group sub-expressions using `()` to avoid an ambiguous order of operations:
+
+  ```js
+  "{{Query}}: ({{Time}} >= 0600 AND {{Time}} <= 1200) OR {{Time}} > 2400": true
+  ```
+
+* Check whether a value is `IN` or `NOT IN` a list:
+
+  ```js
+  "Query: '{{spouse}}' IN ('Abigail', 'Leah', 'Maru')": true
+  ```
+
+* Check text against a prefix/postfix using the `LIKE` or `NOT LIKE` operator. The wildcard `*` can
+  only be at the start/end of the string, and it can only be used with quoted text (e.g. `LIKE '1'` will work but `LIKE 1` will return an error).
+
+  ```js
+  "Query: '{{spouse}}' LIKE 'Abig*'": true
+  ```
+
+### Mod-provided tokens
 SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
 ```js
 {
-   "Format": "1.18.0",
+   "Format": "1.19.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1260,7 +1363,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.18.0",
+     "Format": "1.19.0",
      "Changes": [
         {
            "Action": "EditData",

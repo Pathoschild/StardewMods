@@ -1,15 +1,15 @@
-using System;
-
 namespace ContentPatcher.Framework.Conditions
 {
-    /// <summary>Indicates a context update type.</summary>
-    [Flags]
+    /// <summary>A context update type.</summary>
     public enum ContextUpdateType
     {
-        /// <summary>The current player changed location.</summary>
-        OnLocationChange = UpdateRate.OnLocationChange,
+        /// <summary>All patches should be updated.</summary>
+        All = -1,
 
-        /// <summary>All update types.</summary>
-        All = UpdateRate.OnDayStart | UpdateRate.OnLocationChange
+        /// <summary>The in-game clock changed.</summary>
+        OnTimeChange = UpdateRate.OnTimeChange,
+
+        /// <summary>The current player changed location.</summary>
+        OnLocationChange = UpdateRate.OnLocationChange
     }
 }

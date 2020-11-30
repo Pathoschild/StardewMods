@@ -46,6 +46,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <summary>The implementation for <see cref="TryValidateValues"/>, if any.</summary>
         private ConventionDelegates.TryValidateValues TryValidateValuesImpl;
 
+        /// <summary>The implementation for <see cref="NormalizeValue"/>, if any.</summary>
+        private ConventionDelegates.NormalizeValue NormalizeValueImpl;
+
         /****
         ** State
         ****/
@@ -119,6 +122,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                     && TryMap<ConventionDelegates.HasBoundedRangeValues>(out error)
                     && TryMap<ConventionDelegates.TryValidateInput>(out error)
                     && TryMap<ConventionDelegates.TryValidateValues>(out error)
+                    && TryMap<ConventionDelegates.NormalizeValue>(out error)
 
                     // state
                     && TryMap<ConventionDelegates.IsReady>(out error)
@@ -217,6 +221,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
             error = null;
 
             return this.TryValidateValuesImpl?.Invoke(input, values, out error) ?? true;
+        }
+
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        public string NormalizeValue(string value)
+        {
+            return this.NormalizeValueImpl != null
+                ? this.NormalizeValueImpl(value)
+                : value;
         }
 
 

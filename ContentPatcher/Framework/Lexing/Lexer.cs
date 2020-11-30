@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -70,10 +71,74 @@ namespace ContentPatcher.Framework.Lexing
             return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: false);
         }
 
+        /// <summary>Split a raw comma-delimited string, using only commas at the top lexical level (i.e. <c>{{Random: a, b, c}}, d</c> gets split into two values).</summary>
+        /// <param name="str">The string to split.</param>
+        public IEnumerable<string> SplitLexically(string str)
+        {
+            static IEnumerable<string> RawSplit(Lexer lexer, string str)
+            {
+                // shortcut if no split needed
+                if (str == null || !str.Contains(","))
+                {
+                    yield return str;
+                    yield break;
+                }
+
+                // shortcut if no lexical parsing needed
+                if (!lexer.MightContainTokens(str))
+                {
+                    foreach (string substr in str.SplitValuesNonUnique())
+                        yield return substr;
+                    yield break;
+                }
+
+                // split lexically
+                StringBuilder cur = new StringBuilder(str.Length);
+                foreach (ILexToken bit in lexer.ParseBits(str, impliedBraces: false))
+                {
+                    // handle split character(s)
+                    if (bit is LexTokenLiteral literal && literal.Text.Contains(","))
+                    {
+                        string[] parts = literal.Text.Split(',');
+
+                        // yield up to comma
+                        cur.Append(parts[0]);
+                        yield return cur.ToString();
+                        cur.Clear();
+
+                        // yield inner values
+                        for (int i = 1; i < parts.Length - 1; i++)
+                            yield return parts[i];
+
+                        // start next string
+                        cur.Append(parts.Last());
+                    }
+
+                    // else continue accumulating string
+                    else
+                        cur.Append(bit.ToString());
+                }
+                yield return cur.ToString();
+            }
+
+            return RawSplit(this, str)
+                .Select(p => p?.Trim())
+                .Where(p => !string.IsNullOrEmpty(p));
+        }
+
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Perform a quick check to see if the string might contain tokens. This is only a preliminary check for optimizations and may have false positives.</summary>
+        /// <param name="rawText">The raw text to check.</param>
+        private bool MightContainTokens(string rawText)
+        {
+            return
+                !string.IsNullOrEmpty(rawText)
+                && rawText.Contains("{{");
+        }
+
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="input">The lexical character patterns to parse.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>

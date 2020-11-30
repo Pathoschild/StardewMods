@@ -34,7 +34,7 @@ namespace ContentPatcher.Framework
             if (value == null || other == null)
                 return value == other;
 
-            return value?.IndexOf(other, StringComparison.OrdinalIgnoreCase) >= 0;
+            return value.IndexOf(other, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         /// <summary>Get the set difference of two sequences, ignoring case.</summary>
@@ -78,16 +78,18 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get unique comma-separated values from a token string.</summary>
         /// <param name="tokenStr">The token string to parse.</param>
+        /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static InvariantHashSet SplitValuesUnique(this ITokenString tokenStr)
+        public static InvariantHashSet SplitValuesUnique(this ITokenString tokenStr, Func<string, string> normalize = null)
         {
-            return new InvariantHashSet(tokenStr.SplitValuesNonUnique());
+            return new InvariantHashSet(tokenStr.SplitValuesNonUnique(normalize));
         }
 
         /// <summary>Get comma-separated values from a token string.</summary>
         /// <param name="tokenStr">The token string to parse.</param>
+        /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString tokenStr)
+        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString tokenStr, Func<string, string> normalize = null)
         {
             if (tokenStr == null)
                 return Enumerable.Empty<string>();
@@ -95,20 +97,25 @@ namespace ContentPatcher.Framework
             if (!tokenStr.IsReady)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
-            return tokenStr.Value.SplitValuesNonUnique();
+            return tokenStr.Value.SplitValuesNonUnique(normalize);
         }
 
         /// <summary>Get comma-separated values from a string.</summary>
         /// <param name="str">The string to parse.</param>
         /// <param name="separator">The separator by which to split the value.</param>
-        public static IEnumerable<string> SplitValuesNonUnique(this string str, string separator = ",")
+        /// <param name="normalize">Normalize a value.</param>
+        public static IEnumerable<string> SplitValuesNonUnique(this string str, Func<string, string> normalize = null, string separator = ",")
         {
             if (string.IsNullOrWhiteSpace(str))
                 return Enumerable.Empty<string>();
 
             return str
                 .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => p.Trim());
+                .Select(p => normalize != null
+                    ? normalize(p.Trim())
+                    : p.Trim()
+                )
+                .Where(p => p != string.Empty);
         }
 
         /****

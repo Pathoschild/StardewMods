@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -28,10 +27,7 @@ namespace ContentPatcher.Framework.Migrations
             };
         }
 
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ContentConfig content, out string error)
         {
             if (!base.TryMigrate(content, out error))
@@ -40,7 +36,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.8 adds EditMap
-                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditMap)
+                if (this.GetAction(patch) == PatchType.EditMap)
                 {
                     error = this.GetNounPhraseError($"using action {nameof(PatchType.EditMap)}");
                     return false;

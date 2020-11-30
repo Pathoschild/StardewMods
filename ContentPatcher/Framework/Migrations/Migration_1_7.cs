@@ -28,10 +28,7 @@ namespace ContentPatcher.Framework.Migrations
             };
         }
 
-        /// <summary>Migrate a lexical token.</summary>
-        /// <param name="lexToken">The lexical token to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (!base.TryMigrate(lexToken, out error))
@@ -47,10 +44,7 @@ namespace ContentPatcher.Framework.Migrations
             return true;
         }
 
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ContentConfig content, out string error)
         {
             if (!base.TryMigrate(content, out error))

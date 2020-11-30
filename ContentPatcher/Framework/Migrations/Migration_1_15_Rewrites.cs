@@ -77,10 +77,7 @@ namespace ContentPatcher.Framework.Migrations
             this.LocalTokenNames = new Lazy<ISet<string>>(() => this.GetLocalTokenNames(content));
         }
 
-        /// <summary>Migrate a lexical token.</summary>
-        /// <param name="lexToken">The lexical token to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed (if any).</param>
-        /// <returns>Returns whether migration succeeded.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ILexToken lexToken, out string error)
         {
             if (!base.TryMigrate(lexToken, out error))
@@ -89,7 +86,7 @@ namespace ContentPatcher.Framework.Migrations
             // migrate token input arguments
             if (lexToken is LexTokenToken token && token.HasInputArgs())
             {
-                ConditionType? conditionType = this.GetConditionType(token.Name);
+                ConditionType? conditionType = this.GetEnum<ConditionType>(token.Name);
 
                 // 1.15 drops {{token:search}} form in favor of {{token |contains=search}}
                 if (this.LocalTokenNames.Value.Contains(token.Name) || (conditionType != null && this.TokensWhichDroppedSearchForm.Contains(conditionType.Value)))
@@ -125,15 +122,6 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the condition type for a token name, if any.</summary>
-        /// <param name="name">The token name.</param>
-        private ConditionType? GetConditionType(string name)
-        {
-            if (Enum.TryParse(name, ignoreCase: true, out ConditionType type))
-                return type;
-            return null;
-        }
-
         /// <summary>Get the dynamic and config token names defined by a content pack.</summary>
         /// <param name="content">The content pack to read.</param>
         private ISet<string> GetLocalTokenNames(ContentConfig content)
@@ -155,7 +143,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // exclude tokens that conflict with a built-in condition, which will be ignored
-            names.RemoveWhere(p => Enum.TryParse(p, ignoreCase: true, out ConditionType _));
+            names.RemoveWhere(p => this.GetEnum<ConditionType>(p) != null);
 
             return names;
         }
