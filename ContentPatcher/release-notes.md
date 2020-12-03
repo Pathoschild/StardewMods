@@ -15,8 +15,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added support for multiple `FromFile` values.
 * Added map overlay options for `"Action": "EditMap"` via the new `PatchMode` field.
 * Added `Time` token.
+* Custom mod tokens can now normalize raw values before comparison.
 * Fixed error when using a comma within a token in the `Target` field.
-* Custom mod tokens can now normalize raw values before they're compared with the token.
+* Fixed `{{DayEvent}}` translating festival names when not playing in English.
 
 ## 1.18.6
 Released 21 November 2020.

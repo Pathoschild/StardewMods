@@ -167,7 +167,7 @@ namespace ContentPatcher.Framework
 
             // date and weather
             yield return new ConditionTypeValueProvider(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
-            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
             yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
@@ -341,15 +341,14 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
-        /// <param name="contentHelper">The content helper from which to load festival data.</param>
-        private string GetDayEvent(IContentHelper contentHelper)
+        private string GetDayEvent()
         {
             // marriage
             if (SaveGame.loaded?.weddingToday ?? Game1.weddingToday)
                 return "wedding";
 
             // festival
-            IDictionary<string, string> festivalDates = contentHelper.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
+            IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
             if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
                 return festivalName;
 
