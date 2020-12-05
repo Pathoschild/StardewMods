@@ -9,15 +9,17 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.19
+Released 05 December 2020. See the [release highlights](https://www.patreon.com/posts/44708077).
+
 * Added [query expressions](docs/author-tokens-guide.md#query-expressions).
-* Added support for updating patches [on in-game clock change](docs/author-guide.md#update-rate).
-* Added support for multiple `FromFile` values.
-* Added map overlay options for `"Action": "EditMap"` via the new `PatchMode` field.
+* Added support for updating patches [on in-game time change](docs/author-guide.md#update-rate).
+* Added support for patches with multiple `FromFile` values.
+* Added map patch modes for `"Action": "EditMap"`.
 * Added `Time` token.
 * Custom mod tokens can now normalize raw values before comparison.
-* Fixed error when using a comma within a token in the `Target` field.
 * Fixed `{{DayEvent}}` translating festival names when not playing in English.
+* Fixed error when `FromFile` has tokens containing comma-delimited input arguments.
 
 ## 1.18.6
 Released 21 November 2020.
