@@ -37,8 +37,8 @@ grass starter | plant grass. | —
 hoe        | till dirt; clear weeds; dig artifact spots. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
 milk pail  | collect milk from farm animals. | —
-pickaxe    | break rocks; clear tilled dirt; clear dead crops. | break paths/flooring; break placed objects.
-scythe     | harvest crops, flowers, bushes, fruit trees, forage, tree seeds; clear weeds and dead crops. | collect machine output.
+pickaxe    | break rocks; clear tilled dirt; clear dead crops; harvest spawned mine items. | break paths/flooring; break placed objects.
+scythe     | harvest crops, flowers, bushes, fruit trees, forage, tree seeds, and spawned mine items; clear weeds and dead crops. | collect machine output.
 seeds      | plant seeds in dirt. | —
 shears     | shear wool from farm animals. | —
 slingshot  | — | shoot one projectile/tile/second in the aimed direction.
@@ -352,6 +352,7 @@ field                        | default | effect
 `ClearObjects`               | false   | Whether to clear placed objects.
 `BreakMineContainers`        | true    | Whether to break containers in the mine.
 `ClearWeeds`                 | true    | Whether to clear weeds.
+`HarvestMineSpawns`          | true    | Whether to harvest spawned mine items like quartz and frozen tears.
 
 </td>
 </tr>

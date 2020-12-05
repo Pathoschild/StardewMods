@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* The pickaxe now collects spawned mine items like quartz.
 * The scythe now harvests palm tree coconuts and tree seeds.
 * Fixed scythe harvesting spring onions based on 'harvest crops' option instead of 'harvest forage'.
 

@@ -62,8 +62,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // spawned forage
-            if (this.TryHarvestForage(tileObj, location, tile, player))
+            if (this.Config.HarvestForage && tileObj?.IsSpawnedObject == true && this.CheckTileAction(location, tile, player))
+            {
+                this.CancelAnimation(player, FarmerSprite.harvestItemDown, FarmerSprite.harvestItemLeft, FarmerSprite.harvestItemRight, FarmerSprite.harvestItemUp);
                 return true;
+            }
 
             // crop or indoor pot
             if (this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj, out IndoorPot pot))
@@ -205,37 +208,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
                     return true;
                 }
-            }
-
-            return false;
-        }
-
-        /// <summary>Try to harvest spawned forage.</summary>
-        /// <param name="forage">The forage object.</param>
-        /// <param name="location">The location being harvested.</param>
-        /// <param name="tile">The tile being harvested.</param>
-        /// <param name="player">The current player.</param>
-        /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestForage(SObject forage, GameLocation location, Vector2 tile, Farmer player)
-        {
-            if (this.Config.HarvestForage && forage?.IsSpawnedObject == true)
-            {
-                // pick up forage & cancel animation
-                if (this.CheckTileAction(location, tile, player))
-                {
-                    IReflectedField<int> animationID = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation");
-                    switch (animationID.GetValue())
-                    {
-                        case FarmerSprite.harvestItemDown:
-                        case FarmerSprite.harvestItemLeft:
-                        case FarmerSprite.harvestItemRight:
-                        case FarmerSprite.harvestItemUp:
-                            player.completelyStopAnimatingOrDoingAction();
-                            player.forceCanMove();
-                            break;
-                    }
-                }
-                return true;
             }
 
             return false;

@@ -340,5 +340,23 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             return false;
         }
+
+        /// <summary>Cancel the current player animation if it matches one of the given IDs.</summary>
+        /// <param name="player">The player to change.</param>
+        /// <param name="animationIds">The animation IDs to detect.</param>
+        protected void CancelAnimation(Farmer player, params int[] animationIds)
+        {
+            int animationId = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation").GetValue();
+            foreach (int id in animationIds)
+            {
+                if (id == animationId)
+                {
+                    player.completelyStopAnimatingOrDoingAction();
+                    player.forceCanMove();
+
+                    break;
+                }
+            }
+        }
     }
 }
