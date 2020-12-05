@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Moved `data.json` into standard `assets` folder.
 * Fixed crop fields shown for forage crops.
 * Fixed item lookups no longer showing iridium or stack prices.
 
