@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.Common.Input;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.RotateToolbar.Framework
@@ -9,10 +10,10 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         ** Accessors
         *********/
         /// <summary>The key which rotates the toolbar up (i.e. show the previous inventory row).</summary>
-        public SButton[] ShiftToPrevious { get; }
+        public KeyBinding ShiftToPrevious { get; }
 
         /// <summary>The key which rotates the toolbar up (i.e. show the next inventory row).</summary>
-        public SButton[] ShiftToNext { get; }
+        public KeyBinding ShiftToNext { get; }
 
 
 
@@ -22,7 +23,7 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="shiftToPrevious">The key which rotates the toolbar up (i.e. show the previous inventory row).</param>
         /// <param name="shiftToNext">The key which rotates the toolbar up (i.e. show the next inventory row).</param>
-        public ModConfigKeys(SButton[] shiftToPrevious, SButton[] shiftToNext)
+        public ModConfigKeys(KeyBinding shiftToPrevious, KeyBinding shiftToNext)
         {
             this.ShiftToPrevious = shiftToPrevious;
             this.ShiftToNext = shiftToNext;

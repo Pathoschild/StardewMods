@@ -42,11 +42,10 @@ namespace ContentPatcher.Framework
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
-        /// <summary>The tokens which are linked to the player's current location.</summary>
-        public IEnumerable<string> LocationTokens { get; } = new InvariantHashSet
-        {
-            ConditionType.LocationName.ToString(),
-            ConditionType.IsOutdoors.ToString()
+        /// <summary>The tokens which should always be used with a specific update rate.</summary>
+        public Tuple<UpdateRate, string, InvariantHashSet>[] TokensWithSpecialUpdateRates { get; } = {
+            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", new InvariantHashSet { ConditionType.LocationName.ToString(), ConditionType.IsOutdoors.ToString() }),
+            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", new InvariantHashSet { ConditionType.Time.ToString() })
         };
 
 
@@ -168,12 +167,13 @@ namespace ContentPatcher.Framework
 
             // date and weather
             yield return new ConditionTypeValueProvider(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
-            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(contentHelper), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, () => this.GetDayEvent(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
             yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
             yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new TimeValueProvider(NeedsBasicInfo);
 
             // player
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
@@ -341,15 +341,14 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
-        /// <param name="contentHelper">The content helper from which to load festival data.</param>
-        private string GetDayEvent(IContentHelper contentHelper)
+        private string GetDayEvent()
         {
             // marriage
             if (SaveGame.loaded?.weddingToday ?? Game1.weddingToday)
                 return "wedding";
 
             // festival
-            IDictionary<string, string> festivalDates = contentHelper.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", ContentSource.GameContent);
+            IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
             if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
                 return festivalName;
 

@@ -384,16 +384,23 @@ namespace ContentPatcher.Framework.Commands
                             output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
                     }
 
-                    // log possible token issues
+                    // log update rate issues
                     if (patch.Patch != null)
                     {
-                        // location tokens used with daily patch
-                        if (patch.Patch.UpdateRate == UpdateRate.OnDayStart)
+                        foreach (var pair in this.TokenManager.TokensWithSpecialUpdateRates)
                         {
-                            var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
-                            string[] locationTokensUsed = this.TokenManager.LocationTokens.Where(p => tokensUsed.Contains(p)).ToArray();
-                            if (locationTokensUsed.Any())
-                                output.Append($" // hint: patch uses location tokens, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{UpdateRate.OnLocationChange}\".");
+                            UpdateRate rate = pair.Item1;
+                            string label = pair.Item2;
+                            var tokenNames = pair.Item3;
+
+                            if (!patch.Patch.UpdateRate.HasFlag(rate))
+                            {
+                                var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+
+                                string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
+                                if (locationTokensUsed.Any())
+                                    output.Append($" // hint: patch uses {label}, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{rate}\".");
+                            }
                         }
                     }
 

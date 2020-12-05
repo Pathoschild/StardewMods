@@ -62,14 +62,17 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // spawned forage
-            if (this.TryHarvestForage(tileObj, location, tile, player))
+            if (this.Config.HarvestForage && tileObj?.IsSpawnedObject == true && this.CheckTileAction(location, tile, player))
+            {
+                this.CancelAnimation(player, FarmerSprite.harvestItemDown, FarmerSprite.harvestItemLeft, FarmerSprite.harvestItemRight, FarmerSprite.harvestItemUp);
                 return true;
+            }
 
             // crop or indoor pot
             if (this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj, out IndoorPot pot))
             {
                 // crop or spring onion (if an object like a scarecrow isn't placed on top of it)
-                if (!dirtCoveredByObj && this.TryHarvestCrop(dirt, location, tile, player, tool))
+                if (!dirtCoveredByObj && this.TryHarvestCrop(dirt, location, tile, player))
                     return true;
 
                 // indoor pot bush
@@ -81,12 +84,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.TryHarvestMachine(tileObj))
                 return true;
 
-            // fruit tree
-            if (this.TryHarvestFruitTree(tileFeature as FruitTree, location, tile))
-                return true;
-
             // grass
             if (this.TryHarvestGrass(tileFeature as Grass, location, tile, tool))
+                return true;
+
+            // tree
+            if (this.TryHarvestTree(tileFeature, location, tile))
                 return true;
 
             // weeds
@@ -121,6 +124,25 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="crop">The crop to check.</param>
         private bool ShouldHarvest(Crop crop)
         {
+            // flower
+            if (this.IsFlower(crop))
+                return this.Config.HarvestFlowers;
+
+            // forage
+            if (crop.whichForageCrop.Value > 0)
+                return this.Config.HarvestForage;
+
+            // crop
+            return this.Config.HarvestCrops;
+        }
+
+        /// <summary>Get whether a crop counts as a flower.</summary>
+        /// <param name="crop">The crop to check.</param>
+        private bool IsFlower(Crop crop)
+        {
+            if (crop == null)
+                return false;
+
             int cropId = crop.indexOfHarvest.Value;
             if (!this.IsFlowerCache.TryGetValue(cropId, out bool isFlower))
             {
@@ -135,9 +157,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 this.IsFlowerCache[cropId] = isFlower;
             }
 
-            return isFlower
-                ? this.Config.HarvestFlowers
-                : this.Config.HarvestCrops;
+            return isFlower;
         }
 
         /// <summary>Harvest a bush if it's ready.</summary>
@@ -166,9 +186,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The location being harvested.</param>
         /// <param name="tile">The tile being harvested.</param>
         /// <param name="player">The current player.</param>
-        /// <param name="tool">The tool selected by the player (if any).</param>
         /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestCrop(HoeDirt dirt, GameLocation location, Vector2 tile, Farmer player, Tool tool)
+        private bool TryHarvestCrop(HoeDirt dirt, GameLocation location, Vector2 tile, Farmer player)
         {
             if (dirt?.crop == null)
                 return false;
@@ -181,58 +200,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             // harvest
-            if (this.ShouldHarvest(dirt.crop) && dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
+            if (this.ShouldHarvest(dirt.crop))
             {
-                bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
-                dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>Try to harvest spawned forage.</summary>
-        /// <param name="forage">The forage object.</param>
-        /// <param name="location">The location being harvested.</param>
-        /// <param name="tile">The tile being harvested.</param>
-        /// <param name="player">The current player.</param>
-        /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestForage(SObject forage, GameLocation location, Vector2 tile, Farmer player)
-        {
-            if (this.Config.HarvestForage && forage?.IsSpawnedObject == true)
-            {
-                // pick up forage & cancel animation
-                if (this.CheckTileAction(location, tile, player))
+                if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
                 {
-                    IReflectedField<int> animationID = this.Reflection.GetField<int>(player.FarmerSprite, "currentSingleAnimation");
-                    switch (animationID.GetValue())
-                    {
-                        case FarmerSprite.harvestItemDown:
-                        case FarmerSprite.harvestItemLeft:
-                        case FarmerSprite.harvestItemRight:
-                        case FarmerSprite.harvestItemUp:
-                            player.completelyStopAnimatingOrDoingAction();
-                            player.forceCanMove();
-                            break;
-                    }
+                    bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
+                    dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
+                    return true;
                 }
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>Try to harvest a fruit tree.</summary>
-        /// <param name="tree">The fruit tree to harvest.</param>
-        /// <param name="location">The location being harvested.</param>
-        /// <param name="tile">The tile being harvested.</param>
-        /// <returns>Returns whether it was harvested.</returns>
-        private bool TryHarvestFruitTree(FruitTree tree, GameLocation location, Vector2 tile)
-        {
-            if (this.Config.HarvestFruitTrees && tree?.fruitsOnTree.Value > 0)
-            {
-                tree.performUseAction(tile, location);
-                return true;
             }
 
             return false;
@@ -276,6 +251,39 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 machine.checkForAction(Game1.player);
                 return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>Try to harvest a tree.</summary>
+        /// <param name="terrainFeature">The tree to harvest.</param>
+        /// <param name="location">The location being harvested.</param>
+        /// <param name="tile">The tile being harvested.</param>
+        /// <returns>Returns whether it was harvested.</returns>
+        private bool TryHarvestTree(TerrainFeature terrainFeature, GameLocation location, Vector2 tile)
+        {
+            switch (terrainFeature)
+            {
+                case FruitTree tree:
+                    if (this.Config.HarvestFruitTrees && tree.fruitsOnTree.Value > 0)
+                    {
+                        tree.performUseAction(tile, location);
+                        return true;
+                    }
+                    break;
+
+                case Tree tree:
+                    if (tree.hasSeed.Value && !tree.tapped.Value)
+                    {
+                        bool shouldHarvest = tree.treeType.Value == Tree.palmTree
+                            ? this.Config.HarvestFruitTrees
+                            : this.Config.HarvestTreeSeeds;
+
+                        if (shouldHarvest && tree.performUseAction(tile, location))
+                            return true;
+                    }
+                    break;
             }
 
             return false;

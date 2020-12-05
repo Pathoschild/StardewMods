@@ -20,12 +20,13 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         ** Public fields
         *********/
         /// <summary>Get a parsed representation of the configured controls.</summary>
+        /// <param name="input">The API for checking input state.</param>
         /// <param name="monitor">The monitor through which to log an error if a button value is invalid.</param>
-        public ModConfigKeys ParseControls(IMonitor monitor)
+        public ModConfigKeys ParseControls(IInputHelper input, IMonitor monitor)
         {
             return new ModConfigKeys(
-                shiftToPrevious: CommonHelper.ParseButtons(this.ShiftToPrevious, monitor, nameof(this.ShiftToPrevious)),
-                shiftToNext: CommonHelper.ParseButtons(this.ShiftToNext, monitor, nameof(this.ShiftToNext))
+                shiftToPrevious: CommonHelper.ParseButtons(this.ShiftToPrevious, input, monitor, nameof(this.ShiftToPrevious)),
+                shiftToNext: CommonHelper.ParseButtons(this.ShiftToNext, input, monitor, nameof(this.ShiftToNext))
             );
         }
     }

@@ -1,3 +1,4 @@
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens.Json;
@@ -41,5 +42,11 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
         bool TryMigrate(TokenizableJToken tokenStructure, out string error);
+
+        /// <summary>Migrate a condition.</summary>
+        /// <param name="condition">The condition to migrate.</param>
+        /// <param name="error">An error message which indicates why migration failed (if any).</param>
+        /// <returns>Returns whether migration succeeded.</returns>
+        bool TryMigrate(Condition condition, out string error);
     }
 }

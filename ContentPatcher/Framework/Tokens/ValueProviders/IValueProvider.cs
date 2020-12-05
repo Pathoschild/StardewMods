@@ -19,6 +19,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Whether the value provider requires positional input arguments, and does not provide values without it (see <see cref="AllowsPositionalInput"/>).</summary>
         bool RequiresPositionalInput { get; }
 
+        /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
+        bool BypassesContextValidation { get; }
+
 
         /*********
         ** Public methods
@@ -55,6 +58,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="max">The maximum value this token may return.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedRangeValues(IInputArguments input, out int min, out int max);
+
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        string NormalizeValue(string value);
 
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input arguments.</param>

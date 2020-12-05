@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -29,10 +28,7 @@ namespace ContentPatcher.Framework.Migrations
             };
         }
 
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ContentConfig content, out string error)
         {
             if (!base.TryMigrate(content, out error))
@@ -41,7 +37,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.10 allows 'FromFile' with 'EditData' patches
-                if (patch.FromFile != null && Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.EditData)
+                if (patch.FromFile != null && this.GetAction(patch) == PatchType.EditData)
                 {
                     error = this.GetNounPhraseError($"using {nameof(PatchConfig.FromFile)} with action {nameof(PatchType.EditData)}");
                     return false;

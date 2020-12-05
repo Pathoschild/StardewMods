@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Objects;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -74,8 +74,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // break mine containers
-            if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
-                return container.performToolAction(tool, location);
+            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
+                return true;
 
             // clear weeds
             if (this.Config.ClearWeeds && this.IsWeed(tileObj))
@@ -104,6 +104,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     applyTool(tool);
                     return true;
                 }
+            }
+
+            // harvest spawned mine objects
+            if (this.Config.HarvestMineSpawns && location is MineShaft && tileObj?.IsSpawnedObject == true && this.CheckTileAction(location, tile, player))
+            {
+                this.CancelAnimation(player, FarmerSprite.harvestItemDown, FarmerSprite.harvestItemLeft, FarmerSprite.harvestItemRight, FarmerSprite.harvestItemUp);
+                return true;
             }
 
             return false;

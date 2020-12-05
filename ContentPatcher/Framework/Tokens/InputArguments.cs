@@ -150,12 +150,12 @@ namespace ContentPatcher.Framework.Tokens
                 inputSeparator = ",";
 
             // parse arguments
-            positionalArgs = positionalSegment.SplitValuesNonUnique(inputSeparator).ToArray();
+            positionalArgs = positionalSegment.SplitValuesNonUnique(separator: inputSeparator).ToArray();
             namedArgs = new InvariantDictionary<IInputArgumentValue>();
             reservedArgs = new InvariantDictionary<IInputArgumentValue>();
             foreach (var arg in rawNamedArgs)
             {
-                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique(inputSeparator).ToArray());
+                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique(separator: inputSeparator).ToArray());
 
                 if (InputArguments.ReservedArgKeys.Contains(arg.Key))
                     reservedArgs[arg.Key] = values;
@@ -197,7 +197,7 @@ namespace ContentPatcher.Framework.Tokens
             // extract raw arguments
             rawPositional = positionalSegment;
             rawNamed = new InvariantDictionary<string>();
-            foreach (string arg in namedSegment.SplitValuesNonUnique("|"))
+            foreach (string arg in namedSegment.SplitValuesNonUnique(separator: "|"))
             {
                 string[] parts = arg.Split(new[] { '=' }, 2);
 

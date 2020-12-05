@@ -2,7 +2,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using SObject = StardewValley.Object;
@@ -60,8 +59,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(this.FakePickaxe, tile, player, location);
 
             // break mine containers
-            if (this.Config.BreakMineContainers && tileObj is BreakableContainer container)
-                return container.performToolAction(tool, location);
+            if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
+                return true;
 
             // attack monsters
             if (this.Config.AttackMonsters)

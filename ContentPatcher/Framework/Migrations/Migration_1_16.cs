@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -17,10 +16,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_16()
             : base(new SemanticVersion(1, 16, 0)) { }
 
-        /// <summary>Migrate a content pack.</summary>
-        /// <param name="content">The content pack data to migrate.</param>
-        /// <param name="error">An error message which indicates why migration failed.</param>
-        /// <returns>Returns whether the content pack was successfully migrated.</returns>
+        /// <inheritdoc />
         public override bool TryMigrate(ContentConfig content, out string error)
         {
             if (!base.TryMigrate(content, out error))
@@ -29,7 +25,7 @@ namespace ContentPatcher.Framework.Migrations
             foreach (PatchConfig patch in content.Changes)
             {
                 // 1.16 adds Include
-                if (Enum.TryParse(patch.Action, true, out PatchType action) && action == PatchType.Include)
+                if (this.GetAction(patch) == PatchType.Include)
                 {
                     error = this.GetNounPhraseError($"using action {nameof(PatchType.Include)}");
                     return false;

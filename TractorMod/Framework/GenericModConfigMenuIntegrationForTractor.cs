@@ -291,6 +291,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     get: config => config.StandardAttachments.PickAxe.BreakMineContainers,
                     set: (config, value) => config.StandardAttachments.PickAxe.BreakMineContainers = value
                 )
+                .AddCheckbox(
+                    label: "Harvest Mine Spawns",
+                    description: "Whether the pickaxe harvests spawned mine items like quartz and frozen tears.",
+                    get: config => config.StandardAttachments.PickAxe.HarvestMineSpawns,
+                    set: (config, value) => config.StandardAttachments.PickAxe.HarvestMineSpawns = value
+                )
 
                 // scythe
                 .AddLabel("Scythe Features")

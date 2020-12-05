@@ -34,6 +34,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public bool RequiresInput => this.Values.RequiresPositionalInput;
 
+        /// <inheritdoc />
+        public bool BypassesContextValidation => this.Values.BypassesContextValidation;
+
 
         /*********
         ** Public methods
@@ -147,6 +150,12 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
+        public virtual string NormalizeValue(string value)
+        {
+            return this.Values.NormalizeValue(value);
+        }
+
+        /// <inheritdoc />
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
             // get values
@@ -155,7 +164,7 @@ namespace ContentPatcher.Framework.Tokens
             // apply contains
             if (input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue rawSearch))
             {
-                InvariantHashSet search = new InvariantHashSet(rawSearch.Parsed);
+                InvariantHashSet search = new InvariantHashSet(rawSearch.Parsed.Select(this.NormalizeValue));
                 bool match = search.Any() && values.Any(value => search.Contains(value));
                 values = new[] { match.ToString() };
             }

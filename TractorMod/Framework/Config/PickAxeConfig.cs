@@ -26,5 +26,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Whether to clear weeds.</summary>
         public bool ClearWeeds { get; set; } = true;
+
+        /// <summary>Whether to harvest spawned items in the mines.</summary>
+        public bool HarvestMineSpawns { get; set; } = true;
     }
 }

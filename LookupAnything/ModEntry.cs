@@ -37,8 +37,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private Metadata Metadata;
 
-        /// <summary>The name of the file containing data for the <see cref="Metadata"/> field.</summary>
-        private readonly string DatabaseFileName = "data.json";
+        /// <summary>The relative path to the file containing data for the <see cref="Metadata"/> field.</summary>
+        private readonly string DatabaseFileName = "assets/data.json";
 
         /****
         ** Validation
@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.IsDataValid = this.Metadata.LooksValid();
             if (!this.IsDataValid)
             {
-                this.Monitor.Log("The data.json file seems to be missing or corrupt. Lookups will be disabled.", LogLevel.Error);
+                this.Monitor.Log($"The {this.DatabaseFileName} file seems to be missing or corrupt. Lookups will be disabled.", LogLevel.Error);
                 this.IsDataValid = false;
             }
 
@@ -212,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // disable lookups if metadata is invalid
             if (!this.IsDataValid)
             {
-                this.GameHelper.ShowErrorMessage("The mod doesn't seem to be installed correctly: its data.json file is missing or corrupt.");
+                this.GameHelper.ShowErrorMessage($"The mod doesn't seem to be installed correctly: its {this.DatabaseFileName} file is missing or corrupt.");
                 return;
             }
 
