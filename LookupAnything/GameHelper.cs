@@ -687,7 +687,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     yield return new RecipeModel(
                         key: null,
                         type: RecipeType.TailorInput,
-                        displayType: "Tailoring",
+                        displayType: I18n.RecipeType_Tailoring(),
                         ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
                         item: _ => this.GetTailoredItem(outputId),
                         mustBeLearned: false,

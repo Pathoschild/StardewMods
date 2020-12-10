@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "요리",
     "recipe-type.crafting": "제작",
+    "recipe-type.tailoring": "재단",
 
     // NPC descriptions
     "data.npc.pet.description": "당신의 믿음직한 반려동물이다.",

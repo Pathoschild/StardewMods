@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "Kochen",
     "recipe-type.crafting": "Herstellen",
+    "recipe-type.tailoring": "Schneiderei",
 
     // NPC descriptions
     "data.npc.pet.description": "Dein treues Haustier.",

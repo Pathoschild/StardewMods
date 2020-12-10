@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "Ételek",
     "recipe-type.crafting": "Barkácsolás",
+    "recipe-type.tailoring": "Szabászat",
 
     // NPC descriptions
     "data.npc.pet.description": "A hűséges háziállatod.",

@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             GiftTasteModel[] visibleEntries =
                 (
                     from entry in giftTastes[showTaste]
-                    orderby entry.Villager.Name ascending
+                    orderby entry.Villager.displayName ascending
                     where !onlyRevealed || entry.IsRevealed
                     select entry
                 )
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     GiftTasteModel entry = visibleEntries[i];
 
                     yield return new FormattedText(
-                        text: entry.Villager.Name + (i != last ? ", " : ""),
+                        text: entry.Villager.displayName + (i != last ? ", " : ""),
                         bold: highlightUnrevealed && !entry.IsRevealed
                     );
                 }

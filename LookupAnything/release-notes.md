@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some untranslated text.
+
 ## 1.28.3
 Released 05 December 2020.
 

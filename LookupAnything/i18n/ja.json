@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "料理",
     "recipe-type.crafting": "工作",
+    "recipe-type.tailoring": "仕立て",
 
     // NPC descriptions
     "data.npc.pet.description": "あなたの忠実なペット.",

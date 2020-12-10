@@ -367,6 +367,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("recipe-type.crafting");
         }
 
+        /// <summary>Get a translation equivalent to "Tailoring".</summary>
+        public static string RecipeType_Tailoring()
+        {
+            return I18n.GetByKey("recipe-type.tailoring");
+        }
+
         /// <summary>Get a translation equivalent to "Your loyal pet.".</summary>
         public static string Data_Npc_Pet_Description()
         {

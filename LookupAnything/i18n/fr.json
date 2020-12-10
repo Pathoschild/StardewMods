@@ -73,6 +73,7 @@
     // recipe types
     "recipe-type.cooking": "Cuisine",
     "recipe-type.crafting": "Artisanat",
+    "recipe-type.tailoring": "Couture",
 
     // NPC descriptions
     "data.npc.pet.description": "Vôtre loyal animal.",

@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "烹饪",
     "recipe-type.crafting": "制造",
+    "recipe-type.tailoring": "裁缝",
 
     // NPC descriptions
     "data.npc.pet.description": "对你忠心耿耿的宠物。",

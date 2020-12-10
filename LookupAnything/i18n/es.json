@@ -74,6 +74,7 @@
     // recipe types
     "recipe-type.cooking": "Cocina",
     "recipe-type.crafting": "Artesanía",
+    "recipe-type.tailoring": "Sastrería",
 
     // NPC descriptions
     "data.npc.pet.description": "Tu fiel mascota.",
