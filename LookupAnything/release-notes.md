@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed some untranslated text.
+* Improved translations. Thanks to spindensity (updated Chinese)!
 
 ## 1.28.3
 Released 05 December 2020.

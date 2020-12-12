@@ -21,9 +21,9 @@
     "generic.days": "{{count}}天",
     "generic.in-x-days": "在{{count}}天内",
     "generic.x-days-ago": "{{count}}天前",
-    "generic.price": "{{price}}G",
-    "generic.price-for-quality": "{{price}}G({{quality}})",
-    "generic.price-for-stack": "{{count}}个，总共价值{{price}}G",
+    "generic.price": "{{price}}金",
+    "generic.price-for-quality": "{{price}}金({{quality}})",
+    "generic.price-for-stack": "{{count}}个，总共价值{{price}}金",
 
     // types
     "type.building": "建筑",

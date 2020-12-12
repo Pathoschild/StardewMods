@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 {
                     priceStrings.Add(quality == ItemQuality.Normal
                         ? I18n.Generic_Price(price: saleValues[quality])
-                        : I18n.Generic_PriceForQuality(price: saleValues[quality], quality: quality)
+                        : I18n.Generic_PriceForQuality(price: saleValues[quality], quality: I18n.For(quality))
                     );
                 }
 
