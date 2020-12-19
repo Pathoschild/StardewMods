@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed error in 1.19.8 if a chest name/category has a very long sequence of numbers.
+
 ## 1.19.8
 Released 21 November 2020.
 

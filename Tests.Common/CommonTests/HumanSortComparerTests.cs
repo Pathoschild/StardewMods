@@ -40,6 +40,10 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         [TestCase("ABC1_", "ABC2_", -1)]
         [TestCase("ABC2_", "ABC10_", -1)]
         [TestCase("ABC002_", "ABC1_", -1)]
+
+        // long numeric sequences
+        [TestCase("AB9223372036854775807", "AB9223372036854775806", 1)] // long.MaxValue, long.MaxValue - 1
+        [TestCase("AB10000000000000000000", "AB5", -1)] // values higher than long.MaxValue are sorted alphabetically
         public void Compare(string a, string b, int expectedResult)
         {
             // arrange
