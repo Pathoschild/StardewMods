@@ -1,6 +1,13 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * new machines (bone mill, coffee maker, deconstructor, geode crusher, heavy tapper, hoppers, mini-shipping bin, ostrich incubator, solar panel, and statue of true perfection);
+  * default shipping bin being moveable;
+  * new chest and path types.
+
 ## 1.18.4
 Released 05 December 2020.
 
@@ -12,6 +19,13 @@ Released 21 November 2020.
 * When a mod adds custom machines but is missing something for Automate compatibility, Automate now shows a warning with instructions. This can be disabled in `config.json`.
 * Fixed constructed shipping bins triggering the main shipping bin's animation.
 * Fixed shipped items not added to existing stacks if possible.
+
+**Breaking changes for mod authors:**
+* If you added a `chest.Capacity` property for Automate, you should patch or override the new
+  `chest.GetActualCapacity()` method in 1.5 instead.
+* Automate previously stored automation options in the chest name using tags like
+  `|automate:no-store|`. These are now stored in the new `modData` field added in 1.5; existing
+  chests will be migrated automatically.
 
 ## 1.18.2
 Released 04 November 2020.

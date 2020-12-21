@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -24,11 +25,17 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Simplifies access to private code.</summary>
         protected readonly IReflectionHelper Reflection;
 
+        /// <summary>The screen ID for which the overlay was created, to support split-screen mode.</summary>
+        private readonly int ScreenId;
+
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
         /// <summary>Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</summary>
         private readonly Func<bool> KeepAliveCheck;
+
+        /// <summary>The UI mode to use for pixel coordinates in <see cref="ReceiveLeftClick"/> and <see cref="ReceiveCursorHover"/>, or <c>null</c> to use the current UI mode at the time the event is raised.</summary>
+        private readonly bool? AssumeUiMode;
 
 
         /*********
@@ -38,6 +45,7 @@ namespace Pathoschild.Stardew.Common.UI
         public virtual void Dispose()
         {
             this.Events.Display.Rendered -= this.OnRendered;
+            this.Events.Display.RenderedWorld -= this.OnRenderedWorld;
             this.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
             this.Events.Input.ButtonPressed -= this.OnButtonPressed;
             this.Events.Input.CursorMoved -= this.OnCursorMoved;
@@ -56,24 +64,38 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
-        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool> keepAlive = null)
+        /// <param name="assumeUiMode">The UI mode to use for pixel coordinates in <see cref="ReceiveLeftClick"/> and <see cref="ReceiveCursorHover"/>, or <c>null</c> to use the current UI mode at the time the event is raised.</param>
+        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool> keepAlive = null, bool? assumeUiMode = null)
         {
             this.Events = events;
             this.InputHelper = inputHelper;
             this.Reflection = reflection;
             this.KeepAliveCheck = keepAlive;
-            this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
+            this.LastViewport = new Rectangle(Game1.uiViewport.X, Game1.uiViewport.Y, Game1.uiViewport.Width, Game1.uiViewport.Height);
+            this.ScreenId = Context.ScreenId;
+            this.AssumeUiMode = assumeUiMode;
 
-            events.Display.Rendered += this.OnRendered;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            events.Input.ButtonPressed += this.OnButtonPressed;
-            events.Input.CursorMoved += this.OnCursorMoved;
-            events.Input.MouseWheelScrolled += this.OnMouseWheelScrolled;
+
+            if (this.IsMethodOverridden(nameof(this.DrawUi)))
+                events.Display.Rendered += this.OnRendered;
+            if (this.IsMethodOverridden(nameof(this.DrawWorld)))
+                events.Display.RenderedWorld += this.OnRenderedWorld;
+            if (this.IsMethodOverridden(nameof(this.ReceiveButtonPress)) || this.IsMethodOverridden(nameof(this.ReceiveLeftClick)))
+                events.Input.ButtonPressed += this.OnButtonPressed;
+            if (this.IsMethodOverridden(nameof(this.ReceiveCursorHover)))
+                events.Input.CursorMoved += this.OnCursorMoved;
+            if (this.IsMethodOverridden(nameof(this.ReceiveScrollWheelAction)))
+                events.Input.MouseWheelScrolled += this.OnMouseWheelScrolled;
         }
 
-        /// <summary>Draw the overlay to the screen.</summary>
+        /// <summary>Draw the overlay to the screen over the UI.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
-        protected virtual void Draw(SpriteBatch batch) { }
+        protected virtual void DrawUi(SpriteBatch batch) { }
+
+        /// <summary>Draw the overlay to the screen under the UI.</summary>
+        /// <param name="batch">The sprite batch being drawn.</param>
+        protected virtual void DrawWorld(SpriteBatch batch) { }
 
         /// <summary>The method invoked when the player left-clicks.</summary>
         /// <param name="x">The X-position of the cursor.</param>
@@ -110,9 +132,7 @@ namespace Pathoschild.Stardew.Common.UI
         }
 
         /// <summary>The method invoked when the player resizes the game window.</summary>
-        /// <param name="oldBounds">The previous game window bounds.</param>
-        /// <param name="newBounds">The new game window bounds.</param>
-        protected virtual void ReceiveGameWindowResized(Rectangle oldBounds, Rectangle newBounds) { }
+        protected virtual void ReceiveGameWindowResized() { }
 
         /// <summary>Draw the mouse cursor.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.IClickableMenu.drawMouse"/>.</remarks>
@@ -136,6 +156,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
                 object originMatrix = this.Reflection.GetField<object>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
@@ -143,13 +166,24 @@ namespace Pathoschild.Stardew.Common.UI
 
                 Game1.spriteBatch.End();
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, Matrix.CreateScale(nativeZoomLevel));
-                this.Draw(Game1.spriteBatch);
+                this.DrawUi(Game1.spriteBatch);
                 Game1.spriteBatch.End();
 
                 Game1.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, (Matrix)originMatrix);
             }
             else
-                this.Draw(Game1.spriteBatch);
+                this.DrawUi(Game1.spriteBatch);
+        }
+
+        /// <summary>The method called when the game finishes drawing components to the screen.</summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
+        {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
+            this.DrawWorld(e.SpriteBatch);
         }
 
         /// <summary>The method called once per event tick.</summary>
@@ -157,21 +191,26 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // detect end of life
-            if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
+            if (Context.ScreenId == this.ScreenId)
             {
-                this.Dispose();
-                return;
-            }
+                // detect end of life
+                if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
+                {
+                    this.Dispose();
+                    return;
+                }
 
-            // trigger window resize event
-            Rectangle newViewport = Game1.viewport;
-            if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
-            {
-                newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
-                this.ReceiveGameWindowResized(this.LastViewport, newViewport);
-                this.LastViewport = newViewport;
+                // trigger window resize event
+                Rectangle newViewport = Game1.uiViewport;
+                if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
+                {
+                    newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
+                    this.ReceiveGameWindowResized();
+                    this.LastViewport = newViewport;
+                }
             }
+            else if (!Context.HasScreenId(this.ScreenId))
+                this.Dispose();
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
@@ -179,18 +218,22 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
+            bool uiMode = this.AssumeUiMode ?? Game1.uiMode;
             bool handled;
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                float NativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                float nativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
                 handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                ? this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / NativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / NativeZoomLevel))
+                ? this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / nativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / nativeZoomLevel))
                 : this.ReceiveButtonPress(e.Button);
             }
             else
             {
                 handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                    ? this.ReceiveLeftClick(Game1.getMouseX(), Game1.getMouseY())
+                    ? this.ReceiveLeftClick(Game1.getMouseX(uiMode), Game1.getMouseY(uiMode))
                     : this.ReceiveButtonPress(e.Button);
             }
 
@@ -203,6 +246,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnMouseWheelScrolled(object sender, MouseWheelScrolledEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             bool scrollHandled = this.ReceiveScrollWheelAction(e.Delta);
             if (scrollHandled)
             {
@@ -225,24 +271,24 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnCursorMoved(object sender, CursorMovedEventArgs e)
         {
-            int x = (int)e.NewPosition.ScreenPixels.X;
-            int y = (int)e.NewPosition.ScreenPixels.Y;
+            if (Context.ScreenId != this.ScreenId)
+                return;
 
-            bool hoverHandled = this.ReceiveCursorHover(x, y);
+            bool uiMode = this.AssumeUiMode ?? Game1.uiMode;
+            bool hoverHandled = this.ReceiveCursorHover(Game1.getMouseX(uiMode), Game1.getMouseY(uiMode));
             if (hoverHandled)
-            {
-                MouseState cur = Game1.oldMouseState;
-                Game1.oldMouseState = new MouseState(
-                    x: x,
-                    y: y,
-                    scrollWheel: cur.ScrollWheelValue,
-                    leftButton: cur.LeftButton,
-                    middleButton: cur.MiddleButton,
-                    rightButton: cur.RightButton,
-                    xButton1: cur.XButton1,
-                    xButton2: cur.XButton2
-                );
-            }
+                Game1.InvalidateOldMouseMovement();
+        }
+
+        /// <summary>Get whether a method has been overridden by a subclass.</summary>
+        /// <param name="name">The method name.</param>
+        private bool IsMethodOverridden(string name)
+        {
+            MethodInfo method = this.GetType().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            if (method == null)
+                throw new InvalidOperationException($"Can't find method {this.GetType().FullName}.{name}.");
+
+            return method.DeclaringType != typeof(BaseOverlay);
         }
     }
 }

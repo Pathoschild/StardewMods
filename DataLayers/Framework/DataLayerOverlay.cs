@@ -177,7 +177,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             }
             else
             {
-                Rectangle visibleArea = this.GetVisibleTileArea(Game1.viewport);
+                Rectangle visibleArea = TileHelper.GetVisibleArea(expand: 1);
                 if (--this.UpdateCountdown <= 0 || (this.CurrentLayer.UpdateWhenVisibleTilesChange && visibleArea != this.LastVisibleArea))
                 {
                     GameLocation location = Game1.currentLocation;
@@ -227,9 +227,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return base.ReceiveLeftClick(x, y);
         }
 
-        /// <summary>Draw to the screen.</summary>
-        /// <param name="spriteBatch">The sprite batch to which to draw.</param>
-        protected override void Draw(SpriteBatch spriteBatch)
+        /// <summary>Draw the overlay to the screen under the UI.</summary>
+        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        protected override void DrawWorld(SpriteBatch spriteBatch)
         {
             if (!this.DrawOverlay())
                 return;
@@ -420,19 +420,6 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             }
 
             return tiles;
-        }
-
-        /// <summary>Get the tile area currently visible to the player.</summary>
-        /// <param name="viewport">The game viewport.</param>
-        private Rectangle GetVisibleTileArea(XRectangle viewport)
-        {
-            int tileSize = Game1.tileSize;
-            int left = viewport.X / tileSize;
-            int top = viewport.Y / tileSize;
-            int width = (int)Math.Ceiling(viewport.Width / (decimal)tileSize);
-            int height = (int)Math.Ceiling(viewport.Height / (decimal)tileSize);
-
-            return new Rectangle(left - 1, top - 1, width + 2, height + 2); // extend slightly off-screen to avoid tile pop-in at the edges
         }
     }
 }

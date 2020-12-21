@@ -139,6 +139,10 @@ You shouldn't change this file unless you know what you're doing.
         {
             "DisplayKey": "shop.willy",
             "BuysCategories": [ -4, -23, -21, -22 ]
+        },
+        {
+            "DisplayKey": "shop.volcano",
+            "BuysCategories": [ -12, -2, -15 ] // same as blacksmith
         }
     ],
 
@@ -634,7 +638,7 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "ID": "Villager::TrashBear",
-            "DescriptionKey": "data.npc.trashbear.description"
+            "DescriptionKey": "data.npc.trash-bear.description"
         }
     ],
 
@@ -917,6 +921,13 @@ You shouldn't change this file unless you know what you're doing.
             "DescriptionKey": "data.item.aquamarine-node.description"
         },
         {
+            "SpriteID": [ 843, 844 ], // volcano
+            "Context": "World",
+            "NameKey": "data.item.cinder-shard-node.name",
+            "TypeKey": "data.type.stone",
+            "DescriptionKey": "data.item.cinder-shard-node.description"
+        },
+        {
             "SpriteID": [ 2 /*skull cavern*/, 72 ],
             "Context": "World",
             "NameKey": "data.item.diamond-node.name",
@@ -972,10 +983,17 @@ You shouldn't change this file unless you know what you're doing.
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.topaz-node.description"
         },
+        {
+            "SpriteID": [ 819 ], // volcano
+            "Context": "World",
+            "NameKey": "data.item.omni-geode-node.name",
+            "TypeKey": "data.type.stone",
+            "DescriptionKey": "data.item.omni-geode-node.description"
+        },
 
         /* ores */
         {
-            "SpriteID": [ 751 ],
+            "SpriteID": [ 751, 849/* volcano */ ],
             "Context": "World",
             "NameKey": "data.item.copper-node.name",
             "TypeKey": "data.type.stone",
@@ -996,7 +1014,7 @@ You shouldn't change this file unless you know what you're doing.
             "DescriptionKey": "data.item.iridium-node.description"
         },
         {
-            "SpriteID": [ 290 ],
+            "SpriteID": [ 290, 850/* volcano */ ],
             "Context": "World",
             "NameKey": "data.item.iron-node.name",
             "TypeKey": "data.type.stone",
@@ -1012,12 +1030,34 @@ You shouldn't change this file unless you know what you're doing.
             "DescriptionKey": "data.item.colored-stone.description"
         },
         {
-            "SpriteID": [ 670 ],
+            "SpriteID": [ 668, 670, 845, 846, 847 ], // 845+ in volcano
             "Context": "World",
             "NameKey": "data.item.mine-stone.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.mine-stone.description"
         },
+
+        /* other stones */
+        {
+            "SpriteID": [ 818 ], // IslandNorth
+            "Context": "World",
+            "NameKey": "data.item.clay-stone.name",
+            "TypeKey": "data.type.stone",
+            "DescriptionKey": "data.item.clay-stone.description"
+        },
+        {
+            "SpriteID": [ 816, 817 ], // IslandNorth
+            "Context": "World",
+            "NameKey": "data.item.fossil-stone.name",
+            "TypeKey": "data.type.stone",
+            "DescriptionKey": "data.item.fossil-stone.description"
+        },
+        {
+            "SpriteID": [ 25 ], // IslandWest
+            "Context": "World",
+            "TypeKey": "data.type.stone"
+        },
+
 
         /****
         ** Mine containers (all identified as "Barrel" with no meaningful description)
@@ -1047,12 +1087,12 @@ You shouldn't change this file unless you know what you're doing.
     "AdventureGuildQuests": [
         {
             "KillListKey": "Slimes",
-            "Targets": [ "Green Slime", "Frost Jelly", "Sludge" ],
+            "Targets": [ "Green Slime", "Frost Jelly", "Sludge", "Tiger Slime" ],
             "RequiredKills": 1000
         },
         {
             "KillListKey": "VoidSpirits",
-            "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute" ],
+            "Targets": [ "Shadow Guy", "Shadow Shaman", "Shadow Brute", "Shadow Sniper" ],
             "RequiredKills": 150
         },
         {
@@ -1072,12 +1112,12 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "KillListKey": "Bats",
-            "Targets": [ "Bat", "Frost Bat", "Lava Bat" ],
+            "Targets": [ "Bat", "Frost Bat", "Lava Bat", "Iridium Bat" ],
             "RequiredKills": 200
         },
         {
             "KillListKey": "Duggies",
-            "Targets": [ "Duggy" ],
+            "Targets": [ "Duggy", "Magma Duggy" ],
             "RequiredKills": 30
         },
         {
@@ -1097,8 +1137,22 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "KillListKey": "Serpent",
-            "Targets": [ "Serpent" ],
+            "Targets": [ "Serpent", "Royal Serpent" ],
             "RequiredKills": 250
+        },
+        {
+            "KillListKey": "MagmaSprite",
+            "Targets": [ "Magma Sprite", "Magma Sparker" ],
+            "RequiredKills": 150
         }
-    ]
+    ],
+
+    /*********
+    ** Puzzle solutions
+    *********/
+    "PuzzleSolutions": {
+        // The sequence of flute block pitches for the IslandSouthEast mermaid music puzzle.
+        // Derived from IslandSouthEast.OnFlutePlayed.
+        "IslandMermaidFluteBlockSequence": [ 200, 1100, 900, 500, 700 ]
+    }
 }

@@ -114,8 +114,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <remarks>Derived from <see cref="SObject.checkForAction"/> and <see cref="Utility.findCloseFlower(GameLocation, Vector2)"/>.</remarks>
         private IEnumerable<Vector2> GetCoverage(GameLocation location, Vector2 origin)
         {
-            if (!(location is Farm))
-                yield break; // bee houses are hardcoded to only work on the farm
+            if (!location.IsOutdoors)
+                yield break; // bee houses are hardcoded to only work outdoors
 
             foreach (Vector2 relativeTile in this.RelativeRange)
                 yield return origin + relativeTile;

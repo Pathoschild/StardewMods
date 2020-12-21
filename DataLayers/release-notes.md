@@ -1,4 +1,10 @@
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * new fertilizer types;
+  * new sprinkler upgrades.
+
 ## 1.13
 Released 04 November 2020.
 

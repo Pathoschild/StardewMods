@@ -2,6 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * new chest types.
 * Fixed error in 1.19.8 if a chest name/category has a very long sequence of numbers.
 
 ## 1.19.8
@@ -10,7 +13,13 @@ Released 21 November 2020.
 * Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
 * You can now scroll dropdowns by clicking or tapping the arrow icons.
 * Fixed clicks on a scrolled dropdown selecting the wrong option.
+* Fixed shipping bin playing a chest _dwop_ sound instead of _ker-thunk_.
 * Improved translations. Thanks to PanPan-p (updated Turkish)!
+
+**Breaking changes for mod authors:**
+* Chests Anywhere previously saved chest options in the chest name using tags like `|ignore|`.
+  These are now stored in the new `modData` field added in 1.5; existing chests will be migrated
+  automatically.
 
 ## 1.19.7
 Released 04 November 2020.

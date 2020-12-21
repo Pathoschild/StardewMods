@@ -107,12 +107,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
                 // furniture
                 foreach (int id in this.TryLoad<int, string>("Data\\Furniture").Keys)
-                {
-                    if (id == 1466 || id == 1468 || id == 1680)
-                        yield return this.TryCreate(ItemType.Furniture, id, p => new TV(p.ID, Vector2.Zero));
-                    else
-                        yield return this.TryCreate(ItemType.Furniture, id, p => new Furniture(p.ID, Vector2.Zero));
-                }
+                    yield return this.TryCreate(ItemType.Furniture, id, p => Furniture.GetFurnitureInstance(p.ID));
 
                 // craftables
                 foreach (int id in Game1.bigCraftablesInformation.Keys)

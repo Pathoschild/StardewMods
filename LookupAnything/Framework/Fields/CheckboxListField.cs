@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The checkbox values to display.</summary>
         protected KeyValuePair<IFormattedText[], bool>[] Checkboxes;
 
+        /// <summary>The intro text to show before the checkboxes.</summary>
+        protected IFormattedText[] Intro;
+
 
         /*********
         ** Public methods
@@ -52,6 +55,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             float lineHeight = Math.Max(checkboxSize, Game1.smallFont.MeasureString("ABC").Y);
             float checkboxOffset = (lineHeight - checkboxSize) / 2;
 
+            if (this.Intro != null)
+                topOffset += spriteBatch.DrawTextBlock(font, this.Intro, position, wrapWidth).Y;
+
             foreach (KeyValuePair<IFormattedText[], bool> entry in this.Checkboxes)
             {
                 // draw icon
@@ -75,6 +81,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             return new Vector2(wrapWidth, topOffset);
+        }
+
+        /// <summary>Add intro text before the checkboxes.</summary>
+        /// <param name="text">The text to show before the checkboxes.</param>
+        public CheckboxListField AddIntro(params IFormattedText[] text)
+        {
+            this.Intro = text;
+            return this;
+        }
+
+        /// <summary>Add intro text before the checkboxes.</summary>
+        /// <param name="text">The text to show before the checkboxes.</param>
+        public CheckboxListField AddIntro(params string[] text)
+        {
+            return this.AddIntro(
+                text.Select(p => (IFormattedText)new FormattedText(p)).ToArray()
+            );
         }
 
         /// <summary>Build a checkbox entry.</summary>

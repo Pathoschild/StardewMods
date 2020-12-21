@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
@@ -29,9 +31,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The millisecond game times elapsed when requested cooldowns started.</summary>
         private readonly IDictionary<string, long> CooldownStartTimes = new Dictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-
-        /// <summary>Whether the Deep Woods mod is installed.</summary>
-        private readonly bool HasDeepWoods;
 
         /// <summary>Whether the Farm Type Manager mod is installed.</summary>
         private readonly bool HasFarmTypeManager;
@@ -85,7 +84,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Reflection = reflection;
             this.RateLimit = rateLimit;
 
-            this.HasDeepWoods = modRegistry.IsLoaded("maxvollmer.deepwoodsmod");
             this.HasFarmTypeManager = modRegistry.IsLoaded("Esca.FarmTypeManager");
         }
 
@@ -198,27 +196,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="location">The location to search.</param>
         private IEnumerable<ResourceClump> GetNormalResourceClumps(GameLocation location)
         {
+            IEnumerable<ResourceClump> clumps = location.resourceClumps;
+
             switch (location)
             {
-                case Farm farm:
-                    return farm.resourceClumps;
+                case Forest forest when forest.log != null:
+                    clumps = clumps.Concat(new[] { forest.log });
+                    break;
 
-                case Forest forest:
-                    return forest.log != null
-                        ? new[] { forest.log }
-                        : new ResourceClump[0];
-
-                case Woods woods:
-                    return woods.stumps;
-
-                case MineShaft mineshaft:
-                    return mineshaft.resourceClumps;
-
-                default:
-                    if (this.HasDeepWoods && (location.Name == "DeepWoods" || location.Name.StartsWith("DeepWoods_")))
-                        return this.Reflection.GetField<IList<ResourceClump>>(location, "resourceClumps", required: false)?.GetValue() ?? new ResourceClump[0];
-                    return new ResourceClump[0];
+                case Woods woods when woods.stumps.Any():
+                    clumps = clumps.Concat(woods.stumps);
+                    break;
             }
+
+            return clumps;
         }
 
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
@@ -337,6 +328,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             if (tileObj is BreakableContainer)
                 return tileObj.performToolAction(tool, location);
+
+            if (tileObj?.GetItemType() == ItemType.Object && tileObj.Name == "SupplyCrate" && !(tileObj is Chest) && tileObj.performToolAction(tool, location))
+            {
+                tileObj.performRemoveAction(tile, location);
+                Game1.currentLocation.Objects.Remove(tile);
+                return true;
+            }
 
             return false;
         }

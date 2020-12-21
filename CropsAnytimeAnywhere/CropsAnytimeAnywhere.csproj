@@ -4,6 +4,8 @@
     <Version>1.2.1</Version>
     <RootNamespace>Pathoschild.Stardew.CropsAnytimeAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
+
+    <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
   <ItemGroup>

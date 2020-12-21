@@ -10,6 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * added `KeyToTheTown` value to `HasWalletItem` token.
 * Fixed patch not applied correctly if `FromFile` or `Target` contains a single value with a trailing comma.
 
 ## 1.19

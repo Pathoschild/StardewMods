@@ -34,7 +34,7 @@ hold item  | default effects | optional effects (disabled by default)
 axe        | clear debris; clear dead crops; cut giant crops. | chop down bushes and trees; clear live crops.
 fertilizer | fertilize crops and trees. | —
 grass starter | plant grass. | —
-hoe        | till dirt; clear weeds; dig artifact spots. | —
+hoe        | till dirt; clear weeds; dig artifact spots and ginger. | —
 melee weapon | clear dead crops; break mine containers. | attack monsters.
 milk pail  | collect milk from farm animals. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops; harvest spawned mine items. | break paths/flooring; break placed objects.
@@ -292,6 +292,7 @@ field              | default | effect
 `TillDirt`         | true    | Whether to till empty dirt.
 `ClearWeeds`       | true    | Whether to clear weeds.
 `DigArtifactSpots` | true    | Whether to dig artifact spots.
+`HarvestGinger`    | true    | Whether to harvest spawned ginger.
 
 </td>
 </tr>

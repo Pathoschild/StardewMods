@@ -13,7 +13,9 @@
         "7": "Crystal Path",
         "8": "Cobblestone Path",
         "9": "Stepping Stone Path",
-        "10": "Brick Floor"
+        "10": "Brick Floor",
+        "11": "Rustic Plank Floor",
+        "12": "Stone Walkway Floor"
     },
 
     /**

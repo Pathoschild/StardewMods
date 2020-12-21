@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Items.ItemData;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -111,15 +110,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Construct an instance.</summary>
         /// <param name="recipe">The recipe to parse.</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        public RecipeModel(CraftingRecipe recipe, IReflectionHelper reflectionHelper)
+        public RecipeModel(CraftingRecipe recipe)
             : this(
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
-                ingredients: reflectionHelper
-                    .GetField<Dictionary<int, int>>(recipe, "recipeList").GetValue()
-                    .Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                 item: item => recipe.createItem(),
                 mustBeLearned: true,
                 minOutput: recipe.numberProducedPerCraft,
@@ -127,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 isForMachine: obj => false
             )
         {
-            this.OutputItemIndex = reflectionHelper.GetField<List<int>>(recipe, "itemToProduce").GetValue()[0];
+            this.OutputItemIndex = recipe.itemToProduce[0];
             this.OutputItemType = this.GetItemType(recipe, this.OutputItemIndex.Value);
         }
 

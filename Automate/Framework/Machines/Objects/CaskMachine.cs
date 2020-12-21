@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -11,21 +10,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     /// <remarks>Derived from <see cref="Cask"/>.</remarks>
     internal class CaskMachine : GenericObjectMachine<Cask>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The items which can be aged in a cask with their aging rates.</summary>
-        private readonly IDictionary<int, float> AgingRates = new Dictionary<int, float>
-        {
-            [424] = 4, // cheese
-            [426] = 4, // goat cheese
-            [459] = 2, // mead
-            [303] = 1.66f, // pale ale
-            [346] = 2, // beer
-            [348] = 1 // wine
-        };
-
-
         /*********
         ** Public methods
         *********/
@@ -66,7 +50,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             foreach (ITrackedStack consumable in input.GetItems().Where(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < SObject.bestQuality))
             {
-                if (!this.AgingRates.TryGetValue(consumable.Sample.ParentSheetIndex, out float agingRate))
+                float agingRate = cask.GetAgingMultiplierForItem(consumable.Sample);
+                if (agingRate <= 0)
                     continue;
 
                 SObject ingredient = (SObject)consumable.Take(1);
@@ -74,12 +59,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 cask.heldObject.Value = ingredient;
                 cask.MinutesUntilReady = 999999;
                 cask.agingRate.Value = agingRate;
-                cask.daysToMature.Value = ingredient.Quality switch
-                {
-                    SObject.medQuality => 42,
-                    SObject.highQuality => 28,
-                    _ => 56
-                };
+                cask.daysToMature.Value = cask.GetDaysForQuality(ingredient.Quality);
 
                 return true;
             }

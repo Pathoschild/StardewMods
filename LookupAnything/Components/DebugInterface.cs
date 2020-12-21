@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 // show 'debug enabled' warning + cursor position
                 {
                     string metadata = $"{this.WarningText} Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
-                    this.GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.viewport.Width);
+                    this.GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.uiViewport.Width);
                 }
 
                 // show cursor pixel
@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 {
                     ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, hasCursor: Game1.wasMouseVisibleThisFrame);
                     if (subject != null)
-                        this.GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.viewport.Width / 4f);
+                        this.GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.uiViewport.Width / 4f);
                 }
             }, this.OnDrawError);
         }
