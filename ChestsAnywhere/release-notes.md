@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode.
 * Fixed error in 1.19.8 if a chest name/category has a very long sequence of numbers.
 
 ## 1.19.8

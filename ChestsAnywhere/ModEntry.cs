@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -33,15 +34,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Encapsulates logic for finding chests.</summary>
         private ChestFactory ChestFactory;
 
-
-        /****
-        ** State
-        ****/
         /// <summary>The selected in-game inventory.</summary>
-        private IList<Item> SelectedInventory;
+        private readonly PerScreen<IList<Item>> SelectedInventory = new PerScreen<IList<Item>>();
 
         /// <summary>The overlay for the current menu which which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
-        private IStorageOverlay CurrentOverlay;
+        private readonly PerScreen<IStorageOverlay> CurrentOverlay = new PerScreen<IStorageOverlay>();
 
 
         /*********
@@ -169,14 +166,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             IClickableMenu menu = Game1.activeClickableMenu;
 
             // already matches menu
-            if (this.CurrentOverlay?.ForMenuInstance == menu)
+            if (this.CurrentOverlay.Value?.ForMenuInstance == menu)
                 return;
 
             // remove old overlay
-            if (this.CurrentOverlay != null)
+            if (this.CurrentOverlay.Value != null)
             {
-                this.CurrentOverlay?.Dispose();
-                this.CurrentOverlay = null;
+                this.CurrentOverlay.Value?.Dispose();
+                this.CurrentOverlay.Value = null;
             }
 
             // get open chest
@@ -204,19 +201,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             switch (menu)
             {
                 case ItemGrabMenu chestMenu:
-                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
 
                 case ShopMenu shopMenu:
-                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
             }
-            this.CurrentOverlay.OnChestSelected += selected =>
+
+            // hook new overlay
+            this.CurrentOverlay.Value.OnChestSelected += selected =>
             {
-                this.SelectedInventory = selected.Container.Inventory;
+                this.SelectedInventory.Value = selected.Container.Inventory;
                 Game1.activeClickableMenu = selected.OpenMenu();
             };
-            this.CurrentOverlay.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
+            this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
         }
 
         /// <summary>Open the menu UI.</summary>
@@ -236,7 +235,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest =
-                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory))
+                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory.Value))
                 ?? chests.FirstOrDefault(p => p.Location == Game1.currentLocation)
                 ?? chests.FirstOrDefault();
 

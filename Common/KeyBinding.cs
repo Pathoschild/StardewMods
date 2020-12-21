@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.Common.Input
@@ -16,7 +17,7 @@ namespace Pathoschild.Stardew.Common.Input
         private readonly Func<SButton, SButtonState> GetButtonState;
 
         /// <summary>The last game tick when <see cref="JustPressedUnique"/> was called.</summary>
-        private int LastUniqueTick;
+        private readonly PerScreen<int> LastUniqueTick = new PerScreen<int>();
 
         /// <summary>Whether any keys are bound.</summary>
         private readonly bool HasAnyImpl;
@@ -134,9 +135,9 @@ namespace Pathoschild.Stardew.Common.Input
         /// <summary>Get whether the input binding was just pressed this tick, *and* this method hasn't been called during the same tick yet. This method is only useful if you check input every tick, since otherwise you may miss the tick where it's pressed; otherwise you should cache the result of <see cref="IsDown"/> and compare.</summary>
         public bool JustPressedUnique()
         {
-            if (this.LastUniqueTick == Game1.ticks)
+            if (this.LastUniqueTick.Value == Game1.ticks)
                 return false;
-            this.LastUniqueTick = Game1.ticks;
+            this.LastUniqueTick.Value = Game1.ticks;
 
             return this.GetState() == SButtonState.Pressed;
         }

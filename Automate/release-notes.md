@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for Stardew Valley 1.5, including...
+  * split-screen mode;
   * new path types.
 
 ## 1.18.4

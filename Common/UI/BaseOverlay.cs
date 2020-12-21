@@ -24,6 +24,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>Simplifies access to private code.</summary>
         protected readonly IReflectionHelper Reflection;
 
+        /// <summary>The screen ID for which the overlay was created, to support split-screen mode.</summary>
+        private readonly int ScreenId;
+
         /// <summary>The last viewport bounds.</summary>
         private Rectangle LastViewport;
 
@@ -63,6 +66,7 @@ namespace Pathoschild.Stardew.Common.UI
             this.Reflection = reflection;
             this.KeepAliveCheck = keepAlive;
             this.LastViewport = new Rectangle(Game1.viewport.X, Game1.viewport.Y, Game1.viewport.Width, Game1.viewport.Height);
+            this.ScreenId = Context.ScreenId;
 
             events.Display.Rendered += this.OnRendered;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -136,6 +140,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnRendered(object sender, RenderedEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
                 object originMatrix = this.Reflection.GetField<object>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
@@ -157,21 +164,26 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // detect end of life
-            if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
+            if (Context.ScreenId == this.ScreenId)
             {
-                this.Dispose();
-                return;
-            }
+                // detect end of life
+                if (this.KeepAliveCheck != null && !this.KeepAliveCheck())
+                {
+                    this.Dispose();
+                    return;
+                }
 
-            // trigger window resize event
-            Rectangle newViewport = Game1.viewport;
-            if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
-            {
-                newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
-                this.ReceiveGameWindowResized(this.LastViewport, newViewport);
-                this.LastViewport = newViewport;
+                // trigger window resize event
+                Rectangle newViewport = Game1.viewport;
+                if (this.LastViewport.Width != newViewport.Width || this.LastViewport.Height != newViewport.Height)
+                {
+                    newViewport = new Rectangle(newViewport.X, newViewport.Y, newViewport.Width, newViewport.Height);
+                    this.ReceiveGameWindowResized(this.LastViewport, newViewport);
+                    this.LastViewport = newViewport;
+                }
             }
+            else if (!Context.HasScreenId(this.ScreenId))
+                this.Dispose();
         }
 
         /// <summary>The method invoked when the player presses a key.</summary>
@@ -179,6 +191,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             bool handled;
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
@@ -203,6 +218,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnMouseWheelScrolled(object sender, MouseWheelScrolledEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             bool scrollHandled = this.ReceiveScrollWheelAction(e.Delta);
             if (scrollHandled)
             {
@@ -225,6 +243,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="e">The event arguments.</param>
         private void OnCursorMoved(object sender, CursorMovedEventArgs e)
         {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
             int x = (int)e.NewPosition.ScreenPixels.X;
             int y = (int)e.NewPosition.ScreenPixels.Y;
 

@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode.
+
 ## 1.12.3
 Released 21 November 2020.
 

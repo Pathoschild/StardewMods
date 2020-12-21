@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.DataHelper = dataHelper;
             this.Farm = farm;
             this.ShippingBin = farm.getShippingBin(Game1.player);
-            this.IsDataEditable = Context.IsMainPlayer;
+            this.IsDataEditable = Context.IsOnHostComputer;
             this.Data = this.IsDataEditable
                 ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
                 : new ContainerData(defaultInternalName: null);
