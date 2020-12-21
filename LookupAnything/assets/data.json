@@ -1100,5 +1100,14 @@ You shouldn't change this file unless you know what you're doing.
             "Targets": [ "Serpent" ],
             "RequiredKills": 250
         }
-    ]
+    ],
+
+    /*********
+    ** Puzzle solutions
+    *********/
+    "PuzzleSolutions": {
+        // The sequence of flute block pitches for the IslandSouthEast mermaid music puzzle.
+        // Derived from IslandSouthEast.OnFlutePlayed.
+        "IslandMermaidFluteBlockSequence": [ 200, 1100, 900, 500, 700 ]
+    }
 }

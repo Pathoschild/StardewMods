@@ -60,6 +60,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
             if (this.IsCrystalCavePuzzle(location, tile, out int? crystalId))
                 return new CrystalCavePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode, crystalId);
 
+            if (this.GetIsIslandMermaidPuzzle(location, tile))
+                return new IslandMermaidPuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode);
+
             if (this.IsIslandShrinePuzzle(location, tile))
                 return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode);
 
@@ -100,6 +103,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
             }
 
             return false;
+        }
+
+        /// <summary>Get whether the tile is part of the <see cref="IslandSouthEast"/> mermaid music puzzle.</summary>
+        /// <param name="location">The game location.</param>
+        /// <param name="tile">The tile position.</param>
+        /// <remarks>See game logic in <see cref="IslandSouthEast.draw"/> and <see cref="IslandSouthEast.OnFlutePlayed"/>.</remarks>
+        private bool GetIsIslandMermaidPuzzle(GameLocation location, Vector2 tile)
+        {
+            return
+                location is IslandSouthEast island
+                && island.MermaidIsHere()
+                && tile.X >= 32 && tile.X <= 33
+                && tile.Y >= 31 && tile.Y <= 33;
         }
 
         /// <summary>Get whether the tile is part of the <see cref="IslandShrine"/> puzzle.</summary>

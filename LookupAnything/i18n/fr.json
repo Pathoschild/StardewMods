@@ -570,6 +570,14 @@
 
 
     /*********
+    ** Tile lookups > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Puzzle de la sirène des Îles",
+    "puzzle.island-mermaid.solution.intro": "Utilisez des blocs de flûte pour jouer la chanson de la sirène du marché nocturne. Valeurs de hauteur (vous pouvez rechercher un bloc de flûte pour voir sa hauteur):",
+
+
+    /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels

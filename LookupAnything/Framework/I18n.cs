@@ -2385,6 +2385,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("puzzle.island-crystal-cave.solution.activated");
         }
 
+        /// <summary>Get a translation equivalent to "Island Mermaid Puzzle".</summary>
+        public static string Puzzle_IslandMermaid_Title()
+        {
+            return I18n.GetByKey("puzzle.island-mermaid.title");
+        }
+
+        /// <summary>Get a translation equivalent to "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):".</summary>
+        public static string Puzzle_IslandMermaid_Solution_Intro()
+        {
+            return I18n.GetByKey("puzzle.island-mermaid.solution.intro");
+        }
+
         /// <summary>Get a translation equivalent to "Island Shrine Puzzle".</summary>
         public static string Puzzle_IslandShrine_Title()
         {

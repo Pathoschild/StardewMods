@@ -577,6 +577,15 @@
 
 
     /*********
+    ** Tile lookups > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    // TODO
+    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
+    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+
+
+    /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
