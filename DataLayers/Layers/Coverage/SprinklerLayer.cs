@@ -26,11 +26,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>The border color for the sprinkler under the cursor.</summary>
         private readonly Color SelectedColor = Color.Blue;
 
-        /// <summary>The maximum number of tiles from the center a sprinkler can protect.</summary>
-        private readonly int MaxRadius;
-
-        /// <summary>The static sprinkler tiles centered on (0, 0), indexed by sprinkler ID.</summary>
-        private readonly IDictionary<int, Vector2[]> StaticTilesBySprinklerID;
+        /// <summary>The maximum number of tiles outside the visible screen area to search for sprinklers.</summary>
+        private readonly int SearchRadius;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
@@ -55,15 +52,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 this.Dry = new LegendEntry(I18n.Keys.Sprinklers_DryCrops, Color.Red)
             };
 
-            // get static sprinkler coverage
-            this.StaticTilesBySprinklerID = this.GetStaticSprinklerTiles(mods);
-
-            // get max sprinkler radius
-            this.MaxRadius = this.StaticTilesBySprinklerID.Max(p => this.GetMaxRadius(p.Value));
+            // get search radius
+            this.SearchRadius = 10;
             if (mods.BetterSprinklers.IsLoaded)
-                this.MaxRadius = Math.Max(this.MaxRadius, mods.BetterSprinklers.MaxRadius);
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.BetterSprinklers.MaxRadius);
             if (mods.LineSprinklers.IsLoaded)
-                this.MaxRadius = Math.Max(this.MaxRadius, mods.LineSprinklers.MaxRadius);
+                this.SearchRadius = Math.Max(this.SearchRadius, mods.LineSprinklers.MaxRadius);
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -74,16 +68,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             // get coverage
-            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCurrentSprinklerTiles(this.StaticTilesBySprinklerID);
+            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCustomSprinklerTiles();
 
             // get sprinklers
-            Vector2[] searchTiles = visibleArea.Expand(this.MaxRadius).GetTiles().ToArray();
+            Vector2[] searchTiles = visibleArea.Expand(this.SearchRadius).GetTiles().ToArray();
             SObject[] sprinklers =
                 (
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
-                    where coverageBySprinklerID.ContainsKey(sprinkler.ParentSheetIndex)
+                    where sprinkler.IsSprinkler()
                     select sprinkler
                 )
                 .ToArray();
@@ -134,99 +128,52 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             return terrain is HoeDirt dirt && dirt.crop != null;
         }
 
-        /// <summary>Get the relative sprinkler tile coverage, including any mod customizations which don't change after launch.</summary>
-        /// <param name="mods">Handles access to the supported mod integrations.</param>
-        private IDictionary<int, Vector2[]> GetStaticSprinklerTiles(ModIntegrations mods)
-        {
-            IDictionary<int, Vector2[]> tiles = new Dictionary<int, Vector2[]>();
-
-            // vanilla coverage
-            {
-                Vector2 center = Vector2.Zero;
-
-                // basic sprinkler
-                tiles[599] = Utility.getAdjacentTileLocationsArray(center).Concat(new[] { center }).ToArray();
-
-                // quality sprinkler
-                tiles[621] = Utility.getSurroundingTileLocationsArray(center).Concat(new[] { center }).ToArray();
-
-                // iridium sprinkler
-                List<Vector2> iridiumTiles = new List<Vector2>(4 * 4);
-                for (int x = -2; x <= 2; x++)
-                {
-                    for (int y = -2; y <= 2; y++)
-                        iridiumTiles.Add(new Vector2(x, y));
-                }
-                tiles[645] = iridiumTiles.ToArray();
-            }
-
-            // Prismatic Sprinkler
-            if (mods.PrismaticTools.IsLoaded)
-                tiles[mods.PrismaticTools.GetSprinklerID()] = mods.PrismaticTools.GetSprinklerCoverage().ToArray();
-
-            // Simple Sprinkler mod adds tiles to default coverage
-            if (mods.SimpleSprinkler.IsLoaded)
-            {
-                foreach (var pair in mods.SimpleSprinkler.GetNewSprinklerTiles())
-                {
-                    int sprinklerID = pair.Key;
-                    if (tiles.TryGetValue(sprinklerID, out Vector2[] currentTiles))
-                        tiles[sprinklerID] = currentTiles.Union(pair.Value).ToArray();
-                    else
-                        tiles[sprinklerID] = pair.Value;
-                }
-            }
-
-            return tiles;
-        }
-
         /// <summary>Get the current relative sprinkler coverage, including any dynamic mod changes.</summary>
-        /// <param name="staticTiles">The static sprinkler coverage.</param>
-        private IDictionary<int, Vector2[]> GetCurrentSprinklerTiles(IDictionary<int, Vector2[]> staticTiles)
+        private IDictionary<int, Vector2[]> GetCustomSprinklerTiles()
         {
-            // get static tiles
-            if (!this.Mods.BetterSprinklers.IsLoaded && !this.Mods.LineSprinklers.IsLoaded)
-                return staticTiles;
+            var tilesBySprinklerID = new Dictionary<int, Vector2[]>();
 
-            // merge custom tiles
-            IDictionary<int, Vector2[]> tilesBySprinklerID = new Dictionary<int, Vector2[]>(staticTiles);
+            // Better Sprinklers
             if (this.Mods.BetterSprinklers.IsLoaded)
             {
                 foreach (var pair in this.Mods.BetterSprinklers.GetSprinklerTiles())
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
+
+            // Line Sprinklers
             if (this.Mods.LineSprinklers.IsLoaded)
             {
                 foreach (var pair in this.Mods.LineSprinklers.GetSprinklerTiles())
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
-            return tilesBySprinklerID;
-        }
 
-        /// <summary>Get the maximum distance from the center for a sprinkler coverage.</summary>
-        /// <param name="tiles">The covered tiles.</param>
-        public int GetMaxRadius(IEnumerable<Vector2> tiles)
-        {
-            int maxRadius = 0;
-            foreach (Vector2 tile in tiles)
-                maxRadius = (int)Math.Max(Math.Max(maxRadius, Math.Abs(tile.X)), Math.Abs(tile.Y));
-            return maxRadius;
+            // Prismatic Tools
+            if (this.Mods.PrismaticTools.IsLoaded)
+                tilesBySprinklerID[this.Mods.PrismaticTools.GetSprinklerID()] = this.Mods.PrismaticTools.GetSprinklerCoverage().ToArray();
+
+            // Simple Sprinkler
+            if (this.Mods.SimpleSprinkler.IsLoaded)
+            {
+                foreach (var pair in this.Mods.SimpleSprinkler.GetNewSprinklerTiles())
+                    tilesBySprinklerID[pair.Key] = pair.Value;
+            }
+
+            return tilesBySprinklerID;
         }
 
         /// <summary>Get a sprinkler tile radius.</summary>
         /// <param name="sprinkler">The sprinkler whose radius to get.</param>
         /// <param name="origin">The sprinkler's tile.</param>
-        /// <param name="radii">The sprinkler radii centered on (0, 0) indexed by sprinkler ID.</param>
+        /// <param name="customSprinklerRanges">The custom sprinkler ranges centered on (0, 0) indexed by sprinkler ID.</param>
         /// <remarks>Derived from <see cref="SObject.DayUpdate"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, IDictionary<int, Vector2[]> radii)
+        private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, IDictionary<int, Vector2[]> customSprinklerRanges)
         {
-            // get relative tiles
-            if (!radii.TryGetValue(sprinkler.ParentSheetIndex, out Vector2[] tiles))
-                throw new NotSupportedException($"Unknown sprinkler ID {sprinkler.ParentSheetIndex}.");
+            IEnumerable<Vector2> tiles = sprinkler.GetSprinklerTiles();
 
-            // get tiles
-            foreach (Vector2 tile in tiles)
-                yield return origin + tile;
+            if (customSprinklerRanges.TryGetValue(sprinkler.ParentSheetIndex, out Vector2[] customTiles))
+                tiles = new HashSet<Vector2>(tiles.Concat(customTiles.Select(tile => tile + origin)));
+
+            return tiles;
         }
 
         /// <summary>Get tiles containing crops not covered by a sprinkler.</summary>
