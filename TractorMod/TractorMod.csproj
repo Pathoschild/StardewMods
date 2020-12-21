@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>TractorMod</AssemblyName>
-    <Version>4.12.0</Version>
+    <Version>4.12.1</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

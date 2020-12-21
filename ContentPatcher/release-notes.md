@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.19.1
+Released 21 December 2020.
+
 * Updated for Stardew Valley 1.5, including...
   * split-screen mode and UI scaling;
   * added `KeyToTheTown` value to `HasWalletItem` token.
