@@ -618,11 +618,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
-    // trash bear lookup labels
-    "trash-bear.item-wanted": "Требуется предмет",
-    "trash-bear.quest-progress": "Прогресс задания",
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Требуется предмет",
+    "trash-bear-or-gourmand.quest-progress": "Прогресс задания",
 
 
     /*********

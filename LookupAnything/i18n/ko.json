@@ -618,11 +618,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "원하는 아이템",
-    "trash-bear.quest-progress": "퀘스트 진행률",
+    "trash-bear-or-gourmand.item-wanted": "원하는 아이템",
+    "trash-bear-or-gourmand.quest-progress": "퀘스트 진행률",
 
 
     /*********

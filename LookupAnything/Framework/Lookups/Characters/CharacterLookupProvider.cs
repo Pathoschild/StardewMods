@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Monsters;
 
@@ -37,6 +38,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <inheritdoc />
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
+            // Gourmand NPC
+            if (location is IslandFarmCave islandFarmCave && islandFarmCave.gourmand != null)
+            {
+                NPC gourmand = islandFarmCave.gourmand;
+                yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
+            }
+
             // NPCs
             foreach (NPC npc in location.characters)
             {

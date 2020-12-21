@@ -617,11 +617,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Item desejado",
-    "trash-bear.quest-progress": "Progresso da missão",
+    "trash-bear-or-gourmand.item-wanted": "Item desejado",
+    "trash-bear-or-gourmand.quest-progress": "Progresso da missão",
 
 
     /*********

@@ -624,12 +624,12 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
     // TODO
-    "trash-bear.item-wanted": "Item wanted",
-    "trash-bear.quest-progress": "Quest progress",
+    "trash-bear-or-gourmand.item-wanted": "Item wanted",
+    "trash-bear-or-gourmand.quest-progress": "Quest progress",
 
 
     /*********

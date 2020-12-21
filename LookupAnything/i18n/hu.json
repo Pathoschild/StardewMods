@@ -617,11 +617,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Keresett tárgy",
-    "trash-bear.quest-progress": "Küldetés állása",
+    "trash-bear-or-gourmand.item-wanted": "Keresett tárgy",
+    "trash-bear-or-gourmand.quest-progress": "Küldetés állása",
 
 
     /*********

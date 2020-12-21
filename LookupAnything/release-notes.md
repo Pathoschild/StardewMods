@@ -6,6 +6,7 @@
   * split-screen mode and UI scaling;
   * added island crystal cave puzzle lookup;
   * added island field office lookup;
+  * added island Gourmand lookup;
   * added island mermaid puzzle lookup;
   * added island shrine puzzle lookup.
 * Fixed some untranslated text.

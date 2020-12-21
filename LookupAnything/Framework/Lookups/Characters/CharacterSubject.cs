@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
@@ -40,6 +41,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         private readonly bool HighlightUnrevealedGiftTastes;
+
+        /// <summary>Whether the NPC is Gourmand in the Fern Islands farm cave.</summary>
+        private readonly bool IsGourmand;
 
         /// <summary>Whether the NPC is a haunted skull monster.</summary>
         private readonly bool IsHauntedSkull;
@@ -77,6 +81,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // detect special cases
             if (npc is Bat bat)
                 this.IsHauntedSkull = bat.hauntedSkull.Value;
+            else
+                this.IsGourmand = type == SubjectType.Villager && npc.Name == "Gourmand" && npc.currentLocation.Name == nameof(IslandFarmCave);
+
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -91,6 +98,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 {
                     Child child => this.GetDataForChild(child),
                     TrashBear trashBear => this.GetDataForTrashBear(trashBear),
+                    _ when this.IsGourmand => this.GetDataForGourmand(),
                     _ => this.GetDataForVillager(npc)
                 },
                 _ => Enumerable.Empty<ICustomField>()
@@ -137,7 +145,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // use character portrait (most villager NPCs)
-            if (npc.isVillager() && npc.Portrait != null)
+            if (npc.isVillager() && npc.Portrait != null && !this.IsGourmand) // Gourmand uses Professor Snail's portraits
             {
                 spriteBatch.DrawSprite(npc.Portrait, new Rectangle(0, 0, NPC.portrait_width, NPC.portrait_height), position.X, position.Y, Color.White, size.X / NPC.portrait_width);
                 return true;
@@ -186,6 +194,43 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 yield return new CharacterFriendshipField(I18n.Npc_Friendship(), friendship);
                 yield return new GenericField(I18n.Npc_TalkedToday(), this.Stringify(Game1.player.friendshipData[child.Name].TalkedToToday));
             }
+        }
+
+        /// <summary>Get the fields to display for the gourmand frog.</summary>
+        /// <remarks>Derived from <see cref="IslandFarmCave.IndexForRequest"/>.</remarks>
+        private IEnumerable<ICustomField> GetDataForGourmand()
+        {
+            // get cave
+            IslandFarmCave cave = (IslandFarmCave)Game1.getLocationFromName("IslandFarmCave");
+            if (cave == null)
+                yield break;
+            int questsDone = cave.gourmandRequestsFulfilled.Value;
+            int maxQuests = IslandFarmCave.TOTAL_GOURMAND_REQUESTS;
+
+            // show items wanted
+            if (questsDone <= maxQuests)
+            {
+                var checkboxes = new List<KeyValuePair<IFormattedText[], bool>>();
+                for (int i = 0; i < maxQuests; i++)
+                {
+                    int index = cave.IndexForRequest(i);
+                    if (index == -1)
+                        continue;
+
+                    checkboxes.Add(
+                        CheckboxListField.Checkbox(
+                            text: this.GameHelper.GetObjectBySpriteIndex(index).DisplayName,
+                            value: questsDone > i
+                        )
+                    );
+                }
+
+                if (checkboxes.Any())
+                    yield return new CheckboxListField(I18n.TrashBearOrGourmand_ItemWanted(), checkboxes);
+            }
+
+            // show progress
+            yield return new GenericField(I18n.TrashBearOrGourmand_QuestProgress(), I18n.Generic_Ratio(questsDone, maxQuests));
         }
 
         /// <summary>Get the fields to display for a monster.</summary>
@@ -264,11 +309,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
                 int itemWantedIndex = this.Reflection.GetField<int>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBear_ItemWanted(), new SObject(itemWantedIndex, 1));
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), new SObject(itemWantedIndex, 1));
             }
 
             // show progress
-            yield return new GenericField(I18n.TrashBear_QuestProgress(), I18n.Generic_Ratio(questsDone, maxQuests));
+            yield return new GenericField(I18n.TrashBearOrGourmand_QuestProgress(), I18n.Generic_Ratio(questsDone, maxQuests));
         }
 
         /// <summary>Get the fields to display for a villager NPC.</summary>

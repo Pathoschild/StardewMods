@@ -80,7 +80,7 @@
     "data.npc.pet.description": "Your loyal pet.",
     "data.npc.horse.description": "Your loyal steed.",
     "data.npc.junimo.description": "A forest spirit from the spirit world. Very little is known about them.",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.",
+    "data.npc.trash-bear.description": "A friendly spirit who cleans up trash.",
 
     // item types
     "data.type.debris": "Debris",
@@ -610,11 +610,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Item wanted",
-    "trash-bear.quest-progress": "Quest progress",
+    "trash-bear-or-gourmand.item-wanted": "Item wanted",
+    "trash-bear-or-gourmand.quest-progress": "Quest progress",
 
 
     /*********

@@ -393,9 +393,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         }
 
         /// <summary>Get a translation equivalent to "A friendly spirit who cleans up trash.".</summary>
-        public static string Data_Npc_Trashbear_Description()
+        public static string Data_Npc_TrashBear_Description()
         {
-            return I18n.GetByKey("data.npc.trashbear.description");
+            return I18n.GetByKey("data.npc.trash-bear.description");
         }
 
         /// <summary>Get a translation equivalent to "Debris".</summary>
@@ -2499,15 +2499,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         }
 
         /// <summary>Get a translation equivalent to "Item wanted".</summary>
-        public static string TrashBear_ItemWanted()
+        public static string TrashBearOrGourmand_ItemWanted()
         {
-            return I18n.GetByKey("trash-bear.item-wanted");
+            return I18n.GetByKey("trash-bear-or-gourmand.item-wanted");
         }
 
         /// <summary>Get a translation equivalent to "Quest progress".</summary>
-        public static string TrashBear_QuestProgress()
+        public static string TrashBearOrGourmand_QuestProgress()
         {
-            return I18n.GetByKey("trash-bear.quest-progress");
+            return I18n.GetByKey("trash-bear-or-gourmand.quest-progress");
         }
 
         /// <summary>Get a translation equivalent to "Growth stage".</summary>

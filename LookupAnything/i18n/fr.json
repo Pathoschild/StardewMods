@@ -609,11 +609,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Objet voulu",
-    "trash-bear.quest-progress": "Progrès de la quête",
+    "trash-bear-or-gourmand.item-wanted": "Objet voulu",
+    "trash-bear-or-gourmand.quest-progress": "Progrès de la quête",
 
 
     /*********

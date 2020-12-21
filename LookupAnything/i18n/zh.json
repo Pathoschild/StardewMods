@@ -619,11 +619,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "想要的东西",
-    "trash-bear.quest-progress": "任务进度",
+    "trash-bear-or-gourmand.item-wanted": "想要的东西",
+    "trash-bear-or-gourmand.quest-progress": "任务进度",
 
 
     /*********

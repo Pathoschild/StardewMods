@@ -191,7 +191,7 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * farm animals;
   * horses;
   * pets;
-  * special NPCs like Trash Bear;
+  * spirits like Gourmand and Trash Bear;
 * objects and items, including...
   * crops and seeds;
   * fences;

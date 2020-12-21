@@ -634,7 +634,7 @@ You shouldn't change this file unless you know what you're doing.
         },
         {
             "ID": "Villager::TrashBear",
-            "DescriptionKey": "data.npc.trashbear.description"
+            "DescriptionKey": "data.npc.trash-bear.description"
         }
     ],
 
