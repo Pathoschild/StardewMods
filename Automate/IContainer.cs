@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The container name (if any).</summary>
         string Name { get; }
 
+        /// <summary>The raw mod data for the container.</summary>
+        ModDataDictionary ModData { get; }
+
 
         /*********
         ** Public methods

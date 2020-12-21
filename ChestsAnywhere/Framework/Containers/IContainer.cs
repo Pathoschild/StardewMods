@@ -43,5 +43,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Persist the container data.</summary>
         void SaveData();
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        void MigrateLegacyData();
     }
 }

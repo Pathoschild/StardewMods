@@ -16,6 +16,11 @@ Released 21 November 2020.
 * Fixed shipping bin playing a chest _dwop_ sound instead of _ker-thunk_.
 * Improved translations. Thanks to PanPan-p (updated Turkish)!
 
+**Breaking changes for mod authors:**
+* Chests Anywhere previously saved chest options in the chest name using tags like `|ignore|`.
+  These are now stored in the new `modData` field added in 1.5; existing chests will be migrated
+  automatically.
+
 ## 1.19.7
 Released 04 November 2020.
 

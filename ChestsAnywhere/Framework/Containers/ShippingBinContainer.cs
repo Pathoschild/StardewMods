@@ -169,6 +169,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.DataHelper.WriteSaveData(this.DataKey, this.Data.HasData() ? this.Data : null);
         }
 
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        public void MigrateLegacyData() { }
+
 
         /*********
         ** Private methods

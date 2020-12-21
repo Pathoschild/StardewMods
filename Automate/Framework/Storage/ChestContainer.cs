@@ -24,11 +24,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         ** Accessors
         *********/
         /// <summary>The container name (if any).</summary>
-        public string Name
-        {
-            get => this.Chest.Name;
-            private set => this.Chest.Name = value;
-        }
+        public string Name => this.Chest.Name;
+
+        /// <summary>The raw mod data for the container.</summary>
+        public ModDataDictionary ModData => this.Chest.modData;
 
         /// <summary>The location which contains the container.</summary>
         public GameLocation Location { get; }
@@ -51,9 +50,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             this.Location = location;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
 
-            this.Name = migrateLegacyOptions
-                ? this.MigrateLegacyOptions(this.Name)
-                : this.Name;
+            if (migrateLegacyOptions)
+                this.MigrateLegacyOptions();
         }
 
         /// <summary>Store an item stack.</summary>
@@ -187,35 +185,53 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         }
 
         /// <summary>Migrate legacy options stored in a chest name.</summary>
-        /// <param name="name">The chest name to migrate.</param>
-        private string MigrateLegacyOptions(string name)
+        private void MigrateLegacyOptions()
         {
-            if (string.IsNullOrWhiteSpace(name) || !Regex.IsMatch(name, @"\|automate:(?:ignore|input|output|noinput|nooutput)\|"))
-                return name;
+            // get chest name
+            string name = this.Chest.Name;
+            if (name == null || name == "Chest" || !name.Contains("|"))
+                return;
 
-            // migrate renamed tags
-            name = name
-                .Replace("|automate:noinput|", "|automate:no-store|")
-                .Replace("|automate:output|", "|automate:prefer-store|")
-                .Replace("|automate:nooutput|", "|automate:no-take|")
-                .Replace("|automate:input|", "|automate:prefer-take|");
+            // get tags
+            MatchCollection matches = Regex.Matches(name, @"\|automate:[a-z\-]*\|");
+            if (matches.Count == 0)
+                return;
 
-            // migrate removed tags
-            if (name.Contains("|automate:ignore|"))
+            // migrate to mod data
+            void Set(string key, AutomateContainerPreference value) => this.Chest.modData[key] = value.ToString();
+            foreach (Match match in matches)
             {
-                string newTag = "";
-                foreach (string tag in new[] { "|automate:no-store|", "|automate:no-take|" })
+                switch (match.Groups["tag"].Value.ToLower())
                 {
-                    if (!name.Contains(tag))
-                        newTag = $"{newTag} {tag}".Trim();
+                    case "noinput":
+                    case "no-store":
+                        Set(AutomateContainerHelper.StoreItemsKey, AutomateContainerPreference.Disable);
+                        break;
+
+                    case "output":
+                    case "prefer-store":
+                        Set(AutomateContainerHelper.StoreItemsKey, AutomateContainerPreference.Prefer);
+                        break;
+
+                    case "nooutput":
+                    case "no-take":
+                        Set(AutomateContainerHelper.TakeItemsKey, AutomateContainerPreference.Disable);
+                        break;
+
+                    case "input":
+                    case "prefer-take":
+                        Set(AutomateContainerHelper.TakeItemsKey, AutomateContainerPreference.Prefer);
+                        break;
+
+                    case "ignore":
+                        Set(AutomateContainerHelper.StoreItemsKey, AutomateContainerPreference.Disable);
+                        Set(AutomateContainerHelper.TakeItemsKey, AutomateContainerPreference.Disable);
+                        break;
                 }
 
-                name = name.Replace("|automate:ignore|", newTag);
+                name = name.Replace(match.Value, "");
             }
-
-            // normalize
-            name = Regex.Replace(name, @"\| +\|", "| |");
-            return name.Trim();
+            this.Chest.Name = name.Trim();
         }
     }
 }

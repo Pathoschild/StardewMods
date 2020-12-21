@@ -67,28 +67,33 @@ Normally you'd change how chests are automated through [Chests Anywhere](https:/
 chest options UI:
 > ![](screenshots/chests-anywhere-config.png)
 
-If you don't have Chests Anywhere or want to replicate it in another mod, you can edit the chest
-name a different way and add these substrings:
+If you don't have Chests Anywhere or want to replicate it in another mod, you can edit the chest's
+`modData` field a different way and add these entries:
 
 <table>
 <tr>
-  <th>tag</th>
-  <th>meaning</th>
+  <th>key</th>
+  <th>value</th>
+  <th>description</th>
 </tr>
 <tr>
-  <td><code>|automate:no-store|</code></td>
+  <td><code>Pathoschild.Automate/StoreItems</code></td>
+  <td><code>Disable</code></td>
   <td><strong>don't</strong> store items in this chest.</td>
 </tr>
 <tr>
-  <td><code>|automate:no-take|</code></td>
-  <td><strong>don't</strong> take items from this chest.</td>
-</tr>
-<tr>
-  <td><code>|automate:prefer-store|</code></td>
+  <td><code>Pathoschild.Automate/StoreItems</code></td>
+  <td><code>Prefer</code></td>
   <td>store items in this chest first.</td>
 </tr>
 <tr>
-  <td><code>|automate:prefer-take|</code></td>
+  <td><code>Pathoschild.Automate/TakeItems</code></td>
+  <td><code>Disable</code></td>
+  <td><strong>don't</strong> take items from this chest.</td>
+</tr>
+<tr>
+  <td><code>Pathoschild.Automate/TakeItems</code></td>
+  <td><code>Prefer</code></td>
   <td>take items from this chest first.</td>
 </tr>
 </table>

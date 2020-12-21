@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Context = context;
             this.ShowColorPicker = showColorPicker;
             this.Reflection = reflection;
-            this.Data = ContainerData.ParseName(chest.Name, this.DefaultName);
+            this.Data = ContainerData.GetFor(chest, this.DefaultName);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -131,9 +131,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Persist the container data.</summary>
         public void SaveData()
         {
-            this.Chest.name = this.Data.HasData()
-                ? this.Data.ToName()
-                : this.DefaultName;
+            this.Data.ToModData(this.Chest.modData);
+        }
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        public void MigrateLegacyData()
+        {
+            ContainerData.MigrateLegacyData(this.Chest, this.DefaultName);
         }
 
 

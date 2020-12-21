@@ -116,5 +116,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         {
             return this.Container.Data.HasDefaultDisplayName();
         }
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        public void MigrateLegacyData()
+        {
+            this.Container.MigrateLegacyData();
+        }
     }
 }
