@@ -62,17 +62,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         }
 
         /// <summary>Load contain data for the given item.</summary>
-        /// <param name="item">The item whose container data to load.</param>
-        /// <param name="defaultDisplayName">The default display name.</param>
-        public static ContainerData GetFor(Item item, string defaultDisplayName)
+        /// <param name="data">The mod data to read.</param>
+        /// <param name="defaultInternalName">The game's default name for the container, if any.</param>
+        /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
+        public static ContainerData FromModData(ModDataDictionary data, string defaultInternalName, string discriminator = null)
         {
-            ModDataDictionary data = item.modData;
-            return new ContainerData(defaultDisplayName)
+            string prefix = ContainerData.GetKeyPrefix(discriminator);
+
+            return new ContainerData(defaultInternalName)
             {
-                IsIgnored = data.ReadField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.IsIgnored)}", bool.Parse),
-                Category = data.ReadField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Category)}"),
-                Name = data.ReadField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Name)}"),
-                Order = data.ReadField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Order)}", int.Parse),
+                IsIgnored = data.ReadField($"{prefix}/{nameof(ContainerData.IsIgnored)}", bool.Parse),
+                Category = data.ReadField($"{prefix}/{nameof(ContainerData.Category)}"),
+                Name = data.ReadField($"{prefix}/{nameof(ContainerData.Name)}"),
+                Order = data.ReadField($"{prefix}/{nameof(ContainerData.Order)}", int.Parse),
                 AutomateStoreItems = data.ReadField(AutomateContainerHelper.StoreItemsKey, p => (AutomateContainerPreference)Enum.Parse(typeof(AutomateContainerPreference), p), defaultValue: AutomateContainerPreference.Allow),
                 AutomateTakeItems = data.ReadField(AutomateContainerHelper.TakeItemsKey, p => (AutomateContainerPreference)Enum.Parse(typeof(AutomateContainerPreference), p), defaultValue: AutomateContainerPreference.Allow)
             };
@@ -80,13 +82,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>Save the container data to the given mod data.</summary>
         /// <param name="data">The mod data.</param>
-        public void ToModData(ModDataDictionary data)
+        /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
+        public void ToModData(ModDataDictionary data, string discriminator = null)
         {
+            string prefix = ContainerData.GetKeyPrefix(discriminator);
+
             data
-                .WriteField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.IsIgnored)}", this.IsIgnored ? "true" : null)
-                .WriteField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Category)}", this.Category)
-                .WriteField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Name)}", !this.HasDefaultDisplayName() ? this.Name : null)
-                .WriteField($"{ContainerData.ModDataPrefix}/{nameof(ContainerData.Order)}", this.Order != 0 ? this.Order?.ToString(CultureInfo.InvariantCulture) : null)
+                .WriteField($"{prefix}/{nameof(ContainerData.IsIgnored)}", this.IsIgnored ? "true" : null)
+                .WriteField($"{prefix}/{nameof(ContainerData.Category)}", this.Category)
+                .WriteField($"{prefix}/{nameof(ContainerData.Name)}", !this.HasDefaultDisplayName() ? this.Name : null)
+                .WriteField($"{prefix}/{nameof(ContainerData.Order)}", this.Order != 0 ? this.Order?.ToString(CultureInfo.InvariantCulture) : null)
                 .WriteField(AutomateContainerHelper.StoreItemsKey, this.AutomateStoreItems != AutomateContainerPreference.Allow ? this.AutomateStoreItems.ToString() : null)
                 .WriteField(AutomateContainerHelper.TakeItemsKey, this.AutomateTakeItems != AutomateContainerPreference.Allow ? this.AutomateTakeItems.ToString() : null);
         }
@@ -137,6 +142,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the prefix for fields in a <see cref="ModDataDictionary"/> field.</summary>
+        /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
+        private static string GetKeyPrefix(string discriminator)
+        {
+            string prefix = ContainerData.ModDataPrefix;
+
+            if (discriminator != null)
+                prefix = $"{prefix}/{discriminator}";
+
+            return prefix;
+        }
+
         /// <summary>Parse a serialized name string.</summary>
         /// <param name="name">The serialized name string.</param>
         /// <param name="defaultDisplayName">The default display name for the container.</param>

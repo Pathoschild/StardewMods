@@ -15,8 +15,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Fields
         *********/
-        /// <summary>The name of the data key for the shipping bin name.</summary>
-        private readonly string DataKey = "shipping-bin";
+        /// <summary>A key added to the mod data keys to distinguish different containers in the same mod data.</summary>
+        internal static readonly string ModDataDiscriminator = "shipping-bin";
 
         /// <summary>An API for reading and storing local mod data.</summary>
         private readonly IDataHelper DataHelper;
@@ -46,9 +46,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The persisted container data.</summary>
         public ContainerData Data { get; }
 
-        /// <summary>Whether the player can customize the container data.</summary>
-        public bool IsDataEditable { get; }
-
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate { get; } = false; // Automate can't read the shipping bin settings
 
@@ -69,10 +66,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Location = location;
             this.Farm = location as Farm ?? Game1.getFarm();
             this.ShippingBin = this.Farm.getShippingBin(Game1.player);
-            this.IsDataEditable = Context.IsOnHostComputer;
-            this.Data = this.IsDataEditable
-                ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
-                : new ContainerData(defaultInternalName: null);
+            this.Data = ContainerData.FromModData(location.modData, defaultInternalName: null, discriminator: ShippingBinContainer.ModDataDiscriminator);
             this.Mode = mode;
         }
 
@@ -166,7 +160,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Persist the container data.</summary>
         public void SaveData()
         {
-            this.DataHelper.WriteSaveData(this.DataKey, this.Data.HasData() ? this.Data : null);
+            this.Data.ToModData(this.Location.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
         }
 
         /// <summary>Migrate legacy container data, if needed.</summary>

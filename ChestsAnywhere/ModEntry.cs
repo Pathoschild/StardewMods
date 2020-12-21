@@ -330,8 +330,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Migrate legacy container data, if needed.</summary>
         private void MigrateLegacyData()
         {
+            // chests
             foreach (var chest in this.ChestFactory.GetChests(RangeHandler.Unlimited()))
                 chest.Container.MigrateLegacyData();
+
+            // shipping bin
+            var binData = this.Helper.Data.ReadSaveData<ContainerData>("shipping-bin");
+            if (binData != null)
+            {
+                Farm farm = Game1.getFarm();
+                binData.ToModData(farm.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
+                this.Helper.Data.WriteSaveData<ContainerData>("shipping-bin", null);
+            }
         }
 
         /// <summary>Migrate legacy container data, if needed.</summary>

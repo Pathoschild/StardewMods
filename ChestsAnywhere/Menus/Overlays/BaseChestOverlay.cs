@@ -225,8 +225,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.CategoryDropdown?.Draw(batch, navOpacity);
 
                 // edit button
-                if (this.Chest.CanEdit)
-                    this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+                this.EditButton.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -337,7 +336,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.SelectPreviousCategory();
                     else if (keys.NextCategory.JustPressedUnique() && canNavigate)
                         this.SelectNextCategory();
-                    else if (this.Chest.CanEdit && keys.EditChest.JustPressedUnique() && canNavigate)
+                    else if (keys.EditChest.JustPressedUnique() && canNavigate)
                         this.OpenEdit();
                     else if (keys.SortItems.JustPressedUnique())
                         this.SortInventory();

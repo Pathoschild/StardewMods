@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Context = context;
             this.ShowColorPicker = showColorPicker;
             this.Reflection = reflection;
-            this.Data = ContainerData.GetFor(chest, this.DefaultName);
+            this.Data = ContainerData.FromModData(chest.modData, this.DefaultName);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>

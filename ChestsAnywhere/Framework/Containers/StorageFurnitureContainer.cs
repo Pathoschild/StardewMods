@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             string defaultName = reflection.GetMethod(furniture, "getData").Invoke<string[]>()?[0];
 
             this.Furniture = furniture;
-            this.Data = ContainerData.GetFor(furniture, defaultName);
+            this.Data = ContainerData.FromModData(furniture.modData, defaultName);
             this.DefaultName = defaultName;
 
             StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
