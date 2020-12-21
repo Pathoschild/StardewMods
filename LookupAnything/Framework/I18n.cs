@@ -2385,6 +2385,46 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("puzzle.island-crystal-cave.solution.activated");
         }
 
+        /// <summary>Get a translation equivalent to "Island Shrine Puzzle".</summary>
+        public static string Puzzle_IslandShrine_Title()
+        {
+            return I18n.GetByKey("puzzle.island-shrine.title");
+        }
+
+        /// <summary>Get a translation equivalent to "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.".</summary>
+        public static string Puzzle_IslandShrine_Solution()
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution");
+        }
+
+        /// <summary>Get a translation equivalent to "East: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_East(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.east", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "North: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_North(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.north", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "South: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_South(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.south", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "West: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_West(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.west", new { item });
+        }
+
         /// <summary>Get a translation equivalent to "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.".</summary>
         public static string Tile_Description()
         {

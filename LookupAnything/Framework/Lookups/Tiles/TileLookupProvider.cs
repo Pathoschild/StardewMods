@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
 {
@@ -57,8 +59,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
 
             if (this.IsCrystalCavePuzzle(location, tile, out int? crystalId))
                 return new CrystalCavePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode, crystalId);
+
+            if (this.IsIslandShrinePuzzle(location, tile))
+                return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode);
+
             if (showRaw)
                 return new TileSubject(this.GameHelper, location, tile, true);
+
             return null;
         }
 
@@ -66,7 +73,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <param name="location">The game location.</param>
         /// <param name="tile">The tile position.</param>
         /// <param name="crystalId">The ID of the crystal being looked up, if any.</param>
-        /// <remarks>See game logic in <see cref="IslandWestCave1"/>.</remarks>
         private bool IsCrystalCavePuzzle(GameLocation location, Vector2 tile, out int? crystalId)
         {
             crystalId = null;
@@ -96,6 +102,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
             return false;
         }
 
+        /// <summary>Get whether the tile is part of the <see cref="IslandShrine"/> puzzle.</summary>
+        /// <param name="location">The game location.</param>
+        /// <param name="tile">The tile position.</param>
+        private bool IsIslandShrinePuzzle(GameLocation location, Vector2 tile)
+        {
+            return
+                location is IslandShrine
+                && (
+                    // shrine
+                    (
+                        tile.X >= 23 && tile.X <= 25
+                        && tile.Y >= 20 && tile.Y <= 22
+                    )
+
+                    // pedestal
+                    || (
+                        location.objects.TryGetValue(tile, out SObject obj)
+                        && obj is ItemPedestal
+                    )
+                );
+        }
+
         /// <summary>Get whether a tile property is defined.</summary>
         /// <param name="location">The game location.</param>
         /// <param name="tile">The tile position.</param>
@@ -104,9 +132,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <param name="arguments">The space-separated property values, if any.</param>
         private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, out string[] arguments)
         {
-            string property = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, name, layer);
-            arguments = property?.Split(' ').ToArray() ?? new string[0];
-            return property != null;
+            bool found = this.HasTileProperty(location, tile, name, layer, out string value);
+            arguments = value?.Split(' ').ToArray() ?? new string[0];
+            return found;
+        }
+
+        /// <summary>Get whether a tile property is defined.</summary>
+        /// <param name="location">The game location.</param>
+        /// <param name="tile">The tile position.</param>
+        /// <param name="name">The property name.</param>
+        /// <param name="layer">The map layer name to check.</param>
+        /// <param name="value">The property value, if any.</param>
+        private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, out string value)
+        {
+            value = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, name, layer);
+            return value != null;
         }
     }
 }

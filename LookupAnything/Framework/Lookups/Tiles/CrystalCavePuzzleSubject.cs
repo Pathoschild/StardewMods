@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
             }
 
             // raw map data
-            foreach (var field in base.GetData())
+            foreach (ICustomField field in base.GetData())
                 yield return field;
         }
     }

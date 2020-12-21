@@ -7,7 +7,9 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -49,6 +51,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // map objects
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects.Pairs)
             {
+                if (location is IslandShrine && pair.Value is ItemPedestal)
+                    continue; // part of the Fern Islands shrine puzzle, which is handled by the tile lookup provider
+
                 if (this.GameHelper.CouldSpriteOccludeTile(pair.Key, lookupTile))
                     yield return new ObjectTarget(this.GameHelper, pair.Value, pair.Key, this.Reflection, () => this.BuildSubject(pair.Value, ObjectContext.World, knownQuality: false));
             }

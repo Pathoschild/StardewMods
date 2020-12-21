@@ -214,7 +214,8 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * crops;
   * trees and fruit trees.
 * in-world puzzles, including...
-  * Fern Islands crystal cave puzzle.
+  * Fern Islands crystal cave puzzle;
+  * Fern Islands shrine puzzle.
 * map tiles (if [enabled](#configure)).
 
 ### Data mining fields (advanced)
