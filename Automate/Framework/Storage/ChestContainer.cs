@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -19,9 +18,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         *********/
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
-
-        /// <summary>Get the number of items that can be stored in the chest.</summary>
-        private readonly Func<int> Capacity;
 
 
         /*********
@@ -48,21 +44,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="chest">The underlying chest.</param>
         /// <param name="location">The location which contains the container.</param>
         /// <param name="tile">The tile area covered by the container.</param>
-        /// <param name="reflection">An API for accessing inaccessible code.</param>
-        public ChestContainer(Chest chest, GameLocation location, Vector2 tile, IReflectionHelper reflection)
+        /// <param name="migrateLegacyOptions">Whether to migrate legacy chest options, if applicable.</param>
+        public ChestContainer(Chest chest, GameLocation location, Vector2 tile, bool migrateLegacyOptions = true)
         {
-            // save metadata
             this.Chest = chest;
             this.Location = location;
             this.TileArea = new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
-            this.Name = this.MigrateLegacyOptions(this.Name);
 
-            // get capacity
-            IReflectedProperty<int> capacity = reflection.GetProperty<int>(chest, "Capacity", required: false); // let mods like MegaStorage override capacity
-            if (capacity != null)
-                this.Capacity = capacity.GetValue;
-            else
-                this.Capacity = () => Chest.capacity;
+            this.Name = migrateLegacyOptions
+                ? this.MigrateLegacyOptions(this.Name)
+                : this.Name;
         }
 
         /// <summary>Store an item stack.</summary>
@@ -70,10 +61,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         public void Store(ITrackedStack stack)
         {
-            if (stack.Count <= 0)
+            if (stack.Count <= 0 || this.Chest.SpecialChestType == Chest.SpecialChestTypes.AutoLoader)
                 return;
 
-            IList<Item> inventory = this.Chest.items;
+            IList<Item> inventory = this.GetInventory();
 
             // try stack into existing slot
             foreach (Item slot in inventory)
@@ -90,7 +81,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
 
             // try add to empty slot
-            int capacity = this.Capacity();
+            int capacity = this.Chest.GetActualCapacity();
             for (int i = 0; i < capacity && i < inventory.Count; i++)
             {
                 if (inventory[i] == null)
@@ -121,7 +112,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<ITrackedStack> GetEnumerator()
         {
-            foreach (Item item in this.Chest.items.ToArray())
+            foreach (Item item in this.GetInventory().ToArray())
             {
                 ITrackedStack stack = this.GetTrackedItem(item);
                 if (stack != null)
@@ -140,6 +131,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the chest inventory.</summary>
+        private IList<Item> GetInventory()
+        {
+            return this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
+        }
+
         /// <summary>Find items in the pipe matching a predicate.</summary>
         /// <param name="predicate">Matches items that should be returned.</param>
         /// <param name="count">The number of items to find.</param>
@@ -147,7 +144,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         private IEnumerable<ITrackedStack> GetImpl(Func<Item, bool> predicate, int count)
         {
             int countFound = 0;
-            foreach (Item item in this.Chest.items)
+            foreach (Item item in this.GetInventory())
             {
                 if (item != null && predicate(item))
                 {
@@ -172,7 +169,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
 
             try
             {
-                return new TrackedItem(item, onEmpty: i => this.Chest.items.Remove(i));
+                return new TrackedItem(item, onEmpty: i => this.GetInventory().Remove(i));
             }
             catch (KeyNotFoundException)
             {

@@ -79,9 +79,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
-            // chest container
+            // chest
             if (obj is Chest chest && chest.playerChest.Value)
-                return new ChestContainer(chest, location, tile, this.Reflection);
+            {
+                switch (chest.SpecialChestType)
+                {
+                    case Chest.SpecialChestTypes.None:
+                    case Chest.SpecialChestTypes.AutoLoader:
+                    case Chest.SpecialChestTypes.JunimoChest:
+                        return new ChestContainer(chest, location, tile);
+                }
+            }
 
             // machine by type
             switch (obj)
@@ -103,6 +111,12 @@ namespace Pathoschild.Stardew.Automate.Framework
                 {
                     case 165:
                         return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+
+                    case 246:
+                        return new CoffeeMakerMachine(obj, location, tile);
+
+                    case 280:
+                        return new StatueOfTruePerfectionMachine(obj, location, tile);
                 }
             }
 
@@ -111,6 +125,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 case "Bee House":
                     return new BeeHouseMachine(obj, location, tile);
+
+                case "Bone Mill":
+                    return new BoneMillMachine(obj, location, tile);
 
                 case "Charcoal Kiln":
                     return new CharcoalKilnMachine(obj, location, tile);
@@ -121,11 +138,17 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Crystalarium":
                     return new CrystalariumMachine(obj, location, tile, this.Reflection);
 
+                case "Deconstructor":
+                    return new DeconstructorMachine(obj, location, tile);
+
                 case "Feed Hopper":
                     return new FeedHopperMachine(location, tile);
 
                 case "Furnace":
                     return new FurnaceMachine(obj, location, tile);
+
+                case "Geode Crusher":
+                    return new GeodeCrusherMachine(obj, location, tile);
 
                 case "Incubator":
                     return new CoopIncubatorMachine(obj, location, tile);
@@ -148,6 +171,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Oil Maker":
                     return new OilMakerMachine(obj, location, tile);
 
+                case "Ostrich Incubator":
+                    return new OstrichIncubatorMachine(obj, location, tile);
+
                 case "Preserves Jar":
                     return new PreservesJarMachine(obj, location, tile);
 
@@ -166,14 +192,22 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Soda Machine":
                     return new SodaMachine(obj, location, tile);
 
+                case "Solar Panel":
+                    return new SolarPanelMachine(obj, location, tile);
+
                 case "Statue Of Endless Fortune":
                     return new StatueOfEndlessFortuneMachine(obj, location, tile);
 
                 case "Statue Of Perfection":
                     return new StatueOfPerfectionMachine(obj, location, tile);
 
-                case "Tapper" when (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree):
-                    return new TapperMachine(obj, location, tile, tree.treeType.Value);
+                case "Heavy Tapper":
+                case "Tapper":
+                    {
+                        if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
+                            return new TapperMachine(obj, location, tile, tree);
+                    }
+                    break;
 
                 case "Worm Bin":
                     return new WormBinMachine(obj, location, tile);

@@ -91,6 +91,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     {
                         int namelessChests = 0;
                         int namelessGrabbers = 0;
+                        int namelessHoppers = 0;
+                        int namelessMiniShippingBins = 0;
+                        int junimoChestCount = 0;
                         foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                         {
                             Vector2 tile = pair.Key;
@@ -99,11 +102,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             // chests
                             if (obj is Chest chest && chest.playerChest.Value)
                             {
+                                if (chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest && ++junimoChestCount > 1)
+                                    continue; // only list one Junimo Chest per location (since they share inventory)
+
                                 yield return new ManagedChest(
                                     container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
                                     location: location,
                                     tile: tile,
-                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(130), number: ++namelessChests),
+                                    defaultDisplayName: chest.SpecialChestType switch
+                                    {
+                                        Chest.SpecialChestTypes.AutoLoader => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(275), number: ++namelessHoppers),
+                                        Chest.SpecialChestTypes.JunimoChest => GameI18n.GetBigCraftableName(256),
+                                        Chest.SpecialChestTypes.MiniShippingBin => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(248), number: ++namelessMiniShippingBins),
+                                        _ => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(130), number: ++namelessChests)
+                                    },
                                     defaultCategory: category
                                 );
                             }
@@ -122,10 +134,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         }
                     }
 
-                    // farmhouse containers
-                    if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
+                    // farmhouse fridge
                     {
-                        Chest fridge = house.fridge.Value;
+                        Chest fridge = this.GetStaticFridge(location);
                         if (fridge != null)
                         {
                             yield return new ManagedChest(
@@ -232,7 +243,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             return this
                 .GetChests(RangeHandler.CurrentLocation())
-                .FirstOrDefault(p => p.Container.IsSameAs(chest.items));
+                .FirstOrDefault(p => p.Container.IsSameAs(this.GetChestInventory(chest)));
         }
 
         /// <summary>Get the player chest from the given menu, if any.</summary>
@@ -272,6 +283,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 : this.Multiplayer.GetActiveLocations();
         }
 
+        /// <summary>Get the inventory for a chest.</summary>
+        /// <param name="chest">The chest instance.</param>
+        private IList<Item> GetChestInventory(Chest chest)
+        {
+            return chest?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
+        }
+
         /// <summary>Get the underlying inventory for an <see cref="ItemGrabMenu.context"/> value.</summary>
         /// <param name="context">The menu context.</param>
         private IList<Item> GetInventoryFromContext(object context)
@@ -280,17 +298,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             {
                 // chest
                 case Chest chest:
-                    return chest.items;
+                    return this.GetChestInventory(chest);
 
                 // auto-grabber
                 case SObject obj when obj.ParentSheetIndex == this.AutoGrabberID:
-                    return (obj.heldObject.Value as Chest)?.items;
+                    return this.GetChestInventory(obj.heldObject.Value as Chest);
 
                 // buildings
                 case JunimoHut hut:
-                    return hut.output.Value?.items;
+                    return this.GetChestInventory(hut.output.Value);
                 case Mill mill:
-                    return mill.output.Value?.items;
+                    return this.GetChestInventory(mill.output.Value);
 
                 // shipping bin
                 case Farm _:
@@ -334,6 +352,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 object.ReferenceEquals(Game1.currentLocation, location)
                 && Game1.currentLocation.objects.TryGetValue(chest.TileLocation, out SObject obj)
                 && object.ReferenceEquals(obj, chest);
+        }
+
+        /// <summary>Get the static fridge for a location, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        private Chest GetStaticFridge(GameLocation location)
+        {
+            // main farmhouse or cabin
+            if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
+                return house.fridge.Value;
+
+            // island farmhouse
+            if (location is IslandFarmHouse islandHouse && islandHouse.visited.Value)
+                return islandHouse.fridge.Value;
+
+            return null;
         }
     }
 }

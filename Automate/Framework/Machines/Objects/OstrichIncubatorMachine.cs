@@ -4,9 +4,9 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
-    /// <summary>A coop incubator that accepts eggs and spawns chickens.</summary>
-    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'Incubator').</remarks>
-    internal class CoopIncubatorMachine : GenericObjectMachine<SObject>
+    /// <summary>An ostrich incubator that accepts eggs and spawns ostriches.</summary>
+    /// <remarks>Derived from <see cref="SObject.performObjectDropInAction"/> (search for 'ostrich incubator').</remarks>
+    internal class OstrichIncubatorMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Fields
@@ -22,26 +22,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        public CoopIncubatorMachine(SObject machine, GameLocation location, Vector2 tile)
+        public OstrichIncubatorMachine(SObject machine, GameLocation location, Vector2 tile)
             : base(machine, location, tile)
         {
-            int minutesUntilReady = Game1.player.professions.Contains(Farmer.butcher) ? 9000 : 18000; // coopmaster
+            int minutesUntilReady = Game1.player.professions.Contains(Farmer.butcher) ? 7500 : 15000; // coopmaster
             this.Recipes = new IRecipe[]
             {
-                // egg (except ostrich) => chicken
+                // ostrich egg => ostrich
                 new Recipe(
-                    input: item => item.Category == -5 && item.ParentSheetIndex != 289,
+                    input: 289,
                     inputCount: 1,
                     output: item => new SObject(item.ParentSheetIndex, 1),
-                    minutes: _ => minutesUntilReady / 2
-                ),
-
-                // dinosaur egg => dinosaur
-                new Recipe(
-                    input: 107,
-                    inputCount: 1,
-                    output: item => new SObject(107, 1),
-                    minutes: minutesUntilReady
+                    minutes: minutesUntilReady / 2
                 )
             };
         }
@@ -69,12 +61,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             bool started = this.GenericPullRecipe(input, this.Recipes);
             if (started)
-            {
-                int eggID = this.Machine.heldObject.Value.ParentSheetIndex;
-                this.Machine.ParentSheetIndex = eggID == 180 || eggID == 182 || eggID == 305
-                    ? this.Machine.ParentSheetIndex + 2
-                    : this.Machine.ParentSheetIndex + 1;
-            }
+                this.Machine.ParentSheetIndex++;
             return started;
         }
     }

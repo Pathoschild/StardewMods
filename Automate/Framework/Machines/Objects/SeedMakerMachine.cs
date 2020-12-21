@@ -71,7 +71,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             return
                 item.Type == ItemType.Object
-                && item.Sample.ParentSheetIndex != 433 // seed maker doesn't allow coffee beans
+                && item.Sample.ParentSheetIndex != 433 // coffee beans
+                && item.Sample.ParentSheetIndex != 771 // fiber
                 && SeedMakerMachine.SeedLookup.ContainsKey(item.Sample.ParentSheetIndex);
         }
 

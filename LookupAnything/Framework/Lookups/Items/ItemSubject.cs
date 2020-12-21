@@ -549,7 +549,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // auto-grabber
             else if (machine.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber && machine.GetItemType() == ItemType.BigCraftable)
             {
-                string readyText = I18n.Stringify(heldObj is Chest output && output.items.Any());
+                string readyText = I18n.Stringify(heldObj is Chest output && output.GetItemsForPlayer(Game1.player.UniqueMultiplayerID).Any());
                 yield return new GenericField(I18n.Item_Contents(), readyText);
             }
 

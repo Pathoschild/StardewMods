@@ -38,6 +38,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 minutes: 180
             ),
 
+            // ostrich egg => 10x same-quality mayonnaise
+            new Recipe(
+                input: 289,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 10, Quality = ((SObject)input).Quality },
+                minutes: 180
+            ),
+
             // white/brown egg => normal mayonnaise
             new Recipe(
                 input: item => item.ParentSheetIndex == 176 || item.ParentSheetIndex == 180,
@@ -52,7 +60,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: _ => 180
-            )
+            ),
+
+            // golden egg => 3x gold-quality mayonnaise
+            new Recipe(
+                input: 928,
+                inputCount: 1,
+                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 3, Quality = SObject.highQuality },
+                minutes: 180
+            ),
         };
 
 

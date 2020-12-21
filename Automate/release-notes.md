@@ -4,7 +4,8 @@
 ## Upcoming release
 * Updated for Stardew Valley 1.5, including...
   * split-screen mode and UI scaling;
-  * new path types.
+  * new machines (bone mill, coffee maker, deconstructor, geode crusher, heavy tapper, hoppers, ostrich incubator, solar panel, and statue of true perfection);
+  * new chest and path types.
 
 ## 1.18.4
 Released 05 December 2020.

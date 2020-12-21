@@ -277,8 +277,8 @@ That's it! When Automate scans a location for automatables, it'll call your `Get
 your custom machine to its normal automation.
 
 ### Custom chest capacity
-If a `Chest` instance has a public `Capacity` property, Automate will use that instead of the
-`Chest.capacity` constant.
+Automate uses the value returned by `chest.GetActualCapacity()`. You can override or patch that
+method, and Automate will update automatically.
 
 ### Patch Automate
 You can patch Automate's logic [using Harmony](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Harmony).

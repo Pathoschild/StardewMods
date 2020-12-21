@@ -176,13 +176,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     // Junimo hut
                     case JunimoHut hut:
                         yield return new GenericField(I18n.Building_JunimoHarvestingEnabled(), I18n.Stringify(!hut.noHarvest.Value));
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), hut.output.Value?.items, showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), hut.output.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
                         break;
 
                     // mill
                     case Mill mill:
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), mill.input.Value?.items, showStackSize: true);
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), mill.output.Value?.items, showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), mill.input.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), mill.output.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
                         break;
 
                     // silo

@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        public IList<Item> Inventory => this.Chest.items;
+        public IList<Item> Inventory => this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
 
         /// <summary>The persisted data for this container.</summary>
         public ContainerData Data { get; }
@@ -86,11 +86,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            Chest sourceItem = this.ShowColorPicker
-                ? this.Chest
-                : null;
-
-            return Constants.TargetPlatform switch
+            ItemGrabMenu menu = Constants.TargetPlatform switch
             {
                 GamePlatform.Android => new ItemGrabMenu(
                     inventory: this.Inventory,
@@ -103,7 +99,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                     canBeExitedWithKey: true,
                     showOrganizeButton: true,
                     source: ItemGrabMenu.source_chest,
-                    sourceItem: sourceItem,
+                    sourceItem: this.Chest,
                     context: this.Context
                 ),
 
@@ -118,10 +114,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                     canBeExitedWithKey: true,
                     showOrganizeButton: true,
                     source: ItemGrabMenu.source_chest,
-                    sourceItem: sourceItem,
+                    sourceItem: this.Chest,
                     context: this.Context
                 )
             };
+
+            if (!this.ShowColorPicker) // disable color picker for some special cases like the shipping bin, which can't be recolored
+            {
+                menu.chestColorPicker = null;
+                menu.colorPickerToggleButton = null;
+            }
+
+            return menu;
         }
 
         /// <summary>Persist the container data.</summary>

@@ -4,9 +4,9 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 {
-    /// <summary>A tapper that accepts input and provides output.</summary>
-    /// <remarks>Derived from <see cref="SObject.performDropDownAction"/> and <see cref="SObject.checkForAction"/> (search for 'Worm Bin').</remarks>
-    internal class WormBinMachine : GenericObjectMachine<SObject>
+    /// <summary>A statue of true perfection that provides output.</summary>
+    /// <remarks>Derived from <see cref="SObject.DayUpdate"/> (search for 'case 280').</remarks>
+    internal class StatueOfTruePerfectionMachine : GenericObjectMachine<SObject>
     {
         /*********
         ** Public methods
@@ -15,20 +15,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The location containing the machine.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        public WormBinMachine(SObject machine, GameLocation location, Vector2 tile)
+        public StatueOfTruePerfectionMachine(SObject machine, GameLocation location, Vector2 tile)
             : base(machine, location, tile) { }
 
-        /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        /// <summary>Get the machine's processing state.</summary>
+        public override MachineState GetState()
         {
-            SObject bin = this.Machine;
-            return new TrackedItem(bin.heldObject.Value, item =>
-            {
-                bin.heldObject.Value = new SObject(685, Game1.random.Next(2, 6));
-                bin.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay);
-                bin.readyForHarvest.Value = false;
-                bin.showNextIndex.Value = false;
-            });
+            return this.Machine.heldObject.Value != null
+                ? MachineState.Done
+                : MachineState.Processing;
         }
 
         /// <summary>Provide input to the machine.</summary>
