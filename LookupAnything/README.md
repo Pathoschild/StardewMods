@@ -215,6 +215,7 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * trees and fruit trees.
 * in-world puzzles, including...
   * Fern Islands crystal cave puzzle;
+  * Fern Islands field office donation screen;
   * Fern Islands mermaid puzzle;
   * Fern Islands shrine puzzle.
 * map tiles (if [enabled](#configure)).

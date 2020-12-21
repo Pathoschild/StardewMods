@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 ** Inventory
                 ****/
                 // chest
-                case MenuWithInventory inventoryMenu:
+                case MenuWithInventory inventoryMenu when !(menu is FieldOfficeMenu):
                     {
                         Item item = Game1.player.CursorSlotItem ?? inventoryMenu.heldItem ?? inventoryMenu.hoveredItem;
                         if (item != null)
@@ -188,8 +188,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     break;
 
                 /****
-                ** Bundle menu
+                ** Other menus
                 ****/
+                // community center bundle menu
                 case JunimoNoteMenu bundleMenu:
                     {
                         // hovered inventory item
@@ -217,6 +218,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         {
                             if (slot.item != null && slot.containsPoint(cursorX, cursorY))
                                 return this.BuildSubject(slot.item, ObjectContext.Inventory);
+                        }
+                    }
+                    break;
+
+                // Fern Islands field office menu
+                case FieldOfficeMenu fieldOfficeMenu:
+                    {
+                        ClickableComponent slot = fieldOfficeMenu.pieceHolders.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
+                        if (slot != null)
+                        {
+                            // donated item
+                            if (slot.item != null)
+                                return this.BuildSubject(slot.item, ObjectContext.Inventory, knownQuality: false);
+
+                            // empty slot
+                            if (int.TryParse(slot.label, out int itemId))
+                                return this.BuildSubject(new SObject(itemId, 1), ObjectContext.Inventory, knownQuality: false);
                         }
                     }
                     break;
