@@ -367,23 +367,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // fence
             if (item is Fence fence)
             {
-                // get equivalent object's sprite ID
-                FenceType fenceType = (FenceType)fence.whichType.Value;
-                int? spriteID = null;
-                if (fence.isGate.Value)
-                    spriteID = 325;
-                else if (fenceType == FenceType.Wood)
-                    spriteID = 322;
-                else if (fenceType == FenceType.Stone)
-                    spriteID = 323;
-                else if (fenceType == FenceType.Iron)
-                    spriteID = 324;
-                else if (fenceType == FenceType.Hardwood)
-                    spriteID = 298;
-
-                // get object
-                if (spriteID.HasValue)
-                    return new SObject(spriteID.Value, 1);
+                int spriteID = fence.GetItemParentSheetIndex();
+                return new SObject(spriteID, 1);
             }
 
             return item;
@@ -435,7 +420,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 string summary;
                 if (data.CanHarvestNow)
                     summary = I18n.Generic_Now();
-                else if (!Game1.currentLocation.IsGreenhouse && !data.Seasons.Contains(nextHarvest.Season))
+                else if (!Game1.currentLocation.SeedsIgnoreSeasonsHere() && !data.Seasons.Contains(nextHarvest.Season))
                     summary = I18n.Crop_Harvest_TooLate(date: this.Stringify(nextHarvest));
                 else
                     summary = $"{this.Stringify(nextHarvest)} ({this.GetRelativeDateStr(nextHarvest)})";

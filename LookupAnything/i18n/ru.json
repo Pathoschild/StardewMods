@@ -69,6 +69,7 @@
     "shop.marnie": "Марни",
     "shop.pierre": "Пьер",
     "shop.robin": "Робин",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Вилли",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "Разбейте для получения топазов.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Медная жила",
     "data.item.copper-node.description": "Разбейте для получения медной руды.",
     "data.item.gold-node.name": "Золотая жила",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "Разбейте для получения иридиевой руды.",
     "data.item.iron-node.name": "Железная жила",
     "data.item.iron-node.description": "Разбейте для получения железной руды.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Цветной камень",
     "data.item.colored-stone.description": "Невзрачный камень. Может содержать камни, руду или жеоды.",
     "data.item.mine-stone.name": "Камень",
-    "data.item.mine-stone.description": "Разбейте, чтобы получить камень.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Бочка",
@@ -636,6 +648,7 @@
 
     // values
     "tree.name.big-mushroom": "Большой гриб",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Клён",
     "tree.name.oak": "Дуб",
     "tree.name.palm": "Пальма",

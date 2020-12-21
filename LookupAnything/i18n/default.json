@@ -69,6 +69,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop",
     "shop.willy": "Willy",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "Break apart to obtain topaz.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node",
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.",
     "data.item.copper-node.name": "Copper Node",
     "data.item.copper-node.description": "Break apart to obtain copper ore.",
     "data.item.gold-node.name": "Gold Node",
@@ -139,12 +142,20 @@
     "data.item.iridium-node.description": "Break apart to obtain iridium ore.",
     "data.item.iron-node.name": "Iron Node",
     "data.item.iron-node.description": "Break apart to obtain iron ore.",
+    "data.item.omni-geode-node.name": "Omni Geode Node",
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.",
 
     // mine stones
     "data.item.colored-stone.name": "Colored Stone",
     "data.item.colored-stone.description": "A nondescript stone. It might contain stone, ores, or geodes.",
     "data.item.mine-stone.name": "Stone",
-    "data.item.mine-stone.description": "Break apart to obtain stone.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.",
+
+    // other stones
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Barrel",
@@ -628,6 +639,7 @@
 
     // values
     "tree.name.big-mushroom": "Big Mushroom",
+    "tree.name.mahogany": "Mahogany Tree",
     "tree.name.maple": "Maple Tree",
     "tree.name.oak": "Oak Tree",
     "tree.name.palm": "Palm Tree",

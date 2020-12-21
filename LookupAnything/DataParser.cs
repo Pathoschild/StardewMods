@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
         public IEnumerable<BundleModel> GetBundles()
         {
-            IDictionary<string, string> data = Game1.content.Load<Dictionary<string, string>>("Data\\Bundles");
+            IDictionary<string, string> data = Game1.netWorldState.Value.BundleData;
             foreach (var entry in data)
             {
                 // parse key

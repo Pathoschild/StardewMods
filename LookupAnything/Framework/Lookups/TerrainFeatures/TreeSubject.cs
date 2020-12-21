@@ -43,6 +43,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
+            var location = tree.currentLocation;
 
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
@@ -56,7 +57,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (!isFullyGrown)
             {
                 string label = I18n.Tree_NextGrowth();
-                if (Game1.IsWinter && !Game1.currentLocation.IsGreenhouse)
+                if (location.GetSeasonForLocation() == "winter" && !location.SeedsIgnoreSeasonsHere())
                     yield return new GenericField(label, I18n.Tree_NextGrowth_Winter());
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());
@@ -112,9 +113,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             return type switch
             {
                 TreeType.BigMushroom => I18n.Tree_Name_BigMushroom(),
+                TreeType.Mahogany => I18n.Tree_Name_Mahogany(),
                 TreeType.Maple => I18n.Tree_Name_Maple(),
                 TreeType.Oak => I18n.Tree_Name_Oak(),
                 TreeType.Palm => I18n.Tree_Name_Palm(),
+                TreeType.Palm2 => I18n.Tree_Name_Palm(),
                 TreeType.Pine => I18n.Tree_Name_Pine(),
                 _ => I18n.Tree_Name_Unknown()
             };

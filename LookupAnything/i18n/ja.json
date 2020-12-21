@@ -69,6 +69,7 @@
     "shop.marnie": "マーニー",
     "shop.pierre": "ピエール",
     "shop.robin": "ロビン",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "ウィリー",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "壊すとトパーズが手に入る",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "銅鉱脈",
     "data.item.copper-node.description": "壊すと銅鉱石が手に入る",
     "data.item.gold-node.name": "金鉱脈",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "壊すとイリジウム鉱石が手に入る",
     "data.item.iron-node.name": "鉄鉱脈",
     "data.item.iron-node.description": "壊すと鉄鉱石が手に入る",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "色付きの石",
     "data.item.colored-stone.description": "変哲もない石。 石材,鉱石,ジオードを含んでいるかもしれない",
     "data.item.mine-stone.name": "石",
-    "data.item.mine-stone.description": "壊すと石材が手に入る",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "タル",
@@ -643,6 +655,7 @@
 
     // values
     "tree.name.big-mushroom": "大きなキノコ",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "カエデの木",
     "tree.name.oak": "カシの木",
     "tree.name.palm": "ヤシの木",

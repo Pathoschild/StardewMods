@@ -69,6 +69,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Willy",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "Törd szét, hogy topázhoz juss.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Rézércet Tartalmazó Kőzet",
     "data.item.copper-node.description": "Törd szét, hogy rézérchez juss.",
     "data.item.gold-node.name": "Aranyércet Tartalmazó Kőzet",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "Törd szét, hogy irídiumhoz juss.",
     "data.item.iron-node.name": "Vasércet Tartalmazó Kőzet",
     "data.item.iron-node.description": "Törd szét, hogy vasérchez juss.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Színes Kő",
     "data.item.colored-stone.description": "Egy meghatározhatatlan kő. Lehet, hogy tartalmaz követ, érceket, vagy geódákat.",
     "data.item.mine-stone.name": "Kő",
-    "data.item.mine-stone.description": "Törd szét, hogy kőhöz juss.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Hordó",
@@ -635,6 +647,7 @@
 
     // values
     "tree.name.big-mushroom": "Nagy Gomba",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Juharfa",
     "tree.name.oak": "Tölgyfa",
     "tree.name.palm": "Pálmafa",

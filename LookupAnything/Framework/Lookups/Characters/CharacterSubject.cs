@@ -48,6 +48,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Whether the NPC is a haunted skull monster.</summary>
         private readonly bool IsHauntedSkull;
 
+        /// <summary>Whether the NPC is a magma sprite monster.</summary>
+        private readonly bool IsMagmaSprite;
+
 
         /*********
         ** Public methods
@@ -80,10 +83,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
             // detect special cases
             if (npc is Bat bat)
+            {
                 this.IsHauntedSkull = bat.hauntedSkull.Value;
+                this.IsMagmaSprite = bat.magmaSprite.Value;
+            }
             else
                 this.IsGourmand = type == SubjectType.Villager && npc.Name == "Gourmand" && npc.currentLocation.Name == nameof(IslandFarmCave);
-
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -137,7 +142,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             NPC npc = this.Target;
 
             // special cases
-            if (this.IsHauntedSkull)
+            if (this.IsHauntedSkull || this.IsMagmaSprite)
             {
                 var sourceRect = Game1.getSourceRectForStandardTileSheet(npc.Sprite.Texture, 4, 16, 16);
                 spriteBatch.Draw(npc.Sprite.Texture, position: position, sourceRectangle: sourceRect, color: Color.White, rotation: 0, origin: Vector2.Zero, scale: new Vector2(size.X / 16), effects: SpriteEffects.None, layerDepth: 1);

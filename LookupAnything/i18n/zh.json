@@ -69,6 +69,7 @@
     "shop.marnie": "玛妮",
     "shop.pierre": "皮埃尔",
     "shop.robin": "罗宾",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "威利",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "打碎之后可以获得黄水晶。",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "铜矿点",
     "data.item.copper-node.description": "打碎之后可以获得铜矿石。",
     "data.item.gold-node.name": "黄金矿点",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "打碎之后可以获得铱矿石。",
     "data.item.iron-node.name": "铁矿点",
     "data.item.iron-node.description": "打碎之后可以获得铁矿石。",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "各色石头",
     "data.item.colored-stone.description": "一颗常见的石头。可能藏有石头、矿石或晶洞。",
     "data.item.mine-stone.name": "石头",
-    "data.item.mine-stone.description": "打碎之后可以获得石头。",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "桶",
@@ -637,6 +649,7 @@
 
     // values
     "tree.name.big-mushroom": "大蘑菇",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "枫树",
     "tree.name.oak": "橡树",
     "tree.name.palm": "棕榈树",

@@ -68,6 +68,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Willy",
 
     // recipe types
@@ -130,6 +131,8 @@
     "data.item.topaz-node.description": "Rompilo per ottenere topazi.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Nodo di rame",
     "data.item.copper-node.description": "Rompilo per ottenere del rame.",
     "data.item.gold-node.name": "Nodo d'oro",
@@ -138,12 +141,21 @@
     "data.item.iridium-node.description": "Rompilo per ottenere dell'iridio.",
     "data.item.iron-node.name": "Nodo di ferro",
     "data.item.iron-node.description": "Rompilo per ottenere del ferro.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Pietra colorata",
     "data.item.colored-stone.description": "Una pietra non descrivibile. Potrebbe contenere pietra, minerali, o geodi.",
     "data.item.mine-stone.name": "Pietra",
-    "data.item.mine-stone.description": "Rompila per ottenere della pietra.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Barile",
@@ -635,6 +647,7 @@
 
     // values
     "tree.name.big-mushroom": "Fungo grande",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Acero",
     "tree.name.oak": "Quercia",
     "tree.name.palm": "Palma",

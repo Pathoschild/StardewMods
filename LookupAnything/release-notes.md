@@ -4,6 +4,7 @@
 ## Upcoming release
 * Updated for Stardew Valley 1.5, including...
   * split-screen mode and UI scaling;
+  * added support for new content;
   * added island crystal cave puzzle lookup;
   * added island field office lookup;
   * added island Gourmand lookup;

@@ -69,6 +69,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Willy",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "Baue sie ab, um Topase zu bekommen.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Kupferader",
     "data.item.copper-node.description": "Baue sie ab, um Kupfererz zu bekommen.",
     "data.item.gold-node.name": "Goldader",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
     "data.item.iron-node.name": "Eisenader",
     "data.item.iron-node.description": "Baue sie ab, um Eisenerz zu bekommen.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Farbiger Stein",
     "data.item.colored-stone.description": "Ein unscheinbarer Stein. Kann Stein, Erz oder Geoden enthalten.",
     "data.item.mine-stone.name": "Stein",
-    "data.item.mine-stone.description": "Baue ihn ab, um Steine zu bekommen.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Fass",
@@ -636,6 +648,7 @@
 
     // values
     "tree.name.big-mushroom": "Großer Pilz",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Ahornbaum",
     "tree.name.oak": "Eichenbaum",
     "tree.name.palm": "Palme",

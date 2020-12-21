@@ -69,6 +69,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Willy",
 
     // recipe types
@@ -131,6 +132,8 @@
     "data.item.topaz-node.description": "Quebre-a para coletar topaz.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Aglomerado de Cobre",
     "data.item.copper-node.description": "Quebre-a para coletar minérios de cobre.",
     "data.item.gold-node.name": "Aglomerado de Ouro",
@@ -139,12 +142,21 @@
     "data.item.iridium-node.description": "Quebre-a para receber minérios de irídio.",
     "data.item.iron-node.name": "Aglomerado de Ferro",
     "data.item.iron-node.description": "Quebre-a pra receber minérios de ferro.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Rocha Colorida",
     "data.item.colored-stone.description": "Uma rocha indescritível. Talvez possa conter pedras, minérios, ou geodos.",
     "data.item.mine-stone.name": "Pedra",
-    "data.item.mine-stone.description": "Quebre para obter preda.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Barríl",
@@ -635,6 +647,7 @@
 
     // values
     "tree.name.big-mushroom": "Cogumelo gigante",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Árvore de Ácer",
     "tree.name.oak": "Carvalho",
     "tree.name.palm": "Palmeira",

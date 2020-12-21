@@ -283,6 +283,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             {
                 indexOfHarvest = target.whichForageCrop.Value switch
                 {
+                    Crop.forageCrop_ginger => 829,
                     Crop.forageCrop_springOnion => 399,
                     _ => indexOfHarvest
                 };

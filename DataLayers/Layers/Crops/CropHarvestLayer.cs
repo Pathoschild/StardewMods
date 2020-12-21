@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
                 // yield tile
                 if (data.CanHarvestNow)
                     yield return new TileData(tile, this.Ready);
-                else if (!location.IsGreenhouse && !data.Seasons.Contains(data.GetNextHarvest().Season))
+                else if (!location.SeedsIgnoreSeasonsHere() && !data.Seasons.Contains(data.GetNextHarvest().Season))
                     yield return new TileData(tile, this.NotEnoughTime);
                 else
                     yield return new TileData(tile, this.NotReady);

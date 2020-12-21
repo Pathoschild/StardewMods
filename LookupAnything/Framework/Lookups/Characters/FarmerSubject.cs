@@ -159,6 +159,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 Farm.mountains_layout => GameI18n.GetString("Strings\\UI:Character_FarmMining").Replace("_", Environment.NewLine),
                 Farm.riverlands_layout => GameI18n.GetString("Strings\\UI:Character_FarmFishing").Replace("_", Environment.NewLine),
                 Farm.fourCorners_layout => GameI18n.GetString("Strings\\UI:Character_FarmFourCorners").Replace("_", Environment.NewLine),
+                Farm.beach_layout => GameI18n.GetString("Strings\\UI:Character_FarmBeach").Replace("_", Environment.NewLine),
 
                 _ => I18n.Player_FarmMap_Custom()
             };

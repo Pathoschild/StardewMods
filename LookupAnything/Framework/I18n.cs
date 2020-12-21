@@ -1,4 +1,3 @@
-
 using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics.CodeAnalysis;
@@ -350,6 +349,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("shop.robin");
         }
 
+        /// <summary>Get a translation equivalent to "volcano shop".</summary>
+        public static string Shop_Volcano()
+        {
+            return I18n.GetByKey("shop.volcano");
+        }
+
         /// <summary>Get a translation equivalent to "Willy".</summary>
         public static string Shop_Willy()
         {
@@ -638,6 +643,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.topaz-node.description");
         }
 
+        /// <summary>Get a translation equivalent to "Cinder Shard Node".</summary>
+        public static string Data_Item_CinderShardNode_Name()
+        {
+            return I18n.GetByKey("data.item.cinder-shard-node.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain cinder shards.".</summary>
+        public static string Data_Item_CinderShardNode_Description()
+        {
+            return I18n.GetByKey("data.item.cinder-shard-node.description");
+        }
+
         /// <summary>Get a translation equivalent to "Copper Node".</summary>
         public static string Data_Item_CopperNode_Name()
         {
@@ -686,6 +703,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.iron-node.description");
         }
 
+        /// <summary>Get a translation equivalent to "Omni Geode Node".</summary>
+        public static string Data_Item_OmniGeodeNode_Name()
+        {
+            return I18n.GetByKey("data.item.omni-geode-node.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain an omni geode.".</summary>
+        public static string Data_Item_OmniGeodeNode_Description()
+        {
+            return I18n.GetByKey("data.item.omni-geode-node.description");
+        }
+
         /// <summary>Get a translation equivalent to "Colored Stone".</summary>
         public static string Data_Item_ColoredStone_Name()
         {
@@ -704,10 +733,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.mine-stone.name");
         }
 
-        /// <summary>Get a translation equivalent to "Break apart to obtain stone.".</summary>
+        /// <summary>Get a translation equivalent to "Break apart to obtain stone with a chance of coal.".</summary>
         public static string Data_Item_MineStone_Description()
         {
             return I18n.GetByKey("data.item.mine-stone.description");
+        }
+
+        /// <summary>Get a translation equivalent to "Clay Stone".</summary>
+        public static string Data_Item_ClayStone_Name()
+        {
+            return I18n.GetByKey("data.item.clay-stone.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain clay.".</summary>
+        public static string Data_Item_ClayStone_Description()
+        {
+            return I18n.GetByKey("data.item.clay-stone.description");
+        }
+
+        /// <summary>Get a translation equivalent to "Fossil Stone".</summary>
+        public static string Data_Item_FossilStone_Name()
+        {
+            return I18n.GetByKey("data.item.fossil-stone.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain fossils and bones.".</summary>
+        public static string Data_Item_FossilStone_Description()
+        {
+            return I18n.GetByKey("data.item.fossil-stone.description");
         }
 
         /// <summary>Get a translation equivalent to "Barrel".</summary>
@@ -2538,6 +2591,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string Tree_Name_BigMushroom()
         {
             return I18n.GetByKey("tree.name.big-mushroom");
+        }
+
+        /// <summary>Get a translation equivalent to "Mahogany Tree".</summary>
+        public static string Tree_Name_Mahogany()
+        {
+            return I18n.GetByKey("tree.name.mahogany");
         }
 
         /// <summary>Get a translation equivalent to "Maple Tree".</summary>
