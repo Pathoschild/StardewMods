@@ -22,19 +22,42 @@ usual seasons.
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
-Here's what you can change:
+You can change these settings:
 
-setting              | default     | what it affects
-:------------------- | :---------- | :------------------
-`EnableInSeasons`    | all seasons | The seasons in which any crops should grow. Crops will revert to normal in disabled seasons.
-`FarmAnyLocation`    | `true`      | Whether you can plant crops in non-farm locations, as long as there's tillable dirt there. This only works in seasons enabled via `EnableInSeasons`.
-`ForceTillable`      | dirt, grass | The tile types to make tillable beyond those that would normally be (`other` includes indoor flooring). The default values let you plant on dirt and grass tiles.
+setting                | default | what it affects
+:--------------------- | :------ | :------------------
+`GrowCrops`            | true    | Per-location, whether crops can grow here.
+`GrowCropsOutOfSeason` | true    | Per-location, whether out-of-season crops grow here too.
+`ForceTillable`        | dirt, grass | The tile types to make tillable beyond those that would normally be. The available types are `dirt`, `grass`, `stone`, and `other`.
+
+The location keys can be one of `*` (all locations), `Indoors`, `Outdoors`, or an internal location
+name. (You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see location
+names.)
+
+By default all locations can grow any crop, but you can change that. For example, this enables
+in-season crops anywhere _and_ out-of-season crops in the secret woods:
+
+```js
+{
+   "InLocations": {
+      "*": {
+         "GrowCrops": true,
+         "GrowCropsOutOfSeason": false
+      },
+      "SecretWoods": {
+         "GrowCrops": true,
+         "GrowCropsOutOfSeason": true
+      },
+   }
+}
+```
+
+If multiple configs apply to a location, the last one specified applies. This is always additive,
+so you can't _disable_ crops in a location that normally does allow them.
 
 ## Compatibility
 Compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and multiplayer. In
-multiplayer mode, it must be installed by the main player to work correctly; farmhands only need it
-if they want to enable tilling more tile types (but it won't cause any issues if they don't have
-it).
+multiplayer mode, it must be installed by the main player to work correctly.
 
 ## See also
 * [Release notes](release-notes.md)

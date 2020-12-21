@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5.
+* Overhauled mod configuration to be more flexible (e.g. allow crops anywhere without disabling season checks).
+* Improved compatibility with some custom-location mods.
+
 ## 1.2.1
 Released 02 August 2020.
 
