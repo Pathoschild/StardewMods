@@ -488,7 +488,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 try
                 {
                     var recipe = new CraftingRecipe(entry.Key, entry.IsCookingRecipe);
-                    recipes.Add(new RecipeModel(recipe, reflectionHelper));
+                    recipes.Add(new RecipeModel(recipe));
                 }
                 catch (Exception ex)
                 {

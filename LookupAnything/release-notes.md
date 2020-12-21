@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.5.
 * Fixed some untranslated text.
 * Fixed NPC lookups not showing social info for some custom mod NPCs. (This affects NPCs with friendship data but `CanSocialize` set to false.)
 * Improved translations. Thanks to spindensity (updated Chinese)!

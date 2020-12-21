@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.Constants
         /// <summary>Unlocks the desert casino.</summary>
         ClubCard,
 
+        /// <summary>Allows access to all buildings in town, at any time of day.</summary>
+        KeyToTheTown,
+
         /// <summary>Permanently increases daily luck.</summary>
         SpecialCharm,
 

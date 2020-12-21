@@ -804,7 +804,7 @@ namespace Pathoschild.Stardew.TractorMod
         private void ApplyTextures(Horse horse)
         {
             if (this.IsTractor(horse))
-                this.Helper.Reflection.GetField<Texture2D>(horse.Sprite, "spriteTexture").SetValue(this.TractorTexture);
+                horse.Sprite.spriteTexture = this.TractorTexture;
         }
 
         /// <summary>Apply the mod textures to the given stable, if applicable.</summary>

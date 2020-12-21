@@ -268,6 +268,7 @@ flag | meaning
 `ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` and `IsJojaMartComplete` tokens instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
 `ccMovieTheater`<br />`ccMovieTheaterJoja` | The movie theater has been constructed, either through the community path (only `ccMovieTheater` is set) or through Joja (both are set).
 `doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
+`Farm_Eternal` | The player has reached a 100% completion score.
 `galaxySword` | The player has acquired the Galaxy Sword.
 `geodeFound` | The player has found at least one geode.
 `guildMember` | The player is a member of the Adventurer's Guild.
@@ -336,6 +337,7 @@ flag                       | meaning
 `DwarvishTranslationGuide` | Unlocks speaking to the Dwarf.
 `RustyKey`                 | Unlocks the sewers.
 `ClubCard`                 | Unlocks the desert casino.
+`KeyToTheTown`             | Allows access to all buildings in town, at any time of day.
 `SpecialCharm`             | Permanently increases daily luck.
 `SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
 `MagnifyingGlass`          | Unlocks the ability to find secret notes.

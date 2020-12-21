@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -74,7 +73,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 description: overrides?.DescriptionKey != null ? I18n.GetByKey(overrides.DescriptionKey) : null,
                 type: CharacterSubject.GetTypeName(npc, type)
             );
-            this.IsHauntedSkull = npc is Bat && this.Reflection.GetField<NetBool>(npc, "hauntedSkull").GetValue().Value;
+
+            // detect special cases
+            if (npc is Bat bat)
+                this.IsHauntedSkull = bat.hauntedSkull.Value;
         }
 
         /// <summary>Get the data to display for this subject.</summary>

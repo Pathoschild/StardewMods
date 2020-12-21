@@ -50,9 +50,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             return new[]
             {
-                this.GetGroup(location, visibleTiles, this.Fertilizer, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality),
-                this.GetGroup(location, visibleTiles, this.SpeedGro, HoeDirt.speedGro, HoeDirt.superSpeedGro),
-                this.GetGroup(location, visibleTiles, this.RetainingSoil, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQUality)
+                this.GetGroup(location, visibleTiles, this.Fertilizer, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality, HoeDirt.fertilizerDeluxeQuality),
+                this.GetGroup(location, visibleTiles, this.SpeedGro, HoeDirt.speedGro, HoeDirt.superSpeedGro, HoeDirt.hyperSpeedGro),
+                this.GetGroup(location, visibleTiles, this.RetainingSoil, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQuality, HoeDirt.waterRetentionSoilDeluxe)
             };
         }
 

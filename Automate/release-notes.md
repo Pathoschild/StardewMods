@@ -1,6 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5, including...
+  * new path types.
+
 ## 1.18.4
 Released 05 December 2020.
 

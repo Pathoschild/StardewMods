@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5.
+
 ## 4.12
 Released 05 December 2020.
 

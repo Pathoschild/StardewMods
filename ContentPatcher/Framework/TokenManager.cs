@@ -305,6 +305,8 @@ namespace ContentPatcher.Framework
                 yield return WalletItem.RustyKey.ToString();
             if (player.hasClubCard)
                 yield return WalletItem.ClubCard.ToString();
+            if (player.HasTownKey)
+                yield return WalletItem.KeyToTheTown.ToString();
             if (player.hasSpecialCharm)
                 yield return WalletItem.SpecialCharm.ToString();
             if (player.hasSkullKey)

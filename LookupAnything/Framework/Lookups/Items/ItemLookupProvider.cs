@@ -7,7 +7,6 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
@@ -55,14 +54,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // furniture
-            if (location is DecoratableLocation decoratableLocation)
+            foreach (var furniture in location.furniture)
             {
-                foreach (var furniture in decoratableLocation.furniture)
-                {
-                    Vector2 entityTile = furniture.TileLocation;
-                    if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                        yield return new ObjectTarget(this.GameHelper, furniture, entityTile, this.Reflection, () => this.BuildSubject(furniture, ObjectContext.Inventory));
-                }
+                Vector2 entityTile = furniture.TileLocation;
+                if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                    yield return new ObjectTarget(this.GameHelper, furniture, entityTile, this.Reflection, () => this.BuildSubject(furniture, ObjectContext.Inventory));
             }
 
             // crops
