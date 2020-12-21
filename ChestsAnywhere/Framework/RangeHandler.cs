@@ -59,6 +59,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return new RangeHandler(null, ChestRange.CurrentLocation, Game1.currentLocation);
         }
 
+        /// <summary>Get a range handler which restricts access to a specific location.</summary>
+        /// <param name="location">The specific location.</param>
+        public static RangeHandler SpecificLocation(GameLocation location)
+        {
+            return new RangeHandler(null, ChestRange.CurrentLocation, location); // special case for migrating data
+        }
+
 
         /*********
         ** Private methods

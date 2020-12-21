@@ -69,11 +69,13 @@
     "shop.marnie": "Марни",
     "shop.pierre": "Пьер",
     "shop.robin": "Робин",
+    "shop.volcano": "volcano shop", // TODO
     "shop.willy": "Вилли",
 
     // recipe types
     "recipe-type.cooking": "Готовка",
     "recipe-type.crafting": "Изготовление",
+    "recipe-type.tailoring": "Пошив одежды",
 
     // NPC descriptions
     "data.npc.pet.description": "Ваш преданный питомец.",
@@ -130,6 +132,8 @@
     "data.item.topaz-node.description": "Разбейте для получения топазов.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Медная жила",
     "data.item.copper-node.description": "Разбейте для получения медной руды.",
     "data.item.gold-node.name": "Золотая жила",
@@ -138,12 +142,21 @@
     "data.item.iridium-node.description": "Разбейте для получения иридиевой руды.",
     "data.item.iron-node.name": "Железная жила",
     "data.item.iron-node.description": "Разбейте для получения железной руды.",
+    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
 
     // mine stones
     "data.item.colored-stone.name": "Цветной камень",
     "data.item.colored-stone.description": "Невзрачный камень. Может содержать камни, руду или жеоды.",
     "data.item.mine-stone.name": "Камень",
-    "data.item.mine-stone.description": "Разбейте, чтобы получить камень.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Бочка",
@@ -547,6 +560,59 @@
 
 
     /*********
+    ** Puzzles
+    *********/
+    // labels
+    // TODO
+    "puzzle.solution": "Solution",
+
+    // values
+    // TODO
+    "puzzle.solution.solved": "Puzzle solved!",
+    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    // TODO
+    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
+    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+
+    // values
+    // TODO
+    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
+    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
+    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+
+
+    /*********
+    ** Tile lookups > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    // TODO
+    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
+    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    // TODO
+    "puzzle.island-shrine.title": "Island Shrine Puzzle",
+    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+
+    // values
+    // TODO
+    "puzzle.island-shrine.solution.east": "East: {{item}}",
+    "puzzle.island-shrine.solution.north": "North: {{item}}",
+    "puzzle.island-shrine.solution.south": "South: {{item}}",
+    "puzzle.island-shrine.solution.west": "West: {{item}}",
+
+
+    /*********
     ** Tile lookups
     *********/
     // labels
@@ -564,11 +630,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
-    // trash bear lookup labels
-    "trash-bear.item-wanted": "Требуется предмет",
-    "trash-bear.quest-progress": "Прогресс задания",
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Требуется предмет",
+    "trash-bear-or-gourmand.quest-progress": "Прогресс задания",
 
 
     /*********
@@ -582,6 +648,7 @@
 
     // values
     "tree.name.big-mushroom": "Большой гриб",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Клён",
     "tree.name.oak": "Дуб",
     "tree.name.palm": "Пальма",

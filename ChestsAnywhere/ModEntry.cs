@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -33,15 +34,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Encapsulates logic for finding chests.</summary>
         private ChestFactory ChestFactory;
 
-
-        /****
-        ** State
-        ****/
         /// <summary>The selected in-game inventory.</summary>
-        private IList<Item> SelectedInventory;
+        private readonly PerScreen<IList<Item>> SelectedInventory = new PerScreen<IList<Item>>();
 
         /// <summary>The overlay for the current menu which which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
-        private IStorageOverlay CurrentOverlay;
+        private readonly PerScreen<IStorageOverlay> CurrentOverlay = new PerScreen<IStorageOverlay>();
 
 
         /*********
@@ -60,6 +57,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
@@ -90,6 +88,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // show multiplayer limitations warning
             if (!Context.IsMainPlayer)
                 this.Monitor.Log("Multiplayer limitations: you can only access chests in synced locations since you're not the main player. This is due to limitations in the game's sync logic.", LogLevel.Info);
+
+            // migrate legacy chest data
+            if (Context.IsMainPlayer)
+                this.MigrateLegacyData();
+        }
+
+        /// <summary>The method invoked after locations are added or removed from the game.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        {
+            if (Context.IsMultiplayer)
+            {
+                foreach (GameLocation location in e.Added)
+                    this.MigrateLegacyData(location);
+            }
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
@@ -104,7 +118,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 if (cursorChest != null && !cursorChest.HasDefaultName())
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
-                    CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                    CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.uiViewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
                 }
             }
         }
@@ -169,14 +183,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             IClickableMenu menu = Game1.activeClickableMenu;
 
             // already matches menu
-            if (this.CurrentOverlay?.ForMenuInstance == menu)
+            if (this.CurrentOverlay.Value?.ForMenuInstance == menu)
                 return;
 
             // remove old overlay
-            if (this.CurrentOverlay != null)
+            if (this.CurrentOverlay.Value != null)
             {
-                this.CurrentOverlay?.Dispose();
-                this.CurrentOverlay = null;
+                this.CurrentOverlay.Value?.Dispose();
+                this.CurrentOverlay.Value = null;
             }
 
             // get open chest
@@ -204,19 +218,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             switch (menu)
             {
                 case ItemGrabMenu chestMenu:
-                    this.CurrentOverlay = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay.Value = new ChestOverlay(chestMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
 
                 case ShopMenu shopMenu:
-                    this.CurrentOverlay = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
+                    this.CurrentOverlay.Value = new ShopMenuOverlay(shopMenu, chest, chests, this.Config, this.Keys, this.Helper.Events, this.Helper.Input, this.Helper.Reflection, showAutomateOptions: isAutomateInstalled && chest.CanConfigureAutomate);
                     break;
             }
-            this.CurrentOverlay.OnChestSelected += selected =>
+
+            // hook new overlay
+            this.CurrentOverlay.Value.OnChestSelected += selected =>
             {
-                this.SelectedInventory = selected.Container.Inventory;
+                this.SelectedInventory.Value = selected.Container.Inventory;
                 Game1.activeClickableMenu = selected.OpenMenu();
             };
-            this.CurrentOverlay.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
+            this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
         }
 
         /// <summary>Open the menu UI.</summary>
@@ -236,7 +252,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest =
-                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory))
+                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory.Value))
                 ?? chests.FirstOrDefault(p => p.Location == Game1.currentLocation)
                 ?? chests.FirstOrDefault();
 
@@ -309,6 +325,31 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 return I18n.Errors_NoChestsInRange();
 
             return I18n.Errors_NoChests();
+        }
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        private void MigrateLegacyData()
+        {
+            // chests
+            foreach (var chest in this.ChestFactory.GetChests(RangeHandler.Unlimited()))
+                chest.Container.MigrateLegacyData();
+
+            // shipping bin
+            var binData = this.Helper.Data.ReadSaveData<ContainerData>("shipping-bin");
+            if (binData != null)
+            {
+                Farm farm = Game1.getFarm();
+                binData.ToModData(farm.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
+                this.Helper.Data.WriteSaveData<ContainerData>("shipping-bin", null);
+            }
+        }
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        /// <param name="location">The location whose chests to migrate.</param>
+        private void MigrateLegacyData(GameLocation location)
+        {
+            foreach (var chest in this.ChestFactory.GetChests(RangeHandler.SpecificLocation(location)))
+                chest.Container.MigrateLegacyData();
         }
     }
 }

@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 // When the animation starts, the game shows a yes/no dialogue asking the player to
                 // confirm they really want to eat the item. This code answers 'yes' and closes the
                 // dialogue.
-                Response yes = this.Reflection.GetField<List<Response>>(eatMenu, "responses").GetValue()[0];
+                Response yes = eatMenu.responses[0];
                 Game1.currentLocation.answerDialogue(yes);
                 eatMenu.closeDialogue();
             }
@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             if (Game1.player.itemToEat != null && Game1.activeClickableMenu is DialogueBox dialogue)
             {
-                string actualLine = this.Reflection.GetField<List<string>>(dialogue, "dialogues").GetValue().FirstOrDefault();
+                string actualLine = dialogue.dialogues.FirstOrDefault();
                 bool isConfirmation =
                     actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3159", Game1.player.itemToEat.DisplayName) // drink
                     || actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName); // eat

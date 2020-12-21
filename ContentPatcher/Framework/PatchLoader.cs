@@ -209,8 +209,16 @@ namespace ContentPatcher.Framework
                 // split target and from-file values
                 string[] targets = this.Lexer.SplitLexically(patch.Target).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
                 string[] fromFiles = this.Lexer.SplitLexically(patch.FromFile).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+
+                // no split needed
                 if (targets.Length <= 1 && fromFiles.Length <= 1)
                 {
+                    // strip unneeded commas from split fields
+                    // (Mod authors intuitively expect "a," to be the same as "a", but Content Patcher doesn't treat
+                    // these fields as sets after this split is done, so "a," would become the literal value.)
+                    patch.Target = targets.FirstOrDefault() ?? patch.Target;
+                    patch.FromFile = fromFiles.FirstOrDefault() ?? patch.FromFile;
+
                     yield return patch;
                     continue;
                 }
@@ -224,19 +232,16 @@ namespace ContentPatcher.Framework
                 {
                     foreach (string fromFile in fromFiles)
                     {
-                        var newPatch = new PatchConfig(patch);
+                        var newPatch = new PatchConfig(patch)
+                        {
+                            Target = target,
+                            FromFile = fromFile
+                        };
 
                         if (targets.Length > 1)
-                        {
                             newPatch.LogName += $" > {target}";
-                            newPatch.Target = target;
-                        }
-
                         if (fromFiles.Length > 1)
-                        {
                             newPatch.LogName += $" from {fromFile}";
-                            newPatch.FromFile = fromFile;
-                        }
 
                         yield return newPatch;
                     }

@@ -68,11 +68,13 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "boutique dans le volcan",
     "shop.willy": "Willy",
 
     // recipe types
     "recipe-type.cooking": "Cuisine",
     "recipe-type.crafting": "Artisanat",
+    "recipe-type.tailoring": "Couture",
 
     // NPC descriptions
     "data.npc.pet.description": "Vôtre loyal animal.",
@@ -129,6 +131,8 @@
     "data.item.topaz-node.description": "A casser pour obtenir de la topaze.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
     "data.item.copper-node.name": "Filon de cuivre",
     "data.item.copper-node.description": "A casser pour obtenir du minerais de cuivre.",
     "data.item.gold-node.name": "Filon d'or",
@@ -137,12 +141,21 @@
     "data.item.iridium-node.description": "A casser pour obtenir du minerais d'iridium.",
     "data.item.iron-node.name": "Filon de fer",
     "data.item.iron-node.description": "A casser pour obtenir du minerais du fer.",
+    "data.item.omni-geode-node.name": "Filon de Géode-omni",
+    "data.item.omni-geode-node.description": "A casser pour obtenir des géodes-omni.",
 
     // mine stones
     "data.item.colored-stone.name": "Pierre colorée",
     "data.item.colored-stone.description": "Une pierre. Peut contenir de la pierre, du minerais ou des géodes.",
     "data.item.mine-stone.name": "Pierre",
-    "data.item.mine-stone.description": "A casser pour obtenir de la pierre.",
+    "data.item.mine-stone.description": "A casser pour obtenir de la pierre avec une chance de charbon.",
+
+    // other stones
+    // TODO
+    "data.item.clay-stone.name": "Veine d'argile",
+    "data.item.clay-stone.description": "A casser pour obtenir de l'argile.",
+    "data.item.fossil-stone.name": "Pierre fossile",
+    "data.item.fossil-stone.description": "A casser pour obtenir des fossiles et des os.",
 
     // mine containers
     "data.item.barrel.name": "Tonneau",
@@ -545,6 +558,52 @@
 
 
     /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Solution",
+
+    // values
+    "puzzle.solution.solved": "Puzzle résolu!",
+    "puzzle.solution.hidden": "Les solutions de puzzle sont cachées en mode progression.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Puzzle de la grotte de cristal",
+    "puzzle.island-crystal-cave.crystal-id": "ID du cristal",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Activez la statue pour lancer le puzzle.",
+    "puzzle.island-crystal-cave.solution.waiting": "En attente du jeu pour générer la séquence ...",
+    "puzzle.island-crystal-cave.solution.activated": "Répétez le motif des cristaux activés:",
+
+
+    /*********
+    ** Tile lookups > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Puzzle de la sirène des Îles",
+    "puzzle.island-mermaid.solution.intro": "Utilisez des blocs de flûte pour jouer la chanson de la sirène du marché nocturne. Valeurs de hauteur (vous pouvez rechercher un bloc de flûte pour voir sa hauteur):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Puzzle du sanctuaire",
+    "puzzle.island-shrine.description": "Pour chaque piédestal, placez l'objet déposé par les oiseaux gemmes à l'emplacement correspondant de l'île lorsqu'il pleut. Les objects sont randomisés pour chaque sauvegarde.",
+
+    // values
+    "puzzle.island-shrine.solution.east": "Est: {{item}}",
+    "puzzle.island-shrine.solution.north": "Nord: {{item}}",
+    "puzzle.island-shrine.solution.south": "Sud: {{item}}",
+    "puzzle.island-shrine.solution.west": "Ouest: {{item}}",
+
+
+    /*********
     ** Tile lookups
     *********/
     // labels
@@ -562,11 +621,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Objet voulu",
-    "trash-bear.quest-progress": "Progrès de la quête",
+    "trash-bear-or-gourmand.item-wanted": "Objet voulu",
+    "trash-bear-or-gourmand.quest-progress": "Progrès de la quête",
 
 
     /*********
@@ -580,6 +639,7 @@
 
     // values
     "tree.name.big-mushroom": "Grand champignon",
+    "tree.name.mahogany": "Mahogany Tree", // TODO
     "tree.name.maple": "Erable",
     "tree.name.oak": "Chêne",
     "tree.name.palm": "Palmier",

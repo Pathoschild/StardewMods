@@ -69,17 +69,19 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
+    "shop.volcano": "volcano shop",
     "shop.willy": "Willy",
 
     // recipe types
     "recipe-type.cooking": "Cooking",
     "recipe-type.crafting": "Crafting",
+    "recipe-type.tailoring": "Tailoring",
 
     // NPC descriptions
     "data.npc.pet.description": "Your loyal pet.",
     "data.npc.horse.description": "Your loyal steed.",
     "data.npc.junimo.description": "A forest spirit from the spirit world. Very little is known about them.",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.",
+    "data.npc.trash-bear.description": "A friendly spirit who cleans up trash.",
 
     // item types
     "data.type.debris": "Debris",
@@ -130,6 +132,8 @@
     "data.item.topaz-node.description": "Break apart to obtain topaz.",
 
     // mine ores
+    "data.item.cinder-shard-node.name": "Cinder Shard Node",
+    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.",
     "data.item.copper-node.name": "Copper Node",
     "data.item.copper-node.description": "Break apart to obtain copper ore.",
     "data.item.gold-node.name": "Gold Node",
@@ -138,12 +142,20 @@
     "data.item.iridium-node.description": "Break apart to obtain iridium ore.",
     "data.item.iron-node.name": "Iron Node",
     "data.item.iron-node.description": "Break apart to obtain iron ore.",
+    "data.item.omni-geode-node.name": "Omni Geode Node",
+    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.",
 
     // mine stones
     "data.item.colored-stone.name": "Colored Stone",
     "data.item.colored-stone.description": "A nondescript stone. It might contain stone, ores, or geodes.",
     "data.item.mine-stone.name": "Stone",
-    "data.item.mine-stone.description": "Break apart to obtain stone.",
+    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.",
+
+    // other stones
+    "data.item.clay-stone.name": "Clay Stone",
+    "data.item.clay-stone.description": "Break apart to obtain clay.",
+    "data.item.fossil-stone.name": "Fossil Stone",
+    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
 
     // mine containers
     "data.item.barrel.name": "Barrel",
@@ -546,6 +558,52 @@
 
 
     /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Solution",
+
+    // values
+    "puzzle.solution.solved": "Puzzle solved!",
+    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
+    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
+    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
+    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+
+
+    /*********
+    ** Tile lookups > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
+    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Island Shrine Puzzle",
+
+    // values
+    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.solution.east": "East: {{item}}",
+    "puzzle.island-shrine.solution.north": "North: {{item}}",
+    "puzzle.island-shrine.solution.south": "South: {{item}}",
+    "puzzle.island-shrine.solution.west": "West: {{item}}",
+
+
+    /*********
     ** Tile lookups
     *********/
     // labels
@@ -563,11 +621,11 @@
 
 
     /*********
-    ** Trash bear lookups
+    ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    "trash-bear.item-wanted": "Item wanted",
-    "trash-bear.quest-progress": "Quest progress",
+    "trash-bear-or-gourmand.item-wanted": "Item wanted",
+    "trash-bear-or-gourmand.quest-progress": "Quest progress",
 
 
     /*********
@@ -581,6 +639,7 @@
 
     // values
     "tree.name.big-mushroom": "Big Mushroom",
+    "tree.name.mahogany": "Mahogany Tree",
     "tree.name.maple": "Maple Tree",
     "tree.name.oak": "Oak Tree",
     "tree.name.palm": "Palm Tree",

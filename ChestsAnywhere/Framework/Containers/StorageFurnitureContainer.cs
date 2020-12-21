@@ -50,10 +50,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             string defaultName = reflection.GetMethod(furniture, "getData").Invoke<string[]>()?[0];
 
             this.Furniture = furniture;
-            this.Data = ContainerData.ParseName(furniture.Name, defaultName);
+            this.Data = ContainerData.FromModData(furniture.modData, defaultName);
             this.DefaultName = defaultName;
-            if (StorageFurnitureContainer.DresserCategories == null)
-                StorageFurnitureContainer.DresserCategories = new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
+
+            StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -92,9 +92,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Persist the container data.</summary>
         public void SaveData()
         {
-            this.Furniture.name = this.Data.HasData()
-                ? this.Data.ToName()
-                : this.DefaultName;
+            this.Data.ToModData(this.Furniture.modData);
+        }
+
+        /// <summary>Migrate legacy container data, if needed.</summary>
+        public void MigrateLegacyData()
+        {
+            ContainerData.MigrateLegacyData(this.Furniture, this.DefaultName);
         }
     }
 }

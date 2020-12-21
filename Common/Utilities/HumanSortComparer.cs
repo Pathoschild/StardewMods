@@ -45,11 +45,11 @@ namespace Common.Utilities
             while (true)
             {
                 // get next parts
-                this.GetNextPart(a, ref indexA, out string rawA, out int? numericA);
-                this.GetNextPart(b, ref indexB, out string rawB, out int? numericB);
+                this.GetNextPart(a, ref indexA, out string rawA, out long? numericA);
+                this.GetNextPart(b, ref indexB, out string rawB, out long? numericB);
                 bool isNumeric = numericA.HasValue && numericB.HasValue;
 
-                // if otherwise equal, shorter value sorts first
+                // null is less than any other value
                 if (rawA == null && rawB == null)
                     return 0;
                 if (rawA == null)
@@ -58,19 +58,22 @@ namespace Common.Utilities
                     return 1;
 
                 // numeric with preceding zeros sort first (e.g. 01 < 1)
-                for (int i = 0; i < rawA.Length && i < rawB.Length; i++)
+                if (isNumeric)
                 {
-                    bool zeroA = rawA[i] == '0';
-                    bool zeroB = rawB[i] == '0';
+                    for (int i = 0; i < rawA.Length && i < rawB.Length; i++)
+                    {
+                        bool zeroA = rawA[i] == '0';
+                        bool zeroB = rawB[i] == '0';
 
-                    if (zeroA && zeroB)
-                        continue;
-                    if (zeroA)
-                        return -1;
-                    if (zeroB)
-                        return 1;
+                        if (zeroA && zeroB)
+                            continue;
+                        if (zeroA)
+                            return -1;
+                        if (zeroB)
+                            return 1;
 
-                    break;
+                        break;
+                    }
                 }
 
                 // else compare alphanumerically
@@ -95,7 +98,7 @@ namespace Common.Utilities
         /// <param name="position">The next position in the string.</param>
         /// <param name="raw">The raw sequence value.</param>
         /// <param name="numeric">The numeric sequence, if applicable.</param>
-        private void GetNextPart(string str, ref int position, out string raw, out int? numeric)
+        private void GetNextPart(string str, ref int position, out string raw, out long? numeric)
         {
             // sequence over
             if (position >= str.Length)
@@ -113,9 +116,9 @@ namespace Common.Utilities
 
             // read sequence
             raw = str.Substring(start, position - start);
-            numeric = isNumeric
-                ? int.Parse(raw)
-                : null as int?;
+            numeric = isNumeric && long.TryParse(raw, out long parsedNumeric)
+                ? parsedNumeric
+                : null;
         }
     }
 }

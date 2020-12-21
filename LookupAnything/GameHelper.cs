@@ -202,9 +202,12 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!npc.isVillager())
                 return false;
 
-            return this.Metadata.Constants.ForceSocialVillagers.TryGetValue(npc.Name, out bool social)
-                ? social
-                : npc.CanSocialize;
+            if (this.Metadata.Constants.ForceSocialVillagers.TryGetValue(npc.Name, out bool social))
+                return social;
+
+            return
+                Game1.player.friendshipData.ContainsKey(npc.Name)
+                || npc.CanSocialize;
         }
 
         /// <summary>Get how much each NPC likes receiving an item as a gift.</summary>
@@ -421,14 +424,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the viewport coordinates from the current cursor position.</summary>
         public Vector2 GetScreenCoordinatesFromCursor()
         {
-            return new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
+            return new Vector2(Game1.getMouseX(), Game1.getMouseY());
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="coordinates">The absolute coordinates.</param>
         public Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
         {
-            return coordinates - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+            return coordinates - new Vector2(Game1.uiViewport.X, Game1.uiViewport.Y);
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
@@ -687,7 +690,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     yield return new RecipeModel(
                         key: null,
                         type: RecipeType.TailorInput,
-                        displayType: "Tailoring",
+                        displayType: I18n.RecipeType_Tailoring(),
                         ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
                         item: _ => this.GetTailoredItem(outputId),
                         mustBeLearned: false,

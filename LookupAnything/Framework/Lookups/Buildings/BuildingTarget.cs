@@ -67,8 +67,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
 
             // get combined sprite area adjusted for viewport
             return new Rectangle(
-                x: bounds.X - (sourceRect.Width - bounds.Width + 1) - Game1.viewport.X,
-                y: bounds.Y - (sourceRect.Height - bounds.Height + 1) - Game1.viewport.Y,
+                x: bounds.X - (sourceRect.Width - bounds.Width + 1) - Game1.uiViewport.X,
+                y: bounds.Y - (sourceRect.Height - bounds.Height + 1) - Game1.uiViewport.Y,
                 width: Math.Max(bounds.Width, sourceRect.Width),
                 height: Math.Max(bounds.Height, sourceRect.Height)
             );

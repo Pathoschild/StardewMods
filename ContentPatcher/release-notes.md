@@ -9,6 +9,14 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.19.1
+Released 21 December 2020.
+
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * added `KeyToTheTown` value to `HasWalletItem` token.
+* Fixed patch not applied correctly if `FromFile` or `Target` contains a single value with a trailing comma.
+
 ## 1.19
 Released 05 December 2020. See the [release highlights](https://www.patreon.com/posts/44708077).
 

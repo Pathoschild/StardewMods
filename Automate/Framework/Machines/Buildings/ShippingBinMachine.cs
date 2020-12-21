@@ -1,20 +1,20 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
-    /// <summary>A shipping bin that accepts input and provides output.</summary>
+    /// <summary>A shipping bin that accepts input.</summary>
+    /// <remarks>See also <see cref="MiniShippingBinMachine"/>.</remarks>
     internal class ShippingBinMachine : BaseMachine
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The farm to automate.</summary>
-        private readonly Farm Farm;
-
         /// <summary>The constructed shipping bin, if applicable.</summary>
         private readonly ShippingBin Bin;
 
@@ -30,23 +30,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="farm">The farm containing the shipping bin.</param>
+        /// <param name="location">The machine's in-game location.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
-        public ShippingBinMachine(Farm farm, Rectangle tileArea)
-            : base(farm, tileArea, ShippingBinMachine.ShippingBinId)
+        public ShippingBinMachine(GameLocation location, Rectangle tileArea)
+            : base(location, tileArea, ShippingBinMachine.ShippingBinId)
         {
-            this.Farm = farm;
             this.Bin = null;
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="bin">The constructed shipping bin.</param>
         /// <param name="location">The location which contains the machine.</param>
-        /// <param name="farm">The farm which has the shipping bin data.</param>
-        public ShippingBinMachine(ShippingBin bin, GameLocation location, Farm farm)
-            : base(location, BaseMachine.GetTileAreaFor(bin))
+        public ShippingBinMachine(ShippingBin bin, GameLocation location)
+            : base(location, BaseMachine.GetTileAreaFor(bin), ShippingBinMachine.ShippingBinId)
         {
-            this.Farm = farm;
             this.Bin = bin;
         }
 
@@ -70,25 +67,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            foreach (ITrackedStack tracker in input.GetItems().Where(p => p.Sample is SObject obj && obj.canBeShipped()))
-            {
-                SObject added = (SObject)tracker.Take(tracker.Count);
+            // get next item
+            ITrackedStack tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && obj.canBeShipped());
+            if (tracker == null)
+                return false;
 
-                Utility.addItemToThisInventoryList(
-                    i: added,
-                    list: this.Farm.getShippingBin(Game1.MasterPlayer),
-                    listMaxSpace: int.MaxValue
-                );
+            // ship item
+            SObject item = (SObject)tracker.Take(tracker.Count);
+            var binList = (this.Location as Farm ?? Game1.getFarm()).getShippingBin(Game1.MasterPlayer);
+            Utility.addItemToThisInventoryList(item, binList, listMaxSpace: int.MaxValue);
 
-                if (this.Bin != null)
-                    this.Bin.showShipment(added, false);
-                else
-                    this.Farm.showShipment(added, false);
+            // play animation/sound
+            if (this.Bin != null)
+                this.Bin.showShipment(item, false);
+            else if (this.Location is IslandWest islandFarm)
+                islandFarm.showShipment(item, false);
+            else if (this.Location is Farm farm)
+                farm.showShipment(item, false);
 
-                return true;
-            }
-
-            return false;
+            return true;
         }
     }
 }

@@ -9,6 +9,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -50,19 +51,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // map objects
             foreach (KeyValuePair<Vector2, SObject> pair in location.objects.Pairs)
             {
+                if (location is IslandShrine && pair.Value is ItemPedestal)
+                    continue; // part of the Fern Islands shrine puzzle, which is handled by the tile lookup provider
+
                 if (this.GameHelper.CouldSpriteOccludeTile(pair.Key, lookupTile))
                     yield return new ObjectTarget(this.GameHelper, pair.Value, pair.Key, this.Reflection, () => this.BuildSubject(pair.Value, ObjectContext.World, knownQuality: false));
             }
 
             // furniture
-            if (location is DecoratableLocation decoratableLocation)
+            foreach (var furniture in location.furniture)
             {
-                foreach (var furniture in decoratableLocation.furniture)
-                {
-                    Vector2 entityTile = furniture.TileLocation;
-                    if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                        yield return new ObjectTarget(this.GameHelper, furniture, entityTile, this.Reflection, () => this.BuildSubject(furniture, ObjectContext.Inventory));
-                }
+                Vector2 entityTile = furniture.TileLocation;
+                if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                    yield return new ObjectTarget(this.GameHelper, furniture, entityTile, this.Reflection, () => this.BuildSubject(furniture, ObjectContext.Inventory));
             }
 
             // crops
@@ -86,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 ** Inventory
                 ****/
                 // chest
-                case MenuWithInventory inventoryMenu:
+                case MenuWithInventory inventoryMenu when !(menu is FieldOfficeMenu):
                     {
                         Item item = Game1.player.CursorSlotItem ?? inventoryMenu.heldItem ?? inventoryMenu.hoveredItem;
                         if (item != null)
@@ -187,8 +188,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     break;
 
                 /****
-                ** Bundle menu
+                ** Other menus
                 ****/
+                // community center bundle menu
                 case JunimoNoteMenu bundleMenu:
                     {
                         // hovered inventory item
@@ -216,6 +218,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         {
                             if (slot.item != null && slot.containsPoint(cursorX, cursorY))
                                 return this.BuildSubject(slot.item, ObjectContext.Inventory);
+                        }
+                    }
+                    break;
+
+                // Fern Islands field office menu
+                case FieldOfficeMenu fieldOfficeMenu:
+                    {
+                        ClickableComponent slot = fieldOfficeMenu.pieceHolders.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
+                        if (slot != null)
+                        {
+                            // donated item
+                            if (slot.item != null)
+                                return this.BuildSubject(slot.item, ObjectContext.Inventory, knownQuality: false);
+
+                            // empty slot
+                            if (int.TryParse(slot.label, out int itemId))
+                                return this.BuildSubject(new SObject(itemId, 1), ObjectContext.Inventory, knownQuality: false);
                         }
                     }
                     break;
@@ -264,6 +283,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             {
                 indexOfHarvest = target.whichForageCrop.Value switch
                 {
+                    Crop.forageCrop_ginger => 829,
                     Crop.forageCrop_springOnion => 399,
                     _ => indexOfHarvest
                 };

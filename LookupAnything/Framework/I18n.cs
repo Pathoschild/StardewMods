@@ -349,6 +349,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("shop.robin");
         }
 
+        /// <summary>Get a translation equivalent to "volcano shop".</summary>
+        public static string Shop_Volcano()
+        {
+            return I18n.GetByKey("shop.volcano");
+        }
+
         /// <summary>Get a translation equivalent to "Willy".</summary>
         public static string Shop_Willy()
         {
@@ -365,6 +371,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string RecipeType_Crafting()
         {
             return I18n.GetByKey("recipe-type.crafting");
+        }
+
+        /// <summary>Get a translation equivalent to "Tailoring".</summary>
+        public static string RecipeType_Tailoring()
+        {
+            return I18n.GetByKey("recipe-type.tailoring");
         }
 
         /// <summary>Get a translation equivalent to "Your loyal pet.".</summary>
@@ -386,9 +398,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         }
 
         /// <summary>Get a translation equivalent to "A friendly spirit who cleans up trash.".</summary>
-        public static string Data_Npc_Trashbear_Description()
+        public static string Data_Npc_TrashBear_Description()
         {
-            return I18n.GetByKey("data.npc.trashbear.description");
+            return I18n.GetByKey("data.npc.trash-bear.description");
         }
 
         /// <summary>Get a translation equivalent to "Debris".</summary>
@@ -631,6 +643,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.topaz-node.description");
         }
 
+        /// <summary>Get a translation equivalent to "Cinder Shard Node".</summary>
+        public static string Data_Item_CinderShardNode_Name()
+        {
+            return I18n.GetByKey("data.item.cinder-shard-node.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain cinder shards.".</summary>
+        public static string Data_Item_CinderShardNode_Description()
+        {
+            return I18n.GetByKey("data.item.cinder-shard-node.description");
+        }
+
         /// <summary>Get a translation equivalent to "Copper Node".</summary>
         public static string Data_Item_CopperNode_Name()
         {
@@ -679,6 +703,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.iron-node.description");
         }
 
+        /// <summary>Get a translation equivalent to "Omni Geode Node".</summary>
+        public static string Data_Item_OmniGeodeNode_Name()
+        {
+            return I18n.GetByKey("data.item.omni-geode-node.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain an omni geode.".</summary>
+        public static string Data_Item_OmniGeodeNode_Description()
+        {
+            return I18n.GetByKey("data.item.omni-geode-node.description");
+        }
+
         /// <summary>Get a translation equivalent to "Colored Stone".</summary>
         public static string Data_Item_ColoredStone_Name()
         {
@@ -697,10 +733,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("data.item.mine-stone.name");
         }
 
-        /// <summary>Get a translation equivalent to "Break apart to obtain stone.".</summary>
+        /// <summary>Get a translation equivalent to "Break apart to obtain stone with a chance of coal.".</summary>
         public static string Data_Item_MineStone_Description()
         {
             return I18n.GetByKey("data.item.mine-stone.description");
+        }
+
+        /// <summary>Get a translation equivalent to "Clay Stone".</summary>
+        public static string Data_Item_ClayStone_Name()
+        {
+            return I18n.GetByKey("data.item.clay-stone.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain clay.".</summary>
+        public static string Data_Item_ClayStone_Description()
+        {
+            return I18n.GetByKey("data.item.clay-stone.description");
+        }
+
+        /// <summary>Get a translation equivalent to "Fossil Stone".</summary>
+        public static string Data_Item_FossilStone_Name()
+        {
+            return I18n.GetByKey("data.item.fossil-stone.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Break apart to obtain fossils and bones.".</summary>
+        public static string Data_Item_FossilStone_Description()
+        {
+            return I18n.GetByKey("data.item.fossil-stone.description");
         }
 
         /// <summary>Get a translation equivalent to "Barrel".</summary>
@@ -2330,6 +2390,106 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("player.skill.progress-last", new { level });
         }
 
+        /// <summary>Get a translation equivalent to "Solution".</summary>
+        public static string Puzzle_Solution()
+        {
+            return I18n.GetByKey("puzzle.solution");
+        }
+
+        /// <summary>Get a translation equivalent to "Puzzle solved!".</summary>
+        public static string Puzzle_Solution_Solved()
+        {
+            return I18n.GetByKey("puzzle.solution.solved");
+        }
+
+        /// <summary>Get a translation equivalent to "Puzzle solutions are hidden in progression mode.".</summary>
+        public static string Puzzle_Solution_Hidden()
+        {
+            return I18n.GetByKey("puzzle.solution.hidden");
+        }
+
+        /// <summary>Get a translation equivalent to "Crystal Cave Puzzle".</summary>
+        public static string Puzzle_IslandCrystalCave_Title()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.title");
+        }
+
+        /// <summary>Get a translation equivalent to "Crystal ID".</summary>
+        public static string Puzzle_IslandCrystalCave_CrystalId()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.crystal-id");
+        }
+
+        /// <summary>Get a translation equivalent to "Activate the statue to start the puzzle.".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_NotActivated()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.not-activated");
+        }
+
+        /// <summary>Get a translation equivalent to "Waiting for game to generate sequence...".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_Waiting()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.waiting");
+        }
+
+        /// <summary>Get a translation equivalent to "Repeat the pattern of activated crystals:".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_Activated()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.activated");
+        }
+
+        /// <summary>Get a translation equivalent to "Island Mermaid Puzzle".</summary>
+        public static string Puzzle_IslandMermaid_Title()
+        {
+            return I18n.GetByKey("puzzle.island-mermaid.title");
+        }
+
+        /// <summary>Get a translation equivalent to "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):".</summary>
+        public static string Puzzle_IslandMermaid_Solution_Intro()
+        {
+            return I18n.GetByKey("puzzle.island-mermaid.solution.intro");
+        }
+
+        /// <summary>Get a translation equivalent to "Island Shrine Puzzle".</summary>
+        public static string Puzzle_IslandShrine_Title()
+        {
+            return I18n.GetByKey("puzzle.island-shrine.title");
+        }
+
+        /// <summary>Get a translation equivalent to "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.".</summary>
+        public static string Puzzle_IslandShrine_Solution()
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution");
+        }
+
+        /// <summary>Get a translation equivalent to "East: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_East(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.east", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "North: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_North(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.north", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "South: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_South(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.south", new { item });
+        }
+
+        /// <summary>Get a translation equivalent to "West: {{item}}".</summary>
+        /// <param name="item">The value to inject for the <c>{{item}}</c> token.</param>
+        public static string Puzzle_IslandShrine_Solution_West(object item)
+        {
+            return I18n.GetByKey("puzzle.island-shrine.solution.west", new { item });
+        }
+
         /// <summary>Get a translation equivalent to "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.".</summary>
         public static string Tile_Description()
         {
@@ -2392,15 +2552,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         }
 
         /// <summary>Get a translation equivalent to "Item wanted".</summary>
-        public static string TrashBear_ItemWanted()
+        public static string TrashBearOrGourmand_ItemWanted()
         {
-            return I18n.GetByKey("trash-bear.item-wanted");
+            return I18n.GetByKey("trash-bear-or-gourmand.item-wanted");
         }
 
         /// <summary>Get a translation equivalent to "Quest progress".</summary>
-        public static string TrashBear_QuestProgress()
+        public static string TrashBearOrGourmand_QuestProgress()
         {
-            return I18n.GetByKey("trash-bear.quest-progress");
+            return I18n.GetByKey("trash-bear-or-gourmand.quest-progress");
         }
 
         /// <summary>Get a translation equivalent to "Growth stage".</summary>
@@ -2431,6 +2591,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string Tree_Name_BigMushroom()
         {
             return I18n.GetByKey("tree.name.big-mushroom");
+        }
+
+        /// <summary>Get a translation equivalent to "Mahogany Tree".</summary>
+        public static string Tree_Name_Mahogany()
+        {
+            return I18n.GetByKey("tree.name.mahogany");
         }
 
         /// <summary>Get a translation equivalent to "Maple Tree".</summary>

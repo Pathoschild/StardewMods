@@ -11,5 +11,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Whether to dig artifact spots.</summary>
         public bool DigArtifactSpots { get; set; } = true;
+
+        /// <summary>Whether to harvest spawned ginger.</summary>
+        public bool HarvestGinger { get; set; } = true;
     }
 }

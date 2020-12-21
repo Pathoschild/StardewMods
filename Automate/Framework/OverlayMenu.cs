@@ -50,16 +50,16 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Protected
         *********/
-        /// <summary>Draw the overlay to the screen.</summary>
+        /// <summary>Draw the overlay to the screen under the UI.</summary>
         /// <param name="spriteBatch">The sprite batch being drawn.</param>
         [SuppressMessage("ReSharper", "PossibleLossOfFraction", Justification = "Deliberate discarded for conversion to tile coordinates.")]
-        protected override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawWorld(SpriteBatch spriteBatch)
         {
             if (!Context.IsPlayerFree)
                 return;
 
             // draw each tile
-            foreach (Vector2 tile in TileHelper.GetVisibleTiles())
+            foreach (Vector2 tile in TileHelper.GetVisibleTiles(expand: 1))
             {
                 // get tile's screen coordinates
                 float screenX = tile.X * Game1.tileSize - Game1.viewport.X;

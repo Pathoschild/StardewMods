@@ -14,6 +14,7 @@ using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -49,9 +50,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** State
         ****/
-        /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
-        private readonly Stack<IClickableMenu> PreviousMenus = new Stack<IClickableMenu>();
-
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private GameHelper GameHelper;
 
@@ -59,7 +57,10 @@ namespace Pathoschild.Stardew.LookupAnything
         private TargetFactory TargetFactory;
 
         /// <summary>Draws debug information to the screen.</summary>
-        private DebugInterface DebugInterface;
+        private PerScreen<DebugInterface> DebugInterface;
+
+        /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
+        private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new PerScreen<Stack<IClickableMenu>>(() => new Stack<IClickableMenu>());
 
 
         /*********
@@ -122,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything
             var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
             this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
             this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, this.Config, jsonAssets, () => this.Config.EnableTileLookups);
-            this.DebugInterface = new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor);
+            this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor));
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
@@ -152,7 +153,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 else if (keys.ScrollDown.JustPressedUnique())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
                 else if (keys.ToggleDebug.JustPressedUnique() && Context.IsPlayerFree)
-                    this.DebugInterface.Enabled = !this.DebugInterface.Enabled;
+                    this.DebugInterface.Value.Enabled = !this.DebugInterface.Value.Enabled;
             });
         }
 
@@ -179,8 +180,8 @@ namespace Pathoschild.Stardew.LookupAnything
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (e.NewMenu == null && e.OldMenu is LookupMenu && this.PreviousMenus.Any())
-                    Game1.activeClickableMenu = this.PreviousMenus.Pop();
+                if (e.NewMenu == null && e.OldMenu is LookupMenu && this.PreviousMenus.Value.Any())
+                    Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
             });
         }
 
@@ -190,8 +191,8 @@ namespace Pathoschild.Stardew.LookupAnything
         private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
             // render debug interface
-            if (this.DebugInterface.Enabled)
-                this.DebugInterface.Draw(Game1.spriteBatch);
+            if (this.DebugInterface.Value.Enabled)
+                this.DebugInterface.Value.Draw(Game1.spriteBatch);
         }
 
         /****
@@ -336,6 +337,9 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // get context
             Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
+            if (!Game1.uiMode)
+                cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos); // menus use UI coordinates
+
             bool hasCursor = Constants.TargetPlatform != GamePlatform.Android && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
 
             // open menu
@@ -369,7 +373,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             if (this.ShouldRestoreMenu(Game1.activeClickableMenu))
             {
-                this.PreviousMenus.Push(Game1.activeClickableMenu);
+                this.PreviousMenus.Value.Push(Game1.activeClickableMenu);
                 this.Helper.Reflection.GetField<IClickableMenu>(typeof(Game1), "_activeClickableMenu").SetValue(menu); // bypass Game1.activeClickableMenu, which disposes the previous menu
             }
             else

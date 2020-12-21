@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
 
                 // farmhouse fridge
                 if (location is FarmHouse house)
-                    this.ScanAndTrack(items, house.fridge.Value.items);
+                    this.ScanAndTrack(items, house.fridge.Value, includeRoot: false);
 
                 // character hats
                 foreach (NPC npc in location.characters)
@@ -75,11 +75,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                         switch (building)
                         {
                             case Mill mill:
-                                this.ScanAndTrack(items, mill.output.Value.items);
+                                this.ScanAndTrack(items, mill.output.Value, includeRoot: false);
                                 break;
 
                             case JunimoHut hut:
-                                this.ScanAndTrack(items, hut.output.Value.items);
+                                this.ScanAndTrack(items, hut.output.Value, includeRoot: false);
                                 break;
                         }
                     }
@@ -145,9 +145,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="root">The root item to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, Item root, bool isInInventory = false, bool isRootInWorld = false)
+        /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, Item root, bool isInInventory = false, bool isRootInWorld = false, bool includeRoot = true)
         {
-            foreach (FoundItem found in this.Scan(root, isInInventory, isRootInWorld))
+            foreach (FoundItem found in this.Scan(root, isInInventory, isRootInWorld, includeRoot))
                 tracked.Add(found);
         }
 
@@ -156,9 +157,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="roots">The root items to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, IEnumerable<Item> roots, bool isInInventory = false, bool isRootInWorld = false)
+        /// <param name="includeRoots">Whether to include the root items in the returned values.</param>
+        private void ScanAndTrack(List<FoundItem> tracked, IEnumerable<Item> roots, bool isInInventory = false, bool isRootInWorld = false, bool includeRoots = true)
         {
-            foreach (FoundItem found in roots.SelectMany(root => this.Scan(root, isInInventory, isRootInWorld)))
+            foreach (FoundItem found in roots.SelectMany(root => this.Scan(root, isInInventory, isRootInWorld, includeRoots)))
                 tracked.Add(found);
         }
 
@@ -166,7 +168,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="root">The root item to search.</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
-        private IEnumerable<FoundItem> Scan(Item root, bool isInInventory, bool isRootInWorld)
+        /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
+        private IEnumerable<FoundItem> Scan(Item root, bool isInInventory, bool isRootInWorld, bool includeRoot = true)
         {
             if (root == null)
                 yield break;
@@ -212,7 +215,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     break;
 
                 case Chest chest when (!isRootInWorld || chest.playerChest.Value):
-                    foreach (Item item in chest.items)
+                    foreach (Item item in chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID))
                         yield return item;
                     break;
 

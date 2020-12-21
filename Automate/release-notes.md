@@ -1,6 +1,22 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.19
+Released 21 December 2020.
+
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * new machines (bone mill, coffee maker, deconstructor, geode crusher, heavy tapper, hoppers, mini-shipping bin, ostrich incubator, solar panel, and statue of true perfection);
+  * default shipping bin being moveable;
+  * new chest and path types.
+
+**Breaking changes for mod authors:**
+* If you added a `chest.Capacity` property for Automate, you should patch or override the new
+  `chest.GetActualCapacity()` method in 1.5 instead.
+* Automate previously stored automation options in the chest name using tags like
+  `|automate:no-store|`. These are now stored in the new `chest.modData` field added in 1.5; existing
+  chests will be migrated automatically.
+
 ## 1.18.4
 Released 05 December 2020.
 

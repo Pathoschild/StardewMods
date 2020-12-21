@@ -1,6 +1,18 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.29
+Released 21 December 2020.
+
+* Updated for Stardew Valley 1.5, including support for...
+  * split-screen mode and UI scaling;
+  * new content;
+  * island puzzle lookups (crystal cave, field office, Gourmand, mermaid puzzle, and shrine puzzle);
+  * new chest types.
+* Fixed some untranslated text.
+* Fixed NPC lookups not showing social info for some custom mod NPCs.
+* Improved translations. Thanks to spindensity (updated Chinese)!
+
 ## 1.28.3
 Released 05 December 2020.
 

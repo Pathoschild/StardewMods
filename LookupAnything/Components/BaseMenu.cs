@@ -22,9 +22,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Get the viewport size adjusted for compatibility.</summary>
         protected Point GetViewportSize()
         {
-            Point viewport = new Point(Game1.viewport.Width, Game1.viewport.Height);
+            Point viewport = new Point(Game1.uiViewport.Width, Game1.uiViewport.Height);
 
-            if (BaseMenu.UseSafeDimensions)
+            if (BaseMenu.UseSafeDimensions && Game1.graphics.GraphicsDevice.Viewport.Width < viewport.X)
             {
                 viewport = new Point(
                     x: Math.Min(viewport.X, Game1.graphics.GraphicsDevice.Viewport.Width),

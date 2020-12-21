@@ -34,9 +34,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The object names through which machines can connect, but which have no other automation properties.</summary>
         private readonly HashSet<string> Connectors;
 
-        /// <summary>The tile area on the farm matching the shipping bin.</summary>
-        private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
-
         /// <summary>The internal Automate data that can't be derived automatically.</summary>
         private readonly DataModel Data;
 
@@ -79,9 +76,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns an instance or <c>null</c>.</returns>
         public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
-            // chest container
+            // chest
             if (obj is Chest chest && chest.playerChest.Value)
-                return new ChestContainer(chest, location, tile, this.Reflection);
+            {
+                switch (chest.SpecialChestType)
+                {
+                    case Chest.SpecialChestTypes.None:
+                    case Chest.SpecialChestTypes.AutoLoader:
+                    case Chest.SpecialChestTypes.JunimoChest:
+                        return new ChestContainer(chest, location, tile);
+
+                    case Chest.SpecialChestTypes.MiniShippingBin:
+                        return new MiniShippingBinMachine(chest, location);
+                }
+            }
 
             // machine by type
             switch (obj)
@@ -103,6 +111,12 @@ namespace Pathoschild.Stardew.Automate.Framework
                 {
                     case 165:
                         return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+
+                    case 246:
+                        return new CoffeeMakerMachine(obj, location, tile);
+
+                    case 280:
+                        return new StatueOfTruePerfectionMachine(obj, location, tile);
                 }
             }
 
@@ -111,6 +125,9 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 case "Bee House":
                     return new BeeHouseMachine(obj, location, tile);
+
+                case "Bone Mill":
+                    return new BoneMillMachine(obj, location, tile);
 
                 case "Charcoal Kiln":
                     return new CharcoalKilnMachine(obj, location, tile);
@@ -121,11 +138,17 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Crystalarium":
                     return new CrystalariumMachine(obj, location, tile, this.Reflection);
 
+                case "Deconstructor":
+                    return new DeconstructorMachine(obj, location, tile);
+
                 case "Feed Hopper":
                     return new FeedHopperMachine(location, tile);
 
                 case "Furnace":
                     return new FurnaceMachine(obj, location, tile);
+
+                case "Geode Crusher":
+                    return new GeodeCrusherMachine(obj, location, tile);
 
                 case "Incubator":
                     return new CoopIncubatorMachine(obj, location, tile);
@@ -148,6 +171,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Oil Maker":
                     return new OilMakerMachine(obj, location, tile);
 
+                case "Ostrich Incubator":
+                    return new OstrichIncubatorMachine(obj, location, tile);
+
                 case "Preserves Jar":
                     return new PreservesJarMachine(obj, location, tile);
 
@@ -166,14 +192,22 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case "Soda Machine":
                     return new SodaMachine(obj, location, tile);
 
+                case "Solar Panel":
+                    return new SolarPanelMachine(obj, location, tile);
+
                 case "Statue Of Endless Fortune":
                     return new StatueOfEndlessFortuneMachine(obj, location, tile);
 
                 case "Statue Of Perfection":
                     return new StatueOfPerfectionMachine(obj, location, tile);
 
-                case "Tapper" when (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree):
-                    return new TapperMachine(obj, location, tile, tree.treeType.Value);
+                case "Heavy Tapper":
+                case "Tapper":
+                    {
+                        if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrainFeature) && terrainFeature is Tree tree)
+                            return new TapperMachine(obj, location, tile, tree);
+                    }
+                    break;
 
                 case "Worm Bin":
                     return new WormBinMachine(obj, location, tile);
@@ -230,7 +264,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new MillMachine(mill, location);
 
                 case ShippingBin bin:
-                    return new ShippingBinMachine(bin, location, Game1.getFarm());
+                    return new ShippingBinMachine(bin, location);
             }
 
             // building by buildingType
@@ -247,9 +281,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
         public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
         {
-            // shipping bin
-            if (location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
-                return new ShippingBinMachine(farm, this.ShippingBinArea);
+            // shipping bin on island farm
+            if (location is IslandWest farm && (int)tile.X == farm.shippingBinPosition.X && (int)tile.Y == farm.shippingBinPosition.Y)
+                return new ShippingBinMachine(Game1.getFarm(), new Rectangle(farm.shippingBinPosition.X, farm.shippingBinPosition.Y, 2, 1));
 
             // garbage can
             if (location is Town town)

@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
             int width = sourceRectangle.Width * Game1.pixelZoom;
             int x = boundingBox.Center.X - (width / 2);
             int y = boundingBox.Y + boundingBox.Height - height;
-            return new Rectangle(x - Game1.viewport.X, y - Game1.viewport.Y, width, height);
+            return new Rectangle(x - Game1.uiViewport.X, y - Game1.uiViewport.Y, width, height);
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

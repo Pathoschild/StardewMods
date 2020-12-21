@@ -1,6 +1,20 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.20
+Released 21 December 2020.
+
+* Updated for Stardew Valley 1.5, including...
+  * split-screen mode and UI scaling;
+  * new chest types.
+* Fixed error in 1.19.8 if a chest name/category has a very long sequence of numbers.
+* Fixed shipping bin playing a chest _dwop_ sound instead of bin _ker-thunk_.
+
+**Breaking changes for mod authors:**
+* Chests Anywhere previously saved chest options in the chest name using tags like `|ignore|`.
+  These are now stored in the new `modData` field added in 1.5; existing chests will be migrated
+  automatically.
+
 ## 1.19.8
 Released 21 November 2020.
 

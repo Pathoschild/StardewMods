@@ -8,6 +8,7 @@ using Pathoschild.Stardew.DataLayers.Layers.Coverage;
 using Pathoschild.Stardew.DataLayers.Layers.Crops;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -25,9 +26,6 @@ namespace Pathoschild.Stardew.DataLayers
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys;
 
-        /// <summary>The current overlay being displayed, if any.</summary>
-        private DataLayerOverlay CurrentOverlay;
-
         /// <summary>The available data layers.</summary>
         private ILayer[] Layers;
 
@@ -36,6 +34,9 @@ namespace Pathoschild.Stardew.DataLayers
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private ModIntegrations Mods;
+
+        /// <summary>The current overlay being displayed, if any.</summary>
+        private readonly PerScreen<DataLayerOverlay> CurrentOverlay = new PerScreen<DataLayerOverlay>();
 
 
         /*********
@@ -60,7 +61,7 @@ namespace Pathoschild.Stardew.DataLayers
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
 
             // hook up commands
-            var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay?.CurrentLayer);
+            var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay.Value?.CurrentLayer);
             helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (name, args) => commandHandler.Handle(args));
         }
 
@@ -135,8 +136,8 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="e">The event arguments.</param>
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
-            this.CurrentOverlay?.Dispose();
-            this.CurrentOverlay = null;
+            this.CurrentOverlay.Value?.Dispose();
+            this.CurrentOverlay.Value = null;
             this.Layers = null;
         }
 
@@ -154,7 +155,7 @@ namespace Pathoschild.Stardew.DataLayers
                 // check context
                 if (!this.CanOverlayNow())
                     return;
-                bool overlayVisible = this.CurrentOverlay != null;
+                bool overlayVisible = this.CurrentOverlay.Value != null;
                 ModConfigKeys keys = this.Keys;
 
                 // toggle overlay
@@ -162,23 +163,23 @@ namespace Pathoschild.Stardew.DataLayers
                 {
                     if (overlayVisible)
                     {
-                        this.CurrentOverlay.Dispose();
-                        this.CurrentOverlay = null;
+                        this.CurrentOverlay.Value.Dispose();
+                        this.CurrentOverlay.Value = null;
                     }
                     else
-                        this.CurrentOverlay = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                        this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
                     this.Helper.Input.Suppress(e.Button);
                 }
 
                 // cycle layers
                 else if (overlayVisible && keys.NextLayer.JustPressedUnique())
                 {
-                    this.CurrentOverlay.NextLayer();
+                    this.CurrentOverlay.Value.NextLayer();
                     this.Helper.Input.Suppress(e.Button);
                 }
                 else if (overlayVisible && keys.PrevLayer.JustPressedUnique())
                 {
-                    this.CurrentOverlay.PrevLayer();
+                    this.CurrentOverlay.Value.PrevLayer();
                     this.Helper.Input.Suppress(e.Button);
                 }
 
@@ -186,9 +187,9 @@ namespace Pathoschild.Stardew.DataLayers
                 else if (overlayVisible)
                 {
                     ILayer layer = this.ShortcutMap.Where(p => p.Key.JustPressedUnique()).Select(p => p.Value).FirstOrDefault();
-                    if (layer != null && layer != this.CurrentOverlay.CurrentLayer)
+                    if (layer != null && layer != this.CurrentOverlay.Value.CurrentLayer)
                     {
-                        this.CurrentOverlay.SetLayer(layer);
+                        this.CurrentOverlay.Value.SetLayer(layer);
                         this.Helper.Input.Suppress(e.Button);
                     }
                 }
@@ -200,7 +201,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            this.CurrentOverlay?.Update();
+            this.CurrentOverlay.Value?.Update();
         }
 
         /// <summary>Whether overlays are allowed in the current game context.</summary>
