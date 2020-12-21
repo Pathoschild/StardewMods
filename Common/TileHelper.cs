@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -90,19 +92,21 @@ namespace Pathoschild.Stardew.Common
         }
 
         /// <summary>Get all tiles which are on-screen.</summary>
-        public static IEnumerable<Vector2> GetVisibleTiles()
+        /// <param name="expand">The number of tiles to expand in each direction, to avoid tile edge pop-in.</param>
+        public static IEnumerable<Vector2> GetVisibleTiles(int expand = 0)
         {
-            return TileHelper.GetVisibleArea().GetTiles();
+            return TileHelper.GetVisibleArea(expand).GetTiles();
         }
 
         /// <summary>Get the tile area visible on-screen.</summary>
-        public static Rectangle GetVisibleArea()
+        /// <param name="expand">The number of tiles to expand in each direction, to avoid tile edge pop-in.</param>
+        public static Rectangle GetVisibleArea(int expand = 0)
         {
             return new Rectangle(
-                x: Game1.viewport.X / Game1.tileSize,
-                y: Game1.viewport.Y / Game1.tileSize,
-                width: (int)(Game1.viewport.Width / (decimal)Game1.tileSize) + 2, // extend off-screen slightly to avoid edges popping in
-                height: (int)(Game1.viewport.Height / (decimal)Game1.tileSize) + 2
+                x: (Game1.viewport.X / Game1.tileSize) - expand,
+                y: (Game1.viewport.Y / Game1.tileSize) - expand,
+                width: (int)Math.Ceiling(Game1.viewport.Width / (decimal)Game1.tileSize) + (expand * 2),
+                height: (int)Math.Ceiling(Game1.viewport.Height / (decimal)Game1.tileSize) + (expand * 2)
             );
         }
 
@@ -115,7 +119,7 @@ namespace Pathoschild.Stardew.Common
             return TileHelper.GetTileFromScreenPosition(Game1.getMouseX(), Game1.getMouseY());
         }
 
-        /// <summary>Get the tile at the pixel coordinate relative to the top-left corner of the screen.</summary>
+        /// <summary>Get the tile at the non-UI pixel coordinate relative to the top-left corner of the screen.</summary>
         /// <param name="x">The pixel X coordinate.</param>
         /// <param name="y">The pixel Y coordinate.</param>
         public static Vector2 GetTileFromScreenPosition(float x, float y)

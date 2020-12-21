@@ -424,14 +424,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get the viewport coordinates from the current cursor position.</summary>
         public Vector2 GetScreenCoordinatesFromCursor()
         {
-            return new Vector2(Game1.getOldMouseX(), Game1.getOldMouseY());
+            return new Vector2(Game1.getMouseX(), Game1.getMouseY());
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>
         /// <param name="coordinates">The absolute coordinates.</param>
         public Vector2 GetScreenCoordinatesFromAbsolute(Vector2 coordinates)
         {
-            return coordinates - new Vector2(Game1.viewport.X, Game1.viewport.Y);
+            return coordinates - new Vector2(Game1.uiViewport.X, Game1.uiViewport.Y);
         }
 
         /// <summary>Get the viewport coordinates represented by a tile position.</summary>

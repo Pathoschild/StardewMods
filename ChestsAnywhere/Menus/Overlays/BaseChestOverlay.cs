@@ -187,7 +187,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
         /// <param name="topOffset">The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</param>
         protected BaseChestOverlay(IClickableMenu menu, ManagedChest chest, ManagedChest[] chests, ModConfig config, ModConfigKeys keys, IModEvents events, IInputHelper input, IReflectionHelper reflection, bool showAutomateOptions, Func<bool> keepAlive, int topOffset = 0)
-            : base(events, input, reflection, keepAlive)
+            : base(events, input, reflection, keepAlive, assumeUiMode: true)
         {
             // data
             this.ForMenuInstance = menu;
@@ -205,9 +205,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.Keys = keys;
         }
 
-        /// <summary>Draw the overlay to the screen.</summary>
+        /// <summary>Draw the overlay to the screen over the UI.</summary>
         /// <param name="batch">The sprite batch being drawn.</param>
-        protected override void Draw(SpriteBatch batch)
+        protected override void DrawUi(SpriteBatch batch)
         {
             if (this.DrawCount == 0)
                 this.ReinitializeComponents();
@@ -306,9 +306,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         ** Event handlers
         ****/
         /// <summary>The method invoked when the player resizes the game window.</summary>
-        /// <param name="oldBounds">The previous game window bounds.</param>
-        /// <param name="newBounds">The new game window bounds.</param>
-        protected override void ReceiveGameWindowResized(xTile.Dimensions.Rectangle oldBounds, xTile.Dimensions.Rectangle newBounds)
+        protected override void ReceiveGameWindowResized()
         {
             this.ReinitializeComponents();
         }

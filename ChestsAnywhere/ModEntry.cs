@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 if (cursorChest != null && !cursorChest.HasDefaultName())
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
-                    CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.viewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
+                    CommonHelper.DrawHoverBox(e.SpriteBatch, cursorChest.DisplayName, tooltipPosition, Game1.uiViewport.Width - tooltipPosition.X - Game1.tileSize / 2f);
                 }
             }
         }

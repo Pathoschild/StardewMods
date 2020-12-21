@@ -337,6 +337,9 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // get context
             Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
+            if (!Game1.uiMode)
+                cursorPos = Utility.ModifyCoordinatesForUIScale(cursorPos); // menus use UI coordinates
+
             bool hasCursor = Constants.TargetPlatform != GamePlatform.Android && Game1.wasMouseVisibleThisFrame; // note: only reliable when a menu isn't open
 
             // open menu

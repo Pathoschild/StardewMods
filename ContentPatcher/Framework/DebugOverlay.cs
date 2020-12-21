@@ -78,7 +78,7 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Draw to the screen.</summary>
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
-        protected override void Draw(SpriteBatch spriteBatch)
+        protected override void DrawUi(SpriteBatch spriteBatch)
         {
             Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentName);
             int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture?.Width ?? 0);

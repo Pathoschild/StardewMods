@@ -182,6 +182,10 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="pixel">A pixel texture that can be stretched and colorized for display.</param>
         private void DrawOverlay(SpriteBatch batch, SpriteFont font, Texture2D pixel)
         {
+            var viewport = Game1.uiMode ? Game1.uiViewport : Game1.viewport;
+            int mouseX = Game1.getMouseX();
+            int mouseY = Game1.getMouseY();
+
             // draw debug info at cursor position
             {
                 // generate debug text
@@ -195,8 +199,8 @@ namespace Pathoschild.Stardew.DebugMode
                 // calculate scroll position
                 int width = (int)(textSize.X + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.X * 2));
                 int height = (int)(textSize.Y + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.Y * 2));
-                int x = (int)MathHelper.Clamp(Game1.getMouseX() - width, 0, Game1.viewport.Width - width);
-                int y = (int)MathHelper.Clamp(Game1.getMouseY(), 0, Game1.viewport.Height - height);
+                int x = (int)MathHelper.Clamp(mouseX - width, 0, viewport.Width - width);
+                int y = (int)MathHelper.Clamp(mouseY, 0, viewport.Height - height);
 
                 // draw
                 CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);
@@ -204,8 +208,8 @@ namespace Pathoschild.Stardew.DebugMode
             }
 
             // draw cursor crosshairs
-            batch.Draw(pixel, new Rectangle(0, Game1.getOldMouseY() - 1, Game1.viewport.Width, 3), Color.Black * 0.5f);
-            batch.Draw(pixel, new Rectangle(Game1.getOldMouseX() - 1, 0, 3, Game1.viewport.Height), Color.Black * 0.5f);
+            batch.Draw(pixel, new Rectangle(0, mouseY - 1, viewport.Width, 3), Color.Black * 0.5f);
+            batch.Draw(pixel, new Rectangle(mouseX - 1, 0, 3, viewport.Height), Color.Black * 0.5f);
         }
 
         /// <summary>Get debug info for the current context.</summary>

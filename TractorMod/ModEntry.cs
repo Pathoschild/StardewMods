@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.GameLoop.DayStarted += this.OnDayStarted;
             events.GameLoop.DayEnding += this.OnDayEnding;
             events.GameLoop.Saving += this.OnSaving;
-            events.Display.Rendered += this.OnRendered;
+            events.Display.RenderedWorld += this.OnRenderedWorld;
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
             events.World.NpcListChanged += this.OnNpcListChanged;
@@ -401,10 +401,10 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the game draws to the screen.</summary>
+        /// <summary>The event called after the game draws the world to the screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnRendered(object sender, RenderedEventArgs e)
+        private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
