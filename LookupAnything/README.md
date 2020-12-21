@@ -67,8 +67,8 @@ multi-key bindings with plus signs (like `LeftShift + F1`).
   <td><code>ProgressionMode</code></td>
   <td>
 
-Default `false`. Whether to hide some content (current gift tastes) until you've discovered it
-in-game.
+Default `false`. Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've
+discovered it in-game.
 
   </td>
 </tr>
@@ -106,8 +106,8 @@ setting           | what it affects
 ## Showcase
 ### Progression mode
 The optional 'progression mode' hides spoilers until you've discovered them in-game ([disabled by
-default](#Configure)). This currently affects gift tastes. Hidden content is indicated by
-grayed-out text like this:
+default](#Configure)). This currently affects gift tastes and puzzle solutions. Hidden content is
+indicated by grayed-out text like this:
 > ![](screenshots/progression-mode.png)
 
 The screenshots below are without progression mode, and may show spoilers.
@@ -209,11 +209,13 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * slime hutches;
   * stables;
   * etc;
-* map tiles (if [enabled](#configure));
 * terrain features, including...
   * bushes;
   * crops;
   * trees and fruit trees.
+* in-world puzzles, including...
+  * Fern Islands crystal cave puzzle.
+* map tiles (if [enabled](#configure)).
 
 ### Data mining fields (advanced)
 Are you a data miner or trying to figure out the game mechanics? [Enable data mining fields](#configuration)

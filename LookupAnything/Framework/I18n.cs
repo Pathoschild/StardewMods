@@ -1,3 +1,4 @@
+
 using System;
 using System.CodeDom.Compiler;
 using System.Diagnostics.CodeAnalysis;
@@ -2334,6 +2335,54 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string Player_Skill_ProgressLast(object level)
         {
             return I18n.GetByKey("player.skill.progress-last", new { level });
+        }
+
+        /// <summary>Get a translation equivalent to "Solution".</summary>
+        public static string Puzzle_Solution()
+        {
+            return I18n.GetByKey("puzzle.solution");
+        }
+
+        /// <summary>Get a translation equivalent to "Puzzle solved!".</summary>
+        public static string Puzzle_Solution_Solved()
+        {
+            return I18n.GetByKey("puzzle.solution.solved");
+        }
+
+        /// <summary>Get a translation equivalent to "Puzzle solutions are hidden in progression mode.".</summary>
+        public static string Puzzle_Solution_Hidden()
+        {
+            return I18n.GetByKey("puzzle.solution.hidden");
+        }
+
+        /// <summary>Get a translation equivalent to "Crystal Cave Puzzle".</summary>
+        public static string Puzzle_IslandCrystalCave_Title()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.title");
+        }
+
+        /// <summary>Get a translation equivalent to "Crystal ID".</summary>
+        public static string Puzzle_IslandCrystalCave_CrystalId()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.crystal-id");
+        }
+
+        /// <summary>Get a translation equivalent to "Activate the statue to start the puzzle.".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_NotActivated()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.not-activated");
+        }
+
+        /// <summary>Get a translation equivalent to "Waiting for game to generate sequence...".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_Waiting()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.waiting");
+        }
+
+        /// <summary>Get a translation equivalent to "Repeat the pattern of activated crystals:".</summary>
+        public static string Puzzle_IslandCrystalCave_Solution_Activated()
+        {
+            return I18n.GetByKey("puzzle.island-crystal-cave.solution.activated");
         }
 
         /// <summary>Get a translation equivalent to "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.".</summary>

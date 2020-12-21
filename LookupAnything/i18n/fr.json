@@ -546,6 +546,30 @@
 
 
     /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Solution",
+
+    // values
+    "puzzle.solution.solved": "Puzzle résolu!",
+    "puzzle.solution.hidden": "Les solutions de puzzle sont cachées en mode progression.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Puzzle de la grotte de cristal",
+    "puzzle.island-crystal-cave.crystal-id": "ID du cristal",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Activez la statue pour lancer le puzzle.",
+    "puzzle.island-crystal-cave.solution.waiting": "En attente du jeu pour générer la séquence ...",
+    "puzzle.island-crystal-cave.solution.activated": "Répétez le motif des cristaux activés:",
+
+
+    /*********
     ** Tile lookups
     *********/
     // labels

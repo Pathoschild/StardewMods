@@ -326,7 +326,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                             // draw name & item type
                             {
                                 Vector2 nameSize = contentBatch.DrawTextBlock(font, $"{subject.Name}.", new Vector2(x + leftOffset, y + topOffset), wrapWidth, bold: Constant.AllowBold);
-                                Vector2 typeSize = contentBatch.DrawTextBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth);
+                                Vector2 typeSize = subject.Type != null
+                                    ? contentBatch.DrawTextBlock(font, $"{subject.Type}.", new Vector2(x + leftOffset + nameSize.X + spaceWidth, y + topOffset), wrapWidth)
+                                    : Vector2.Zero;
                                 topOffset += Math.Max(nameSize.Y, typeSize.Y);
                             }
 

@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 new CharacterLookupProvider(reflection, gameHelper, config),
                 new ItemLookupProvider(reflection, gameHelper, config, jsonAssets),
                 new TerrainFeatureLookupProvider(reflection, gameHelper, jsonAssets),
-                new TileLookupProvider(reflection, gameHelper, showRawTileInfo)
+                new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
             };
         }
 
