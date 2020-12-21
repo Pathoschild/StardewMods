@@ -13,6 +13,7 @@ Released 21 November 2020.
 * Improved dropdown sorting (e.g. _Chest #2_ is now before _Chest #10_).
 * You can now scroll dropdowns by clicking or tapping the arrow icons.
 * Fixed clicks on a scrolled dropdown selecting the wrong option.
+* Fixed shipping bin playing a chest _dwop_ sound instead of _ker-thunk_.
 * Improved translations. Thanks to PanPan-p (updated Turkish)!
 
 ## 1.19.7

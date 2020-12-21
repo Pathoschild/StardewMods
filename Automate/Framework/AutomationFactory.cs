@@ -34,9 +34,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The object names through which machines can connect, but which have no other automation properties.</summary>
         private readonly HashSet<string> Connectors;
 
-        /// <summary>The tile area on the farm matching the shipping bin.</summary>
-        private readonly Rectangle ShippingBinArea = new Rectangle(71, 14, 2, 1);
-
         /// <summary>The internal Automate data that can't be derived automatically.</summary>
         private readonly DataModel Data;
 
@@ -88,6 +85,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                     case Chest.SpecialChestTypes.AutoLoader:
                     case Chest.SpecialChestTypes.JunimoChest:
                         return new ChestContainer(chest, location, tile);
+
+                    case Chest.SpecialChestTypes.MiniShippingBin:
+                        return new MiniShippingBinMachine(chest, location);
                 }
             }
 
@@ -264,7 +264,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new MillMachine(mill, location);
 
                 case ShippingBin bin:
-                    return new ShippingBinMachine(bin, location, Game1.getFarm());
+                    return new ShippingBinMachine(bin, location);
             }
 
             // building by buildingType
@@ -281,9 +281,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
         public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
         {
-            // shipping bin
-            if (location is Farm farm && (int)tile.X == this.ShippingBinArea.X && (int)tile.Y == this.ShippingBinArea.Y)
-                return new ShippingBinMachine(farm, this.ShippingBinArea);
+            // shipping bin on island farm
+            if (location is IslandWest farm && (int)tile.X == farm.shippingBinPosition.X && (int)tile.Y == farm.shippingBinPosition.Y)
+                return new ShippingBinMachine(Game1.getFarm(), new Rectangle(farm.shippingBinPosition.X, farm.shippingBinPosition.Y, 2, 1));
 
             // garbage can
             if (location is Town town)

@@ -187,22 +187,22 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // shipping bin
-                    if (this.EnableShippingBin && location is Farm farm && object.ReferenceEquals(farm, Game1.getFarm()))
+                    if (this.HasShippingBin(location))
                     {
                         string shippingBinLabel = GameI18n.GetBuildingName("Shipping Bin");
 
                         if (Constants.TargetPlatform == GamePlatform.Android)
                         {
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileStore),
-                                location: farm,
+                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.MobileStore),
+                                location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
                                 defaultCategory: category
                             );
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.MobileTake),
-                                location: farm,
+                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.MobileTake),
+                                location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
                                 defaultCategory: category
@@ -211,8 +211,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         else
                         {
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(farm, this.DataHelper, ShippingBinMode.Normal),
-                                location: farm,
+                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.Normal),
+                                location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: shippingBinLabel,
                                 defaultCategory: category
@@ -252,14 +252,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         {
             // get inventory from menu
             IList<Item> inventory = null;
+            GameLocation forLocation = null;
             switch (menu)
             {
                 case ItemGrabMenu itemGrabMenu:
                     inventory = this.GetInventoryFromContext(itemGrabMenu.context);
+                    forLocation = itemGrabMenu.context as GameLocation;
                     break;
 
                 case ShopMenu shopMenu:
                     inventory = this.GetInventoryFromContext(shopMenu.source);
+                    forLocation = shopMenu.source as GameLocation;
                     break;
             }
             if (inventory == null)
@@ -268,6 +271,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get chest from inventory
             return this
                 .GetChests(RangeHandler.Unlimited())
+                .OrderByDescending(p => object.ReferenceEquals(forLocation, p.Location)) // shipping bin in different locations has the same inventory, so prioritize by location if possible;
                 .FirstOrDefault(p => p.Container.IsSameAs(inventory));
         }
 
@@ -312,6 +316,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
                 // shipping bin
                 case Farm _:
+                case IslandWest _:
                 case ShippingBin _:
                     return Game1.getFarm().getShippingBin(Game1.player);
 
@@ -367,6 +372,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 return islandHouse.fridge.Value;
 
             return null;
+        }
+
+        /// <summary>Whether the location has a predefined shipping bin.</summary>
+        /// <param name="location">The location to check.</param>
+        private bool HasShippingBin(GameLocation location)
+        {
+            if (!this.EnableShippingBin)
+                return false;
+
+            return location switch
+            {
+                Farm => true,
+                IslandWest islandFarm => islandFarm.farmhouseRestored.Value,
+                _ => false
+            };
         }
     }
 }

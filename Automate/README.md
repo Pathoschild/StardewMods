@@ -57,6 +57,7 @@ This can be used to automate...
 * [looms](https://stardewvalleywiki.com/Loom);
 * [mayonnaise machines](https://stardewvalleywiki.com/Mayonnaise_Machine);
 * [mills](https://stardewvalleywiki.com/Mill);
+* mini-shipping bins;
 * [mushroom boxes](https://stardewvalleywiki.com/The_Cave#Mushrooms);
 * [oil makers](https://stardewvalleywiki.com/Oil_Maker);
 * [preserves jars](https://stardewvalleywiki.com/Preserves_Jar);

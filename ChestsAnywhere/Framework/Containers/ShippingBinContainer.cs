@@ -21,7 +21,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>An API for reading and storing local mod data.</summary>
         private readonly IDataHelper DataHelper;
 
-        /// <summary>The farm containing the shipping bin.</summary>
+        /// <summary>The location containing the shipping bin.</summary>
+        private readonly GameLocation Location;
+
+        /// <summary>The farm instance. This is not necessarily the location which contains the shipping bin.</summary>
         private readonly Farm Farm;
 
         /// <summary>The underlying shipping bin.</summary>
@@ -57,14 +60,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="farm">The farm whose shipping bin to manage.</param>
+        /// <param name="location">The location whose shipping bin to manage.</param>
         /// <param name="dataHelper">An API for reading and storing local mod data.</param>
         /// <param name="mode">The type of shipping bin menu to create.</param>
-        public ShippingBinContainer(Farm farm, IDataHelper dataHelper, ShippingBinMode mode)
+        public ShippingBinContainer(GameLocation location, IDataHelper dataHelper, ShippingBinMode mode)
         {
             this.DataHelper = dataHelper;
-            this.Farm = farm;
-            this.ShippingBin = farm.getShippingBin(Game1.player);
+            this.Location = location;
+            this.Farm = location as Farm ?? Game1.getFarm();
+            this.ShippingBin = this.Farm.getShippingBin(Game1.player);
             this.IsDataEditable = Context.IsOnHostComputer;
             this.Data = this.IsDataEditable
                 ? dataHelper.ReadSaveData<ContainerData>(this.DataKey) ?? new ContainerData(defaultInternalName: null)
@@ -97,10 +101,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>Derived from <see cref="StardewValley.Objects.Chest.updateWhenCurrentLocation"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
+            // build menu
+            ItemGrabMenu menu;
             switch (this.Mode)
             {
                 case ShippingBinMode.Normal:
-                    return new ItemGrabMenu(
+                    menu = new ItemGrabMenu(
                         inventory: this.Inventory,
                         reverseGrab: false,
                         showReceivingMenu: true,
@@ -110,12 +116,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                         behaviorOnItemGrab: this.GrabItemFromContainer,
                         canBeExitedWithKey: true,
                         showOrganizeButton: true,
-                        context: this.Farm
+                        context: this.Location
                     );
+                    break;
 
                 case ShippingBinMode.MobileStore:
                     {
-                        var menu = new ItemGrabMenu(
+                        menu = new ItemGrabMenu(
                             inventory: this.Inventory,
                             reverseGrab: false,
                             showReceivingMenu: true,
@@ -125,14 +132,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                             behaviorOnItemGrab: this.GrabItemFromContainer,
                             canBeExitedWithKey: true,
                             showOrganizeButton: true,
-                            context: this.Farm
+                            context: this.Location
                         );
                         menu.initializeShippingBin();
-                        return menu;
+                        break;
                     }
 
                 case ShippingBinMode.MobileTake:
-                    return new ItemGrabMenu(
+                    menu = new ItemGrabMenu(
                         inventory: this.Inventory,
                         reverseGrab: false,
                         showReceivingMenu: true,
@@ -142,12 +149,18 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                         behaviorOnItemGrab: this.GrabItemFromContainer,
                         canBeExitedWithKey: true,
                         showOrganizeButton: true,
-                        context: this.Farm
+                        context: this.Location
                     );
+                    break;
 
                 default:
                     throw new NotSupportedException($"Unknown shipping bin mode '{this.Mode}'.");
             }
+
+            // use shipping sound
+            menu.inventory.moveItemSound = "Ship";
+
+            return menu;
         }
 
         /// <summary>Persist the container data.</summary>
