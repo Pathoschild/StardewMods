@@ -286,16 +286,24 @@ Automate uses the value returned by `chest.GetActualCapacity()`. You can overrid
 method, and Automate will update automatically.
 
 ### Patch Automate
-You can patch Automate's logic [using Harmony](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Harmony).
-To simplify patching, Automate wraps all machines with a [`MachineWrapper`](Framework/MachineWrapper.cs)
-instance, so you can hook one place to change any machine's input, output, or processing logic. For
-example, you can patch `GetOutput` to adjust machine output, `SetInput` to add custom recipes if
-none of the vanilla recipes matched, etc.
+When all else fails, you can patch Automate's logic
+[using Harmony](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Harmony).
 
-**This is strongly discouraged in most cases.** Patching Automate makes both Automate and your mod
-more fragile and likely to break. If you patch Automate, **please**:
+To simplify patching, Automate also wraps all machines with a
+[`MachineWrapper`](Framework/MachineWrapper.cs) instance, so you can hook one place to change any
+machine's input, output, or processing logic. For example, you can patch `GetOutput` to adjust
+machine output, `SetInput` to add custom recipes if none of the vanilla recipes matched, etc.
 
-1. When your mod starts, log a clear message indicating that your mod patches Automate. This
+Before you patch Automate, please consider these best practices:
+
+1. **This is strongly discouraged in most cases.** Patching Automate makes both Automate and your
+   mod more fragile and likely to break. Only do this if you can't do it any other way.
+
+2. Inside your patch methods, **wrap the code in a `try..catch` and log your own exception**. That
+   way players won't report errors on the Automate page instead. You should also fallback to
+   running the original method, so errors in your code don't break Automate.
+
+3. When your mod starts, log a clear message indicating that your mod patches Automate. This
    simplifies troubleshooting and avoids confusion. For example:
 
    ```c#
@@ -304,16 +312,7 @@ more fragile and likely to break. If you patch Automate, **please**:
    ```
 
    It doesn't have to be player-visible, even a `TRACE`-level message is useful when helping a
-   player troubleshoot:
-
-   ```c#
-   if (helper.ModRegistry.IsLoaded("Pathoschild.Automate"))
-      this.Monitor.Log("This mod patches Automate.", LogLevel.Trace);
-   ```
-
-2. Inside your patch methods, wrap the code in a `try..catch` and log your own exception (so
-   players don't report errors on the Automate page). You should also fallback to running the
-   original method, so errors in your code don't break Automate.
+   player troubleshoot.
 
 ## Implementation details
 This section provides a view of Automate's inner workings for the curious. You can safely skip it
