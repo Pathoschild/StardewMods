@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed tractor not summonable if it's currently in the volcano dungeon.
+
 ## 4.12.1
 Released 21 December 2020.
 

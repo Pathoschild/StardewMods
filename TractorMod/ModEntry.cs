@@ -647,7 +647,7 @@ namespace Pathoschild.Stardew.TractorMod
         {
             GameLocation[] mainLocations = (Context.IsMainPlayer ? Game1.locations : this.Helper.Multiplayer.GetActiveLocations()).ToArray();
 
-            foreach (GameLocation location in mainLocations.Concat(MineShaft.activeMines))
+            foreach (GameLocation location in mainLocations.Concat(MineShaft.activeMines).Concat(VolcanoDungeon.activeLevels))
             {
                 yield return location;
 
