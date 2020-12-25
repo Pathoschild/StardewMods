@@ -60,7 +60,7 @@
     "machines.finished": "Fertig",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "Pflanzgitter",
 
     // tillable
     "tillable.name": "Anbaubar",
