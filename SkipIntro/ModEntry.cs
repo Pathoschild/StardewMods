@@ -34,6 +34,7 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             this.Config = this.LoadConfig();
 
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
         }
@@ -45,6 +46,26 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
+        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForSkipIntro(
+                getConfig: () => this.Config,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                },
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
         /// <summary>The method called when the player returns to the title screen.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed.
 * Fixed crash when skipping to co-op screen in Stardew Valley 1.5.
 
 ## 1.8.5
