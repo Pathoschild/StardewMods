@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed crash when skipping to co-op screen in Stardew Valley 1.5.
+
 ## 1.8.5
 Released 03 July 2020.
 
