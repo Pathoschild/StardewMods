@@ -297,7 +297,7 @@ namespace ContentPatcher.Framework.Commands
                 + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
                 + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
                 + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
-                + (forModIds != null ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
+                + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
                 + "\n"
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
