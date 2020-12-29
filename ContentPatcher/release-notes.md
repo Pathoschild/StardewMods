@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* The `patch summary` console command now accepts optional content pack IDs whose patches to show.
+
 ## 1.19.1
 Released 21 December 2020.
 
