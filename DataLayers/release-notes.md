@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to norges (updated German)!
+* Improved translations. Thanks to elCrimar (updated Spanish) and norges (updated German)!
 
 ## 1.13.1
 Released 21 December 2020.
