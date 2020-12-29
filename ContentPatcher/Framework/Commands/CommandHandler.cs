@@ -180,9 +180,32 @@ namespace ContentPatcher.Framework.Commands
             LogPathBuilder path = new LogPathBuilder("console command");
 
             // parse arguments
+            bool showFull = false;
             var forModIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (string arg in args)
+            {
+                // flags
+                if (arg.Equals("full", StringComparison.OrdinalIgnoreCase))
+                {
+                    showFull = true;
+                    continue;
+                }
+
+                // for mod ID
                 forModIds.Add(arg);
+            }
+
+            // truncate token values if needed
+            string GetTruncatedTokenValues(IEnumerable<string> values)
+            {
+                const int maxLength = 200;
+                const string truncatedSuffix = "... (use `patch summary full` to see other values)";
+
+                string valueStr = string.Join(", ", values);
+                return showFull || valueStr.Length <= maxLength
+                    ? valueStr
+                    : $"{valueStr.Substring(0, maxLength - truncatedSuffix.Length)}{truncatedSuffix}";
+            }
 
             // add condition summary
             output.AppendLine();
@@ -245,14 +268,15 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
+
+                                    output.AppendLine($":{input}: {GetTruncatedTokenValues(token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
                                 }
                             }
                             else
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
+                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
                     }
 
                     output.AppendLine();
@@ -302,7 +326,7 @@ namespace ContentPatcher.Framework.Commands
                             let result = new
                             {
                                 Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                Value = token.IsReady ? string.Join(", ", token.GetValues(new InputArguments(input))) : "",
+                                Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
                                 IsReady = token.IsReady
                             }
                             orderby result.Name
@@ -320,7 +344,7 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
 
                         foreach (var token in tokens)
-                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
+                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {GetTruncatedTokenValues(token.Values)}");
                     }
                 }
 

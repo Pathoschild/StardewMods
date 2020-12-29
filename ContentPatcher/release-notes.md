@@ -10,7 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* The `patch summary` console command now accepts optional content pack IDs whose patches to show.
+* Improved `patch summary` command:
+  * Added optional arguments to filter by content packs IDs.
+  * Long token values are now truncated to 200 characters by default to improve readability. You can use `patch summary full` to see the full summary.
 
 ## 1.19.1
 Released 21 December 2020.
