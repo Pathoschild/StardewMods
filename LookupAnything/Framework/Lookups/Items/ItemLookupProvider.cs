@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 TerrainFeature feature = pair.Value;
 
                 if (feature is HoeDirt dirt && dirt.crop != null && this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new CropTarget(this.GameHelper, dirt, entityTile, this.Reflection, this.JsonAssets, () => this.BuildSubject(dirt.crop, ObjectContext.World));
+                    yield return new CropTarget(this.GameHelper, dirt, entityTile, this.Reflection, this.JsonAssets, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
             }
         }
 
@@ -276,7 +276,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Build a crop subject.</summary>
         /// <param name="target">The target instance.</param>
         /// <param name="context">The context of the object being looked up.</param>
-        private ISubject BuildSubject(Crop target, ObjectContext context)
+        /// <param name="dirt">The dirt containing the crop, if applicable.</param>
+        private ISubject BuildSubject(Crop target, ObjectContext context, HoeDirt dirt)
         {
             int indexOfHarvest = target.indexOfHarvest.Value;
             if (indexOfHarvest == 0 && target.forageCrop.Value)
@@ -289,7 +290,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 };
             }
 
-            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest), context, getCropSubject: this.BuildSubject, knownQuality: false, fromCrop: target);
+            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest), context, getCropSubject: this.BuildSubject, knownQuality: false, fromDirt: dirt);
         }
     }
 }

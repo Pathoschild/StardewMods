@@ -46,6 +46,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("generic.yesterday");
         }
 
+        /// <summary>Get a translation equivalent to "unknown".</summary>
+        public static string Generic_Unknown()
+        {
+            return I18n.GetByKey("generic.unknown");
+        }
+
         /// <summary>Get a translation equivalent to "{{percent}}%".</summary>
         /// <param name="percent">The value to inject for the <c>{{percent}}</c> token.</param>
         public static string Generic_Percent(object percent)
@@ -1490,6 +1496,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string Crop_Harvest()
         {
             return I18n.GetByKey("crop.harvest");
+        }
+
+        /// <summary>Get a translation equivalent to "Fertilized".</summary>
+        public static string Crop_Fertilized()
+        {
+            return I18n.GetByKey("crop.fertilized");
+        }
+
+        /// <summary>Get a translation equivalent to "Watered".</summary>
+        public static string Crop_Watered()
+        {
+            return I18n.GetByKey("crop.watered");
         }
 
         /// <summary>Get a translation equivalent to "This crop is dead.".</summary>
