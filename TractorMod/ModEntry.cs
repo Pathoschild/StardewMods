@@ -232,7 +232,7 @@ namespace Pathoschild.Stardew.TractorMod
 
                         // normalize tractor
                         if (tractor != null)
-                            tractor.Name = TractorManager.GetTractorName(garage.HorseId);
+                            TractorManager.SetTractorInfo(tractor);
 
                         // apply textures
                         this.ApplyTextures(garage);
@@ -279,7 +279,7 @@ namespace Pathoschild.Stardew.TractorMod
                     foreach (Horse horse in horses)
                     {
                         if (tractorIDs.Contains(horse.HorseId) && !TractorManager.IsTractor(horse))
-                            horse.Name = TractorManager.GetTractorName(horse.HorseId);
+                            TractorManager.SetTractorInfo(horse);
                     }
                 }
             }
@@ -540,8 +540,8 @@ namespace Pathoschild.Stardew.TractorMod
             // create a tractor if needed
             if (tractor == null && this.Config.CanSummonWithoutGarage && Context.IsMainPlayer)
             {
-                Guid id = Guid.NewGuid();
-                tractor = new Horse(id, 0, 0) { Name = TractorManager.GetTractorName(id) };
+                tractor = new Horse(Guid.NewGuid(), 0, 0);
+                TractorManager.SetTractorInfo(tractor);
                 this.ApplyTextures(tractor);
             }
 

@@ -6,6 +6,7 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Characters;
 using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
@@ -53,6 +54,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // apply migrations
             if (lastVersion.IsOlderThan("4.7.0"))
                 Migrator.Migrate_to_4_7(helper, monitor, buildableLocations.Value, getBlueprint);
+            if (lastVersion.IsOlderThan("4.13.0"))
+                Migrator.Migrate_To_4_13(buildableLocations.Value);
 
             // update version
             Game1.CustomData[Migrator.LastVersionKey] = currentVersion.ToString();
@@ -143,6 +146,23 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 if (legacyFile.Exists)
                     legacyFile.Delete();
             });
+        }
+
+        /// <summary>Migrate to Tractor Mod 4.13.</summary>
+        /// <param name="locations">The locations to scan for tractors and garages.</param>
+        private static void Migrate_To_4_13(BuildableGameLocation[] locations)
+        {
+            // Tractor Mod 4.13 migrates to the modData field to track whether a stable/horse is
+            // part of Tractor Mod.
+            foreach (BuildableGameLocation location in locations)
+            {
+                foreach (Stable stable in location.buildings.OfType<Stable>())
+                {
+                    Horse horse = stable.getStableHorse();
+                    if (horse != null && horse.Name.StartsWith("tractor/"))
+                        TractorManager.SetTractorInfo(horse);
+                }
+            }
         }
 
 
