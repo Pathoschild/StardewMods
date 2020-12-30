@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
                     //       IL_001f: ret
                     bool isLocationCheck =
                         instructions[i].opcode == OpCodes.Callvirt
-                        && instructions[i].operand is MethodInfo {Name: "get_IsOutdoors"}
+                        && instructions[i].operand is MethodInfo { Name: "get_IsOutdoors" }
                         && instructions.Length > i + 2
                         && instructions[i + 3].opcode == OpCodes.Ret;
 
@@ -139,7 +139,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         /// <param name="match">The condition to match.</param>
         private static Horse TryFindHorse(Func<Horse, bool> match)
         {
-            return CommonHelper.GetLocations()
+            return CommonHelper.GetLocations(includeTempLevels: true)
                 .SelectMany(location => location.characters)
                 .OfType<Horse>()
                 .FirstOrDefault(match);
