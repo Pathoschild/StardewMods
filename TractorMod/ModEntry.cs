@@ -54,9 +54,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>A request from a farmhand to warp a tractor to the given player.</summary>
         private readonly string RequestTractorMessageID = "TractorRequest";
 
-        /// <summary>The absolute path to legacy mod data for the current save.</summary>
-        private string LegacySaveDataRelativePath => Path.Combine("data", $"{Constants.SaveFolderName}.json");
-
         /****
         ** State
         ****/
@@ -101,7 +98,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             events.GameLoop.DayStarted += this.OnDayStarted;
             events.GameLoop.DayEnding += this.OnDayEnding;
-            events.GameLoop.Saving += this.OnSaving;
+            events.GameLoop.Saved += this.OnSaved;
             events.Display.RenderedWorld += this.OnRenderedWorld;
             events.Display.MenuChanged += this.OnMenuChanged;
             events.Input.ButtonPressed += this.OnButtonPressed;
@@ -179,8 +176,7 @@ namespace Pathoschild.Stardew.TractorMod
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // load legacy data
-            if (Context.IsMainPlayer)
-                this.LoadLegacyData();
+            Migrator.AfterLoad(this.Helper, this.Monitor, this.ModManifest.Version, this.GetBlueprint);
 
             // check if mod should be enabled for the current player
             this.IsEnabled = Context.IsMainPlayer;
@@ -380,25 +376,12 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called before the game starts saving.</summary>
+        /// <summary>The event called after the game saves.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
-        private void OnSaving(object sender, SavingEventArgs e)
+        private void OnSaved(object sender, SavedEventArgs e)
         {
-            if (!this.IsEnabled)
-                return;
-
-            // host: remove legacy data
-            if (Context.IsMainPlayer)
-            {
-                // remove legacy file (pre-4.6)
-                FileInfo legacyFile = new FileInfo(Path.Combine(this.Helper.DirectoryPath, this.LegacySaveDataRelativePath));
-                if (legacyFile.Exists)
-                    legacyFile.Delete();
-
-                // remove legacy save data (4.6)
-                this.Helper.Data.WriteSaveData<LegacySaveData>("tractors", null);
-            }
+            Migrator.AfterSave();
         }
 
         /// <summary>The event called after the game draws the world to the screen.</summary>
@@ -591,55 +574,6 @@ namespace Pathoschild.Stardew.TractorMod
 
             // warp home
             TractorManager.SetLocation(tractor, location, tile);
-        }
-
-        /// <summary>Migrate tractors and garages from older versions of the mod.</summary>
-        /// <remarks>The Robin construction logic is derived from <see cref="NPC.reloadSprite"/> and <see cref="Farm.resetForPlayerEntry"/>.</remarks>
-        private void LoadLegacyData()
-        {
-            // fix building types
-            foreach (BuildableGameLocation location in this.GetBuildableLocations())
-            {
-                foreach (Stable stable in location.buildings.OfType<Stable>())
-                {
-                    if (stable.buildingType.Value == this.BlueprintBuildingType)
-                    {
-                        stable.buildingType.Value = "Stable";
-                        stable.maxOccupants.Value = this.MaxOccupantsID;
-                    }
-                }
-            }
-
-            // get save data
-            LegacySaveData saveData = this.Helper.Data.ReadSaveData<LegacySaveData>("tractors"); // 4.6
-            if (saveData?.Buildings == null)
-                saveData = this.Helper.Data.ReadJsonFile<LegacySaveData>(this.LegacySaveDataRelativePath); // pre-4.6
-            if (saveData?.Buildings == null)
-                return;
-
-            // add tractor + garages
-            BuildableGameLocation[] locations = this.GetBuildableLocations().ToArray();
-            foreach (LegacySaveDataBuilding garageData in saveData.Buildings)
-            {
-                // get location
-                BuildableGameLocation location = locations.FirstOrDefault(p => p.NameOrUniqueName == (garageData.Map ?? "Farm"));
-                if (location == null)
-                {
-                    this.Monitor.Log($"Ignored legacy tractor garage in unknown location '{garageData.Map}'.", LogLevel.Warn);
-                    continue;
-                }
-
-                // add garage
-                Stable garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.tileX.Value == (int)garageData.Tile.X && p.tileY.Value == (int)garageData.Tile.Y);
-                if (garage == null)
-                {
-                    garage = new Stable(garageData.TractorID, this.GetBlueprint(), garageData.Tile);
-                    garage.daysOfConstructionLeft.Value = 0;
-                    location.buildings.Add(garage);
-                }
-                garage.maxOccupants.Value = this.MaxOccupantsID;
-                garage.load();
-            }
         }
 
         /// <summary>Get all available locations.</summary>

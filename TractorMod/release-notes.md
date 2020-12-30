@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Internal refactoring to legacy data migrations.
 * Fixed tractor not summonable if it's currently in the volcano dungeon.
 
 ## 4.12.1
