@@ -1,3 +1,5 @@
+using Harmony;
+using Pathoschild.Stardew.HorseFluteAnywhere.Framework;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.HorseFluteAnywhere
@@ -12,6 +14,9 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            // add patches
+            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
+            UtilityPatcher.Hook(harmony, this.Monitor);
         }
     }
 }
