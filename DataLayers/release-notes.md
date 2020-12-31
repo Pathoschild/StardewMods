@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Updated for Prismatic Tools 1.7.1-unofficial.9.
 * Improved translations. Thanks to elCrimar (updated Spanish) and norges (updated German)!
 
 ## 1.13.1

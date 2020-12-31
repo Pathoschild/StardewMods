@@ -147,10 +147,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
 
-            // Prismatic Tools
-            if (this.Mods.PrismaticTools.IsLoaded)
-                tilesBySprinklerID[this.Mods.PrismaticTools.GetSprinklerID()] = this.Mods.PrismaticTools.GetSprinklerCoverage().ToArray();
-
             // Simple Sprinkler
             if (this.Mods.SimpleSprinkler.IsLoaded)
             {
