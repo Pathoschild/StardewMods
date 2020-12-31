@@ -131,7 +131,11 @@ namespace Pathoschild.Stardew.Automate
         {
             // disable if secondary player
             if (!this.EnableAutomation)
-                this.Monitor.Log("Disabled automation (only the main player can automate machines in multiplayer mode).", LogLevel.Warn);
+            {
+                if (!this.HostHasAutomate())
+                    this.Monitor.Log("Automate doesn't seem to be installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                return;
+            }
 
             // reset
             this.ActiveMachineGroups.Clear();
@@ -382,6 +386,16 @@ namespace Pathoschild.Stardew.Automate
                 if (registry.IsLoaded(integration.Id) && !registry.IsLoaded(integration.SuggestedId))
                     this.Monitor.Log($"Machine recipes added by {integration.Name} aren't currently automated. Install {integration.SuggestedName} too to enable them: {integration.SuggestedUrl}.", LogLevel.Warn);
             }
+        }
+
+        /// <summary>Get whether the host player has Automate installed.</summary>
+        private bool HostHasAutomate()
+        {
+            if (Context.IsMainPlayer)
+                return true;
+
+            IMultiplayerPeer host = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID);
+            return host?.Mods?.Any(p => string.Equals(p.ID, this.ModManifest.UniqueID, StringComparison.OrdinalIgnoreCase)) == true;
         }
 
         /// <summary>Get the active machine groups in every location.</summary>

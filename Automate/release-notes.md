@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* The warning when joining a multiplayer save is now clearer and only shown if the main player doesn't have Automate installed.
+
 ## 1.19
 Released 21 December 2020.
 
