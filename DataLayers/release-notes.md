@@ -1,6 +1,6 @@
 # Release notes
 ## Upcoming release
-* Updated for Prismatic Tools 1.7.1-unofficial.9.
+* Fixed sprinkler layer not showing range for older sprinkler mods in Stardew Valley 1.5.
 * Improved translations. Thanks to elCrimar (updated Spanish) and norges (updated German)!
 
 ## 1.13.1

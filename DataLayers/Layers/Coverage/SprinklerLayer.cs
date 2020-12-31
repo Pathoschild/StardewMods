@@ -77,7 +77,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
-                    where sprinkler.IsSprinkler()
+                    where
+                        sprinkler.IsSprinkler()
+                        || (sprinkler.bigCraftable.Value && coverageBySprinklerID.ContainsKey(sprinkler.ParentSheetIndex)) // older custom sprinklers
                     select sprinkler
                 )
                 .ToArray();
