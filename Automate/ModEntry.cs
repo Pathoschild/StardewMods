@@ -132,8 +132,10 @@ namespace Pathoschild.Stardew.Automate
             // disable if secondary player
             if (!this.EnableAutomation)
             {
-                if (!this.HostHasAutomate())
-                    this.Monitor.Log("Automate doesn't seem to be installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                if (this.HostHasAutomate(out ISemanticVersion installedVersion))
+                    this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
+                else
+                    this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
                 return;
             }
 
@@ -389,13 +391,20 @@ namespace Pathoschild.Stardew.Automate
         }
 
         /// <summary>Get whether the host player has Automate installed.</summary>
-        private bool HostHasAutomate()
+        /// <param name="version">The installed version, if any.</param>
+        private bool HostHasAutomate(out ISemanticVersion version)
         {
             if (Context.IsMainPlayer)
+            {
+                version = this.ModManifest.Version;
                 return true;
+            }
 
             IMultiplayerPeer host = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID);
-            return host?.Mods?.Any(p => string.Equals(p.ID, this.ModManifest.UniqueID, StringComparison.OrdinalIgnoreCase)) == true;
+            IMultiplayerPeerMod mod = host?.Mods?.SingleOrDefault(p => string.Equals(p.ID, this.ModManifest.UniqueID, StringComparison.OrdinalIgnoreCase));
+
+            version = mod?.Version;
+            return mod != null;
         }
 
         /// <summary>Get the active machine groups in every location.</summary>
