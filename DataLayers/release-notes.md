@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.13.2
+Released 04 January 2021.
+
 * Fixed sprinkler layer not showing range for older sprinkler mods in Stardew Valley 1.5.
 * Improved translations. Thanks to elCrimar (updated Spanish) and norges (updated German)!
 

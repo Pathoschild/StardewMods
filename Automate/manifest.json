@@ -1,7 +1,7 @@
 {
     "Name": "Automate",
     "Author": "Pathoschild",
-    "Version": "1.19.0",
+    "Version": "1.19.1",
     "MinimumApiVersion": "3.8.0",
     "Description": "Lets you automate crafting machines, fruit trees, and more by connecting them to chests.",
     "UniqueID": "Pathoschild.Automate",

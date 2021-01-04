@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 4.12.2
+Released 04 January 2021.
+
 * Updated to use `modData` field in Stardew Valley 1.5.
 * Internal refactoring to legacy data migrations.
 * Fixed tractor not summonable if it's currently in the volcano dungeon.

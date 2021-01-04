@@ -6,5 +6,5 @@
     "Description": "Summon your horse anywhere using the horse flute.",
     "UniqueID": "Pathoschild.HorseFluteAnywhere",
     "EntryDll": "HorseFluteAnywhere.dll",
-    //"UpdateKeys": [ ]
+    "UpdateKeys": [ "Nexus:7500" ]
 }

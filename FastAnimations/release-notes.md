@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.4
+Released 04 January 2021.
+
 * Updated for Tractor Mod 4.13.
 
 ## 1.9.3
