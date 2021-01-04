@@ -32,7 +32,7 @@ Active mods:
   _Speed up many animations in the game (currently eating, drinking, milking, shearing, and
   breaking geodes). Optionally configure the speed for each animation._
 
-* ~~**Horse Flute Anywhere**~~ <small>([source](HorseFluteAnywhere))</small>  
+* **[Horse Flute Anywhere](http://www.nexusmods.com/stardewvalley/mods/7500)** <small>([source](HorseFluteAnywhere))</small>  
   _Use the [horse flute](https://stardewvalleywiki.com/Horse_Flute) to summon your horse anywhere,
   even indoors or in caves/dungeons._
 

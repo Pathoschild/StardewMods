@@ -2,6 +2,9 @@
 [horse flute](https://stardewvalleywiki.com/Horse_Flute) to summon your horse anywhere, even indoors
 or in caves/dungeons.
 
+![](screenshots/indoors.png)  
+![](screenshots/dungeon.png)
+
 ## Contents
 * [Install](#install)
 * [Configure](#configure)
@@ -10,7 +13,7 @@ or in caves/dungeons.
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
-2. ~~Install this mod from Nexus mods.~~
+2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/7500).
 3. Run the game using SMAPI.
 
 ## Compatibility
@@ -19,4 +22,4 @@ single-player and multiplayer.
 
 ## See also
 * [Release notes](release-notes.md)
-* ~~Nexus mod~~
+* [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/7500)
