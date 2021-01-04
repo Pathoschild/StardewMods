@@ -25,9 +25,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>The item ID for auto-grabbers.</summary>
         private readonly int AutoGrabberID = 165;
 
-        /// <summary>An API for reading and storing local mod data.</summary>
-        private readonly IDataHelper DataHelper;
-
         /// <summary>Provides multiplayer utilities.</summary>
         private readonly IMultiplayerHelper Multiplayer;
 
@@ -42,13 +39,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="dataHelper">An API for reading and storing local mod data.</param>
         /// <param name="multiplayer">Provides multiplayer utilities.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IDataHelper dataHelper, IMultiplayerHelper multiplayer, IReflectionHelper reflection, bool enableShippingBin)
+        public ChestFactory(IMultiplayerHelper multiplayer, IReflectionHelper reflection, bool enableShippingBin)
         {
-            this.DataHelper = dataHelper;
             this.Multiplayer = multiplayer;
             this.Reflection = reflection;
             this.EnableShippingBin = enableShippingBin;
@@ -194,14 +189,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         if (Constants.TargetPlatform == GamePlatform.Android)
                         {
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.MobileStore),
+                                container: new ShippingBinContainer(location, ShippingBinMode.MobileStore),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
                                 defaultCategory: category
                             );
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.MobileTake),
+                                container: new ShippingBinContainer(location, ShippingBinMode.MobileTake),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
@@ -211,7 +206,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         else
                         {
                             yield return new ManagedChest(
-                                container: new ShippingBinContainer(location, this.DataHelper, ShippingBinMode.Normal),
+                                container: new ShippingBinContainer(location, ShippingBinMode.Normal),
                                 location: location,
                                 tile: Vector2.Zero,
                                 defaultDisplayName: shippingBinLabel,
