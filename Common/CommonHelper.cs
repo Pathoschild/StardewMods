@@ -53,15 +53,21 @@ namespace Pathoschild.Stardew.Common
         ** Game
         ****/
         /// <summary>Get all game locations.</summary>
-        public static IEnumerable<GameLocation> GetLocations()
+        /// <param name="includeTempLevels">Whether to include temporary mine/dungeon locations.</param>
+        public static IEnumerable<GameLocation> GetLocations(bool includeTempLevels = false)
         {
-            return Game1.locations
+            var locations = Game1.locations
                 .Concat(
                     from location in Game1.locations.OfType<BuildableGameLocation>()
                     from building in location.buildings
                     where building.indoors.Value != null
                     select building.indoors.Value
                 );
+
+            if (includeTempLevels)
+                locations = locations.Concat(MineShaft.activeMines).Concat(VolcanoDungeon.activeLevels);
+            
+            return locations;
         }
 
         /// <summary>Get a player's current tile position.</summary>

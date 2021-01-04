@@ -18,8 +18,7 @@ Active mods:
   install and uninstall, and are less likely to break due to game updates._
 
 * **[Crops Anytime Anywhere](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsAnytimeAnywhere))</small>  
-  _Lets you grow crops in any season and location, including on grass/dirt tiles you normally
-  couldn't till._
+  _Grow crops in any season and location, including on grass/dirt tiles you normally couldn't till._
 
 * **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
   _Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage,
@@ -32,6 +31,10 @@ Active mods:
 * **[Fast Animations](http://www.nexusmods.com/stardewvalley/mods/1089)** <small>([source](FastAnimations))</small>  
   _Speed up many animations in the game (currently eating, drinking, milking, shearing, and
   breaking geodes). Optionally configure the speed for each animation._
+
+* ~~**Horse Flute Anywhere**~~ <small>([source](HorseFluteAnywhere))</small>  
+  _Use the [horse flute](https://stardewvalleywiki.com/Horse_Flute) to summon your horse anywhere,
+  even indoors or in caves/dungeons._
 
 * **[Lookup Anything](http://www.nexusmods.com/stardewvalley/mods/541)** <small>([source](LookupAnything))</small>  
   _See live info about whatever's under your cursor when you press F1. Learn a villager's favorite
