@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SkipIntro</AssemblyName>
-    <Version>1.8.5</Version>
+    <Version>1.9.0</Version>
     <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

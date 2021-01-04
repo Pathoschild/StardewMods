@@ -169,7 +169,7 @@ the current game instance (from game launch to full exit). Most tokens are _muta
 value may change.
 
 Immutability enables several optimizations. For example, since Content Patcher doesn't need to
-update their value, it also doesn't need to update dependent tokens/patches (and theirs dependents,
+update their value, it also doesn't need to update dependent tokens/patches (and their dependents,
 etc).
 
 Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise

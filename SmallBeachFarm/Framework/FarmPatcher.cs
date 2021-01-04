@@ -95,18 +95,21 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
                 FishType type = FarmPatcher.GetFishType(__instance, (int)bobberTile.X, (int)bobberTile.Y);
                 FarmPatcher.Monitor.VerboseLog($"Fishing {type.ToString().ToLower()} tile at ({bobberTile.X / Game1.tileSize}, {bobberTile.Y / Game1.tileSize}).");
-                if (type == FishType.Ocean)
+                switch (type)
                 {
-                    __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Beach");
-                    return false;
-                }
-                else
-                {
-                    // match riverland farm behavior
-                    __result = Game1.random.NextDouble() < 0.3
-                        ? __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Forest")
-                        : __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Town");
-                    return false;
+                    case FishType.Ocean:
+                        __result = __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Beach");
+                        return false;
+
+                    case FishType.River:
+                        // match riverland farm behavior
+                        __result = Game1.random.NextDouble() < 0.3
+                            ? __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Forest")
+                            : __instance.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, "Town");
+                        return false;
+
+                    default:
+                        return true; // run original method
                 }
             }
             finally

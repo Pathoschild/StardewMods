@@ -29,6 +29,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The number of ticks between each tractor action check.</summary>
         private readonly int TicksPerAction = 12; // roughly five times per second
 
+        /// <summary>The <see cref="Horse.modData"/> key which indicates it's a tractor.</summary>
+        private const string TractorDataKey = "Pathoschild.TractorMod";
+
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -81,18 +84,22 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Reflection = reflection;
         }
 
-        /// <summary>Get the unique name for a tractor horse.</summary>
-        /// <param name="id">The horse ID.</param>
-        public static string GetTractorName(Guid id)
+        /// <summary>Set the base tractor data for a horse.</summary>
+        /// <param name="tractor">The tractor instance.</param>
+        /// <returns>Returns the tractor instance for convenience.</returns>
+        public static Horse SetTractorInfo(Horse tractor)
         {
-            return $"tractor/{id:N}";
+            tractor.Name = $"tractor/{tractor.HorseId:N}";
+            tractor.modData[TractorManager.TractorDataKey] = "1";
+
+            return tractor;
         }
 
         /// <summary>Get whether the given horse should be treated as a tractor.</summary>
         /// <param name="horse">The horse to check.</param>
         public static bool IsTractor(Horse horse)
         {
-            return horse != null && horse.Name.StartsWith("tractor/");
+            return horse?.modData.TryGetValue(TractorManager.TractorDataKey, out _) == true;
         }
 
         /// <summary>Move a horse to the given location.</summary>

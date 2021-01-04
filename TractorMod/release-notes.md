@@ -1,4 +1,16 @@
 # Release notes
+## 4.12.2
+Released 04 January 2021.
+
+* Updated to use `modData` field in Stardew Valley 1.5.
+* Internal refactoring to legacy data migrations.
+* Fixed tractor not summonable if it's currently in the volcano dungeon.
+
+**Note for mod authors:**
+* Tractor Mod previously identified horses by setting their name to `tractor/<horse id>`. It still
+  sets the name, but it now identifies horses by adding a `Pathoschild.TractorMod` entry to the new
+  `horse.modData` field instead. Existing tractors will be migrated automatically.
+
 ## 4.12.1
 Released 21 December 2020.
 

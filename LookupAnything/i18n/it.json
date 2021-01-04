@@ -7,6 +7,9 @@
     "generic.tomorrow": "domani",
     "generic.yesterday": "ieri",
 
+    // generic values
+    "generic.unknown": "unknown", // TODO
+
     // generic field values
     "generic.percent": "{{percent}}%",
     "generic.percent-chance-of": "probabilità del {{percent}}% di {{label}}",
@@ -321,6 +324,8 @@
     // labels
     "crop.summary": "Raccolto",
     "crop.harvest": "Raccogli",
+    "crop.fertilized": "Fertilized", // TODO
+    "crop.watered": "Watered", // TODO
 
     // values
     "crop.summary.dead": "Questo raccolto è morto.",

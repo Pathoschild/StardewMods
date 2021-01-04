@@ -43,7 +43,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Items\ItemData\ItemType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\ItemData\SearchableItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Items\ItemRepository.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)KeyBinding.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Input\KeyBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Messages\AutomateUpdateChestMessage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ModDataDictionaryExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShirtSpriteInfo.cs" />

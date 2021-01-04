@@ -1,0 +1,10 @@
+{
+    "Name": "Horse Flute Anywhere",
+    "Author": "Pathoschild",
+    "Version": "1.0.0",
+    "MinimumApiVersion": "3.8.0",
+    "Description": "Summon your horse anywhere using the horse flute.",
+    "UniqueID": "Pathoschild.HorseFluteAnywhere",
+    "EntryDll": "HorseFluteAnywhere.dll",
+    "UpdateKeys": [ "Nexus:7500" ]
+}

@@ -18,8 +18,7 @@ Active mods:
   install and uninstall, and are less likely to break due to game updates._
 
 * **[Crops Anytime Anywhere](https://www.nexusmods.com/stardewvalley/mods/3000)** <small>([source](CropsAnytimeAnywhere))</small>  
-  _Lets you grow crops in any season and location, including on grass/dirt tiles you normally
-  couldn't till._
+  _Grow crops in any season and location, including on grass/dirt tiles you normally couldn't till._
 
 * **[Data Layers](https://www.nexusmods.com/stardewvalley/mods/1691)** <small>([source](DataLayers))</small>  
   _Overlays the world with visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage,
@@ -32,6 +31,10 @@ Active mods:
 * **[Fast Animations](http://www.nexusmods.com/stardewvalley/mods/1089)** <small>([source](FastAnimations))</small>  
   _Speed up many animations in the game (currently eating, drinking, milking, shearing, and
   breaking geodes). Optionally configure the speed for each animation._
+
+* **[Horse Flute Anywhere](http://www.nexusmods.com/stardewvalley/mods/7500)** <small>([source](HorseFluteAnywhere))</small>  
+  _Use the [horse flute](https://stardewvalleywiki.com/Horse_Flute) to summon your horse anywhere,
+  even indoors or in caves/dungeons._
 
 * **[Lookup Anything](http://www.nexusmods.com/stardewvalley/mods/541)** <small>([source](LookupAnything))</small>  
   _See live info about whatever's under your cursor when you press F1. Learn a villager's favorite
@@ -76,14 +79,14 @@ use the right translations.
 ---------- | :--------------------------------------- | :----------------------------------- | :--------------------------- | :--------------------------------------- | :---------------------------- | :----------------------------
 Chinese    | [✓](ChestsAnywhere/i18n/zh.json)        | [✓](DataLayers/i18n/zh.json)        | [✓](DebugMode/i18n/zh.json) | [↻ partial](LookupAnything/i18n/zh.json) | [✓](NoclipMode/i18n/zh.json) | [✓](TractorMod/i18n/zh.json)
 French     | [✓](ChestsAnywhere/i18n/fr.json)        | [✓](DataLayers/i18n/fr.json)        | [✓](DebugMode/i18n/fr.json) | [↻ partial](LookupAnything/i18n/fr.json) | [✓](NoclipMode/i18n/fr.json) | [✓](TractorMod/i18n/fr.json)
-German     | [✓](ChestsAnywhere/i18n/de.json)        | [↻ partial](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json) | [↻ partial](LookupAnything/i18n/de.json) | [✓](NoclipMode/i18n/de.json) | [✓](TractorMod/i18n/de.json)
-Hungarian  | [✓](ChestsAnywhere/i18n/hu.json)        | [✓](DataLayers/i18n/hu.json)        | [✓](DebugMode/i18n/hu.json) | [✓](LookupAnything/i18n/hu.json)        | [✓](NoclipMode/i18n/hu.json) | [✓](TractorMod/i18n/hu.json)
+German     | [✓](ChestsAnywhere/i18n/de.json)        | [✓](DataLayers/i18n/de.json)        | [✓](DebugMode/i18n/de.json) | [↻ partial](LookupAnything/i18n/de.json) | [✓](NoclipMode/i18n/de.json) | [✓](TractorMod/i18n/de.json)
+Hungarian  | [✓](ChestsAnywhere/i18n/hu.json)        | [✓](DataLayers/i18n/hu.json)        | [✓](DebugMode/i18n/hu.json) | [↻ partial](LookupAnything/i18n/hu.json) | [✓](NoclipMode/i18n/hu.json) | [✓](TractorMod/i18n/hu.json)
 Italian    | [↻ partial](ChestsAnywhere/i18n/it.json) | [↻ partial](DataLayers/i18n/it.json) | [✓](DebugMode/i18n/it.json) | [↻ partial](LookupAnything/i18n/it.json) | [✓](NoclipMode/i18n/it.json) | [✓](TractorMod/i18n/it.json)
 Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [✓](DataLayers/i18n/ja.json)        | [✓](DebugMode/i18n/ja.json) | [↻ partial](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
 Korean     | [✓](ChestsAnywhere/i18n/ko.json)        | [✓](DataLayers/i18n/ko.json)        | [✓](DebugMode/i18n/ko.json) | [↻ partial](LookupAnything/i18n/ko.json) | [✓](NoclipMode/i18n/ko.json) | [✓](TractorMod/i18n/ko.json)
-Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json) | [✓](LookupAnything/i18n/pt.json)        | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json)        | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json) | [↻ partial](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
 Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
-Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [↻ partial](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json) | [↻ partial](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | [✓](TractorMod/i18n/es.json)
+Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [✓](DataLayers/i18n/es.json)        | [✓](DebugMode/i18n/es.json) | [↻ partial](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | [✓](TractorMod/i18n/es.json)
 Turkish    | [✓](ChestsAnywhere/i18n/tr.json)        | [✓](DataLayers/i18n/tr.json)        | [✓](DebugMode/i18n/tr.json) | ❑                                       | [✓](NoclipMode/i18n/tr.json) | [✓](TractorMod/i18n/tr.json)
 
 Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)

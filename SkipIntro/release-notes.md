@@ -1,6 +1,12 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.9
+Released 04 January 2021.
+
+* You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed.
+* Fixed crash when skipping to co-op screen in Stardew Valley 1.5.
+
 ## 1.8.5
 Released 03 July 2020.
 

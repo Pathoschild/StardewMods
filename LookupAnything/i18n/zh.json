@@ -7,6 +7,9 @@
     "generic.tomorrow": "明天",
     "generic.yesterday": "昨天",
 
+    // generic values
+    "generic.unknown": "unknown", // TODO
+
     // generic field values
     "generic.percent": "{{percent}}%",
     "generic.percent-chance-of": "{{percent}}%几率{{label}}",
@@ -322,6 +325,8 @@
     // labels
     "crop.summary": "作物",
     "crop.harvest": "收割",
+    "crop.fertilized": "Fertilized", // TODO
+    "crop.watered": "Watered", // TODO
 
     // values
     "crop.summary.dead": "作物死亡",

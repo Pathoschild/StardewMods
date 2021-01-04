@@ -77,7 +77,9 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
-                    where sprinkler.IsSprinkler()
+                    where
+                        sprinkler.IsSprinkler()
+                        || (sprinkler.bigCraftable.Value && coverageBySprinklerID.ContainsKey(sprinkler.ParentSheetIndex)) // older custom sprinklers
                     select sprinkler
                 )
                 .ToArray();
@@ -146,10 +148,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 foreach (var pair in this.Mods.LineSprinklers.GetSprinklerTiles())
                     tilesBySprinklerID[pair.Key] = pair.Value;
             }
-
-            // Prismatic Tools
-            if (this.Mods.PrismaticTools.IsLoaded)
-                tilesBySprinklerID[this.Mods.PrismaticTools.GetSprinklerID()] = this.Mods.PrismaticTools.GetSprinklerCoverage().ToArray();
 
             // Simple Sprinkler
             if (this.Mods.SimpleSprinkler.IsLoaded)

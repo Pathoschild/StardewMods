@@ -101,7 +101,7 @@ namespace ContentPatcher.Framework.Commands
                     return this.HandleHelp(subcommandArgs);
 
                 case "summary":
-                    return this.HandleSummary();
+                    return this.HandleSummary(subcommandArgs);
 
                 case "update":
                     return this.HandleUpdate();
@@ -137,7 +137,7 @@ namespace ContentPatcher.Framework.Commands
             var helpEntries = new InvariantDictionary<string>
             {
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
-                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.",
+                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.\n\n  Usage: {this.CommandName} summary \"<content pack ID>\"\n Show a summary of the current conditions, and loaded patches for the given content pack.",
                 ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches.",
                 ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
                 ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'.",
@@ -157,6 +157,7 @@ namespace ContentPatcher.Framework.Commands
                 {
                     help.AppendLine(entry.Value);
                     help.AppendLine();
+                    help.AppendLine();
                 }
             }
             else if (helpEntries.TryGetValue(args[0], out string entry))
@@ -165,17 +166,46 @@ namespace ContentPatcher.Framework.Commands
                 help.AppendLine($"Unknown command '{this.CommandName} {args[0]}'. Type '{this.CommandName} help' for available commands.");
 
             // write output
-            this.Monitor.Log(help.ToString(), LogLevel.Debug);
+            this.Monitor.Log(help.ToString().Trim(), LogLevel.Debug);
 
             return true;
         }
 
         /// <summary>Handle the 'patch summary' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
         /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleSummary()
+        private bool HandleSummary(string[] args)
         {
             StringBuilder output = new StringBuilder();
             LogPathBuilder path = new LogPathBuilder("console command");
+
+            // parse arguments
+            bool showFull = false;
+            var forModIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string arg in args)
+            {
+                // flags
+                if (arg.Equals("full", StringComparison.OrdinalIgnoreCase))
+                {
+                    showFull = true;
+                    continue;
+                }
+
+                // for mod ID
+                forModIds.Add(arg);
+            }
+
+            // truncate token values if needed
+            string GetTruncatedTokenValues(IEnumerable<string> values)
+            {
+                const int maxLength = 200;
+                const string truncatedSuffix = "... (use `patch summary full` to see other values)";
+
+                string valueStr = string.Join(", ", values);
+                return showFull || valueStr.Length <= maxLength
+                    ? valueStr
+                    : $"{valueStr.Substring(0, maxLength - truncatedSuffix.Length)}{truncatedSuffix}";
+            }
 
             // add condition summary
             output.AppendLine();
@@ -193,17 +223,21 @@ namespace ContentPatcher.Framework.Commands
                             inputArgs.Length > 1
                             || rootValues.Length > 1
                             || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input")))).Count() > 1)
+                        let mod = (token as ModProvidedToken)?.Mod
                         orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
-                        select token
+                        select new { Mod = mod, Token = token }
                     )
-                    .GroupBy(p => (p as ModProvidedToken)?.Mod.Name.Trim())
+                    .GroupBy(p => p.Mod?.Name?.Trim())
                     .OrderBy(p => p.Key) // default tokens (key is null), then tokens added by other mods
                     .ToArray();
-                int labelWidth = Math.Max(tokensByProvider.Max(group => group.Max(p => p.Name.Length)), "token name".Length);
+                int labelWidth = Math.Max(tokensByProvider.Max(group => group.Max(p => p.Token.Name.Length)), "token name".Length);
 
                 // group by provider mod (if any)
                 foreach (var tokenGroup in tokensByProvider)
                 {
+                    if (tokenGroup.Key != null && forModIds.Any() && !forModIds.Contains(tokenGroup.First().Mod.UniqueID))
+                        continue;
+
                     // print mod name
                     output.AppendLine($"   {tokenGroup.Key ?? "Content Patcher"}:");
                     output.AppendLine();
@@ -213,7 +247,7 @@ namespace ContentPatcher.Framework.Commands
                     output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
 
                     // print tokens
-                    foreach (IToken token in tokenGroup)
+                    foreach (IToken token in tokenGroup.Select(p => p.Token))
                     {
                         output.Append($"      {token.Name.PadRight(labelWidth)} | ");
 
@@ -234,14 +268,15 @@ namespace ContentPatcher.Framework.Commands
                                     }
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
-                                    output.AppendLine($":{input}: {string.Join(", ", token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
+
+                                    output.AppendLine($":{input}: {GetTruncatedTokenValues(token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
                                 }
                             }
                             else
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + string.Join(", ", token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
+                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
                     }
 
                     output.AppendLine();
@@ -250,6 +285,7 @@ namespace ContentPatcher.Framework.Commands
 
             // add patch summary
             var patches = this.GetAllPatches()
+                .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
                 .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
                 .OrderByIgnoreCase(p => p.Key);
 
@@ -261,6 +297,7 @@ namespace ContentPatcher.Framework.Commands
                 + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
                 + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
                 + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
+                + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
                 + "\n"
             );
             foreach (IGrouping<string, PatchInfo> patchGroup in patches)
@@ -289,7 +326,7 @@ namespace ContentPatcher.Framework.Commands
                             let result = new
                             {
                                 Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                Value = token.IsReady ? string.Join(", ", token.GetValues(new InputArguments(input))) : "",
+                                Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
                                 IsReady = token.IsReady
                             }
                             orderby result.Name
@@ -307,7 +344,7 @@ namespace ContentPatcher.Framework.Commands
                         output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
 
                         foreach (var token in tokens)
-                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {token.Value}");
+                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {GetTruncatedTokenValues(token.Values)}");
                     }
                 }
 

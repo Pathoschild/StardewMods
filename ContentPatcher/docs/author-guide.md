@@ -1159,6 +1159,12 @@ Example Content Pack:
       TerrainFeatures/tree_palm | edited image
 ```
 
+You can also optionally specify one or more content pack IDs, in which case it'll only show patches for those
+content packs:
+```
+> patch summary "LemonEx.HobbitHouse" "Another.Content.Pack"
+```
+
 #### patch update
 `patch update` immediately updates Content Patcher's condition context and rechecks all patches.
 This is mainly useful if you change conditions through the console (like the date), and want to

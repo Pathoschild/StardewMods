@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
@@ -43,13 +41,6 @@ namespace Pathoschild.Stardew.Common.Integrations.PrismaticTools
         {
             this.AssertLoaded();
             return this.ModApi.SprinklerIndex;
-        }
-
-        /// <summary>Get the relative tile coverage for a prismatic sprinkler.</summary>
-        public IEnumerable<Vector2> GetSprinklerCoverage()
-        {
-            this.AssertLoaded();
-            return this.ModApi.GetSprinklerCoverage(Vector2.Zero);
         }
     }
 }

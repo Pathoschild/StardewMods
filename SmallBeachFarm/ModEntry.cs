@@ -295,7 +295,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             // This should never happen since it's only called when catching a fish, but just in
             // case fallback to the default farm logic.
             if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
-                return FishType.River;
+                return FishType.Default;
 
             // mixed fish area
             if (this.Data.MixedFishAreas.Any(p => p.Contains(x, y)))
