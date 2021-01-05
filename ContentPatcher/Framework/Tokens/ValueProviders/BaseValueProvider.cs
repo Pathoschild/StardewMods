@@ -104,15 +104,18 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     }
 
                     // check values
-                    InvariantHashSet validInputs = this.GetValidPositionalArgs();
-                    if (validInputs?.Any() == true)
+                    if (input.TokenString.Value != InternalConstants.TokenPlaceholder)
                     {
-                        if (input.PositionalArgs.Any(arg => !validInputs.Contains(arg)))
+                        InvariantHashSet validInputs = this.GetValidPositionalArgs();
+                        if (validInputs?.Any() == true)
                         {
-                            string raw = input.TokenString.Raw;
-                            string parsed = input.TokenString.Value;
-                            error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
-                            return false;
+                            if (input.PositionalArgs.Any(arg => !validInputs.Contains(arg)))
+                            {
+                                string raw = input.TokenString.Raw;
+                                string parsed = input.TokenString.Value;
+                                error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
+                                return false;
+                            }
                         }
                     }
                 }

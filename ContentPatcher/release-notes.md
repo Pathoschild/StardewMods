@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed patches not applied for farmhands in some highly specific cases resulting in an _invalid input arguments_ error.
+
 ## 1.19.2
 Released 04 January 2021.
 
