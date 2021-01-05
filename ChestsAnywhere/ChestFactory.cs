@@ -252,12 +252,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             {
                 case ItemGrabMenu itemGrabMenu:
                     inventory = this.GetInventoryFromContext(itemGrabMenu.context);
-                    forLocation = itemGrabMenu.context as GameLocation;
+                    forLocation = this.GetLocationFromContext(itemGrabMenu.context);
                     break;
 
                 case ShopMenu shopMenu:
                     inventory = this.GetInventoryFromContext(shopMenu.source);
-                    forLocation = shopMenu.source as GameLocation;
+                    forLocation = this.GetLocationFromContext(shopMenu.source);
                     break;
             }
             if (inventory == null)
@@ -287,6 +287,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private IList<Item> GetChestInventory(Chest chest)
         {
             return chest?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
+        }
+
+        /// <summary>Get the container location from an <see cref="ItemGrabMenu.context"/>, if applicable.</summary>
+        /// <param name="context">The menu context.</param>
+        private GameLocation GetLocationFromContext(object context)
+        {
+            if (context is GameLocation location)
+                return location;
+
+            if (context is ShippingBin bin)
+                return Game1.getFarm();
+
+            return null;
         }
 
         /// <summary>Get the underlying inventory for an <see cref="ItemGrabMenu.context"/> value.</summary>

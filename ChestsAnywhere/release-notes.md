@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed mod confused between farm and island shipping bins when they're opened directly.
+
 ## 1.20
 Released 21 December 2020.
 
