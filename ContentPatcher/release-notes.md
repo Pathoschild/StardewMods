@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## 1.19.2
-Released 04 December 2020.
+Released 04 January 2021.
 
 * Improved `patch summary` command:
   * Added optional arguments to filter by content packs IDs.
