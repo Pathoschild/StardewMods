@@ -52,8 +52,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Get all player chests.</summary>
         /// <param name="range">Determines whether given locations are in range of the player for remote chest access.</param>
         /// <param name="excludeHidden">Whether to exclude chests marked as hidden.</param>
-        /// <param name="alwaysIncludeContainer">A container to include even if it would normally be hidden.</param>
-        public IEnumerable<ManagedChest> GetChests(RangeHandler range, bool excludeHidden = false, IContainer alwaysIncludeContainer = null)
+        /// <param name="alwaysInclude">A chest to include even if it would normally be hidden.</param>
+        public IEnumerable<ManagedChest> GetChests(RangeHandler range, bool excludeHidden = false, ManagedChest alwaysInclude = null)
         {
             IEnumerable<ManagedChest> Search()
             {
@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         int namelessGrabbers = 0;
                         int namelessHoppers = 0;
                         int namelessMiniShippingBins = 0;
-                        int junimoChestCount = 0;
+                        int namelessJunimoChests = 0;
                         foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                         {
                             Vector2 tile = pair.Key;
@@ -97,9 +97,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             // chests
                             if (obj is Chest chest && chest.playerChest.Value)
                             {
-                                if (chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest && ++junimoChestCount > 1)
-                                    continue; // only list one Junimo Chest per location (since they share inventory)
-
                                 yield return new ManagedChest(
                                     container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
                                     location: location,
@@ -107,7 +104,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     defaultDisplayName: chest.SpecialChestType switch
                                     {
                                         Chest.SpecialChestTypes.AutoLoader => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(275), number: ++namelessHoppers),
-                                        Chest.SpecialChestTypes.JunimoChest => GameI18n.GetBigCraftableName(256),
+                                        Chest.SpecialChestTypes.JunimoChest => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(256), number: ++namelessJunimoChests),
                                         Chest.SpecialChestTypes.MiniShippingBin => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(248), number: ++namelessMiniShippingBins),
                                         _ => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(130), number: ++namelessChests)
                                     },
@@ -221,7 +218,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 .OrderBy(chest => chest.Order ?? int.MaxValue)
                 .ThenBy(chest => chest.DisplayName, HumanSortComparer.DefaultIgnoreCase)
                 .Where(chest =>
-                    chest.Container.IsSameAs(alwaysIncludeContainer)
+                    (
+                        alwaysInclude != null
+                        && chest.Container.IsSameAs(alwaysInclude.Container)
+                        && object.ReferenceEquals(chest.Location, alwaysInclude.Location)
+                        && chest.Tile == alwaysInclude.Tile
+                    )
                     || (
                         (!excludeHidden || !chest.IsIgnored)
                         && range.IsInRange(chest.Location)
@@ -236,9 +238,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || !(obj is Chest chest))
                 return null;
 
-            return this
-                .GetChests(RangeHandler.CurrentLocation())
-                .FirstOrDefault(p => p.Container.IsSameAs(this.GetChestInventory(chest)));
+            return ChestFactory.GetBestMatch(
+                chests: this.GetChests(RangeHandler.CurrentLocation()),
+                inventory: this.GetChestInventory(chest),
+                location: Game1.currentLocation,
+                tile: tile
+            );
         }
 
         /// <summary>Get the player chest from the given menu, if any.</summary>
@@ -248,26 +253,59 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get inventory from menu
             IList<Item> inventory = null;
             GameLocation forLocation = null;
+            Vector2? tile = null;
             switch (menu)
             {
                 case ItemGrabMenu itemGrabMenu:
                     inventory = this.GetInventoryFromContext(itemGrabMenu.context);
                     forLocation = this.GetLocationFromContext(itemGrabMenu.context);
+                    tile = this.GetTileFromContext(itemGrabMenu.context);
                     break;
 
                 case ShopMenu shopMenu:
                     inventory = this.GetInventoryFromContext(shopMenu.source);
                     forLocation = this.GetLocationFromContext(shopMenu.source);
+                    tile = this.GetTileFromContext(shopMenu.source);
                     break;
             }
             if (inventory == null)
                 return null;
 
             // get chest from inventory
-            return this
-                .GetChests(RangeHandler.Unlimited())
-                .OrderByDescending(p => object.ReferenceEquals(forLocation, p.Location)) // shipping bin in different locations has the same inventory, so prioritize by location if possible;
-                .FirstOrDefault(p => p.Container.IsSameAs(inventory));
+            return ChestFactory.GetBestMatch(
+                chests: this.GetChests(RangeHandler.Unlimited()),
+                inventory: inventory,
+                location: forLocation,
+                tile: tile
+            );
+        }
+
+        /// <summary>Get the chest which contains the given inventory, prioritising the closest match for chests with shared inventory like Junimo chests.</summary>
+        /// <param name="chests">The chest to search.</param>
+        /// <param name="inventory">The chest inventory to match.</param>
+        /// <param name="location">The chest location, if known.</param>
+        /// <param name="tile">The chest tile, if known.</param>
+        public static ManagedChest GetBestMatch(IEnumerable<ManagedChest> chests, IList<Item> inventory, GameLocation location, Vector2? tile)
+        {
+            if (inventory == null)
+                throw new ArgumentNullException(nameof(inventory));
+
+            return chests
+                .Where(p => p.Container.IsSameAs(inventory))
+                .OrderByDescending(p => location == null || object.ReferenceEquals(location, p.Location))
+                .ThenByDescending(p => tile == null || p.Tile == tile)
+                .FirstOrDefault();
+        }
+
+        /// <summary>Get the chest which contains the given inventory, prioritising the closest match for chests with shared inventory like Junimo chests.</summary>
+        /// <param name="chests">The chest to search.</param>
+        /// <param name="search">The chest to match.</param>
+        public static ManagedChest GetBestMatch(IEnumerable<ManagedChest> chests, ManagedChest search)
+        {
+            if (search == null)
+                return null;
+
+            return ChestFactory.GetBestMatch(chests, search.Container.Inventory, search.Location, search.Tile);
         }
 
 
@@ -293,13 +331,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="context">The menu context.</param>
         private GameLocation GetLocationFromContext(object context)
         {
-            if (context is GameLocation location)
-                return location;
+            return context switch
+            {
+                GameLocation location => location,
+                ShippingBin => Game1.getFarm(),
+                _ => null
+            };
+        }
 
-            if (context is ShippingBin bin)
-                return Game1.getFarm();
-
-            return null;
+        /// <summary>Get the container's tile position from an <see cref="ItemGrabMenu.context"/>, if applicable.</summary>
+        /// <param name="context">The menu context.</param>
+        private Vector2? GetTileFromContext(object context)
+        {
+            return context switch
+            {
+                SObject obj => obj.TileLocation,
+                Building building => new Vector2(building.tileX.Value, building.tileY.Value),
+                _ => null
+            };
         }
 
         /// <summary>Get the underlying inventory for an <see cref="ItemGrabMenu.context"/> value.</summary>

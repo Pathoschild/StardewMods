@@ -2,7 +2,11 @@
 
 # Release notes
 ## Upcoming release
-* Fixed mod confused between farm and island shipping bins when they're opened directly.
+* Fixed issues related to Junimo chests and main shipping bins (which have shared inventories):
+  * Fixed which one you opened not always tracked correctly.
+  * Fixed dropdown always selecting the first chest of that type when you click a different one of that type.
+  * Fixed Junimo chests not always listed separately.
+  * Fixed named Junimo chests sometimes showing the label from another Junimo chest.
 
 ## 1.20
 Released 21 December 2020.

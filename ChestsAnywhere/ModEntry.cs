@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
@@ -34,8 +33,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <summary>Encapsulates logic for finding chests.</summary>
         private ChestFactory ChestFactory;
 
-        /// <summary>The selected in-game inventory.</summary>
-        private readonly PerScreen<IList<Item>> SelectedInventory = new PerScreen<IList<Item>>();
+        /// <summary>The last selected chest.</summary>
+        private readonly PerScreen<ManagedChest> LastChest = new PerScreen<ManagedChest>();
 
         /// <summary>The overlay for the current menu which which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
         private readonly PerScreen<IStorageOverlay> CurrentOverlay = new PerScreen<IStorageOverlay>();
@@ -213,7 +212,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // add overlay
             RangeHandler range = this.GetCurrentRange();
-            ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysIncludeContainer: chest.Container).ToArray();
+            ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true, alwaysInclude: chest).ToArray();
             bool isAutomateInstalled = this.Helper.ModRegistry.IsLoaded("Pathoschild.Automate");
             switch (menu)
             {
@@ -229,7 +228,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // hook new overlay
             this.CurrentOverlay.Value.OnChestSelected += selected =>
             {
-                this.SelectedInventory.Value = selected.Container.Inventory;
+                this.LastChest.Value = selected;
                 Game1.activeClickableMenu = selected.OpenMenu();
             };
             this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
@@ -252,8 +251,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
             ManagedChest selectedChest =
-                chests.FirstOrDefault(p => p.Container.IsSameAs(this.SelectedInventory.Value))
-                ?? chests.FirstOrDefault(p => p.Location == Game1.currentLocation)
+                ChestFactory.GetBestMatch(chests, this.LastChest.Value)
+                ?? chests.FirstOrDefault(p => object.ReferenceEquals(p.Location, Game1.currentLocation))
                 ?? chests.FirstOrDefault();
 
             // show error

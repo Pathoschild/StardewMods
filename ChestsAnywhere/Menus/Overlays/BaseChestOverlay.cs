@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Common.Utilities;
 using Microsoft.Xna.Framework;
@@ -577,7 +576,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // chest dropdown
             {
                 ManagedChest[] chests = this.Chests.Where(chest => !this.ShowCategoryDropdown || chest.DisplayCategory == this.SelectedCategory).ToArray();
-                ManagedChest selected = chests.FirstOrDefault(p => p.Container.IsSameAs(this.Chest.Container));
+                ManagedChest selected = ChestFactory.GetBestMatch(chests, this.Chest);
                 this.ChestDropdown = new Dropdown<ManagedChest>(bounds.X, bounds.Y, this.Font, selected, chests, chest => chest.DisplayName);
 
                 if (Constants.TargetPlatform != GamePlatform.Android)
@@ -685,16 +684,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Get the index of a chest in the selected category.</summary>
         /// <param name="chest">The chest to find.</param>
         /// <param name="chests">The chests to search.</param>
-        private int GetChestIndex(ManagedChest chest, IEnumerable<ManagedChest> chests)
+        private int GetChestIndex(ManagedChest chest, ManagedChest[] chests)
         {
-            int i = 0;
-            foreach (ManagedChest cur in chests)
-            {
-                if (cur.Container.IsSameAs(chest.Container))
-                    return i;
-                i++;
-            }
-            return -1;
+            ManagedChest match = ChestFactory.GetBestMatch(chests, chest);
+            return match != null
+                ? Array.IndexOf(chests, match)
+                : -1;
         }
 
         /// <summary>Switch to the previous chest in the list.</summary>
