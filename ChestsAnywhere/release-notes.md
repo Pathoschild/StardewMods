@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.1
+Released 05 January 2020.
+
 * Fixed issues related to Junimo chests and main shipping bins (which have shared inventories):
   * Fixed which one you opened not always tracked correctly.
   * Fixed dropdown always selecting the first chest of that type when you click a different one of that type.
