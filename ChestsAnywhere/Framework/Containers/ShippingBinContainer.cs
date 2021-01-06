@@ -18,9 +18,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>A key added to the mod data keys to distinguish different containers in the same mod data.</summary>
         internal static readonly string ModDataDiscriminator = "shipping-bin";
 
-        /// <summary>An API for reading and storing local mod data.</summary>
-        private readonly IDataHelper DataHelper;
-
         /// <summary>The location containing the shipping bin.</summary>
         private readonly GameLocation Location;
 
@@ -58,11 +55,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="location">The location whose shipping bin to manage.</param>
-        /// <param name="dataHelper">An API for reading and storing local mod data.</param>
         /// <param name="mode">The type of shipping bin menu to create.</param>
-        public ShippingBinContainer(GameLocation location, IDataHelper dataHelper, ShippingBinMode mode)
+        public ShippingBinContainer(GameLocation location, ShippingBinMode mode)
         {
-            this.DataHelper = dataHelper;
             this.Location = location;
             this.Farm = location as Farm ?? Game1.getFarm();
             this.ShippingBin = this.Farm.getShippingBin(Game1.player);
