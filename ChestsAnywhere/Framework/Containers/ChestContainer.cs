@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Fields
         *********/
         /// <summary>The container's default internal name.</summary>
-        private readonly string DefaultName = "Chest";
+        private readonly string DefaultName;
 
         /// <summary>The in-game chest.</summary>
         protected readonly Chest Chest;
@@ -55,6 +55,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Context = context;
             this.ShowColorPicker = showColorPicker;
             this.Reflection = reflection;
+            this.DefaultName = this.GetDefaultName(chest);
             this.Data = ContainerData.FromModData(chest.modData, this.DefaultName);
         }
 
@@ -167,6 +168,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 itemGrabMenu.behaviorOnItemGrab = this.GrabItemFromContainer;
                 this.Reflection.GetField<ItemGrabMenu.behaviorOnItemSelect>(itemGrabMenu, "behaviorFunction").SetValue(this.GrabItemFromPlayer);
             }
+        }
+
+        /// <summary>Get the default name for an item.</summary>
+        /// <param name="chest">The whose default name to get.</param>
+        private string GetDefaultName(Chest chest)
+        {
+            return chest.ParentSheetIndex switch
+            {
+                216 => "Mini-Fridge",
+                256 => "Junimo Chest",
+                275 => "Hopper",
+                _ => "Chest"
+            };
         }
     }
 }

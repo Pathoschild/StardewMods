@@ -130,7 +130,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="defaultDisplayName">The default display name.</param>
         public static void MigrateLegacyData(Item item, string defaultDisplayName)
         {
-            if (string.IsNullOrWhiteSpace(item.Name) || item.Name == defaultDisplayName)
+            if (string.IsNullOrWhiteSpace(item.Name) || item.Name == "Chest" || item.Name == defaultDisplayName)
                 return;
 
             ContainerData data = ContainerData.ParseLegacyDataFromName(item.Name, defaultDisplayName);

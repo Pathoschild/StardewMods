@@ -189,7 +189,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         {
             // get chest name
             string name = this.Chest.Name;
-            if (name == null || name == "Chest" || !name.Contains("|"))
+            if (name == null || !name.Contains("|"))
                 return;
 
             // get tags

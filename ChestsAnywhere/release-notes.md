@@ -7,6 +7,7 @@
   * Fixed dropdown always selecting the first chest of that type when you click a different one of that type.
   * Fixed Junimo chests not always listed separately.
   * Fixed named Junimo chests sometimes showing the label from another Junimo chest.
+* Fixed mini-fridge options sometimes reset on load.
 
 ## 1.20
 Released 21 December 2020.
