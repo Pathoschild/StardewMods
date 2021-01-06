@@ -222,7 +222,7 @@ namespace Pathoschild.Stardew.Common.UI
             int itemHeight = this.MaxLabelHeight;
 
             // get pagination
-            this.MaxItems = Math.Min((Game1.viewport.Height - y) / itemHeight, this.Options.Length);
+            this.MaxItems = Math.Min((Game1.uiViewport.Height - y) / itemHeight, this.Options.Length);
             this.FirstVisibleIndex = this.GetValidFirstItem(this.FirstVisibleIndex, this.MaxFirstVisibleIndex);
 
             // get dropdown size
