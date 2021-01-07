@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming version
+* Fixed custom chest types added by mods listed as _Chest_ instead of their display name.
+
 ## 1.20.1
 Released 05 January 2020.
 

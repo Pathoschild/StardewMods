@@ -76,6 +76,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 // find chests
                 foreach (var entry in locations)
                 {
+                    IDictionary<string, int> nameCounts = new Dictionary<string, int>();
+
                     // get info
                     GameLocation location = entry.Location;
                     string category = defaultCategories.ContainsKey(entry.Category)
@@ -83,46 +85,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                         : entry.Category;
 
                     // chests in location
+                    foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
                     {
-                        int namelessChests = 0;
-                        int namelessGrabbers = 0;
-                        int namelessHoppers = 0;
-                        int namelessMiniShippingBins = 0;
-                        int namelessJunimoChests = 0;
-                        foreach (KeyValuePair<Vector2, SObject> pair in location.Objects.Pairs)
+                        Vector2 tile = pair.Key;
+                        SObject obj = pair.Value;
+
+                        // chests
+                        if (obj is Chest chest && chest.playerChest.Value)
                         {
-                            Vector2 tile = pair.Key;
-                            SObject obj = pair.Value;
+                            yield return new ManagedChest(
+                                container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
+                                location: location,
+                                tile: tile,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(chest.DisplayName, nameCounts),
+                                defaultCategory: category
+                            );
+                        }
 
-                            // chests
-                            if (obj is Chest chest && chest.playerChest.Value)
-                            {
-                                yield return new ManagedChest(
-                                    container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
-                                    location: location,
-                                    tile: tile,
-                                    defaultDisplayName: chest.SpecialChestType switch
-                                    {
-                                        Chest.SpecialChestTypes.AutoLoader => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(275), number: ++namelessHoppers),
-                                        Chest.SpecialChestTypes.JunimoChest => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(256), number: ++namelessJunimoChests),
-                                        Chest.SpecialChestTypes.MiniShippingBin => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(248), number: ++namelessMiniShippingBins),
-                                        _ => I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(130), number: ++namelessChests)
-                                    },
-                                    defaultCategory: category
-                                );
-                            }
-
-                            // auto-grabbers
-                            else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
-                            {
-                                yield return new ManagedChest(
-                                    container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
-                                    location: location,
-                                    tile: tile,
-                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBigCraftableName(165), number: ++namelessGrabbers),
-                                    defaultCategory: category
-                                );
-                            }
+                        // auto-grabbers
+                        else if (obj.ParentSheetIndex == this.AutoGrabberID && obj.heldObject.Value is Chest grabberChest)
+                        {
+                            yield return new ManagedChest(
+                                container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
+                                location: location,
+                                tile: tile,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(obj.DisplayName, nameCounts),
+                                defaultCategory: category
+                            );
                         }
                     }
 
@@ -144,16 +133,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // dressers
                     if (location is DecoratableLocation decoratableLocation)
                     {
-                        var dresserCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
                         foreach (StorageFurniture furniture in decoratableLocation.furniture.OfType<StorageFurniture>())
                         {
                             var container = new StorageFurnitureContainer(furniture, this.Reflection);
-                            dresserCounts[container.DefaultName] = dresserCounts.TryGetValue(container.DefaultName, out int count) ? ++count : (count = 1);
                             yield return new ManagedChest(
                                 container: container,
                                 location,
                                 furniture.TileLocation,
-                                defaultDisplayName: $"{container.DefaultName} #{count}",
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(furniture.DisplayName, nameCounts),
                                 defaultCategory: category
                             );
                         }
@@ -162,7 +149,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // buildings
                     if (location is BuildableGameLocation buildableLocation)
                     {
-                        int namelessHuts = 0;
                         foreach (Building building in buildableLocation.buildings)
                         {
                             if (building is JunimoHut hut)
@@ -171,7 +157,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     container: new JunimoHutContainer(hut, this.Reflection),
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
-                                    defaultDisplayName: I18n.DefaultName_Other(name: GameI18n.GetBuildingName("Junimo Hut"), number: ++namelessHuts),
+                                    defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetBuildingName("Junimo Hut"), nameCounts),
                                     defaultCategory: category
                                 );
                             }
@@ -444,6 +430,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 IslandWest islandFarm => islandFarm.farmhouseRestored.Value,
                 _ => false
             };
+        }
+
+        /// <summary>Append an incrementing number to a default chest name.</summary>
+        /// <param name="name">The name without the suffix.</param>
+        /// <param name="nameCounts">The number of times names were previously disambiguated.</param>
+        private string GetDisambiguatedDefaultName(string name, IDictionary<string, int> nameCounts)
+        {
+            if (!nameCounts.TryGetValue(name, out int prevNumber))
+                prevNumber = 0;
+
+            int number = prevNumber + 1;
+            nameCounts[name] = number;
+
+            return I18n.DefaultName_Other(name, number);
         }
     }
 }
