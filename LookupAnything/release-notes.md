@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
+
 ## 1.30
 Released 04 January 2021.
 

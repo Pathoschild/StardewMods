@@ -48,11 +48,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             foreach (GameLocation location in CommonHelper.GetLocations())
             {
                 // furniture
-                if (location is DecoratableLocation decorableLocation)
-                {
-                    foreach (Furniture furniture in decorableLocation.furniture)
-                        this.ScanAndTrack(items, furniture, isRootInWorld: true);
-                }
+                foreach (Furniture furniture in location.furniture)
+                    this.ScanAndTrack(items, furniture, isRootInWorld: true);
 
                 // farmhouse fridge
                 if (location is FarmHouse house)
