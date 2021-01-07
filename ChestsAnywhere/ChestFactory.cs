@@ -131,19 +131,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // dressers
-                    if (location is DecoratableLocation decoratableLocation)
+                    foreach (StorageFurniture furniture in location.furniture.OfType<StorageFurniture>())
                     {
-                        foreach (StorageFurniture furniture in decoratableLocation.furniture.OfType<StorageFurniture>())
-                        {
-                            var container = new StorageFurnitureContainer(furniture, this.Reflection);
-                            yield return new ManagedChest(
-                                container: container,
-                                location,
-                                furniture.TileLocation,
-                                defaultDisplayName: this.GetDisambiguatedDefaultName(furniture.DisplayName, nameCounts),
-                                defaultCategory: category
-                            );
-                        }
+                        var container = new StorageFurnitureContainer(furniture, this.Reflection);
+                        yield return new ManagedChest(
+                            container: container,
+                            location,
+                            furniture.TileLocation,
+                            defaultDisplayName: this.GetDisambiguatedDefaultName(furniture.DisplayName, nameCounts),
+                            defaultCategory: category
+                        );
                     }
 
                     // buildings
