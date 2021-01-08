@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());
                 else
-                    yield return new GenericField(label, I18n.Tree_NextGrowth_Chance(stage: I18n.For(stage + 1), chance: tree.fertilized.Value ? 100 : 20));
+                    yield return new GenericField(label, I18n.Tree_NextGrowth_Chance(stage: I18n.For(stage + 1), chance: this.GetNormalGrowthChance()));
             }
 
             // get fertilizer
@@ -135,6 +135,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                     : null
                 select otherTree != null && otherTree.growthStage.Value >= (int)WildTreeGrowthStage.SmallTree
             ).Any(p => p);
+        }
+
+        /// <summary>Get the percentage chance the tree will grow, assuming it's in season and not blocked.</summary>
+        /// <remarks>Derived from <see cref="Tree.dayUpdate"/>.</remarks>
+        private int GetNormalGrowthChance()
+        {
+            Tree tree = this.Target;
+            return tree.treeType.Value == Tree.mahoganyTree
+                ? (tree.fertilized.Value ? 60 : 15)
+                : (tree.fertilized.Value ? 100 : 20);
         }
     }
 }
