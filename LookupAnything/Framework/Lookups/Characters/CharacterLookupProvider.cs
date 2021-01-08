@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
 
         /*********
         ** Public methods
@@ -29,10 +32,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
-        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config)
+        /// <param name="codex">Provides subject entries.</param>
+        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Config = config;
+            this.Codex = codex;
         }
 
         /// <inheritdoc />
@@ -214,7 +219,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="animal">The entity to look up.</param>
         private ISubject BuildSubject(FarmAnimal animal)
         {
-            return new FarmAnimalSubject(this.GameHelper, animal);
+            return new FarmAnimalSubject(this.Codex, this.GameHelper, animal);
         }
 
         /// <summary>Build a subject.</summary>
@@ -222,6 +227,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private ISubject BuildSubject(NPC npc)
         {
             return new CharacterSubject(
+                codex: this.Codex,
                 gameHelper: this.GameHelper,
                 npc: npc,
                 type: this.GetSubjectType(npc),

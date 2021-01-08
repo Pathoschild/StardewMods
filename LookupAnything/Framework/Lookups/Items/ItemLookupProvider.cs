@@ -30,6 +30,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
 
         /*********
         ** Public methods
@@ -38,14 +41,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="codex">Provides subject entries.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, JsonAssetsIntegration jsonAssets)
+        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
             : base(reflection, gameHelper)
         {
             this.Config = config;
+            this.Codex = codex;
             this.JsonAssets = jsonAssets;
         }
 
+        /// <inheritdoc />
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
             // map objects
@@ -261,6 +267,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield return this.BuildSubject(item.Item, ObjectContext.World, knownQuality: false);
         }
 
+        /// <inheritdoc />
+        public override ISubject GetSubjectFor(object entity)
+        {
+            return entity is Item item
+                ? this.BuildSubject(item, ObjectContext.Any, knownQuality: false)
+                : null;
+        }
+
+
         /*********
         ** Private methods
         *********/
@@ -270,7 +285,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         private ISubject BuildSubject(Item target, ObjectContext context, bool knownQuality = true)
         {
-            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, target, context, knownQuality, this.BuildSubject);
+            return new ItemSubject(this.Codex, this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, target, context, knownQuality, this.BuildSubject);
         }
 
         /// <summary>Build a crop subject.</summary>
@@ -290,7 +305,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 };
             }
 
-            return new ItemSubject(this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest), context, getCropSubject: this.BuildSubject, knownQuality: false, fromDirt: dirt);
+            return new ItemSubject(this.Codex, this.GameHelper, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes, this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest), context, getCropSubject: this.BuildSubject, knownQuality: false, fromDirt: dirt);
         }
     }
 }

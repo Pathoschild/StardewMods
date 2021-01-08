@@ -19,17 +19,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>The lookup target.</summary>
         private readonly FarmAnimal Target;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="animal">The lookup target.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
-        public FarmAnimalSubject(GameHelper gameHelper, FarmAnimal animal)
+        public FarmAnimalSubject(ISubjectRegistry codex, GameHelper gameHelper, FarmAnimal animal)
             : base(gameHelper, animal.displayName, null, animal.type.Value)
         {
+            this.Codex = codex;
             this.Target = animal;
         }
 
@@ -53,7 +58,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             yield return new PercentageBarField(I18n.Animal_Happiness(), animal.happiness.Value, byte.MaxValue, Color.Green, Color.Gray, I18n.Generic_Percent(percent: (int)Math.Round(animal.happiness.Value / (this.Constants.AnimalMaxHappiness * 1f) * 100)));
             yield return new GenericField(I18n.Animal_Mood(), animal.getMoodMessage());
             yield return new GenericField(I18n.Animal_Complaints(), this.GetMoodReason(animal));
-            yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null);
+            yield return new ItemIconField(this.GameHelper, I18n.Animal_ProduceReady(), animal.currentProduce.Value > 0 ? this.GameHelper.GetObjectBySpriteIndex(animal.currentProduce.Value) : null, this.Codex);
             if (!isFullyGrown)
                 yield return new GenericField(I18n.Animal_Growth(), $"{I18n.Generic_Days(count: daysUntilGrown)} ({this.Stringify(dayOfMaturity)})");
             yield return new GenericField(I18n.Animal_SellsFor(), GenericField.GetSaleValueString(animal.getSellPrice(), 1));

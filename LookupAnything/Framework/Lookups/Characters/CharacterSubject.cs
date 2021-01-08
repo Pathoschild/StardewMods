@@ -17,7 +17,6 @@ using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 {
@@ -27,11 +26,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /*********
         ** Fields
         *********/
-        /// <summary>The NPC type.s</summary>
+        /// <summary>The NPC type.</summary>
         private readonly SubjectType TargetType;
 
         /// <summary>The lookup target.</summary>
         private readonly NPC Target;
+
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
 
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
@@ -59,6 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="npc">The lookup target.</param>
         /// <param name="type">The NPC type.</param>
@@ -68,9 +71,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
         /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool enableTargetRedirection)
+        public CharacterSubject(ISubjectRegistry codex, GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool enableTargetRedirection)
             : base(gameHelper)
         {
+            this.Codex = codex;
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
@@ -319,7 +323,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             {
                 this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
                 int itemWantedIndex = this.Reflection.GetField<int>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), new SObject(itemWantedIndex, 1));
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), this.GameHelper.GetObjectBySpriteIndex(itemWantedIndex), this.Codex);
             }
 
             // show progress
