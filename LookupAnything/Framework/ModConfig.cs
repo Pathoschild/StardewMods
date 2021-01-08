@@ -13,16 +13,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public int ScrollAmount { get; set; } = 160;
 
         /// <summary>Whether to hide content until the player has discovered it in-game (where applicable).</summary>
-        public bool ProgressionMode { get; set; } = false;
+        public bool ProgressionMode { get; set; }
 
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
-        public bool HighlightUnrevealedGiftTastes { get; set; } = false;
+        public bool HighlightUnrevealedGiftTastes { get; set; }
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
 
         /// <summary>Whether to include map tiles as lookup targets.</summary>
         public bool EnableTileLookups { get; set; }
+
+        /// <summary>Whether to look up the original entity when the game spawns a temporary copy.</summary>
+        /// <remarks>In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.</remarks>
+        public bool EnableTargetRedirection { get; set; } = true;
 
         /// <summary>The key bindings.</summary>
         public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();

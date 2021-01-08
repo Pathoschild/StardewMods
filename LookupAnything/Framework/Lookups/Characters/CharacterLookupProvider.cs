@@ -221,7 +221,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The entity to look up.</param>
         private ISubject BuildSubject(NPC npc)
         {
-            return new CharacterSubject(this.GameHelper, npc, this.GetSubjectType(npc), this.GameHelper.Metadata, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
+            return new CharacterSubject(
+                gameHelper: this.GameHelper,
+                npc: npc,
+                type: this.GetSubjectType(npc),
+                metadata: this.GameHelper.Metadata,
+                reflectionHelper: this.Reflection,
+                progressionMode: this.Config.ProgressionMode,
+                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
+                enableTargetRedirection: this.Config.EnableTargetRedirection
+            );
         }
 
         /// <summary>Get the subject type for an NPC.</summary>

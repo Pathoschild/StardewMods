@@ -42,6 +42,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         private readonly bool HighlightUnrevealedGiftTastes;
 
+        /// <summary>Whether to look up the original entity when the game spawns a temporary copy.</summary>
+        private readonly bool EnableTargetRedirection;
+
         /// <summary>Whether the NPC is Gourmand in the Fern Islands farm cave.</summary>
         private readonly bool IsGourmand;
 
@@ -63,13 +66,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="progressionMode">Whether to only show content once the player discovers it.</param>
         /// <param name="highlightUnrevealedGiftTastes">Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</param>
+        /// <param name="enableTargetRedirection">Whether to look up the original entity when the game spawns a temporary copy.</param>
         /// <remarks>Reverse engineered from <see cref="NPC"/>.</remarks>
-        public CharacterSubject(GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes)
+        public CharacterSubject(GameHelper gameHelper, NPC npc, SubjectType type, Metadata metadata, IReflectionHelper reflectionHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool enableTargetRedirection)
             : base(gameHelper)
         {
             this.Reflection = reflectionHelper;
             this.ProgressionMode = progressionMode;
             this.HighlightUnrevealedGiftTastes = highlightUnrevealedGiftTastes;
+            this.EnableTargetRedirection = enableTargetRedirection;
 
             // initialize
             this.Target = npc;
@@ -325,6 +330,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The NPC for which to show info.</param>
         private IEnumerable<ICustomField> GetDataForVillager(NPC npc)
         {
+            // special case: Abigail in the mines is a temporary instance with the name
+            // 'AbigailMine', so the info shown will be incorrect.
+            if (this.EnableTargetRedirection && npc.Name == "AbigailMine" && npc.currentLocation?.Name == "UndergroundMine20")
+                npc = Game1.getCharacterFromName("Abigail") ?? npc;
+
             // social fields (birthday, friendship, gifting, etc)
             if (this.GameHelper.IsSocialVillager(npc))
             {
