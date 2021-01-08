@@ -172,6 +172,101 @@ You shouldn't change this file unless you know what you're doing.
     ** Machine recipes (not available from game data)
     *********/
     "MachineRecipes": [
+        /* bone mill */
+        {
+            "MachineID": 90,
+            "Recipes": [
+                {
+                    "Ingredients": [
+                        {
+                            "PossibleIds": [
+                                579, // Prehistoric Scapula
+                                580, // Prehistoric Tibia
+                                581, // Prehistoric Skull
+                                582, // Skeletal Hand
+                                583, // Prehistoric Rib
+                                584, // Prehistoric Vertebra
+                                585, // Skeletal Tail
+                                586, // Nautilus Fossil
+                                587, // Amphibian Fossil
+                                588, // Palm Fossil
+                                589, // Trilobyte
+                                820, // Fossilized Skull
+                                821, // Fossilized Spine
+                                822, // Fossilized Tail
+                                823, // Fossilized Leg
+                                824, // Fossilized Ribs
+                                825, // Snake Skull
+                                826, // Snake Vertebrae
+                                827, // Mummified Bat
+                                828 // Mummified Frog
+                            ]
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 466 ], // Deluxe Speed-Gro
+                            "MinOutput": 3,
+                            "MaxOutput": 6,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 465 ], // Speed-Gro
+                            "MinOutput": 5,
+                            "MaxOutput": 10,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 369 ], // Quality Fertilizer
+                            "MinOutput": 10,
+                            "MaxOutput": 20,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 805 ], // Tree Fertilizer
+                            "MinOutput": 5,
+                            "MaxOutput": 10,
+                            "OutputChance": 22.5
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
+                            "PossibleIds": [ 881 ], // bone fragment
+                            "Count": 5 
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 466 ], // Deluxe Speed-Gro
+                            "MinOutput": 3,
+                            "MaxOutput": 6,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 465 ], // Speed-Gro
+                            "MinOutput": 5,
+                            "MaxOutput": 10,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 369 ], // Quality Fertilizer
+                            "MinOutput": 10,
+                            "MaxOutput": 20,
+                            "OutputChance": 22.5
+                        },
+                        {
+                            "Ids": [ 805 ], // Tree Fertilizer
+                            "MinOutput": 5,
+                            "MaxOutput": 10,
+                            "OutputChance": 22.5
+                        }
+                    ]
+                }
+            ]
+        },
+
         /* charcoal kiln */
         {
             "MachineID": 114,
@@ -294,6 +389,22 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
+                            "PossibleIds": [ 909 ], // radioactive ore
+                            "Count": 5
+                        },
+                        {
+                            "PossibleIds": [ 382 ] // coal
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 910 ] // radioactive bar
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
                             "PossibleIds": [ 82 ] // fire quartz
                         },
                         {
@@ -319,6 +430,18 @@ You shouldn't change this file unless you know what you're doing.
                     "PossibleOutputs": [
                         {
                             "Ids": [ 338 ] // refined quartz
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
+                            "PossibleIds": [ 458 ] // bouquet
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 277 ] // wilted bouquet
                         }
                     ]
                 }
@@ -484,6 +607,32 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
+                            "PossibleIds": [ 928 ] // golden egg
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 928 ], // mayonnaise
+                            "MaxOutput": 3
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
+                            "PossibleIds": [ 289 ] // ostrich egg
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        {
+                            "Ids": [ 306 ], // mayonnaise
+                            "MaxOutput": 10
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
                             "PossibleIds": [ 305 ] // void egg
                         }
                     ],
@@ -546,7 +695,7 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ -75 ] // any vegetable
+                            "PossibleIds": [ -75, 829 ] // any vegetable, ginger
                         }
                     ],
                     "PossibleOutputs": [

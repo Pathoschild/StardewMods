@@ -3,9 +3,11 @@
 # Release notes
 ## Upcoming release
 * Added support for looking up NPCs at festivals.
-* Added target redirection. This fixes an issue where looking up Abigail in the mines wouldn't show her real data. (See [`EnableTargetRedirection` in config](README.md#configure) to disable this fix.)
-* Item icon fields now link to their item's lookup.
+* Added target redirection, which fixes an issue where looking up Abigail in the mines wouldn't show her real data.
+* Added links in item icon fields.
+* Added new machine recipes in Stardew Valley 1.5.
 * Tree lookups' 'is fertilized' field now links to the tree fertilizer lookup if applicable.
+* Fixed furnace not showing wilted bouquet recipe.
 * Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
 * Fixed mahogany tree lookups showing wrong percentage growth chance.
 
