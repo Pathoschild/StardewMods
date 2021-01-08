@@ -10,6 +10,7 @@
 * Fixed furnace not showing wilted bouquet recipe.
 * Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
 * Fixed mahogany tree lookups showing wrong percentage growth chance.
+* Fixed items counted more than once if they're in a Junimo chest.
 
 ## 1.30
 Released 04 January 2021.
