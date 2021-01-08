@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Fixed issue where looking up Abigail in the mines wouldn't show her real data. (See [`EnableTargetRedirection` in config](README.md#configure) to disable this fix.)
+* Added support for looking up NPCs at festivals.
+* Added target redirection. This fixes an issue where looking up Abigail in the mines wouldn't show her real data. (See [`EnableTargetRedirection` in config](README.md#configure) to disable this fix.)
 * Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
 
 ## 1.30

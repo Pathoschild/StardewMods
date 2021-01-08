@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // NPCs
-            foreach (NPC npc in location.characters)
+            foreach (NPC npc in Game1.CurrentEvent?.actors ?? (IEnumerable<NPC>)location.characters)
             {
                 Vector2 entityTile = npc.getTileLocation();
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
