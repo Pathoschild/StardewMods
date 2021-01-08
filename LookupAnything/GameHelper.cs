@@ -359,8 +359,8 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
                 return
-                    ingredient?.Ids.Any(p => p < 0) == true
-                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.Ids.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
+                    ingredient?.PossibleIds.Any(p => p < 0) == true
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
             });
 
             // from tailor recipes
@@ -630,7 +630,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     // remove vanilla recipes overridden by a PFM one
                     // This is always an integer currently, but the API may return context_tag keys in the future.
-                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].Ids.Contains(recipe.InputId.Value));
+                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
 
                     // add recipe
                     SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);

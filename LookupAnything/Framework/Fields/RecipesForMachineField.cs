@@ -174,34 +174,37 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             foreach (RecipeModel recipe in recipes)
             {
-                // get inputs
-                List<EntryItem> inputs = new List<EntryItem>();
-                foreach (var ingredient in recipe.Ingredients)
-                {
-                    int count = ingredient.Count;
+                bool isKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player);
 
-                    foreach (int inputId in ingredient.Ids)
+                foreach (int[] inputIds in this.GetCartesianInputs(recipe))
+                {
+                    // get inputs
+                    var inputs = new EntryItem[inputIds.Length];
+                    for (int i = 0; i < inputIds.Length; i++)
                     {
+                        int id = inputIds[i];
+                        var ingredient = recipe.Ingredients[i];
+
                         // category
-                        if (inputId < 0)
+                        if (id < 0)
                         {
-                            Item sampleInput = gameHelper.GetObjectsByCategory(inputId).FirstOrDefault();
+                            Item sampleInput = gameHelper.GetObjectsByCategory(id).FirstOrDefault();
                             if (sampleInput == null)
                                 continue;
 
-                            string displayText = this.GetItemDisplayText(name: sampleInput.getCategoryName(), minCount: count, maxCount: count, chance: 100);
-                            inputs.Add(new EntryItem
+                            string displayText = this.GetItemDisplayText(name: sampleInput.getCategoryName(), minCount: ingredient.Count, maxCount: ingredient.Count, chance: 100);
+                            inputs[i] = new EntryItem
                             {
                                 Sprite = null,
                                 DisplayText = displayText,
                                 DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                            });
+                            };
                         }
 
                         // item
                         else
                         {
-                            Item input = gameHelper.GetObjectBySpriteIndex(inputId);
+                            Item input = gameHelper.GetObjectBySpriteIndex(id);
                             if (input is SObject obj)
                             {
                                 if (ingredient.PreservedParentSheetIndex != null)
@@ -210,37 +213,46 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                                     obj.preserve.Value = ingredient.PreserveType.Value;
                             }
 
-                            string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
-                            inputs.Add(new EntryItem
+                            string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: ingredient.Count, maxCount: ingredient.Count, chance: 100);
+                            inputs[i] = new EntryItem
                             {
                                 Sprite = gameHelper.GetSprite(input),
                                 DisplayText = displayText,
                                 DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                            });
+                            };
                         }
                     }
-                }
 
-                // get output
-                EntryItem output;
-                {
-                    Item outputItem = recipe.CreateItem(null);
-                    string displayText = this.GetItemDisplayText(name: outputItem.DisplayName, minCount: recipe.MinOutput, maxCount: recipe.MaxOutput, chance: recipe.OutputChance);
-                    output = new EntryItem
+                    // get output
+                    EntryItem output;
                     {
-                        Sprite = gameHelper.GetSprite(outputItem),
-                        DisplayText = displayText,
-                        DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                        Item outputItem = recipe.CreateItem(null);
+                        string displayText = this.GetItemDisplayText(name: outputItem.DisplayName, minCount: recipe.MinOutput, maxCount: recipe.MaxOutput, chance: recipe.OutputChance);
+                        output = new EntryItem
+                        {
+                            Sprite = gameHelper.GetSprite(outputItem),
+                            DisplayText = displayText,
+                            DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                        };
+                    }
+
+                    // build recipe
+                    yield return new Entry
+                    {
+                        IsKnown = isKnown,
+                        Inputs = inputs.ToArray(),
+                        Output = output
                     };
                 }
-
-                yield return new Entry
-                {
-                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                    Inputs = inputs.ToArray(),
-                    Output = output
-                };
             }
+        }
+
+        /// <summary>Get the cartesian product of the possible input ingredients for a recipe.</summary>
+        /// <param name="recipe">The recipe whose input sets to list.</param>
+        private IEnumerable<int[]> GetCartesianInputs(RecipeModel recipe)
+        {
+            int[][] sets = recipe.Ingredients.Select(p => p.PossibleIds.ToArray()).ToArray();
+            return this.GetCartesianProduct(sets);
         }
 
         /// <summary>Get the display text for an input or output item.</summary>
@@ -264,6 +276,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 text += " (" + I18n.Generic_Percent(chance) + ")";
 
             return text;
+        }
+
+        /// <summary>Get the cartesian product of an arbitrary number of arrays.</summary>
+        /// <typeparam name="T">The array value type.</typeparam>
+        /// <param name="arrays">The arrays to combine.</param>
+        /// <remarks>Derived from <a href="https://stackoverflow.com/a/33106054/262123">code by Peter Almazov</a>.</remarks>
+        private IEnumerable<T[]> GetCartesianProduct<T>(T[][] arrays)
+        {
+            int[] lengths = arrays.Select(a => a.Length).ToArray();
+            int length = arrays.Length;
+            int[] inds = new int[length];
+
+            while (inds[0] != lengths[0])
+            {
+                T[] result = new T[length];
+                for (int i = 0; i != length; i++)
+                    result[i] = arrays[i][inds[i]];
+                yield return result;
+
+                int j = length - 1;
+                inds[j]++;
+                while (j > 0 && inds[j] == lengths[j])
+                {
+                    inds[j--] = 0;
+                    inds[j]++;
+                }
+            }
         }
     }
 }

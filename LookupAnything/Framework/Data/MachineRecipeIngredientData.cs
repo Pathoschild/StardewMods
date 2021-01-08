@@ -5,14 +5,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
     /// <summary>Metadata for an ingredient in a machine recipe.</summary>
     internal class MachineRecipeIngredientData
     {
-        /// <summary>The unique item ID.</summary>
-        public int ID
-        {
-            set => this.Ids = new[] { value };
-        }
-
+        /*********
+        ** Accessors
+        *********/
         /// <summary>The unique item IDs.</summary>
-        public int[] Ids { get; set; }
+        public int[] PossibleIds { get; set; }
 
         /// <summary>The number required (or <c>null</c> for the default).</summary>
         public int? Count { get; set; }

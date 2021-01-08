@@ -500,18 +500,23 @@ namespace Pathoschild.Stardew.LookupAnything
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
                 let machine = new SObject(Vector2.Zero, entry.MachineID)
+
+                from recipe in entry.Recipes
+                from output in recipe.PossibleOutputs
+                from outputId in output.Ids
+
                 select new RecipeModel(
                     key: null,
                     type: RecipeType.MachineInput,
                     displayType: machine.DisplayName,
-                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
+                    ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, outputId),
                     mustBeLearned: false,
-                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
-                    outputItemIndex: entry.Output,
-                    minOutput: entry.MinOutput,
-                    maxOutput: entry.MaxOutput,
-                    outputChance: entry.OutputChance,
+                    exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
+                    outputItemIndex: outputId,
+                    minOutput: output.MinOutput,
+                    maxOutput: output.MaxOutput,
+                    outputChance: output.OutputChance,
                     machineParentSheetIndex: entry.MachineID,
                     isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == entry.MachineID
                 )
