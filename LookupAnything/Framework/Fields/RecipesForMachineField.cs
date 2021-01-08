@@ -180,41 +180,44 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 {
                     int count = ingredient.Count;
 
-                    // category
-                    if (ingredient.ID < 0)
+                    foreach (int inputId in ingredient.Ids)
                     {
-                        Item sampleInput = gameHelper.GetObjectsByCategory(ingredient.ID).FirstOrDefault();
-                        if (sampleInput == null)
-                            continue;
-
-                        string displayText = this.GetItemDisplayText(name: sampleInput.getCategoryName(), minCount: count, maxCount: count, chance: 100);
-                        inputs.Add(new EntryItem
+                        // category
+                        if (inputId < 0)
                         {
-                            Sprite = null,
-                            DisplayText = displayText,
-                            DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                        });
-                    }
+                            Item sampleInput = gameHelper.GetObjectsByCategory(inputId).FirstOrDefault();
+                            if (sampleInput == null)
+                                continue;
 
-                    // item
-                    else
-                    {
-                        Item input = gameHelper.GetObjectBySpriteIndex(ingredient.ID);
-                        if (input is SObject obj)
-                        {
-                            if (ingredient.PreservedParentSheetIndex != null)
-                                obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
-                            if (ingredient.PreserveType != null)
-                                obj.preserve.Value = ingredient.PreserveType.Value;
+                            string displayText = this.GetItemDisplayText(name: sampleInput.getCategoryName(), minCount: count, maxCount: count, chance: 100);
+                            inputs.Add(new EntryItem
+                            {
+                                Sprite = null,
+                                DisplayText = displayText,
+                                DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                            });
                         }
 
-                        string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
-                        inputs.Add(new EntryItem
+                        // item
+                        else
                         {
-                            Sprite = gameHelper.GetSprite(input),
-                            DisplayText = displayText,
-                            DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                        });
+                            Item input = gameHelper.GetObjectBySpriteIndex(inputId);
+                            if (input is SObject obj)
+                            {
+                                if (ingredient.PreservedParentSheetIndex != null)
+                                    obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
+                                if (ingredient.PreserveType != null)
+                                    obj.preserve.Value = ingredient.PreserveType.Value;
+                            }
+
+                            string displayText = this.GetItemDisplayText(name: input.DisplayName, minCount: count, maxCount: count, chance: 100);
+                            inputs.Add(new EntryItem
+                            {
+                                Sprite = gameHelper.GetSprite(input),
+                                DisplayText = displayText,
+                                DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                            });
+                        }
                     }
                 }
 

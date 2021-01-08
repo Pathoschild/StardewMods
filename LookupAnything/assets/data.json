@@ -185,28 +185,24 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 16,
             "Ingredients": [
-                { "ID": 184 } // milk
+                {
+                    "Ids": [
+                        184, // milk
+                        186 // large milk
+                    ]
+                }
             ],
             "Output": 424 // cheese
         },
         {
             "MachineID": 16,
             "Ingredients": [
-                { "ID": 186 } // large milk
-            ],
-            "Output": 424 // cheese
-        },
-        {
-            "MachineID": 16,
-            "Ingredients": [
-                { "ID": 436 } // goat milk
-            ],
-            "Output": 426 // goat cheese
-        },
-        {
-            "MachineID": 16,
-            "Ingredients": [
-                { "ID": 438 } // large goat milk
+                {
+                    "Ids": [
+                        436, // goat milk
+                        438 // large goat milk
+                    ]
+                } 
             ],
             "Output": 426 // goat cheese
         },
@@ -331,28 +327,14 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 24,
             "Ingredients": [
-                { "ID": 174 } // large white egg
-            ],
-            "Output": 306 // mayonnaise
-        },
-        {
-            "MachineID": 24,
-            "Ingredients": [
-                { "ID": 176 } // white egg
-            ],
-            "Output": 306 // mayonnaise
-        },
-        {
-            "MachineID": 24,
-            "Ingredients": [
-                { "ID": 180 } // brown egg
-            ],
-            "Output": 306 // mayonnaise
-        },
-        {
-            "MachineID": 24,
-            "Ingredients": [
-                { "ID": 182 } // large brown egg
+                {
+                    "Ids": [
+                        174, // large white egg
+                        176, // white egg
+                        180, // brown egg
+                        182 // large brown egg
+                    ]
+                }
             ],
             "Output": 306 // mayonnaise
         },
@@ -389,21 +371,13 @@ You shouldn't change this file unless you know what you're doing.
         {
             "MachineID": 19,
             "Ingredients": [
-                { "ID": 270 } // corn
-            ],
-            "Output": 247 // oil
-        },
-        {
-            "MachineID": 19,
-            "Ingredients": [
-                { "ID": 421 } // sunflower
-            ],
-            "Output": 247 // oil
-        },
-        {
-            "MachineID": 19,
-            "Ingredients": [
-                { "ID": 431 } // sunflower seeds
+                {
+                    "Ids": [
+                        270, // corn
+                        421, // sunflower
+                        431 // sunflower seeds
+                    ]
+                } 
             ],
             "Output": 247 // oil
         },

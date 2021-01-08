@@ -6,7 +6,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
     internal class MachineRecipeIngredientData
     {
         /// <summary>The unique item ID.</summary>
-        public int ID { get; set; }
+        public int ID
+        {
+            set => this.Ids = new[] { value };
+        }
+
+        /// <summary>The unique item IDs.</summary>
+        public int[] Ids { get; set; }
 
         /// <summary>The number required (or <c>null</c> for the default).</summary>
         public int? Count { get; set; }

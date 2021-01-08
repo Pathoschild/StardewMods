@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -10,8 +11,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /*********
         ** Accessors
         *********/
-        /// <summary>The unique item ID.</summary>
-        public int ID { get; }
+        /// <summary>The unique item IDs.</summary>
+        public ISet<int> Ids { get; }
 
         /// <summary>The number required.</summary>
         public int Count { get; }
@@ -27,13 +28,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="id">The unique item ID.</param>
+        /// <param name="ids">The unique item IDs.</param>
         /// <param name="count">The number required.</param>
         /// <param name="preserveType">The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</param>
         /// <param name="preservedParentSheetIndex">The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
-        public RecipeIngredientModel(int id, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
+        public RecipeIngredientModel(int[] ids, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
         {
-            this.ID = id;
+            this.Ids = new HashSet<int>(ids);
             this.Count = count;
             this.PreserveType = preserveType;
             this.PreservedParentSheetIndex = preservedParentSheetIndex;
@@ -43,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="ingredient">The ingredient to copy.</param>
         public RecipeIngredientModel(MachineRecipeIngredientData ingredient)
             : this(
-                id: ingredient.ID,
+                ids: ingredient.Ids,
                 count: ingredient.Count ?? 1,
                 preserveType: ingredient.PreserveType,
                 preservedParentSheetIndex: ingredient.PreservedParentSheetIndex
@@ -59,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 return false;
 
             // item fields
-            if (item.ParentSheetIndex != this.ID && item.Category != this.ID)
+            if (!this.Ids.Contains(item.ParentSheetIndex) && !this.Ids.Contains(item.Category))
                 return false;
 
             // object fields
