@@ -23,17 +23,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>The tree's tile position.</summary>
         private readonly Vector2 Tile;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="codex">Provides subject entries.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
-        public TreeSubject(GameHelper gameHelper, Tree tree, Vector2 tile)
+        public TreeSubject(ISubjectRegistry codex, GameHelper gameHelper, Tree tree, Vector2 tile)
             : base(gameHelper, TreeSubject.GetName(tree), null, I18n.Type_Tree())
         {
+            this.Codex = codex;
             this.Target = tree;
             this.Tile = tile;
         }
@@ -67,7 +72,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
             // get fertilizer
             if (!isFullyGrown)
-                yield return new GenericField(I18n.Tree_IsFertilized(), this.Stringify(tree.fertilized.Value) + (tree.fertilized.Value ? $" ({I18n.Tree_IsFertilized_Effects()})" : ""));
+            {
+                if (!tree.fertilized.Value)
+                    yield return new GenericField(I18n.Tree_IsFertilized(), this.Stringify(false));
+                else
+                {
+                    var fertilizer = new StardewValley.Object(805, 1);
+                    yield return new ItemIconField(this.GameHelper, I18n.Tree_IsFertilized(), fertilizer, this.Codex);
+                }
+            }
 
             // get seed
             if (isFullyGrown)

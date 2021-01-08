@@ -5,6 +5,7 @@
 * Added support for looking up NPCs at festivals.
 * Added target redirection. This fixes an issue where looking up Abigail in the mines wouldn't show her real data. (See [`EnableTargetRedirection` in config](README.md#configure) to disable this fix.)
 * Item icon fields now link to their item's lookup.
+* Tree lookups' 'is fertilized' field now links to the tree fertilizer lookup if applicable.
 * Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
 * Fixed mahogany tree lookups showing wrong percentage growth chance.
 

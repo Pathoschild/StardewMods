@@ -664,7 +664,6 @@
     "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
     "tree.next-growth.chance": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
-    "tree.is-fertilized.effects": "겨울에도 매일 성장 보장",
 
     // growth stages
     "tree.stages.seed": "씨앗",

@@ -663,7 +663,6 @@
     "tree.next-growth.winter": "télen nem tud növekedni, csak ha üvegházban van",
     "tree.next-growth.adjacent-trees": "nem tud nőni, mert egy vagy több fa túl közel van",
     "tree.next-growth.chance": "{{chance}}% eséllyel lesz {{stage}} holnapra",
-    "tree.is-fertilized.effects": "garantáltan naponta növekszik, még télen is",
 
     // growth stages
     "tree.stages.seed": "mag",
