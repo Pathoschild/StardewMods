@@ -655,7 +655,6 @@
     "tree.next-growth.winter": "can't grow in winter outside greenhouse",
     "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
     "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
-    "tree.is-fertilized.effects": "guarantees daily growth, even in winter",
 
     // growth stages
     "tree.stages.seed": "seed",

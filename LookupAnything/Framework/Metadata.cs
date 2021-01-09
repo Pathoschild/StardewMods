@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>The machine recipes.</summary>
         /// <remarks>Derived from <see cref="Object.performObjectDropInAction"/>.</remarks>
-        public MachineRecipeData[] MachineRecipes { get; set; }
+        public MachineRecipesData[] MachineRecipes { get; set; }
 
         /// <summary>The shops that buy items from the player.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.ShopMenu"/> constructor.</remarks>

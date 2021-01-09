@@ -1,18 +1,22 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows an item icon.</summary>
-    internal class ItemIconField : GenericField
+    internal class ItemIconField : GenericField, ILinkField
     {
         /*********
         ** Fields
         *********/
         /// <summary>The item icon to draw.</summary>
         private readonly SpriteInfo Sprite;
+
+        /// <summary>Gets the subject the link points to, if applicable.</summary>
+        private readonly ISubject LinkSubject;
 
 
         /*********
@@ -22,25 +26,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="item">The item for which to display an icon.</param>
+        /// <param name="codex">Provides subject entries to create a link, if applicable.</param>
         /// <param name="text">The text to display (if not the item name).</param>
-        public ItemIconField(GameHelper gameHelper, string label, Item item, string text = null)
+        public ItemIconField(GameHelper gameHelper, string label, Item item, ISubjectRegistry codex, string text = null)
             : base(label, hasValue: item != null)
         {
             this.Sprite = gameHelper.GetSprite(item);
+
             if (item != null)
             {
-                this.Value = !string.IsNullOrWhiteSpace(text)
-                    ? this.FormatValue(text)
-                    : this.FormatValue(item.DisplayName);
+                this.LinkSubject = codex?.GetByEntity(item);
+
+                text = !string.IsNullOrWhiteSpace(text) ? text : item.DisplayName;
+                Color? color = this.LinkSubject != null ? Color.Blue : null;
+                this.Value = new IFormattedText[] { new FormattedText(text, color) };
             }
         }
 
-        /// <summary>Draw the value (or return <c>null</c> to render the <see cref="GenericField.Value"/> using the default format).</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
-        /// <param name="font">The recommended font.</param>
-        /// <param name="position">The position at which to draw.</param>
-        /// <param name="wrapWidth">The maximum width before which content should be wrapped.</param>
-        /// <returns>Returns the drawn dimensions, or <c>null</c> to draw the <see cref="GenericField.Value"/> using the default format.</returns>
+        /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
             // get icon size
@@ -53,6 +56,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             // return size
             return new Vector2(wrapWidth, textSize.Y + 5);
+        }
+
+        /// <inheritdoc />
+        public ISubject GetLinkSubject()
+        {
+            return this.LinkSubject;
         }
     }
 }

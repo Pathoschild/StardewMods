@@ -655,7 +655,6 @@
     "tree.next-growth.winter": "ne peut pousser en hiver en dehors de la serre",
     "tree.next-growth.adjacent-trees": "ne peut pousser car d'autres arbres sont trop près",
     "tree.next-growth.chance": "{{chance}}% de chance de grandir en {{stage}} demain",
-    "tree.is-fertilized.effects": "garantit une pousse quotidienne, même en hiver",
 
     // growth stages
     "tree.stages.seed": "graine",

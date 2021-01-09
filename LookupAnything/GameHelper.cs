@@ -359,8 +359,8 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
                 return
-                    ingredient?.ID < 0
-                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.ID == item.ParentSheetIndex && other.DisplayType == recipe.DisplayType);
+                    ingredient?.PossibleIds.Any(p => p < 0) == true
+                    && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
             });
 
             // from tailor recipes
@@ -630,7 +630,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     // remove vanilla recipes overridden by a PFM one
                     // This is always an integer currently, but the API may return context_tag keys in the future.
-                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && r.Ingredients[0].ID == recipe.InputId);
+                    recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
 
                     // add recipe
                     SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
@@ -638,7 +638,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.MachineInput,
                         displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId.Value, p.Count)),
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.InputId.Value }, p.Count)),
                         item: ingredient =>
                         {
                             SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
@@ -650,7 +650,7 @@ namespace Pathoschild.Stardew.LookupAnything
                             return output;
                         },
                         mustBeLearned: false,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id.Value, 1)),
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(new[] { id.Value }, 1)),
                         outputItemIndex: recipe.OutputId,
                         minOutput: recipe.MinOutput,
                         maxOutput: recipe.MaxOutput,
@@ -691,7 +691,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.TailorInput,
                         displayType: I18n.RecipeType_Tailoring(),
-                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
+                        ingredients: new[] { new RecipeIngredientModel(new[] { input.ParentSheetIndex }, 1) },
                         item: _ => this.GetTailoredItem(outputId),
                         mustBeLearned: false,
                         outputItemIndex: recipe.CraftedItemID,

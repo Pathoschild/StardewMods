@@ -663,7 +663,6 @@
     "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
     "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
     "tree.next-growth.chance": "{{chance}}% Chance de crescer {{stage}} amanhã",
-    "tree.is-fertilized.effects": "garante crescimento diário, inclusive no inverno",
 
     // growth stages
     "tree.stages.seed": "Semente",

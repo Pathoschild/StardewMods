@@ -1,6 +1,19 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.31
+Released 08 January 2021.
+
+* Added support for NPC lookups at festivals.
+* Added target redirection, which fixes an issue where looking up Abigail in the mines wouldn't show her real data.
+* Added lookup links in item icon fields.
+* Updated for new machine recipes in Stardew Valley 1.5.
+* Tree 'is fertilized' field now links to the tree fertilizer lookup if applicable.
+* Fixed furnace not showing wilted bouquet recipe.
+* Fixed furniture placed outside cabins/farmhouses/sheds not counted for 'owned' stats.
+* Fixed items counted more than once for 'owned' stats if they're in a Junimo chest.
+* Fixed mahogany tree lookups showing wrong percentage growth chance.
+
 ## 1.30
 Released 04 January 2021.
 

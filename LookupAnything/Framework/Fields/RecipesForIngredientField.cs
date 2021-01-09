@@ -108,8 +108,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 Item output = recipe.CreateItem(inputItem);
                 SpriteInfo customSprite = gameHelper.GetSprite(output);
                 RecipeIngredientModel ingredient =
-                    recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.ParentSheetIndex && p.Matches(inputItem))
-                    ?? recipe.Ingredients.FirstOrDefault(p => p.ID == inputItem.Category && p.Matches(inputItem));
+                    recipe.Ingredients.FirstOrDefault(p => p.PossibleIds.Contains(inputItem.ParentSheetIndex) && p.Matches(inputItem))
+                    ?? recipe.Ingredients.FirstOrDefault(p => p.PossibleIds.Contains(inputItem.Category) && p.Matches(inputItem));
 
                 yield return new Entry
                 {

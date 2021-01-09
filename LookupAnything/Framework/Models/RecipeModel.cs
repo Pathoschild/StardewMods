@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
-                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
+                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(new [] { p.Key }, p.Value)),
                 item: item => recipe.createItem(),
                 mustBeLearned: true,
                 minOutput: recipe.numberProducedPerCraft,

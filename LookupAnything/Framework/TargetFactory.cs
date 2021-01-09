@@ -49,9 +49,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             this.LookupProviders = new ILookupProvider[]
             {
                 new BuildingLookupProvider(reflection, gameHelper, codex),
-                new CharacterLookupProvider(reflection, gameHelper, config),
-                new ItemLookupProvider(reflection, gameHelper, config, jsonAssets),
-                new TerrainFeatureLookupProvider(reflection, gameHelper, jsonAssets),
+                new CharacterLookupProvider(reflection, gameHelper, config, codex),
+                new ItemLookupProvider(reflection, gameHelper, config, codex, jsonAssets),
+                new TerrainFeatureLookupProvider(reflection, gameHelper, codex, jsonAssets),
                 new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
             };
         }

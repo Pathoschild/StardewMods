@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
 
         /*********
         ** Public methods
@@ -29,10 +32,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
-        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config)
+        /// <param name="codex">Provides subject entries.</param>
+        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Config = config;
+            this.Codex = codex;
         }
 
         /// <inheritdoc />
@@ -46,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // NPCs
-            foreach (NPC npc in location.characters)
+            foreach (NPC npc in Game1.CurrentEvent?.actors ?? (IEnumerable<NPC>)location.characters)
             {
                 Vector2 entityTile = npc.getTileLocation();
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
@@ -214,14 +219,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="animal">The entity to look up.</param>
         private ISubject BuildSubject(FarmAnimal animal)
         {
-            return new FarmAnimalSubject(this.GameHelper, animal);
+            return new FarmAnimalSubject(this.Codex, this.GameHelper, animal);
         }
 
         /// <summary>Build a subject.</summary>
         /// <param name="npc">The entity to look up.</param>
         private ISubject BuildSubject(NPC npc)
         {
-            return new CharacterSubject(this.GameHelper, npc, this.GetSubjectType(npc), this.GameHelper.Metadata, this.Reflection, this.Config.ProgressionMode, this.Config.HighlightUnrevealedGiftTastes);
+            return new CharacterSubject(
+                codex: this.Codex,
+                gameHelper: this.GameHelper,
+                npc: npc,
+                type: this.GetSubjectType(npc),
+                metadata: this.GameHelper.Metadata,
+                reflectionHelper: this.Reflection,
+                progressionMode: this.Config.ProgressionMode,
+                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
+                enableTargetRedirection: this.Config.EnableTargetRedirection
+            );
         }
 
         /// <summary>Get the subject type for an NPC.</summary>

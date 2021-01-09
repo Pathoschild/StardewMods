@@ -2682,12 +2682,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("tree.next-growth.chance", new { chance, stage });
         }
 
-        /// <summary>Get a translation equivalent to "guarantees daily growth, even in winter".</summary>
-        public static string Tree_IsFertilized_Effects()
-        {
-            return I18n.GetByKey("tree.is-fertilized.effects");
-        }
-
         /// <summary>Get a translation equivalent to "seed".</summary>
         public static string Tree_Stages_Seed()
         {

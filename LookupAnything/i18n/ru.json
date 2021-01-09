@@ -664,7 +664,6 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.chance": "20% шанс, что завтра вырастит в {{stage}}",
-    "tree.is-fertilized.effects": "Гарантирует ежедневный рост, даже зимой",
 
     // growth stages
     "tree.stages.seed": "семя",

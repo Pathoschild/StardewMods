@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /*********
         ** Fields
         *********/
+        /// <summary>Provides subject entries.</summary>
+        private readonly ISubjectRegistry Codex;
+
         /// <summary>The Json Assets API.</summary>
         private readonly JsonAssetsIntegration JsonAssets;
 
@@ -23,10 +26,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="codex">Provides subject entries.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, JsonAssetsIntegration jsonAssets)
+        public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
             : base(reflection, gameHelper)
         {
+            this.Codex = codex;
             this.JsonAssets = jsonAssets;
         }
 
@@ -100,7 +105,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="tile">The tree tile.</param>
         private ISubject BuildSubject(Tree tree, Vector2 tile)
         {
-            return new TreeSubject(this.GameHelper, tree, tile);
+            return new TreeSubject(this.Codex, this.GameHelper, tree, tile);
         }
     }
 }

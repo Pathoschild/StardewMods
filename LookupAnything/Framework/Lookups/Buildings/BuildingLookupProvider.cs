@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /*********
         ** Public methods
         *********/
-        /// <summary>Provides subject entries for target values.</summary>
+        /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
 
 
@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="codex">Provides subject entries for target values.</param>
+        /// <param name="codex">Provides subject entries.</param>
         public BuildingLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {

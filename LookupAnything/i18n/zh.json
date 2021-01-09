@@ -665,7 +665,6 @@
     "tree.next-growth.winter": "冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
     "tree.next-growth.chance": "有{{chance}}%几率明天成长到{{stage}}",
-    "tree.is-fertilized.effects": "即使在冬天也能保证每天生长",
 
     // growth stages
     "tree.stages.seed": "种子",
