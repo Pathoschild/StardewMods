@@ -796,7 +796,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             CommunityCenter communityCenter = Game1.locations.OfType<CommunityCenter>().First();
 
-            return !communityCenter.bundles[bundle.ID][ingredient.Index];
+            // handle rare edge case where item is required in the bundle data, but it's not
+            // present in the community center data. This seems to be caused by some mods like
+            // Challenging Community Center Bundles in some cases.
+            if (!communityCenter.bundles.TryGetValue(bundle.ID, out bool[] items) || ingredient.Index >= items.Length)
+                return true; 
+
+            return items[ingredient.Index];
         }
 
         /// <summary>Get the number of an ingredient needed for a bundle.</summary>
@@ -804,7 +810,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="item">The ingredient to check.</param>
         private int GetIngredientCountNeeded(BundleModel bundle, SObject item)
         {
-            return this.GetIngredientsFromBundle(bundle, item)
+            return this
+                .GetIngredientsFromBundle(bundle, item)
                 .Where(p => this.IsIngredientNeeded(bundle, p))
                 .Sum(p => p.Stack);
         }

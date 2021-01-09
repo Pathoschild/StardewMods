@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed rare issue where item lookup fails due to mismatched bundle game data.
+
 ## 1.31
 Released 08 January 2021.
 
