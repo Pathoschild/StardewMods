@@ -221,14 +221,19 @@ namespace ContentPatcher.Framework
                     continue;
                 }
 
-                // split targets with a null FromFile if needed
-                if (!fromFiles.Any())
-                    fromFiles = new string[] { null };
+                // if `targets` or `fromFile` are missing, we still need to iterate one null value
+                // to populate the split patches.
+                IEnumerable<string> AlwaysIterate(string[] values)
+                {
+                    return values.Length > 0
+                        ? values
+                        : new string[] { null };
+                }
 
                 // create new patches
-                foreach (string target in targets)
+                foreach (string target in AlwaysIterate(targets))
                 {
-                    foreach (string fromFile in fromFiles)
+                    foreach (string fromFile in AlwaysIterate(fromFiles))
                     {
                         var newPatch = new PatchConfig(patch)
                         {
