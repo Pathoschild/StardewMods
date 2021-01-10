@@ -64,14 +64,24 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Get the dirt instance for a tile, if any.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
-        protected HoeDirt GetDirt(GameLocation location, Vector2 tile)
+        /// <param name="ignorePot">Whether to ignore dirt in indoor pots.</param>
+        protected HoeDirt GetDirt(GameLocation location, Vector2 tile, bool ignorePot = false)
         {
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt)
                 return dirt;
-            if (location.objects.TryGetValue(tile, out Object obj) && obj is IndoorPot pot)
+            if (!ignorePot && location.objects.TryGetValue(tile, out Object obj) && obj is IndoorPot pot)
                 return pot.hoeDirt.Value;
 
             return null;
+        }
+
+        /// <summary>Get whether a tile is tillable.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <remarks>Derived from <see cref="StardewValley.Tools.Hoe.DoFunction"/>.</remarks>
+        protected bool IsTillable(GameLocation location, Vector2 tile)
+        {
+            return location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Diggable", "Back") != null;
         }
 
         /// <summary>Get whether dirt contains a dead crop.</summary>

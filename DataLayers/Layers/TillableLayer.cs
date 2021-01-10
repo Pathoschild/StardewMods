@@ -96,16 +96,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             return tiles;
         }
 
-
-        /// <summary>Get whether a tile is tillable.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <remarks>Derived from <see cref="StardewValley.Tools.Hoe.DoFunction"/>.</remarks>
-        private bool IsTillable(GameLocation location, Vector2 tile)
-        {
-            return location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Diggable", "Back") != null;
-        }
-
         /// <summary>Get whether a tile is blocked due to something it contains.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>

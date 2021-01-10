@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Updated _water for paddy crops_ layer for the latest game code.
+
 ## 1.13.2
 Released 04 January 2021.
 
