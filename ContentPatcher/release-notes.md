@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Fixed `FarmType` token returning `Custom` for the beach farm; it now returns `Beach` instead.
 * Fixed patches not applied for farmhands in some highly specific cases resulting in an _invalid input arguments_ error.
 
 ## 1.19.2
