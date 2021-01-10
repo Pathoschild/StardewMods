@@ -1,12 +1,13 @@
-**Horse Flute Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you use the
-[horse flute](https://stardewvalleywiki.com/Horse_Flute) to summon your horse anywhere, even indoors
-or in caves/dungeons.
+**Horse Flute Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you summon
+your horse anywhere (even indoors or in caves/dungeons) at the press of a button or by using the
+[horse flute](https://stardewvalleywiki.com/Horse_Flute).
 
 ![](screenshots/indoors.png)  
 ![](screenshots/dungeon.png)
 
 ## Contents
 * [Install](#install)
+* [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
 * [See also](#see-also)
@@ -15,6 +16,53 @@ or in caves/dungeons.
 1. [Install the latest version of SMAPI](https://smapi.io/).
 2. [Install this mod from Nexus mods](https://www.nexusmods.com/stardewvalley/mods/7500).
 3. Run the game using SMAPI.
+
+## Use
+You can summon your horse by...
+
+* using the [horse flute](https://stardewvalleywiki.com/Horse_Flute) item;
+* pressing `H` if you have a horse flute in your inventory;
+* pressing `H` without a horse flute if `RequireHorseFlute` is disable in the [config](#configure).
+
+This will work anywhere, even in the deepest mines.
+
+## Configure
+### config.json
+The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
+file in a text editor to configure the mod.
+
+These are the available settings:
+
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+<tr>
+<tr>
+  <td><code>SummonHorseKey</code></td>
+  <td>
+
+The keybinding which plays the flute and summons the horse (if you have a
+[horse flute](https://stardewvalleywiki.com/Horse_Flute) in your inventory or you disabled
+`RequireHorseFlute`). The default value is `"H"`.
+
+You can use any controller/keyboard/mouse [button codes](https://stardewvalleywiki.com/Modding:Key_bindings).
+You can separate bindings with commas (like `"H, LeftShoulder"` for either one), set multi-key
+bindings with plus signs (like `"LeftShift + H"`), and disable it with `"None"`.
+
+  </td>
+</tr>
+<tr>
+  <td><code>RequireHorseFlute</code></td>
+  <td>
+
+Whether you must have a [horse flute](https://stardewvalleywiki.com/Horse_Flute) in your inventory
+(not necessarily on the toolbar) to summon the horse.
+
+  </td>
+</tr>
+</table>
 
 ## Compatibility
 Horse Flute Anywhere is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both
