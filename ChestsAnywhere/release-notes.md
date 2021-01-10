@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming version
 * Fixed custom chest types added by mods listed as _Chest_ instead of their display name.
+* Fixed compatibility with mods that add a fridge to the initial farmhouse level.
 * Fixed dressers placed outside cabins/farmhouses/sheds not listed in the menu.
 
 ## 1.20.1

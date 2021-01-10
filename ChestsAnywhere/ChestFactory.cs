@@ -404,7 +404,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private Chest GetStaticFridge(GameLocation location)
         {
             // main farmhouse or cabin
-            if (location is FarmHouse house && Game1.player.HouseUpgradeLevel > 0)
+            if (location is FarmHouse house && house.fridgePosition != Point.Zero)
                 return house.fridge.Value;
 
             // island farmhouse
