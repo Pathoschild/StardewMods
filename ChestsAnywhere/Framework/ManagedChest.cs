@@ -31,6 +31,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The chest's tile position within its location or building.</summary>
         public Vector2 Tile { get; }
 
+        /// <summary>The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</summary>
+        public object MapEntity { get; }
+
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
 
@@ -60,13 +63,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="container">The storage container.</param>
         /// <param name="location">The location or building which contains the chest.</param>
         /// <param name="tile">The chest's tile position within its location or building.</param>
+        /// <param name="mapEntity">The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</param>
         /// <param name="defaultDisplayName">The default name to display if it hasn't been customized.</param>
         /// <param name="defaultCategory">The default category to display if it hasn't been customized.</param>
-        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, string defaultDisplayName, string defaultCategory)
+        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, object mapEntity, string defaultDisplayName, string defaultCategory)
         {
             this.Container = container;
             this.Location = location;
             this.Tile = tile;
+            this.MapEntity = mapEntity;
             this.DefaultDisplayName = defaultDisplayName;
             this.DefaultCategory = defaultCategory;
         }

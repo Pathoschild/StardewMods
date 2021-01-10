@@ -97,6 +97,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ChestContainer(chest, context: chest, showColorPicker: this.CanShowColorPicker(chest, location), this.Reflection),
                                 location: location,
                                 tile: tile,
+                                mapEntity: chest,
                                 defaultDisplayName: this.GetDisambiguatedDefaultName(chest.DisplayName, nameCounts),
                                 defaultCategory: category
                             );
@@ -109,6 +110,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new AutoGrabberContainer(obj, grabberChest, context: obj, this.Reflection),
                                 location: location,
                                 tile: tile,
+                                mapEntity: obj,
                                 defaultDisplayName: this.GetDisambiguatedDefaultName(obj.DisplayName, nameCounts),
                                 defaultCategory: category
                             );
@@ -124,6 +126,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ChestContainer(fridge, context: fridge, showColorPicker: false, this.Reflection),
                                 location: location,
                                 tile: Vector2.Zero,
+                                mapEntity: null,
                                 defaultDisplayName: I18n.DefaultName_Fridge(),
                                 defaultCategory: category
                             );
@@ -138,6 +141,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                             container: container,
                             location,
                             furniture.TileLocation,
+                            mapEntity: furniture,
                             defaultDisplayName: this.GetDisambiguatedDefaultName(furniture.DisplayName, nameCounts),
                             defaultCategory: category
                         );
@@ -154,6 +158,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                     container: new JunimoHutContainer(hut, this.Reflection),
                                     location: location,
                                     tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
+                                    mapEntity: building,
                                     defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetBuildingName("Junimo Hut"), nameCounts),
                                     defaultCategory: category
                                 );
@@ -172,6 +177,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ShippingBinContainer(location, ShippingBinMode.MobileStore),
                                 location: location,
                                 tile: Vector2.Zero,
+                                mapEntity: null,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Store()})",
                                 defaultCategory: category
                             );
@@ -179,6 +185,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ShippingBinContainer(location, ShippingBinMode.MobileTake),
                                 location: location,
                                 tile: Vector2.Zero,
+                                mapEntity: null,
                                 defaultDisplayName: $"{shippingBinLabel} ({I18n.DefaultName_ShippingBin_Take()})",
                                 defaultCategory: category
                             );
@@ -189,6 +196,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                                 container: new ShippingBinContainer(location, ShippingBinMode.Normal),
                                 location: location,
                                 tile: Vector2.Zero,
+                                mapEntity: null,
                                 defaultDisplayName: shippingBinLabel,
                                 defaultCategory: category
                             );
@@ -225,7 +233,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 chests: this.GetChests(RangeHandler.CurrentLocation()),
                 inventory: this.GetChestInventory(chest),
                 location: Game1.currentLocation,
-                tile: tile
+                tile: tile,
+                mapEntity: chest
             );
         }
 
@@ -237,18 +246,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             IList<Item> inventory = null;
             GameLocation forLocation = null;
             Vector2? tile = null;
+            SObject chest = null;
             switch (menu)
             {
                 case ItemGrabMenu itemGrabMenu:
                     inventory = this.GetInventoryFromContext(itemGrabMenu.context);
                     forLocation = this.GetLocationFromContext(itemGrabMenu.context);
                     tile = this.GetTileFromContext(itemGrabMenu.context);
+                    chest = itemGrabMenu.context as SObject;
                     break;
 
                 case ShopMenu shopMenu:
                     inventory = this.GetInventoryFromContext(shopMenu.source);
                     forLocation = this.GetLocationFromContext(shopMenu.source);
                     tile = this.GetTileFromContext(shopMenu.source);
+                    chest = shopMenu.source as SObject;
                     break;
             }
             if (inventory == null)
@@ -259,36 +271,45 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 chests: this.GetChests(RangeHandler.Unlimited()),
                 inventory: inventory,
                 location: forLocation,
-                tile: tile
+                tile: tile,
+                mapEntity: chest
             );
         }
 
-        /// <summary>Get the chest which contains the given inventory, prioritising the closest match for chests with shared inventory like Junimo chests.</summary>
-        /// <param name="chests">The chest to search.</param>
+        /// <summary>Get the chest which contains the given inventory, prioritizing the closest match based on the available data.</summary>
+        /// <param name="chests">The available chests to filter.</param>
         /// <param name="inventory">The chest inventory to match.</param>
         /// <param name="location">The chest location, if known.</param>
         /// <param name="tile">The chest tile, if known.</param>
-        public static ManagedChest GetBestMatch(IEnumerable<ManagedChest> chests, IList<Item> inventory, GameLocation location, Vector2? tile)
+        /// <param name="mapEntity">The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</param>
+        public static ManagedChest GetBestMatch(IEnumerable<ManagedChest> chests, IList<Item> inventory, GameLocation location, Vector2? tile, object mapEntity)
         {
             if (inventory == null)
                 throw new ArgumentNullException(nameof(inventory));
 
-            return chests
-                .Where(p => p.Container.IsSameAs(inventory))
-                .OrderByDescending(p => location == null || object.ReferenceEquals(location, p.Location))
-                .ThenByDescending(p => tile == null || p.Tile == tile)
+            return
+                (
+                    from chest in chests
+                    where chest.Container.IsSameAs(inventory)
+                    orderby
+                        mapEntity == null || object.ReferenceEquals(chest.MapEntity, mapEntity) descending,
+                        location == null || object.ReferenceEquals(location, chest.Location) descending,
+                        tile == null || chest.Tile == tile descending
+                    select chest
+                )
                 .FirstOrDefault();
         }
 
         /// <summary>Get the chest which contains the given inventory, prioritising the closest match for chests with shared inventory like Junimo chests.</summary>
-        /// <param name="chests">The chest to search.</param>
+        /// <param name="chests">The available chests to filter.</param>
         /// <param name="search">The chest to match.</param>
         public static ManagedChest GetBestMatch(IEnumerable<ManagedChest> chests, ManagedChest search)
         {
-            if (search == null)
-                return null;
-
-            return ChestFactory.GetBestMatch(chests, search.Container.Inventory, search.Location, search.Tile);
+            // We can't just return the search chest here, since it may be a previously created
+            // instance that's not in the list being searched.
+            return search != null
+                ? ChestFactory.GetBestMatch(chests, search.Container.Inventory, search.Location, search.Tile, search.MapEntity)
+                : null;
         }
 
 
