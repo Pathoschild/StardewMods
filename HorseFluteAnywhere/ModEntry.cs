@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.HorseFluteAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.HorseFluteAnywhere
 {
@@ -16,17 +19,38 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
     internal class ModEntry : Mod
     {
         /*********
+        ** Private methods
+        *********/
+        /// <summary>The unique item ID for a horse flute.</summary>
+        private const int HorseFluteId = 911;
+
+        /// <summary>The horse flute to play when the summon key is pressed.</summary>
+        private readonly Lazy<SObject> HorseFlute = new(() => new SObject(ModEntry.HorseFluteId, 1));
+
+        /// <summary>The mod configuration.</summary>
+        private ModConfig Config;
+
+        /// <summary>The summon key binding.</summary>
+        private KeyBinding SummonKey;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>The mod entry point, called after the mod is first loaded.</summary>
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            // load config
+            this.UpdateConfig();
+
             // add patches
             var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
             UtilityPatcher.Hook(harmony, this.Monitor);
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
         }
@@ -35,6 +59,41 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /*********
         ** Public methods
         *********/
+        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForHorseFluteAnywhere(
+                getConfig: () => this.Config,
+                getSummonKey: () => this.SummonKey,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                saveAndApply: () =>
+                {
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
+        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        {
+            if (this.SummonKey.JustPressedUnique() && this.CanPlayFlute(Game1.player))
+                this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+        }
+
         /// <summary>The event called after the location list changes.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -70,6 +129,13 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                 Game1.player.mount.dismount();
         }
 
+        /// <summary>Update the mod configuration.</summary>
+        private void UpdateConfig()
+        {
+            this.Config = this.Helper.ReadConfig<ModConfig>();
+            this.SummonKey = CommonHelper.ParseButtons(this.Config.SummonHorseKey, this.Helper.Input, this.Monitor, nameof(this.Config.SummonHorseKey));
+        }
+
         /// <summary>Get all horses in the given location.</summary>
         /// <param name="location">The location to scan.</param>
         private IEnumerable<Horse> GetHorsesIn(GameLocation location)
@@ -88,6 +154,18 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
             Game1.warpCharacter(horse, farm, Vector2.Zero);
             stable?.grabHorse();
+        }
+
+        /// <summary>Get whether the player can play the flute.</summary>
+        /// <param name="player">The player to check.</param>
+        private bool CanPlayFlute(Farmer player)
+        {
+            return
+                Context.IsPlayerFree
+                && (
+                    !this.Config.RequireHorseFlute
+                    || player.Items.Any(p => Utility.IsNormalObjectAtParentSheetIndex(p, ModEntry.HorseFluteId))
+                );
         }
 
         /// <summary>Get whether a player is riding a (non-tractor) horse.</summary>
