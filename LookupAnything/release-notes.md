@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added names for Ginger Island fishing locations.
 * Fixed rare issue where item lookup fails due to mismatched bundle game data.
 
 ## 1.31
