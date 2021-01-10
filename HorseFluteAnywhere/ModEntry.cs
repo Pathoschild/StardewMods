@@ -42,14 +42,14 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         public override void Entry(IModHelper helper)
         {
             // load config
-            this.Config = this.Helper.ReadConfig<ModConfig>();
-            this.SummonKey = CommonHelper.ParseButtons(this.Config.SummonHorseKey, this.Helper.Input, this.Monitor, nameof(this.Config.SummonHorseKey));
+            this.UpdateConfig();
 
             // add patches
             var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
             UtilityPatcher.Hook(harmony, this.Monitor);
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.Input.ButtonPressed += this.OnButtonPressed;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
@@ -59,6 +59,32 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /*********
         ** Public methods
         *********/
+        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForHorseFluteAnywhere(
+                getConfig: () => this.Config,
+                getSummonKey: () => this.SummonKey,
+                reset: () =>
+                {
+                    this.Config = new ModConfig();
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                saveAndApply: () =>
+                {
+                    this.Helper.WriteConfig(this.Config);
+                    this.UpdateConfig();
+                },
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
         /// <summary>The method invoked when the player presses a button.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -101,6 +127,13 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)
             if (Game1.CurrentEvent != null)
                 Game1.player.mount.dismount();
+        }
+
+        /// <summary>Update the mod configuration.</summary>
+        private void UpdateConfig()
+        {
+            this.Config = this.Helper.ReadConfig<ModConfig>();
+            this.SummonKey = CommonHelper.ParseButtons(this.Config.SummonHorseKey, this.Helper.Input, this.Monitor, nameof(this.Config.SummonHorseKey));
         }
 
         /// <summary>Get all horses in the given location.</summary>
