@@ -245,7 +245,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     from entry in this.SearchLookup
                     where words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                     orderby entry.Key
-                    select new SearchResultComponent(entry.First()) // first result for each name
+
+                    from subject in this.FilterUniqueSubjects(entry)
+                    select new SearchResultComponent(subject)
                 )
                 .Take(50)
                 .ToArray();
@@ -264,6 +266,20 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
+        }
+
+        /// <summary>Filter a list of subjects to remove duplicate entries (like multiples of a monster type).</summary>
+        /// <param name="subjects">The subjects to filter.</param>
+        private IEnumerable<ISubject> FilterUniqueSubjects(IEnumerable<ISubject> subjects)
+        {
+            HashSet<string> seen = new HashSet<string>();
+            foreach (ISubject subject in subjects)
+            {
+                if (!seen.Add($"{subject.GetType().FullName}::{subject.Type}::{subject.Name}"))
+                    continue;
+
+                yield return subject;
+            }
         }
     }
 }
