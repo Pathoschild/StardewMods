@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed search UI hiding some results if they had the same name.
+* Fixed new 'needed for' bundle logic in 1.31.1.
 
 ## 1.31.1
 Released 10 January 2021.
