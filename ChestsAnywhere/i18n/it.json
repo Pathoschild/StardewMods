@@ -2,8 +2,8 @@
     // default chest names
     "default-name.fridge": "Frigo",
     "default-name.other": "{{name}} n.{{number}}",
-    "default-name.shipping-bin.store": "ship items", // TODO
-    "default-name.shipping-bin.take": "retrieve items", // TODO
+    "default-name.shipping-bin.store": "spedisci oggetti",
+    "default-name.shipping-bin.take": "recupera oggetti",
 
     // default category names
     "default-category.owned-cabin": "Cabina ({{owner}})",
