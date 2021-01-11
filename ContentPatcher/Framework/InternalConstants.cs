@@ -7,7 +7,7 @@ using StardewValley.GameData.Movies;
 namespace ContentPatcher.Framework
 {
     /// <summary>Internal constant values.</summary>
-    public static class InternalConstants
+    internal static class InternalConstants
     {
         /*********
         ** Fields
@@ -23,6 +23,9 @@ namespace ContentPatcher.Framework
 
         /// <summary>A prefix for player names when specified as an input argument.</summary>
         public const string PlayerNamePrefix = "@";
+
+        /// <summary>A temporary value assigned to input arguments during early patch loading, before the patch is updated with the context values.</summary>
+        public const string TokenPlaceholder = "$~placeholder";
 
 
         /*********

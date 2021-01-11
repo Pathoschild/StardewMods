@@ -191,6 +191,17 @@
     "location.undergroundMine.level": "mine level {{level}}",
     "location.witchSwamp": "witch's swamp",
     "location.woods": "secret woods",
+
+    "location.caldera": "Ginger Island caldera",
+    "location.islandEast": "Ginger Island east",
+    "location.islandNorth": "Ginger Island north",
+    "location.islandSouth": "Ginger Island south",
+    "location.islandSouthEast": "Ginger Island southeast",
+    "location.islandSouthEastCave": "Ginger Island southeast cave",
+    "location.islandWest": "Ginger Island west",
+    "location.islandWest.fish-area-1": "Ginger Island west (ocean)",
+    "location.islandWest.fish-area-2": "Ginger Island west (pond)",
+
     "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
 
 

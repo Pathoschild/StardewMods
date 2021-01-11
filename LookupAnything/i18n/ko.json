@@ -192,6 +192,17 @@
     "location.undergroundMine.level": "광산 레벨 {{level}}",
     "location.witchSwamp": "마녀의 늪",
     "location.woods": "비밀 숲",
+
+    "location.caldera": "Ginger Island caldera", // TODO
+    "location.islandEast": "Ginger Island east", // TODO
+    "location.islandNorth": "Ginger Island north", // TODO
+    "location.islandSouth": "Ginger Island south", // TODO
+    "location.islandSouthEast": "Ginger Island southeast", // TODO
+    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
+    "location.islandWest": "Ginger Island west", // TODO
+    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
+    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+
     "location.unknown-fish-area": "{{locationName}} (낚시 장소 {{id}})",
 
 

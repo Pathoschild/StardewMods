@@ -1,6 +1,14 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.20.2
+Released 10 January 2020.
+
+* Fixed support for fridges in some custom farmhouse maps.
+* Fixed default names for custom chest types.
+* Fixed dressers placed outside cabins/farmhouses/sheds not listed in the menu.
+* Fixed more cases where a Junimo chest wasn't matched correctly.
+
 ## 1.20.1
 Released 05 January 2020.
 

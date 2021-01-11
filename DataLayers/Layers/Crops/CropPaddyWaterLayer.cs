@@ -6,6 +6,8 @@ using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 {
@@ -15,23 +17,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /*********
         ** Fields
         *********/
-        /// <summary>The number of land tiles </summary>
-        private const int PaddyWaterRange = 3;
-
         /// <summary>The legend entry for tiles within range of water for paddy crops.</summary>
         private readonly LegendEntry InRange;
 
         /// <summary>The legend entry for tiles not within range of water for paddy crops.</summary>
         private readonly LegendEntry NotInRange;
 
-        /// <summary>The previous location for which the <see cref="WaterTiles"/> were cached.</summary>
+        /// <summary>The previous location for which <see cref="TilesInRange"/> was cached.</summary>
         private GameLocation LastLocation;
-
-        /// <summary>The cached water tiles in the current location.</summary>
-        private readonly HashSet<Vector2> WaterTiles = new HashSet<Vector2>();
 
         /// <summary>The cached tiles in range of open water for the current location.</summary>
         private readonly IDictionary<Vector2, bool> TilesInRange = new Dictionary<Vector2, bool>();
+
+        /// <summary>A sample paddy crop.</summary>
+        private readonly Lazy<Crop> PaddyCrop = new(() => new SamplePaddyCrop());
 
 
         /*********
@@ -62,23 +61,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             if (this.LastLocation == null || !object.ReferenceEquals(location, this.LastLocation))
             {
                 this.LastLocation = location;
-                this.WaterTiles.Clear();
                 this.TilesInRange.Clear();
-
-                int mapWidth = location.Map.Layers.Max(p => p.LayerWidth);
-                int mapHeight = location.Map.Layers.Max(p => p.LayerHeight);
-                for (int x = 0; x < mapWidth; x++)
-                {
-                    for (int y = 0; y < mapHeight; y++)
-                    {
-                        if (location.isOpenWater(x, y))
-                            this.WaterTiles.Add(new Vector2(x, y));
-                    }
-                }
             }
 
             // get paddy tiles
-            HashSet<Vector2> tilesInRange = new HashSet<Vector2>(this.GetTilesInRange(visibleTiles));
+            HashSet<Vector2> tilesInRange = new HashSet<Vector2>(this.GetTilesInRange(location, visibleTiles));
             return new[]
             {
                 new TileGroup(tilesInRange.Select(pos => new TileData(pos, this.InRange)), outerBorderColor: this.InRange.Color),
@@ -91,20 +78,45 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         ** Private methods
         *********/
         /// <summary>Get tiles within range of open water for paddy crops.</summary>
+        /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         /// <remarks>Derived from <see cref="HoeDirt.paddyWaterCheck"/>.</remarks>
-        private IEnumerable<Vector2> GetTilesInRange(Vector2[] visibleTiles)
+        private IEnumerable<Vector2> GetTilesInRange(GameLocation location, Vector2[] visibleTiles)
         {
-            if (!this.WaterTiles.Any())
-                yield break;
-
             foreach (Vector2 tile in visibleTiles)
             {
                 if (!this.TilesInRange.TryGetValue(tile, out bool inRange))
-                    this.TilesInRange[tile] = inRange = this.WaterTiles.Any(water => Math.Abs(tile.X - water.X) <= PaddyWaterRange && Math.Abs(tile.Y - water.Y) <= PaddyWaterRange);
+                    this.TilesInRange[tile] = inRange = this.RecalculateTileInRange(location, tile, this.PaddyCrop);
 
                 if (inRange)
                     yield return tile;
+            }
+        }
+
+        /// <summary>Get whether the tile is in range, without caching.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="samplePaddyCrop">A sample paddy crop.</param>
+        private bool RecalculateTileInRange(GameLocation location, Vector2 tile, Lazy<Crop> samplePaddyCrop)
+        {
+            // water tile
+            if (location.isWaterTile((int)tile.X, (int)tile.Y))
+                return false;
+
+            // dirt tile
+            HoeDirt dirt = this.GetDirt(location, tile, ignorePot: true);
+            if (dirt == null && this.IsTillable(location, tile) && location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport))
+                dirt = new HoeDirt(HoeDirt.watered, samplePaddyCrop.Value);
+            return dirt?.paddyWaterCheck(location, tile) ?? false;
+        }
+
+        /// <summary>A sample paddy crop.</summary>
+        private class SamplePaddyCrop : Crop
+        {
+            /// <inheritdoc />
+            public override bool isPaddyCrop()
+            {
+                return true;
             }
         }
     }

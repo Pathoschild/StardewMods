@@ -23,6 +23,9 @@ namespace ContentPatcher.Framework.Constants
         /// <summary>The Four Corners farm type.</summary>
         FourCorners = Farm.fourCorners_layout,
 
+        /// <summary>The beach farm type.</summary>
+        Beach = Farm.beach_layout,
+
         /// <summary>A custom farm type.</summary>
         Custom = 100
     }

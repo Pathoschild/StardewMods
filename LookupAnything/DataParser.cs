@@ -146,7 +146,7 @@ namespace Pathoschild.Stardew.LookupAnything
             var locations = new List<FishSpawnLocationData>();
             foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
             {
-                if (entry.Key == "Temp" || entry.Key == "fishingGame")
+                if (metadata.IgnoreFishingLocations.Contains(entry.Key))
                     continue; // ignore event data
 
                 string locationName = entry.Key;

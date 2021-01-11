@@ -1,4 +1,9 @@
 # Release notes
+## 1.13.3
+Released 10 January 2021.
+
+* Improved _water for paddy crops_ layer. (It's now updated for the latest game code, and no longer highlights untillable tiles.)
+
 ## 1.13.2
 Released 04 January 2021.
 

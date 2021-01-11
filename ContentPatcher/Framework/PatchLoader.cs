@@ -75,10 +75,8 @@ namespace ContentPatcher.Framework
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
-            fakePatchContext.SetLocalValue(ConditionType.FromFile.ToString(), "$placeholder");
-            fakePatchContext.SetLocalValue(ConditionType.Target.ToString(), "$placeholder");
-            fakePatchContext.SetLocalValue(ConditionType.TargetPathOnly.ToString(), "$placeholder");
-            fakePatchContext.SetLocalValue(ConditionType.TargetWithoutPath.ToString(), "$placeholder");
+            foreach (ConditionType type in new[] { ConditionType.FromFile, ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath })
+                fakePatchContext.SetLocalValue(type.ToString(), InternalConstants.TokenPlaceholder);
 
             // get token parser for fake context
             TokenParser tokenParser = new TokenParser(fakePatchContext, contentPack.Manifest, contentPack.Migrator, this.InstalledMods);
@@ -223,14 +221,19 @@ namespace ContentPatcher.Framework
                     continue;
                 }
 
-                // split targets with a null FromFile if needed
-                if (!fromFiles.Any())
-                    fromFiles = new string[] { null };
+                // if `targets` or `fromFile` are missing, we still need to iterate one null value
+                // to populate the split patches.
+                IEnumerable<string> AlwaysIterate(string[] values)
+                {
+                    return values.Length > 0
+                        ? values
+                        : new string[] { null };
+                }
 
                 // create new patches
-                foreach (string target in targets)
+                foreach (string target in AlwaysIterate(targets))
                 {
-                    foreach (string fromFile in fromFiles)
+                    foreach (string fromFile in AlwaysIterate(fromFiles))
                     {
                         var newPatch = new PatchConfig(patch)
                         {
