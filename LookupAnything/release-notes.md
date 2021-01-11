@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.31.1
+Released 10 January 2021.
+
 * Added names for Ginger Island fishing locations.
 * Fixed rare issue where item lookup fails due to mismatched bundle game data.
 

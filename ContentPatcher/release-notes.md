@@ -9,8 +9,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
-* Fixed `Include` patches with multiple `FromFile` files being skipped.
+## 1.19.3
+Released 10 January 2021.
+
+* Fixed `Include` patches skipped if they have multiple `FromFile` values.
 * Fixed `FarmType` token returning `Custom` for the beach farm; it now returns `Beach` instead.
 * Fixed patches not applied for farmhands in some highly specific cases resulting in an _invalid input arguments_ error.
 
