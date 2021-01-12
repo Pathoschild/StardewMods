@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added _force full-screen_ option (disabled by default).
+## 1.32
+Released 11 January 2021.
+
+* Added 'force full-screen' option (disabled by default).
 * Added missing mill recipe for rice.
 * Improved data mining info:
   * Added `GameLocation` fields to tile lookups.
