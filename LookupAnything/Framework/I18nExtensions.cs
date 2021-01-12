@@ -191,6 +191,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             str.AppendLine($"- {field.Name}: {I18n.Stringify(field.GetValue(stats))}");
                         return str.ToString();
                     }
+                case Warp warp:
+                    return $"([{warp.X}, {warp.Y}] to {warp.TargetName}[{warp.TargetX}, {warp.TargetY}])";
 
                 // enumerable
                 case IEnumerable array when !(value is string):
