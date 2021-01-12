@@ -134,8 +134,8 @@
     "data.item.topaz-node.description": "Rompilo per ottenere topazi.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Nodo di Frammento cinereo",
-    "data.item.cinder-shard-node.description": "Rompilo per ottenere dei frammenti cinerei.",
+    "data.item.cinder-shard-node.name": "Nodo di Schegge di brace",
+    "data.item.cinder-shard-node.description": "Rompilo per ottenere delle schegge di brace.",
     "data.item.copper-node.name": "Nodo di rame",
     "data.item.copper-node.description": "Rompilo per ottenere del rame.",
     "data.item.gold-node.name": "Nodo d'oro",
