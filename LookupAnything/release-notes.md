@@ -4,9 +4,12 @@
 ## Upcoming release
 * Added _force full-screen_ option (disabled by default).
 * Added missing mill recipe for rice.
-* Added `GameLocation` info when viewing data mining fields for a tile lookup.
-* Fixed search UI hiding some results if they had the same name.
+* Improved data mining info:
+  * Added `GameLocation` fields to tile lookups.
+  * Fields are now sorted by reverse inheritance. <small>(For example, for a pet lookup you'll see the fields/properties declared directly on `Pet` first, then those on `NPC`, then those on `Character`.)</small>
+  * Fixed duplicate entries for inherited fields.
 * Fixed new 'needed for' bundle logic in 1.31.1.
+* Fixed search UI hiding some results if they had the same name.
 
 ## 1.31.1
 Released 10 January 2021.
