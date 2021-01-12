@@ -251,7 +251,7 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 this.Monitor.Log($"Showing {subject.GetType().Name}::{subject.Type}::{subject.Name}.");
                 this.PushMenu(
-                    new LookupMenu(subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.ShowLookupFor)
+                    new LookupMenu(subject, this.Monitor, this.Helper.Reflection, this.Config.ScrollAmount, this.Config.ShowDataMiningFields, this.Config.ForceFullScreen, this.ShowLookupFor)
                 );
             });
         }
