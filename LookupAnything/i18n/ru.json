@@ -604,7 +604,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -633,6 +633,7 @@
     *********/
     // labels
     "tile.description": "Позиция тайла на карте. Это отображается, потому что вы включили просмотр тайлов в конфигурационном файле мода.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Название локации",
     "tile.tile": "Тайл",
     "tile.tile-index": "{{layerName}}: индекс тайла",

@@ -802,7 +802,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (!communityCenter.bundles.TryGetValue(bundle.ID, out bool[] items) || ingredient.Index >= items.Length)
                 return true; 
 
-            return items[ingredient.Index];
+            return !items[ingredient.Index];
         }
 
         /// <summary>Get the number of an ingredient needed for a bundle.</summary>

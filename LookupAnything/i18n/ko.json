@@ -604,7 +604,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -633,6 +633,7 @@
     *********/
     // labels
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "맵 이름",
     "tile.tile": "타일",
     "tile.tile-index": "{{layerName}}: 타일 인덱스",

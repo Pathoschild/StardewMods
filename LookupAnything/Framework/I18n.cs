@@ -938,6 +938,60 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("location.woods");
         }
 
+        /// <summary>Get a translation equivalent to "Ginger Island caldera".</summary>
+        public static string Location_Caldera()
+        {
+            return I18n.GetByKey("location.caldera");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island east".</summary>
+        public static string Location_IslandEast()
+        {
+            return I18n.GetByKey("location.islandEast");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island north".</summary>
+        public static string Location_IslandNorth()
+        {
+            return I18n.GetByKey("location.islandNorth");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island south".</summary>
+        public static string Location_IslandSouth()
+        {
+            return I18n.GetByKey("location.islandSouth");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island southeast".</summary>
+        public static string Location_IslandSouthEast()
+        {
+            return I18n.GetByKey("location.islandSouthEast");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island southeast cave".</summary>
+        public static string Location_IslandSouthEastCave()
+        {
+            return I18n.GetByKey("location.islandSouthEastCave");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island west".</summary>
+        public static string Location_IslandWest()
+        {
+            return I18n.GetByKey("location.islandWest");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island west (ocean)".</summary>
+        public static string Location_IslandWest_FishArea1()
+        {
+            return I18n.GetByKey("location.islandWest.fish-area-1");
+        }
+
+        /// <summary>Get a translation equivalent to "Ginger Island west (pond)".</summary>
+        public static string Location_IslandWest_FishArea2()
+        {
+            return I18n.GetByKey("location.islandWest.fish-area-2");
+        }
+
         /// <summary>Get a translation equivalent to "{{locationName}} (fishing area {{id}})".</summary>
         /// <param name="locationName">The value to inject for the <c>{{locationName}}</c> token.</param>
         /// <param name="id">The value to inject for the <c>{{id}}</c> token.</param>
@@ -2512,6 +2566,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         public static string Tile_Description()
         {
             return I18n.GetByKey("tile.description");
+        }
+
+        /// <summary>Get a translation equivalent to "Location".</summary>
+        public static string Tile_GameLocation()
+        {
+            return I18n.GetByKey("tile.game-location");
         }
 
         /// <summary>Get a translation equivalent to "Map name".</summary>

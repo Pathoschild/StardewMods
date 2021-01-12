@@ -605,7 +605,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -634,6 +634,7 @@
     *********/
     // labels
     "tile.description": "地图上此位置的地格。显示此信息是因为你在设置中打开了地格信息显示功能。",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "地图名",
     "tile.tile": "地格",
     "tile.tile-index": "{{layerName}}：地格号",

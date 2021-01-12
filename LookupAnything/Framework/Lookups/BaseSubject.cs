@@ -96,24 +96,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
             if (obj == null)
                 yield break;
 
+            // get values
+            IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             for (Type type = obj.GetType(); type != null; type = type.BaseType)
             {
                 // get fields & properties
                 var fields =
                     (
-                        from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        from field in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
                         where !field.IsLiteral // exclude constants
                         select new { field.Name, Type = field.FieldType, Value = this.GetDebugValue(obj, field) }
                     )
                     .Concat(
-                        from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.FlattenHierarchy)
+                        from property in type.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly)
                         where property.CanRead
                         select new { property.Name, Type = property.PropertyType, Value = this.GetDebugValue(obj, property) }
                     )
                     .OrderBy(field => field.Name, StringComparer.OrdinalIgnoreCase);
 
                 // yield valid values
-                IDictionary<string, string> seenValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var field in fields)
                 {
                     if (seenValues.TryGetValue(field.Name, out string value) && value == field.Value)

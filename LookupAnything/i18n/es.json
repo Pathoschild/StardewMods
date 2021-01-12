@@ -603,7 +603,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -633,6 +633,7 @@
     // labels
     // note from translator: better not to translate the technical terms
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Nombre del mapa",
     "tile.tile": "Casilla",
     "tile.tile-index": "{{layerName}}: tile index",

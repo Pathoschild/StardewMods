@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
@@ -42,6 +41,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>The amount to scroll long content on each up/down scroll.</summary>
         private readonly int ScrollAmount;
+
+        /// <summary>Whether the menu should always be full-screen, instead of centered in the window.</summary>
+        private readonly bool ForceFullScreen;
 
         /// <summary>The clickable 'scroll up' icon.</summary>
         private readonly ClickableTextureComponent ScrollUpButton;
@@ -83,8 +85,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
         /// <param name="showDebugFields">Whether to display debug fields.</param>
+        /// <param name="forceFullScreen">Whether the menu should always be full-screen, instead of centered in the window.</param>
         /// <param name="showNewPage">A callback which shows a new lookup for a given subject.</param>
-        public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, Action<ISubject> showNewPage)
+        public LookupMenu(ISubject subject, IMonitor monitor, IReflectionHelper reflectionHelper, int scroll, bool showDebugFields, bool forceFullScreen, Action<ISubject> showNewPage)
         {
             // save data
             this.Subject = subject;
@@ -92,19 +95,25 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.Monitor = monitor;
             this.Reflection = reflectionHelper;
             this.ScrollAmount = scroll;
+            this.ForceFullScreen = forceFullScreen;
             this.ShowNewPage = showNewPage;
             this.WasHudEnabled = Game1.displayHUD;
 
             // save debug fields
             if (showDebugFields)
             {
-                IDebugField[] debugFields = subject.GetDebugFields().ToArray();
-                this.Fields = this.Fields
-                    .Concat(new[]
+                this.Fields = subject
+                    .GetDebugFields()
+                    .GroupBy(p =>
                     {
-                        new DataMiningField("debug (pinned)", debugFields.Where(p => p.IsPinned)),
-                        new DataMiningField("debug (raw)", debugFields.Where(p => !p.IsPinned))
+                        if (p.IsPinned)
+                            return "debug (pinned)";
+                        if (p.OverrideCategory != null)
+                            return $"debug ({p.OverrideCategory})";
+                        return "debug (raw)";
                     })
+                    .OrderByDescending(p => p.Key == "debug (pinned)")
+                    .Select(p => (ICustomField)new DataMiningField(p.Key, p))
                     .ToArray();
             }
 
@@ -425,14 +434,23 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             Point viewport = this.GetViewportSize();
 
-            // update size
-            this.width = Math.Min(Game1.tileSize * 20, viewport.X);
-            this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
+            // update size & position
+            if (this.ForceFullScreen)
+            {
+                this.xPositionOnScreen = 0;
+                this.yPositionOnScreen = 0;
+                this.width = viewport.X;
+                this.height = viewport.Y;
+            }
+            else
+            {
+                this.width = Math.Min(Game1.tileSize * 20, viewport.X);
+                this.height = Math.Min((int)(this.AspectRatio.Y / this.AspectRatio.X * this.width), viewport.Y);
 
-            // update position
-            Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
-            this.xPositionOnScreen = (int)origin.X;
-            this.yPositionOnScreen = (int)origin.Y;
+                Vector2 origin = new Vector2(viewport.X / 2 - this.width / 2, viewport.Y / 2 - this.height / 2); // derived from Utility.getTopLeftPositionForCenteringOnScreen, adjusted to account for possibly different GPU viewport size
+                this.xPositionOnScreen = (int)origin.X;
+                this.yPositionOnScreen = (int)origin.Y;
+            }
 
             // update up/down buttons
             int x = this.xPositionOnScreen;

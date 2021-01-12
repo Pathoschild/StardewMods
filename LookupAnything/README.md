@@ -99,10 +99,11 @@ Advanced settings:
 
 setting           | what it affects
 ----------------- | -------------------
+`EnableTargetRedirection` | Default `true`. In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.
 `EnableTileLookups` | Default `false`. Whether to include map tiles as lookup targets.
+`ForceFullScreen` | Default `false`. Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.
 `ScrollAmount` | Default `160`. The number of pixels to shift content on each up/down scroll.
 `ShowDataMiningFields` | Default `false`. Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.
-`EnableTargetRedirection` | Default `true`. In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.
 
 ## Showcase
 ### Progression mode

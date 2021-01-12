@@ -598,7 +598,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     "puzzle.island-mermaid.title": "Puzzle de la sirène des Îles",
@@ -624,6 +624,7 @@
     *********/
     // labels
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Nom de la carte",
     "tile.tile": "Case",
     "tile.tile-index": "{{layerName}}: index de la case",

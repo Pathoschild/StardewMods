@@ -165,6 +165,13 @@ You shouldn't change this file unless you know what you're doing.
             },
             "Output": 245, // sugar
             "MaxOutput": 3
+        },
+        {
+            "BuildingKey": "Mill",
+            "Ingredients": {
+                "271": 1 // unmilled rice
+            },
+            "Output": 423 // rice
         }
     ],
 

@@ -8,7 +8,7 @@
     "generic.yesterday": "ieri",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "sconosciuto",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -71,7 +71,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "Negozio del vulcano",
     "shop.willy": "Willy",
 
     // recipe types
@@ -134,8 +134,8 @@
     "data.item.topaz-node.description": "Rompilo per ottenere topazi.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "Nodo di Frammento cinereo",
+    "data.item.cinder-shard-node.description": "Rompilo per ottenere dei frammenti cinerei.",
     "data.item.copper-node.name": "Nodo di rame",
     "data.item.copper-node.description": "Rompilo per ottenere del rame.",
     "data.item.gold-node.name": "Nodo d'oro",
@@ -144,21 +144,20 @@
     "data.item.iridium-node.description": "Rompilo per ottenere dell'iridio.",
     "data.item.iron-node.name": "Nodo di ferro",
     "data.item.iron-node.description": "Rompilo per ottenere del ferro.",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "Nodo di omni-geode",
+    "data.item.omni-geode-node.description": "Rompilo per ottenere un omni-geode.",
 
     // mine stones
     "data.item.colored-stone.name": "Pietra colorata",
-    "data.item.colored-stone.description": "Una pietra non descrivibile. Potrebbe contenere pietra, minerali, o geodi.",
+    "data.item.colored-stone.description": "Una pietra indescrivibile. Potrebbe contenere pietra, minerali, o geodi.",
     "data.item.mine-stone.name": "Pietra",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "Rompila per ottenere una pietra con probabilità di carbone.",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "Pietra di argilla",
+    "data.item.clay-stone.description": "Rompila per ottenere dell'argilla.",
+    "data.item.fossil-stone.name": "Pietra fossile",
+    "data.item.fossil-stone.description": "Rompila per ottenere fossili e ossa.",
 
     // mine containers
     "data.item.barrel.name": "Barile",
@@ -171,14 +170,14 @@
     "location.beach": "spiaggia",
     "location.beach.east-pier": "spiaggia (molo orientale)",
     "location.bugLand": "tana dell'insetto mutante",
-    "location.busStop": "bus stop", // TODO
+    "location.busStop": "fermata dell'autobus",
     "location.desert": "deserto",
     "location.farm": "fattoria",
     "location.farmCave": "grotta nella fattoria",
     "location.farmHouse": "casale",
     "location.forest": "foresta",
-    "location.forest.fish-area-0": "fiume nella forest",
-    "location.forest.fish-area-1": "lagetto nella foresta",
+    "location.forest.fish-area-0": "fiume nella foresta",
+    "location.forest.fish-area-1": "laghetto nella foresta",
     "location.forest.island-tip": "fiume nella foresta (punta Sud dell'isola maggiore)",
     "location.mountain": "montagna",
     "location.railroad": "ferrovia",
@@ -186,23 +185,23 @@
     "location.submarine": "sottomarino",
     "location.town": "paese",
     "location.town.northmost-bridge": "paese (ponte Nord)",
-    "location.tunnel": "bus tunnel", // TODO
+    "location.tunnel": "tunnel dell'autobus",
     "location.undergroundMine": "miniera",
     "location.undergroundMine.level": "miniera livello {{level}}",
     "location.witchSwamp": "palude della strega",
     "location.woods": "boschi segreti",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "Caldera dell'Isola Zenzero",
+    "location.islandEast": "Zona est dell'Isola Zenzero",
+    "location.islandNorth": "Zona nord dell'Isola Zenzero",
+    "location.islandSouth": "Zona sud dell'Isola Zenzero",
+    "location.islandSouthEast": "Zona sud-est dell'Isola Zenzero",
+    "location.islandSouthEastCave": "Caverne a sud-est dell'Isola Zenzero",
+    "location.islandWest": "Zona ovest dell'Isola Zenzero",
+    "location.islandWest.fish-area-1": "Zona ovest dell'Isola Zenzero (oceano)",
+    "location.islandWest.fish-area-2": "Zona ovest dell'Isola Zenzero (stagno)",
 
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})", // TODO
+    "location.unknown-fish-area": "{{locationName}} (area di pesca {{id}})",
 
 
     /*********
@@ -335,8 +334,8 @@
     // labels
     "crop.summary": "Raccolto",
     "crop.harvest": "Raccogli",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "Fertilizzato",
+    "crop.watered": "Inumidito",
 
     // values
     "crop.summary.dead": "Questo raccolto è morto.",
@@ -464,9 +463,8 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "Intonazione",
+    "item.music-block.drum-type": "Tipo di tamburo",
 
 
     /*********
@@ -578,37 +576,32 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "Soluzione",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "Puzzle risolto!",
+    "puzzle.solution.hidden": "Le soluzioni dei Puzzle sono nascoste nella modalità Progresso.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "Puzzle della Caverna di Cristallo",
+    "puzzle.island-crystal-cave.crystal-id": "ID Cristallo",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "Attiva la statua per iniziare il puzzle.",
+    "puzzle.island-crystal-cave.solution.waiting": "In attesa che il gioco generi una sequenza...",
+    "puzzle.island-crystal-cave.solution.activated": "Ripeti il modello dei cristalli attivati:",
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.title": "Puzzle dell'Isola della Sirena",
+    "puzzle.island-mermaid.solution.intro": "Usa i blocchi del flauto per suonare la canzone della sirena 'Mercato Notturno'. Valori Intonazione (you can lookup a flute block to see its pitch):", // TODO
 
 
     /*********
@@ -620,11 +613,10 @@
     "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution.east": "Est: {{item}}",
+    "puzzle.island-shrine.solution.north": "Nord: {{item}}",
+    "puzzle.island-shrine.solution.south": "Sud: {{item}}",
+    "puzzle.island-shrine.solution.west": "Ovest: {{item}}",
 
 
     /*********
@@ -632,6 +624,7 @@
     *********/
     // labels
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Nome mappa",
     "tile.tile": "Tassello della mappa",
     "tile.tile-index": "{{layerName}}: indice tasselli della mappa",
@@ -663,7 +656,7 @@
 
     // values
     "tree.name.big-mushroom": "Fungo grande",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "Mogano",
     "tree.name.maple": "Acero",
     "tree.name.oak": "Quercia",
     "tree.name.palm": "Palma",
