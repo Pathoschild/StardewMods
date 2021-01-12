@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
@@ -103,13 +102,18 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // save debug fields
             if (showDebugFields)
             {
-                IDebugField[] debugFields = subject.GetDebugFields().ToArray();
-                this.Fields = this.Fields
-                    .Concat(new[]
+                this.Fields = subject
+                    .GetDebugFields()
+                    .GroupBy(p =>
                     {
-                        new DataMiningField("debug (pinned)", debugFields.Where(p => p.IsPinned)),
-                        new DataMiningField("debug (raw)", debugFields.Where(p => !p.IsPinned))
+                        if (p.IsPinned)
+                            return "debug (pinned)";
+                        if (p.OverrideCategory != null)
+                            return $"debug ({p.OverrideCategory})";
+                        return "debug (raw)";
                     })
+                    .OrderByDescending(p => p.Key == "debug (pinned)")
+                    .Select(p => (ICustomField)new DataMiningField(p.Key, p))
                     .ToArray();
             }
 

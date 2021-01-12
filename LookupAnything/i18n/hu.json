@@ -603,7 +603,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -632,6 +632,7 @@
     *********/
     // labels
     "tile.description": "Négyzet elhelyezkedése a térképen. Ez azért jelenik meg, mert engedélyezte a csempekeresést a konfigurációban.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Térkép neve",
     "tile.tile": "Négyzet",
     "tile.tile-index": "{{layerName}}: négyzetmutató",

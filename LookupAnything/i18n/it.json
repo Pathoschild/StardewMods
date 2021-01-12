@@ -603,7 +603,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -632,6 +632,7 @@
     *********/
     // labels
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Nome mappa",
     "tile.tile": "Tassello della mappa",
     "tile.tile-index": "{{layerName}}: indice tasselli della mappa",

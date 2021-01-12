@@ -610,7 +610,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -639,6 +639,7 @@
     *********/
     // labels
     "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "マップ名",
     "tile.tile": "タイル",
     "tile.tile-index": "{{layerName}}: タイルインデックス",

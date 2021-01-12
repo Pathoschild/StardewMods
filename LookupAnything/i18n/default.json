@@ -598,7 +598,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
@@ -624,6 +624,7 @@
     *********/
     // labels
     "tile.description": "A tile position on the map. This is displayed because you enabled tile lookups in the configuration.",
+    "tile.game-location": "Location",
     "tile.map-name": "Map name",
     "tile.tile": "Tile",
     "tile.tile-index": "{{layerName}}: tile index",

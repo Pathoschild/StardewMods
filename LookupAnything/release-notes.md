@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added _force full-screen_ option (disabled by default).
 * Added missing mill recipe for rice.
+* Added `GameLocation` info when viewing data mining fields for a tile lookup.
 * Fixed search UI hiding some results if they had the same name.
 * Fixed new 'needed for' bundle logic in 1.31.1.
 

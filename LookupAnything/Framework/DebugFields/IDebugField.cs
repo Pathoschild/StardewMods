@@ -1,4 +1,4 @@
-﻿namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
+namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
 {
     /// <summary>A debug field containing a raw datamining value.</summary>
     internal interface IDebugField
@@ -17,5 +17,8 @@
 
         /// <summary>Whether the field should be highlighted for special attention.</summary>
         bool IsPinned { get; }
+
+        /// <summary>The debug category text.</summary>
+        public string OverrideCategory { get; set; }
     }
 }

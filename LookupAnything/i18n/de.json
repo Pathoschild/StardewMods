@@ -604,7 +604,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -633,6 +633,7 @@
     *********/
     // labels
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Kartenname",
     "tile.tile": "Kachel",
     "tile.tile-index": "{{layerName}}: Kachelindex",

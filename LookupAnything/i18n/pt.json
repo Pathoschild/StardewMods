@@ -603,7 +603,7 @@
 
 
     /*********
-    ** Tile lookups > Fern Islands mermaid puzzle
+    ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
     // TODO
@@ -632,6 +632,7 @@
     *********/
     // labels
     "tile.description": "Um bloque posicionado no mapa. Isto está aparecendo pois você habilitou nas configurações.",
+    "tile.game-location": "Location", // TODO
     "tile.map-name": "Nome do mapa",
     "tile.tile": "Bloco",
     "tile.tile-index": "{{layerName}}: Indice do bloco",
