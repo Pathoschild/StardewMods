@@ -600,9 +600,8 @@
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
     "puzzle.island-mermaid.title": "Puzzle dell'Isola della Sirena",
-    "puzzle.island-mermaid.solution.intro": "Usa i blocchi del flauto per suonare la canzone della sirena 'Mercato Notturno'. Valori Intonazione (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.solution.intro": "Usa i blocchi del flauto per suonare la canzone della sirena 'Mercato Notturno'. Valori Intonazione (you can lookup a flute block to see its pitch):", // TODO
 
 
     /*********

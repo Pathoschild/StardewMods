@@ -10,6 +10,7 @@
   * Fixed duplicate entries for inherited fields.
 * Fixed new 'needed for' bundle logic in 1.31.1.
 * Fixed search UI hiding some results if they had the same name.
+* Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.31.1
 Released 10 January 2021.
