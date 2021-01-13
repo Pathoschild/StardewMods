@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed datamining mode not showing non-datamining fields in 1.32.
+
 ## 1.32
 Released 11 January 2021.
 
