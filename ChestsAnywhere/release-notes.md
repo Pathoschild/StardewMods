@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed fish tanks showing dresser UI when opened remotely.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.20.2
