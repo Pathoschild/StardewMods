@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed datamining mode not showing non-datamining fields in 1.32.
+* Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.32
 Released 11 January 2021.

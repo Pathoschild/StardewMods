@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to LeecanIt (updated Italian)!
+
 ## 1.13.3
 Released 10 January 2021.
 

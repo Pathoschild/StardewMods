@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to LeecanIt (updated Italian)!
+
 ## 1.20.2
 Released 10 January 2020.
 
