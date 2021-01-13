@@ -60,7 +60,7 @@
     "machines.finished": "Finito",
 
     // tile grid
-    "grid.name": "Tile Grid", // TODO
+    "grid.name": "Griglia di piastrelle",
 
     // tillable
     "tillable.name": "Coltivabile",
