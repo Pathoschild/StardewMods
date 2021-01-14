@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed datamining mode not showing non-datamining fields in 1.32.
+* Fixed swapped labels for deluxe/quality fertilizers.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.32

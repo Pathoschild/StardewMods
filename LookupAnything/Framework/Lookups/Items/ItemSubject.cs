@@ -489,8 +489,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     HoeDirt.hyperSpeedGro => GameI18n.GetObjectName(918), // Hyper Speed-Gro
 
                     HoeDirt.fertilizerLowQuality => GameI18n.GetObjectName(368), // Basic Fertilizer
-                    HoeDirt.fertilizerHighQuality => GameI18n.GetObjectName(919), // Deluxe Fertilizer
-                    HoeDirt.fertilizerDeluxeQuality => GameI18n.GetObjectName(369), // Quality Fertilizer
+                    HoeDirt.fertilizerHighQuality => GameI18n.GetObjectName(369), // Quality Fertilizer
+                    HoeDirt.fertilizerDeluxeQuality => GameI18n.GetObjectName(919), // Deluxe Fertilizer
 
                     HoeDirt.waterRetentionSoil => GameI18n.GetObjectName(370), // Basic Retaining Soil
                     HoeDirt.waterRetentionSoilQuality => GameI18n.GetObjectName(371), // Quality Retaining Soil
