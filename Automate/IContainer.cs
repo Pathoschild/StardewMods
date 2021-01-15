@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The raw mod data for the container.</summary>
         ModDataDictionary ModData { get; }
 
+        /// <summary>Whether this is a Junimo chest, which shares a global inventory with all other Junimo chests.</summary>
+        bool IsJunimoChest { get; }
+
 
         /*********
         ** Public methods
