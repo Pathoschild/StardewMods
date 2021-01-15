@@ -577,28 +577,24 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "Lösung",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "Rätsel gelöst!",
+    "puzzle.solution.hidden": "Lösungen der Rätsel sind im Fortschrittsmodus nicht sichtbar.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "Farbige Kristalle Puzzle",
+    "puzzle.island-crystal-cave.crystal-id": "Kristall ID",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "Aktiviere die Statue um das Rätsel zu starten.",
+    "puzzle.island-crystal-cave.solution.waiting": "Warte bis das Spiel die Sequenz generiert ...",
+    "puzzle.island-crystal-cave.solution.activated": "Wiederhole die Reihenfolge der aktivierten Kristalle:",
 
 
     /*********
