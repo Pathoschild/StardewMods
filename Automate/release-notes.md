@@ -4,7 +4,8 @@
 ## Upcoming release
 * Added [full support for Junimo chests](README.md#junimo-chests), which enables global supply chains.
 * Removed old `config.json` migrations. If you changed the mod options in Automate 1.17.3 or earlier, and haven't played since then, you may need to reconfigure them.
-* The default machine priorities are now set in `assets/data.json`. You can override an entry in your `config.json`.
+* Moved the default machine priorities into `assets/data.json`. You can still override an entry in your `config.json`.
+* Lowered priority for mini-shipping bins by default (similar to shipping bins).
 
 ## 1.19.1
 Released 04 January 2021.

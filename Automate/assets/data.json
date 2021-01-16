@@ -67,6 +67,9 @@
     "DefaultMachineOverrides": {
         "ShippingBin": {
             "Priority": -1
+        },
+        "MiniShippingBin": {
+            "Priority": -2
         }
     }
 }
