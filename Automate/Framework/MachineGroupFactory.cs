@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
-        public IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
+        public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
             MachineGroupBuilder builder = new MachineGroupBuilder(location, this.Config);
             LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);

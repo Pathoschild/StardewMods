@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private readonly MachineGroupFactory Factory;
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups;
+        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups;
 
 
         /*********
@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="config">The mod configuration.</param>
         /// <param name="factory">Constructs machine groups.</param>
         /// <param name="activeMachineGroups">The machines to process.</param>
-        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups)
+        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, IDictionary<GameLocation, IMachineGroup[]> activeMachineGroups)
         {
             this.Monitor = monitor;
             this.Config = config;
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 // machine groups
                 if (Context.IsWorldReady)
                 {
-                    MachineGroup[] allGroups = this.ActiveMachineGroups.SelectMany(p => p.Value).ToArray();
+                    IMachineGroup[] allGroups = this.ActiveMachineGroups.SelectMany(p => p.Value).ToArray();
                     report.AppendLine($"   Found {allGroups.Length} machine groups in {this.ActiveMachineGroups.Count} locations, containing {allGroups.Sum(p => p.Machines.Length)} automated machines connected to {allGroups.Sum(p => p.Containers.Length)} containers.");
                 }
                 else
@@ -136,11 +136,11 @@ namespace Pathoschild.Stardew.Automate.Framework
                 {
                     foreach (GameLocation location in this.ActiveMachineGroups.Keys.OrderBy(p => $"{p.Name} ({p.NameOrUniqueName})", StringComparer.OrdinalIgnoreCase))
                     {
-                        MachineGroup[] machineGroups = this.ActiveMachineGroups[location];
+                        IMachineGroup[] machineGroups = this.ActiveMachineGroups[location];
 
                         report.AppendLine($"   {location.Name}{(location.NameOrUniqueName != location.Name ? $" ({location.NameOrUniqueName})" : "")}:");
 
-                        foreach (MachineGroup group in machineGroups)
+                        foreach (IMachineGroup group in machineGroups)
                         {
                             var tile = group.Tiles[0];
 

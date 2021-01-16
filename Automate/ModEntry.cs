@@ -38,10 +38,10 @@ namespace Pathoschild.Stardew.Automate
         private bool EnableAutomation => Context.IsMainPlayer;
 
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups = new Dictionary<GameLocation, IMachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The disabled machine groups (e.g. machines not connected to a chest).</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> DisabledMachineGroups = new Dictionary<GameLocation, MachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+        private readonly IDictionary<GameLocation, IMachineGroup[]> DisabledMachineGroups = new Dictionary<GameLocation, IMachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
@@ -256,7 +256,7 @@ namespace Pathoschild.Stardew.Automate
                 }
 
                 // process machines
-                foreach (MachineGroup group in this.GetActiveMachineGroups())
+                foreach (IMachineGroup group in this.GetActiveMachineGroups())
                     group.Automate();
             }
             catch (Exception ex)
@@ -408,11 +408,11 @@ namespace Pathoschild.Stardew.Automate
         }
 
         /// <summary>Get the active machine groups in every location.</summary>
-        private IEnumerable<MachineGroup> GetActiveMachineGroups()
+        private IEnumerable<IMachineGroup> GetActiveMachineGroups()
         {
-            foreach (KeyValuePair<GameLocation, MachineGroup[]> group in this.ActiveMachineGroups)
+            foreach (KeyValuePair<GameLocation, IMachineGroup[]> group in this.ActiveMachineGroups)
             {
-                foreach (MachineGroup machineGroup in group.Value)
+                foreach (IMachineGroup machineGroup in group.Value)
                     yield return machineGroup;
             }
         }
@@ -424,7 +424,7 @@ namespace Pathoschild.Stardew.Automate
             this.Monitor.VerboseLog($"Reloading machines in {location.Name}...");
 
             // get machine groups
-            MachineGroup[] machineGroups = this.Factory.GetMachineGroups(location).ToArray();
+            IMachineGroup[] machineGroups = this.Factory.GetMachineGroups(location).ToArray();
             this.ActiveMachineGroups[location] = machineGroups.Where(p => p.HasInternalAutomation).ToArray();
             this.DisabledMachineGroups[location] = machineGroups.Where(p => !p.HasInternalAutomation).ToArray();
 

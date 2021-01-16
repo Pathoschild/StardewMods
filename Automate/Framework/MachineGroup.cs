@@ -9,7 +9,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A collection of machines and storage which work as one unit.</summary>
-    internal class MachineGroup
+    internal class MachineGroup : IMachineGroup
     {
         /*********
         ** Fields
@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Machines which are temporarily paused, with the game time in milliseconds when their pause expires.</summary>
         private readonly IDictionary<IMachine, double> MachinePauseExpiries = new Dictionary<IMachine, double>(new ObjectReferenceComparer<IMachine>());
+
+        /// <summary>The storage manager for the group.</summary>
+        private readonly IStorage StorageManager;
 
 
         /*********
@@ -32,9 +35,6 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>The containers in the group.</summary>
         public IContainer[] Containers { get; }
-
-        /// <summary>The storage manager for the group.</summary>
-        public IStorage StorageManager { get; }
 
         /// <summary>The tiles comprising the group.</summary>
         public Vector2[] Tiles { get; }

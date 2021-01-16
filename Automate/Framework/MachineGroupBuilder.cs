@@ -7,7 +7,7 @@ using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
-    /// <summary>Handles logic for building a <see cref="MachineGroup"/>.</summary>
+    /// <summary>Handles logic for building an <see cref="IMachineGroup"/>.</summary>
     internal class MachineGroupBuilder
     {
         /*********
@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Create a group from the saved data.</summary>
-        public MachineGroup Build()
+        public IMachineGroup Build()
         {
             IMachine[] machines =
                 (

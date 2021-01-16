@@ -21,7 +21,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private readonly int TileGap = 1;
 
         /// <summary>A machine group lookup by tile coordinate.</summary>
-        private readonly IDictionary<Vector2, MachineGroup> GroupTiles;
+        private readonly IDictionary<Vector2, IMachineGroup> GroupTiles;
 
 
         /*********
@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="inputHelper">An API for checking and changing input state.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="machineGroups">The machine groups to display.</param>
-        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IEnumerable<MachineGroup> machineGroups)
+        public OverlayMenu(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, IEnumerable<IMachineGroup> machineGroups)
             : base(events, inputHelper, reflection)
         {
             // init machine groups
@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 int tileSize = Game1.tileSize;
 
                 // get machine group
-                this.GroupTiles.TryGetValue(tile, out MachineGroup group);
+                this.GroupTiles.TryGetValue(tile, out IMachineGroup group);
                 bool isGrouped = group != null;
                 bool isActive = isGrouped && group.HasInternalAutomation;
 
@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="group">The machine group.</param>
         /// <param name="tile">The group tile.</param>
         /// <param name="color">The border color.</param>
-        private void DrawEdgeBorders(SpriteBatch spriteBatch, MachineGroup group, Vector2 tile, Color color)
+        private void DrawEdgeBorders(SpriteBatch spriteBatch, IMachineGroup group, Vector2 tile, Color color)
         {
             int borderSize = 3;
             float screenX = tile.X * Game1.tileSize - Game1.viewport.X;

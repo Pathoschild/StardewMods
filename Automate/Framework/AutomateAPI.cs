@@ -20,10 +20,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         private readonly MachineGroupFactory MachineGroupFactory;
 
         /// <summary>The active machine groups recognized by Automate.</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> ActiveMachineGroups;
+        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups;
 
         /// <summary>The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</summary>
-        private readonly IDictionary<GameLocation, MachineGroup[]> DisabledMachineGroups;
+        private readonly IDictionary<GameLocation, IMachineGroup[]> DisabledMachineGroups;
 
 
         /*********
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="machineGroupFactory">Constructs machine groups.</param>
         /// <param name="activeMachineGroups">The active machine groups recognized by Automate.</param>
         /// <param name="disabledMachineGroups">The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</param>
-        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, MachineGroup[]> activeMachineGroups, IDictionary<GameLocation, MachineGroup[]> disabledMachineGroups)
+        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, IMachineGroup[]> activeMachineGroups, IDictionary<GameLocation, IMachineGroup[]> disabledMachineGroups)
         {
             this.Monitor = monitor;
             this.MachineGroupFactory = machineGroupFactory;
@@ -78,19 +78,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Get all machines in a location.</summary>
         /// <param name="location">The location whose matches to fetch.</param>
-        private IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
+        private IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
             // active groups
-            if (this.ActiveMachineGroups.TryGetValue(location, out MachineGroup[] activeGroups))
+            if (this.ActiveMachineGroups.TryGetValue(location, out IMachineGroup[] activeGroups))
             {
-                foreach (MachineGroup machineGroup in activeGroups)
+                foreach (IMachineGroup machineGroup in activeGroups)
                     yield return machineGroup;
             }
 
             // disabled groups
-            if (this.DisabledMachineGroups.TryGetValue(location, out MachineGroup[] disabledGroups))
+            if (this.DisabledMachineGroups.TryGetValue(location, out IMachineGroup[] disabledGroups))
             {
-                foreach (MachineGroup machineGroup in disabledGroups)
+                foreach (IMachineGroup machineGroup in disabledGroups)
                     yield return machineGroup;
             }
         }
