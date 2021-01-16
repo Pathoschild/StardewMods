@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added [full support for Junimo chests](README.md#junimo-chests), which enables global supply chains.
+* Removed old `config.json` migrations. If you changed the mod options in Automate 1.17.3 or earlier, and haven't played since then, you may need to reconfigure them.
 
 ## 1.19.1
 Released 04 January 2021.

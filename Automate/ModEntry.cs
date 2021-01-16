@@ -342,43 +342,6 @@ namespace Pathoschild.Stardew.Automate
                 changed = true;
             }
 
-            // migrate legacy fields
-            if (config.ExtensionFields != null)
-            {
-                // migrate AutomateShippingBin (1.10.4–1.17.3)
-                try
-                {
-                    if (config.ExtensionFields.TryGetValue("AutomateShippingBin", out JToken raw))
-                        config.GetOrAddMachineOverrides(ShippingBinMachine.ShippingBinId).Enabled = raw.ToObject<bool>();
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log($"Failed migrating legacy 'AutomateShippingBin' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
-                }
-
-                // migrate MachinePriority field (1.17–1.17.3) to MachineSettings
-                // (and fix wrong "ShippingBinMachine" default value)
-                try
-                {
-                    if (config.ExtensionFields.TryGetValue("MachinePriority", out JToken raw))
-                    {
-                        var priorities = raw.ToObject<Dictionary<string, int>>() ?? new Dictionary<string, int>();
-                        foreach (var pair in priorities)
-                        {
-                            string key = pair.Key == "ShippingBinMachine" ? ShippingBinMachine.ShippingBinId : pair.Key;
-                            config.GetOrAddMachineOverrides(key).Priority = pair.Value;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    this.Monitor.Log($"Failed migrating legacy 'MachinePriority' config field, ignoring previous value.\n\n{ex}", LogLevel.Warn);
-                }
-
-                config.ExtensionFields.Clear();
-                changed = true;
-            }
-
             // resave changes
             if (changed)
                 this.Helper.WriteConfig(config);
