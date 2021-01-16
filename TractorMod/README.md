@@ -42,7 +42,7 @@ scythe     | harvest crops, flowers, bushes, fruit trees, forage, tree seeds, an
 seeds      | plant seeds in dirt. | —
 shears     | shear wool from farm animals. | —
 slingshot  | — | shoot one projectile/tile/second in the aimed direction.
-watering can | water crops. | —
+watering can | water crops; cool lava in the volcano dungeon. | —
 
 Tractors use no stamina when using tools, and the watering can won't run out of water. They will
 consume fertilizer or seeds when you sow those, though.
