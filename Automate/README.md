@@ -128,18 +128,20 @@ Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.
 is part of a global machine group. This global group behaves just like a regular machine group
 (including for [machine priority](#machine-priority)), even if it's spread across many locations.
 
-For example, you can use this to set up global supply chains:
+For example, you can use this to distribute automation across the world:
 
 1. Junimo huts on your farm collect crops;
 2. kegs in a shed turn them into juice/wine;
 3. cellar casks age the juice/wine;
 4. the shipping bin collects the final output.
 
-Due to this special behaviour, you can't change input/output options for a Junimo chest. Junimo
-chests are always automated if at least one is connected to a machine. They have the highest
-priority for machine input, and the lowest priority for machine output. (That is, items are only
-pushed into a Junimo chest if no other chest is available. Items are still available to all
-machines in the global group either way.)
+Caveats:
+* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
+  chests are always automated if at least one is connected to a machine.
+ 
+  They have the highest priority for machine input, and the lowest priority for machine output.
+  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
+  still available to all machines in the global group either way.)
 
 ### Machine priority
 The default order that machines are processed is unpredictable and subject to change, except that

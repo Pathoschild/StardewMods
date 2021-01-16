@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 1.14
+Released 16 January 2021.
+
 * Reopening the menu now shows your last selected layer.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 

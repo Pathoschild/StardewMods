@@ -1,9 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Added [full support for Junimo chests](README.md#junimo-chests), which enables global supply chains.
-* Removed old `config.json` migrations. If you changed the mod options in Automate 1.17.3 or earlier, and haven't played since then, you may need to reconfigure them.
+## 1.20
+Released 16 January 2021.
+
+* Added [full support for Junimo chests](README.md#junimo-chests), which enables distributed automation.
+* Removed old `config.json` migrations. If you changed the mod options in Automate 1.17.3 or earlier, and haven't played since then, you may need to do it again.
 * Moved the default machine priorities into `assets/data.json`. You can still override an entry in your `config.json`.
 * Lowered priority for mini-shipping bins by default (similar to shipping bins).
 * Fixed bushes not harvested out of season on the island farm.

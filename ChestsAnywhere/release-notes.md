@@ -1,13 +1,15 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.3
+Released 16 January 2021.
+
 * Updated chest options for Automate 1.20.
 * Fixed fish tanks showing dresser UI when opened remotely.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.20.2
-Released 10 January 2020.
+Released 10 January 2021.
 
 * Fixed support for fridges in some custom farmhouse maps.
 * Fixed default names for custom chest types.
@@ -15,7 +17,7 @@ Released 10 January 2020.
 * Fixed more cases where a Junimo chest wasn't matched correctly.
 
 ## 1.20.1
-Released 05 January 2020.
+Released 05 January 2021.
 
 * Fixed issues related to Junimo chests and main shipping bins (which have shared inventories):
   * Fixed which one you opened not always tracked correctly.

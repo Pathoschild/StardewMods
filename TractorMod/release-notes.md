@@ -1,5 +1,7 @@
 # Release notes
-## Upcoming release
+## 4.13
+Released 16 January 2021.
+
 * The watering can now cools lava in the volcano dungeon.
 * Fixed tractor affecting other players' tools in split-screen mode.
 
