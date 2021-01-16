@@ -10,7 +10,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Menus;
-using XRectangle = xTile.Dimensions.Rectangle;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
@@ -145,6 +144,18 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             if (index < 0)
                 index = this.Layers.Length - 1;
             this.SetLayer(this.Layers[index]);
+        }
+
+        /// <summary>Switch to the data layer with the given ID, if any.</summary>
+        /// <param name="id">The layer ID.</param>
+        public void TrySetLayer(string id)
+        {
+            if (id == null)
+                return;
+
+            ILayer layer = this.Layers.FirstOrDefault(p => p.Id == id);
+            if (layer != null)
+                this.SetLayer(layer);
         }
 
         /// <summary>Switch to the given data layer.</summary>

@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -27,38 +24,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
 
         /// <summary>The configuration for specific machines by ID.</summary>
-        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>
-        {
-            [BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = new ModConfigMachine { Priority = -1 }
-        };
-
-        /// <summary>The fields read from JSON which don't match any model field.</summary>
-        [JsonExtensionData]
-        public IDictionary<string, JToken> ExtensionFields { get; set; }
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Get the settings for a machine.</summary>
-        /// <param name="id">The unique machine ID.</param>
-        public ModConfigMachine GetMachineOverrides(string id)
-        {
-            return this.MachineOverrides.TryGetValue(id, out ModConfigMachine config)
-                ? config
-                : null;
-        }
-
-        /// <summary>Get the settings for a machine, creating a new entry if missing.</summary>
-        /// <param name="id">The unique machine ID.</param>
-        public ModConfigMachine GetOrAddMachineOverrides(string id)
-        {
-            ModConfigMachine config = this.GetMachineOverrides(id);
-
-            if (config == null)
-                this.MachineOverrides[id] = config = new ModConfigMachine();
-
-            return config;
-        }
+        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
     }
 }

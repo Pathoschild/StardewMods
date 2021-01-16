@@ -13,6 +13,7 @@ using Pathoschild.Stardew.TractorMod.Framework.Config;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -63,8 +64,11 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys;
 
+        /// <summary>The backing field for <see cref="TractorManager"/>.</summary>
+        private PerScreen<TractorManager> TractorManagerImpl;
+
         /// <summary>The tractor being ridden by the current player.</summary>
-        private TractorManager TractorManager;
+        private TractorManager TractorManager => this.TractorManagerImpl.Value;
 
         /// <summary>The garage texture to apply.</summary>
         private Texture2D GarageTexture;
@@ -89,7 +93,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // init
             I18n.Init(helper.Translation);
-            this.TractorManager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection);
+            this.TractorManagerImpl = new(() => new TractorManager(this.Config, this.Keys, this.Helper.Reflection));
             this.UpdateConfig();
 
             // hook events

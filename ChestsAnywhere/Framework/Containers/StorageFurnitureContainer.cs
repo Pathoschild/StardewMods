@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public IClickableMenu OpenMenu()
         {
             Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems.ToDictionary(item => (ISalable)item, _ => new[] { 0, 1 });
-            return new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, "Dresser")
+            return new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, this.Furniture.GetShopMenuContext())
             {
                 source = this.Furniture,
                 behaviorBeforeCleanup = menu => this.Furniture.mutex.ReleaseLock()

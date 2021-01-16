@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,18 +23,18 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The automation factories which construct machines, containers, and connectors.</summary>
         private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();
 
-        /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        /// <summary>Get the configuration for specific machines by ID, if any.</summary>
+        private readonly Func<string, ModConfigMachine> GetMachineOverride;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public MachineGroupFactory(ModConfig config)
+        /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
+        public MachineGroupFactory(Func<string, ModConfigMachine> getMachineOverride)
         {
-            this.Config = config;
+            this.GetMachineOverride = getMachineOverride;
         }
 
         /// <summary>Add an automation factory.</summary>
@@ -43,11 +44,33 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.AutomationFactories.Add(factory);
         }
 
+        /// <summary>Get the unique key which identifies a location.</summary>
+        /// <param name="location">The location instance.</param>
+        public string GetLocationKey(GameLocation location)
+        {
+            return location.uniqueName.Value != null && location.uniqueName.Value != location.Name
+                ? $"{location.Name} ({location.uniqueName.Value})"
+                : location.Name;
+        }
+
+        /// <summary>Sort machines by priority.</summary>
+        /// <param name="machines">The machines to sort.</param>
+        public IEnumerable<IMachine> SortMachines(IEnumerable<IMachine> machines)
+        {
+            return
+                (
+                    from machine in machines
+                    let config = this.GetMachineOverride(machine.MachineTypeID)
+                    orderby config?.Priority ?? 0 descending
+                    select machine
+                );
+        }
+
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
-        public IEnumerable<MachineGroup> GetMachineGroups(GameLocation location)
+        public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
-            MachineGroupBuilder builder = new MachineGroupBuilder(location, this.Config);
+            MachineGroupBuilder builder = new MachineGroupBuilder(this.GetLocationKey(location), this.SortMachines);
             LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())
@@ -155,7 +178,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return false;
 
                 case IMachine machine:
-                    if (this.Config.GetMachineOverrides(machine.MachineTypeID)?.Enabled != false)
+                    if (this.GetMachineOverride(machine.MachineTypeID)?.Enabled != false)
                         group.Add(machine);
                     return true;
 

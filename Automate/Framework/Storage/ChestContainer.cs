@@ -23,16 +23,19 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /*********
         ** Accessors
         *********/
-        /// <summary>The container name (if any).</summary>
+        /// <inheritdoc />
         public string Name => this.Chest.Name;
 
-        /// <summary>The raw mod data for the container.</summary>
+        /// <inheritdoc />
         public ModDataDictionary ModData => this.Chest.modData;
 
-        /// <summary>The location which contains the container.</summary>
+        /// <inheritdoc />
+        public bool IsJunimoChest => this.Chest.SpecialChestType == Chest.SpecialChestTypes.JunimoChest;
+
+        /// <inheritdoc />
         public GameLocation Location { get; }
 
-        /// <summary>The tile area covered by the container.</summary>
+        /// <inheritdoc />
         public Rectangle TileArea { get; }
 
 
@@ -54,9 +57,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
                 this.MigrateLegacyOptions();
         }
 
-        /// <summary>Store an item stack.</summary>
-        /// <param name="stack">The item stack to store.</param>
-        /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
+        /// <inheritdoc />
         public void Store(ITrackedStack stack)
         {
             if (stack.Count <= 0 || this.Chest.SpecialChestType == Chest.SpecialChestTypes.AutoLoader)
@@ -94,10 +95,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
                 inventory.Add(stack.Take(stack.Count));
         }
 
-        /// <summary>Find items in the pipe matching a predicate.</summary>
-        /// <param name="predicate">Matches items that should be returned.</param>
-        /// <param name="count">The number of items to find.</param>
-        /// <returns>If the pipe has no matching item, returns <c>null</c>. Otherwise returns a tracked item stack, which may have less items than requested if no more were found.</returns>
+        /// <inheritdoc />
         public ITrackedStack Get(Func<Item, bool> predicate, int count)
         {
             ITrackedStack[] stacks = this.GetImpl(predicate, count).ToArray();
@@ -106,8 +104,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             return new TrackedItemCollection(stacks);
         }
 
-        /// <summary>Returns an enumerator that iterates through the collection.</summary>
-        /// <returns>An enumerator that can be used to iterate through the collection.</returns>
+        /// <inheritdoc />
         public IEnumerator<ITrackedStack> GetEnumerator()
         {
             foreach (Item item in this.GetInventory().ToArray())
@@ -118,8 +115,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
         }
 
-        /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();

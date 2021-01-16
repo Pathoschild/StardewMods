@@ -9,7 +9,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework
 {
     /// <summary>A collection of machines and storage which work as one unit.</summary>
-    internal class MachineGroup
+    internal class MachineGroup : IMachineGroup
     {
         /*********
         ** Fields
@@ -20,49 +20,55 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Machines which are temporarily paused, with the game time in milliseconds when their pause expires.</summary>
         private readonly IDictionary<IMachine, double> MachinePauseExpiries = new Dictionary<IMachine, double>(new ObjectReferenceComparer<IMachine>());
 
+        /// <summary>The storage manager for the group.</summary>
+        protected readonly StorageManager StorageManager;
+
 
         /*********
         ** Accessors
         *********/
-        /// <summary>The location containing the group.</summary>
-        public GameLocation Location { get; }
+        /// <inheritdoc />
+        public string LocationKey { get; }
 
-        /// <summary>The machines in the group.</summary>
-        public IMachine[] Machines { get; }
+        /// <inheritdoc />
+        public IMachine[] Machines { get; protected set; }
 
-        /// <summary>The containers in the group.</summary>
-        public IContainer[] Containers { get; }
+        /// <inheritdoc />
+        public IContainer[] Containers { get; protected set; }
 
-        /// <summary>The storage manager for the group.</summary>
-        public IStorage StorageManager { get; }
+        /// <inheritdoc />
+        public Vector2[] Tiles { get; protected set; }
 
-        /// <summary>The tiles comprising the group.</summary>
-        public Vector2[] Tiles { get; }
+        /// <inheritdoc />
+        public bool IsJunimoGroup { get; protected set; }
 
-        /// <summary>Whether the group has the minimum requirements to enable internal automation (i.e., at least one chest and one machine).</summary>
-        public bool HasInternalAutomation => this.Machines.Length > 0 && this.Containers.Length > 0;
+        /// <inheritdoc />
+        public virtual bool HasInternalAutomation => this.IsJunimoGroup || (this.Machines.Length > 0 && this.Containers.Any(p => !p.IsJunimoChest));
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Create an instance.</summary>
-        /// <param name="location">The location containing the group.</param>
+        /// <param name="locationKey">The main location containing the group (as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>).</param>
         /// <param name="machines">The machines in the group.</param>
         /// <param name="containers">The containers in the group.</param>
         /// <param name="tiles">The tiles comprising the group.</param>
-        public MachineGroup(GameLocation location, IMachine[] machines, IContainer[] containers, Vector2[] tiles)
+        public MachineGroup(string locationKey, IEnumerable<IMachine> machines, IEnumerable<IContainer> containers, IEnumerable<Vector2> tiles)
         {
-            this.Location = location;
-            this.Machines = machines;
-            this.Containers = containers;
-            this.Tiles = tiles;
-            this.StorageManager = new StorageManager(containers);
+            this.LocationKey = locationKey;
+            this.Machines = machines.ToArray();
+            this.Containers = containers.ToArray();
+            this.Tiles = tiles.ToArray();
+
+            this.IsJunimoGroup = this.Containers.Any(p => p.IsJunimoChest);
+            this.StorageManager = new StorageManager(this.Containers);
         }
 
-        /// <summary>Automate the machines inside the group.</summary>
+        /// <inheritdoc />
         public void Automate()
         {
+            IStorage storage = this.StorageManager;
             double curTime = Game1.currentGameTime.TotalGameTime.TotalMilliseconds;
 
             // clear expired timers
@@ -104,7 +110,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 try
                 {
                     output = machine.GetOutput();
-                    if (this.StorageManager.TryPush(output) && machine.GetState() == MachineState.Empty)
+                    if (storage.TryPush(output) && machine.GetState() == MachineState.Empty)
                         inputReady.Add(machine);
                 }
                 catch (Exception ex)
@@ -133,7 +139,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 if (ignoreMachines.Contains(machine.MachineTypeID))
                     continue;
 
-                if (!machine.SetInput(this.StorageManager))
+                if (!machine.SetInput(storage))
                     ignoreMachines.Add(machine.MachineTypeID); // if the machine can't process available input, no need to ask every instance of its type
             }
         }

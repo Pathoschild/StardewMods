@@ -1,32 +1,31 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
-using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
-    /// <summary>Handles logic for building a <see cref="MachineGroup"/>.</summary>
+    /// <summary>Handles logic for building an <see cref="IMachineGroup"/>.</summary>
     internal class MachineGroupBuilder
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The location containing the group.</summary>
-        private readonly GameLocation Location;
+        /// <summary>The location containing the group, as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</summary>
+        private readonly string LocationKey;
 
         /// <summary>The machines in the group.</summary>
-        private readonly HashSet<IMachine> Machines = new HashSet<IMachine>();
+        private readonly HashSet<IMachine> Machines = new();
 
         /// <summary>The containers in the group.</summary>
-        private readonly HashSet<IContainer> Containers = new HashSet<IContainer>();
+        private readonly HashSet<IContainer> Containers = new();
 
         /// <summary>The tiles comprising the group.</summary>
-        private readonly HashSet<Vector2> Tiles = new HashSet<Vector2>();
+        private readonly HashSet<Vector2> Tiles = new();
 
-        /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        /// <summary>Sort machines by priority.</summary>
+        private readonly Func<IEnumerable<IMachine>, IEnumerable<IMachine>> SortMachines;
 
 
         /*********
@@ -40,12 +39,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Create an instance.</summary>
-        /// <param name="location">The location containing the group.</param>
-        /// <param name="config">The mod configuration.</param>
-        public MachineGroupBuilder(GameLocation location, ModConfig config)
+        /// <param name="locationKey">The location containing the group, as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
+        /// <param name="sortMachines">Sort machines by priority.</param>
+        public MachineGroupBuilder(string locationKey, Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines)
         {
-            this.Location = location;
-            this.Config = config;
+            this.LocationKey = locationKey;
+            this.SortMachines = sortMachines;
         }
 
         /// <summary>Add a machine to the group.</summary>
@@ -80,18 +79,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Create a group from the saved data.</summary>
-        public MachineGroup Build()
+        public IMachineGroup Build()
         {
-            IMachine[] machines =
-                (
-                    from machine in this.Machines
-                    let config = this.Config.GetMachineOverrides(machine.MachineTypeID) ?? new ModConfigMachine()
-                    orderby config.Priority descending
-                    select (IMachine)new MachineWrapper(machine)
-                )
-                .ToArray();
-
-            return new MachineGroup(this.Location, machines, this.Containers.ToArray(), this.Tiles.ToArray());
+            var machines = this.SortMachines(this.Machines.Select(p => new MachineWrapper(p)));
+            return new MachineGroup(this.LocationKey, machines, this.Containers, this.Tiles);
         }
 
         /// <summary>Clear the saved data.</summary>

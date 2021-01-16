@@ -134,8 +134,8 @@
     "data.item.topaz-node.description": "Rompilo per ottenere topazi.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Nodo di Frammento cinereo",
-    "data.item.cinder-shard-node.description": "Rompilo per ottenere dei frammenti cinerei.",
+    "data.item.cinder-shard-node.name": "Nodo di Schegge di brace",
+    "data.item.cinder-shard-node.description": "Rompilo per ottenere delle schegge di brace.",
     "data.item.copper-node.name": "Nodo di rame",
     "data.item.copper-node.description": "Rompilo per ottenere del rame.",
     "data.item.gold-node.name": "Nodo d'oro",
@@ -601,16 +601,15 @@
     *********/
     // labels
     "puzzle.island-mermaid.title": "Puzzle dell'Isola della Sirena",
-    "puzzle.island-mermaid.solution.intro": "Usa i blocchi del flauto per suonare la canzone della sirena 'Mercato Notturno'. Valori Intonazione (you can lookup a flute block to see its pitch):", // TODO
+    "puzzle.island-mermaid.solution.intro": "Usa i blocchi del flauto per suonare la canzone della sirena 'Mercato Notturno'. Valori Intonazione (puoi vedere il blocco del flauto per vedere la sua intonazione):",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.title": "Puzzle del Reliquiario sull'Isola",
+    "puzzle.island-shrine.description": "Per ogni piedistallo, posiziona l'oggetto lasciato dagli uccelli gemma nel luogo dell'isola corrispondente quando piove. Gli oggetti sono casuali per ogni salvataggio.",
 
     // values
     "puzzle.island-shrine.solution.east": "Est: {{item}}",
@@ -624,7 +623,7 @@
     *********/
     // labels
     "tile.description": "La posizione di un tassello della mappa. Ti viene mostrato perchè hai abilitato la visione dei tasselli dalle opzioni.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "Posizione",
     "tile.map-name": "Nome mappa",
     "tile.tile": "Tassello della mappa",
     "tile.tile-index": "{{layerName}}: indice tasselli della mappa",

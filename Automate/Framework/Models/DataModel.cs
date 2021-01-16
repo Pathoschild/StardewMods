@@ -13,5 +13,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
 
         /// <summary>Mods which add custom machine recipes and require a separate automation component.</summary>
         public DataModelIntegration[] SuggestedIntegrations { get; set; }
+
+        /// <summary>The configuration for specific machines by ID.</summary>
+        public IDictionary<string, ModConfigMachine> DefaultMachineOverrides { get; set; }
     }
 }

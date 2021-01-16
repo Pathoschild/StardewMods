@@ -102,18 +102,21 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // save debug fields
             if (showDebugFields)
             {
-                this.Fields = subject
-                    .GetDebugFields()
-                    .GroupBy(p =>
-                    {
-                        if (p.IsPinned)
-                            return "debug (pinned)";
-                        if (p.OverrideCategory != null)
-                            return $"debug ({p.OverrideCategory})";
-                        return "debug (raw)";
-                    })
-                    .OrderByDescending(p => p.Key == "debug (pinned)")
-                    .Select(p => (ICustomField)new DataMiningField(p.Key, p))
+                this.Fields = this.Fields
+                    .Concat(
+                        subject
+                            .GetDebugFields()
+                            .GroupBy(p =>
+                            {
+                                if (p.IsPinned)
+                                    return "debug (pinned)";
+                                if (p.OverrideCategory != null)
+                                    return $"debug ({p.OverrideCategory})";
+                                return "debug (raw)";
+                            })
+                            .OrderByDescending(p => p.Key == "debug (pinned)")
+                            .Select(p => (ICustomField)new DataMiningField(p.Key, p))
+                    )
                     .ToArray();
             }
 

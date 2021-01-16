@@ -36,7 +36,10 @@ namespace Pathoschild.Stardew.DataLayers
         private ModIntegrations Mods;
 
         /// <summary>The current overlay being displayed, if any.</summary>
-        private readonly PerScreen<DataLayerOverlay> CurrentOverlay = new PerScreen<DataLayerOverlay>();
+        private readonly PerScreen<DataLayerOverlay> CurrentOverlay = new();
+
+        /// <summary>The last layer ID used by the player in this session.</summary>
+        private string LastLayerId;
 
 
         /*********
@@ -167,7 +170,10 @@ namespace Pathoschild.Stardew.DataLayers
                         this.CurrentOverlay.Value = null;
                     }
                     else
+                    {
                         this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
+                        this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
+                    }
                     this.Helper.Input.Suppress(e.Button);
                 }
 
@@ -201,7 +207,12 @@ namespace Pathoschild.Stardew.DataLayers
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            this.CurrentOverlay.Value?.Update();
+            var overlay = this.CurrentOverlay.Value;
+            if (overlay != null)
+            {
+                overlay.Update();
+                this.LastLayerId = overlay.CurrentLayer.Id;
+            }
         }
 
         /// <summary>Whether overlays are allowed in the current game context.</summary>
