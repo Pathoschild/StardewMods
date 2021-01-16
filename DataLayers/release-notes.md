@@ -1,5 +1,6 @@
 # Release notes
 ## Upcoming release
+* Reopening the menu now shows your last selected layer.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.13.3

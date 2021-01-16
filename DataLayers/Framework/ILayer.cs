@@ -10,6 +10,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>A unique identifier for the layer.</summary>
+        string Id { get; }
+
         /// <summary>The layer display name.</summary>
         string Name { get; }
 

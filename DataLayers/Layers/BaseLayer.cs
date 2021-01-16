@@ -15,33 +15,32 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /*********
         ** Accessors
         *********/
-        /// <summary>The layer's display name.</summary>
+        /// <inheritdoc />
+        public string Id { get; }
+
+        /// <inheritdoc />
         public string Name { get; }
 
-        /// <summary>The number of ticks between each update.</summary>
+        /// <inheritdoc />
         public int UpdateTickRate { get; }
 
-        /// <summary>Whether to update the layer when the set of visible tiles changes.</summary>
+        /// <inheritdoc />
         public bool UpdateWhenVisibleTilesChange { get; }
 
-        /// <summary>The keys which activate the layer.</summary>
+        /// <inheritdoc />
         public KeyBinding ShortcutKey { get; }
 
-        /// <summary>The legend entries to display.</summary>
+        /// <inheritdoc />
         public LegendEntry[] Legend { get; protected set; }
 
-        /// <summary>Whether to always show the tile grid.</summary>
+        /// <inheritdoc />
         public bool AlwaysShowGrid { get; protected set; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the updated data layer tiles.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="visibleArea">The tile area currently visible on the screen.</param>
-        /// <param name="visibleTiles">The tile positions currently visible on the screen.</param>
-        /// <param name="cursorTile">The tile position under the cursor.</param>
+        /// <inheritdoc />
         public abstract TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile);
 
 
@@ -55,6 +54,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="monitor">Writes messages to the SMAPI log.</param>
         protected BaseLayer(string name, LayerConfig config, IInputHelper input, IMonitor monitor)
         {
+            this.Id = this.GetType().FullName;
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
