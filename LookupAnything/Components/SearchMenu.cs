@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         private readonly IMonitor Monitor;
 
         /// <summary>The aspect ratio of the page background.</summary>
-        private readonly Vector2 AspectRatio = new Vector2(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+        private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
 
         /// <summary>The maximum pixels to scroll.</summary>
         private int MaxScroll;
@@ -40,6 +40,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>The current search results.</summary>
         private IEnumerable<SearchResultComponent> SearchResults = Enumerable.Empty<SearchResultComponent>();
+
+        /// <summary>The pixel area containing search results.</summary>
+        private Rectangle SearchResultArea;
+
+        /// <summary>The spacing around the search result area.</summary>
+        private readonly int SearchResultGutter = 15;
 
 
         /*********
@@ -80,13 +86,16 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             }
 
             // search matches
-            foreach (SearchResultComponent match in this.SearchResults)
+            if (this.SearchResultArea.Contains(x, y))
             {
-                if (match.containsPoint(x, y))
+                foreach (SearchResultComponent match in this.GetResultsPossiblyOnScreen())
                 {
-                    this.ShowLookup(match.Subject);
-                    Game1.playSound("coin");
-                    return;
+                    if (match.containsPoint(x, y))
+                    {
+                        this.ShowLookup(match.Subject);
+                        Game1.playSound("coin");
+                        return;
+                    }
                 }
             }
         }
@@ -125,11 +134,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // calculate dimensions
             int x = this.xPositionOnScreen;
             int y = this.yPositionOnScreen;
-            const int gutter = 15;
+            int gutter = this.SearchResultGutter;
             float leftOffset = gutter;
             float topOffset = gutter;
-            float contentWidth = this.width - gutter * 2;
-            float contentHeight = this.height - gutter * 2;
+            float contentHeight = this.SearchResultArea.Height;
 
             // get font
             SpriteFont font = Game1.smallFont;
@@ -156,7 +164,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 try
                 {
                     // begin draw
-                    device.ScissorRectangle = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
+                    device.ScissorRectangle = this.SearchResultArea;
                     contentBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
 
                     // scroll view
@@ -177,11 +185,24 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                         int mouseX = Game1.getMouseX();
                         int mouseY = Game1.getMouseY();
+                        bool reachedViewport = false;
+                        bool reachedBottomOfViewport = false;
+                        bool isCursorInSearchArea = this.SearchResultArea.Contains(mouseX, mouseY);
                         foreach (SearchResultComponent result in this.SearchResults)
                         {
-                            bool isHighlighted = result.containsPoint(mouseX, mouseY);
-                            var objSize = result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
-                            topOffset += objSize.Y;
+                            if (!reachedViewport || !reachedBottomOfViewport)
+                            {
+                                if (this.IsResultPossiblyOnScreen(result))
+                                {
+                                    reachedViewport = true;
+                                    bool isHighlighted = isCursorInSearchArea && result.containsPoint(mouseX, mouseY);
+                                    result.Draw(contentBatch, new Vector2(x + leftOffset, y + topOffset), (int)wrapWidth, isHighlighted);
+                                }
+                                else if (reachedViewport)
+                                    reachedBottomOfViewport = true;
+                            }
+
+                            topOffset += SearchResultComponent.FixedHeight;
                         }
 
                         // draw spacer
@@ -227,6 +248,39 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the search results that may be on screen.</summary>
+        private IEnumerable<SearchResultComponent> GetResultsPossiblyOnScreen()
+        {
+            bool reachedViewport = false;
+            foreach (var result in this.SearchResults)
+            {
+                if (!this.IsResultPossiblyOnScreen(result))
+                {
+                    if (reachedViewport)
+                        yield break;
+                    continue;
+                }
+
+                reachedViewport = true;
+                yield return result;
+            }
+        }
+
+        /// <summary>Get whether a search result may be on screen.</summary>
+        /// <param name="result">The search result.</param>
+        private bool IsResultPossiblyOnScreen(SearchResultComponent result)
+        {
+            // This is a simple approximation to optimize large lists. It doesn't need to be
+            // precise, as long as it can't have false positives.
+            const int resultHeight = SearchResultComponent.FixedHeight;
+            int index = result.Index;
+            int minY = (index - 3) * resultHeight;
+            int maxY = (index + 3) * resultHeight;
+            return
+                maxY > this.CurrentScroll
+                && minY < this.CurrentScroll + this.height;
+        }
+
         /// <summary>The method invoked when the player changes the search text.</summary>
         /// <param name="search">The new search text.</param>
         private void ReceiveSearchTextboxChanged(string search)
@@ -240,16 +294,11 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             }
 
             // get matches
-            this.SearchResults =
-                (
-                    from entry in this.SearchLookup
-                    where words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
-                    orderby entry.Key
-
-                    from subject in this.FilterUniqueSubjects(entry)
-                    select new SearchResultComponent(subject)
-                )
-                .Take(50)
+            this.SearchResults = this.SearchLookup
+                .Where(entry => words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
+                .OrderBy(entry => entry.Key)
+                .SelectMany(this.FilterUniqueSubjects)
+                .Select((subject, index) => new SearchResultComponent(subject, index))
                 .ToArray();
         }
 
@@ -266,6 +315,14 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
             this.xPositionOnScreen = (int)origin.X;
             this.yPositionOnScreen = (int)origin.Y;
+
+            // update scissor rectangle for search result area
+            int x = this.xPositionOnScreen;
+            int y = this.yPositionOnScreen;
+            int gutter = this.SearchResultGutter;
+            float contentWidth = this.width - gutter * 2;
+            float contentHeight = this.height - gutter * 2;
+            this.SearchResultArea = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
         }
 
         /// <summary>Filter a list of subjects to remove duplicate entries (like multiples of a monster type).</summary>

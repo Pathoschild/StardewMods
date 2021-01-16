@@ -15,16 +15,24 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The subject to display.</summary>
         public ISubject Subject { get; }
 
+        /// <summary>The search result's index in the list.</summary>
+        public int Index { get; }
+
+        /// <summary>The fixed height for a search result.</summary>
+        public const int FixedHeight = 70;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="subject">The subject to display.</param>
-        public SearchResultComponent(ISubject subject)
+        /// <param name="index">The search result's index in the list.</param>
+        public SearchResultComponent(ISubject subject, int index)
             : base(Rectangle.Empty, subject.Name)
         {
             this.Subject = subject;
+            this.Index = index;
         }
 
         /// <summary>Draw the search result to the screen.</summary>
@@ -38,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.bounds.X = (int)position.X;
             this.bounds.Y = (int)position.Y;
             this.bounds.Width = width;
-            this.bounds.Height = 70;
+            this.bounds.Height = SearchResultComponent.FixedHeight;
             const int borderWidth = 2;
             int iconSize = 70;
             int topPadding = this.bounds.Height / 2;
