@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added [full support for Junimo chests](README.md#junimo-chests), which enables global supply chains.
+
 ## 1.19.1
 Released 04 January 2021.
 

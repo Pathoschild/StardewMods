@@ -37,11 +37,14 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Whether to enable automation for the current save.</summary>
         private bool EnableAutomation => Context.IsMainPlayer;
 
+        /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
+        private JunimoMachineGroup JunimoMachineGroup;
+
         /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups = new Dictionary<GameLocation, IMachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+        private readonly List<IMachineGroup> ActiveMachineGroups = new();
 
         /// <summary>The disabled machine groups (e.g. machines not connected to a chest).</summary>
-        private readonly IDictionary<GameLocation, IMachineGroup[]> DisabledMachineGroups = new Dictionary<GameLocation, IMachineGroup[]>(new ObjectReferenceComparer<GameLocation>());
+        private readonly List<IMachineGroup> DisabledMachineGroups = new();
 
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new HashSet<GameLocation>(new ObjectReferenceComparer<GameLocation>());
@@ -89,7 +92,8 @@ namespace Pathoschild.Stardew.Automate
                 autoGrabberModCompat: this.Config.ModCompatibility.AutoGrabberMod && helper.ModRegistry.IsLoaded("Jotser.AutoGrabberMod"),
                 pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
             ));
-            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.Factory, this.ActiveMachineGroups);
+            this.JunimoMachineGroup = new(this.Factory.SortMachines);
+            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.Factory, this.GetActiveMachineGroups);
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
@@ -114,7 +118,7 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
         public override object GetApi()
         {
-            return new AutomateAPI(this.Monitor, this.Factory, this.ActiveMachineGroups, this.DisabledMachineGroups);
+            return new AutomateAPI(this.Monitor, this.Factory, this.GetForApi);
         }
 
 
@@ -169,10 +173,18 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 // remove locations
-                foreach (GameLocation location in e.Removed)
+                if (e.Removed.Any())
                 {
-                    this.ActiveMachineGroups.Remove(location);
-                    this.DisabledMachineGroups.Remove(location);
+                    foreach (GameLocation location in e.Removed)
+                    {
+                        string locationKey = this.Factory.GetLocationKey(location);
+
+                        this.ActiveMachineGroups.RemoveAll(p => p.LocationKey == locationKey);
+                        this.DisabledMachineGroups.RemoveAll(p => p.LocationKey == locationKey);
+                        this.JunimoMachineGroup.RemoveAll(p => p.LocationKey == locationKey);
+                    }
+
+                    this.JunimoMachineGroup.Rebuild();
                 }
 
                 // add locations
@@ -248,8 +260,7 @@ namespace Pathoschild.Stardew.Automate
                 // reload machines if needed
                 if (this.ReloadQueue.Any())
                 {
-                    foreach (GameLocation location in this.ReloadQueue)
-                        this.ReloadMachinesIn(location);
+                    this.ReloadMachinesIn(this.ReloadQueue);
                     this.ReloadQueue.Clear();
 
                     this.ResetOverlayIfShown();
@@ -407,32 +418,77 @@ namespace Pathoschild.Stardew.Automate
             return mod != null;
         }
 
-        /// <summary>Get the active machine groups in every location.</summary>
+        /// <summary>Get the machine groups in every location.</summary>
         private IEnumerable<IMachineGroup> GetActiveMachineGroups()
         {
-            foreach (KeyValuePair<GameLocation, IMachineGroup[]> group in this.ActiveMachineGroups)
-            {
-                foreach (IMachineGroup machineGroup in group.Value)
-                    yield return machineGroup;
-            }
+            if (this.JunimoMachineGroup.HasInternalAutomation)
+                yield return this.JunimoMachineGroup;
+
+            foreach (IMachineGroup group in this.ActiveMachineGroups)
+                yield return group;
+        }
+
+        /// <summary>Get the active and disabled machine groups in a specific location for the API.</summary>
+        /// <param name="location">The location whose machine groups to fetch.</param>
+        private IEnumerable<IMachineGroup> GetForApi(GameLocation location)
+        {
+            string locationKey = this.Factory.GetLocationKey(location);
+
+            return this
+                .ActiveMachineGroups
+                .Concat(this.DisabledMachineGroups)
+                .Concat(this.JunimoMachineGroup.GetAll())
+                .Where(p => p.LocationKey == locationKey);
         }
 
         /// <summary>Reload the machines in a given location.</summary>
-        /// <param name="location">The location whose machines to reload.</param>
-        private void ReloadMachinesIn(GameLocation location)
+        /// <param name="locations">The locations whose machines to reload.</param>
+        private void ReloadMachinesIn(ISet<GameLocation> locations)
         {
-            this.Monitor.VerboseLog($"Reloading machines in {location.Name}...");
+            bool junimoGroupChanged;
 
-            // get machine groups
-            IMachineGroup[] machineGroups = this.Factory.GetMachineGroups(location).ToArray();
-            this.ActiveMachineGroups[location] = machineGroups.Where(p => p.HasInternalAutomation).ToArray();
-            this.DisabledMachineGroups[location] = machineGroups.Where(p => !p.HasInternalAutomation).ToArray();
+            // remove old groups
+            {
+                HashSet<string> locationKeys = new(locations.Select(this.Factory.GetLocationKey));
+                this.Monitor.VerboseLog($"Reloading machines in {locationKeys.Count} locations: {string.Join(", ", locationKeys)}...");
 
-            // remove unneeded entries
-            if (!this.ActiveMachineGroups[location].Any())
-                this.ActiveMachineGroups.Remove(location);
-            if (!this.DisabledMachineGroups[location].Any())
-                this.DisabledMachineGroups.Remove(location);
+                this.DisabledMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey));
+                this.ActiveMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey));
+                junimoGroupChanged = this.JunimoMachineGroup.RemoveAll(p => locationKeys.Contains(p.LocationKey));
+            }
+
+            // add new groups
+            foreach (GameLocation location in locations)
+            {
+                // collect new groups
+                List<IMachineGroup> active = new();
+                List<IMachineGroup> disabled = new();
+                List<IMachineGroup> junimo = new();
+                foreach (IMachineGroup group in this.Factory.GetMachineGroups(location))
+                {
+                    if (!group.HasInternalAutomation)
+                        disabled.Add(group);
+
+                    else if (group.IsJunimoGroup)
+                        junimo.Add(group);
+
+                    else
+                        active.Add(group);
+                }
+
+                // add groups
+                this.DisabledMachineGroups.AddRange(disabled);
+                this.ActiveMachineGroups.AddRange(active);
+                if (junimo.Any())
+                {
+                    this.JunimoMachineGroup.Add(junimo.ToArray());
+                    junimoGroupChanged = true;
+                }
+            }
+
+            // rebuild index
+            if (junimoGroupChanged)
+                this.JunimoMachineGroup.Rebuild();
         }
 
         /// <summary>Log an error and warn the user.</summary>

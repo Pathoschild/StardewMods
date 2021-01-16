@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -19,11 +20,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Constructs machine groups.</summary>
         private readonly MachineGroupFactory MachineGroupFactory;
 
-        /// <summary>The active machine groups recognized by Automate.</summary>
-        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups;
-
-        /// <summary>The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</summary>
-        private readonly IDictionary<GameLocation, IMachineGroup[]> DisabledMachineGroups;
+        /// <summary>Get all active and disabled machine groups in a location.</summary>
+        private readonly Func<GameLocation, IEnumerable<IMachineGroup>> GetMachineGroupsIn;
 
 
         /*********
@@ -32,14 +30,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="machineGroupFactory">Constructs machine groups.</param>
-        /// <param name="activeMachineGroups">The active machine groups recognized by Automate.</param>
-        /// <param name="disabledMachineGroups">The disabled machine groups recognized by Automate (e.g. machines not connected to a chest).</param>
-        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, IDictionary<GameLocation, IMachineGroup[]> activeMachineGroups, IDictionary<GameLocation, IMachineGroup[]> disabledMachineGroups)
+        /// <param name="getMachineGroupsIn">Get all active and disabled machine groups in a location.</param>
+        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, Func<GameLocation, IEnumerable<IMachineGroup>> getMachineGroupsIn)
         {
             this.Monitor = monitor;
             this.MachineGroupFactory = machineGroupFactory;
-            this.ActiveMachineGroups = activeMachineGroups;
-            this.DisabledMachineGroups = disabledMachineGroups;
+            this.GetMachineGroupsIn = getMachineGroupsIn;
         }
 
         /// <summary>Add an automation factory.</summary>
@@ -56,7 +52,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IDictionary<Vector2, int> GetMachineStates(GameLocation location, Rectangle tileArea)
         {
             IDictionary<Vector2, int> data = new Dictionary<Vector2, int>();
-            foreach (IMachine machine in this.GetMachineGroups(location).SelectMany(group => group.Machines))
+            foreach (IMachine machine in this.GetMachineGroupsIn(location).SelectMany(group => group.Machines))
             {
                 if (machine.TileArea.Intersects(tileArea))
                 {
@@ -70,29 +66,6 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             return data;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get all machines in a location.</summary>
-        /// <param name="location">The location whose matches to fetch.</param>
-        private IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
-        {
-            // active groups
-            if (this.ActiveMachineGroups.TryGetValue(location, out IMachineGroup[] activeGroups))
-            {
-                foreach (IMachineGroup machineGroup in activeGroups)
-                    yield return machineGroup;
-            }
-
-            // disabled groups
-            if (this.DisabledMachineGroups.TryGetValue(location, out IMachineGroup[] disabledGroups))
-            {
-                foreach (IMachineGroup machineGroup in disabledGroups)
-                    yield return machineGroup;
-            }
         }
     }
 }

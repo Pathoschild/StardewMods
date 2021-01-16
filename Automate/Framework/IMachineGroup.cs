@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -9,8 +8,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The location containing the group.</summary>
-        GameLocation Location { get; }
+        /// <summary>The main location containing the group (as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>), unless this is an aggregate machine group.</summary>
+        string LocationKey { get; }
 
         /// <summary>The machines in the group.</summary>
         IMachine[] Machines { get; }
@@ -21,12 +20,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The tiles comprising the group.</summary>
         Vector2[] Tiles { get; }
 
+        /// <summary>Whether the machine group is linked to a Junimo chest.</summary>
+        bool IsJunimoGroup { get; }
+
         /// <summary>Whether the group has the minimum requirements to enable internal automation (i.e., at least one chest and one machine).</summary>
         bool HasInternalAutomation { get; }
 
 
         /*********
-        ** Public methods
+        ** Methods
         *********/
         /// <summary>Automate the machines inside the group.</summary>
         void Automate();

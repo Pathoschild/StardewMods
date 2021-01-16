@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using StardewModdingAPI;
-using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -23,8 +22,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Constructs machine groups.</summary>
         private readonly MachineGroupFactory Factory;
 
-        /// <summary>The machines to process.</summary>
-        private readonly IDictionary<GameLocation, IMachineGroup[]> ActiveMachineGroups;
+        /// <summary>Get the active machine groups.</summary>
+        private readonly Func<IEnumerable<IMachineGroup>> GetActiveMachineGroups;
 
 
         /*********
@@ -34,13 +33,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="monitor">Writes messages to the console.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="factory">Constructs machine groups.</param>
-        /// <param name="activeMachineGroups">The machines to process.</param>
-        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, IDictionary<GameLocation, IMachineGroup[]> activeMachineGroups)
+        /// <param name="getActiveMachineGroups">Get the active machine groups.</param>
+        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, Func<IEnumerable<IMachineGroup>> getActiveMachineGroups)
         {
             this.Monitor = monitor;
             this.Config = config;
             this.Factory = factory;
-            this.ActiveMachineGroups = activeMachineGroups;
+            this.GetActiveMachineGroups = getActiveMachineGroups;
         }
 
         /// <summary>Handle a console command.</summary>
@@ -74,6 +73,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private void HandleSummary()
         {
             StringBuilder report = new StringBuilder();
+            IMachineGroup[] machineGroups = this.GetActiveMachineGroups().ToArray();
 
             report.AppendLine("\n##########\n## Automate summary\n##########");
 
@@ -112,13 +112,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             report.AppendLine("Summary:\n------------------------------");
             {
                 // machine groups
-                if (Context.IsWorldReady)
-                {
-                    IMachineGroup[] allGroups = this.ActiveMachineGroups.SelectMany(p => p.Value).ToArray();
-                    report.AppendLine($"   Found {allGroups.Length} machine groups in {this.ActiveMachineGroups.Count} locations, containing {allGroups.Sum(p => p.Machines.Length)} automated machines connected to {allGroups.Sum(p => p.Containers.Length)} containers.");
-                }
-                else
-                    report.AppendLine("   No save loaded.");
+                report.AppendLine(Context.IsWorldReady
+                    ? $"   Found {machineGroups.Length} machine groups in {machineGroups.Length} locations, containing {machineGroups.Sum(p => p.Machines.Length)} automated machines connected to {machineGroups.Sum(p => p.Containers.Length)} containers."
+                    : "   No save loaded."
+                );
 
                 // custom machine factories
                 IAutomationFactory[] customFactories = this.Factory.GetFactories().Where(p => p.GetType() != typeof(AutomationFactory)).ToArray();
@@ -132,19 +129,28 @@ namespace Pathoschild.Stardew.Automate.Framework
             if (Context.IsWorldReady)
             {
                 report.AppendLine("Automated machine groups:\n------------------------------");
-                if (this.ActiveMachineGroups.Any())
+                if (machineGroups.Any())
                 {
-                    foreach (GameLocation location in this.ActiveMachineGroups.Keys.OrderBy(p => $"{p.Name} ({p.NameOrUniqueName})", StringComparer.OrdinalIgnoreCase))
+                    IGrouping<string, IMachineGroup>[] groupsByLocation = machineGroups
+                        .GroupBy(p => p.LocationKey)
+                        .OrderByDescending(p => p.Key == null)
+                        .ThenBy(p => p.Key)
+                        .ToArray();
+
+                    foreach (var locationGroups in groupsByLocation)
                     {
-                        IMachineGroup[] machineGroups = this.ActiveMachineGroups[location];
+                        bool isJunimoGroup = locationGroups.Key == null;
+                        string label = locationGroups.Key ?? "Machines connected to a Junimo chest";
 
-                        report.AppendLine($"   {location.Name}{(location.NameOrUniqueName != location.Name ? $" ({location.NameOrUniqueName})" : "")}:");
-
-                        foreach (IMachineGroup group in machineGroups)
+                        report.AppendLine($"   {label}:");
+                        foreach (IMachineGroup group in locationGroups)
                         {
                             var tile = group.Tiles[0];
 
-                            report.AppendLine($"      Group at ({tile.X}, {tile.Y}):");
+                            report.AppendLine(isJunimoGroup
+                                ? "      Distributed group:"
+                                : $"      Group at ({tile.X}, {tile.Y}):"
+                            );
 
                             foreach (KeyValuePair<string, int> pair in group.Machines.GroupBy(p => p.MachineTypeID).ToDictionary(p => p.Key, p => p.Count()).OrderByDescending(p => p.Value))
                                 report.AppendLine($"          {pair.Value} x {pair.Key}");

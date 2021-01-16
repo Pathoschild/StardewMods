@@ -43,11 +43,33 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.AutomationFactories.Add(factory);
         }
 
+        /// <summary>Get the unique key which identifies a location.</summary>
+        /// <param name="location">The location instance.</param>
+        public string GetLocationKey(GameLocation location)
+        {
+            return location.uniqueName.Value != null && location.uniqueName.Value != location.Name
+                ? $"{location.Name} ({location.uniqueName.Value})"
+                : location.Name;
+        }
+
+        /// <summary>Sort machines by priority.</summary>
+        /// <param name="machines">The machines to sort.</param>
+        public IEnumerable<IMachine> SortMachines(IEnumerable<IMachine> machines)
+        {
+            return
+                (
+                    from machine in machines
+                    let config = this.Config.GetMachineOverrides(machine.MachineTypeID) ?? new ModConfigMachine()
+                    orderby config.Priority descending
+                    select machine
+                );
+        }
+
         /// <summary>Get all machine groups in a location.</summary>
         /// <param name="location">The location to search.</param>
         public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
-            MachineGroupBuilder builder = new MachineGroupBuilder(location, this.Config);
+            MachineGroupBuilder builder = new MachineGroupBuilder(this.GetLocationKey(location), this.SortMachines);
             LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())

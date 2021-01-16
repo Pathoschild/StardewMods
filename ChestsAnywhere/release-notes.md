@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated chest options for Automate 1.20.
 * Fixed fish tanks showing dresser UI when opened remotely.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 

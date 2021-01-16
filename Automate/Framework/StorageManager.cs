@@ -14,10 +14,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Fields
         *********/
         /// <summary>The storage containers that accept input, in priority order.</summary>
-        private readonly IContainer[] InputContainers;
+        private IContainer[] InputContainers;
 
         /// <summary>The storage containers that provide items, in priority order.</summary>
-        private readonly IContainer[] OutputContainers;
+        private IContainer[] OutputContainers;
 
 
         /*********
@@ -27,11 +27,28 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="containers">The storage containers.</param>
         public StorageManager(IEnumerable<IContainer> containers)
         {
+            this.SetContainers(containers);
+        }
+
+        /// <summary>Set the containers to use.</summary>
+        /// <param name="containers">The storage containers.</param>
+        public void SetContainers(IEnumerable<IContainer> containers)
+        {
             containers = containers.ToArray();
 
-            this.InputContainers = containers.Where(p => p.StorageAllowed()).OrderByDescending(p => p.StoragePreferred()).ToArray();
-            this.OutputContainers = containers.Where(p => p.TakingItemsAllowed()).OrderByDescending(p => p.TakingItemsPreferred()).ToArray();
+            this.InputContainers = containers
+                .Where(p => p.StorageAllowed())
+                .OrderBy(p => p.IsJunimoChest) // push items into Junimo chests last
+                .ThenByDescending(p => p.StoragePreferred())
+                .ToArray();
+
+            this.OutputContainers = containers
+                .Where(p => p.TakingItemsAllowed())
+                .OrderByDescending(p => p.IsJunimoChest) // take items from Junimo chests first
+                .ThenByDescending(p => p.TakingItemsPreferred())
+                .ToArray();
         }
+
 
         /****
         ** GetItems
