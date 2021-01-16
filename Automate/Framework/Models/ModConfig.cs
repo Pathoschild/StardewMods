@@ -29,18 +29,5 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         {
             [BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = new ModConfigMachine { Priority = -1 }
         };
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Get the settings for a machine.</summary>
-        /// <param name="id">The unique machine ID.</param>
-        public ModConfigMachine GetMachineOverrides(string id)
-        {
-            return this.MachineOverrides.TryGetValue(id, out ModConfigMachine config)
-                ? config
-                : null;
-        }
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -17,11 +16,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>Constructs machine groups.</summary>
-        private readonly MachineGroupFactory MachineGroupFactory;
-
-        /// <summary>Get all active and disabled machine groups in a location.</summary>
-        private readonly Func<GameLocation, IEnumerable<IMachineGroup>> GetMachineGroupsIn;
+        /// <summary>Manages machine groups.</summary>
+        private readonly MachineManager MachineManager;
 
 
         /*********
@@ -29,13 +25,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="machineGroupFactory">Constructs machine groups.</param>
-        /// <param name="getMachineGroupsIn">Get all active and disabled machine groups in a location.</param>
-        internal AutomateAPI(IMonitor monitor, MachineGroupFactory machineGroupFactory, Func<GameLocation, IEnumerable<IMachineGroup>> getMachineGroupsIn)
+        /// <param name="machineManager">Manages machine groups.</param>
+        internal AutomateAPI(IMonitor monitor, MachineManager machineManager)
         {
             this.Monitor = monitor;
-            this.MachineGroupFactory = machineGroupFactory;
-            this.GetMachineGroupsIn = getMachineGroupsIn;
+            this.MachineManager = machineManager;
         }
 
         /// <summary>Add an automation factory.</summary>
@@ -43,7 +37,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public void AddFactory(IAutomationFactory factory)
         {
             this.Monitor.Log($"Adding automation factory: {factory.GetType().AssemblyQualifiedName}", LogLevel.Trace);
-            this.MachineGroupFactory.Add(factory);
+            this.MachineManager.Factory.Add(factory);
         }
 
         /// <summary>Get the status of machines in a tile area. This is a specialized API for Data Layers and similar mods.</summary>
@@ -52,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IDictionary<Vector2, int> GetMachineStates(GameLocation location, Rectangle tileArea)
         {
             IDictionary<Vector2, int> data = new Dictionary<Vector2, int>();
-            foreach (IMachine machine in this.GetMachineGroupsIn(location).SelectMany(group => group.Machines))
+            foreach (IMachine machine in this.MachineManager.GetForApi(location).SelectMany(group => group.Machines))
             {
                 if (machine.TileArea.Intersects(tileArea))
                 {

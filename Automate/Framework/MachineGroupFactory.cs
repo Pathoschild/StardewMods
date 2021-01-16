@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,18 +23,18 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The automation factories which construct machines, containers, and connectors.</summary>
         private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();
 
-        /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        /// <summary>Get the configuration for specific machines by ID, if any.</summary>
+        private readonly Func<string, ModConfigMachine> GetMachineOverride;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="config">The mod configuration.</param>
-        public MachineGroupFactory(ModConfig config)
+        /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
+        public MachineGroupFactory(Func<string, ModConfigMachine> getMachineOverride)
         {
-            this.Config = config;
+            this.GetMachineOverride = getMachineOverride;
         }
 
         /// <summary>Add an automation factory.</summary>
@@ -59,8 +60,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             return
                 (
                     from machine in machines
-                    let config = this.Config.GetMachineOverrides(machine.MachineTypeID) ?? new ModConfigMachine()
-                    orderby config.Priority descending
+                    let config = this.GetMachineOverride(machine.MachineTypeID)
+                    orderby config?.Priority ?? 0 descending
                     select machine
                 );
         }
@@ -177,7 +178,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return false;
 
                 case IMachine machine:
-                    if (this.Config.GetMachineOverrides(machine.MachineTypeID)?.Enabled != false)
+                    if (this.GetMachineOverride(machine.MachineTypeID)?.Enabled != false)
                         group.Add(machine);
                     return true;
 

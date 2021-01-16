@@ -19,11 +19,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
-        /// <summary>Constructs machine groups.</summary>
-        private readonly MachineGroupFactory Factory;
-
-        /// <summary>Get the active machine groups.</summary>
-        private readonly Func<IEnumerable<IMachineGroup>> GetActiveMachineGroups;
+        /// <summary>Manages machine groups.</summary>
+        private readonly MachineManager MachineManager;
 
 
         /*********
@@ -32,14 +29,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Writes messages to the console.</param>
         /// <param name="config">The mod configuration.</param>
-        /// <param name="factory">Constructs machine groups.</param>
-        /// <param name="getActiveMachineGroups">Get the active machine groups.</param>
-        public CommandHandler(IMonitor monitor, ModConfig config, MachineGroupFactory factory, Func<IEnumerable<IMachineGroup>> getActiveMachineGroups)
+        /// <param name="machineManager">Manages machine groups.</param>
+        public CommandHandler(IMonitor monitor, ModConfig config, MachineManager machineManager)
         {
             this.Monitor = monitor;
             this.Config = config;
-            this.Factory = factory;
-            this.GetActiveMachineGroups = getActiveMachineGroups;
+            this.MachineManager = machineManager;
         }
 
         /// <summary>Handle a console command.</summary>
@@ -73,7 +68,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private void HandleSummary()
         {
             StringBuilder report = new StringBuilder();
-            IMachineGroup[] machineGroups = this.GetActiveMachineGroups().ToArray();
+            IMachineGroup[] machineGroups = this.MachineManager.GetActiveMachineGroups().ToArray();
 
             report.AppendLine("\n##########\n## Automate summary\n##########");
 
@@ -87,7 +82,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 StringBuilder perMachineReport = new StringBuilder();
 
-                foreach (var config in this.Config.MachineOverrides.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
+                foreach (var config in this.MachineManager.GetMachineOverrides().OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
                 {
                     string[] customSettings = config.Value
                         .GetCustomSettings()
@@ -118,7 +113,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 );
 
                 // custom machine factories
-                IAutomationFactory[] customFactories = this.Factory.GetFactories().Where(p => p.GetType() != typeof(AutomationFactory)).ToArray();
+                IAutomationFactory[] customFactories = this.MachineManager.Factory.GetFactories().Where(p => p.GetType() != typeof(AutomationFactory)).ToArray();
                 if (customFactories.Any())
                     report.AppendLine($"   Custom automation factories found: {string.Join(", ", customFactories.Select(p => p.GetType().FullName).OrderBy(p => p))}.");
             }
