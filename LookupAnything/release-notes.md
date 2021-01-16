@@ -5,6 +5,7 @@
 * The search menu now shows unlimited results.
 * Fixed search menu letting you click on off-screen result.
 * Fixed swapped labels for deluxe/quality fertilizers.
+* Fixed tea bush lookups not showing winter growth dates on the Ginger Island farm.
 * Fixed datamining mode not showing non-datamining fields in 1.32.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 

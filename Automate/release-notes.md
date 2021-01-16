@@ -6,6 +6,7 @@
 * Removed old `config.json` migrations. If you changed the mod options in Automate 1.17.3 or earlier, and haven't played since then, you may need to reconfigure them.
 * Moved the default machine priorities into `assets/data.json`. You can still override an entry in your `config.json`.
 * Lowered priority for mini-shipping bins by default (similar to shipping bins).
+* Fixed bushes not harvested out of season on the island farm.
 
 ## 1.19.1
 Released 04 January 2021.
