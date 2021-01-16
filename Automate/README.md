@@ -266,7 +266,8 @@ _This is advanced; most players won't need to configure Automate to this extent.
 
 You can set some options for individual machine types by [editing the `config.json`](#config.json),
 and adding an entry to the `MachineOverrides` field. If a machine isn't listed in that field, it'll
-use the default values. This works for all automated machines, including those added by other mods.
+use the default values defined in `assets/data.json`. This works for all automated machines,
+including those added by other mods.
 
 Each entry in `MachineOverrides` is identified by the internal machine type ID (_not_ the machine
 name you see in-game). You can [run the `automate summary` command](#console-command) to see a list

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Models;
@@ -19,6 +20,9 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
+
+        /// <summary>The configuration for specific machines by ID.</summary>
+        private readonly IDictionary<string, ModConfigMachine> PerMachineSettings;
 
         /// <summary>An aggregate collection of machine groups linked by Junimo chests.</summary>
         private readonly JunimoMachineGroup JunimoMachineGroup;
@@ -45,9 +49,10 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The mod configuration.</param>
+        /// <param name="data">The internal mod data.</param>
         /// <param name="defaultFactory">The default automation factory to registry.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public MachineManager(ModConfig config, IAutomationFactory defaultFactory, IMonitor monitor)
+        public MachineManager(ModConfig config, DataModel data, IAutomationFactory defaultFactory, IMonitor monitor)
         {
             this.Config = config;
             this.Monitor = monitor;
@@ -56,6 +61,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Factory.Add(defaultFactory);
 
             this.JunimoMachineGroup = new(this.Factory.SortMachines);
+
+            this.PerMachineSettings = this.ParseMachineOverrides(config, data);
         }
 
         /****
@@ -87,14 +94,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the registered override settings.</summary>
         public IDictionary<string, ModConfigMachine> GetMachineOverrides()
         {
-            return new Dictionary<string, ModConfigMachine>(this.Config.MachineOverrides);
+            return new Dictionary<string, ModConfigMachine>(this.PerMachineSettings);
         }
 
         /// <summary>Get the settings for a machine.</summary>
         /// <param name="id">The unique machine ID.</param>
         public ModConfigMachine GetMachineOverride(string id)
         {
-            return this.Config.MachineOverrides.TryGetValue(id, out ModConfigMachine config)
+            return this.PerMachineSettings.TryGetValue(id, out ModConfigMachine config)
                 ? config
                 : null;
         }
@@ -194,6 +201,19 @@ namespace Pathoschild.Stardew.Automate.Framework
             // rebuild index
             if (junimoGroupChanged)
                 this.JunimoMachineGroup.Rebuild();
+        }
+
+        /// <summary>Parse per-machine overrides.</summary>
+        /// <param name="config">The configured overrides.</param>
+        /// <param name="data">The default overrides.</param>
+        private IDictionary<string, ModConfigMachine> ParseMachineOverrides(ModConfig config, DataModel data)
+        {
+            var overrides = new Dictionary<string, ModConfigMachine>(data.DefaultMachineOverrides ?? new Dictionary<string, ModConfigMachine>(), StringComparer.OrdinalIgnoreCase);
+
+            foreach (var pair in config.MachineOverrides)
+                overrides[pair.Key] = pair.Value;
+
+            return overrides;
         }
     }
 }

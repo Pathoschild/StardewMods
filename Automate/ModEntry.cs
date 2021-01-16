@@ -69,6 +69,7 @@ namespace Pathoschild.Stardew.Automate
             this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.MachineManager = new MachineManager(
                 config: this.Config,
+                data: data,
                 defaultFactory: new AutomationFactory(
                     connectors: this.Config.ConnectorNames,
                     monitor: this.Monitor,

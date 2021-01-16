@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -25,9 +24,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
 
         /// <summary>The configuration for specific machines by ID.</summary>
-        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>
-        {
-            [BaseMachine.GetDefaultMachineId(typeof(ShippingBinMachine))] = new ModConfigMachine { Priority = -1 }
-        };
+        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
     }
 }
