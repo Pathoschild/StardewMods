@@ -34,10 +34,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private ChestFactory ChestFactory;
 
         /// <summary>The last selected chest.</summary>
-        private readonly PerScreen<ManagedChest> LastChest = new PerScreen<ManagedChest>();
+        private readonly PerScreen<ManagedChest> LastChest = new();
 
         /// <summary>The overlay for the current menu which which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
-        private readonly PerScreen<IStorageOverlay> CurrentOverlay = new PerScreen<IStorageOverlay>();
+        private readonly PerScreen<IStorageOverlay> CurrentOverlay = new();
 
 
         /*********
@@ -56,7 +56,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-            helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
@@ -90,19 +89,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
             // migrate legacy chest data
             if (Context.IsMainPlayer)
-                this.MigrateLegacyData();
-        }
-
-        /// <summary>The method invoked after locations are added or removed from the game.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
-        {
-            if (Context.IsMultiplayer)
-            {
-                foreach (GameLocation location in e.Added)
-                    this.MigrateLegacyData(location);
-            }
+                Migrator.MigrateLegacyData(this.ChestFactory, this.Helper.Data);
         }
 
         /// <summary>The method invoked when the interface has finished rendering.</summary>
@@ -324,31 +311,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 return I18n.Errors_NoChestsInRange();
 
             return I18n.Errors_NoChests();
-        }
-
-        /// <summary>Migrate legacy container data, if needed.</summary>
-        private void MigrateLegacyData()
-        {
-            // chests
-            foreach (var chest in this.ChestFactory.GetChests(RangeHandler.Unlimited()))
-                chest.Container.MigrateLegacyData();
-
-            // shipping bin
-            var binData = this.Helper.Data.ReadSaveData<ContainerData>("shipping-bin");
-            if (binData != null)
-            {
-                Farm farm = Game1.getFarm();
-                binData.ToModData(farm.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
-                this.Helper.Data.WriteSaveData<ContainerData>("shipping-bin", null);
-            }
-        }
-
-        /// <summary>Migrate legacy container data, if needed.</summary>
-        /// <param name="location">The location whose chests to migrate.</param>
-        private void MigrateLegacyData(GameLocation location)
-        {
-            foreach (var chest in this.ChestFactory.GetChests(RangeHandler.SpecificLocation(location)))
-                chest.Container.MigrateLegacyData();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Fields
         *********/
         /// <summary>The in-game storage furniture.</summary>
-        private readonly StorageFurniture Furniture;
+        internal readonly StorageFurniture Furniture;
 
         /// <summary>The categories accepted by a dresser.</summary>
         private static HashSet<int> DresserCategories;
@@ -23,9 +23,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Accessors
         *********/
-        /// <summary>The container's default internal name.</summary>
-        public string DefaultName { get; }
-
         /// <summary>The underlying inventory.</summary>
         public IList<Item> Inventory => this.Furniture.heldItems;
 
@@ -47,8 +44,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             string defaultName = reflection.GetMethod(furniture, "getData").Invoke<string[]>()?[0];
 
             this.Furniture = furniture;
-            this.Data = ContainerData.FromModData(furniture.modData, defaultName);
-            this.DefaultName = defaultName;
+            this.Data = new ContainerData(furniture.modData, defaultName);
 
             StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
         }
@@ -90,12 +86,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public void SaveData()
         {
             this.Data.ToModData(this.Furniture.modData);
-        }
-
-        /// <summary>Migrate legacy container data, if needed.</summary>
-        public void MigrateLegacyData()
-        {
-            ContainerData.MigrateLegacyData(this.Furniture, this.DefaultName);
         }
     }
 }

@@ -61,7 +61,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Location = location;
             this.Farm = location as Farm ?? Game1.getFarm();
             this.ShippingBin = this.Farm.getShippingBin(Game1.player);
-            this.Data = ContainerData.FromModData(location.modData, defaultInternalName: null, discriminator: ShippingBinContainer.ModDataDiscriminator);
+            this.Data = new ContainerData(location.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
             this.Mode = mode;
         }
 
@@ -157,9 +157,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         {
             this.Data.ToModData(this.Location.modData, discriminator: ShippingBinContainer.ModDataDiscriminator);
         }
-
-        /// <summary>Migrate legacy container data, if needed.</summary>
-        public void MigrateLegacyData() { }
 
 
         /*********
