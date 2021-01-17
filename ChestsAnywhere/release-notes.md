@@ -1,8 +1,10 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Rewrote how legacy chest data is migrated to fix compatibility with Expanded Storage.
+## 1.20.4
+Released 17 January 2021.
+
+* Rewrote how older chest data is migrated for compatibility with Expanded Storage.
 
 ## 1.20.3
 Released 16 January 2021.
