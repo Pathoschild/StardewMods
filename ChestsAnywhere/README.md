@@ -98,7 +98,7 @@ Default `true`. Whether to allow access to the shipping bin through Chests Anywh
 </tr>
 
 <tr>
-  <td><code>DisableInLocations</code></td>
+  <td><code>DisabledInLocations</code></td>
   <td>
 
 The locations in which to disable remote chest lookups. You can use the
