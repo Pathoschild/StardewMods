@@ -12,11 +12,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /*********
         ** Fields
         *********/
-        /// <summary>The container's default internal name.</summary>
-        private readonly string DefaultName;
-
         /// <summary>The in-game chest.</summary>
-        protected readonly Chest Chest;
+        internal readonly Chest Chest;
 
         /// <summary>The <see cref="ItemGrabMenu.context"/> value which indicates what opened the menu.</summary>
         private readonly object Context;
@@ -55,8 +52,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Context = context;
             this.ShowColorPicker = showColorPicker;
             this.Reflection = reflection;
-            this.DefaultName = this.GetDefaultName(chest);
-            this.Data = ContainerData.FromModData(chest.modData, this.DefaultName);
+            this.Data = new ContainerData(chest.modData);
         }
 
         /// <summary>Get whether the inventory can accept the item type.</summary>
@@ -132,12 +128,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Data.ToModData(this.Chest.modData);
         }
 
-        /// <summary>Migrate legacy container data, if needed.</summary>
-        public void MigrateLegacyData()
-        {
-            ContainerData.MigrateLegacyData(this.Chest, this.DefaultName);
-        }
-
 
         /*********
         ** Protected methods
@@ -168,19 +158,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
                 itemGrabMenu.behaviorOnItemGrab = this.GrabItemFromContainer;
                 this.Reflection.GetField<ItemGrabMenu.behaviorOnItemSelect>(itemGrabMenu, "behaviorFunction").SetValue(this.GrabItemFromPlayer);
             }
-        }
-
-        /// <summary>Get the default name for an item.</summary>
-        /// <param name="chest">The whose default name to get.</param>
-        private string GetDefaultName(Chest chest)
-        {
-            return chest.ParentSheetIndex switch
-            {
-                216 => "Mini-Fridge",
-                256 => "Junimo Chest",
-                275 => "Hopper",
-                _ => "Chest"
-            };
         }
     }
 }
