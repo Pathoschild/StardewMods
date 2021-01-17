@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming version
+* Fixed dresser options not being saved in 1.20.4.
+
 ## 1.20.4
 Released 17 January 2021.
 

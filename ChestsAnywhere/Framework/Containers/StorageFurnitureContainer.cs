@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -38,13 +37,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="furniture">The in-game storage furniture.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public StorageFurnitureContainer(StorageFurniture furniture, IReflectionHelper reflection)
+        public StorageFurnitureContainer(StorageFurniture furniture)
         {
-            string defaultName = reflection.GetMethod(furniture, "getData").Invoke<string[]>()?[0];
-
             this.Furniture = furniture;
-            this.Data = new ContainerData(furniture.modData, defaultName);
+            this.Data = new ContainerData(furniture.modData);
 
             StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
         }

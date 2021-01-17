@@ -136,7 +136,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     // dressers
                     foreach (StorageFurniture furniture in location.furniture.OfType<StorageFurniture>())
                     {
-                        var container = new StorageFurnitureContainer(furniture, this.Reflection);
+                        var container = new StorageFurnitureContainer(furniture);
                         yield return new ManagedChest(
                             container: container,
                             location,
