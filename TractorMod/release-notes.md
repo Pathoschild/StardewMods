@@ -1,4 +1,7 @@
 # Release notes
+## Upcoming release
+* Fixed issues when farmhands ride a tractor in split-screen mode.
+
 ## 4.13
 Released 16 January 2021.
 

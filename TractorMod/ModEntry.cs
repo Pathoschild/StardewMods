@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -93,7 +94,12 @@ namespace Pathoschild.Stardew.TractorMod
 
             // init
             I18n.Init(helper.Translation);
-            this.TractorManagerImpl = new(() => new TractorManager(this.Config, this.Keys, this.Helper.Reflection));
+            this.TractorManagerImpl = new(() =>
+            {
+                var manager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection);
+                this.UpdateConfigFor(manager);
+                return manager;
+            });
             this.UpdateConfig();
 
             // hook events
@@ -474,15 +480,30 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Helper methods
         ****/
-        /// <summary>Apply the mod configuration if it changed.</summary>
+        /// <summary>Reapply the mod configuration.</summary>
         private void UpdateConfig()
         {
             this.Keys = this.Config.Controls.ParseControls(this.Helper.Input, this.Monitor);
 
+            // TODO
+            // Temporary hack until new PerScreen<T> methods in SMAPI 3.9
+            var field = this.TractorManagerImpl.GetType().GetField("States", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(this.TractorManagerImpl) as IDictionary<int, TractorManager>;
+            if (field == null)
+                throw new InvalidOperationException("Can't access per-screen tractor states. Try updating Tractor Mod or reporting this on the mod page.");
+
+            foreach (TractorManager manager in field.Values)
+                this.UpdateConfigFor(manager);
+        }
+
+        /// <summary>Apply the mod configuration to a tractor manager instance.</summary>
+        /// <param name="manager">The tractor manager to update.</param>
+        private void UpdateConfigFor(TractorManager manager)
+        {
             var modRegistry = this.Helper.ModRegistry;
             var reflection = this.Helper.Reflection;
             var toolConfig = this.Config.StandardAttachments;
-            this.TractorManager.UpdateConfig(this.Config, this.Keys, new IAttachment[]
+
+            manager.UpdateConfig(this.Config, this.Keys, new IAttachment[]
             {
                 new CustomAttachment(this.Config.CustomAttachments, modRegistry, reflection), // should be first so it can override default attachments
                 new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
