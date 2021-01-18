@@ -1,6 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed some crop fields not shown for growing mixed seeds.
+
 ## 1.32.1
 Released 16 January 2021.
 
