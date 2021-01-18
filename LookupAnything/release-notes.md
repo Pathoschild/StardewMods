@@ -1,7 +1,9 @@
 [← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.32.2
+Released 17 January 2021.
+
 * Fixed some crop fields not shown for growing mixed seeds.
 * Improved translations. Thanks to norges (updated German)!
 
