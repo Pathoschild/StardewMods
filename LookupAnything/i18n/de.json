@@ -8,7 +8,7 @@
     "generic.yesterday": "gestern",
 
     // generic values
-    "generic.unknown": "unbekannt", 
+    "generic.unknown": "unbekannt",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -623,7 +623,7 @@
     *********/
     // labels
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
-    "tile.game-location": "Standort", 
+    "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
     "tile.tile": "Kachel",
     "tile.tile-index": "{{layerName}}: Kachelindex",
