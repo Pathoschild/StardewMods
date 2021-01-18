@@ -422,7 +422,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield break;
 
             var data = new CropDataParser(crop, isPlanted: !isSeed);
-            bool isForage = crop.whichForageCrop.Value > 0;
+            bool isForage = crop.whichForageCrop.Value > 0 && crop.fullyGrown.Value; // show crop fields for growing mixed seeds
 
             // add next-harvest field
             if (!isSeed)

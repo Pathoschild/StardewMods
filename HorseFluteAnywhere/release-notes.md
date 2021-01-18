@@ -1,6 +1,11 @@
 [← back to readme](README.md)
 
 # Release notes
+## 1.1.1
+Released 17 January 2021.
+
+* The horse flute is now optional by default.
+
 ## 1.1
 Released 09 January 2021.
 

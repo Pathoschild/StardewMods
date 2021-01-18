@@ -8,7 +8,7 @@
     "generic.yesterday": "gestern",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "unbekannt",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -72,7 +72,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "Vulkan Händler",
     "shop.willy": "Willy",
 
     // recipe types
@@ -135,8 +135,8 @@
     "data.item.topaz-node.description": "Baue sie ab, um Topase zu bekommen.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "Schlackenscherbenader",
+    "data.item.cinder-shard-node.description": "Baue sie ab um eine Schlackenscherbe zu bekommen.",
     "data.item.copper-node.name": "Kupferader",
     "data.item.copper-node.description": "Baue sie ab, um Kupfererz zu bekommen.",
     "data.item.gold-node.name": "Goldader",
@@ -145,21 +145,20 @@
     "data.item.iridium-node.description": "Baue sie ab, um Iridiumerz zu bekommen.",
     "data.item.iron-node.name": "Eisenader",
     "data.item.iron-node.description": "Baue sie ab, um Eisenerz zu bekommen.",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "Omni-Geoden-Ader",
+    "data.item.omni-geode-node.description": "Baue sie ab um eine Omni-Geode zu bekommen.",
 
     // mine stones
     "data.item.colored-stone.name": "Farbiger Stein",
     "data.item.colored-stone.description": "Ein unscheinbarer Stein. Kann Stein, Erz oder Geoden enthalten.",
     "data.item.mine-stone.name": "Stein",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "Bau sie ab um Stein oder mit Glück Kohle zu bekommen.",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "Lehmstein",
+    "data.item.clay-stone.description": "Zerbrich ihn ab um Lehm zu bekommen.",
+    "data.item.fossil-stone.name": "Fossilien stein",
+    "data.item.fossil-stone.description": "Zerbrich ihn um Fossilien oder Knochen zu bekommen.",
 
     // mine containers
     "data.item.barrel.name": "Fass",
@@ -193,15 +192,15 @@
     "location.witchSwamp": "Hexensumpf",
     "location.woods": "Geheimnisvolle Wälder",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "Feuerberg",
+    "location.islandEast": "Insel Ost",
+    "location.islandNorth": "Insel Nord",
+    "location.islandSouth": "Insel Süd",
+    "location.islandSouthEast": "Insel Südost",
+    "location.islandSouthEastCave": "Piratenhöhle",
+    "location.islandWest": "Insel West",
+    "location.islandWest.fish-area-1": "Insel West (Meer)",
+    "location.islandWest.fish-area-2": "Insel West (Teich)",
 
     "location.unknown-fish-area": "{{locationName}} (Angelgebiet {{id}})",
 
@@ -336,8 +335,8 @@
     // labels
     "crop.summary": "Saat",
     "crop.harvest": "Ernte",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "Gedüngt",
+    "crop.watered": "Gegossen",
 
     // values
     "crop.summary.dead": "Diese Saat ist tot.",
@@ -465,9 +464,8 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "Tonhöhe",
+    "item.music-block.drum-type": "Trommelart",
 
 
     /*********
@@ -579,53 +577,45 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "Lösung",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "Rätsel gelöst!",
+    "puzzle.solution.hidden": "Lösungen der Rätsel sind im Fortschrittsmodus nicht sichtbar.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "Farbige Kristalle Puzzle",
+    "puzzle.island-crystal-cave.crystal-id": "Kristall ID",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "Aktiviere die Statue um das Rätsel zu starten.",
+    "puzzle.island-crystal-cave.solution.waiting": "Warte bis das Spiel die Sequenz generiert ...",
+    "puzzle.island-crystal-cave.solution.activated": "Wiederhole die Reihenfolge der aktivierten Kristalle:",
 
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
-
+    "puzzle.island-mermaid.title": "Meerjungfrauen Rätsel",
+    "puzzle.island-mermaid.solution.intro": "Benutze Flötenblöcke um das Lied der Meerjungfrau vom Nachtmarkt zu spielen. Tonhöhen: (Es ist möglich die Tonhöhe eines Flötenblocks nachzusehen):",
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.title": "Edelsteinvogel Rätsel",
+    "puzzle.island-shrine.description": "Lege den Edelstein auf den Sockel der vom Edelsteinvogel am passenden Ort bei Regen gelegt wurde. Die Edelsteine sind für jeden Speicherstand zufällig.",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution.east": "Osten: {{item}}",
+    "puzzle.island-shrine.solution.north": "Norden: {{item}}",
+    "puzzle.island-shrine.solution.south": "Süden: {{item}}",
+    "puzzle.island-shrine.solution.west": "Westen: {{item}}",
 
 
     /*********
@@ -633,7 +623,7 @@
     *********/
     // labels
     "tile.description": "Kachel-Informationen. Dies wird angezeigt, weil du \"tile lookups\" in den Konfiguration angeschaltet hast.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "Standort",
     "tile.map-name": "Kartenname",
     "tile.tile": "Kachel",
     "tile.tile-index": "{{layerName}}: Kachelindex",
@@ -665,7 +655,7 @@
 
     // values
     "tree.name.big-mushroom": "Großer Pilz",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "Mahagonibaum",
     "tree.name.maple": "Ahornbaum",
     "tree.name.oak": "Eichenbaum",
     "tree.name.palm": "Palme",
