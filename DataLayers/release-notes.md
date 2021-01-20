@@ -1,4 +1,4 @@
-# Release notes
+﻿# Release notes
 ## Upcoming release
 * Updated for multi-key bindings in SMAPI 3.9.
 

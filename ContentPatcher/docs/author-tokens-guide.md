@@ -1,4 +1,4 @@
-← [README](../README.md) • [author guide](author-guide.md)
+﻿← [README](../README.md) • [author guide](author-guide.md)
 
 This document lists the tokens available in Content Patcher packs.
 

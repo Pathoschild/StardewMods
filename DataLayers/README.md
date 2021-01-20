@@ -1,4 +1,4 @@
-**Data Layers** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
+﻿**Data Layers** is a [Stardew Valley](http://stardewvalley.net/) mod that overlays the world with
 visual data like accessibility, bee/Junimo/scarecrow/sprinkler coverage, etc. It automatically
 includes data from other mods if applicable.
 
