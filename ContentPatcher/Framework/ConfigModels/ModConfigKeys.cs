@@ -1,4 +1,5 @@
-using Pathoschild.Stardew.Common.Input;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -9,27 +10,12 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The keys which toggle the display of debug information.</summary>
-        public KeyBinding ToggleDebug { get; }
+        public KeybindList ToggleDebug { get; set; } = KeybindList.ForSingle(SButton.F3);
 
         /// <summary>The keys which switch to the previous texture.</summary>
-        public KeyBinding DebugPrevTexture { get; }
+        public KeybindList DebugPrevTexture { get; set; } = KeybindList.ForSingle(SButton.LeftControl);
 
         /// <summary>The keys which switch to the next texture.</summary>
-        public KeyBinding DebugNextTexture { get; }
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="toggleDebug">The keys which toggle the display of debug information.</param>
-        /// <param name="debugPrevTexture">The keys which switch to the previous texture.</param>
-        /// <param name="debugNextTexture">The keys which switch to the next texture.</param>
-        public ModConfigKeys(KeyBinding toggleDebug, KeyBinding debugPrevTexture, KeyBinding debugNextTexture)
-        {
-            this.ToggleDebug = toggleDebug;
-            this.DebugPrevTexture = debugPrevTexture;
-            this.DebugNextTexture = debugNextTexture;
-        }
+        public KeybindList DebugNextTexture { get; set; } = KeybindList.ForSingle(SButton.RightControl);
     }
 }

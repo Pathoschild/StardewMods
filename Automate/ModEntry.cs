@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.Automate
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Manages machine groups.</summary>
         private MachineManager MachineManager;
@@ -66,7 +66,6 @@ namespace Pathoschild.Stardew.Automate
             this.Config = this.LoadConfig();
 
             // init
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.MachineManager = new MachineManager(
                 config: this.Config,
                 data: data,
@@ -92,7 +91,7 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.World.ObjectListChanged += this.OnObjectListChanged;
             helper.Events.World.TerrainFeatureListChanged += this.OnTerrainFeatureListChanged;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
 
             // hook commands
@@ -245,15 +244,15 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             try
             {
                 // toggle overlay
-                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.JustPressedUnique())
+                if (Context.IsPlayerFree && this.Keys.ToggleOverlay.JustPressed())
                 {
                     if (this.CurrentOverlay != null)
                         this.DisableOverlay();

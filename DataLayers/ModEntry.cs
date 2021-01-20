@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.DataLayers.Framework;
 using Pathoschild.Stardew.DataLayers.Layers;
 using Pathoschild.Stardew.DataLayers.Layers.Coverage;
@@ -24,13 +23,13 @@ namespace Pathoschild.Stardew.DataLayers
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The available data layers.</summary>
         private ILayer[] Layers;
 
         /// <summary>Maps key bindings to the layers they should activate.</summary>
-        private readonly IDictionary<KeyBinding, ILayer> ShortcutMap = new Dictionary<KeyBinding, ILayer>();
+        private readonly IDictionary<KeybindList, ILayer> ShortcutMap = new Dictionary<KeybindList, ILayer>();
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private ModIntegrations Mods;
@@ -51,7 +50,6 @@ namespace Pathoschild.Stardew.DataLayers
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // init
             I18n.Init(helper.Translation);
@@ -61,11 +59,11 @@ namespace Pathoschild.Stardew.DataLayers
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
 
             // hook up commands
             var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay.Value?.CurrentLayer);
-            helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (name, args) => commandHandler.Handle(args));
+            helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (_, args) => commandHandler.Handle(args));
         }
 
 
@@ -88,50 +86,49 @@ namespace Pathoschild.Stardew.DataLayers
         {
             // init layers
             // need to do this after the save is loaded so translations use the selected language
-            this.Layers = this.GetLayers(this.Config, this.Helper.Input, this.Mods).ToArray();
+            this.Layers = this.GetLayers(this.Config, this.Mods).ToArray();
             foreach (ILayer layer in this.Layers)
             {
-                if (layer.ShortcutKey.ToString() != SButton.None.ToString())
+                if (layer.ShortcutKey.IsBound)
                     this.ShortcutMap[layer.ShortcutKey] = layer;
             }
         }
 
         /// <summary>Get the enabled data layers.</summary>
         /// <param name="config">The mod configuration.</param>
-        /// <param name="input">The API for checking input state.</param>
         /// <param name="mods">Handles access to the supported mod integrations.</param>
-        private IEnumerable<ILayer> GetLayers(ModConfig config, IInputHelper input, ModIntegrations mods)
+        private IEnumerable<ILayer> GetLayers(ModConfig config, ModIntegrations mods)
         {
             ModConfig.LayerConfigs layers = config.Layers;
 
             if (layers.Accessible.IsEnabled())
-                yield return new AccessibleLayer(layers.Accessible, input, this.Monitor);
+                yield return new AccessibleLayer(layers.Accessible);
             if (layers.Buildable.IsEnabled())
-                yield return new BuildableLayer(layers.Buildable, input, this.Monitor);
+                yield return new BuildableLayer(layers.Buildable);
             if (layers.CoverageForBeeHouses.IsEnabled())
-                yield return new BeeHouseLayer(layers.CoverageForBeeHouses, input, this.Monitor);
+                yield return new BeeHouseLayer(layers.CoverageForBeeHouses);
             if (layers.CoverageForScarecrows.IsEnabled())
-                yield return new ScarecrowLayer(layers.CoverageForScarecrows, mods, input, this.Monitor);
+                yield return new ScarecrowLayer(layers.CoverageForScarecrows, mods);
             if (layers.CoverageForSprinklers.IsEnabled())
-                yield return new SprinklerLayer(layers.CoverageForSprinklers, mods, input, this.Monitor);
+                yield return new SprinklerLayer(layers.CoverageForSprinklers, mods);
             if (layers.CoverageForJunimoHuts.IsEnabled())
-                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, mods, input, this.Monitor);
+                yield return new JunimoHutLayer(layers.CoverageForJunimoHuts, mods);
             if (layers.CropWater.IsEnabled())
-                yield return new CropWaterLayer(layers.CropWater, input, this.Monitor);
+                yield return new CropWaterLayer(layers.CropWater);
             if (layers.CropPaddyWater.IsEnabled())
-                yield return new CropPaddyWaterLayer(layers.CropPaddyWater, input, this.Monitor);
+                yield return new CropPaddyWaterLayer(layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(layers.CropFertilizer, input, this.Monitor);
+                yield return new CropFertilizerLayer(layers.CropFertilizer);
             if (layers.CropHarvest.IsEnabled())
-                yield return new CropHarvestLayer(layers.CropHarvest, input, this.Monitor);
+                yield return new CropHarvestLayer(layers.CropHarvest);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)
-                yield return new MachineLayer(layers.Machines, mods, input, this.Monitor);
+                yield return new MachineLayer(layers.Machines, mods);
             if (layers.Tillable.IsEnabled())
-                yield return new TillableLayer(layers.Tillable, input, this.Monitor);
+                yield return new TillableLayer(layers.Tillable);
 
             // add separate grid layer if grid isn't enabled for all layers
             if (!config.ShowGrid && layers.TileGrid.IsEnabled())
-                yield return new GridLayer(layers.TileGrid, input, this.Monitor);
+                yield return new GridLayer(layers.TileGrid);
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -144,16 +141,16 @@ namespace Pathoschild.Stardew.DataLayers
             this.Layers = null;
         }
 
-        /// <summary>The method invoked when the player presses an input button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (this.Layers == null)
                 return;
 
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
+            this.Monitor.InterceptErrors("handling your input", () =>
             {
                 // check context
                 if (!this.CanOverlayNow())
@@ -162,7 +159,7 @@ namespace Pathoschild.Stardew.DataLayers
                 ModConfigKeys keys = this.Keys;
 
                 // toggle overlay
-                if (keys.ToggleLayer.JustPressedUnique())
+                if (keys.ToggleLayer.JustPressed())
                 {
                     if (overlayVisible)
                     {
@@ -174,29 +171,35 @@ namespace Pathoschild.Stardew.DataLayers
                         this.CurrentOverlay.Value = new DataLayerOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Reflection, this.Layers, this.CanOverlayNow, this.Config.CombineOverlappingBorders, this.Config.ShowGrid);
                         this.CurrentOverlay.Value.TrySetLayer(this.LastLayerId);
                     }
-                    this.Helper.Input.Suppress(e.Button);
+                    this.Helper.Input.SuppressActiveKeybinds(keys.ToggleLayer);
                 }
 
                 // cycle layers
-                else if (overlayVisible && keys.NextLayer.JustPressedUnique())
+                else if (overlayVisible && keys.NextLayer.JustPressed())
                 {
                     this.CurrentOverlay.Value.NextLayer();
-                    this.Helper.Input.Suppress(e.Button);
+                    this.Helper.Input.SuppressActiveKeybinds(keys.NextLayer);
                 }
-                else if (overlayVisible && keys.PrevLayer.JustPressedUnique())
+                else if (overlayVisible && keys.PrevLayer.JustPressed())
                 {
                     this.CurrentOverlay.Value.PrevLayer();
-                    this.Helper.Input.Suppress(e.Button);
+                    this.Helper.Input.SuppressActiveKeybinds(keys.PrevLayer);
                 }
 
                 // shortcut to layer
                 else if (overlayVisible)
                 {
-                    ILayer layer = this.ShortcutMap.Where(p => p.Key.JustPressedUnique()).Select(p => p.Value).FirstOrDefault();
-                    if (layer != null && layer != this.CurrentOverlay.Value.CurrentLayer)
+                    foreach (var pair in this.ShortcutMap)
                     {
-                        this.CurrentOverlay.Value.SetLayer(layer);
-                        this.Helper.Input.Suppress(e.Button);
+                        if (pair.Key.JustPressed())
+                        {
+                            if (pair.Value != this.CurrentOverlay.Value.CurrentLayer)
+                            {
+                                this.CurrentOverlay.Value.SetLayer(pair.Value);
+                                this.Helper.Input.SuppressActiveKeybinds(pair.Key);
+                            }
+                            break;
+                        }
                     }
                 }
             });

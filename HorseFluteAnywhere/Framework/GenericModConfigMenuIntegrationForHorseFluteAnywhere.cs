@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
-using Pathoschild.Stardew.Common.Input;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
 {
@@ -15,9 +15,6 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         /// <summary>The Generic Mod Config Menu integration.</summary>
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
 
-        /// <summary>Get the summon key binding.</summary>
-        private readonly Func<KeyBinding> GetSummonKey;
-
 
         /*********
         ** Public methods
@@ -27,12 +24,10 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="manifest">The mod manifest.</param>
         /// <param name="getConfig">Get the current config model.</param>
-        /// <param name="getSummonKey">Get the parsed key bindings.</param>
         /// <param name="reset">Reset the config model to the default values.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
-        public GenericModConfigMenuIntegrationForHorseFluteAnywhere(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Func<KeyBinding> getSummonKey, Action reset, Action saveAndApply)
+        public GenericModConfigMenuIntegrationForHorseFluteAnywhere(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Action reset, Action saveAndApply)
         {
-            this.GetSummonKey = getSummonKey;
             this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
         }
 
@@ -56,17 +51,22 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
                 .AddKeyBinding(
                     label: "Summon Horse Button",
                     description: "The button to press which plays the flute and summons a horse. Default H.",
-                    get: _ => this.GetSingleButton(this.GetSummonKey()),
-                    set: (config, value) => config.SummonHorseKey = value.ToString()
+                    get: config => this.GetSingleButton(config.SummonHorseKey),
+                    set: (config, value) => config.SummonHorseKey = KeybindList.ForSingle(value)
                 );
         }
 
         /// <summary>Get the first button in a key binding, if any.</summary>
-        /// <param name="binding">The key binding.</param>
-        private SButton GetSingleButton(KeyBinding binding)
+        /// <param name="keybindList">The key binding list.</param>
+        private SButton GetSingleButton(KeybindList keybindList)
         {
-            SButton[] set = binding.ButtonSets.FirstOrDefault();
-            return set?.FirstOrDefault() ?? SButton.None;
+            foreach (Keybind keybind in keybindList.Keybinds)
+            {
+                if (keybind.IsBound)
+                    return keybind.Buttons.First();
+            }
+
+            return SButton.None;
         }
     }
 }

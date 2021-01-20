@@ -1,4 +1,5 @@
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.NoclipMode.Framework
 {
@@ -9,7 +10,7 @@ namespace Pathoschild.Stardew.NoclipMode.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle noclip mode.</summary>
-        public string ToggleKey { get; set; } = SButton.F11.ToString();
+        public KeybindList ToggleKey { get; set; } = KeybindList.ForSingle(SButton.F11);
 
         /// <summary>Whether to show a confirmation message when noclip is enabled.</summary>
         public bool ShowEnabledMessage { get; set; } = true;

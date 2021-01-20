@@ -3,7 +3,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
@@ -36,10 +35,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public TillableLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.Tillable_Name(), config, input, monitor)
+        public TillableLayer(LayerConfig config)
+            : base(I18n.Tillable_Name(), config)
         {
             this.Legend = new[]
             {

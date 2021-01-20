@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -29,9 +28,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public CropFertilizerLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.CropFertilizer_Name(), config, input, monitor)
+        public CropFertilizerLayer(LayerConfig config)
+            : base(I18n.CropFertilizer_Name(), config)
         {
             this.Legend = new[]
             {

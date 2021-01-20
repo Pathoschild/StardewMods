@@ -1,8 +1,6 @@
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -28,7 +26,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         public bool UpdateWhenVisibleTilesChange { get; }
 
         /// <inheritdoc />
-        public KeyBinding ShortcutKey { get; }
+        public KeybindList ShortcutKey { get; }
 
         /// <inheritdoc />
         public LegendEntry[] Legend { get; protected set; }
@@ -50,15 +48,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The data layer name.</param>
         /// <param name="config">The data layers settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        protected BaseLayer(string name, LayerConfig config, IInputHelper input, IMonitor monitor)
+        protected BaseLayer(string name, LayerConfig config)
         {
             this.Id = this.GetType().FullName;
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
-            this.ShortcutKey = CommonHelper.ParseButtons(config.ShortcutKey, input, monitor, this.Name);
+            this.ShortcutKey = config.ShortcutKey;
         }
 
         /// <summary>Get the dirt instance for a tile, if any.</summary>

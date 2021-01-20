@@ -1,4 +1,5 @@
-using Pathoschild.Stardew.Common.Input;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
@@ -9,27 +10,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
         ** Accessors
         *********/
         /// <summary>The keys which summon the tractor.</summary>
-        public KeyBinding SummonTractor { get; }
+        public KeybindList SummonTractor { get; set; } = KeybindList.ForSingle(SButton.Back);
 
         /// <summary>The keys which return the tractor to its home.</summary>
-        public KeyBinding DismissTractor { get; }
+        public KeybindList DismissTractor { get; set; } = KeybindList.ForSingle(SButton.Back);
 
         /// <summary>The keys which activate the tractor when held, or none to activate automatically.</summary>
-        public KeyBinding HoldToActivate { get; }
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="summonTractor">The keys which summon the tractor.</param>
-        /// <param name="dismissTractor">The keys which return the tractor to its home.</param>
-        /// <param name="holdToActivate">The keys which activate the tractor when held, or none to activate automatically.</param>
-        public ModConfigKeys(KeyBinding summonTractor, KeyBinding dismissTractor, KeyBinding holdToActivate)
-        {
-            this.SummonTractor = summonTractor;
-            this.DismissTractor = dismissTractor;
-            this.HoldToActivate = holdToActivate;
-        }
+        public KeybindList HoldToActivate { get; set; } = new();
     }
 }

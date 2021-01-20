@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.TractorMod
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The backing field for <see cref="TractorManager"/>.</summary>
         private PerScreen<TractorManager> TractorManagerImpl;
@@ -90,7 +90,6 @@ namespace Pathoschild.Stardew.TractorMod
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // init
             I18n.Init(helper.Translation);
@@ -111,7 +110,7 @@ namespace Pathoschild.Stardew.TractorMod
             events.GameLoop.Saved += this.OnSaved;
             events.Display.RenderedWorld += this.OnRenderedWorld;
             events.Display.MenuChanged += this.OnMenuChanged;
-            events.Input.ButtonPressed += this.OnButtonPressed;
+            events.Input.ButtonsChanged += this.OnButtonsChanged;
             events.World.NpcListChanged += this.OnNpcListChanged;
             events.World.LocationListChanged += this.OnLocationListChanged;
             events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -162,7 +161,6 @@ namespace Pathoschild.Stardew.TractorMod
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForTractor(
                 getConfig: () => this.Config,
-                getKeys: () => this.Keys,
                 reset: () =>
                 {
                     this.Config = new ModConfig();
@@ -440,17 +438,17 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called when the player presses a keyboard button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (!this.IsEnabled || !Context.IsPlayerFree)
                 return;
 
-            if (this.Keys.SummonTractor.JustPressedUnique() && !Game1.player.isRidingHorse())
+            if (this.Keys.SummonTractor.JustPressed() && !Game1.player.isRidingHorse())
                 this.SummonTractor();
-            else if (this.Keys.DismissTractor.JustPressedUnique() && Game1.player.isRidingHorse())
+            else if (this.Keys.DismissTractor.JustPressed() && Game1.player.isRidingHorse())
                 this.DismissTractor(Game1.player.mount);
         }
 
@@ -483,8 +481,6 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Reapply the mod configuration.</summary>
         private void UpdateConfig()
         {
-            this.Keys = this.Config.Controls.ParseControls(this.Helper.Input, this.Monitor);
-
             // TODO
             // Temporary hack until new PerScreen<T> methods in SMAPI 3.9
             var field = this.TractorManagerImpl.GetType().GetField("States", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(this.TractorManagerImpl) as IDictionary<int, TractorManager>;

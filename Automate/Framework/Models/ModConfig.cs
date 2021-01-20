@@ -15,13 +15,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public int AutomationInterval { get; set; } = 60;
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The in-game object names through which machines can connect.</summary>
         public string[] ConnectorNames { get; set; } = { "Workbench" };
 
         /// <summary>Options affecting compatibility with other mods.</summary>
-        public ModCompatibilityConfig ModCompatibility { get; set; } = new ModCompatibilityConfig();
+        public ModCompatibilityConfig ModCompatibility { get; set; } = new();
 
         /// <summary>The configuration for specific machines by ID.</summary>
         public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();

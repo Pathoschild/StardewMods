@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         private Metadata Metadata;
@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private PerScreen<DebugInterface> DebugInterface;
 
         /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
-        private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new PerScreen<Stack<IClickableMenu>>(() => new Stack<IClickableMenu>());
+        private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
 
 
         /*********
@@ -72,7 +72,6 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // load config
             this.Config = this.LoadConfig();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // load translations
             I18n.Init(helper.Translation);
@@ -95,9 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
             helper.Events.Display.MenuChanged += this.OnMenuChanged;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
-            if (this.Config.HideOnKeyUp)
-                helper.Events.Input.ButtonReleased += this.OnButtonReleased;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         }
 
 
@@ -135,39 +132,29 @@ namespace Pathoschild.Stardew.LookupAnything
             this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
+            this.Monitor.InterceptErrors("handling your input", () =>
             {
                 ModConfigKeys keys = this.Keys;
 
-                if (keys.ToggleSearch.JustPressedUnique())
+                // pressed
+                if (keys.ToggleSearch.JustPressed())
                     this.TryToggleSearch();
-                else if (keys.ToggleLookup.JustPressedUnique())
+                else if (keys.ToggleLookup.JustPressed())
                     this.ToggleLookup();
-                else if (keys.ScrollUp.JustPressedUnique())
+                else if (keys.ScrollUp.JustPressed())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
-                else if (keys.ScrollDown.JustPressedUnique())
+                else if (keys.ScrollDown.JustPressed())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
-                else if (keys.ToggleDebug.JustPressedUnique() && Context.IsPlayerFree)
+                else if (keys.ToggleDebug.JustPressed() && Context.IsPlayerFree)
                     this.DebugInterface.Value.Enabled = !this.DebugInterface.Value.Enabled;
-            });
-        }
 
-        /// <summary>The method invoked when the player releases a button.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnButtonReleased(object sender, ButtonReleasedEventArgs e)
-        {
-            // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input release '{e.Button}'", () =>
-            {
-                ModConfigKeys keys = this.Keys;
-
-                if (keys.ToggleLookup.JustPressedUnique())
+                // released
+                if (this.Config.HideOnKeyUp && keys.ToggleLookup.GetState() == SButtonState.Released)
                     this.HideLookup();
             });
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
@@ -38,10 +37,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public CropPaddyWaterLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.CropPaddyWater_Name(), config, input, monitor)
+        public CropPaddyWaterLayer(LayerConfig config)
+            : base(I18n.CropPaddyWater_Name(), config)
         {
             this.Legend = new[]
             {

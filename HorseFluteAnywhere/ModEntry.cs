@@ -4,10 +4,10 @@ using System.Linq;
 using Harmony;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.HorseFluteAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         private ModConfig Config;
 
         /// <summary>The summon key binding.</summary>
-        private KeyBinding SummonKey;
+        private KeybindList SummonKey => this.Config.SummonHorseKey;
 
 
         /*********
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
             // hook events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
         }
@@ -67,7 +67,6 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForHorseFluteAnywhere(
                 getConfig: () => this.Config,
-                getSummonKey: () => this.SummonKey,
                 reset: () =>
                 {
                     this.Config = new ModConfig();
@@ -85,12 +84,12 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             ).Register();
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
-            if (this.SummonKey.JustPressedUnique() && this.CanPlayFlute(Game1.player))
+            if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
                 this.HorseFlute.Value.performUseAction(Game1.currentLocation);
         }
 
@@ -133,7 +132,6 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         private void UpdateConfig()
         {
             this.Config = this.Helper.ReadConfig<ModConfig>();
-            this.SummonKey = CommonHelper.ParseButtons(this.Config.SummonHorseKey, this.Helper.Input, this.Monitor, nameof(this.Config.SummonHorseKey));
         }
 
         /// <summary>Get all horses in the given location.</summary>

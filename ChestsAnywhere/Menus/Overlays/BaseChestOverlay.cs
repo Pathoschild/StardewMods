@@ -10,6 +10,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -64,6 +65,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>The configured key bindings.</summary>
         private readonly ModConfigKeys Keys;
+
+        /// <summary>The keybind for escaping the active element or menu.</summary>
+        private readonly KeybindList EscapeKeybind = KeybindList.Parse($"{SButton.Escape}, {SButton.ControllerB}");
 
         /// <summary>Whether to show the category dropdown.</summary>
         protected bool ShowCategoryDropdown => this.Categories.Length > 1;
@@ -309,49 +313,51 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.ReinitializeComponents();
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
-        /// <param name="input">The button that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveButtonPress(SButton input)
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        protected override void ReceiveButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (!this.IsInitialized)
-                return false;
+                return;
 
             bool canNavigate = this.CanCloseChest;
             ModConfigKeys keys = this.Keys;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (keys.Toggle.JustPressedUnique() || input == SButton.Escape || input == SButton.ControllerB)
+                    if (keys.Toggle.JustPressed() || this.EscapeKeybind.JustPressed())
                     {
+                        this.InputHelper.SuppressActiveKeybinds(keys.Toggle);
+                        this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
+
                         if (canNavigate)
                             this.Exit();
                     }
-                    else if (keys.PrevChest.JustPressedUnique() && canNavigate)
+                    else if (keys.PrevChest.JustPressed() && canNavigate)
                         this.SelectPreviousChest();
-                    else if (keys.NextChest.JustPressedUnique() && canNavigate)
+                    else if (keys.NextChest.JustPressed() && canNavigate)
                         this.SelectNextChest();
-                    else if (keys.PrevCategory.JustPressedUnique() && canNavigate)
+                    else if (keys.PrevCategory.JustPressed() && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (keys.NextCategory.JustPressedUnique() && canNavigate)
+                    else if (keys.NextCategory.JustPressed() && canNavigate)
                         this.SelectNextCategory();
-                    else if (keys.EditChest.JustPressedUnique() && canNavigate)
+                    else if (keys.EditChest.JustPressed() && canNavigate)
                         this.OpenEdit();
-                    else if (keys.SortItems.JustPressedUnique())
+                    else if (keys.SortItems.JustPressed())
                         this.SortInventory();
-                    else
-                        return false;
-                    return true;
+                    break;
 
                 case Element.ChestList:
                 case Element.CategoryList:
                 case Element.EditForm:
-                    if (input == SButton.Escape || input == SButton.ControllerB)
-                        this.ActiveElement = Element.Menu;
-                    return true;
+                    if (this.EscapeKeybind.JustPressed())
+                    {
+                        this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
 
-                default:
-                    return false;
+                        this.ActiveElement = Element.Menu;
+                    }
+                    break;
             }
         }
 

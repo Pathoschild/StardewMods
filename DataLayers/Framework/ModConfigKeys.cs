@@ -1,4 +1,5 @@
-using Pathoschild.Stardew.Common.Input;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
@@ -9,28 +10,12 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle the data layer overlay.</summary>
-        public KeyBinding ToggleLayer { get; }
+        public KeybindList ToggleLayer { get; set; } = KeybindList.ForSingle(SButton.F2);
 
         /// <summary>The keys which cycle backwards through data layers.</summary>
-        public KeyBinding PrevLayer { get; }
+        public KeybindList PrevLayer { get; set; } = KeybindList.Parse($"{SButton.LeftControl}, {SButton.LeftShoulder}");
 
         /// <summary>The keys which cycle forward through data layers.</summary>
-        public KeyBinding NextLayer { get; }
-
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="toggleLayer">The keys which toggle the data layer overlay.</param>
-        /// <param name="prevLayer">The keys which cycle backwards through data layers.</param>
-        /// <param name="nextLayer">The keys which cycle forward through data layers.</param>
-        public ModConfigKeys(KeyBinding toggleLayer, KeyBinding prevLayer, KeyBinding nextLayer)
-        {
-            this.ToggleLayer = toggleLayer;
-            this.PrevLayer = prevLayer;
-            this.NextLayer = nextLayer;
-        }
+        public KeybindList NextLayer { get; set; } = KeybindList.Parse($"{SButton.RightControl}, {SButton.RightShoulder}");
     }
 }

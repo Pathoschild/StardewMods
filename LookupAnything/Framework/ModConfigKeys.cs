@@ -1,4 +1,5 @@
-using Pathoschild.Stardew.Common.Input;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
 {
@@ -9,37 +10,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle the lookup UI for something under the cursor.</summary>
-        public KeyBinding ToggleLookup { get; }
+        public KeybindList ToggleLookup { get; set; } = KeybindList.ForSingle(SButton.F1);
 
         /// <summary>The keys which toggle the search UI.</summary>
-        public KeyBinding ToggleSearch { get; set; }
+        public KeybindList ToggleSearch { get; set; } = KeybindList.Parse($"{SButton.LeftShift} + {SButton.F1}");
 
         /// <summary>The keys which scroll up long content.</summary>
-        public KeyBinding ScrollUp { get; }
+        public KeybindList ScrollUp { get; set; } = KeybindList.ForSingle(SButton.Up);
 
         /// <summary>The keys which scroll down long content.</summary>
-        public KeyBinding ScrollDown { get; }
+        public KeybindList ScrollDown { get; set; } = KeybindList.ForSingle(SButton.Down);
 
         /// <summary>The keys which toggle the display of debug information.</summary>
-        public KeyBinding ToggleDebug { get; }
-
-
-        /*********
-        ** Public methods
-        *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="toggleLookup">The keys which toggle the lookup UI for something under the cursor.</param>
-        /// <param name="toggleSearch">The keys which toggle the search UI.</param>
-        /// <param name="scrollUp">The keys which scroll up long content.</param>
-        /// <param name="scrollDown">The keys which scroll down long content.</param>
-        /// <param name="toggleDebug">The keys which toggle the display of debug information.</param>
-        public ModConfigKeys(KeyBinding toggleLookup, KeyBinding toggleSearch, KeyBinding scrollUp, KeyBinding scrollDown, KeyBinding toggleDebug)
-        {
-            this.ToggleLookup = toggleLookup;
-            this.ToggleSearch = toggleSearch;
-            this.ScrollUp = scrollUp;
-            this.ScrollDown = scrollDown;
-            this.ToggleDebug = toggleDebug;
-        }
+        public KeybindList ToggleDebug { get; set; } = new();
     }
 }

@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         ** Common settings
         ****/
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>Whether to hide content until the player has discovered it in-game (where applicable).</summary>
         public bool ProgressionMode { get; set; }

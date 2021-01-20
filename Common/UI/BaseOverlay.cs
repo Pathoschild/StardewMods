@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using Rectangle = xTile.Dimensions.Rectangle;
 
@@ -81,8 +82,10 @@ namespace Pathoschild.Stardew.Common.UI
                 events.Display.Rendered += this.OnRendered;
             if (this.IsMethodOverridden(nameof(this.DrawWorld)))
                 events.Display.RenderedWorld += this.OnRenderedWorld;
-            if (this.IsMethodOverridden(nameof(this.ReceiveButtonPress)) || this.IsMethodOverridden(nameof(this.ReceiveLeftClick)))
+            if (this.IsMethodOverridden(nameof(this.ReceiveLeftClick)))
                 events.Input.ButtonPressed += this.OnButtonPressed;
+            if (this.IsMethodOverridden(nameof(this.ReceiveButtonsChanged)))
+                events.Input.ButtonsChanged += this.OnButtonsChanged;
             if (this.IsMethodOverridden(nameof(this.ReceiveCursorHover)))
                 events.Input.CursorMoved += this.OnCursorMoved;
             if (this.IsMethodOverridden(nameof(this.ReceiveScrollWheelAction)))
@@ -106,13 +109,10 @@ namespace Pathoschild.Stardew.Common.UI
             return false;
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
-        /// <param name="input">The button that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected virtual bool ReceiveButtonPress(SButton input)
-        {
-            return false;
-        }
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        protected virtual void ReceiveButtonsChanged(object sender, ButtonsChangedEventArgs e) { }
 
         /// <summary>The method invoked when the player uses the mouse scroll wheel.</summary>
         /// <param name="amount">The scroll amount.</param>
@@ -134,6 +134,9 @@ namespace Pathoschild.Stardew.Common.UI
         /// <summary>The method invoked when the player resizes the game window.</summary>
         protected virtual void ReceiveGameWindowResized() { }
 
+        /****
+        ** Helpers
+        ****/
         /// <summary>Draw the mouse cursor.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Menus.IClickableMenu.drawMouse"/>.</remarks>
         protected void DrawCursor()
@@ -213,6 +216,17 @@ namespace Pathoschild.Stardew.Common.UI
                 this.Dispose();
         }
 
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        {
+            if (Context.ScreenId != this.ScreenId)
+                return;
+
+            this.ReceiveButtonsChanged(sender, e);
+        }
+
         /// <summary>The method invoked when the player presses a key.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event arguments.</param>
@@ -221,21 +235,18 @@ namespace Pathoschild.Stardew.Common.UI
             if (Context.ScreenId != this.ScreenId)
                 return;
 
+            if (e.Button != SButton.MouseLeft && e.Button.IsUseToolButton())
+                return;
+
             bool uiMode = this.AssumeUiMode ?? Game1.uiMode;
             bool handled;
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
                 float nativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
-                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                ? this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / nativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / nativeZoomLevel))
-                : this.ReceiveButtonPress(e.Button);
+                handled = this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / nativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / nativeZoomLevel));
             }
             else
-            {
-                handled = e.Button == SButton.MouseLeft || e.Button.IsUseToolButton()
-                    ? this.ReceiveLeftClick(Game1.getMouseX(uiMode), Game1.getMouseY(uiMode))
-                    : this.ReceiveButtonPress(e.Button);
-            }
+                handled = this.ReceiveLeftClick(Game1.getMouseX(uiMode), Game1.getMouseY(uiMode));
 
             if (handled)
                 this.InputHelper.Suppress(e.Button);

@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Updated for multi-key bindings in SMAPI 3.9.
+
 ## 1.19.3
 Released 10 January 2021.
 

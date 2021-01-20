@@ -13,10 +13,10 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         public bool ShowGrid { get; set; }
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The generic settings for each layer.</summary>
-        public LayerConfigs Layers { get; set; } = new LayerConfigs();
+        public LayerConfigs Layers { get; set; } = new();
 
 
         /*********

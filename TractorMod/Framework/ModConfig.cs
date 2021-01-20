@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public int BuildPrice { get; set; } = 150000;
 
         /// <summary>The materials needed to to buy the garage.</summary>
-        public Dictionary<int, int> BuildMaterials { get; set; } = new Dictionary<int, int>
+        public Dictionary<int, int> BuildMaterials { get; set; } = new()
         {
             [Object.ironBar] = 20,
             [Object.iridiumBar] = 5,
@@ -37,10 +37,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public bool HighlightRadius { get; set; }
 
         /// <summary>The standard attachment features to enable.</summary>
-        public StandardAttachmentsConfig StandardAttachments { get; set; } = new StandardAttachmentsConfig();
+        public StandardAttachmentsConfig StandardAttachments { get; set; } = new();
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
         public string[] CustomAttachments { get; set; } = new string[0];
