@@ -6,9 +6,12 @@ automatically pull raw items from the chest and push processed items into it.
 * [Install](#install)
 * [Use](#use)
   * [Basic automation](#basic-automation)
-  * [Factories](#factories)
+  * [Examples](#examples)
+* [Automation techniques](#automation-techniques)
   * [Connectors](#connectors)
+  * [Machine pipelines](#machine-pipelines)
   * [Machine priority](#machine-priority)
+  * [Junimo chests](#junimo-chests)
 * [Configure](#configure)
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
@@ -32,6 +35,7 @@ Machines connected to a chest will push their output into it, and pull ingredien
 of it.
 
 This can be used to automate...
+
 * [auto-grabbers](https://stardewvalleywiki.com/Auto-Grabber);
 * [bee houses](https://stardewvalleywiki.com/Bee_House);
 * [bone mills](https://stardewvalleywiki.com/Bone_Mill);
@@ -114,6 +118,7 @@ Here are some example machine group setups. You can increase production by just 
   put back in the chest.
   > ![](screenshots/iridium-cheese-factory.png)
 
+## Automation techniques
 ### Connectors
 You can optionally configure objects or paths as connectors, which link machines together. For
 example, here are wooden paths used as connectors:
@@ -123,25 +128,39 @@ example, here are wooden paths used as connectors:
 Workbenches are the only connectors by default. You can edit the `config.json` to add connectors
 (see _[configure](#configure)_ below).
 
-### Junimo chests
-Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
-is part of a global machine group. This global group behaves just like a regular machine group
-(including for [machine priority](#machine-priority)), even if it's spread across many locations.
+### Machine pipelines
+A _pipeline_ is the directional flow of items along a set of machines. For example, milk in the
+chest gets processed in the cheese presses, then aged in the casks, then shipped:
+```
+ milk         cheese      aged 
+ ----------> ----------> ---------->
+┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+│  input   ││  cheese  ││   cask   ││ shipping │
+│  chest   ││  press   ││          ││   bin    │
+└──────────┘└──────────┘└──────────┘└──────────┘
+            ┌──────────┐┌──────────┐
+            │  cheese  ││   cask   │
+            │  press   ││          │
+            └──────────┘└──────────┘
+                        ┌──────────┐
+                        │   cask   │
+                        │          │
+                        └──────────┘
+```
 
-For example, you can use this to distribute automation across the world:
+Automate doesn't _directly_ support pipelines: every machine (including the shipping bin) always
+has access to every connected chest.
 
-1. Junimo huts on your farm collect crops;
-2. kegs in a shed turn them into juice/wine;
-3. cellar casks age the juice/wine;
-4. the shipping bin collects the final output.
+You can still have pipelines using [machine priorities](#machine-priority) though. The shipping bin
+has the lowest priority by default, so milk in the chest will go into the cheese press first
+automatically. The caveat is that **priority only matters when different machines are ready to take
+items**. For example, the shipping bin will happily take any remaining items if your other machines
+are all busy. There are two common solutions:
 
-Caveats:
-* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
-  chests are always automated if at least one is connected to a machine.
- 
-  They have the highest priority for machine input, and the lowest priority for machine output.
-  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
-  still available to all machines in the global group either way.)
+* Add enough machines to handle all your input, so you never have unused items for the shipping bin.
+* Leave a space between the shipping bin and other machines, so it's not connected. When you're
+  ready to ship all the output, put down a [path connector](#connectors) temporarily so it pulls
+  all the available items.
 
 ### Machine priority
 The default order that machines are processed is unpredictable and subject to change, except that
@@ -162,6 +181,26 @@ predictable.
 
 Note that if all higher-priority machines are busy, any remaining items may go into lower-priority
 machines.
+
+### Junimo chests
+Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
+is part of a global machine group. This global group behaves just like a regular machine group
+(including for [machine priority](#machine-priority)), even if it's spread across many locations.
+
+For example, you can use this to distribute automation across the world:
+
+1. Junimo huts on your farm collect crops;
+2. kegs in a shed turn them into juice/wine;
+3. cellar casks age the juice/wine;
+4. the shipping bin collects the final output.
+
+Caveats:
+* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
+  chests are always automated if at least one is connected to a machine.
+ 
+  They have the highest priority for machine input, and the lowest priority for machine output.
+  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
+  still available to all machines in the global group either way.)
 
 ## Configure
 ### config.json
@@ -266,7 +305,7 @@ This adds four options for automate:
 ### Per-machine settings
 _This is advanced; most players won't need to configure Automate to this extent._
 
-You can set some options for individual machine types by [editing the `config.json`](#config.json),
+You can set some options for individual machine types by [editing the `config.json`](#configure),
 and adding an entry to the `MachineOverrides` field. If a machine isn't listed in that field, it'll
 use the default values defined in `assets/data.json`. This works for all automated machines,
 including those added by other mods.
@@ -327,6 +366,14 @@ Enter `automate summary` directly in the SMAPI console to view a summary of your
 > ![](screenshots/console-command.png)
 
 ## FAQs
+### How many machines can I automate at once?
+There's no strict limit, since Automate optimises machine connections internally. I've officially
+tested with up to [630 machines in one group](https://community.playstarbound.com/threads/automate.131913/page-11#post-3238142)
+(which didn't cause any issues), and some players have thousands of automated machines.
+
+### Can I prevent a chest from being automated?
+Yep; see _[in-game settings](#in-game-settings)_.
+
 ### Why did my chests/machines disappear?
 Some common reasons:
 * NPCs destroy items placed in their path. You can use [Non Destructive NPCs](https://www.nexusmods.com/stardewvalley/mods/5176)
@@ -336,11 +383,6 @@ Some common reasons:
 
 Automate doesn't remove placed objects, so it's never at fault for disappearing chests or machines.
 
-### Is there a limit to how many machines can be connected?
-There's no strict limit, since Automate optimises machine connections internally. I've officially
-tested with up to [630 machines in one group](https://community.playstarbound.com/threads/automate.131913/page-11#post-3238142)
-(which didn't cause any issues), and some players have thousands of automated machines.
-
 ### What's the order for chest/machine handling?
 When storing items, Automate prefers chests which either have the "Put items in this chest first" option (see
 [_in-game settings_ in the README](README.md#in-game-settings)) or already have an item of the
@@ -348,21 +390,6 @@ same type. The order when taking items is a bit more complicated. For more info,
 [technical documentation](technical.md).
 
 For machines, see [machine priority](#machine-priority).
-
-### How can I prevent a chest from being automated?
-See _[in-game settings](#in-game-settings)_.
-
-### Why does my shipping bin take unprocessed items?
-The shipping bin has a lower priority than other machines by default, but it's still a machine like
-any other. If all your higher-priority machines are busy, the shipping bin will happily take any
-remaining items.
-
-There are two common ways to solve that:
-
-* Add enough machines to handle all your input, so you never have unused items for the shipping bin.
-* Leave a space between the shipping bin and other machines, so it's not connected. When you're
-  ready to ship all the output, put down a [path connectors](#connectors) temporarily so it pulls
-  all the available items.
 
 ### Can other mods extend Automate?
 Yep. Automate provides APIs that let other mods add custom machines/containers/connectors or make
