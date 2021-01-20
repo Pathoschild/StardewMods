@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
@@ -481,14 +480,8 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Reapply the mod configuration.</summary>
         private void UpdateConfig()
         {
-            // TODO
-            // Temporary hack until new PerScreen<T> methods in SMAPI 3.9
-            var field = this.TractorManagerImpl.GetType().GetField("States", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(this.TractorManagerImpl) as IDictionary<int, TractorManager>;
-            if (field == null)
-                throw new InvalidOperationException("Can't access per-screen tractor states. Try updating Tractor Mod or reporting this on the mod page.");
-
-            foreach (TractorManager manager in field.Values)
-                this.UpdateConfigFor(manager);
+            foreach (var pair in this.TractorManagerImpl.GetActiveValues())
+                this.UpdateConfigFor(pair.Value);
         }
 
         /// <summary>Apply the mod configuration to a tractor manager instance.</summary>
