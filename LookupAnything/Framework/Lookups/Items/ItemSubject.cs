@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             this.FromCrop = fromCrop ?? fromDirt?.crop;
             this.FromDirt = fromDirt;
 
-            if ((item as SObject)?.Type == "Seeds" && fromCrop == null) // fromCrop == null to exclude planted coffee beans
+            if ((item as SObject)?.Type == "Seeds" && this.FromCrop == null) // fromCrop == null to exclude unplanted coffee beans
                 this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;

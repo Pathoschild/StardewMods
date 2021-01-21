@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for multi-key bindings in SMAPI 3.9.
+* Fixed coffee crops not showing next harvest date.
 
 ## 1.32.2
 Released 17 January 2021.
