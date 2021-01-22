@@ -89,8 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         // parse ID
                         string[] parts = entry.Split(' ');
-                        int id;
-                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out id))
+                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out int id))
                             return null;
 
                         // parse counts
@@ -262,69 +261,6 @@ namespace Pathoschild.Stardew.LookupAnything
         public FriendshipModel GetFriendshipForAnimal(SFarmer player, FarmAnimal animal, Metadata metadata)
         {
             return new FriendshipModel(animal.friendshipTowardFarmer.Value, metadata.Constants.AnimalFriendshipPointsPerLevel, metadata.Constants.AnimalFriendshipMaxPoints);
-        }
-
-        /// <summary>Get the raw gift tastes from the underlying data.</summary>
-        /// <param name="objects">The game's object data.</param>
-        /// <remarks>Reverse engineered from <c>Data\NPCGiftTastes</c> and <see cref="StardewValley.NPC.getGiftTasteForThisItem"/>.</remarks>
-        public IEnumerable<GiftTasteEntry> GetGiftTastes(ObjectModel[] objects)
-        {
-            // extract raw values
-            var tastes = new List<GiftTasteEntry>();
-            {
-                // define data schema
-                var universal = new Dictionary<string, GiftTaste>
-                {
-                    ["Universal_Love"] = GiftTaste.Love,
-                    ["Universal_Like"] = GiftTaste.Like,
-                    ["Universal_Neutral"] = GiftTaste.Neutral,
-                    ["Universal_Dislike"] = GiftTaste.Dislike,
-                    ["Universal_Hate"] = GiftTaste.Hate
-                };
-                var personalMetadataKeys = new Dictionary<int, GiftTaste>
-                {
-                    // metadata is paired: odd values contain a list of item references, even values contain the reaction dialogue
-                    [1] = GiftTaste.Love,
-                    [3] = GiftTaste.Like,
-                    [5] = GiftTaste.Dislike,
-                    [7] = GiftTaste.Hate,
-                    [9] = GiftTaste.Neutral
-                };
-
-                // read data
-                IDictionary<string, string> data = Game1.NPCGiftTastes;
-                foreach (string villager in data.Keys)
-                {
-                    string tasteStr = data[villager];
-
-                    if (universal.ContainsKey(villager))
-                    {
-                        GiftTaste taste = universal[villager];
-                        tastes.AddRange(
-                            from refID in tasteStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                            select new GiftTasteEntry(taste, "*", int.Parse(refID), isUniversal: true)
-                        );
-                    }
-                    else
-                    {
-                        string[] personalData = tasteStr.Split('/');
-                        foreach (KeyValuePair<int, GiftTaste> taste in personalMetadataKeys)
-                        {
-                            tastes.AddRange(
-                                from refID in
-                                    personalData[taste.Key].Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                                select new GiftTasteEntry(taste.Value, villager, int.Parse(refID))
-                            );
-                        }
-                    }
-                }
-            }
-
-            // get sanitized data
-            HashSet<int> validItemIDs = new HashSet<int>(objects.Select(p => p.ParentSpriteIndex));
-            HashSet<int> validCategories = new HashSet<int>(objects.Where(p => p.Category != 0).Select(p => p.Category));
-            return tastes
-                .Where(model => validCategories.Contains(model.RefID) || validItemIDs.Contains(model.RefID)); // ignore invalid entries
         }
 
         /// <summary>Parse monster data.</summary>
