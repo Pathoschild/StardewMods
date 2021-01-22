@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for multi-key bindings in SMAPI 3.9.
+* Fixed NPC lookups taking a long time to open when using mods that add a large number of custom items.
 * Fixed support for mods which add gift tastes by context tag.
 * Fixed coffee crops not showing next harvest date.
 
