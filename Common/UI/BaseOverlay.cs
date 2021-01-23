@@ -48,6 +48,7 @@ namespace Pathoschild.Stardew.Common.UI
             this.Events.Display.RenderedWorld -= this.OnRenderedWorld;
             this.Events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
             this.Events.Input.ButtonPressed -= this.OnButtonPressed;
+            this.Events.Input.ButtonsChanged -= this.OnButtonsChanged;
             this.Events.Input.CursorMoved -= this.OnCursorMoved;
             this.Events.Input.MouseWheelScrolled -= this.OnMouseWheelScrolled;
         }
