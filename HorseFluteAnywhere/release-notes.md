@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1.2
+Released 23 January 2021.
+
 * Updated for multi-key bindings in SMAPI 3.9.
 
 ## 1.1.1

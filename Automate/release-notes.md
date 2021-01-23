@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.1
+Released 23 January 2021.
+
 * Updated for multi-key bindings in SMAPI 3.9.
 * Fixed tappers on mahogany tree always producing one sap.
 * Fixed errors when a chest contains an invalid item stack.
