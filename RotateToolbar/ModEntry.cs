@@ -1,4 +1,3 @@
-using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.RotateToolbar.Framework;
 using StardewModdingAPI;
@@ -17,7 +16,7 @@ namespace Pathoschild.Stardew.RotateToolbar
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
 
         /*********
@@ -29,10 +28,9 @@ namespace Pathoschild.Stardew.RotateToolbar
         {
             // read config
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // hook events
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         }
 
 
@@ -42,21 +40,21 @@ namespace Pathoschild.Stardew.RotateToolbar
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;
 
             // perform bound action
-            this.Monitor.InterceptErrors("handling your input", $"handling input '{e.Button}'", () =>
+            this.Monitor.InterceptErrors("handling your input", () =>
             {
                 ModConfigKeys keys = this.Keys;
-                if (keys.ShiftToNext.JustPressedUnique())
+                if (keys.ShiftToNext.JustPressed())
                     this.RotateToolbar(true, this.Config.DeselectItemOnRotate);
-                else if (keys.ShiftToPrevious.JustPressedUnique())
+                else if (keys.ShiftToPrevious.JustPressed())
                     this.RotateToolbar(false, this.Config.DeselectItemOnRotate);
             });
         }

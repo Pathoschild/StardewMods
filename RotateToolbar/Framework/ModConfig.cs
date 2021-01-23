@@ -10,6 +10,6 @@ namespace Pathoschild.Stardew.RotateToolbar.Framework
         public bool DeselectItemOnRotate { get; set; } = false;
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
     }
 }
