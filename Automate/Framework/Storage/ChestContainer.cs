@@ -158,7 +158,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="item">The item to track.</param>
         private ITrackedStack GetTrackedItem(Item item)
         {
-            if (item == null)
+            if (item == null || item.Stack <= 0)
                 return null;
 
             try

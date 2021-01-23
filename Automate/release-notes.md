@@ -4,6 +4,7 @@
 ## Upcoming release
 * Updated for multi-key bindings in SMAPI 3.9.
 * Fixed tappers on mahogany tree always producing one sap.
+* Fixed errors when a chest contains an invalid item stack.
 
 ## 1.20
 Released 16 January 2021.
