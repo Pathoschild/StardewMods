@@ -1,4 +1,4 @@
-**Noclip Mode** is a [Stardew Valley](http://stardewvalley.net/) mod that toggles
+﻿**Noclip Mode** is a [Stardew Valley](http://stardewvalley.net/) mod that toggles
 [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button, letting you walk
 through anything (even map boundaries).
 

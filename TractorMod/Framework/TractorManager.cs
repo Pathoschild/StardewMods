@@ -229,7 +229,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 return false;
 
             // automatic mode
-            if (!this.Keys.HoldToActivate.HasAny())
+            if (!this.Keys.HoldToActivate.IsBound)
                 return true;
 
             // hold-to-activate mode

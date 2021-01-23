@@ -1,6 +1,12 @@
-[← back to readme](README.md)
+﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.6
+Released 23 January 2021.
+
+* Updated for multi-key bindings in SMAPI 3.9.
+* Improved Automate options UI.
+
 ## 1.20.5
 Released 18 January 2021.
 

@@ -21,9 +21,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public ChestRange Range { get; set; } = ChestRange.Unlimited;
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The locations in which to disable remote chest lookups.</summary>
-        public InvariantHashSet DisabledInLocations { get; set; } = new InvariantHashSet();
+        public InvariantHashSet DisabledInLocations { get; set; } = new();
     }
 }

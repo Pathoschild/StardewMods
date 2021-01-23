@@ -1,4 +1,4 @@
-[← back to readme](README.md)
+﻿[← back to readme](README.md)
 
 # Release notes
 <!--
@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.19.4
+Released 23 January 2021.
+
+* Updated for multi-key bindings in SMAPI 3.9.
+
 ## 1.19.3
 Released 10 January 2021.
 

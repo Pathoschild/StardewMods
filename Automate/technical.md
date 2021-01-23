@@ -1,4 +1,4 @@
-This document provides technical info about the Automate mod. **For more general info, see the
+﻿This document provides technical info about the Automate mod. **For more general info, see the
 [README](README.md) file instead.**
 
 ## Contents

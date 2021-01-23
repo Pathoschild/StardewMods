@@ -1,4 +1,4 @@
-**Small Beach Farm** is a [Stardew Valley](http://stardewvalley.net/) mod which adds a fertile
+﻿**Small Beach Farm** is a [Stardew Valley](http://stardewvalley.net/) mod which adds a fertile
 pocket beach farm suitable for slower/challenge runs, and lets you catch both river and ocean fish.
 You can optionally enable islands and beach sounds.
 

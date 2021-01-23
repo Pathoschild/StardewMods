@@ -1,8 +1,7 @@
-using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Input;
 using Pathoschild.Stardew.NoclipMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 namespace Pathoschild.Stardew.NoclipMode
@@ -17,7 +16,7 @@ namespace Pathoschild.Stardew.NoclipMode
         private ModConfig Config;
 
         /// <summary>The keys which toggle noclip mode.</summary>
-        private KeyBinding ToggleKey;
+        private KeybindList ToggleKey => this.Config.ToggleKey;
 
         /// <summary>An arbitrary number which identifies messages from Noclip Mode.</summary>
         private const int MessageID = 91871825;
@@ -33,32 +32,31 @@ namespace Pathoschild.Stardew.NoclipMode
             // init
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
-            this.ToggleKey = CommonHelper.ParseButtons(this.Config.ToggleKey, helper.Input, this.Monitor, nameof(this.Config.ToggleKey));
 
             // hook events
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Raised after the player presses a button on the keyboard, controller, or mouse.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
-            if (this.CanToggle() && this.ToggleKey.JustPressedUnique())
+            if (this.CanToggle() && this.ToggleKey.JustPressed())
             {
                 bool enabled = Game1.player.ignoreCollisions = !Game1.player.ignoreCollisions;
-                this.ShowConfirmationMessage(enabled, e.Button);
+                this.ShowConfirmationMessage(enabled, this.ToggleKey);
             }
         }
 
         /// <summary>Show a confirmation message for the given noclip mode, if enabled.</summary>
         /// <param name="noclipEnabled">Whether noclip was enabled; else noclip was disabled.</param>
-        /// <param name="button">The toggle button that was pressed.</param>
-        private void ShowConfirmationMessage(bool noclipEnabled, SButton button)
+        /// <param name="keybind">The keybind that was pressed.</param>
+        private void ShowConfirmationMessage(bool noclipEnabled, KeybindList keybind)
         {
             // skip if message not enabled
             if (noclipEnabled && !this.Config.ShowEnabledMessage)
@@ -68,7 +66,8 @@ namespace Pathoschild.Stardew.NoclipMode
 
             // show message
             Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageID);
-            string text = noclipEnabled ? I18n.EnabledMessage(button) : I18n.DisabledMessage(button);
+            string keybindStr = keybind.GetKeybindCurrentlyDown().ToString();
+            string text = noclipEnabled ? I18n.EnabledMessage(keybindStr) : I18n.DisabledMessage(keybindStr);
             Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageID });
         }
 

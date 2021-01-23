@@ -1,4 +1,4 @@
-**Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
+﻿**Chests Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod which lets you access
 your chests, fridge, Junimo huts, and shipping bin from anywhere and organize them your way.
 Transfer items without having to run around, from the comfort of your bed to the deepest mine level.
 

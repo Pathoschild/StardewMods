@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.DebugMode
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Whether to show the debug info overlay.</summary>
         private bool ShowOverlay;
@@ -31,10 +31,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <summary>Whether the built-in debug mode is enabled.</summary>
         private bool GameDebugMode
         {
-            get
-            {
-                return Game1.debugMode;
-            }
+            get => Game1.debugMode;
             set
             {
                 Game1.debugMode = value;
@@ -70,10 +67,9 @@ namespace Pathoschild.Stardew.DebugMode
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             // hook events
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Display.Rendered += this.OnRendered;
             if (this.Config.AllowGameDebug)
                 helper.Events.Player.Warped += this.OnWarped;
@@ -90,13 +86,13 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             // toggle debug menu
-            if (this.Keys.ToggleDebug.JustPressedUnique())
+            if (this.Keys.ToggleDebug.JustPressed())
             {
                 this.ShowOverlay = !this.ShowOverlay;
                 if (this.Config.AllowGameDebug)
@@ -104,8 +100,14 @@ namespace Pathoschild.Stardew.DebugMode
             }
 
             // suppress dangerous actions
-            if (this.GameDebugMode && !this.Config.AllowDangerousCommands && this.DestructiveKeys.Contains(e.Button))
-                this.Helper.Input.Suppress(e.Button);
+            if (this.GameDebugMode && !this.Config.AllowDangerousCommands)
+            {
+                foreach (SButton button in e.Pressed)
+                {
+                    if (this.DestructiveKeys.Contains(button))
+                        this.Helper.Input.Suppress(button);
+                }
+            }
         }
 
         /// <summary>The method invoked when the player warps into a new location.</summary>

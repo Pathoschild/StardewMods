@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
@@ -20,10 +19,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public GridLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.Grid_Name(), config, input, monitor)
+        public GridLayer(LayerConfig config)
+            : base(I18n.Grid_Name(), config)
         {
             this.Legend = new LegendEntry[0];
             this.AlwaysShowGrid = true;

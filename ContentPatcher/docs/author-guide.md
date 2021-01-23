@@ -1,4 +1,4 @@
-← [README](../README.md)
+﻿← [README](../README.md)
 
 This document helps mod authors create a content pack for Content Patcher.
 

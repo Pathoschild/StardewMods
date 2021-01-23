@@ -1,4 +1,4 @@
-**Crops Anytime Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you grow
+﻿**Crops Anytime Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you grow
 crops in any season and location, including on grass/dirt tiles you normally couldn't till. You can
 optionally configure the seasons, locations, and tillable tile types.
 

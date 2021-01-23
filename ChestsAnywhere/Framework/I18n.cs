@@ -119,28 +119,46 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return I18n.GetByKey("label.hide-chest-hidden");
         }
 
-        /// <summary>Get a translation equivalent to "(Automate) Put items in this chest".</summary>
+        /// <summary>Get a translation equivalent to "Automate options".</summary>
+        public static string Label_AutomateOptions()
+        {
+            return I18n.GetByKey("label.automate-options");
+        }
+
+        /// <summary>Get a translation equivalent to "Put items in this chest".</summary>
         public static string Label_AutomateStore()
         {
             return I18n.GetByKey("label.automate-store");
         }
 
-        /// <summary>Get a translation equivalent to "(Automate) Put items in this chest first".</summary>
+        /// <summary>Get a translation equivalent to "Put items in this chest first".</summary>
         public static string Label_AutomateStoreFirst()
         {
             return I18n.GetByKey("label.automate-store-first");
         }
 
-        /// <summary>Get a translation equivalent to "(Automate) Take items from this chest".</summary>
+        /// <summary>Get a translation equivalent to "Never put items in this chest".</summary>
+        public static string Label_AutomateStoreDisabled()
+        {
+            return I18n.GetByKey("label.automate-store-disabled");
+        }
+
+        /// <summary>Get a translation equivalent to "Take items from this chest".</summary>
         public static string Label_AutomateTake()
         {
             return I18n.GetByKey("label.automate-take");
         }
 
-        /// <summary>Get a translation equivalent to "(Automate) Take items from this chest first".</summary>
+        /// <summary>Get a translation equivalent to "Take items from this chest first".</summary>
         public static string Label_AutomateTakeFirst()
         {
             return I18n.GetByKey("label.automate-take-first");
+        }
+
+        /// <summary>Get a translation equivalent to "Never take items from this chest".</summary>
+        public static string Label_AutomateTakeDisabled()
+        {
+            return I18n.GetByKey("label.automate-take-disabled");
         }
 
         /// <summary>Get a translation equivalent to "edit chest".</summary>

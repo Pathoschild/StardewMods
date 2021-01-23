@@ -36,9 +36,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>The cached object data.</summary>
         private Lazy<ObjectModel[]> Objects;
 
-        /// <summary>The cached villagers' gift tastes.</summary>
-        private Lazy<GiftTasteEntry[]> GiftTastes;
-
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
 
@@ -53,6 +50,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Scans the game world for owned items.</summary>
         private readonly WorldItemScanner WorldItemScanner;
+
+        /// <summary>Provides methods for searching and constructing items.</summary>
+        private readonly ItemRepository ItemRepository = new();
 
 
         /*********
@@ -85,7 +85,6 @@ namespace Pathoschild.Stardew.LookupAnything
         public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
             this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
-            this.GiftTastes = new Lazy<GiftTasteEntry[]>(() => this.DataParser.GetGiftTastes(this.Objects.Value).ToArray());
             this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
         }
 
@@ -235,19 +234,10 @@ namespace Pathoschild.Stardew.LookupAnything
             if (!this.IsSocialVillager(npc))
                 return new GiftTasteModel[0];
 
-            // get giftable items
-            HashSet<int> giftableItemIDs = new HashSet<int>(
-                from int refID in this.GiftTastes.Value.Select(p => p.RefID)
-                from ObjectModel obj in this.Objects.Value
-                where obj.ParentSpriteIndex == refID || obj.Category == refID
-                select obj.ParentSpriteIndex
-            );
-
-            // get gift tastes
             return
                 (
-                    from int itemID in giftableItemIDs
-                    let item = this.GetObjectBySpriteIndex(itemID)
+                    from entry in this.ItemRepository.GetAll(ItemType.Object)
+                    let item = entry.CreateItem()
                     let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
                     select new GiftTasteModel(npc, item, taste.Value)

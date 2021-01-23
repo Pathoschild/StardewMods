@@ -1,4 +1,4 @@
-**Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which shows a
+﻿**Debug Mode** is an open-source [Stardew Valley](http://stardewvalley.net/) mod which shows a
 useful debug info overlay when you press `~`, and optionally enables the game's debug hotkeys
 (including teleportation and time manipulation).
 

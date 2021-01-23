@@ -13,6 +13,6 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         public bool AllowDangerousCommands { get; set; }
 
         /// <summary>The key bindings.</summary>
-        public ModConfigRawKeys Controls { get; set; } = new ModConfigRawKeys();
+        public ModConfigKeys Controls { get; set; } = new();
     }
 }

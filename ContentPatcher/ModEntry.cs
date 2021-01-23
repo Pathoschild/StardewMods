@@ -77,19 +77,19 @@ namespace ContentPatcher
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The debug overlay (if enabled).</summary>
         private DebugOverlay DebugOverlay;
 
         /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
-        private List<ModProvidedToken> QueuedModTokens = new List<ModProvidedToken>();
+        private List<ModProvidedToken> QueuedModTokens = new();
 
         /// <summary>Whether the next tick is the first one.</summary>
         private bool IsFirstTick = true;
 
         /// <summary>The loaded content packs.</summary>
-        private readonly IList<RawContentPack> RawContentPacks = new List<RawContentPack>();
+        private readonly List<RawContentPack> RawContentPacks = new();
 
 
         /*********
@@ -100,7 +100,6 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
@@ -119,15 +118,15 @@ namespace ContentPatcher
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (this.Config.EnableDebugFeatures)
             {
                 // toggle overlay
-                if (this.Keys.ToggleDebug.JustPressedUnique())
+                if (this.Keys.ToggleDebug.JustPressed())
                 {
                     if (this.DebugOverlay == null)
                         this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
@@ -136,15 +135,14 @@ namespace ContentPatcher
                         this.DebugOverlay.Dispose();
                         this.DebugOverlay = null;
                     }
-                    return;
                 }
 
                 // cycle textures
-                if (this.DebugOverlay != null)
+                else if (this.DebugOverlay != null)
                 {
-                    if (this.Keys.DebugPrevTexture.JustPressedUnique())
+                    if (this.Keys.DebugPrevTexture.JustPressed())
                         this.DebugOverlay.PrevTexture();
-                    if (this.Keys.DebugNextTexture.JustPressedUnique())
+                    if (this.Keys.DebugNextTexture.JustPressed())
                         this.DebugOverlay.NextTexture();
                 }
             }
@@ -271,7 +269,7 @@ namespace ContentPatcher
 
             // set up events
             if (this.Config.EnableDebugFeatures)
-                helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+                helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
@@ -280,7 +278,7 @@ namespace ContentPatcher
 
             // set up commands
             this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext(ContextUpdateType.All));
-            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (name, args) => this.CommandHandler.Handle(args));
+            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (_, args) => this.CommandHandler.Handle(args));
 
             // can no longer queue tokens
             this.QueuedModTokens = null;

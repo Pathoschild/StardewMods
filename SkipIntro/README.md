@@ -1,4 +1,4 @@
-**Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips straight to
+﻿**Skip Intro** is a minimal [Stardew Valley](http://stardewvalley.net/) mod that skips straight to
 the title screen when you start the game. You can optionally skip to the load screen, co-op join
 screen, or co-op host screen instead. It also skips the screen transitions, so starting the game is
 much faster.

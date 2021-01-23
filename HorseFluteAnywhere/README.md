@@ -1,4 +1,4 @@
-**Horse Flute Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you summon
+﻿**Horse Flute Anywhere** is a [Stardew Valley](http://stardewvalley.net/) mod that lets you summon
 your horse anywhere (even indoors or in caves/dungeons) at the press of a button or by using the
 [horse flute](https://stardewvalleywiki.com/Horse_Flute).
 

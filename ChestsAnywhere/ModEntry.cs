@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private ModConfig Config;
 
         /// <summary>The configured key bindings.</summary>
-        private ModConfigKeys Keys;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The internal mod settings.</summary>
         private ModData Data;
@@ -50,7 +50,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // initialize
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
-            this.Keys = this.Config.Controls.ParseControls(helper.Input, this.Monitor);
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
             this.ChestFactory = new ChestFactory(helper.Multiplayer, helper.Reflection, this.Config.EnableShippingBin);
 
@@ -59,7 +58,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
-            helper.Events.Input.ButtonPressed += this.OnButtonPressed;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -125,10 +124,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.ChangeOverlayIfNeeded();
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -138,7 +137,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 ModConfigKeys keys = this.Keys;
 
                 // open menu
-                if (keys.Toggle.JustPressedUnique())
+                if (keys.Toggle.JustPressed())
                 {
                     // open if no conflict
                     if (Game1.activeClickableMenu == null)

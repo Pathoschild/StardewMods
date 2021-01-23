@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
@@ -44,10 +43,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public AccessibleLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.Accessible_Name(), config, input, monitor)
+        public AccessibleLayer(LayerConfig config)
+            : base(I18n.Accessible_Name(), config)
         {
             this.Legend = new[]
             {

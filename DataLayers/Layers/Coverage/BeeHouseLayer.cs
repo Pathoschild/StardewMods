@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
-using StardewModdingAPI;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -34,10 +33,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="input">The API for checking input state.</param>
-        /// <param name="monitor">Writes messages to the SMAPI log.</param>
-        public BeeHouseLayer(LayerConfig config, IInputHelper input, IMonitor monitor)
-            : base(I18n.BeeHouses_Name(), config, input, monitor)
+        public BeeHouseLayer(LayerConfig config)
+            : base(I18n.BeeHouses_Name(), config)
         {
             this.Legend = new[]
             {

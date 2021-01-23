@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>NoclipMode</AssemblyName>
-    <Version>1.2.4</Version>
+    <Version>1.2.5</Version>
     <RootNamespace>Pathoschild.Stardew.NoclipMode</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

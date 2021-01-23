@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Common.Utilities;
 using Microsoft.Xna.Framework;
@@ -10,6 +11,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -65,6 +67,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The configured key bindings.</summary>
         private readonly ModConfigKeys Keys;
 
+        /// <summary>The keybind for escaping the active element or menu.</summary>
+        private readonly KeybindList EscapeKeybind = KeybindList.Parse($"{SButton.Escape}, {SButton.ControllerB}");
+
         /// <summary>Whether to show the category dropdown.</summary>
         protected bool ShowCategoryDropdown => this.Categories.Length > 1;
 
@@ -110,17 +115,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>A checkbox which indicates whether to hide the chest.</summary>
         private Checkbox EditHideChestField;
 
-        /// <summary>A checkbox which indicates whether Automate should store items in this chest.</summary>
-        private Checkbox EditAutomateStoreItems;
+        /// <summary>A dropdown which configures how Automate stores items in this chest.</summary>
+        private SimpleDropdown<AutomateContainerPreference> EditAutomateStorage;
 
-        /// <summary>A checkbox which indicates whether Automate should store items in this chest first.</summary>
-        private Checkbox EditAutomateStoreItemsPreferred;
-
-        /// <summary>A checkbox which indicates whether Automate should take items from this chest.</summary>
-        private Checkbox EditAutomateTakeItems;
-
-        /// <summary>A checkbox which indicates whether Automate should take items from this chest first.</summary>
-        private Checkbox EditAutomateTakeItemsPreferred;
+        /// <summary>A dropdown which configures how Automate takes items from this chest.</summary>
+        private SimpleDropdown<AutomateContainerPreference> EditAutomateFetch;
 
         /// <summary>The clickable area which saves the edit form.</summary>
         private ClickableComponent EditSaveButtonArea;
@@ -278,19 +277,32 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // checkboxes
                 topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditHideChestField, bounds.X + padding, bounds.Y + (int)topOffset, this.EditHideChestField.Value ? I18n.Label_HideChestHidden() : I18n.Label_HideChest()).Y;
-                if (this.ShowAutomateOptions)
-                {
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateStore(), defaultValue: true).Y;
-                    if (this.EditAutomateStoreItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateStoreItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateStoreFirst()).Y;
-                    topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItems, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Label_AutomateTake(), defaultValue: true).Y;
-                    if (this.EditAutomateTakeItems.Value)
-                        topOffset += this.DrawAndPositionCheckbox(batch, font, this.EditAutomateTakeItemsPreferred, bounds.X + padding + indent, bounds.Y + (int)topOffset, I18n.Label_AutomateTakeFirst()).Y;
-                }
 
                 // buttons
-                this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset, I18n.Button_Save(), Color.DarkGreen, out Rectangle saveButtonBounds);
-                this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset, I18n.Button_Reset(), Color.DarkRed, out _);
+                void DrawButtons(int yOffset)
+                {
+                    this.DrawButton(batch, Game1.smallFont, this.EditSaveButtonArea, bounds.X + padding, bounds.Y + (int)topOffset + yOffset, I18n.Button_Save(), Color.DarkGreen, out Rectangle saveButtonBounds);
+                    this.DrawButton(batch, Game1.smallFont, this.EditResetButtonArea, bounds.X + padding + saveButtonBounds.Width + 2, bounds.Y + (int)topOffset + yOffset, I18n.Button_Reset(), Color.DarkRed, out _);
+                }
+
+                // Automate options
+                // note: must be drawn in reverse order (including the buttons), so dropdowns overlay the elements below them
+                if (this.ShowAutomateOptions)
+                {
+                    // label
+                    topOffset += padding;
+                    topOffset += batch.DrawTextBlock(Game1.smallFont, I18n.Label_AutomateOptions(), new Vector2(bounds.X + padding, bounds.Y + topOffset), wrapWidth: bounds.Width - bounds.X - padding, bold: true).Y;
+
+                    // buttons
+                    DrawButtons(yOffset: this.EditAutomateStorage.Bounds.Height + this.EditAutomateFetch.Bounds.Height + padding);
+
+                    // dropdowns
+                    this.EditAutomateFetch.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset + this.EditAutomateStorage.Bounds.Height);
+                    this.EditAutomateStorage.Draw(batch, bounds.X + padding, bounds.Y + (int)topOffset);
+                }
+                else
+                    DrawButtons(yOffset: 0);
+
 
                 // exit button
                 this.EditExitButton.draw(batch);
@@ -309,49 +321,51 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.ReinitializeComponents();
         }
 
-        /// <summary>The method invoked when the player presses a button.</summary>
-        /// <param name="input">The button that was pressed.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
-        protected override bool ReceiveButtonPress(SButton input)
+        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        protected override void ReceiveButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (!this.IsInitialized)
-                return false;
+                return;
 
             bool canNavigate = this.CanCloseChest;
             ModConfigKeys keys = this.Keys;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (keys.Toggle.JustPressedUnique() || input == SButton.Escape || input == SButton.ControllerB)
+                    if (keys.Toggle.JustPressed() || this.EscapeKeybind.JustPressed())
                     {
+                        this.InputHelper.SuppressActiveKeybinds(keys.Toggle);
+                        this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
+
                         if (canNavigate)
                             this.Exit();
                     }
-                    else if (keys.PrevChest.JustPressedUnique() && canNavigate)
+                    else if (keys.PrevChest.JustPressed() && canNavigate)
                         this.SelectPreviousChest();
-                    else if (keys.NextChest.JustPressedUnique() && canNavigate)
+                    else if (keys.NextChest.JustPressed() && canNavigate)
                         this.SelectNextChest();
-                    else if (keys.PrevCategory.JustPressedUnique() && canNavigate)
+                    else if (keys.PrevCategory.JustPressed() && canNavigate)
                         this.SelectPreviousCategory();
-                    else if (keys.NextCategory.JustPressedUnique() && canNavigate)
+                    else if (keys.NextCategory.JustPressed() && canNavigate)
                         this.SelectNextCategory();
-                    else if (keys.EditChest.JustPressedUnique() && canNavigate)
+                    else if (keys.EditChest.JustPressed() && canNavigate)
                         this.OpenEdit();
-                    else if (keys.SortItems.JustPressedUnique())
+                    else if (keys.SortItems.JustPressed())
                         this.SortInventory();
-                    else
-                        return false;
-                    return true;
+                    break;
 
                 case Element.ChestList:
                 case Element.CategoryList:
                 case Element.EditForm:
-                    if (input == SButton.Escape || input == SButton.ControllerB)
-                        this.ActiveElement = Element.Menu;
-                    return true;
+                    if (this.EscapeKeybind.JustPressed())
+                    {
+                        this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
 
-                default:
-                    return false;
+                        this.ActiveElement = Element.Menu;
+                    }
+                    break;
             }
         }
 
@@ -430,14 +444,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     // checkbox
                     else if (this.EditHideChestField.GetBounds().Contains(x, y))
                         this.EditHideChestField.Toggle();
-                    else if (this.EditAutomateStoreItems.GetBounds().Contains(x, y))
-                        this.EditAutomateStoreItems.Toggle();
-                    else if (this.EditAutomateStoreItems.Value && this.EditAutomateStoreItemsPreferred.GetBounds().Contains(x, y)) // hidden if store items disabled
-                        this.EditAutomateStoreItemsPreferred.Toggle();
-                    else if (this.EditAutomateTakeItems.GetBounds().Contains(x, y))
-                        this.EditAutomateTakeItems.Toggle();
-                    else if (this.EditAutomateTakeItems.Value && this.EditAutomateTakeItemsPreferred.GetBounds().Contains(x, y)) // hidden if take items disabled
-                        this.EditAutomateTakeItemsPreferred.Toggle();
+
+                    // Automate options
+                    else if (this.EditAutomateStorage.TryClick(x, y) || this.EditAutomateFetch.TryClick(x, y))
+                    {
+                        // handled internally
+                    }
 
                     // save button
                     else if (this.EditSaveButtonArea.containsPoint(x, y))
@@ -542,6 +554,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 case Element.EditForm:
                     this.EditExitButton.tryHover(x, y);
+                    this.EditAutomateStorage.TryHover(x, y);
+                    this.EditAutomateFetch.TryHover(x, y);
                     return true;
 
                 case Element.ChestList:
@@ -600,10 +614,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField = new ValidatedTextBox(Game1.smallFont, Color.Black, ch => ch != '|', this.Reflection) { Width = longTextWidth };
             this.EditOrderField = new ValidatedTextBox(Game1.smallFont, Color.Black, char.IsDigit, this.Reflection) { Width = (int)Game1.smallFont.MeasureString("9999999").X };
             this.EditHideChestField = new Checkbox();
-            this.EditAutomateStoreItems = new Checkbox();
-            this.EditAutomateStoreItemsPreferred = new Checkbox();
-            this.EditAutomateTakeItems = new Checkbox();
-            this.EditAutomateTakeItemsPreferred = new Checkbox();
+            this.EditAutomateStorage = new SimpleDropdown<AutomateContainerPreference>(
+                this.Reflection,
+                options: new[]
+                {
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateStore()),
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Prefer, I18n.Label_AutomateStoreFirst()),
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Disable, I18n.Label_AutomateStoreDisabled())
+                }
+            );
+            this.EditAutomateFetch = new SimpleDropdown<AutomateContainerPreference>(
+                this.Reflection,
+                options: new[]
+                {
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Allow, I18n.Label_AutomateTake()),
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Prefer, I18n.Label_AutomateTakeFirst()),
+                    new KeyValuePair<AutomateContainerPreference, string>(AutomateContainerPreference.Disable, I18n.Label_AutomateTakeDisabled())
+                }
+            );
             this.FillForm();
 
             this.EditSaveButtonArea = new ClickableComponent(new Rectangle(0, 0, Game1.tileSize, Game1.tileSize), "save-chest");
@@ -618,10 +646,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomateStoreItems.Value = this.Chest.AutomateStoreItems.IsAllowed();
-            this.EditAutomateStoreItemsPreferred.Value = this.Chest.AutomateStoreItems.IsPreferred();
-            this.EditAutomateTakeItems.Value = this.Chest.AutomateTakeItems.IsAllowed();
-            this.EditAutomateTakeItemsPreferred.Value = this.Chest.AutomateTakeItems.IsPreferred();
+            this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
+            this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
         }
 
         /// <summary>Reset the edit form to the default values.</summary>
@@ -642,8 +668,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // update chest
-            AutomateContainerPreference automateStore = this.GetAutomatePreference(allow: this.EditAutomateStoreItems.Value, prefer: this.EditAutomateStoreItemsPreferred.Value);
-            AutomateContainerPreference automateTake = this.GetAutomatePreference(allow: this.EditAutomateTakeItems.Value, prefer: this.EditAutomateTakeItemsPreferred.Value);
+            AutomateContainerPreference automateStore = this.EditAutomateStorage.SelectedKey;
+            AutomateContainerPreference automateTake = this.EditAutomateFetch.SelectedKey;
             bool automateChanged = this.Chest.CanConfigureAutomate && (automateStore != this.Chest.AutomateStoreItems || automateTake != this.Chest.AutomateTakeItems);
             this.Chest.Update(
                 name: this.EditNameField.Text,
@@ -731,10 +757,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditCategoryField.Text = this.Chest.DisplayCategory;
             this.EditOrderField.Text = this.Chest.Order?.ToString();
             this.EditHideChestField.Value = this.Chest.IsIgnored;
-            this.EditAutomateStoreItems.Value = this.Chest.AutomateStoreItems.IsAllowed();
-            this.EditAutomateStoreItemsPreferred.Value = this.Chest.AutomateStoreItems.IsPreferred();
-            this.EditAutomateTakeItems.Value = this.Chest.AutomateTakeItems.IsAllowed();
-            this.EditAutomateTakeItemsPreferred.Value = this.Chest.AutomateTakeItems.IsPreferred();
+            this.EditAutomateStorage.TrySelect(this.Chest.AutomateStoreItems);
+            this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
 
             this.ActiveElement = Element.EditForm;
         }
@@ -792,20 +816,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // return size
             return new Vector2(bounds.Width, bounds.Height);
-        }
-
-        /// <summary>Get an Automate IO preference.</summary>
-        /// <param name="allow">Whether IO is allowed.</param>
-        /// <param name="prefer">Whether IO is preferred.</param>
-        private AutomateContainerPreference GetAutomatePreference(bool allow, bool prefer)
-        {
-            if (allow && prefer)
-                return AutomateContainerPreference.Prefer;
-
-            if (allow)
-                return AutomateContainerPreference.Allow;
-
-            return AutomateContainerPreference.Disable;
         }
     }
 }

@@ -1,6 +1,15 @@
-[← back to readme](README.md)
+﻿[← back to readme](README.md)
 
 # Release notes
+## 1.32.3
+Released 23 January 2021.
+
+* Updated for multi-key bindings in SMAPI 3.9.
+* Fixed NPC lookups taking a long time to open when using mods that add a large number of custom items.
+* Fixed support for mods which add gift tastes by context tag.
+* Fixed coffee crops not showing next harvest date.
+* Fixed lookup background too short when 'force full-screen' is enabled in split-screen mode.
+
 ## 1.32.2
 Released 17 January 2021.
 

@@ -37,8 +37,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            SObject heldObject = cask.heldObject.Value;
-            return new TrackedItem(heldObject.getOne(), this.Reset);
+            return new TrackedItem(cask.heldObject.Value, this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>

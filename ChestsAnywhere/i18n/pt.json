@@ -18,10 +18,13 @@
     "label.order": "Ordem",
     "label.hide-chest": "Esconder esse baú",
     "label.hide-chest-hidden": "Esconder esse baú (Você terá que achar o baú para desfazer isso!)",
-    "label.automate-store": "(Automate) Coloque itens neste baú",
-    "label.automate-store-first": "(Automate) Primeiro coloque itens neste baú",
-    "label.automate-take": "(Automate) Pegue itens deste baú",
-    "label.automate-take-first": "(Automate) Primeiro pegue itens deste baú",
+    "label.automate-options": "Automate",
+    "label.automate-store": "Coloque itens neste baú",
+    "label.automate-store-first": "Primeiro coloque itens neste baú",
+    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-take": "Pegue itens deste baú",
+    "label.automate-take-first": "Primeiro pegue itens deste baú",
+    "label.automate-take-disabled": "Never take items from this chest", // TODO
 
     // button labels
     "button.edit-chest": "editar baú",

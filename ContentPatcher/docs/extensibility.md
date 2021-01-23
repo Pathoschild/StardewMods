@@ -1,4 +1,4 @@
-← [README](../README.md)
+﻿← [README](../README.md)
 
 This document helps SMAPI mod authors extend Content Patcher with custom functionality.
 

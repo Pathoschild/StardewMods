@@ -370,14 +370,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     yield return new GenericField(I18n.Npc_Friendship(), I18n.Npc_Friendship_NotMet());
 
                 // gift tastes
-                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc);
-                yield return this.GetGiftTasteField(I18n.Npc_LovesGifts(), giftTastes, GiftTaste.Love);
-                yield return this.GetGiftTasteField(I18n.Npc_LikesGifts(), giftTastes, GiftTaste.Like);
-                yield return this.GetGiftTasteField(I18n.Npc_NeutralGifts(), giftTastes, GiftTaste.Neutral);
-                if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
                 {
-                    yield return this.GetGiftTasteField(I18n.Npc_DislikesGifts(), giftTastes, GiftTaste.Dislike);
-                    yield return this.GetGiftTasteField(I18n.Npc_HatesGifts(), giftTastes, GiftTaste.Hate);
+                    IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(npc);
+                    IDictionary<string, bool> ownedItems = CharacterGiftTastesField.GetOwnedItemsCache(this.GameHelper);
+
+                    yield return this.GetGiftTasteField(I18n.Npc_LovesGifts(), giftTastes, ownedItems, GiftTaste.Love);
+                    yield return this.GetGiftTasteField(I18n.Npc_LikesGifts(), giftTastes, ownedItems, GiftTaste.Like);
+                    yield return this.GetGiftTasteField(I18n.Npc_NeutralGifts(), giftTastes, ownedItems, GiftTaste.Neutral);
+                    if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes)
+                    {
+                        yield return this.GetGiftTasteField(I18n.Npc_DislikesGifts(), giftTastes, ownedItems, GiftTaste.Dislike);
+                        yield return this.GetGiftTasteField(I18n.Npc_HatesGifts(), giftTastes, ownedItems, GiftTaste.Hate);
+                    }
                 }
             }
         }
@@ -385,10 +389,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Get a list of gift tastes for an NPC.</summary>
         /// <param name="label">The field label.</param>
         /// <param name="giftTastes">The gift taste data.</param>
+        /// <param name="ownedItemsCache">A lookup cache for owned items, as created by <see cref="CharacterGiftTastesField.GetOwnedItemsCache"/>.</param>
         /// <param name="taste">The gift taste to display.</param>
-        private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, GiftTaste taste)
+        private ICustomField GetGiftTasteField(string label, IDictionary<GiftTaste, GiftTasteModel[]> giftTastes, IDictionary<string, bool> ownedItemsCache, GiftTaste taste)
         {
-            return new CharacterGiftTastesField(this.GameHelper, label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+            return new CharacterGiftTastesField(label, giftTastes, taste, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes, ownedItemsCache);
         }
 
         /*****

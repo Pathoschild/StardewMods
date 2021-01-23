@@ -1,4 +1,4 @@
-**This mod is obsolete and no longer maintained.**
+﻿**This mod is obsolete and no longer maintained.**
 
 ----
 

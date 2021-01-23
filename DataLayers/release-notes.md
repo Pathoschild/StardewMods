@@ -1,4 +1,9 @@
-# Release notes
+﻿# Release notes
+## 1.14.1
+Released 23 January 2021.
+
+* Updated for multi-key bindings in SMAPI 3.9.
+
 ## 1.14
 Released 16 January 2021.
 
