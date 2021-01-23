@@ -18,10 +18,13 @@
     "label.order": "Порядок",
     "label.hide-chest": "Скрыть этот сундук",
     "label.hide-chest-hidden": "Скрыть этот сундук (вам нужно найти сундук, чтобы отменить это!)",
-    "label.automate-store": "(Автоматизировать) класть предметы в этот сундук",
-    "label.automate-store-first": "(Автоматизировать) Сначала класть предметы в этот сундук",
-    "label.automate-take": "(Автоматизировать) брать предметы из этого сундука",
-    "label.automate-take-first": "(Автоматизировать) Сначала брать предметы из этого сундука",
+    "label.automate-options": "Автоматизировать",
+    "label.automate-store": "класть предметы в этот сундук",
+    "label.automate-store-first": "Сначала класть предметы в этот сундук",
+    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-take": "брать предметы из этого сундука",
+    "label.automate-take-first": "Сначала брать предметы из этого сундука",
+    "label.automate-take-disabled": "Never take items from this chest", // TODO
 
     // button labels
     "button.edit-chest": "Редактировать сундук",

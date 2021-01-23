@@ -18,10 +18,13 @@
     "label.order": "Sorrend",
     "label.hide-chest": "Láda elrejtése",
     "label.hide-chest-hidden": "Láda elrejtése (a visszavonáshoz meg kell majd találnod a ládát!)",
-    "label.automate-store": "(Automate mod) Tegyen tárgyakat ebbe a ládába",
-    "label.automate-store-first": "(Automate mod) Először ebbe a ládába tegyen tárgyakat",
-    "label.automate-take": "(Automate mod) Vegyen ki tárgyakat ebből a ládából",
-    "label.automate-take-first": "(Automate mod) Először ebből a ládából vegyen ki tárgyakat",
+    "label.automate-options": "Automate mod",
+    "label.automate-store": "Tegyen tárgyakat ebbe a ládába",
+    "label.automate-store-first": "Először ebbe a ládába tegyen tárgyakat",
+    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-take": "Vegyen ki tárgyakat ebből a ládából",
+    "label.automate-take-first": "Először ebből a ládából vegyen ki tárgyakat",
+    "label.automate-take-disabled": "Never take items from this chest", // TODO
 
     // button labels
     "button.edit-chest": "Láda szerkesztése",
