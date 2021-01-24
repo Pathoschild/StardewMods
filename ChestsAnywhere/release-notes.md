@@ -4,6 +4,7 @@
 ## Upcoming release
 * Fixed controller interaction issues after 1.20.6.
 * Fixed toggle key closing the menu while typing into another mod's textbox.
+* Improved translations. Thanks to Kareolis (updated Russian)!
 
 ## 1.20.6
 Released 23 January 2021.
