@@ -6,6 +6,7 @@ Released 23 January 2021.
 
 * Updated for multi-key bindings in SMAPI 3.9.
 * Improved Automate options UI.
+* Fixed toggle key not closing the menu.
 
 ## 1.20.5
 Released 18 January 2021.
