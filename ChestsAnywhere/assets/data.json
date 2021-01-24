@@ -1,4 +1,4 @@
-{
+﻿{
     /**
      * The predefined world areas for the CurrentWorldArea range. For areas not listed here:
      *   - Constructed buildings are in the same world area as their parent location.

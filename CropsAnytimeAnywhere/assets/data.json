@@ -1,4 +1,4 @@
-{
+﻿{
     /**
      * The tile types to use for back tile IDs which don't have a type property and aren't marked
      * diggable. Indexed by tilesheet image source (without path or season) and type.
