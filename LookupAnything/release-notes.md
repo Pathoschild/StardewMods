@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed NPC lookups showing gift tastes for flavored variants in 1.32.3.
 * Improved translations. Thanks to Kareolis (updated Russian)!
 
 ## 1.32.3
