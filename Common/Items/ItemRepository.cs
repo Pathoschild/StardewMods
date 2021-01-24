@@ -28,9 +28,10 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         ** Public methods
         *********/
         /// <summary>Get all spawnable items.</summary>
-        /// <param name="itemTypes">The item types to fetch (or none to fetch all of them).</param>
+        /// <param name="itemTypes">The item types to fetch (or null for any type).</param>
+        /// <param name="includeVariants">Whether to include flavored variants like "Sunflower Honey".</param>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "TryCreate invokes the lambda immediately.")]
-        public IEnumerable<SearchableItem> GetAll(params ItemType[] itemTypes)
+        public IEnumerable<SearchableItem> GetAll(ItemType[] itemTypes = null, bool includeVariants = true)
         {
             //
             //
@@ -44,8 +45,8 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
             IEnumerable<SearchableItem> GetAllRaw()
             {
-                HashSet<ItemType> types = new HashSet<ItemType>(itemTypes);
-                bool ShouldGet(ItemType type) => types.Count == 0 || types.Contains(type);
+                HashSet<ItemType> types = itemTypes?.Any() == true ? new HashSet<ItemType>(itemTypes) : null;
+                bool ShouldGet(ItemType type) => types == null || types.Contains(type);
 
                 // get tools
                 if (ShouldGet(ItemType.Tool))
@@ -188,111 +189,114 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                                 continue;
 
                             // flavored items
-                            switch (item.Category)
+                            if (includeVariants)
                             {
-                                // fruit products
-                                case SObject.FruitsCategory:
-                                    // wine
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + item.ParentSheetIndex, _ => new SObject(348, 1)
-                                    {
-                                        Name = $"{item.Name} Wine",
-                                        Price = item.Price * 3,
-                                        preserve = { SObject.PreserveType.Wine },
-                                        preservedParentSheetIndex = { item.ParentSheetIndex }
-                                    });
-
-                                    // jelly
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + item.ParentSheetIndex, _ => new SObject(344, 1)
-                                    {
-                                        Name = $"{item.Name} Jelly",
-                                        Price = 50 + item.Price * 2,
-                                        preserve = { SObject.PreserveType.Jelly },
-                                        preservedParentSheetIndex = { item.ParentSheetIndex }
-                                    });
-                                    break;
-
-                                // vegetable products
-                                case SObject.VegetableCategory:
-                                    // juice
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + item.ParentSheetIndex, _ => new SObject(350, 1)
-                                    {
-                                        Name = $"{item.Name} Juice",
-                                        Price = (int)(item.Price * 2.25d),
-                                        preserve = { SObject.PreserveType.Juice },
-                                        preservedParentSheetIndex = { item.ParentSheetIndex }
-                                    });
-
-                                    // pickled
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ => new SObject(342, 1)
-                                    {
-                                        Name = $"Pickled {item.Name}",
-                                        Price = 50 + item.Price * 2,
-                                        preserve = { SObject.PreserveType.Pickle },
-                                        preservedParentSheetIndex = { item.ParentSheetIndex }
-                                    });
-                                    break;
-
-                                // flower honey
-                                case SObject.flowersCategory:
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ =>
-                                    {
-                                        SObject honey = new SObject(Vector2.Zero, 340, $"{item.Name} Honey", false, true, false, false)
+                                switch (item.Category)
+                                {
+                                    // fruit products
+                                    case SObject.FruitsCategory:
+                                        // wine
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + item.ParentSheetIndex, _ => new SObject(348, 1)
                                         {
-                                            Name = $"{item.Name} Honey",
+                                            Name = $"{item.Name} Wine",
+                                            Price = item.Price * 3,
+                                            preserve = { SObject.PreserveType.Wine },
                                             preservedParentSheetIndex = { item.ParentSheetIndex }
-                                        };
-                                        honey.Price += item.Price * 2;
-                                        return honey;
-                                    });
-                                    break;
+                                        });
 
-                                // roe and aged roe (derived from FishPond.GetFishProduce)
-                                case SObject.sellAtFishShopCategory when item.ParentSheetIndex == 812:
-                                    {
-                                        this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
-
-                                        foreach (var pair in Game1.objectInformation)
+                                        // jelly
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + item.ParentSheetIndex, _ => new SObject(344, 1)
                                         {
-                                            // get input
-                                            SObject input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
-                                            var inputTags = input?.GetContextTags();
-                                            if (inputTags?.Any() != true)
-                                                continue;
+                                            Name = $"{item.Name} Jelly",
+                                            Price = 50 + item.Price * 2,
+                                            preserve = { SObject.PreserveType.Jelly },
+                                            preservedParentSheetIndex = { item.ParentSheetIndex }
+                                        });
+                                        break;
 
-                                            // check if roe-producing fish
-                                            if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
-                                                continue;
+                                    // vegetable products
+                                    case SObject.VegetableCategory:
+                                        // juice
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + item.ParentSheetIndex, _ => new SObject(350, 1)
+                                        {
+                                            Name = $"{item.Name} Juice",
+                                            Price = (int)(item.Price * 2.25d),
+                                            preserve = { SObject.PreserveType.Juice },
+                                            preservedParentSheetIndex = { item.ParentSheetIndex }
+                                        });
 
-                                            // yield roe
-                                            SObject roe = null;
-                                            Color color = this.GetRoeColor(input);
-                                            yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
+                                        // pickled
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ => new SObject(342, 1)
+                                        {
+                                            Name = $"Pickled {item.Name}",
+                                            Price = 50 + item.Price * 2,
+                                            preserve = { SObject.PreserveType.Pickle },
+                                            preservedParentSheetIndex = { item.ParentSheetIndex }
+                                        });
+                                        break;
+
+                                    // flower honey
+                                    case SObject.flowersCategory:
+                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ =>
+                                        {
+                                            SObject honey = new SObject(Vector2.Zero, 340, $"{item.Name} Honey", false, true, false, false)
                                             {
-                                                roe = new ColoredObject(812, 1, color)
-                                                {
-                                                    name = $"{input.Name} Roe",
-                                                    preserve = { Value = SObject.PreserveType.Roe },
-                                                    preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                                                };
-                                                roe.Price += input.Price / 2;
-                                                return roe;
-                                            });
+                                                Name = $"{item.Name} Honey",
+                                                preservedParentSheetIndex = { item.ParentSheetIndex }
+                                            };
+                                            honey.Price += item.Price * 2;
+                                            return honey;
+                                        });
+                                        break;
 
-                                            // aged roe
-                                            if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
+                                    // roe and aged roe (derived from FishPond.GetFishProduce)
+                                    case SObject.sellAtFishShopCategory when item.ParentSheetIndex == 812:
+                                        {
+                                            this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
+
+                                            foreach (var pair in Game1.objectInformation)
                                             {
-                                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
+                                                // get input
+                                                SObject input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
+                                                var inputTags = input?.GetContextTags();
+                                                if (inputTags?.Any() != true)
+                                                    continue;
+
+                                                // check if roe-producing fish
+                                                if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
+                                                    continue;
+
+                                                // yield roe
+                                                SObject roe = null;
+                                                Color color = this.GetRoeColor(input);
+                                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
                                                 {
-                                                    name = $"Aged {input.Name} Roe",
-                                                    Category = -27,
-                                                    preserve = { Value = SObject.PreserveType.AgedRoe },
-                                                    preservedParentSheetIndex = { Value = input.ParentSheetIndex },
-                                                    Price = roe.Price * 2
+                                                    roe = new ColoredObject(812, 1, color)
+                                                    {
+                                                        name = $"{input.Name} Roe",
+                                                        preserve = { Value = SObject.PreserveType.Roe },
+                                                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
+                                                    };
+                                                    roe.Price += input.Price / 2;
+                                                    return roe;
                                                 });
+
+                                                // aged roe
+                                                if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
+                                                {
+                                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
+                                                    {
+                                                        name = $"Aged {input.Name} Roe",
+                                                        Category = -27,
+                                                        preserve = { Value = SObject.PreserveType.AgedRoe },
+                                                        preservedParentSheetIndex = { Value = input.ParentSheetIndex },
+                                                        Price = roe.Price * 2
+                                                    });
+                                                }
                                             }
                                         }
-                                    }
-                                    break;
+                                        break;
+                                }
                             }
                         }
                     }

@@ -236,7 +236,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
             return
                 (
-                    from entry in this.ItemRepository.GetAll(ItemType.Object)
+                    from entry in this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }, includeVariants: false)
                     let item = entry.CreateItem()
                     let taste = this.GetGiftTaste(npc, item)
                     where taste.HasValue
