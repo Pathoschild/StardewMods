@@ -85,7 +85,7 @@ Italian    | [↻ partial](ChestsAnywhere/i18n/it.json) | [✓](DataLayers/i18n/
 Japanese   | [↻ partial](ChestsAnywhere/i18n/ja.json) | [✓](DataLayers/i18n/ja.json)        | [✓](DebugMode/i18n/ja.json) | [↻ partial](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | [✓](TractorMod/i18n/ja.json)
 Korean     | [↻ partial](ChestsAnywhere/i18n/ko.json) | [✓](DataLayers/i18n/ko.json)        | [✓](DebugMode/i18n/ko.json) | [↻ partial](LookupAnything/i18n/ko.json) | [✓](NoclipMode/i18n/ko.json) | [✓](TractorMod/i18n/ko.json)
 Portuguese | [↻ partial](ChestsAnywhere/i18n/pt.json) | [✓](DataLayers/i18n/pt.json)        | [✓](DebugMode/i18n/pt.json) | [↻ partial](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
-Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
+Russian    | [✓](ChestsAnywhere/i18n/ru.json)        | [✓](DataLayers/i18n/ru.json)        | [✓](DebugMode/i18n/ru.json) | [✓](LookupAnything/i18n/ru.json)        | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
 Spanish    | [↻ partial](ChestsAnywhere/i18n/es.json) | [✓](DataLayers/i18n/es.json)        | [✓](DebugMode/i18n/es.json) | [↻ partial](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | [✓](TractorMod/i18n/es.json)
 Turkish    | [↻ partial](ChestsAnywhere/i18n/tr.json) | [✓](DataLayers/i18n/tr.json)        | [✓](DebugMode/i18n/tr.json) | ❑                                       | [✓](NoclipMode/i18n/tr.json) | [✓](TractorMod/i18n/tr.json)
 
