@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Config fields consisting of a numeric range are now formatted as a slider in Generic Mod Config Menu.
+
 ## 1.19.4
 Released 23 January 2021.
 

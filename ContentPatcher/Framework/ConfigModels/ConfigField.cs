@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
@@ -52,6 +54,32 @@ namespace ContentPatcher.Framework.ConfigModels
                 this.AllowValues.Count == 2
                 && this.AllowValues.Contains(true.ToString())
                 && this.AllowValues.Contains(false.ToString());
+        }
+
+        /// <summary>Get whether the field consists of a consecutive numeric range.</summary>
+        /// <param name="min">The parsed minimum.</param>
+        /// <param name="max">The parsed maximum.</param>
+        public bool IsNumericRange(out int min, out int max)
+        {
+            // parse numeric values
+            var parsedValues = new List<int>(this.AllowValues.Count);
+            foreach (string value in this.AllowValues)
+            {
+                if (!int.TryParse(value, out int parsed))
+                {
+                    min = -1;
+                    max = -1;
+                    return false;
+                }
+
+                parsedValues.Add(parsed);
+            }
+
+            // check for consecutive range
+            parsedValues.Sort(Comparer<int>.Default);
+            min = parsedValues.First();
+            max = parsedValues.Last();
+            return max - min == parsedValues.Count - 1; // each value is unique and guaranteed integer, so can check the number of increments between min and max
         }
     }
 }
