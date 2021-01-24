@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.Common.UI
             if (Context.ScreenId != this.ScreenId)
                 return;
 
-            if (e.Button != SButton.MouseLeft && e.Button.IsUseToolButton())
+            if (e.Button != SButton.MouseLeft && !e.Button.IsUseToolButton())
                 return;
 
             bool uiMode = this.AssumeUiMode ?? Game1.uiMode;
