@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed controller interaction issues after 1.20.6.
 * Fixed toggle key closing the menu while typing into another mod's textbox.
 
 ## 1.20.6
