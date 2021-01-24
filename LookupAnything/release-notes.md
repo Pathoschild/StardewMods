@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to Kareolis (updated Russian)!
+
 ## 1.32.3
 Released 23 January 2021.
 
