@@ -130,6 +130,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The top-right button which closes the edit form.</summary>
         private ClickableTextureComponent EditExitButton;
 
+        /// <summary>The textboxes managed by Chests Anywhere.</summary>
+        private IEnumerable<ValidatedTextBox> ManagedTextboxes => new[] { this.EditNameField, this.EditOrderField, this.EditCategoryField }.Where(p => p != null);
+
 
         /*********
         ** Accessors
@@ -239,7 +242,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 SpriteFont font = Game1.smallFont;
                 const int gutter = 10;
                 int padding = Game1.pixelZoom * 10;
-                int indent = Game1.pixelZoom * 3;
                 float topOffset = padding;
                 int maxLabelWidth = (int)new[] { locationLabel, nameLabel, categoryLabel, orderLabel }.Select(p => font.MeasureString(p).X).Max();
 
@@ -329,11 +331,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             if (!this.IsInitialized)
                 return;
 
+            // check for textbox focus
+            bool anyTextboxSelected = Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null;
+            bool ownTextboxSelected = anyTextboxSelected && this.ManagedTextboxes.Any(p => p.Selected);
+
+            // handle keys
             bool canNavigate = this.CanCloseChest;
             ModConfigKeys keys = this.Keys;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
+                    if (anyTextboxSelected)
+                        return;
+
                     if (keys.Toggle.JustPressed() || this.EscapeKeybind.JustPressed())
                     {
                         this.InputHelper.SuppressActiveKeybinds(keys.Toggle);
@@ -359,7 +369,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 case Element.ChestList:
                 case Element.CategoryList:
                 case Element.EditForm:
-                    if (this.EscapeKeybind.JustPressed())
+                    if (this.EscapeKeybind.JustPressed() && (!anyTextboxSelected || ownTextboxSelected))
                     {
                         this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
 
