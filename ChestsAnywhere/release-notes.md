@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed toggle key closing the menu while typing into another mod's textbox.
+
 ## 1.20.6
 Released 23 January 2021.
 
