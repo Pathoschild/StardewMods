@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed bushes producing berries out of season once immediately after loading the save.
+
 ## 1.20.1
 Released 23 January 2021.
 
