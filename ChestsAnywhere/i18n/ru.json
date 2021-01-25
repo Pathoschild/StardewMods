@@ -2,8 +2,8 @@
     // default chest names
     "default-name.fridge": "Холодильник",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "отправленные предметы",
-    "default-name.shipping-bin.take": "принятые предметы",
+    "default-name.shipping-bin.store": "Отправить предметы",
+    "default-name.shipping-bin.take": "Получить предметы",
 
     // default category names
     "default-category.owned-cabin": "В данном домике проживает {{owner}}.",
@@ -18,13 +18,13 @@
     "label.order": "Порядок",
     "label.hide-chest": "Скрыть этот сундук",
     "label.hide-chest-hidden": "Скрыть этот сундук (вам нужно найти сундук, чтобы отменить это!)",
-    "label.automate-options": "Автоматизировать",
-    "label.automate-store": "класть предметы в этот сундук",
+    "label.automate-options": "Опции автоматизации",
+    "label.automate-store": "Класть предметы в этот сундук",
     "label.automate-store-first": "Сначала класть предметы в этот сундук",
-    "label.automate-store-disabled": "Никогда не кладите предметы в этот суднук",
-    "label.automate-take": "брать предметы из этого сундука",
+    "label.automate-store-disabled": "Никогда не класть предметы в этот суднук",
+    "label.automate-take": "Брать предметы из этого сундука",
     "label.automate-take-first": "Сначала брать предметы из этого сундука",
-    "label.automate-take-disabled": "Никогда не берите предметы из этого сундука",
+    "label.automate-take-disabled": "Никогда не брать предметы из этого сундука",
 
     // button labels
     "button.edit-chest": "Редактировать сундук",
