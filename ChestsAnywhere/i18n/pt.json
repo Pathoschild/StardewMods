@@ -21,10 +21,10 @@
     "label.automate-options": "Automate",
     "label.automate-store": "Coloque itens neste baú",
     "label.automate-store-first": "Primeiro coloque itens neste baú",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "Nunca coloque itens neste baú",
     "label.automate-take": "Pegue itens deste baú",
     "label.automate-take-first": "Primeiro pegue itens deste baú",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-take-disabled": "Nunca pegue itens deste baú",
 
     // button labels
     "button.edit-chest": "editar baú",
