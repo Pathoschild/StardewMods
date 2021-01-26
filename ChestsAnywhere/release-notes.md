@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed pressing `e` always closing the menu after 1.20.6. It should now match the previous behavior.
+
 ## 1.20.7
 Released 25 January 2021.
 
