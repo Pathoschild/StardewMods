@@ -130,6 +130,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The top-right button which closes the edit form.</summary>
         private ClickableTextureComponent EditExitButton;
 
+        /// <summary>The textboxes managed by Chests Anywhere.</summary>
+        private IEnumerable<ValidatedTextBox> ManagedTextboxes => new[] { this.EditNameField, this.EditOrderField, this.EditCategoryField }.Where(p => p != null);
+
 
         /*********
         ** Accessors
@@ -710,6 +713,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.ChestDropdown.IsExpanded = false;
                 if (this.CategoryDropdown != null)
                     this.CategoryDropdown.IsExpanded = false;
+            }
+
+            // deselect textboxes
+            if (value != Element.EditForm)
+            {
+                foreach (ValidatedTextBox textbox in this.ManagedTextboxes)
+                    textbox.Selected = false;
             }
         }
 
