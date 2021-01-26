@@ -1,9 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed controller interaction issues after 1.20.6.
-* Fixed toggle key closing the menu while typing into another mod's textbox.
+## 1.20.7
+Released 25 January 2021.
+
+* Fixed controller issues in 1.20.6.
+* Fixed toggle key closing the menu even if you're typing into another mod's textbox.
 * Improved translations. Thanks to Kareolis (updated Russian)!
 
 ## 1.20.6
