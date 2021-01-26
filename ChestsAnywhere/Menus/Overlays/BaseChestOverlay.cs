@@ -130,9 +130,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The top-right button which closes the edit form.</summary>
         private ClickableTextureComponent EditExitButton;
 
-        /// <summary>The textboxes managed by Chests Anywhere.</summary>
-        private IEnumerable<ValidatedTextBox> ManagedTextboxes => new[] { this.EditNameField, this.EditOrderField, this.EditCategoryField }.Where(p => p != null);
-
 
         /*********
         ** Accessors
@@ -333,17 +330,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
             // check for textbox focus
             bool anyTextboxSelected = Game1.game1.HasKeyboardFocus() && Game1.game1.instanceKeyboardDispatcher?.Subscriber != null;
-            bool ownTextboxSelected = anyTextboxSelected && this.ManagedTextboxes.Any(p => p.Selected);
 
             // handle keys
-            bool canNavigate = this.CanCloseChest;
+            bool canNavigate = this.CanCloseChest && !anyTextboxSelected;
             ModConfigKeys keys = this.Keys;
             switch (this.ActiveElement)
             {
                 case Element.Menu:
-                    if (anyTextboxSelected)
-                        return;
-
                     if (keys.Toggle.JustPressed() || this.EscapeKeybind.JustPressed())
                     {
                         this.InputHelper.SuppressActiveKeybinds(keys.Toggle);
@@ -364,19 +357,29 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         this.OpenEdit();
                     else if (keys.SortItems.JustPressed())
                         this.SortInventory();
+                    else
+                        return; // don't suppress if the key wasn't handled
+
+                    this.SuppressAll(e.Pressed);
                     break;
 
                 case Element.ChestList:
                 case Element.CategoryList:
                 case Element.EditForm:
-                    if (this.EscapeKeybind.JustPressed() && (!anyTextboxSelected || ownTextboxSelected))
-                    {
-                        this.InputHelper.SuppressActiveKeybinds(this.EscapeKeybind);
-
+                    if (this.EscapeKeybind.JustPressed())
                         this.ActiveElement = Element.Menu;
-                    }
+
+                    this.SuppressAll(e.Pressed); // always suppress in this context
                     break;
             }
+        }
+
+        /// <summary>Suppress all pressed buttons.</summary>
+        /// <param name="buttons">The buttons to suppress.</param>
+        protected void SuppressAll(IEnumerable<SButton> buttons)
+        {
+            foreach (SButton button in buttons)
+                this.InputHelper.Suppress(button);
         }
 
         /// <summary>The method invoked when the player scrolls the dropdown using the mouse wheel.</summary>
