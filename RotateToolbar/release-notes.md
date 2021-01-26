@@ -1,4 +1,4 @@
-[← back to readme](README.md)
+﻿[← back to readme](README.md)
 
 # Release notes
 ## 1.3.3

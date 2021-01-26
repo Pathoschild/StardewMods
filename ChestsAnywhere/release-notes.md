@@ -1,11 +1,19 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.7
+Released 25 January 2021.
+
+* Fixed controller issues in 1.20.6.
+* Fixed toggle key closing the menu even if you're typing into another mod's textbox.
+* Improved translations. Thanks to Kareolis (updated Russian)!
+
 ## 1.20.6
 Released 23 January 2021.
 
 * Updated for multi-key bindings in SMAPI 3.9.
 * Improved Automate options UI.
+* Fixed toggle key not closing the menu.
 
 ## 1.20.5
 Released 18 January 2021.

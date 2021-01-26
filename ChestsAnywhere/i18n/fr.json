@@ -1,4 +1,4 @@
-{
+﻿{
     // default chest names
     "default-name.fridge": "Réfrigérateur",
     "default-name.other": "{{name}} #{{number}}",

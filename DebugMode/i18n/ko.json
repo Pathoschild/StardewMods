@@ -1,4 +1,4 @@
-{
+﻿{
     // labels shown on the debug screen (디버그 화면에 나타나는 라벨들)
     "label.tile": "타일 좌표",
     "label.map": "지도",
