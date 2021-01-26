@@ -125,7 +125,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ** Other menus
                 ****/
                 // calendar
-                case Billboard billboard:
+                case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
                         int selectedDay = -1;
