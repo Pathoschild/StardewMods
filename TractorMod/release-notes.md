@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Fixed support for Seed Bag mod.
+
 ## 4.13.2
 Released 23 January 2021.
 
