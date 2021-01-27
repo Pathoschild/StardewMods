@@ -48,7 +48,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
-            var location = tree.currentLocation;
+            TreeType treeType = (TreeType)tree.treeType.Value;
+            GameLocation location = tree.currentLocation;
 
             // get growth stage
             WildTreeGrowthStage stage = (WildTreeGrowthStage)Math.Min(tree.growthStage.Value, (int)WildTreeGrowthStage.Tree);
@@ -62,7 +63,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (!isFullyGrown)
             {
                 string label = I18n.Tree_NextGrowth();
-                if (location.GetSeasonForLocation() == "winter" && !location.SeedsIgnoreSeasonsHere())
+                if (location.GetSeasonForLocation() == "winter" && !location.SeedsIgnoreSeasonsHere() && !tree.fertilized.Value)
                     yield return new GenericField(label, I18n.Tree_NextGrowth_Winter());
                 else if (stage == WildTreeGrowthStage.SmallTree && this.HasAdjacentTrees(this.Tile))
                     yield return new GenericField(label, I18n.Tree_NextGrowth_AdjacentTrees());

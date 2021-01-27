@@ -664,7 +664,7 @@
     "tree.name.unknown": "Arbre inconnu",
     "tree.stage.done": "Taille adulte",
     "tree.stage.partial": "{{stageName}} ({{step}} sur {{max}})",
-    "tree.next-growth.winter": "ne peut pousser en hiver en dehors de la serre",
+    "tree.next-growth.winter": "ne peut pousser en dehors de la serre en hiver à moins d'être fertilisé",
     "tree.next-growth.adjacent-trees": "ne peut pousser car d'autres arbres sont trop près",
     "tree.next-growth.chance": "{{chance}}% de chance de grandir en {{stage}} demain",
 

@@ -680,7 +680,7 @@
     "tree.name.unknown": "未知の木",
     "tree.stage.done": "成長完了",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
-    "tree.next-growth.winter": "温室の外では冬に育たない",
+    "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized", // TODO
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
     "tree.next-growth.chance": "{{chance}}%の確率で明日{{stage}}に成長する",
 
