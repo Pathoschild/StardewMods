@@ -6,7 +6,7 @@
 * Fixed tree lookups incorrectly stating that a fertilized tree won't grow in winter.
 * Fixed error when trying to lookup on the 'help wanted' screen.
 * Fixed untranslated text in child lookup.
-* Improved translations. Thanks to Kareolis (updated Russian)!
+* Improved translations. Thanks to carloshbcabral (updated Portuguese) and Kareolis (updated Russian)!
 
 ## 1.32.3
 Released 23 January 2021.

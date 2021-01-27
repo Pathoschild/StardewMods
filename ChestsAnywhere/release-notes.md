@@ -4,6 +4,7 @@
 ## Upcoming release
 * Fixed exit keys not working after editing a textbox option and closing the edit UI.
 * Fixed textboxes not deselected when you click outside them.
+* Improved translations. Thanks to carloshbcabral (updated Portuguese)!
 
 ## 1.20.8
 Released 26 January 2021.
