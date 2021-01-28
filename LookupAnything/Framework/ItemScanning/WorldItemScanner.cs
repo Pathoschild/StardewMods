@@ -54,8 +54,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     this.ScanAndTrack(items, itemsSeen, furniture, isRootInWorld: true);
 
                 // farmhouse fridge
-                if (location is FarmHouse house)
-                    this.ScanAndTrack(items, itemsSeen, house.fridge.Value, includeRoot: false);
+                Chest fridge = location switch
+                {
+                    FarmHouse house => house.fridge.Value,
+                    IslandFarmHouse house => house.fridge.Value,
+                    _ => null
+                };
+                this.ScanAndTrack(items, itemsSeen, fridge, includeRoot: false);
 
                 // character hats
                 foreach (NPC npc in location.characters)
