@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Fixed the legend UI not affected by the game's UI scaling.
+
 ## 1.14.1
 Released 23 January 2021.
 
