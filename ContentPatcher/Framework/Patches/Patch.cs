@@ -109,7 +109,18 @@ namespace ContentPatcher.Framework.Patches
             isReady &= this.RawTargetAsset?.IsReady != false && this.RawFromAsset?.IsReady != false;
 
             // update contextuals
-            changed |= this.Contextuals.UpdateContext(this.PrivateContext, except: this.ManuallyUpdatedTokens);
+            changed |= this.Contextuals.UpdateContext(
+                this.PrivateContext,
+                update: p => !this.ManuallyUpdatedTokens.Contains(p),
+
+                // This avoids propagating irrelevant changes. For example, consider this condition:
+                //    "{{Time}}": "0800"
+                // 
+                // Since the condition key will be different on each time change, the condition would be marked as
+                // changed which would trigger a patch update. But the patch should only update if the *result*
+                // changes, which we check below via isReady.
+                countChange: p => p is not Condition
+            );
             isReady &= this.Contextuals.IsReady && (!this.Conditions.Any() || this.Conditions.All(p => p.IsMatch));
             this.FromAssetExistsImpl = false;
 

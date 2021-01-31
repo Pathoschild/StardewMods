@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
@@ -11,7 +12,7 @@ namespace ContentPatcher.Framework
         ** Fields
         *********/
         /// <summary>The underlying values.</summary>
-        private readonly HashSet<IContextual> ValuesImpl = new HashSet<IContextual>();
+        private readonly HashSet<IContextual> ValuesImpl = new();
 
 
         /*********
@@ -21,7 +22,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<IContextual> Values => this.ValuesImpl;
 
         /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable { get; private set; } = false;
+        public bool IsMutable { get; private set; }
 
         /// <summary>Whether the instance is valid for the current context.</summary>
         public bool IsReady { get; private set; } = true;
@@ -88,14 +89,15 @@ namespace ContentPatcher.Framework
         /// <returns>Returns whether the instance changed.</returns>
         bool IContextual.UpdateContext(IContext context)
         {
-            return this.UpdateContext(context, except: null);
+            return this.UpdateContext(context, update: null, countChange: null);
         }
 
         /// <summary>Update the instance when the context changes.</summary>
         /// <param name="context">Provides access to contextual tokens.</param>
-        /// <param name="except">The contextuals to skip.</param>
+        /// <param name="update">Matches contextuals to update, or <c>null</c> for all contextuals.</param>
+        /// <param name="countChange">Matches contextuals which should be counted as a change for the return value if their state changed, or <c>null</c> for all contextuals.</param>
         /// <returns>Returns whether the instance changed.</returns>
-        public bool UpdateContext(IContext context, HashSet<IContextual> except = null)
+        public bool UpdateContext(IContext context, Func<IContextual, bool> update = null, Func<IContextual, bool> countChange = null)
         {
             bool wasReady = this.IsReady;
             this.IsReady = true;
@@ -103,10 +105,10 @@ namespace ContentPatcher.Framework
             bool changed = false;
             foreach (IContextual contextual in this.ValuesImpl)
             {
-                if (except != null && except.Contains(contextual))
+                if (update?.Invoke(contextual) == false)
                     continue;
 
-                if (contextual.UpdateContext(context))
+                if (contextual.UpdateContext(context) && countChange?.Invoke(contextual) != false)
                     changed = true;
 
                 if (!contextual.IsReady)
