@@ -6,6 +6,7 @@
 * Fixed NPC lookups showing gift tastes for flavored variants in 1.32.3.
 * Fixed tree lookups incorrectly stating that a fertilized tree won't grow in winter.
 * Fixed error when trying to lookup on the 'help wanted' screen.
+* Fixed error looking up items when the game has invalid bundle data.
 * Fixed untranslated text in child lookup.
 * Fixed 'number owned' field not counting items in the island farmhouse fridge.
 * Improved translations. Thanks to carloshbcabral (updated Portuguese) and Kareolis (updated Russian)!
