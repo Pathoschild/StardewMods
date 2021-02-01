@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Patches;
@@ -229,6 +230,11 @@ namespace ContentPatcher.Framework
             if (!patches.Any() && !reloadAssetNames.Any())
                 return;
 
+            // init for verbose logging
+            List<PatchAuditChange> verbosePatchesReloaded = this.Monitor.IsVerbose
+                ? new()
+                : null;
+
             // update patches
             string prevAssetName = null;
             foreach (IPatch patch in patches)
@@ -282,6 +288,9 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
+                // track for logging
+                verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
+
                 // log change
                 if (this.Monitor.IsVerbose)
                 {
@@ -305,6 +314,42 @@ namespace ContentPatcher.Framework
             this.PendingPatches.Clear();
             this.AssetsWithRemovedPatches.Clear();
             this.Reindex(patchListChanged: false);
+
+            // log changes
+            if (verbosePatchesReloaded?.Count > 0)
+            {
+                StringBuilder report = new StringBuilder();
+                report.AppendLine($"{verbosePatchesReloaded.Count} patches changed state:");
+
+                foreach (PatchAuditChange entry in verbosePatchesReloaded.OrderBy(p => p.Patch.Path.ToString()))
+                {
+                    var patch = entry.Patch;
+
+                    List<string> notes = new List<string>();
+
+                    if (entry.WillInvalidate)
+                    {
+                        var assetNames = new[] { entry.WasTargetAsset, patch.TargetAsset }
+                            .Select(p => p?.Trim())
+                            .Where(p => !string.IsNullOrEmpty(p))
+                            .Distinct(StringComparer.OrdinalIgnoreCase);
+                        notes.Add($"invalidates {string.Join(", ", assetNames.OrderBy(p => p))}");
+                    }
+
+                    if (entry.WasReady != patch.IsReady)
+                        notes.Add(patch.IsReady ? "=> not ready" : "=> ready");
+                    if (entry.WasFromAsset != patch.FromAsset)
+                        notes.Add($"{nameof(patch.FromAsset)} '{entry.WasFromAsset}' => '{patch.FromAsset}'");
+                    if (entry.WasTargetAsset != patch.TargetAsset)
+                        notes.Add($"{nameof(patch.TargetAsset)} '{entry.WasTargetAsset}' => '{patch.TargetAsset}'");
+
+                    report.AppendLine($"   - {patch.Type} {patch.Path}");
+                    foreach (string note in notes)
+                        report.AppendLine($"      - {note}");
+                }
+
+                this.Monitor.Log(report.ToString());
+            }
 
             // reload assets if needed
             if (reloadAssetNames.Any())
