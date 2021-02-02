@@ -21,10 +21,10 @@
     "label.automate-options": "Automatisation",
     "label.automate-store": "Mettre les objets dans ce coffre",
     "label.automate-store-first": "Mettre les objets dans ce coffre d'abord",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "Ne mettez jamais d'objets dans ce coffre",
     "label.automate-take": "Obtenir les objets dans ce coffre",
     "label.automate-take-first": "Obtenir les objets dans ce coffre d'abord",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-take-disabled": "Ne prenez jamais les objets de ce coffre",
 
     // button labels
     "button.edit-chest": "modifier coffre",
