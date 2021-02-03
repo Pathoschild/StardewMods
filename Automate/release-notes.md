@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed tea bushes in garden pots not automated.
 * Fixed bushes producing berries out of season once immediately after loading the save.
 
 ## 1.20.1

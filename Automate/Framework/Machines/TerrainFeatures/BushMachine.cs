@@ -69,6 +69,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="bush">The bush to check.</param>
         public static bool CanAutomate(Bush bush)
         {
+            if (bush == null)
+                return false;
+
             return
                 (bush.size.Value == Bush.mediumBush && !bush.townBush.Value) // berry bush
                 || bush.size.Value == Bush.greenTeaBush; // tea bush
