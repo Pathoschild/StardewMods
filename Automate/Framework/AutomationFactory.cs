@@ -238,11 +238,14 @@ namespace Pathoschild.Stardew.Automate.Framework
             // machine
             switch (feature)
             {
+                case Bush bush when BushMachine.CanAutomate(bush):
+                    return new BushMachine(bush, location);
+
                 case FruitTree fruitTree:
                     return new FruitTreeMachine(fruitTree, location, tile);
 
-                case Bush bush when BushMachine.CanAutomate(bush):
-                    return new BushMachine(bush, location);
+                case Tree tree when TreeMachine.CanAutomate(tree):
+                    return new TreeMachine(tree, location, tile);
             }
 
             // connector

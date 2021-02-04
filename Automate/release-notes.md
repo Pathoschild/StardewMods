@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added (non-fruit) tree automation to collect seeds, golden coconuts, and Qi beans.
 * Fixed tea bushes in garden pots not automated.
 * Fixed bushes producing berries out of season once immediately after loading the save.
 

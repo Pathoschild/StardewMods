@@ -48,6 +48,7 @@ This can be used to automate...
 * [crystalariums](https://stardewvalleywiki.com/Crystalarium) (once started with the gem/mineral you want);
 * [deconstructors](https://stardewvalleywiki.com/Deconstructor);
 * [fish ponds](https://stardewvalleywiki.com/Fish_Pond) (for output only);
+* [trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [fruit trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](https://stardewvalleywiki.com/Furnace) (don't forget they also need coal);
 * [garbage cans](https://stardewvalleywiki.com/Garbage_Can);

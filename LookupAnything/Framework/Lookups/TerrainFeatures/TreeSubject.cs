@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common.Enums;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -48,7 +49,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         public override IEnumerable<ICustomField> GetData()
         {
             Tree tree = this.Target;
-            TreeType treeType = (TreeType)tree.treeType.Value;
             GameLocation location = tree.currentLocation;
 
             // get growth stage

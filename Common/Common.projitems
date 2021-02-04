@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Enums\TreeType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataParsers\CropDataParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GameI18n.cs" />
