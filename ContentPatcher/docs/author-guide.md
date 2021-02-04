@@ -1231,8 +1231,15 @@ This can also be used to troubleshoot token syntax:
 ```
 > patch parse "assets/{{Season}.png"
 [ERROR] Can't parse that token value: Reached end of input, expected end of token ('}}').
-
 ```
+
+### patch dump
+`patch dump` provides specialized reports about the internal Content Patcher state. These are meant
+for technical troubleshooting; in most cases you should use `patch summary` instead.
+
+Available reports:
+
+* `patch dump order`: get the global definition order for all loaded patches.
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any

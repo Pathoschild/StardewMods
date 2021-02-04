@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -100,6 +101,9 @@ namespace ContentPatcher.Framework.Commands
                 case "help":
                     return this.HandleHelp(subcommandArgs);
 
+                case "dump":
+                    return this.HandleDump(subcommandArgs);
+
                 case "summary":
                     return this.HandleSummary(subcommandArgs);
 
@@ -137,6 +141,7 @@ namespace ContentPatcher.Framework.Commands
             var helpEntries = new InvariantDictionary<string>
             {
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
+                ["dump"] = $"{this.CommandName} dump\n   Usage: {this.CommandName} dump order\n   Lists every loaded patch in their apply order. When two patches edit the same asset, they'll be applied in the apply order.",
                 ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.\n\n  Usage: {this.CommandName} summary \"<content pack ID>\"\n Show a summary of the current conditions, and loaded patches for the given content pack.",
                 ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches.",
                 ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
@@ -169,6 +174,52 @@ namespace ContentPatcher.Framework.Commands
             this.Monitor.Log(help.ToString().Trim(), LogLevel.Debug);
 
             return true;
+        }
+
+        /// <summary>Handle the 'patch dump' command.</summary>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleDump(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch dump' command requires an argument which indicates what to dump. See 'patch help dump' for more info.", LogLevel.Error);
+                return true;
+            }
+
+            switch (args[0]?.ToLower())
+            {
+                case "order":
+                    {
+                        var patches = this.PatchManager.GetPatches()
+                            .Select((patch, globalIndex) => new
+                            {
+                                globalPosition = (globalIndex + 1).ToString(CultureInfo.InvariantCulture),
+                                indexPath = string.Join(" > ", patch.IndexPath),
+                                name = patch.Path.ToString()
+                            })
+                            .ToArray();
+
+                        int indexLen = Math.Max("order".Length, patches.Max(p => p.globalPosition.Length));
+                        int pathLen = Math.Max("index path".Length, patches.Max(p => p.indexPath.Length));
+
+                        StringBuilder str = new();
+                        str.AppendLine("Here's the global patch definition order across all loaded content packs, which affects the order that patches are applied.");
+                        str.AppendLine("The 'order' column is the patch's global position in the order; the 'index path' column is Content Patcher's internal hierarchical definition order.");
+                        str.AppendLine();
+                        str.AppendLine($"   {"order".PadRight(indexLen, ' ')}   {"index path".PadRight(pathLen, ' ')}   patch");
+                        str.AppendLine($"   {"".PadRight(indexLen, '-')}   {"".PadRight(pathLen, '-')}   -----");
+
+                        foreach (var patch in patches)
+                            str.AppendLine($"   {patch.globalPosition.PadRight(indexLen, ' ')}   {patch.indexPath.PadRight(pathLen, ' ')}   {patch.name}");
+
+                        this.Monitor.Log(str.ToString(), LogLevel.Info);
+                    }
+                    return true;
+
+                default:
+                    this.Monitor.Log("Invalid 'patch dump' argument. See 'patch help dump' for more info.", LogLevel.Error);
+                    return true;
+            }
         }
 
         /// <summary>Handle the 'patch summary' command.</summary>
