@@ -1239,7 +1239,9 @@ for technical troubleshooting; in most cases you should use `patch summary` inst
 
 Available reports:
 
-* `patch dump order`: get the global definition order for all loaded patches.
+* `patch dump order` shows the global definition order for all loaded patches.
+* `patch dump applied` shows all active patches grouped by target in their apply order, including
+  whether each patch is applied.
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any

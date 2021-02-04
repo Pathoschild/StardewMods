@@ -440,6 +440,13 @@ namespace ContentPatcher.Framework
             return new IPatch[0];
         }
 
+        /// <summary>Get all valid patches grouped by their current target value.</summary>
+        public IEnumerable<KeyValuePair<string, IEnumerable<IPatch>>> GetPatchesByTarget()
+        {
+            foreach (KeyValuePair<string, SortedSet<IPatch>> pair in this.PatchesByCurrentTarget)
+                yield return new KeyValuePair<string, IEnumerable<IPatch>>(pair.Key, pair.Value);
+        }
+
         /// <summary>Get patches which are permanently disabled for this session, along with the reason they were.</summary>
         public IEnumerable<DisabledPatch> GetPermanentlyDisabledPatches()
         {

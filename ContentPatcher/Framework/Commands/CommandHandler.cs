@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Common.Utilities;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -188,6 +189,29 @@ namespace ContentPatcher.Framework.Commands
 
             switch (args[0]?.ToLower())
             {
+                case "applied":
+                    {
+                        StringBuilder str = new();
+                        str.AppendLine("Here are the active patches grouped by their current target value. Within each group, patches are listed in the expected apply order and the checkbox indicates whether each patch is currently applied. See `patch summary` for more info about each patch, including reasons it may not be applied.");
+
+                        foreach (var group in this.PatchManager.GetPatchesByTarget().OrderBy(p => p.Key, HumanSortComparer.DefaultIgnoreCase))
+                        {
+                            str.AppendLine();
+                            str.AppendLine(group.Key);
+                            str.AppendLine("".PadRight(group.Key.Length, '-'));
+
+                            var patches = group.Value
+                                .OrderByDescending(p => p.Type == PatchType.Load)
+                                .ThenBy(p => p, PatchIndexComparer.Instance);
+
+                            foreach (var patch in patches)
+                                str.AppendLine($"   [{(patch.IsApplied ? "X" : " ")}] {patch.Type} {patch.Path}");
+                        }
+
+                        this.Monitor.Log(str.ToString(), LogLevel.Info);
+                    }
+                    return true;
+
                 case "order":
                     {
                         var patches = this.PatchManager.GetPatches()
@@ -203,8 +227,7 @@ namespace ContentPatcher.Framework.Commands
                         int pathLen = Math.Max("index path".Length, patches.Max(p => p.indexPath.Length));
 
                         StringBuilder str = new();
-                        str.AppendLine("Here's the global patch definition order across all loaded content packs, which affects the order that patches are applied.");
-                        str.AppendLine("The 'order' column is the patch's global position in the order; the 'index path' column is Content Patcher's internal hierarchical definition order.");
+                        str.AppendLine("Here's the global patch definition order across all loaded content packs, which affects the order that patches are applied. The 'order' column is the patch's global position in the order; the 'index path' column is Content Patcher's internal hierarchical definition order.");
                         str.AppendLine();
                         str.AppendLine($"   {"order".PadRight(indexLen, ' ')}   {"index path".PadRight(pathLen, ' ')}   patch");
                         str.AppendLine($"   {"".PadRight(indexLen, '-')}   {"".PadRight(pathLen, '-')}   -----");

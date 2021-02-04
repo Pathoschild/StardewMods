@@ -12,7 +12,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Added `LocationUniqueName` token.
 * Added support for setting translation token values through the `i18n` token.
-* Added `patch dump order` console command to view the global apply order for all loaded patches.
+* Added console commands:
+  * `patch dump applied` shows all active patches grouped by target in their apply order, including whether each patch is applied.
+  * `patch dump order` shows the global definition order for all loaded patches.
 * Fixed patch order not guaranteed when `Include` patches get reloaded.
 * Improved performance for content packs using tokenized conditions in patches updated on time change.
 * Config fields consisting of a numeric range are now formatted as a slider in Generic Mod Config Menu.
