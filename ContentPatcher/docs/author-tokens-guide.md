@@ -370,10 +370,19 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 </tr>
 
 <tr valign="top">
-<td>LocationName</td>
+<td>LocationName<br />LocationUniqueName</td>
 <td>
 
-The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
+The internal name of the player's current location, like `FarmHouse` or `Town`. You can see the name
+for the current location using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or
+[`patch summary`](author-guide.md#patch-summary).
+
+Notes:
+* Temporary festival maps always have the location name "Temp".
+* `LocationName` and `LocationUniqueName` are identical except inside constructed buildings, cabins,
+  and farmhand cellars. For example, a coop might have `LocationName` "Deluxe Coop" and
+  `LocationUniqueName` "Coop7379e3db-1c12-4963-bb93-23a1323a25f7". The `LocationUniqueName` can be
+  used as the target location for warp properties.
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 

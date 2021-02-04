@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added `LocationUniqueName` token.
 * Added support for setting translation token values through the `i18n` token.
 * Improved performance for content packs using tokenized conditions in patches updated on time change.
 * Config fields consisting of a numeric range are now formatted as a slider in Generic Mod Config Menu.

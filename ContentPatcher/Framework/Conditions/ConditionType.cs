@@ -62,6 +62,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The name of the player's current location.</summary>
         LocationName,
 
+        /// <summary>The unique name of the player's current location. This differs from <see cref="LocationName"/> for constructed building interiors.</summary>
+        LocationUniqueName,
+
         /// <summary>The gender of the current player.</summary>
         PlayerGender,
 
