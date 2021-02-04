@@ -35,6 +35,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -47,8 +48,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
+        public EditImagePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
             : base(
+                indexPath: indexPath,
                 path: path,
                 type: PatchType.EditImage,
                 assetName: assetName,

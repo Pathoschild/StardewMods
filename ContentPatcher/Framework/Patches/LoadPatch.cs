@@ -12,6 +12,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="localAsset">The asset key to load from the content pack instead.</param>
@@ -20,18 +21,19 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public LoadPatch(LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName)
+        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName)
             : base(
-                  path: path,
-                  type: PatchType.Load,
-                  assetName: assetName,
-                  conditions: conditions,
-                  updateRate: updateRate,
-                  contentPack: contentPack,
-                  parentPatch: parentPatch,
-                  normalizeAssetName: normalizeAssetName,
-                  fromAsset: localAsset
-                )
+                indexPath: indexPath,
+                path: path,
+                type: PatchType.Load,
+                assetName: assetName,
+                conditions: conditions,
+                updateRate: updateRate,
+                contentPack: contentPack,
+                parentPatch: parentPatch,
+                normalizeAssetName: normalizeAssetName,
+                fromAsset: localAsset
+            )
         { }
 
         /// <inheritdoc />

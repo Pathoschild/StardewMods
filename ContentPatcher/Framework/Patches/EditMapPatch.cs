@@ -58,6 +58,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -74,8 +75,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
+                indexPath: indexPath,
                 path: path,
                 type: PatchType.EditMap,
                 assetName: assetName,

@@ -670,7 +670,14 @@ namespace ContentPatcher.Framework.Commands
             pack.Content.Changes = changes;
 
             // reload patches
-            this.PatchLoader.LoadPatches(pack, pack.Content.Changes, new LogPathBuilder(pack.Manifest.Name), reindex: true, parentPatch: null);
+            this.PatchLoader.LoadPatches(
+                contentPack: pack,
+                rawPatches: pack.Content.Changes,
+                rootIndexPath: new[] { pack.Index },
+                path: new LogPathBuilder(pack.Manifest.Name),
+                reindex: true,
+                parentPatch: null
+            );
 
             // make the changes apply
             this.UpdateContext();

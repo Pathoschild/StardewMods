@@ -46,6 +46,9 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <inheritdoc />
+        public int[] IndexPath { get; }
+
+        /// <inheritdoc />
         public LogPathBuilder Path { get; }
 
         /// <inheritdoc />
@@ -176,6 +179,7 @@ namespace ContentPatcher.Framework.Patches
         ** Protected methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="type">The patch type.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
@@ -185,8 +189,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which this patch was loaded, if any.</param>
         /// <param name="fromAsset">The normalized asset key from which to load the local asset (if applicable), including tokens.</param>
-        protected Patch(LogPathBuilder path, PatchType type, IManagedTokenString assetName, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
+        protected Patch(int[] indexPath, LogPathBuilder path, PatchType type, IManagedTokenString assetName, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IManagedTokenString fromAsset = null)
         {
+            this.IndexPath = indexPath;
             this.Path = path;
             this.Type = type;
             this.ManagedRawTargetAsset = assetName;

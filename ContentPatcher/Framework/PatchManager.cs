@@ -36,26 +36,26 @@ namespace ContentPatcher.Framework
         private readonly IList<DisabledPatch> PermanentlyDisabledPatches = new List<DisabledPatch>();
 
         /// <summary>The patches to apply.</summary>
-        private readonly HashSet<IPatch> Patches = new HashSet<IPatch>();
+        private readonly SortedSet<IPatch> Patches = new(PatchIndexComparer.Instance);
 
         /// <summary>The patches to apply, indexed by token.</summary>
-        private readonly InvariantDictionary<HashSet<IPatch>> PatchesAffectedByToken = new InvariantDictionary<HashSet<IPatch>>();
+        private readonly InvariantDictionary<SortedSet<IPatch>> PatchesAffectedByToken = new();
 
         /// <summary>The patches to apply, indexed by asset name.</summary>
-        private readonly InvariantDictionary<HashSet<IPatch>> PatchesByCurrentTarget = new InvariantDictionary<HashSet<IPatch>>();
+        private readonly InvariantDictionary<SortedSet<IPatch>> PatchesByCurrentTarget = new();
 
         /// <summary>The new patches which haven't received a context update yet.</summary>
-        private readonly HashSet<IPatch> PendingPatches = new HashSet<IPatch>();
+        private readonly HashSet<IPatch> PendingPatches = new();
 
         /// <summary>Assets for which patches were removed, which should be reloaded on the next context update.</summary>
-        private readonly InvariantHashSet AssetsWithRemovedPatches = new InvariantHashSet();
+        private readonly InvariantHashSet AssetsWithRemovedPatches = new();
 
         /// <summary>The token changes queued for periodic update types.</summary>
         private readonly IDictionary<ContextUpdateType, InvariantHashSet> QueuedTokenChanges = new Dictionary<ContextUpdateType, InvariantHashSet>
         {
-            [ContextUpdateType.OnTimeChange] = new InvariantHashSet(),
-            [ContextUpdateType.OnLocationChange] = new InvariantHashSet(),
-            [ContextUpdateType.All] = new InvariantHashSet()
+            [ContextUpdateType.OnTimeChange] = new(),
+            [ContextUpdateType.OnLocationChange] = new(),
+            [ContextUpdateType.All] = new()
         };
 
 
@@ -435,7 +435,7 @@ namespace ContentPatcher.Framework
         /// <param name="assetName">The asset name for which to find patches.</param>
         public IEnumerable<IPatch> GetPatches(string assetName)
         {
-            if (this.PatchesByCurrentTarget.TryGetValue(assetName, out HashSet<IPatch> patches))
+            if (this.PatchesByCurrentTarget.TryGetValue(assetName, out SortedSet<IPatch> patches))
                 return patches;
             return new IPatch[0];
         }
@@ -492,7 +492,7 @@ namespace ContentPatcher.Framework
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
             foreach (string tokenName in globalChangedTokens)
             {
-                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affectedPatches))
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch> affectedPatches))
                 {
                     foreach (IPatch patch in affectedPatches)
                     {
@@ -516,8 +516,8 @@ namespace ContentPatcher.Framework
             // index by target asset
             if (patch.TargetAsset != null)
             {
-                if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out HashSet<IPatch> list))
-                    this.PatchesByCurrentTarget[patch.TargetAsset] = list = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+                if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out SortedSet<IPatch> list))
+                    this.PatchesByCurrentTarget[patch.TargetAsset] = list = new SortedSet<IPatch>(PatchIndexComparer.Instance);
                 list.Add(patch);
             }
 
@@ -526,8 +526,8 @@ namespace ContentPatcher.Framework
             {
                 void IndexForToken(string tokenName)
                 {
-                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out HashSet<IPatch> affected))
-                        this.PatchesAffectedByToken[tokenName] = affected = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
+                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch> affected))
+                        this.PatchesAffectedByToken[tokenName] = affected = new SortedSet<IPatch>(PatchIndexComparer.Instance);
                     affected.Add(patch);
                 }
 

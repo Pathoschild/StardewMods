@@ -312,6 +312,7 @@ namespace ContentPatcher
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
+            int index = -1;
             foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
                 RawContentPack rawContentPack;
@@ -339,7 +340,8 @@ namespace ContentPatcher
                     }
 
                     // init
-                    rawContentPack = new RawContentPack(contentPack, content, migrator);
+                    index++;
+                    rawContentPack = new RawContentPack(contentPack, content, migrator, index);
                 }
                 catch (Exception ex)
                 {
@@ -390,7 +392,14 @@ namespace ContentPatcher
                             {
                                 configFileHandler.Save(current.ContentPack, config, this.Helper);
                                 this.PatchLoader.UnloadPatchesLoadedBy(current, false);
-                                this.PatchLoader.LoadPatches(current, current.Content.Changes, path, reindex: true, parentPatch: null);
+                                this.PatchLoader.LoadPatches(
+                                    contentPack: current,
+                                    rawPatches: current.Content.Changes,
+                                    rootIndexPath: new[] { current.Index },
+                                    path: path,
+                                    reindex: true,
+                                    parentPatch: null
+                                );
                             });
                             configMenu.Register((name, field) => this.AddConfigToken(name, field, modContext, current));
                         }
@@ -462,7 +471,14 @@ namespace ContentPatcher
                     }
 
                     // load patches
-                    this.PatchLoader.LoadPatches(current, content.Changes, path, reindex: false, parentPatch: null);
+                    this.PatchLoader.LoadPatches(
+                        contentPack: current,
+                        rawPatches: content.Changes,
+                        rootIndexPath: new[] { current.Index },
+                        path: path,
+                        reindex: false,
+                        parentPatch: null
+                    );
 
                     // add to content pack list
                     this.RawContentPacks.Add(current);
