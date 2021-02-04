@@ -19,6 +19,20 @@
     },
 
     /**
+     * The default machine-specific overrides.
+     *
+     * Don't edit this section directly! Instead copy an entry into your config.json to replace it.
+     */
+    "DefaultMachineOverrides": {
+        "ShippingBin": {
+            "Priority": -1
+        },
+        "MiniShippingBin": {
+            "Priority": -2
+        }
+    },
+
+    /**
      * Mods which add custom machine recipes and require a separate automation component.
      */
     "SuggestedIntegrations": [
@@ -57,19 +71,5 @@
             "SuggestedId": "Traktori.AM.QualityScrubber",
             "SuggestedUrl": "https://www.nexusmods.com/stardewvalley/mods/5663?tab=files"
         }
-    ],
-
-    /**
-     * The default machine-specific overrides.
-     *
-     * Don't edit this section directly! Instead copy an entry into your config.json to replace it.
-     */
-    "DefaultMachineOverrides": {
-        "ShippingBin": {
-            "Priority": -1
-        },
-        "MiniShippingBin": {
-            "Priority": -2
-        }
-    }
+    ]
 }
