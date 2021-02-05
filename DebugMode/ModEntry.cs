@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DebugMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -26,7 +27,7 @@ namespace Pathoschild.Stardew.DebugMode
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Whether to show the debug info overlay.</summary>
-        private bool ShowOverlay;
+        private readonly PerScreen<bool> ShowOverlay = new();
 
         /// <summary>Whether the built-in debug mode is enabled.</summary>
         private bool GameDebugMode
@@ -40,7 +41,7 @@ namespace Pathoschild.Stardew.DebugMode
         }
 
         /// <summary>A pixel texture that can be stretched and colorized for display.</summary>
-        private readonly Lazy<Texture2D> Pixel = new Lazy<Texture2D>(ModEntry.CreatePixel);
+        private readonly Lazy<Texture2D> Pixel = new(ModEntry.CreatePixel);
 
         /// <summary>Keyboard keys which are mapped to a destructive action in debug mode. See <see cref="ModConfig.AllowDangerousCommands"/>.</summary>
         private readonly SButton[] DestructiveKeys =
@@ -94,7 +95,7 @@ namespace Pathoschild.Stardew.DebugMode
             // toggle debug menu
             if (this.Keys.ToggleDebug.JustPressed())
             {
-                this.ShowOverlay = !this.ShowOverlay;
+                this.ShowOverlay.Value = !this.ShowOverlay.Value;
                 if (this.Config.AllowGameDebug)
                     this.GameDebugMode = !this.GameDebugMode;
             }
@@ -124,7 +125,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <param name="e">The event arguments.</param>
         public void OnRendered(object sender, RenderedEventArgs e)
         {
-            if (this.ShowOverlay)
+            if (this.ShowOverlay.Value)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
         }
 

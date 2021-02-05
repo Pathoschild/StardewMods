@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed debug overlay not per-screen in split-screen mode.
+
 ## 1.12.5
 Released 23 January 2021.
 
