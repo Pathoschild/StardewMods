@@ -756,7 +756,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 int[] iridiumItems = this.Constants.ItemsWithIridiumQuality;
                 var prices = new Dictionary<ItemQuality, int>();
                 var sample = (SObject)item.getOne();
-                foreach (ItemQuality quality in Enum.GetValues(typeof(ItemQuality)))
+                foreach (ItemQuality quality in CommonHelper.GetEnumValues<ItemQuality>())
                 {
                     if (quality == ItemQuality.Iridium && !iridiumItems.Contains(item.ParentSheetIndex) && !iridiumItems.Contains(item.Category))
                         continue;

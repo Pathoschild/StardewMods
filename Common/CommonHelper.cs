@@ -49,6 +49,16 @@ namespace Pathoschild.Stardew.Common
         ** Public methods
         *********/
         /****
+        ** Enums
+        ****/
+        /// <summary>Get the values in an enum.</summary>
+        /// <typeparam name="TValue">The enum value type.</typeparam>
+        public static IEnumerable<TValue> GetEnumValues<TValue>() where TValue : struct
+        {
+            return Enum.GetValues(typeof(TValue)).Cast<TValue>();
+        }
+
+        /****
         ** Game
         ****/
         /// <summary>Get all game locations.</summary>
