@@ -36,7 +36,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public virtual bool TryMigrate(ILexToken lexToken, out string error)
+        public virtual bool TryMigrate(ref ILexToken lexToken, out string error)
         {
             if (lexToken is LexTokenToken token)
             {
@@ -50,9 +50,10 @@ namespace ContentPatcher.Framework.Migrations
                 // check input arguments
                 if (token.HasInputArgs())
                 {
-                    foreach (ILexToken part in token.InputArgs.Parts)
+                    var parts = token.InputArgs.Parts;
+                    for (int i = 0; i < parts.Length; i++)
                     {
-                        if (!this.TryMigrate(part, out error))
+                        if (!this.TryMigrate(ref parts[i], out error))
                             return false;
                     }
                 }

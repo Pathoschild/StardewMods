@@ -26,9 +26,9 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ILexToken lexToken, out string error)
+        public override bool TryMigrate(ref ILexToken lexToken, out string error)
         {
-            if (!base.TryMigrate(lexToken, out error))
+            if (!base.TryMigrate(ref lexToken, out error))
                 return false;
 
             // 1.11 adds pinned keys

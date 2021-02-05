@@ -58,9 +58,9 @@ namespace ContentPatcher.Framework
         {
             // parse lexical bits
             var bits = new Lexer().ParseBits(rawValue, impliedBraces: false).ToArray();
-            foreach (ILexToken bit in bits)
+            for (int i = 0; i < bits.Length; i++)
             {
-                if (!this.Migrator.TryMigrate(bit, out error))
+                if (!this.Migrator.TryMigrate(ref bits[i], out error))
                 {
                     parsed = null;
                     return false;
