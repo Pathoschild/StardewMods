@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework
         private readonly GenericTokenContext GlobalContext;
 
         /// <summary>The available tokens defined within the context of each content pack.</summary>
-        private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new Dictionary<IContentPack, ModTokenContext>();
+        private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new();
 
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
@@ -172,7 +172,7 @@ namespace ContentPatcher.Framework
             yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
             yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.Weather, this.GetCurrentWeather, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(Weather)));
+            yield return new WeatherValueProvider(NeedsBasicInfo);
             yield return new TimeValueProvider(NeedsBasicInfo);
 
             // player
@@ -241,22 +241,6 @@ namespace ContentPatcher.Framework
             return Enum.IsDefined(typeof(TEnum), value)
                 ? (TEnum)(object)value
                 : defaultValue;
-        }
-
-        /// <summary>Get the current weather from the game state.</summary>
-        private string GetCurrentWeather()
-        {
-            if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
-                return Weather.Sun.ToString();
-
-            if (Game1.isSnowing)
-                return Weather.Snow.ToString();
-            if (Game1.isRaining)
-                return (Game1.isLightning ? Weather.Storm : Weather.Rain).ToString();
-            if (SaveGame.loaded?.isDebrisWeather ?? Game1.isDebrisWeather)
-                return Weather.Wind.ToString();
-
-            return Weather.Sun.ToString();
         }
 
         /// <summary>Get the event IDs seen by the player.</summary>

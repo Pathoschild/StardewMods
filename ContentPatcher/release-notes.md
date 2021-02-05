@@ -10,9 +10,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Added tokens:
-  * `LocationContext` (the world area recognized by the game, currently `Island` or `Valley`);
-  * `LocationUniqueName` (the unique location name for constructed buildings and cabins).
+* Improved tokens:
+  * Added `LocationContext` (the world area recognized by the game, currently `Island` or `Valley`).
+  * Added `LocationUniqueName` (the unique location name for constructed buildings and cabins).
+  * `Weather` now returns weather for the current location context (i.e. island or valley) by default, instead of always returning the valley's weather.
+  * You can now use an optional argument like `{{Weather: Valley}}` to get the weather for a specific context.
 * Added support for setting translation token values through the `i18n` token.
 * Added console commands:
   * `patch dump applied` shows all active patches grouped by target in their apply order, including whether each patch is applied.
@@ -20,6 +22,10 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed patch order not guaranteed when `Include` patches get reloaded.
 * Improved performance for content packs using tokenized conditions in patches updated on time change.
 * Config fields consisting of a numeric range are now formatted as a slider in Generic Mod Config Menu.
+
+**Update note for mod authors:**  
+If you use the `Weather` token, updating the `Format` field to `1.20.0` or later changes its
+behavior. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.19.4
 Released 23 January 2021.

@@ -193,7 +193,8 @@ This can also be used with range tokens:
 <td>Weather</td>
 <td>
 
-The weather type. Possible values:
+The weather type in the current world area (or the area specified with a
+[`LocationContext`](#playertype) argument). Possible values:
 
 value   | meaning
 ------- | -------
@@ -202,6 +203,9 @@ value   | meaning
 `Storm` | Rain is falling with lightning.
 `Snow`  | Snow is falling.
 `Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token without specifying a
+location context.
 
 </td>
 </tr>
@@ -374,7 +378,7 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 <td>
 
 The general world area recognize by the game. Possible values: `Island` (locations on
-[Ginger Island](https://stardewcommunitywiki.com/Ginger_Island)) and `Valley` (anywhere else).
+[Ginger Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -1419,6 +1423,21 @@ To use a mod-provided token, at least one of these must be true:
 
 ## Constants
 These are predefined values used in tokens.
+
+### `LocationContext`
+value | meaning
+----- | -------
+`Island` | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
+`Valley` | Any other location.
+
+The location context can be specified as an [input argument](#input-arguments) for tokens that
+support it, defaulting to the current location. For example:
+
+example | meaning
+------- | -------
+`{{Weather}}`<br />`{{Weather: current}}` | Get weather for the current location.
+`{{Weather: island}}` | Get the weather on Ginger Island.
+`{{Weather: valley}}` | Get the weather in the valley.
 
 ### `PlayerType`
 value | meaning
