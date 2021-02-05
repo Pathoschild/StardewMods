@@ -18,6 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             this.AddedTokens = new InvariantHashSet
             {
+                ConditionType.LocationContext.ToString(),
                 ConditionType.LocationUniqueName.ToString()
             };
         }

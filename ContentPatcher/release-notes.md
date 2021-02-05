@@ -10,7 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Added `LocationUniqueName` token.
+* Added tokens:
+  * `LocationContext` (the world area recognized by the game, currently `Island` or `Valley`);
+  * `LocationUniqueName` (the unique location name for constructed buildings and cabins).
 * Added support for setting translation token values through the `i18n` token.
 * Added console commands:
   * `patch dump applied` shows all active patches grouped by target in their apply order, including whether each patch is applied.

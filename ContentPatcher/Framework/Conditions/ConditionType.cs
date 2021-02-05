@@ -59,6 +59,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the player's current location is outdoors.</summary>
         IsOutdoors,
 
+        /// <summary>The general world area.</summary>
+        LocationContext,
+
         /// <summary>The name of the player's current location.</summary>
         LocationName,
 

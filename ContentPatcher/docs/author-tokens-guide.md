@@ -370,6 +370,18 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 </tr>
 
 <tr valign="top">
+<td>LocationContext</td>
+<td>
+
+The general world area recognize by the game. Possible values: `Island` (locations on
+[Ginger Island](https://stardewcommunitywiki.com/Ginger_Island)) and `Valley` (anywhere else).
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>LocationName<br />LocationUniqueName</td>
 <td>
 
