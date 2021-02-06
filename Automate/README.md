@@ -121,8 +121,8 @@ Here are some example machine group setups. You can increase production by just 
 
 ## Automation techniques
 ### Connectors
-You can optionally configure objects or paths as connectors, which link machines together. For
-example, here are wooden paths used as connectors:
+You can optionally configure specific furniture/objects/paths as connectors, which link machines
+together. For example, here are wooden paths used as connectors:
 
 > ![](screenshots/connectors.png)
 
