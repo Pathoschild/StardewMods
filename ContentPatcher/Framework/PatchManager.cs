@@ -196,7 +196,7 @@ namespace ContentPatcher.Framework
         /// <param name="updateType">The context update type.</param>
         public void UpdateContext(IContentHelper contentHelper, InvariantHashSet globalChangedTokens, ContextUpdateType updateType)
         {
-            this.Monitor.VerboseLog("Propagating context...");
+            this.Monitor.VerboseLog($"Updating context for {updateType} tick...");
 
             // Patches can have variable update rates, so we keep track of updated tokens here so
             // we update patches at their next update point.
@@ -319,7 +319,7 @@ namespace ContentPatcher.Framework
             if (verbosePatchesReloaded?.Count > 0)
             {
                 StringBuilder report = new StringBuilder();
-                report.AppendLine($"{verbosePatchesReloaded.Count} patches changed state:");
+                report.AppendLine($"{verbosePatchesReloaded.Count} patches were rechecked for {updateType} tick.");
 
                 foreach (PatchAuditChange entry in verbosePatchesReloaded.OrderBy(p => p.Patch.Path.ToString()))
                 {
@@ -337,7 +337,7 @@ namespace ContentPatcher.Framework
                     }
 
                     if (entry.WasReady != patch.IsReady)
-                        notes.Add(patch.IsReady ? "=> not ready" : "=> ready");
+                        notes.Add(patch.IsReady ? "=> ready" : "=> not ready");
                     if (entry.WasFromAsset != patch.FromAsset)
                         notes.Add($"{nameof(patch.FromAsset)} '{entry.WasFromAsset}' => '{patch.FromAsset}'");
                     if (entry.WasTargetAsset != patch.TargetAsset)
