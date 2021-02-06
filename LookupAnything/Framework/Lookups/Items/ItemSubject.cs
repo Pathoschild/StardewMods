@@ -224,13 +224,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 }
             }
 
-            // fish
+            // fish spawn rules
             if (item.Category == SObject.FishCategory)
-            {
-                // spawn rules
                 yield return new FishSpawnRulesField(this.GameHelper, I18n.Item_FishSpawnRules(), item.ParentSheetIndex);
 
-                // fish pond data
+            // fish pond data
+            // derived from FishPond::doAction and FishPond::isLegalFishForPonds
+            if (!item.HasContextTag("fish_legendary") && (item.Category == SObject.FishCategory || Utility.IsNormalObjectAtParentSheetIndex(item, 393/*coral*/) || Utility.IsNormalObjectAtParentSheetIndex(item, 397/*sea urchin*/)))
+            {
                 foreach (FishPondData fishPondData in Game1.content.Load<List<FishPondData>>("Data\\FishPondData"))
                 {
                     if (!fishPondData.RequiredTags.All(item.HasContextTag))

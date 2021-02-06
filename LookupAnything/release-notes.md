@@ -4,6 +4,7 @@
 ## Upcoming release
 * Fixed unable to lookup an NPC from their profile menu.
 * Fixed NPC lookups showing gift tastes for flavored variants in 1.32.3.
+* Fixed item lookups showing fish pond info for legendary fish, and not showing it for coral and sea urchins.
 * Fixed tree lookups incorrectly stating that a fertilized tree won't grow in winter.
 * Fixed error when trying to lookup on the 'help wanted' screen.
 * Fixed error looking up items when the game has invalid bundle data.
