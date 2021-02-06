@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Debug Mode",
     "Author": "Pathoschild",
-    "Version": "1.12.5",
+    "Version": "1.12.6",
     "MinimumApiVersion": "3.9.0",
     "Description": "Enables an overlay which provides debug information and unlocks the game's debug hotkeys.",
     "UniqueID": "Pathoschild.DebugMode",

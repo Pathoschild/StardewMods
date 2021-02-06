@@ -991,7 +991,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1227,7 +1227,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1260,7 +1260,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1385,7 +1385,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1405,7 +1405,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.19.0",
+     "Format": "1.20.0",
      "Changes": [
         {
            "Action": "EditData",

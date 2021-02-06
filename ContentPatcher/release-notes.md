@@ -9,13 +9,15 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.20
+Released 06 February 2021. See the [release highlights](https://www.patreon.com/posts/47213526).
+
 * Improved tokens:
-  * Added `LocationContext` (the world area recognized by the game, currently `Island` or `Valley`).
-  * Added `LocationUniqueName` (the unique location name for constructed buildings and cabins).
-  * `Weather` now returns weather for the current location context (i.e. island or valley) by default, instead of always returning the valley's weather.
+  * Added `LocationContext` (the world area recognized by the game like `Island` or `Valley`).
+  * Added `LocationUniqueName` (the unique name for constructed building and cabin interiors).
+  * `Weather` now returns weather for the current location context by default, instead of always returning the valley's weather.
   * You can now use an optional argument like `{{Weather: Valley}}` to get the weather for a specific context.
-* Added support for setting translation token values through the `i18n` token.
+* You can now set translation token values through `i18n` token arguments.
 * Added console commands:
   * `patch dump applied` shows all active patches grouped by target in their apply order, including whether each patch is applied.
   * `patch dump order` shows the global definition order for all loaded patches.

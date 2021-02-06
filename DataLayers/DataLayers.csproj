@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>DataLayers</AssemblyName>
-    <Version>1.14.1</Version>
+    <Version>1.14.2</Version>
     <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>

@@ -72,7 +72,7 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
 
 ## 1.20
-This version isn't released yet.
+Released 06 February 2021.
 
 * **The `Weather` token now returns weather for the _current location context_ (i.e. island or
   valley) by default**. You can use `{{Weather: Valley}}` to match the previous behavior.
