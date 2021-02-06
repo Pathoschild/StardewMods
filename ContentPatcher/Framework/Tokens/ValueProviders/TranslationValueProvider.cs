@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 using StardewValley;
@@ -32,7 +33,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: 1);
             this.ValidNamedArguments = null; // allow any named argument
             this.MarkReady(true);
-
         }
 
         /// <inheritdoc />
@@ -50,16 +50,38 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
+            // get translation
             Translation translation = this.TranslationHelper.Get(input.GetFirstPositionalArg());
 
+            // add tokens
+            if (input.HasNamedArgs)
+            {
+                translation = translation.Tokens(input
+                    .NamedArgs
+                    .ToDictionary(p => p.Key, p => this.Stringify(p.Value))
+                );
+            }
+
+            // add default value
             if (input.NamedArgs.TryGetValue("default", out IInputArgumentValue defaultValue))
             {
                 translation = translation
-                    .Default(string.Join(", ", defaultValue.Parsed))
+                    .Default(this.Stringify(defaultValue))
                     .UsePlaceholder(false); // allow setting a blank default
             }
 
             yield return translation;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the string representation for an input argument.</summary>
+        /// <param name="input">The input argument.</param>
+        private string Stringify(IInputArgumentValue input)
+        {
+            return string.Join(", ", input.Parsed);
         }
     }
 }

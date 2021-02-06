@@ -88,6 +88,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case SkillsPage _:
                     return this.BuildSubject(Game1.player);
 
+                // profile tab
+                case ProfileMenu profileMenu:
+                    if (profileMenu.hoveredItem == null)
+                    {
+                        if (profileMenu.GetCharacter() is NPC npc)
+                            return this.Codex.GetByEntity(npc);
+                    }
+                    break;
+
                 // social tab
                 case SocialPage socialPage:
                     {
@@ -125,7 +134,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ** Other menus
                 ****/
                 // calendar
-                case Billboard billboard:
+                case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
                         int selectedDay = -1;

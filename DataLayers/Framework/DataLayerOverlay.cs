@@ -205,10 +205,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /*********
         ** Protected methods
         *********/
-        /// <summary>The method invoked when the cursor is hovered.</summary>
-        /// <param name="x">The cursor's X position.</param>
-        /// <param name="y">The cursor's Y position.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        /// <inheritdoc />
         protected override bool ReceiveCursorHover(int x, int y)
         {
             this.PrevButton.tryHover(x, y);
@@ -217,10 +214,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return this.PrevButton.containsPoint(x, y) || this.NextButton.containsPoint(x, y);
         }
 
-        /// <summary>The method invoked when the player left-clicks.</summary>
-        /// <param name="x">The X-position of the cursor.</param>
-        /// <param name="y">The Y-position of the cursor.</param>
-        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        /// <inheritdoc />
         protected override bool ReceiveLeftClick(int x, int y)
         {
             if (this.PrevButton.containsPoint(x, y))
@@ -238,8 +232,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return base.ReceiveLeftClick(x, y);
         }
 
-        /// <summary>Draw the overlay to the screen under the UI.</summary>
-        /// <param name="spriteBatch">The sprite batch being drawn.</param>
+        /// <inheritdoc />
         protected override void DrawWorld(SpriteBatch spriteBatch)
         {
             if (!this.DrawOverlay())
@@ -295,11 +288,18 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                         this.DrawBorder(spriteBatch, pixelPosition, TileEdge.Bottom, color, width);
                 }
             }
+        }
 
+        /// <inheritdoc />
+        protected override void DrawUi(SpriteBatch batch)
+        {
             // draw top-left UI
-            this.Legend.Draw(spriteBatch);
-            this.PrevButton.draw(spriteBatch);
-            this.NextButton.draw(spriteBatch);
+            if (this.DrawOverlay() && Game1.displayHUD)
+            {
+                this.Legend.Draw(batch);
+                this.PrevButton.draw(batch);
+                this.NextButton.draw(batch);
+            }
         }
 
         /// <summary>Reinitialize the UI components.</summary>

@@ -41,7 +41,7 @@ namespace ContentPatcher.Framework
         private readonly Func<string, string> NormalizeAssetName;
 
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private readonly Lexer Lexer = new Lexer();
+        private readonly Lexer Lexer = new();
 
 
         /*********
@@ -67,10 +67,11 @@ namespace ContentPatcher.Framework
         /// <summary>Load patches for a content pack.</summary>
         /// <param name="contentPack">The content pack for which to load patches.</param>
         /// <param name="rawPatches">The raw patches to load.</param>
+        /// <param name="rootIndexPath">The path of indexes from the root <c>content.json</c> to the root which is loading patches; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
-        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, LogPathBuilder path, bool reindex, Patch parentPatch)
+        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch parentPatch)
         {
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
@@ -97,11 +98,13 @@ namespace ContentPatcher.Framework
             patches = this.SplitPatches(patches).ToArray();
 
             // load patches
+            int index = -1;
             foreach (PatchConfig patch in patches)
             {
+                index++;
                 var localPath = path.With(patch.LogName);
                 this.Monitor.VerboseLog($"   loading {localPath}...");
-                this.LoadPatch(contentPack, patch, tokenParser, localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
             }
 
             // rebuild indexes
@@ -297,11 +300,12 @@ namespace ContentPatcher.Framework
         /// <param name="rawContentPack">The content pack being loaded.</param>
         /// <param name="entry">The change to load.</param>
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
+        private bool LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
         {
             var pack = rawContentPack.ContentPack;
             PatchType? action = null;
@@ -396,6 +400,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new IncludePatch(
+                                indexPath: indexPath,
                                 path: path,
                                 assetName: null,
                                 conditions: conditions,
@@ -419,6 +424,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new LoadPatch(
+                                indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -472,6 +478,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new EditDataPatch(
+                                indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -514,6 +521,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new EditImagePatch(
+                                indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -571,8 +579,8 @@ namespace ContentPatcher.Framework
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
 
                                 // index
-                                IManagedTokenString index = null;
-                                if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out index))
+                                IManagedTokenString setIndex = null;
+                                if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out setIndex))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
 
                                 // properties
@@ -599,7 +607,7 @@ namespace ContentPatcher.Framework
                                 mapTiles.Add(new EditMapPatchTile(
                                     layer: layer,
                                     position: position,
-                                    setIndex: index,
+                                    setIndex: setIndex,
                                     setTilesheet: tilesheet,
                                     setProperties: tileProperties,
                                     remove: remove
@@ -631,6 +639,7 @@ namespace ContentPatcher.Framework
 
                             // save
                             patch = new EditMapPatch(
+                                indexPath: indexPath,
                                 path: path,
                                 assetName: targetAsset,
                                 conditions: conditions,
@@ -859,9 +868,9 @@ namespace ContentPatcher.Framework
             {
                 // get lexical tokens
                 ILexToken[] lexTokens = this.Lexer.ParseBits(name, impliedBraces: true).ToArray();
-                foreach (ILexToken cur in lexTokens)
+                for (int i = 0; i < lexTokens.Length; i++)
                 {
-                    if (!tokenParser.Migrator.TryMigrate(cur, out error))
+                    if (!tokenParser.Migrator.TryMigrate(ref lexTokens[i], out error))
                         return Fail(error, out error, out condition, out immutableRequiredModIDs);
                 }
 

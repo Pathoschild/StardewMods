@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.5
+Released 06 February 2021.
+
+* Fixed overlapping option elements in recent versions of Generic Mod Config Menu.
+
 ## 1.9.4
 Released 04 January 2021.
 

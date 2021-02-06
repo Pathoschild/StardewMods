@@ -6,7 +6,7 @@ namespace ContentPatcher.Framework.Constants
         /// <summary>Append text after the target value.</summary>
         Append,
 
-        /// <summary>Prepend text before the target value/</summary>
+        /// <summary>Prepend text before the target value.</summary>
         Prepend
     }
 }

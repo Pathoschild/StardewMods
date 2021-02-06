@@ -91,14 +91,22 @@ namespace Pathoschild.Stardew.Automate.Framework
                 }
             }
 
+            // indoor pot
+            if (obj is IndoorPot indoorPot)
+            {
+                return BushMachine.CanAutomate(indoorPot.bush.Value)
+                    ? new BushMachine(indoorPot.bush.Value, location)
+                    : null;
+            }
+
             // machine by type
             switch (obj)
             {
                 case Cask cask:
                     return new CaskMachine(cask, location, tile);
 
-                case CrabPot pot:
-                    return new CrabPotMachine(pot, location, tile, this.Monitor, this.Reflection);
+                case CrabPot crabPot:
+                    return new CrabPotMachine(crabPot, location, tile, this.Monitor, this.Reflection);
 
                 case WoodChipper woodChipper:
                     return new WoodChipperMachine(woodChipper, location, tile);
@@ -230,11 +238,14 @@ namespace Pathoschild.Stardew.Automate.Framework
             // machine
             switch (feature)
             {
+                case Bush bush when BushMachine.CanAutomate(bush):
+                    return new BushMachine(bush, location);
+
                 case FruitTree fruitTree:
                     return new FruitTreeMachine(fruitTree, location, tile);
 
-                case Bush bush when BushMachine.CanAutomate(bush):
-                    return new BushMachine(bush, location);
+                case Tree tree when TreeMachine.CanAutomate(tree):
+                    return new TreeMachine(tree, location, tile);
             }
 
             // connector

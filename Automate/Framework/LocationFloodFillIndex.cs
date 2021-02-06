@@ -59,6 +59,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             foreach (var pair in location.overlayObjects)
                 yield return new KeyValuePair<Vector2, object>(pair.Key, pair.Value);
 
+            // furniture
+            foreach (var furniture in location.furniture)
+                yield return new KeyValuePair<Vector2, object>(furniture.TileLocation, furniture);
+
             // terrain features
             foreach (var pair in location.terrainFeatures.Pairs)
             {

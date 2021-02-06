@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Common.Utilities;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -100,20 +102,23 @@ namespace ContentPatcher.Framework.Commands
                 case "help":
                     return this.HandleHelp(subcommandArgs);
 
+                case "dump":
+                    return this.HandleDump(subcommandArgs);
+
+                case "export":
+                    return this.HandleExport(subcommandArgs);
+
+                case "parse":
+                    return this.HandleParse(subcommandArgs);
+
+                case "reload":
+                    return this.HandleReload(subcommandArgs);
+
                 case "summary":
                     return this.HandleSummary(subcommandArgs);
 
                 case "update":
                     return this.HandleUpdate();
-
-                case "parse":
-                    return this.HandleParse(subcommandArgs);
-
-                case "export":
-                    return this.HandleExport(subcommandArgs);
-
-                case "reload":
-                    return this.HandleReload(subcommandArgs);
 
                 default:
                     this.Monitor.Log($"The '{this.CommandName} {args[0]}' command isn't valid. Type '{this.CommandName} help' for a list of valid commands.", LogLevel.Debug);
@@ -137,11 +142,12 @@ namespace ContentPatcher.Framework.Commands
             var helpEntries = new InvariantDictionary<string>
             {
                 ["help"] = $"{this.CommandName} help\n   Usage: {this.CommandName} help\n   Lists all available {this.CommandName} commands.\n\n   Usage: {this.CommandName} help <cmd>\n   Provides information for a specific {this.CommandName} command.\n   - cmd: The {this.CommandName} command name.",
-                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.\n\n  Usage: {this.CommandName} summary \"<content pack ID>\"\n Show a summary of the current conditions, and loaded patches for the given content pack.",
-                ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches.",
-                ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
+                ["dump"] = $"{this.CommandName} dump\n   Usage: {this.CommandName} dump order\n   Lists every loaded patch in their apply order. When two patches edit the same asset, they'll be applied in the apply order.",
                 ["export"] = $"{this.CommandName} export\n   Usage: {this.CommandName} export \"<asset name>\"\n   Saves a copy of an asset (including any changes from mods like Content Patcher) to the game folder. The asset name should be the target without the locale or extension, like \"Characters/Abigail\" if you want to export the value of 'Content/Characters/Abigail.xnb'.",
-                ["reload"] = $"{this.CommandName} reload\n   Usage: {this.CommandName} reload \"<content pack ID>\"\n   Reloads the patches of the content.json of a content pack. Config schema changes and dynamic token changes are unsupported."
+                ["parse"] = $"{this.CommandName} parse\n   usage: {this.CommandName} parse \"value\"\n   Parses the given token string and shows the result. For example, `{this.CommandName} parse \"assets/{{{{Season}}}}.png\" will show a value like \"assets/Spring.png\".\n\n{this.CommandName} parse \"value\" \"content-pack.id\"\n   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `{this.CommandName} parse \"assets/{{{{CustomToken}}}}.png\" \"Pathoschild.ExampleContentPack\".",
+                ["reload"] = $"{this.CommandName} reload\n   Usage: {this.CommandName} reload \"<content pack ID>\"\n   Reloads the patches of the content.json of a content pack. Config schema changes and dynamic token changes are unsupported.",
+                ["summary"] = $"{this.CommandName} summary\n   Usage: {this.CommandName} summary\n   Shows a summary of the current conditions and loaded patches.\n\n  Usage: {this.CommandName} summary \"<content pack ID>\"\n Show a summary of the current conditions, and loaded patches for the given content pack.",
+                ["update"] = $"{this.CommandName} update\n   Usage: {this.CommandName} update\n   Immediately refreshes the condition context and rechecks all patches."
             };
 
             // build output
@@ -168,6 +174,265 @@ namespace ContentPatcher.Framework.Commands
             // write output
             this.Monitor.Log(help.ToString().Trim(), LogLevel.Debug);
 
+            return true;
+        }
+
+        /// <summary>Handle the 'patch dump' command.</summary>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleDump(string[] args)
+        {
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch dump' command requires an argument which indicates what to dump. See 'patch help dump' for more info.", LogLevel.Error);
+                return true;
+            }
+
+            switch (args[0]?.ToLower())
+            {
+                case "applied":
+                    {
+                        StringBuilder str = new();
+                        str.AppendLine("Here are the active patches grouped by their current target value. Within each group, patches are listed in the expected apply order and the checkbox indicates whether each patch is currently applied. See `patch summary` for more info about each patch, including reasons it may not be applied.");
+
+                        foreach (var group in this.PatchManager.GetPatchesByTarget().OrderBy(p => p.Key, HumanSortComparer.DefaultIgnoreCase))
+                        {
+                            str.AppendLine();
+                            str.AppendLine(group.Key);
+                            str.AppendLine("".PadRight(group.Key.Length, '-'));
+
+                            var patches = group.Value
+                                .OrderByDescending(p => p.Type == PatchType.Load)
+                                .ThenBy(p => p, PatchIndexComparer.Instance);
+
+                            foreach (var patch in patches)
+                                str.AppendLine($"   [{(patch.IsApplied ? "X" : " ")}] {patch.Type} {patch.Path}");
+                        }
+
+                        this.Monitor.Log(str.ToString(), LogLevel.Info);
+                    }
+                    return true;
+
+                case "order":
+                    {
+                        var patches = this.PatchManager.GetPatches()
+                            .Select((patch, globalIndex) => new
+                            {
+                                globalPosition = (globalIndex + 1).ToString(CultureInfo.InvariantCulture),
+                                indexPath = string.Join(" > ", patch.IndexPath),
+                                name = patch.Path.ToString()
+                            })
+                            .ToArray();
+
+                        int indexLen = Math.Max("order".Length, patches.Max(p => p.globalPosition.Length));
+                        int pathLen = Math.Max("index path".Length, patches.Max(p => p.indexPath.Length));
+
+                        StringBuilder str = new();
+                        str.AppendLine("Here's the global patch definition order across all loaded content packs, which affects the order that patches are applied. The 'order' column is the patch's global position in the order; the 'index path' column is Content Patcher's internal hierarchical definition order.");
+                        str.AppendLine();
+                        str.AppendLine($"   {"order".PadRight(indexLen, ' ')}   {"index path".PadRight(pathLen, ' ')}   patch");
+                        str.AppendLine($"   {"".PadRight(indexLen, '-')}   {"".PadRight(pathLen, '-')}   -----");
+
+                        foreach (var patch in patches)
+                            str.AppendLine($"   {patch.globalPosition.PadRight(indexLen, ' ')}   {patch.indexPath.PadRight(pathLen, ' ')}   {patch.name}");
+
+                        this.Monitor.Log(str.ToString(), LogLevel.Info);
+                    }
+                    return true;
+
+                default:
+                    this.Monitor.Log("Invalid 'patch dump' argument. See 'patch help dump' for more info.", LogLevel.Error);
+                    return true;
+            }
+        }
+
+        /// <summary>Handle the 'patch export' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleExport(string[] args)
+        {
+            // get asset name
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch export' command expects a single argument containing the target asset name. See 'patch help' for more info.", LogLevel.Error);
+                return true;
+            }
+            string assetName = args[0];
+
+            // load asset
+            object asset;
+            try
+            {
+                asset = Game1.content.Load<object>(assetName);
+            }
+            catch (ContentLoadException ex)
+            {
+                this.Monitor.Log($"Can't load asset '{assetName}': {ex.Message}", LogLevel.Error);
+                return true;
+            }
+
+            // init export path
+            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.ExecutionPath, "patch export", string.Join("_", assetName.Split(Path.GetInvalidFileNameChars())));
+            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath));
+
+            // export
+            if (asset is Texture2D texture)
+            {
+                fullTargetPath += ".png";
+
+                texture = this.UnpremultiplyTransparency(texture);
+                using (Stream stream = File.Create(fullTargetPath))
+                    texture.SaveAsPng(stream, texture.Width, texture.Height);
+
+                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
+            }
+            else if (this.IsDataAsset(asset))
+            {
+                fullTargetPath += ".json";
+
+                File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(asset, Formatting.Indented));
+
+                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
+            }
+            else
+                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
+
+            return true;
+        }
+
+        /// <summary>Handle the 'patch parse' command.</summary>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleParse(string[] args)
+        {
+            // get token string
+            if (args.Length < 1 || args.Length > 2)
+            {
+                this.Monitor.Log("The 'patch parse' command expects one to two arguments. See 'patch help parse' for more info.", LogLevel.Error);
+                return true;
+            }
+            string raw = args[0];
+            string modID = args.Length >= 2 ? args[1] : null;
+
+            // get context
+            IContext context;
+            try
+            {
+                context = this.GetContext(modID);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                this.Monitor.Log(ex.Message, LogLevel.Error);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log(ex.ToString(), LogLevel.Error);
+                return true;
+            }
+
+            // parse value
+            TokenString tokenStr;
+            try
+            {
+                tokenStr = new TokenString(raw, context, new LogPathBuilder("console command"));
+            }
+            catch (LexFormatException ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
+                return true;
+            }
+            catch (InvalidOperationException outerEx) when (outerEx.InnerException is LexFormatException ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.Monitor.Log($"Can't parse that token value: {ex}", LogLevel.Error);
+                return true;
+            }
+            IContextualState state = tokenStr.GetDiagnosticState();
+
+            // show result
+            StringBuilder output = new StringBuilder();
+            output.AppendLine();
+            output.AppendLine("Metadata");
+            output.AppendLine("----------------");
+            output.AppendLine($"   raw value:   {raw}");
+            output.AppendLine($"   ready:       {tokenStr.IsReady}");
+            output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
+            output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
+            if (tokenStr.HasAnyTokens)
+                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
+            output.AppendLine();
+
+            output.AppendLine("Diagnostic state");
+            output.AppendLine("----------------");
+            output.AppendLine($"   valid:    {state.IsValid}");
+            output.AppendLine($"   in scope: {state.IsValid}");
+            output.AppendLine($"   ready:    {state.IsReady}");
+            if (state.Errors.Any())
+                output.AppendLine($"   errors:         {string.Join(", ", state.Errors)}");
+            if (state.InvalidTokens.Any())
+                output.AppendLine($"   invalid tokens: {string.Join(", ", state.InvalidTokens)}");
+            if (state.UnreadyTokens.Any())
+                output.AppendLine($"   unready tokens: {string.Join(", ", state.UnreadyTokens)}");
+            if (state.UnavailableModTokens.Any())
+                output.AppendLine($"   unavailable mod tokens: {string.Join(", ", state.UnavailableModTokens)}");
+            output.AppendLine();
+
+            output.AppendLine("Result");
+            output.AppendLine("----------------");
+            output.AppendLine(!tokenStr.IsReady
+                ? "The token string is invalid or unready."
+                : $"   The token string is valid and ready. Parsed value: \"{tokenStr}\""
+            );
+
+            this.Monitor.Log(output.ToString(), LogLevel.Debug);
+            return true;
+        }
+
+        /// <summary>Handle the 'patch reload' command.</summary>
+        /// <param name="args">The subcommand arguments.</param>
+        /// <returns>Returns whether the command was handled.</returns>
+        private bool HandleReload(string[] args)
+        {
+            // get pack ID
+            if (args.Length != 1)
+            {
+                this.Monitor.Log("The 'patch reload' command expects a single arguments containing the target content pack ID. See 'patch help' for more info.", LogLevel.Error);
+                return true;
+            }
+            string packId = args[0];
+
+            // get pack
+            RawContentPack pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
+            if (pack == null)
+            {
+                this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".", LogLevel.Error);
+                return true;
+            }
+
+            // unload patches
+            this.PatchLoader.UnloadPatchesLoadedBy(pack, false);
+
+            // load pack patches
+            var changes = pack.ContentPack.ReadJsonFile<ContentConfig>("content.json").Changes;
+            pack.Content.Changes = changes;
+
+            // reload patches
+            this.PatchLoader.LoadPatches(
+                contentPack: pack,
+                rawPatches: pack.Content.Changes,
+                rootIndexPath: new[] { pack.Index },
+                path: new LogPathBuilder(pack.Manifest.Name),
+                reindex: true,
+                parentPatch: null
+            );
+
+            // make the changes apply
+            this.UpdateContext();
+
+            this.Monitor.Log("Content pack reloaded.", LogLevel.Info);
             return true;
         }
 
@@ -492,190 +757,6 @@ namespace ContentPatcher.Framework.Commands
         private bool HandleUpdate()
         {
             this.UpdateContext();
-            return true;
-        }
-
-        /// <summary>Handle the 'patch parse' command.</summary>
-        /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleParse(string[] args)
-        {
-            // get token string
-            if (args.Length < 1 || args.Length > 2)
-            {
-                this.Monitor.Log("The 'patch parse' command expects one to two arguments. See 'patch help parse' for more info.", LogLevel.Error);
-                return true;
-            }
-            string raw = args[0];
-            string modID = args.Length >= 2 ? args[1] : null;
-
-            // get context
-            IContext context;
-            try
-            {
-                context = this.GetContext(modID);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                this.Monitor.Log(ex.Message, LogLevel.Error);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log(ex.ToString(), LogLevel.Error);
-                return true;
-            }
-
-            // parse value
-            TokenString tokenStr;
-            try
-            {
-                tokenStr = new TokenString(raw, context, new LogPathBuilder("console command"));
-            }
-            catch (LexFormatException ex)
-            {
-                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
-                return true;
-            }
-            catch (InvalidOperationException outerEx) when (outerEx.InnerException is LexFormatException ex)
-            {
-                this.Monitor.Log($"Can't parse that token value: {ex.Message}", LogLevel.Error);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log($"Can't parse that token value: {ex}", LogLevel.Error);
-                return true;
-            }
-            IContextualState state = tokenStr.GetDiagnosticState();
-
-            // show result
-            StringBuilder output = new StringBuilder();
-            output.AppendLine();
-            output.AppendLine("Metadata");
-            output.AppendLine("----------------");
-            output.AppendLine($"   raw value:   {raw}");
-            output.AppendLine($"   ready:       {tokenStr.IsReady}");
-            output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
-            output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
-            if (tokenStr.HasAnyTokens)
-                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
-            output.AppendLine();
-
-            output.AppendLine("Diagnostic state");
-            output.AppendLine("----------------");
-            output.AppendLine($"   valid:    {state.IsValid}");
-            output.AppendLine($"   in scope: {state.IsValid}");
-            output.AppendLine($"   ready:    {state.IsReady}");
-            if (state.Errors.Any())
-                output.AppendLine($"   errors:         {string.Join(", ", state.Errors)}");
-            if (state.InvalidTokens.Any())
-                output.AppendLine($"   invalid tokens: {string.Join(", ", state.InvalidTokens)}");
-            if (state.UnreadyTokens.Any())
-                output.AppendLine($"   unready tokens: {string.Join(", ", state.UnreadyTokens)}");
-            if (state.UnavailableModTokens.Any())
-                output.AppendLine($"   unavailable mod tokens: {string.Join(", ", state.UnavailableModTokens)}");
-            output.AppendLine();
-
-            output.AppendLine("Result");
-            output.AppendLine("----------------");
-            output.AppendLine(!tokenStr.IsReady
-                ? "The token string is invalid or unready."
-                : $"   The token string is valid and ready. Parsed value: \"{tokenStr}\""
-            );
-
-            this.Monitor.Log(output.ToString(), LogLevel.Debug);
-            return true;
-        }
-
-        /// <summary>Handle the 'patch export' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
-        /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleExport(string[] args)
-        {
-            // get asset name
-            if (args.Length != 1)
-            {
-                this.Monitor.Log("The 'patch export' command expects a single argument containing the target asset name. See 'patch help' for more info.", LogLevel.Error);
-                return true;
-            }
-            string assetName = args[0];
-
-            // load asset
-            object asset;
-            try
-            {
-                asset = Game1.content.Load<object>(assetName);
-            }
-            catch (ContentLoadException ex)
-            {
-                this.Monitor.Log($"Can't load asset '{assetName}': {ex.Message}", LogLevel.Error);
-                return true;
-            }
-
-            // init export path
-            string fullTargetPath = Path.Combine(StardewModdingAPI.Constants.ExecutionPath, "patch export", string.Join("_", assetName.Split(Path.GetInvalidFileNameChars())));
-            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath));
-
-            // export
-            if (asset is Texture2D texture)
-            {
-                fullTargetPath += ".png";
-
-                texture = this.UnpremultiplyTransparency(texture);
-                using (Stream stream = File.Create(fullTargetPath))
-                    texture.SaveAsPng(stream, texture.Width, texture.Height);
-
-                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
-            }
-            else if (this.IsDataAsset(asset))
-            {
-                fullTargetPath += ".json";
-
-                File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(asset, Formatting.Indented));
-
-                this.Monitor.Log($"Exported asset '{assetName}' to '{fullTargetPath}'.", LogLevel.Info);
-            }
-            else
-                this.Monitor.Log($"Can't export asset '{assetName}' of type {asset?.GetType().FullName ?? "null"}, expected image or data.", LogLevel.Error);
-
-            return true;
-        }
-
-        /// <summary>Handle the 'patch reload' command.</summary>
-        /// <param name="args">The subcommand arguments.</param>
-        /// <returns>Returns whether the command was handled.</returns>
-        private bool HandleReload(string[] args)
-        {
-            // get pack ID
-            if (args.Length != 1)
-            {
-                this.Monitor.Log("The 'patch reload' command expects a single arguments containing the target content pack ID. See 'patch help' for more info.", LogLevel.Error);
-                return true;
-            }
-            string packId = args[0];
-
-            // get pack
-            RawContentPack pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
-            if (pack == null)
-            {
-                this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".", LogLevel.Error);
-                return true;
-            }
-
-            // unload patches
-            this.PatchLoader.UnloadPatchesLoadedBy(pack, false);
-
-            // load pack patches
-            var changes = pack.ContentPack.ReadJsonFile<ContentConfig>("content.json").Changes;
-            pack.Content.Changes = changes;
-
-            // reload patches
-            this.PatchLoader.LoadPatches(pack, pack.Content.Changes, new LogPathBuilder(pack.Manifest.Name), reindex: true, parentPatch: null);
-
-            // make the changes apply
-            this.UpdateContext();
-
-            this.Monitor.Log("Content pack reloaded.", LogLevel.Info);
             return true;
         }
 

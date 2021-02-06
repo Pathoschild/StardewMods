@@ -59,8 +59,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Whether the player's current location is outdoors.</summary>
         IsOutdoors,
 
+        /// <summary>The general world area.</summary>
+        LocationContext,
+
         /// <summary>The name of the player's current location.</summary>
         LocationName,
+
+        /// <summary>The unique name of the player's current location. This differs from <see cref="LocationName"/> for constructed building interiors.</summary>
+        LocationUniqueName,
 
         /// <summary>The gender of the current player.</summary>
         PlayerGender,

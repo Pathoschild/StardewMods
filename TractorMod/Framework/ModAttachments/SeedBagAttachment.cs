@@ -23,9 +23,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <summary>The unique ID for the Seed Bag mod.</summary>
         internal const string ModId = "Platonymous.SeedBag";
 
-        /// <summary>The <see cref="System.Type.FullName"/> value for the Seed Bag mod's seed bag.</summary>
-        internal const string SeedBagTypeName = "SeedBag.SeedBagTool";
-
 
         /*********
         ** Public methods
@@ -47,7 +44,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return this.Config.Enable && tool?.GetType().FullName == SeedBagAttachment.SeedBagTypeName;
+            return this.Config.Enable && tool?.Name == "Seed Bag";
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -61,7 +58,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // apply to plain dirt
-            if (tileFeature is HoeDirt)
+            if (tileFeature is HoeDirt { crop: null })
                 return this.UseToolOnTile(tool, tile, player, location);
 
             return false;

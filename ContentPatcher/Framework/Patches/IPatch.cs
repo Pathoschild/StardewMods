@@ -10,6 +10,10 @@ namespace ContentPatcher.Framework.Patches
         /*********
         ** Accessors
         *********/
+        /// <summary>The path of indexes from the root <c>content.json</c> to this patch, used to sort patches by global load order.</summary>
+        /// <remarks>For example, the first patch in <c>content.json</c> is <c>[0]</c>. If that patch is an <see cref="PatchType.Include"/> patch, the third patch it loads would be <c>[0, 2]</c> (i.e. patch index 2 within patch index 0).</remarks>
+        int[] IndexPath { get; }
+
         /// <summary>The path to the patch from the root content file.</summary>
         LogPathBuilder Path { get; }
 

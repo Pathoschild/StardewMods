@@ -64,12 +64,12 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(ILexToken lexToken, out string error)
+        public bool TryMigrate(ref ILexToken lexToken, out string error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)
             {
-                if (!migration.TryMigrate(lexToken, out error))
+                if (!migration.TryMigrate(ref lexToken, out error))
                     return false;
             }
 

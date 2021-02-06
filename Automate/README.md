@@ -48,6 +48,7 @@ This can be used to automate...
 * [crystalariums](https://stardewvalleywiki.com/Crystalarium) (once started with the gem/mineral you want);
 * [deconstructors](https://stardewvalleywiki.com/Deconstructor);
 * [fish ponds](https://stardewvalleywiki.com/Fish_Pond) (for output only);
+* [trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [fruit trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](https://stardewvalleywiki.com/Furnace) (don't forget they also need coal);
 * [garbage cans](https://stardewvalleywiki.com/Garbage_Can);
@@ -120,8 +121,8 @@ Here are some example machine group setups. You can increase production by just 
 
 ## Automation techniques
 ### Connectors
-You can optionally configure objects or paths as connectors, which link machines together. For
-example, here are wooden paths used as connectors:
+You can optionally configure specific furniture/objects/paths as connectors, which link machines
+together. For example, here are wooden paths used as connectors:
 
 > ![](screenshots/connectors.png)
 

@@ -8,7 +8,7 @@
     "generic.yesterday": "ontem",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "desconhecido",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -110,59 +110,58 @@
     "data.item.fertile-weed.name": "Mato fértil",
     "data.item.fertile-weed.description": "É garantido conter sementes mistas.",
     "data.item.ice-crystal.name": "Cristal de Gelo",
-    "data.item.ice-crystal.description": "Um cristal de gelo sem descrição. Tem uma chance bem pequena de colher Quartzo Refinado.",
+    "data.item.ice-crystal.description": "Um cristal de gelo sem descrição. Tem uma chance bem pequena de colher quartzo refinado.",
 
     // mine gems
-    "data.item.amethyst-node.name": "Ametistas aglomeradas",
-    "data.item.amethyst-node.description": "Quebre-a para obter ametista.",
-    "data.item.aquamarine-node.name": "Aglomerado de Água-Marinha",
-    "data.item.aquamarine-node.description": "Quebre-a para obter água-marinha.",
-    "data.item.diamond-node.name": "Aglomerado de Diamantes",
-    "data.item.diamond-node.description": "Quebre-a para obter diamante",
-    "data.item.emerald-node.name": "Aglomerado de Esmeralda",
-    "data.item.emerald-node.description": "Quebre-a para obter esmeralda.",
-    "data.item.gem-node.name": "Aglomerado de Gemas",
-    "data.item.gem-node.description": "Quebre-a para receber esmeraldas, água-marinhas, rubis, ametistas, topaz, jade, ou diamantes.",
-    "data.item.jade-node.name": "Aglomerado de Jade",
-    "data.item.jade-node.description": "Quebre-a para receber Jade.",
+    "data.item.amethyst-node.name": "Nó de Ametista",
+    "data.item.amethyst-node.description": "Quebre-o para obter ametistas.",
+    "data.item.aquamarine-node.name": "Nó de Água-Marinha",
+    "data.item.aquamarine-node.description": "Quebre-o para obter água-marinhas.",
+    "data.item.diamond-node.name": "Nó de Diamantes",
+    "data.item.diamond-node.description": "Quebre-o para obter diamantes",
+    "data.item.emerald-node.name": "Nó de Esmeralda",
+    "data.item.emerald-node.description": "Quebre-o para obter esmeraldas.",
+    "data.item.gem-node.name": "Nó de Gemas",
+    "data.item.gem-node.description": "Quebre-o para obter esmeraldas, água-marinhas, rubis, ametistas, topázios, jades, ou diamantes.",
+    "data.item.jade-node.name": "Nó de Jade",
+    "data.item.jade-node.description": "Quebre-o para obter jades.",
     "data.item.mystic-stone.name": "Rocha Mística",
-    "data.item.mystic-stone.description": "Quebre-a para receber gemas raras ou minérios, incluindo o fragmentos prismáticos.",
-    "data.item.prismatic-node.name": "Aglomerado Prismático",
-    "data.item.prismatic-node.description": "Quebre-a para obter fragmentos prismáticos.",
-    "data.item.ruby-node.name": "Aglomerado de Rubís",
-    "data.item.ruby-node.description": "Quebre-a para receber rubis.",
-    "data.item.topaz-node.name": "Aglomerado de topaz",
-    "data.item.topaz-node.description": "Quebre-a para coletar topaz.",
+    "data.item.mystic-stone.description": "Quebre-o para obter gemas raras ou minérios, incluindo o fragmentos prismáticos.",
+    "data.item.prismatic-node.name": "Nó Prismático",
+    "data.item.prismatic-node.description": "Quebre-o para obter fragmentos prismáticos.",
+    "data.item.ruby-node.name": "Nó de Rubi",
+    "data.item.ruby-node.description": "Quebre-o para obter rubis.",
+    "data.item.topaz-node.name": "Nó de Topázio",
+    "data.item.topaz-node.description": "Quebre-o para obter topázios.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
-    "data.item.copper-node.name": "Aglomerado de Cobre",
-    "data.item.copper-node.description": "Quebre-a para coletar minérios de cobre.",
-    "data.item.gold-node.name": "Aglomerado de Ouro",
-    "data.item.gold-node.description": "Quebre para receber minérios de ouro.",
-    "data.item.iridium-node.name": "Aglomerado de Irídio",
-    "data.item.iridium-node.description": "Quebre-a para receber minérios de irídio.",
-    "data.item.iron-node.name": "Aglomerado de Ferro",
-    "data.item.iron-node.description": "Quebre-a pra receber minérios de ferro.",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.cinder-shard-node.name": "Nó de Brasa",
+    "data.item.cinder-shard-node.description": "Quebre-o para obter fragmentos de brasa",
+    "data.item.copper-node.name": "Nó de Cobre",
+    "data.item.copper-node.description": "Quebre-o para obter minérios de cobre.",
+    "data.item.gold-node.name": "Nó de Ouro",
+    "data.item.gold-node.description": "Quebre-o para obter minérios de ouro.",
+    "data.item.iridium-node.name": "Nó de Irídio",
+    "data.item.iridium-node.description": "Quebre-o para obter minérios de irídio.",
+    "data.item.iron-node.name": "Nó de Ferro",
+    "data.item.iron-node.description": "Quebre-o pra obter minérios de ferro.",
+    "data.item.omni-geode-node.name": "Nó de Omnigeodo",
+    "data.item.omni-geode-node.description": "Quebre-o pra obter omnigeodos.",
 
     // mine stones
     "data.item.colored-stone.name": "Rocha Colorida",
     "data.item.colored-stone.description": "Uma rocha indescritível. Talvez possa conter pedras, minérios, ou geodos.",
     "data.item.mine-stone.name": "Pedra",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "Quebre-a para obter pedras com uma chance de carvão.",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "Nó de Argila",
+    "data.item.clay-stone.description": "Quebre-o para obter argilas.",
+    "data.item.fossil-stone.name": "Nó de Ossos",
+    "data.item.fossil-stone.description": "Quebre-o para obter ossos e fósseis.",
 
     // mine containers
-    "data.item.barrel.name": "Barríl",
+    "data.item.barrel.name": "Barril",
     "data.item.barrel.description": "Quebre pra receber bens diversos.",
     "data.item.box.name": "Caixa",
     "data.item.box.description": "Quebre para receber bens diversos.",
@@ -336,8 +335,8 @@
     // labels
     "crop.summary": "Plantação",
     "crop.harvest": "Próxima colheita",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "Fertilizado",
+    "crop.watered": "Regado",
 
     // values
     "crop.summary.dead": "Esta planta está morta.",
@@ -578,28 +577,24 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "Solução",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "Quebra-cabeça resolvido!",
+    "puzzle.solution.hidden": "As soluções do quebra-cabeça estão escondidas no modo de progressão.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "Quebra-cabeça da Caverna de Cristal",
+    "puzzle.island-crystal-cave.crystal-id": "ID Cristal",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "Ative a estátua para iniciar o quebra-cabeça.",
+    "puzzle.island-crystal-cave.solution.waiting": "Esperando que o jogo gere a sequência...",
+    "puzzle.island-crystal-cave.solution.activated": "Repita o padrão de cristais ativados:",
 
 
     /*********
@@ -620,11 +615,10 @@
     "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution.east": "Leste: {{item}}",
+    "puzzle.island-shrine.solution.north": "Norte: {{item}}",
+    "puzzle.island-shrine.solution.south": "Sul: {{item}}",
+    "puzzle.island-shrine.solution.west": "Oeste: {{item}}",
 
 
     /*********
@@ -632,7 +626,7 @@
     *********/
     // labels
     "tile.description": "Um bloque posicionado no mapa. Isto está aparecendo pois você habilitou nas configurações.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "Localização",
     "tile.map-name": "Nome do mapa",
     "tile.tile": "Bloco",
     "tile.tile-index": "{{layerName}}: Indice do bloco",
@@ -664,7 +658,7 @@
 
     // values
     "tree.name.big-mushroom": "Cogumelo gigante",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "Mogno",
     "tree.name.maple": "Árvore de Ácer",
     "tree.name.oak": "Carvalho",
     "tree.name.palm": "Palmeira",
@@ -672,7 +666,7 @@
     "tree.name.unknown": "Árvore desconhecida",
     "tree.stage.done": "Totalmente crescido",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
-    "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa",
+    "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa, a menos que seja fertilizado",
     "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
     "tree.next-growth.chance": "{{chance}}% Chance de crescer {{stage}} amanhã",
 

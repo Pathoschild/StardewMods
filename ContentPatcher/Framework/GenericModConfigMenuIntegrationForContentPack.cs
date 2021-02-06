@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
 using ContentPatcher.Framework.ConfigModels;
@@ -83,75 +84,9 @@ namespace ContentPatcher.Framework
             if (!this.ConfigMenu.IsLoaded)
                 return;
 
-            if (field.AllowValues.Any())
+            // textbox if any values allowed
+            if (!field.AllowValues.Any())
             {
-                if (field.AllowMultiple)
-                {
-                    // Whitelist + multiple options = fake with multiple checkboxes
-                    foreach (string value in field.AllowValues)
-                    {
-                        this.ConfigMenu.AddCheckbox(
-                            label: $"{name}.{value}",
-                            description: field.Description,
-                            get: config => field.Value.Contains(value),
-                            set: (config, selected) =>
-                            {
-                                // toggle value
-                                if (selected)
-                                    field.Value.Add(value);
-                                else
-                                    field.Value.Remove(value);
-
-                                // set default if blank
-                                if (!field.AllowBlank && !field.Value.Any())
-                                    field.Value = new InvariantHashSet(field.DefaultValues);
-
-                                // update token
-                                resetToken();
-                            }
-                        );
-                    }
-                }
-                else if (field.IsBoolean() && !field.AllowBlank)
-                {
-                    // true/false only = checkbox
-                    this.ConfigMenu.AddCheckbox(
-                        label: name,
-                        description: field.Description,
-                        get: config => field.Value.Contains(true.ToString()),
-                        set: (config, selected) =>
-                        {
-                            field.Value.Clear();
-                            field.Value.Add(selected.ToString().ToLower());
-
-                            resetToken();
-                        }
-                    );
-                }
-                else
-                {
-                    // Whitelist + single value = drop down
-                    // Need an extra option when blank is allowed
-                    List<string> choices = new List<string>(field.AllowValues);
-                    if (field.AllowBlank)
-                        choices.Insert(0, "");
-
-                    this.ConfigMenu.AddDropdown(
-                        label: name,
-                        description: field.Description,
-                        get: config => field.Value.FirstOrDefault() ?? "",
-                        set: (config, newValue) =>
-                        {
-                            field.Value = new InvariantHashSet(newValue);
-                            resetToken();
-                        },
-                        choices.ToArray()
-                    );
-                }
-            }
-            else
-            {
-                // No whitelist = text field
                 this.ConfigMenu.AddTextbox(
                     label: name,
                     description: field.Description,
@@ -165,6 +100,93 @@ namespace ContentPatcher.Framework
 
                         resetToken();
                     }
+                );
+            }
+
+            // checkboxes if player can choose multiple values
+            else if (field.AllowMultiple)
+            {
+                foreach (string value in field.AllowValues)
+                {
+                    this.ConfigMenu.AddCheckbox(
+                        label: $"{name}.{value}",
+                        description: field.Description,
+                        get: config => field.Value.Contains(value),
+                        set: (config, selected) =>
+                        {
+                            // toggle value
+                            if (selected)
+                                field.Value.Add(value);
+                            else
+                                field.Value.Remove(value);
+
+                            // set default if blank
+                            if (!field.AllowBlank && !field.Value.Any())
+                                field.Value = new InvariantHashSet(field.DefaultValues);
+
+                            // update token
+                            resetToken();
+                        }
+                    );
+                }
+            }
+
+            // checkbox for single boolean
+            else if (!field.AllowBlank && field.IsBoolean())
+            {
+                this.ConfigMenu.AddCheckbox(
+                    label: name,
+                    description: field.Description,
+                    get: config => field.Value.Contains(true.ToString()),
+                    set: (config, selected) =>
+                    {
+                        field.Value.Clear();
+                        field.Value.Add(selected.ToString().ToLower());
+
+                        resetToken();
+                    }
+                );
+            }
+
+            // slider for single numeric range
+            else if (!field.AllowBlank && field.IsNumericRange(out int min, out int max))
+            {
+                if (!int.TryParse(field.DefaultValues.FirstOrDefault(), out int defaultValue))
+                    defaultValue = min;
+
+                // number slider
+                this.ConfigMenu.AddNumberField(
+                    label: name,
+                    description: field.Description,
+                    get: config => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
+                    set: (config, val) =>
+                    {
+                        field.Value = new InvariantHashSet(((int)val).ToString(CultureInfo.InvariantCulture));
+
+                        resetToken();
+                    },
+                    min: min,
+                    max: max
+                );
+            }
+
+            // dropdown for single multiple-choice value
+            else
+            {
+                List<string> choices = new List<string>(field.AllowValues);
+                if (field.AllowBlank)
+                    choices.Insert(0, "");
+
+                this.ConfigMenu.AddDropdown(
+                    label: name,
+                    description: field.Description,
+                    get: config => field.Value.FirstOrDefault() ?? "",
+                    set: (config, newValue) =>
+                    {
+                        field.Value = new InvariantHashSet(newValue);
+                        resetToken();
+                    },
+                    choices.ToArray()
                 );
             }
         }

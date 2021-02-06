@@ -664,7 +664,7 @@
     "tree.name.unknown": "Unknown Tree",
     "tree.stage.done": "Fully grown",
     "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
-    "tree.next-growth.winter": "can't grow in winter outside greenhouse",
+    "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized",
     "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
     "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
 

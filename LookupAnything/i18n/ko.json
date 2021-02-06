@@ -673,7 +673,7 @@
     "tree.name.unknown": "알 수 없는 나무",
     "tree.stage.done": "다 자람",
     "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",
-    "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
+    "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized", // TODO
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
     "tree.next-growth.chance": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
 

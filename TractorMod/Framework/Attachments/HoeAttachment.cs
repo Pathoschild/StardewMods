@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
-using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -46,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return (this.Config.TillDirt || this.Config.ClearWeeds) && tool is Hoe && tool.GetType().FullName != SeedBagAttachment.SeedBagTypeName;
+            return (this.Config.TillDirt || this.Config.ClearWeeds) && tool is Hoe;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

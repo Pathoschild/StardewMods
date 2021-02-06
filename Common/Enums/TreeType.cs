@@ -1,6 +1,6 @@
 using StardewValley.TerrainFeatures;
 
-namespace Pathoschild.Stardew.LookupAnything.Framework.Constants
+namespace Pathoschild.Stardew.Common.Enums
 {
     /// <summary>Indicates a tree type.</summary>
     internal enum TreeType

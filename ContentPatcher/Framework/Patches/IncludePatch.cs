@@ -34,6 +34,7 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="indexPath">The path of indexes from the root <c>content.json</c> to this patch; see <see cref="IPatch.IndexPath"/>.</param>
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="assetName">The normalized asset name to intercept.</param>
         /// <param name="conditions">The conditions which determine whether this patch should be applied.</param>
@@ -44,8 +45,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="patchLoader">Handles loading and unloading patches for content packs.</param>
-        public IncludePatch(LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IMonitor monitor, PatchLoader patchLoader)
+        public IncludePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IMonitor monitor, PatchLoader patchLoader)
             : base(
+                indexPath: indexPath,
                 path: path,
                 type: PatchType.Include,
                 assetName: assetName,
@@ -125,7 +127,14 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     // load patches
-                    this.PatchLoader.LoadPatches(this.RawContentPack, content.Changes, this.GetIncludedLogPath(this.FromAsset), reindex: true, parentPatch: this);
+                    this.PatchLoader.LoadPatches(
+                        contentPack: this.RawContentPack,
+                        rawPatches: content.Changes,
+                        rootIndexPath: this.IndexPath,
+                        path: this.GetIncludedLogPath(this.FromAsset),
+                        reindex: true,
+                        parentPatch: this
+                    );
                     this.IsApplied = true;
                 }
                 catch (Exception ex)

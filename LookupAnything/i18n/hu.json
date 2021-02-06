@@ -672,7 +672,7 @@
     "tree.name.unknown": "Ismeretlen Fa",
     "tree.stage.done": "Teljesen megnőtt",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
-    "tree.next-growth.winter": "télen nem tud növekedni, csak ha üvegházban van",
+    "tree.next-growth.winter": "télen nem tud növekedni, csak ha üvegházban van, hacsak nem trágyázzák",
     "tree.next-growth.adjacent-trees": "nem tud nőni, mert egy vagy több fa túl közel van",
     "tree.next-growth.chance": "{{chance}}% eséllyel lesz {{stage}} holnapra",
 

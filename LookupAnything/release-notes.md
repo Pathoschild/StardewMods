@@ -1,6 +1,19 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.32.4
+Released 06 February 2021.
+
+* Fixed NPC lookup not working from their profile menu.
+* Fixed NPC lookup showing gift tastes for flavored variants in 1.32.3.
+* Fixed item lookup showing fish pond info for legendary fish, and not showing it for coral and sea urchins.
+* Fixed item lookup failing when the game has invalid bundle data.
+* Fixed tree lookup incorrectly saying that a fertilized tree won't grow in winter.
+* Fixed error when trying to lookup on the 'help wanted' screen.
+* Fixed untranslated text in child lookup.
+* Fixed 'number owned' field not counting items in the island farmhouse fridge.
+* Improved translations. Thanks to carloshbcabral (updated Portuguese) and Kareolis (updated Russian)!
+
 ## 1.32.3
 Released 23 January 2021.
 

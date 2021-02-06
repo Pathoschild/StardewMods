@@ -5,7 +5,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 {
-    /// <summary>A fruit tree machine that accepts input and provides output.</summary>
+    /// <summary>A fruit tree machine that provides output.</summary>
     /// <remarks>Derived from <see cref="FruitTree.shake"/>.</remarks>
     internal class FruitTreeMachine : BaseMachine<FruitTree>
     {

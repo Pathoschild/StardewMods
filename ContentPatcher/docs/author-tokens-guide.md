@@ -193,7 +193,8 @@ This can also be used with range tokens:
 <td>Weather</td>
 <td>
 
-The weather type. Possible values:
+The weather type in the current world area (or the area specified with a
+[`LocationContext`](#playertype) argument). Possible values:
 
 value   | meaning
 ------- | -------
@@ -202,6 +203,9 @@ value   | meaning
 `Storm` | Rain is falling with lightning.
 `Snow`  | Snow is falling.
 `Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token without specifying a
+location context.
 
 </td>
 </tr>
@@ -370,10 +374,31 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 </tr>
 
 <tr valign="top">
-<td>LocationName</td>
+<td>LocationContext</td>
 <td>
 
-The internal name of the player's current location (visible using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679)).
+The general world area recognize by the game. Possible values: `Island` (locations on
+[Ginger Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>LocationName<br />LocationUniqueName</td>
+<td>
+
+The internal name of the player's current location, like `FarmHouse` or `Town`. You can see the name
+for the current location using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or
+[`patch summary`](author-guide.md#patch-summary).
+
+Notes:
+* Temporary festival maps always have the location name "Temp".
+* `LocationName` and `LocationUniqueName` are identical except inside constructed buildings, cabins,
+  and farmhand cellars. For example, a coop might have `LocationName` "Deluxe Coop" and
+  `LocationUniqueName` "Coop7379e3db-1c12-4963-bb93-23a1323a25f7". The `LocationUniqueName` can be
+  used as the target location for warp properties.
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -966,7 +991,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1202,7 +1227,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1235,7 +1260,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1360,7 +1385,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.19.0",
+   "Format": "1.20.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1380,7 +1405,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.19.0",
+     "Format": "1.20.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1398,6 +1423,21 @@ To use a mod-provided token, at least one of these must be true:
 
 ## Constants
 These are predefined values used in tokens.
+
+### `LocationContext`
+value | meaning
+----- | -------
+`Island` | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
+`Valley` | Any other location.
+
+The location context can be specified as an [input argument](#input-arguments) for tokens that
+support it, defaulting to the current location. For example:
+
+example | meaning
+------- | -------
+`{{Weather}}`<br />`{{Weather: current}}` | Get weather for the current location.
+`{{Weather: island}}` | Get the weather on Ginger Island.
+`{{Weather: valley}}` | Get the weather in the valley.
 
 ### `PlayerType`
 value | meaning

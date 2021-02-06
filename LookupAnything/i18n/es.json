@@ -673,7 +673,7 @@
     "tree.name.unknown": "Árbol desconocido",
     "tree.stage.done": "Completamente maduro",
     "tree.stage.partial": "{{stageName}} ({{step}} de {{max}})",
-    "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero",
+    "tree.next-growth.winter": "no puede crecer en invierno fuera del invernadero a menos que se fertilice",
     "tree.next-growth.adjacent-trees": "no puede crecer porque otros árboles estan muy cerca",
     "tree.next-growth.chance": "{{chance}}% de probabilidad de evolucionar a «{{stage}}» mañana",
 
