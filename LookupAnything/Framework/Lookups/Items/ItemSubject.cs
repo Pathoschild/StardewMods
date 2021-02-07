@@ -207,9 +207,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     // for ingredient
                     case ItemType.Object:
                         {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                            if (recipes.Any())
-                                yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes);
+                            // recipes that need this item
+                            RecipeModel[] ingredientRecipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
+                            if (ingredientRecipes.Any())
+                                yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, ingredientRecipes);
+
+                            // recipes that output this item
+                            RecipeModel[] createRecipes = this.GameHelper.GetRecipesForItem(this.DisplayItem).ToArray();
+                            if (createRecipes.Any())
+                                yield return new RecipesForOutputItemField(this.GameHelper, I18n.Item_Recipes(), createRecipes);
                         }
                         break;
 

@@ -362,6 +362,27 @@ namespace Pathoschild.Stardew.LookupAnything
             return recipes;
         }
 
+        /// <summary>Get the recipes that create an item.</summary>
+        /// <param name="item">The item.</param>
+        public IEnumerable<RecipeModel> GetRecipesForItem(Item item)
+        {
+            // ignore invalid item
+            if (item.GetItemType() != ItemType.Object)
+                return Enumerable.Empty<RecipeModel>();
+
+            // from cached recipes
+            var recipes = new List<RecipeModel>();
+            foreach (RecipeModel recipe in this.GetRecipes())
+            {
+                if (recipe.OutputItemIndex != item.ParentSheetIndex)
+                    continue;
+
+                recipes.Add(recipe);
+            }
+
+            return recipes;
+        }
+
         /// <summary>Get the recipes for a given machine.</summary>
         /// <param name="machine">The machine.</param>
         public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
