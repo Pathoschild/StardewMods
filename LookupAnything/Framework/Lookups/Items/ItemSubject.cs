@@ -210,12 +210,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             // recipes that need this item
                             RecipeModel[] ingredientRecipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
                             if (ingredientRecipes.Any())
-                                yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, ingredientRecipes);
+                                yield return ItemRecipesField.ForIngredient(this.GameHelper, I18n.Item_Recipes(), item, ingredientRecipes);
 
                             // recipes that output this item
                             RecipeModel[] createRecipes = this.GameHelper.GetRecipesForItem(this.DisplayItem).ToArray();
                             if (createRecipes.Any())
-                                yield return new RecipesForOutputItemField(this.GameHelper, I18n.Item_Recipes(), createRecipes);
+                                yield return ItemRecipesField.ForOutput(this.GameHelper, I18n.Item_Recipes(), createRecipes);
                         }
                         break;
 
@@ -224,7 +224,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         {
                             RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
                             if (recipes.Any())
-                                yield return new RecipesForMachineField(this.GameHelper, I18n.Item_Recipes(), recipes);
+                                yield return ItemRecipesField.ForMachine(this.GameHelper, I18n.Item_Recipes(), recipes);
                         }
                         break;
                 }
