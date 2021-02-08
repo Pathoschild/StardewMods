@@ -21,10 +21,10 @@
     "label.automate-options": "Automatisieren",
     "label.automate-store": "Lege Gegenstände in diese Kiste",
     "label.automate-store-first": "Lege zuerst Gegenstände in diese Kiste",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "Lege niemals Gegenstände in diese Kiste",
     "label.automate-take": "Nimm Gegenstände von dieser Kiste",
     "label.automate-take-first": "Nimm zuerst Gegenstände von dieser Kiste",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-take-disabled": "Nimm niemals Gegenstände aus dieser Kiste",
 
     // button labels
     "button.edit-chest": "Bearbeite Kiste",
