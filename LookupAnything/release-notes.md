@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to wally232 (updated Korean)!
+
 ## 1.32.4
 Released 06 February 2021.
 

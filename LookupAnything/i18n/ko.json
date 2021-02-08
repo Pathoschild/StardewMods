@@ -336,7 +336,7 @@
     "crop.summary": "작물",
     "crop.harvest": "수확",
     "crop.fertilized": "비료",
-    "crop.watered": "물 줌", // TODO
+    "crop.watered": "물 줌",
 
     // values
     "crop.summary.dead": "이 작물은 시들었다.",
@@ -609,12 +609,10 @@
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
     "puzzle.island-shrine.title": "진저섬 사당 퍼즐",
     "puzzle.island-shrine.description": "각 받침대마다 비가 올 때 보석 새가 떨어뜨린 아이템을 해당 섬 위치에 놓습니다. 개체는 저장할 때마다 무작위로 지정됩니다.",
 
     // values
-    // TODO
     "puzzle.island-shrine.solution.east": "동쪽: {{item}}",
     "puzzle.island-shrine.solution.north": "북쪽: {{item}}",
     "puzzle.island-shrine.solution.south": "남쪽: {{item}}",
