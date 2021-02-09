@@ -74,6 +74,20 @@ bindings with plus signs (like `"LeftShift + H"`), and disable it with `"None"`.
 Horse Flute Anywhere is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both
 single-player and multiplayer.
 
+## Troubleshooting
+### "You do not own a horse"
+That's an issue with the vanilla game, not Horse Flute Anywhere. Make sure you built a stable, and
+that you were the first player to ride the new horse (which marks you as the owner).
+
+You can also reset horse ownership if needed:
+
+1. Run this command in the SMAPI console window:
+   ```
+   reset_horses
+   ```
+2. That will reset **all** horses in the game. Each player should then interact with their horse to
+   name it and take ownership.
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/7500)
