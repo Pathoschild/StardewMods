@@ -76,8 +76,7 @@ namespace ContentPatcher.Framework
         /****
         ** Patching
         ****/
-        /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        /// <inheritdoc />
         public bool CanLoad<T>(IAssetInfo asset)
         {
             // get load patches
@@ -119,8 +118,7 @@ namespace ContentPatcher.Framework
             return canLoad;
         }
 
-        /// <summary>Get whether this instance can edit the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        /// <inheritdoc />
         public bool CanEdit<T>(IAssetInfo asset)
         {
             bool canEdit = this.GetCurrentEditors(asset).Any();
@@ -128,8 +126,7 @@ namespace ContentPatcher.Framework
             return canEdit;
         }
 
-        /// <summary>Load a matched asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        /// <inheritdoc />
         public T Load<T>(IAssetInfo asset)
         {
             // get applicable patches for context
@@ -161,8 +158,7 @@ namespace ContentPatcher.Framework
             return data;
         }
 
-        /// <summary>Edit a matched asset.</summary>
-        /// <param name="asset">A helper which encapsulates metadata about an asset and enables changes to it.</param>
+        /// <inheritdoc />
         public void Edit<T>(IAssetData asset)
         {
             IPatch[] patches = this.GetCurrentEditors(asset).ToArray();

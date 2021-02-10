@@ -7,6 +7,7 @@ using ContentPatcher.Framework;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using ContentPatcher.Framework.Locations;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
@@ -53,7 +54,8 @@ namespace ContentPatcher
             new Migration_1_17(),
             new Migration_1_18(),
             new Migration_1_19(),
-            new Migration_1_20()
+            new Migration_1_20(),
+            new Migration_1_21()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -70,6 +72,9 @@ namespace ContentPatcher
 
         /// <summary>Handles loading and unloading patches.</summary>
         private PatchLoader PatchLoader;
+
+        /// <summary>Handles loading custom location data and adding it to the game.</summary>
+        private CustomLocationManager CustomLocationManager;
 
         /// <summary>Handles the 'patch' console command.</summary>
         private CommandHandler CommandHandler;
@@ -154,7 +159,14 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnLoadStageChanged(object sender, LoadStageChangedEventArgs e)
         {
-            switch (e.NewStage)
+            LoadStage stage = e.NewStage;
+
+            // add locations
+            if (stage == LoadStage.CreatedBasicInfo || stage == LoadStage.SaveLoadedBasicInfo)
+                this.CustomLocationManager.Apply();
+
+            // update context
+            switch (stage)
             {
                 case LoadStage.CreatedBasicInfo:
                 case LoadStage.SaveLoadedBasicInfo:
@@ -258,15 +270,17 @@ namespace ContentPatcher
             this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
             this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, this.Helper.Reflection, installedMods, this.Helper.Content.NormalizeAssetName);
+            this.CustomLocationManager = new CustomLocationManager(this.Monitor);
             this.UpdateContext(ContextUpdateType.All); // set initial context before loading any custom mod tokens
 
             // load context
             this.LoadContentPacks(contentPacks, installedMods);
             this.UpdateContext(ContextUpdateType.All); // set initial context once patches + dynamic tokens + custom tokens are loaded
 
-            // register patcher
-            helper.Content.AssetLoaders.Add(this.PatchManager);
-            helper.Content.AssetEditors.Add(this.PatchManager);
+            // register asset interceptor
+            var interceptor = new AssetInterceptor(this.PatchManager, this.CustomLocationManager);
+            helper.Content.AssetLoaders.Add(interceptor);
+            helper.Content.AssetEditors.Add(interceptor);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -278,7 +292,7 @@ namespace ContentPatcher
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext(ContextUpdateType.All));
+            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.CustomLocationManager, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext(ContextUpdateType.All));
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (_, args) => this.CommandHandler.Handle(args));
 
             // can no longer queue tokens
@@ -406,7 +420,7 @@ namespace ContentPatcher
                         }
 
                         // load dynamic tokens
-                        IDictionary<string, int> dynamicTokenCountByName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                        IDictionary<string, int> dynamicTokenCountByName = new InvariantDictionary<int>();
                         foreach (DynamicTokenConfig entry in content.DynamicTokens)
                         {
                             void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
@@ -481,6 +495,13 @@ namespace ContentPatcher
                         parentPatch: null
                     );
 
+                    // load custom locations
+                    foreach (CustomLocationConfig location in content.CustomLocations)
+                    {
+                        if (!this.CustomLocationManager.TryAddCustomLocationConfig(location, current.ContentPack, out string error))
+                            this.Monitor.Log($"Ignored {current.Manifest.Name} > custom location '{location?.Name}': {error}", LogLevel.Warn);
+                    }
+
                     // add to content pack list
                     this.RawContentPacks.Add(current);
                 }
@@ -490,6 +511,8 @@ namespace ContentPatcher
                     continue;
                 }
             }
+
+            this.CustomLocationManager.EnforceUniqueNames();
 
             this.PatchManager.Reindex(patchListChanged: true);
         }

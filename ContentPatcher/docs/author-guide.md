@@ -27,6 +27,7 @@ This document helps mod authors create a content pack for Content Patcher.
     * [Tiles and tile properties](#tiles-and-tile-properties)
     * [Known limitations](#map-known-limitations)
   * [`Include`](#include)
+* [Custom locations](#custom-locations)
 * [Advanced](#advanced)
   * [Conditions & tokens](#conditions--tokens)
   * [Player config](#player-config)
@@ -90,11 +91,12 @@ A content pack is a folder with these files:
 
 The `content.json` file has three main fields:
 
-field          | purpose
--------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.20.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
-`Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
+field             | purpose
+----------------- | -------
+`Format`          | The format version. You should always use the latest version (currently `1.20.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Changes`         | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
+`ConfigSchema`    | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
+`CustomLocations` | _(optional)_ The custom in-game locations to make available. See [_custom locations_](#custom-locations).
 
 You can list any number of patches (surrounded by `{` and `}` in the `Changes` field). See the next
 few sections for more info about the format. For example:
@@ -850,6 +852,112 @@ circular include loop). In that case the patches are duplicated for each inclusi
 copied & pasted them into each place. This may negatively impact performance though, since each
 patch will be reapplied multiple times.
 
+## Custom locations
+Content Patcher lets you add new locations to the game which work just like the ones that are
+built-in. They're fully persisted in the save file, pathfindable by NPCs, etc. This is only needed
+for new locations; use [`EditMap`](#EditMap) to change existing ones.
+
+This is configured through a `CustomLocations` section in your `content.json` (see example below),
+which lists the locations with these required fields:
+
+   field         | purpose
+   ------------- | -------
+   `Name`        | The location's unique internal name. This can't contain tokens. The name must begin with `Custom_` (to avoid conflicting with current or future vanilla locations), can only contain alphanumeric or underscore characters, and must be **globally** unique. Prefixing it with your mod name is strongly recommended (see _caveats_).
+   `FromMapFile` | The relative path to the location's map file in your content pack folder (file can be `.tmx`, `.tbin`, or `.xnb`). This can't contain tokens, but you can make conditional changes using [`EditMap`](#EditMap) (see example below).
+
+Make sure you read _background_ and _caveats_ below before using this feature.
+
+### Example
+Let's say you want to give Abigail a walk-in closet. This example makes three changes:
+
+1. add the in-game location with the base map;
+2. add a simple warp from Abigail's room;
+3. add a conditional map edit (optional).
+
+Here's how you'd do that:
+
+```js
+{
+   "Format": "1.21.0",
+
+   "CustomLocations": [
+      // add the in-game location
+      {
+         "Name": "Custom_ExampleMod_AbigailCloset",
+         "FromMapFile": "assets/abigail-closet.tmx"
+      }
+   ],
+
+   "Changes": [
+      // add a warp to the new location from Abigail's room
+      {
+         "Action": "EditMap",
+         "Target": "Maps/SeedShop",
+         "TextOperations": [
+            {
+               "Operation": "Append",
+               "Target": ["MapProperties", "Warp"],
+               "Value": "8 10 Custom_ExampleMod_AbigailCloset 7 20",
+               "Delimiter": " "
+            }
+         ]
+      },
+
+      // conditionally edit the map if needed
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Custom_ExampleMod_AbigailCloset",
+         "FromFile": "assets/abigail-closet-clean.tmx",
+         "When": {
+            "HasFlag": "AbigailClosetClean" // example custom mail flag
+         }
+      }
+   ]
+}
+```
+
+### Background
+There's a distinction that's crucial to understanding how this feature works:
+
+* A **map** is an asset file which describes the tile layout, tilesheets, and map/tile properties
+  for the in-game area. The map is reloaded each time you load a save, and each time a mod changes
+  the map.
+* A **location** is [part of the game code](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#GameLocation_et_al)
+  and manages the in-game area and everything inside it (including non-map entities like players).
+  The location is read/written to the save file, and is only loaded when loading the save file.
+
+In other words, a _location_ (part of the game code) contains the _map_ (loaded from the `Content`
+folder):
+```
+┌─────────────────────────────────┐
+│ Location                        │
+│   - objects                     │
+│   - furniture                   │
+│   - crops                       │
+│   - bushes and trees            │
+│   - NPCs and players            │
+│   - etc                         │
+│                                 │
+│   ┌─────────────────────────┐   │
+│   │ Map file                │   │
+│   │   - tile layout         │   │
+│   │   - map/tile properties │   │
+│   │   - tilesheets          │   │
+│   └─────────────────────────┘   │
+└─────────────────────────────────┘
+```
+
+### Caveats
+* The name must be **globally** unique. If two content packs add a location with the same name,
+  both will be rejected with an error message, and the location won't be added at all. If the
+  player saves anyway at that point, anything in that location will be permanently lost. Adding a
+  unique prefix like `YourModName_LocationName` is strongly recommended to avoid that.
+* This only adds the location to the game. Players won't be able to reach it unless you also add
+  warps using [`EditMap`](#editmap) (see the example above). Those warps can be conditional and
+  dynamic, so you can decide when it becomes available to players.
+* The `FromMapFile` map is loaded automatically. A separate `Load` patch which targets the
+  location's map will have no effect, though you can still use `EditMap` patches fine.
+
 ## Advanced
 ### Conditions & tokens
 The previous sections explain how to make static changes, but that's only scratching the surface of
@@ -1106,8 +1214,14 @@ Content Patcher adds several console commands for testing and troubleshooting. E
 directly into the SMAPI console for more info.
 
 #### patch summary
-`patch summary` lists all the loaded patches, their current values, what they changed, and (if
-applicable) the reasons they weren't applied.
+`patch summary` provides a comprehensive overview of what your content packs are doing. That
+includes...
+
+* global token values;
+* local token values for each pack;
+* custom locations added by each pack;
+* and patches loaded from each pack along with their current values, what they changed, and
+  (if applicable) the reasons they weren't applied.
 
 For example:
 
@@ -1159,8 +1273,8 @@ Example Content Pack:
       TerrainFeatures/tree_palm | edited image
 ```
 
-You can also optionally specify one or more content pack IDs, in which case it'll only show patches for those
-content packs:
+You can also optionally specify one or more content pack IDs, in which case it'll only show data
+for those content packs:
 ```
 > patch summary "LemonEx.HobbitHouse" "Another.Content.Pack"
 ```

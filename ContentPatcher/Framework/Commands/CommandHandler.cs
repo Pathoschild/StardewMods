@@ -9,6 +9,7 @@ using Common.Utilities;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
+using ContentPatcher.Framework.Locations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
@@ -39,6 +40,9 @@ namespace ContentPatcher.Framework.Commands
 
         /// <summary>Manages loading and unloading patches.</summary>
         private readonly PatchLoader PatchLoader;
+
+        /// <summary>Handles loading custom location data and adding it to the game.</summary>
+        private readonly CustomLocationManager CustomLocationLoader;
 
         /// <summary>The loaded content packs.</summary>
         private readonly IList<RawContentPack> ContentPacks;
@@ -73,15 +77,17 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="tokenManager">Manages loaded tokens.</param>
         /// <param name="patchManager">Manages loaded patches.</param>
         /// <param name="patchLoader">Manages loading and unloading patches.</param>
+        /// <param name="customLocationManager">Handles loading custom location data and adding it to the game.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, IMonitor monitor, IList<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, CustomLocationManager customLocationManager, IMonitor monitor, IList<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
         {
             this.TokenManager = tokenManager;
             this.PatchManager = patchManager;
             this.PatchLoader = patchLoader;
+            this.CustomLocationLoader = customLocationManager;
             this.Monitor = monitor;
             this.ContentPacks = contentPacks;
             this.GetContext = getContext;
@@ -548,204 +554,244 @@ namespace ContentPatcher.Framework.Commands
                 }
             }
 
-            // add patch summary
-            var patches = this.GetAllPatches()
-                .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
-                .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
-                .OrderByIgnoreCase(p => p.Key);
-
-            output.AppendLine(
-                "=====================\n"
-                + "== Content patches ==\n"
-                + "=====================\n"
-                + "The following patches were loaded. For each patch:\n"
-                + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
-                + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
-                + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
-                + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
-                + "\n"
-            );
-            foreach (IGrouping<string, PatchInfo> patchGroup in patches)
+            // list custom locations
             {
-                ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack);
-                output.AppendLine($"{patchGroup.Key}:");
-                output.AppendLine("".PadRight(patchGroup.Key.Length + 1, '-'));
+                var locations = this.CustomLocationLoader.GetCustomLocationData()
+                    .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
+                    .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
+                    .OrderByIgnoreCase(p => p.Key)
+                    .ToArray();
 
-                // print tokens
+                if (locations.Any())
                 {
-                    var tokens =
-                        (
-                            // get non-global tokens
-                            from IToken token in tokenContext.GetTokens(enforceContext: false)
-                            where token.Scope != null
+                    output.AppendLine(
+                        "======================\n"
+                        + "== Custom locations ==\n"
+                        + "======================\n"
+                        + "The following custom locations were created by content packs.\n"
+                        + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
+                    );
 
-                            // get input arguments
-                            let validInputs = token.IsReady && token.RequiresInput
-                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
-                                : new ITokenString[] { null }
-                            from ITokenString input in validInputs
-
-                            where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
-
-                            // select display data
-                            let result = new
-                            {
-                                Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
-                                IsReady = token.IsReady
-                            }
-                            orderby result.Name
-                            select result
-                        )
-                        .ToArray();
-                    if (tokens.Any())
+                    foreach (var locationGroup in locations)
                     {
-                        int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
+                        int nameWidth = Math.Max("location name".Length, locationGroup.Max(p => p.Name.Length));
+
+                        output.AppendLine($"{locationGroup.Key}:");
+                        output.AppendLine("".PadRight(locationGroup.Key.Length + 1, '-'));
+                        output.AppendLine();
+                        output.AppendLine($"   {"location name".PadRight(nameWidth)}  | status");
+                        output.AppendLine($"   {"".PadRight(nameWidth, '-')}  | ------");
+                        foreach (CustomLocationData location in locationGroup.OrderByIgnoreCase(p => p.Name))
+                            output.AppendLine($"   {location.Name.PadRight(nameWidth)}  | {(location.IsEnabled ? "[X] ok" : $"[ ] error: {location.Error}")}");
+                        output.AppendLine();
+                    }
+                }
+
+                output.AppendLine();
+            }
+
+
+            // list patches
+            {
+                var patches = this.GetAllPatches()
+                    .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
+                    .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
+                    .OrderByIgnoreCase(p => p.Key)
+                    .ToArray();
+
+                output.AppendLine(
+                    "=====================\n"
+                    + "== Content patches ==\n"
+                    + "=====================\n"
+                    + "The following patches were loaded. For each patch:\n"
+                    + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
+                    + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
+                    + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
+                    + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
+                    + "\n"
+                );
+                foreach (var patchGroup in patches)
+                {
+                    ModTokenContext tokenContext = this.TokenManager.TrackLocalTokens(patchGroup.First().ContentPack);
+                    output.AppendLine($"{patchGroup.Key}:");
+                    output.AppendLine("".PadRight(patchGroup.Key.Length + 1, '-'));
+
+                    // print tokens
+                    {
+                        var tokens =
+                            (
+                                // get non-global tokens
+                                from IToken token in tokenContext.GetTokens(enforceContext: false)
+                                where token.Scope != null
+
+                                // get input arguments
+                                let validInputs = token.IsReady && token.RequiresInput
+                                        ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
+                                        : new ITokenString[] { null }
+                                from ITokenString input in validInputs
+
+                                where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
+
+                                // select display data
+                                let result = new
+                                {
+                                    Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
+                                    Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
+                                    IsReady = token.IsReady
+                                }
+                                orderby result.Name
+                                select result
+                            )
+                            .ToArray();
+                        if (tokens.Any())
+                        {
+                            int labelWidth = Math.Max(tokens.Max(p => p.Name.Length), "token name".Length);
+
+                            output.AppendLine();
+                            output.AppendLine("   Local tokens:");
+
+                            output.AppendLine($"      {"token name".PadRight(labelWidth)} | value");
+                            output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
+
+                            foreach (var token in tokens)
+                                output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {GetTruncatedTokenValues(token.Values)}");
+                        }
+                    }
+
+                    // print patches
+                    output.AppendLine();
+                    output.AppendLine("   Patches:");
+                    output.AppendLine("      loaded  | conditions | applied | name + details");
+                    output.AppendLine("      ------- | ---------- | ------- | --------------");
+                    foreach (PatchInfo patch in patchGroup.OrderBy(p => p, new PatchDisplaySortComparer()))
+                    {
+                        // log checkbox and patch name
+                        output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
+
+                        // log target value if different from name
+                        {
+                            // get patch values
+                            string rawIdentifyingPath = PathUtilities.NormalizePath(patch.ParsedType == PatchType.Include
+                                ? patch.RawFromAsset
+                                : patch.RawTargetAsset
+                            );
+                            ITokenString parsedIdentifyingPath = patch.ParsedType == PatchType.Include
+                                ? patch.ParsedFromAsset
+                                : patch.ParsedTargetAsset;
+
+                            // get raw name if different
+                            // (ignore differences in whitespace, capitalization, and path separators)
+                            string rawValue = !PathUtilities.NormalizePath(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
+                                ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
+                                : null;
+
+                            // get parsed value
+                            string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
+                                ? PathUtilities.NormalizePath(parsedIdentifyingPath.Value)
+                                : null;
+
+                            // format
+                            if (rawValue != null || parsedValue != null)
+                            {
+                                output.Append(" (");
+                                if (rawValue != null)
+                                {
+                                    output.Append(rawValue);
+                                    if (parsedValue != null)
+                                        output.Append(" ");
+                                }
+                                if (parsedValue != null)
+                                    output.Append($"=> {parsedValue}");
+                                output.Append(")");
+                            }
+                        }
+
+                        // log reason not applied
+                        string errorReason = this.GetReasonNotLoaded(patch);
+                        if (errorReason != null)
+                            output.Append($"  // {errorReason}");
+
+                        // log common issues if not applied
+                        if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
+                        {
+                            string assetName = patch.ParsedTargetAsset.Value;
+
+                            List<string> issues = new List<string>();
+                            if (this.AssetNameWithContentPattern.IsMatch(assetName))
+                                issues.Add("shouldn't include 'Content/' prefix");
+                            if (this.AssetNameWithExtensionPattern.IsMatch(assetName))
+                            {
+                                Match match = this.AssetNameWithExtensionPattern.Match(assetName);
+                                issues.Add($"shouldn't include '{match.Captures[0]}' extension");
+                            }
+                            if (this.AssetNameWithLocalePattern.IsMatch(assetName))
+                                issues.Add("shouldn't include language code (use conditions instead)");
+
+                            if (issues.Any())
+                                output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
+                        }
+
+                        // log update rate issues
+                        if (patch.Patch != null)
+                        {
+                            foreach (var pair in this.TokenManager.TokensWithSpecialUpdateRates)
+                            {
+                                UpdateRate rate = pair.Item1;
+                                string label = pair.Item2;
+                                InvariantHashSet tokenNames = pair.Item3;
+
+                                if (!patch.Patch.UpdateRate.HasFlag(rate))
+                                {
+                                    var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+
+                                    string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
+                                    if (locationTokensUsed.Any())
+                                        output.Append($" // hint: patch uses {label}, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{rate}\".");
+                                }
+                            }
+                        }
+
+                        // end line
+                        output.AppendLine();
+                    }
+
+                    // print patch effects
+                    {
+                        IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.OrdinalIgnoreCase);
+                        foreach (PatchInfo patch in patchGroup)
+                        {
+                            if (!patch.IsApplied || patch.Patch == null)
+                                continue;
+
+                            string[] changeLabels = patch.GetChangeLabels().ToArray();
+                            if (!changeLabels.Any())
+                                continue;
+
+                            if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet effects))
+                                effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
+
+                            effects.AddMany(patch.GetChangeLabels());
+                        }
 
                         output.AppendLine();
-                        output.AppendLine("   Local tokens:");
-
-                        output.AppendLine($"      {"token name".PadRight(labelWidth)} | value");
-                        output.AppendLine($"      {"".PadRight(labelWidth, '-')} | -----");
-
-                        foreach (var token in tokens)
-                            output.AppendLine($"      {token.Name.PadRight(labelWidth)} | [{(token.IsReady ? "X" : " ")}] {GetTruncatedTokenValues(token.Values)}");
-                    }
-                }
-
-                // print patches
-                output.AppendLine();
-                output.AppendLine("   Patches:");
-                output.AppendLine("      loaded  | conditions | applied | name + details");
-                output.AppendLine("      ------- | ---------- | ------- | --------------");
-                foreach (PatchInfo patch in patchGroup.OrderBy(p => p, new PatchDisplaySortComparer()))
-                {
-                    // log checkbox and patch name
-                    output.Append($"      [{(patch.IsLoaded ? "X" : " ")}]     | [{(patch.MatchesContext ? "X" : " ")}]        | [{(patch.IsApplied ? "X" : " ")}]     | {patch.PathWithoutContentPackPrefix}");
-
-                    // log target value if different from name
-                    {
-                        // get patch values
-                        string rawIdentifyingPath = PathUtilities.NormalizePath(patch.ParsedType == PatchType.Include
-                            ? patch.RawFromAsset
-                            : patch.RawTargetAsset
-                        );
-                        var parsedIdentifyingPath = patch.ParsedType == PatchType.Include
-                            ? patch.ParsedFromAsset
-                            : patch.ParsedTargetAsset;
-
-                        // get raw name if different
-                        // (ignore differences in whitespace, capitalization, and path separators)
-                        string rawValue = !PathUtilities.NormalizePath(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
-                            ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
-                            : null;
-
-                        // get parsed value
-                        string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
-                            ? PathUtilities.NormalizePath(parsedIdentifyingPath.Value)
-                            : null;
-
-                        // format
-                        if (rawValue != null || parsedValue != null)
+                        if (effectsByPatch.Any())
                         {
-                            output.Append(" (");
-                            if (rawValue != null)
-                            {
-                                output.Append(rawValue);
-                                if (parsedValue != null)
-                                    output.Append(" ");
-                            }
-                            if (parsedValue != null)
-                                output.Append($"=> {parsedValue}");
-                            output.Append(")");
+                            int maxAssetNameWidth = Math.Max("asset name".Length, effectsByPatch.Max(p => p.Key.Length));
+
+                            output.AppendLine("   Current changes:");
+                            output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
+                            output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
+
+                            foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
+                                output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
                         }
+                        else
+                            output.AppendLine("   No current changes.");
                     }
 
-                    // log reason not applied
-                    string errorReason = this.GetReasonNotLoaded(patch);
-                    if (errorReason != null)
-                        output.Append($"  // {errorReason}");
-
-                    // log common issues if not applied
-                    if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
-                    {
-                        string assetName = patch.ParsedTargetAsset.Value;
-
-                        List<string> issues = new List<string>();
-                        if (this.AssetNameWithContentPattern.IsMatch(assetName))
-                            issues.Add("shouldn't include 'Content/' prefix");
-                        if (this.AssetNameWithExtensionPattern.IsMatch(assetName))
-                        {
-                            var match = this.AssetNameWithExtensionPattern.Match(assetName);
-                            issues.Add($"shouldn't include '{match.Captures[0]}' extension");
-                        }
-                        if (this.AssetNameWithLocalePattern.IsMatch(assetName))
-                            issues.Add("shouldn't include language code (use conditions instead)");
-
-                        if (issues.Any())
-                            output.Append($" // hint: asset name may be incorrect ({string.Join("; ", issues)}).");
-                    }
-
-                    // log update rate issues
-                    if (patch.Patch != null)
-                    {
-                        foreach (var pair in this.TokenManager.TokensWithSpecialUpdateRates)
-                        {
-                            UpdateRate rate = pair.Item1;
-                            string label = pair.Item2;
-                            var tokenNames = pair.Item3;
-
-                            if (!patch.Patch.UpdateRate.HasFlag(rate))
-                            {
-                                var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
-
-                                string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
-                                if (locationTokensUsed.Any())
-                                    output.Append($" // hint: patch uses {label}, but doesn't set \"{nameof(PatchConfig.Update)}\": \"{rate}\".");
-                            }
-                        }
-                    }
-
-                    // end line
+                    // add blank line between groups
                     output.AppendLine();
                 }
-
-                // print patch effects
-                {
-                    IDictionary<string, InvariantHashSet> effectsByPatch = new Dictionary<string, InvariantHashSet>(StringComparer.OrdinalIgnoreCase);
-                    foreach (PatchInfo patch in patchGroup)
-                    {
-                        if (!patch.IsApplied || patch.Patch == null)
-                            continue;
-
-                        string[] changeLabels = patch.GetChangeLabels().ToArray();
-                        if (!changeLabels.Any())
-                            continue;
-
-                        if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet effects))
-                            effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
-
-                        effects.AddMany(patch.GetChangeLabels());
-                    }
-
-                    output.AppendLine();
-                    if (effectsByPatch.Any())
-                    {
-                        int maxAssetNameWidth = Math.Max("asset name".Length, effectsByPatch.Max(p => p.Key.Length));
-
-                        output.AppendLine("   Current changes:");
-                        output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
-                        output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
-
-                        foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
-                            output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
-                    }
-                    else
-                        output.AppendLine("   No current changes.");
-                }
-
-                // add blank line between groups
-                output.AppendLine();
             }
 
             this.Monitor.Log(output.ToString(), LogLevel.Debug);
