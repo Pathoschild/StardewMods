@@ -935,13 +935,13 @@ Any other arguments provide values for translation tokens. For example, if you h
 like this:
 ```json
 {
-   "dialogue": "It's a beautiful {{day}} morning!"
+   "dialogue": "Hi {{name}}, it's a beautiful {{day}} morning!"
 }
 ```
 
-Then you can do this to provide a value for the token in your patch:
+Then you can do this to provide the token values in your patch:
 ```json
-"{{i18n: dialogue |day={{DayOfWeek}} }}"
+"{{i18n: dialogue |day={{DayOfWeek}} |name=Abigail }}"
 ```
 
   </td>
