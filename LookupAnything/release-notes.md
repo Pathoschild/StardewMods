@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Show recipes that create an item.
 * Add quests and special orders to item 'needed for' field (thanks to cofiem!).
 * Fixed item lookups not showing all cooking/crafting recipes in some cases.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
