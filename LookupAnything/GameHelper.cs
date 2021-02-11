@@ -376,6 +376,8 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 if (recipe.OutputItemIndex != item.ParentSheetIndex)
                     continue;
+                if (recipe.OutputItemType != item.GetItemType())
+                    continue;
 
                 recipes.Add(recipe);
             }
