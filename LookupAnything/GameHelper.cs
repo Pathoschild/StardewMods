@@ -342,11 +342,14 @@ namespace Pathoschild.Stardew.LookupAnything
                 recipes.Add(recipe);
             }
 
-            // resolve conflicts from mods like Producer Framework Mod: if multiple recipes take the
-            // same item as input, ID takes precedence over category. This only occurs with mod recipes,
-            // since there are no such conflicts in the vanilla recipes.
+            // resolve conflicts from mods like Producer Framework Mod: if multiple machine recipes
+            // take the same item as input, ID takes precedence over category. This only occurs
+            // with mod recipes, since there are no such conflicts in the vanilla recipes.
             recipes.RemoveAll(recipe =>
             {
+                if (recipe.Type != RecipeType.MachineInput)
+                    return false;
+
                 RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
                 return
                     ingredient?.PossibleIds.Any(p => p < 0) == true

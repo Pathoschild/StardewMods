@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed item lookups not showing all cooking/crafting recipes in some cases.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
 ## 1.32.4
