@@ -377,6 +377,12 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
+        /// <summary>Get items needed to complete current quests.</summary>
+        public IEnumerable<QuestModel> GetQuests()
+        {
+            return this.DataParser.GetQuests();
+        }
+
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>

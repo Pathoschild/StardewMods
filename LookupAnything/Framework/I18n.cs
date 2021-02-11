@@ -1794,6 +1794,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("item.needed-for.craft-master", new { recipes });
         }
 
+        /// <summary>Get a translation equivalent to "quests ({{quests}})".</summary>
+        /// <param name="quests">The value to inject for the <c>{{quests}}</c> token.</param>
+        public static string Item_NeededFor_Quests(object quests)
+        {
+            return I18n.GetByKey("item.needed-for.quests", new { quests });
+        }
+
         /// <summary>Get a translation equivalent to "shipping box".</summary>
         public static string Item_SellsTo_ShippingBox()
         {
