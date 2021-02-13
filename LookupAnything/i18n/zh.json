@@ -595,10 +595,9 @@
     // labels
 
     "puzzle.island-shrine.title": "岛屿神庙谜题",
-    "puzzle.island-shrine.description": "对于每个基座，下雨时将宝石鸟掉落的物品放在相应的岛上位置。每个存档都会随机分配物品。",
 
     // values
-
+    "puzzle.island-shrine.solution": "对于每个基座，下雨时将宝石鸟掉落的物品放在相应的岛上位置。每个存档都会随机分配物品。",
     "puzzle.island-shrine.solution.east": "东部：{{item}}",
     "puzzle.island-shrine.solution.north": "北部：{{item}}",
     "puzzle.island-shrine.solution.south": "南部：{{item}}",
