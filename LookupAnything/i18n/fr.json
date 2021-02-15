@@ -611,9 +611,9 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Puzzle du sanctuaire",
-    "puzzle.island-shrine.description": "Pour chaque piédestal, placez l'objet déposé par les oiseaux gemmes à l'emplacement correspondant de l'île lorsqu'il pleut. Les objects sont randomisés pour chaque sauvegarde.",
 
     // values
+    "puzzle.island-shrine.solution": "Pour chaque piédestal, placez l'objet déposé par les oiseaux gemmes à l'emplacement correspondant de l'île lorsqu'il pleut. Les objects sont randomisés pour chaque sauvegarde.",
     "puzzle.island-shrine.solution.east": "Est: {{item}}",
     "puzzle.island-shrine.solution.north": "Nord: {{item}}",
     "puzzle.island-shrine.solution.south": "Sud: {{item}}",

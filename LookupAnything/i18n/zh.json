@@ -53,6 +53,7 @@
     "friendship-status.divorced": "已离婚",
     "friendship-status.kicked-out": "关系解除",
 
+
     /*********
     ** Data translations
     *********/
@@ -203,6 +204,7 @@
 
     "location.unknown-fish-area": "{{locationName}}（钓鱼区 {{id}}）",
 
+
     /*********
     ** Animal lookups
     *********/
@@ -222,6 +224,7 @@
     "animal.complaints.no-heater": "冬天没有暖气",
     "animal.complaints.not-petted": "今天还没有被爱抚",
     "animal.complaints.wild-animal-attack": "夜晚被野生动物攻击了",
+
 
     /*********
     ** Building > generic lookups
@@ -262,6 +265,7 @@
     "building.upgrades.coop.2": "可容纳动物量上升至 12 只动物，解锁自动喂食和兔子",
     "building.water-trough.summary": "{{filled}}个水槽已填充，最大可填充水槽量{{max}}个",
 
+
     /*********
     ** Building > fish pond lookups
     *********/
@@ -279,6 +283,7 @@
     "building.fish-pond.quests.incomplete-one": "扩充到{{count}}条鱼：将需要{{itemName}}",
     "building.fish-pond.quests.incomplete-random": "扩充到{{count}}条鱼：将需要{{itemList}}其中之一",
     "building.fish-pond.quests.available": "{{relativeDate}}可以获取任务",
+
 
     /*********
     ** Bush lookups
@@ -298,6 +303,7 @@
     "bush.growth.summary": "将于 {{date}} 成熟",
     "bush.schedule.berry": "春季15-18日有20%几率生长美洲大树莓，秋季8-11日有20%几率生长黑莓。",
     "bush.schedule.tea": "每个季节22日开始茶叶可以收获（冬季除外，在温室里种植则四季可收）。",
+
 
     /*********
     ** Fruit tree lookups
@@ -322,6 +328,7 @@
     "fruit-tree.quality.on-date-next-year": "将于第二年的{{date}}获得{{quality}}",
     "fruit-tree.season.summary": "{{season}}（在温室内全年结果）",
 
+
     /*********
     ** Crop lookups
     *********/
@@ -340,6 +347,7 @@
     "crop.summary.seasons": "在{{seasons}}生长",
     "crop.summary.sells-for": "以{{price}}出售",
     "crop.harvest.too-late": "下次收获超出本季（下次收获将在{{date}}）",
+
 
     /*********
     ** Item > generic lookups
@@ -381,6 +389,7 @@
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
     "item.number-crafted.summary": "你已制造{{count}}个此物",
 
+
     /*********
     ** Item > cask lookups
     *********/
@@ -394,6 +403,7 @@
     "item.cask-schedule.tomorrow": "明天{{quality}}",
     "item.cask-schedule.in-x-days": "将在{{count}}天（{{date}}）后提升到{{quality}}",
 
+
     /*********
     ** Item > crab pot lookups
     *********/
@@ -401,6 +411,7 @@
     "item.crabpot-bait": "鱼饵",
     "item.crabpot-bait-needed": "需要鱼饵！",
     "item.crabpot-bait-not-needed": "诱饵大师职业不需要鱼饵",
+
 
     /*********
     ** Item > fence lookups
@@ -411,6 +422,7 @@
     // values
     "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
     "item.fence-health.summary": "{{percent}}%（大约还剩{{count}}天）",
+
 
     /*********
     ** Item > fish lookups
@@ -432,6 +444,7 @@
     "item.fish-spawn-rules.weather-sunny": "天气：晴朗",
     "item.fish-spawn-rules.weather-rainy": "天气：雨天",
 
+
     /*********
     ** Item > movie lookups
     *********/
@@ -448,13 +461,14 @@
     "item.movie-snack-preference.dislike": "{{name}}不喜欢这个",
     "item.movie-ticket.movie-this-week.none": "本周没有电影",
 
+
     /*********
     ** Item > music block lookups
     *********/
     // labels
-
     "item.music-block.pitch": "音调",
     "item.music-block.drum-type": "鼓点类型",
+
 
     /*********
     ** Monster lookups
@@ -471,6 +485,7 @@
     // values
     "monster.drops.nothing": "无",
     "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}}（击杀了总数{{requiredCount}}中的{{count}}）",
+
 
     /*********
     ** NPC > generic lookups
@@ -499,6 +514,7 @@
     "npc.undiscovered-gift-taste": "{{count}} 个没揭露的品目",
     "npc.undiscovered-gift-taste-appended": ", 和 {{count}} 个没揭露的品目",
 
+
     /*********
     ** NPC > child lookups
     *********/
@@ -512,6 +528,7 @@
     "npc.child.age.baby": "婴儿期",
     "npc.child.age.crawler": "爬走期",
     "npc.child.age.toddler": "幼童期",
+
 
     /*********
     ** Pet lookups
@@ -528,6 +545,7 @@
     "pet.last-petted.never": "还没有抚摸",
     "pet.water-bowl.empty": "水碗是空的",
     "pet.water-bowl.filled": "水碗加满水了（+6友好度）",
+
 
     /*********
     ** Player lookups
@@ -556,45 +574,43 @@
     "player.skill.progress": "{{level}}级，（下一等级需要{{expNeeded}}经验）",
     "player.skill.progress-last": "{{level}}级",
 
+
     /*********
     ** Puzzles
     *********/
     // labels
-
     "puzzle.solution": "解决方案",
 
     // values
-
     "puzzle.solution.solved": "谜题已解决！",
     "puzzle.solution.hidden": "谜题解决方案隐藏在进度模式中。",
+
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-
     "puzzle.island-crystal-cave.title": "水晶洞穴谜题",
     "puzzle.island-crystal-cave.crystal-id": "水晶 ID",
 
     // values
-
     "puzzle.island-crystal-cave.solution.not-activated": "激活雕像以开始谜题。",
     "puzzle.island-crystal-cave.solution.waiting": "等待游戏生成序列…",
     "puzzle.island-crystal-cave.solution.activated": "重复激活水晶的序列：",
+
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-
     "puzzle.island-mermaid.title": "岛屿美人鱼谜题",
     "puzzle.island-mermaid.solution.intro": "使用长笛块播放夜市的美人鱼歌曲。音高值（你可以查找长笛块以查看其音调）：",
+
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-
     "puzzle.island-shrine.title": "岛屿神庙谜题",
 
     // values
@@ -603,6 +619,7 @@
     "puzzle.island-shrine.solution.north": "北部：{{item}}",
     "puzzle.island-shrine.solution.south": "南部：{{item}}",
     "puzzle.island-shrine.solution.west": "西部：{{item}}",
+
 
     /*********
     ** Tile lookups
@@ -621,12 +638,14 @@
     // values
     "tile.tile.none-here": "此处无地格",
 
+
     /*********
     ** Trash Bear or Gourmand lookups
     *********/
     // labels
     "trash-bear-or-gourmand.item-wanted": "想要的东西",
     "trash-bear-or-gourmand.quest-progress": "任务进度",
+
 
     /*********
     ** Wild tree lookups
