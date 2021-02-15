@@ -377,10 +377,25 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
-        /// <summary>Get items needed to complete current quests.</summary>
-        public IEnumerable<QuestModel> GetQuests()
+        /// <summary>Get the current quests which need an item.</summary>
+        /// <param name="item">The item to check.</param>
+        public IEnumerable<QuestModel> GetQuestsWhichNeedItem(SObject item)
         {
-            return this.DataParser.GetQuests();
+            // get all quests
+            var quests =
+                Game1.player.questLog.Select(quest => new QuestModel(quest))
+                .Concat(Game1.player.team.specialOrders.Select(order => new QuestModel(order)));
+
+            // get matching quests
+            foreach (QuestModel quest in quests)
+            {
+                bool needsItem =
+                    !string.IsNullOrWhiteSpace(quest.DisplayText)
+                    && quest.NeedsItem(item);
+
+                if (needsItem)
+                    yield return quest;
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>

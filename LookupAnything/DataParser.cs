@@ -480,23 +480,6 @@ namespace Pathoschild.Stardew.LookupAnything
             return recipes.ToArray();
         }
 
-        /// <summary>Get items needed to complete current quests.</summary>
-        public QuestModel[] GetQuests()
-        {
-            var quests = new List<QuestModel>();
-
-            // information found in StardewValley.Farmer.hasNewQuestActivity
-
-            // help wanted quests
-            quests.AddRange(Game1.player.questLog
-                .Select(q => new QuestModel(q)));
-
-            // special orders
-            quests.AddRange(Game1.player.team.specialOrders
-                .Select(q => new QuestModel(q)));
-
-            return quests.ToArray();
-        }
 
         /*********
         ** Private methods

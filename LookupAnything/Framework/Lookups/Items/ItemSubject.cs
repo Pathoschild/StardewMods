@@ -674,13 +674,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // quests
-            string[] quests = this.GameHelper.GetQuests()
-                .Where(q => q != null && !string.IsNullOrWhiteSpace(q.DisplayText) && q.NeedsItems)
-                .Where(q => q.IsValidItem(obj))
-                .OrderBy(q => q.DisplayText)
-                .Select(q => q.DisplayText).ToArray();
-            if (quests.Any())
-                neededFor.Add(I18n.Item_NeededFor_Quests(quests: string.Join(", ", quests)));
+            {
+                string[] quests = this.GameHelper
+                    .GetQuestsWhichNeedItem(obj)
+                    .Select(p => p.DisplayText)
+                    .OrderBy(p => p)
+                    .ToArray();
+                if (quests.Any())
+                    neededFor.Add(I18n.Item_NeededFor_Quests(quests: string.Join(", ", quests)));
+            }
 
             // yield
             if (neededFor.Any())
