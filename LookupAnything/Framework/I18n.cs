@@ -1794,7 +1794,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("item.needed-for.craft-master", new { recipes });
         }
 
-        /// <summary>Get a translation equivalent to "quests ({{quests}})".</summary>
+        /// <summary>Get a translation equivalent to "current quests ({{quests}})".</summary>
         /// <param name="quests">The value to inject for the <c>{{quests}}</c> token.</param>
         public static string Item_NeededFor_Quests(object quests)
         {
@@ -2729,7 +2729,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("tree.stage.partial", new { stageName, step, max });
         }
 
-        /// <summary>Get a translation equivalent to "can't grow in winter outside greenhouse".</summary>
+        /// <summary>Get a translation equivalent to "can't grow in winter outside greenhouse unless fertilized".</summary>
         public static string Tree_NextGrowth_Winter()
         {
             return I18n.GetByKey("tree.next-growth.winter");
