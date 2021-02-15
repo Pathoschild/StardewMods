@@ -673,6 +673,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     neededFor.Add(I18n.Item_NeededFor_CraftMaster(recipes: string.Join(", ", uncraftedNames)));
             }
 
+            // quests
+            {
+                string[] quests = this.GameHelper
+                    .GetQuestsWhichNeedItem(obj)
+                    .Select(p => p.DisplayText)
+                    .OrderBy(p => p)
+                    .ToArray();
+                if (quests.Any())
+                    neededFor.Add(I18n.Item_NeededFor_Quests(quests: string.Join(", ", quests)));
+            }
+
             // yield
             if (neededFor.Any())
                 yield return new GenericField(I18n.Item_NeededFor(), string.Join(", ", neededFor));

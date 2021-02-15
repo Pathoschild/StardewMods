@@ -384,6 +384,7 @@
     "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
     "item.needed-for.gourmet-chef": "実績:グルメマスター ({{recipes}}を調理する)",
     "item.needed-for.craft-master": "実績:クラフトマスター ({{recipes}}を作成する)",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}個必要)",
     "item.recipes-for-machine.multiple-items": "{{name}}が{{count}}個",

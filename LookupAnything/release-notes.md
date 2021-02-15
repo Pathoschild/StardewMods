@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Add quests to item 'needed for' field (thanks to cofiem!).
 * Fixed item lookups not showing all cooking/crafting recipes in some cases.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
