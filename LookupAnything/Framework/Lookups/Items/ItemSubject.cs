@@ -202,32 +202,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // recipes
             if (showInventoryFields)
             {
+                var recipes = new List<RecipeModel>();
                 switch (itemType)
                 {
-                    // for ingredient
-                    case ItemType.Object:
-                        {
-                            // recipes that need this item
-                            RecipeModel[] ingredientRecipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                            if (ingredientRecipes.Any())
-                                yield return ItemRecipesField.ForIngredient(this.GameHelper, I18n.Item_Recipes(), item, ingredientRecipes);
+                    // for item
+                    default:
+                        // recipes that take this item as an ingredient
+                        recipes.AddRange(this.GameHelper.GetRecipesForIngredient(this.DisplayItem));
+                        recipes.AddRange(this.GameHelper.GetRecipesForIngredient(item));
 
-                            // recipes that output this item
-                            RecipeModel[] createRecipes = this.GameHelper.GetRecipesForItem(this.DisplayItem).ToArray();
-                            if (createRecipes.Any())
-                                yield return ItemRecipesField.ForOutput(this.GameHelper, I18n.Item_Recipes(), createRecipes);
-                        }
+                        // recipes that output this item
+                        recipes.AddRange(this.GameHelper.GetRecipesForOutput(this.DisplayItem));
+                        recipes.AddRange(this.GameHelper.GetRecipesForOutput(item));
                         break;
 
                     // for machine
                     case ItemType.BigCraftable:
-                        {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
-                            if (recipes.Any())
-                                yield return ItemRecipesField.ForMachine(this.GameHelper, I18n.Item_Recipes(), recipes);
-                        }
+                        recipes.AddRange(this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject));
+                        recipes.AddRange(this.GameHelper.GetRecipesForMachine(item as SObject));
                         break;
                 }
+
+                if (recipes.Any())
+                    yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes.ToArray());
             }
 
             // fish spawn rules

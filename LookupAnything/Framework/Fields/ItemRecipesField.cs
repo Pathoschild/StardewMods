@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -27,15 +26,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             /// <summary>The display text for the item name and count.</summary>
             public string DisplayText;
-
-            /// <summary>The pixel size of the display text.</summary>
-            public Vector2 DisplayTextSize;
         }
 
         /// <summary>Metadata needed to draw a recipe.</summary>
         private struct RecipeEntry
         {
-            /// <summary>The recipe name.</summary>
+            /// <summary>The recipe name or key.</summary>
             public string Name;
 
             /// <summary>The recipe type.</summary>
@@ -54,317 +50,276 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
         private readonly RecipeEntry[] Recipes;
 
-        /// <summary>Whether to align input/output columns.</summary>
-        private readonly bool AlignColumns;
-
-        /// <summary>The input column widths, if <see cref="AlignColumns"/> is true.</summary>
-        private readonly int[] InputColumnWidths;
-
-        /// <summary>Whether or not to group by recipe type.</summary>
-        private readonly bool GroupByType;
-
-        /// <summary>Whether or not to show all ingredients and output, or just the ingredient.</summary>
-        private readonly bool ShowFullRecipe;
-
         /// <summary>The indent from the left when drawing the lookup UI.</summary>
         private readonly int LeftIndent = 16;
-
-        /// <summary>The margin from the bottom when drawing the lookup UI.</summary>
-        private readonly int BottomMargin = 5;
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Create an item recipe field that shows recipes that use an item as an ingredient and the number of items needed.</summary>
+        /// <summary>Create an item recipe field that shows recipes with ingredients and the output.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
-        /// <param name="ingredient">The ingredient item.</param>
-        /// <param name="recipes">The recipe to list.</param>
-        /// <returns></returns>
-        public static ItemRecipesField ForIngredient(GameHelper gameHelper, string label, Item ingredient,
-            RecipeModel[] recipes)
-        {
-            return new(gameHelper, label, ingredient, recipes);
-        }
-
-        /// <summary>Create an item recipe field that shows recipes for an item, with ingredients and the output.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="label">A short field label.</param>
+        /// <param name="item">The recipe item.</param>
         /// <param name="recipes">The recipes to list.</param>
-        /// <returns></returns>
-        public static ItemRecipesField ForOutput(GameHelper gameHelper, string label, RecipeModel[] recipes)
+        public ItemRecipesField(GameHelper gameHelper, string label, Item item, RecipeModel[] recipes)
+            : base(label, true)
         {
-            return new(gameHelper, label, recipes, true);
-        }
+            // get recipe data
+            List<RecipeEntry> availableRecipes = recipes
+                .SelectMany(recipe =>
+                {
+                    Item outputItem = recipe.CreateItem(item);
+                    ItemEntry outputEntry = this.ItemEntryFromItem(gameHelper, outputItem.DisplayName, outputItem,
+                        recipe.MinOutput, recipe.MaxOutput, recipe.OutputChance);
 
-        /// <summary>Create an item recipe field that shows recipes for a machine, with ingredients and the output.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="label">A short field label.</param>
-        /// <param name="recipes">The recipes to list.</param>
-        /// <returns></returns>
-        public static ItemRecipesField ForMachine(GameHelper gameHelper, string label, RecipeModel[] recipes)
-        {
-            return new(gameHelper, label, recipes, false);
+                    return this.GetCartesianInputs(recipe)
+                        .Select(inputIds =>
+                            {
+                                var inputEntries = inputIds
+                                    .Select((inputId, index) =>
+                                        this.ItemEntryFromIdAndIngredient(gameHelper, inputId,
+                                            recipe.Ingredients[index])
+                                    ).Where(i => i.HasValue)
+                                    .Select(i => i.Value);
+
+                                return new RecipeEntry
+                                {
+                                    Name = recipe.Key,
+                                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                                    Type = recipe.DisplayType,
+                                    Output = outputEntry,
+                                    Inputs = inputEntries.ToArray(),
+                                };
+                            }
+                        );
+                }).ToList();
+
+            // group to get unique recipes,
+            // order the recipes by the recipe type,
+            // then the output item name
+            this.Recipes = availableRecipes
+                .GroupBy(recipe => string.Join(", ", recipe.Inputs
+                    .Select(i => i.DisplayText)
+                    .OrderBy(i => i)
+                    .Concat(new[] {recipe.Output.DisplayText})
+                    .Concat(new[] {recipe.Name})
+                ))
+                .Select(i => i.First())
+                .OrderBy(recipe => recipe.Type)
+                .ThenBy(recipe => recipe.Output.DisplayText)
+                .ToArray();
         }
 
         /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
-            float topOffset = 0;
+            // The margin between lines of text
+            const int verticalMargin = 5;
+
+            var originalPosition = position;
+            var currentPosition = new Vector2(position.X, position.Y);
 
             // get icon size
             float textHeight = font.MeasureString("ABC").Y;
-            float spaceWidth = font.MeasureString("W").X;
+            float spaceWidth = font.MeasureString("I").X;
             Vector2 iconSize = new Vector2(textHeight);
 
             // draw recipes
             string lastType = null;
             foreach (RecipeEntry entry in this.Recipes)
             {
-                float leftOffset = this.LeftIndent;
-                float bottomMargin = this.BottomMargin;
                 Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
                 Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
-                float lineHeight = iconSize.Y + bottomMargin;
+                float lineHeight = iconSize.Y + verticalMargin;
 
-                // draw type
-                if (this.GroupByType && entry.Type != lastType)
+                // draw type for group
+                if (entry.Type != lastType)
                 {
-                    spriteBatch.DrawTextBlock(font, $"{entry.Type}:",
-                        position + new Vector2(0, topOffset + bottomMargin), wrapWidth, Color.Black);
-                    topOffset += lineHeight;
+                    currentPosition = new Vector2(originalPosition.X, currentPosition.Y + verticalMargin);
+                    Vector2 textSize = spriteBatch.DrawTextBlock(
+                        font,
+                        $"{entry.Type}:",
+                        currentPosition,
+                        wrapWidth,
+                        Color.Black);
+                    currentPosition = new Vector2(currentPosition.X, currentPosition.Y + textSize.Y);
+
                     lastType = entry.Type;
                 }
 
-                // draw inputs
+                // draw output item
+                {
+                    currentPosition = new Vector2(originalPosition.X + this.LeftIndent, currentPosition.Y);
+
+                    // icon
+                    if (entry.Output.Sprite != null)
+                    {
+                        spriteBatch.DrawSpriteWithin(
+                            entry.Output.Sprite,
+                            currentPosition.X,
+                            currentPosition.Y,
+                            iconSize,
+                            iconColor);
+                        currentPosition = new Vector2(currentPosition.X + iconSize.X, currentPosition.Y);
+                    }
+
+                    // name + count + chance
+                    Vector2 textSize = spriteBatch.DrawTextBlock(
+                        font,
+                        entry.Output.DisplayText,
+                        currentPosition,
+                        wrapWidth,
+                        textColor);
+                    currentPosition = new Vector2(currentPosition.X + textSize.X, currentPosition.Y);
+
+                    // joiner
+                    Vector2 joinerSize = spriteBatch.DrawTextBlock(
+                        font,
+                        ":",
+                        currentPosition,
+                        wrapWidth,
+                        textColor);
+                    currentPosition = new Vector2(currentPosition.X + joinerSize.X + spaceWidth, currentPosition.Y);
+
+                    // choose highest line height
+                    lineHeight = new[] {lineHeight, iconSize.Y, textSize.Y, joinerSize.Y}.Max();
+                }
+
+                // draw input items
                 for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                 {
                     ItemEntry input = entry.Inputs[i];
 
+                    currentPosition = this.WrapLineIfNeeded(spriteBatch, font, input.DisplayText,
+                        originalPosition, currentPosition, lineHeight, wrapWidth, iconSize);
+
                     // icon
                     if (input.Sprite != null)
-                        spriteBatch.DrawSpriteWithin(input.Sprite, position.X + leftOffset, position.Y + topOffset,
-                            iconSize, iconColor);
-                    leftOffset += iconSize.X;
+                    {
+                        spriteBatch.DrawSpriteWithin(
+                            input.Sprite,
+                            currentPosition.X,
+                            currentPosition.Y,
+                            iconSize,
+                            iconColor);
+                        currentPosition = new Vector2(currentPosition.X + iconSize.X, currentPosition.Y);
+                    }
 
                     // display text
-                    Vector2 textSize = spriteBatch.DrawTextBlock(font, input.DisplayText,
-                        position + new Vector2(leftOffset, topOffset + 5), wrapWidth - leftOffset, textColor);
-                    leftOffset += this.AlignColumns ? this.InputColumnWidths[i] : textSize.X;
-                    lineHeight = Math.Max(lineHeight, textSize.Y);
+                    Vector2 textSize = spriteBatch.DrawTextBlock(
+                        font,
+                        input.DisplayText,
+                        currentPosition,
+                        wrapWidth,
+                        textColor);
+                    currentPosition = new Vector2(currentPosition.X + textSize.X, currentPosition.Y);
 
                     // joiner
                     if (i == last)
                         continue;
 
-                    Vector2 joinerSize = spriteBatch.DrawTextBlock(font, "+",
-                        position + new Vector2(leftOffset + spaceWidth, topOffset + 5), wrapWidth - leftOffset,
+                    currentPosition = new Vector2(currentPosition.X + spaceWidth, currentPosition.Y);
+
+                    currentPosition = this.WrapLineIfNeeded(spriteBatch, font, "+",
+                        originalPosition, currentPosition, lineHeight, wrapWidth);
+
+                    Vector2 joinerSize = spriteBatch.DrawTextBlock(
+                        font,
+                        "+",
+                        currentPosition,
+                        wrapWidth,
                         textColor);
-                    leftOffset += joinerSize.X + (2 * spaceWidth);
-                    lineHeight = Math.Max(lineHeight, joinerSize.Y);
+                    currentPosition = new Vector2(currentPosition.X + joinerSize.X + (2 * spaceWidth),
+                        currentPosition.Y);
+
+                    // choose highest line height
+                    lineHeight = new[] {lineHeight, iconSize.Y, textSize.Y, joinerSize.Y}.Max();
                 }
 
-                // draw output
-                if (this.ShowFullRecipe)
-                {
-                    // joiner
-                    Vector2 joinerSize = spriteBatch.DrawTextBlock(font, ">",
-                        position + new Vector2(leftOffset + spaceWidth, topOffset + 5), wrapWidth - leftOffset,
-                        textColor);
-                    leftOffset += joinerSize.X + (2 * spaceWidth);
-                    lineHeight = Math.Max(lineHeight, joinerSize.Y);
-
-                    // icon
-                    if (entry.Output.Sprite != null)
-                        spriteBatch.DrawSpriteWithin(entry.Output.Sprite, position.X + leftOffset,
-                            position.Y + topOffset, iconSize, iconColor);
-                    leftOffset += iconSize.X;
-
-                    // name + count + chance
-                    Vector2 textSize = spriteBatch.DrawTextBlock(font, entry.Output.DisplayText,
-                        position + new Vector2(leftOffset, topOffset + 5), wrapWidth - leftOffset, textColor);
-                    lineHeight = Math.Max(lineHeight, textSize.Y);
-                }
-
-                topOffset += lineHeight;
+                currentPosition = new Vector2(currentPosition.X, currentPosition.Y + lineHeight);
             }
 
-            return new Vector2(wrapWidth, topOffset);
-        }
-
-        /// <summary>Create an item recipe field that shows recipes with ingredients and the output.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="label">A short field label.</param>
-        /// <param name="recipes">The recipes to list.</param>
-        /// <param name="groupByType">Whether or not to group recipes by type.</param>
-        private ItemRecipesField(GameHelper gameHelper, string label, RecipeModel[] recipes, bool groupByType)
-            : base(label, true)
-        {
-            this.GroupByType = groupByType;
-            this.ShowFullRecipe = true;
-
-            // get recipe data
-            var availableRecipes = new List<RecipeEntry>();
-            foreach (RecipeModel recipe in recipes)
-            {
-                bool isKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player);
-
-                foreach (int[] inputIds in this.GetCartesianInputs(recipe))
-                {
-                    // get inputs
-                    var inputs = new ItemEntry[inputIds.Length];
-                    for (int i = 0; i < inputIds.Length; i++)
-                    {
-                        int id = inputIds[i];
-                        RecipeIngredientModel ingredient = recipe.Ingredients[i];
-
-                        // category
-                        if (id < 0)
-                        {
-                            Item sampleInput = gameHelper.GetObjectsByCategory(id).FirstOrDefault();
-                            if (sampleInput == null)
-                                continue;
-
-                            string displayText = this.GetRecipeItemDisplayText(name: sampleInput.getCategoryName(),
-                                minCount: ingredient.Count, maxCount: ingredient.Count, chance: 100);
-                            inputs[i] = new ItemEntry
-                            {
-                                Sprite = null,
-                                DisplayText = displayText,
-                                DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                            };
-                        }
-
-                        // item
-                        else
-                        {
-                            Item input = gameHelper.GetObjectBySpriteIndex(id);
-                            if (input is SObject obj)
-                            {
-                                if (ingredient.PreservedParentSheetIndex != null)
-                                    obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
-                                if (ingredient.PreserveType != null)
-                                    obj.preserve.Value = ingredient.PreserveType.Value;
-                            }
-
-                            if (input == null)
-                                continue;
-
-                            string displayText = this.GetRecipeItemDisplayText(name: input.DisplayName,
-                                minCount: ingredient.Count, maxCount: ingredient.Count, chance: 100);
-                            inputs[i] = new ItemEntry
-                            {
-                                Sprite = gameHelper.GetSprite(input),
-                                DisplayText = displayText,
-                                DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                            };
-                        }
-                    }
-
-                    // build recipe
-                    availableRecipes.Add(new RecipeEntry
-                    {
-                        Name = null,
-                        Type = recipe.DisplayType,
-                        IsKnown = isKnown,
-                        Inputs = inputs.ToArray(),
-                        Output = this.CreateOutputEntryItem(gameHelper, recipe),
-                    });
-                }
-            }
-
-            this.Recipes = availableRecipes
-                .OrderBy(entry => string.Join(", ", entry.Inputs.SelectMany(input => input.DisplayText)))
-                .ThenBy(entry => entry.Output.DisplayText)
-                .ToArray();
-
-            // calculate column alignment
-            if (!this.Recipes.Any())
-                return;
-
-            RecipeEntry firstRecipe = this.Recipes.First();
-            int inputCount = firstRecipe.Inputs.Length;
-
-            if (this.Recipes.Any(p => p.Inputs.Length != inputCount))
-                return;
-
-            this.AlignColumns = true;
-            this.InputColumnWidths = firstRecipe.Inputs.Select(p => (int)p.DisplayTextSize.X).ToArray();
-
-            foreach (RecipeEntry recipe in this.Recipes.Skip(1))
-            {
-                for (int i = 0; i < recipe.Inputs.Length; i++)
-                {
-                    int inputWidth = (int)recipe.Inputs[i].DisplayTextSize.X;
-                    if (inputWidth > this.InputColumnWidths[i])
-                        this.InputColumnWidths[i] = inputWidth;
-                }
-            }
-        }
-
-        /// <summary>Create an item recipe field that shows recipes that use an item as an ingredient and the number of items needed.</summary>
-        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        /// <param name="label">A short field label.</param>
-        /// <param name="item">The ingredient item.</param>
-        /// <param name="recipes">The recipe to list.</param>
-        private ItemRecipesField(GameHelper gameHelper, string label, Item item, RecipeModel[] recipes)
-            : base(label, hasValue: true)
-        {
-            this.GroupByType = true;
-            this.ShowFullRecipe = false;
-
-            var availableRecipes = new List<RecipeEntry>();
-            foreach (RecipeModel recipe in recipes)
-            {
-                Item output = recipe.CreateItem(item);
-                RecipeIngredientModel ingredient =
-                    recipe.Ingredients.FirstOrDefault(p =>
-                        p.PossibleIds.Contains(item.ParentSheetIndex) && p.Matches(item))
-                    ?? recipe.Ingredients.FirstOrDefault(p => p.PossibleIds.Contains(item.Category) && p.Matches(item));
-
-                var inputs = new List<ItemEntry>();
-                string displayText =
-                    I18n.Item_RecipesForIngredient_Entry(name: output.DisplayName, count: ingredient?.Count ?? 1);
-                var input1 = new ItemEntry
-                {
-                    Sprite = gameHelper.GetSprite(output),
-                    DisplayText = displayText,
-                    DisplayTextSize = Game1.smallFont.MeasureString(displayText)
-                };
-
-                inputs.Add(input1);
-                availableRecipes.Add(new RecipeEntry
-                {
-                    Name = output.DisplayName,
-                    Type = recipe.DisplayType,
-                    IsKnown = !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                    Inputs = inputs.ToArray(),
-                    Output = this.CreateOutputEntryItem(gameHelper, recipe),
-                }
-                );
-            }
-
-            this.Recipes = this.DistinctBy(availableRecipes, p => new { p.Name, p.Type })
-                .OrderBy(p => p.Type)
-                .ThenBy(p => p.Name)
-                .ToArray();
+            return new Vector2(wrapWidth, currentPosition.Y - originalPosition.Y);
         }
 
         /*********
         ** Private methods
         *********/
-        private ItemEntry CreateOutputEntryItem(GameHelper gameHelper, RecipeModel recipe)
+        private Vector2 WrapLineIfNeeded(SpriteBatch batch, SpriteFont font, string text, Vector2 originalPosition,
+            Vector2 position, float lineHeight, float wrapWidth, Vector2? iconSize = null)
         {
-            Item outputItem = recipe.CreateItem(null);
-            string displayText = this.GetRecipeItemDisplayText(name: outputItem.DisplayName, minCount: recipe.MinOutput,
-                maxCount: recipe.MaxOutput, chance: recipe.OutputChance);
-            var output = new ItemEntry
+            var estimatedText = font.MeasureString(text);
+            float iconWidth = iconSize?.X ?? 0;
+            float iconHeight = iconSize?.Y ?? 0;
+            float indentFromOriginal = position.X - originalPosition.X;
+
+            if ((indentFromOriginal + iconWidth + estimatedText.X) > wrapWidth)
             {
-                Sprite = gameHelper.GetSprite(outputItem),
-                DisplayText = displayText,
-                DisplayTextSize = Game1.smallFont.MeasureString(displayText)
+                // if the icon width plus text width will go beyond the wrap width
+                // move down to the next line, with 2x indents
+                lineHeight = new[] {lineHeight, iconHeight, estimatedText.Y}.Max();
+                position = new Vector2(originalPosition.X + (this.LeftIndent * 3), position.Y + lineHeight);
+            }
+
+            return position;
+        }
+
+
+
+        /// <summary>Create an item entry from an item id and ingredient model.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="id">The item id.</param>
+        /// <param name="ingredient">The recipe ingredient model for the item.</param>
+        /// <returns>An item entry model or null.</returns>
+        private ItemEntry? ItemEntryFromIdAndIngredient(GameHelper gameHelper, int id, RecipeIngredientModel ingredient)
+        {
+            // category
+            if (id < 0)
+            {
+                Item sampleInput = gameHelper.GetObjectsByCategory(id).FirstOrDefault();
+                if (sampleInput == null)
+                    return null;
+
+                return this.ItemEntryFromItem(gameHelper, sampleInput.getCategoryName(),
+                    min: ingredient.Count, max: ingredient.Count);
+            }
+
+            // item
+            {
+                Item input = gameHelper.GetObjectBySpriteIndex(id);
+                if (input is SObject obj)
+                {
+                    if (ingredient.PreservedParentSheetIndex != null)
+                        obj.preservedParentSheetIndex.Value = ingredient.PreservedParentSheetIndex.Value;
+                    if (ingredient.PreserveType != null)
+                        obj.preserve.Value = ingredient.PreserveType.Value;
+                }
+
+                if (input == null)
+                    return null;
+
+                return this.ItemEntryFromItem(gameHelper, input.DisplayName, input,
+                    ingredient.Count, ingredient.Count);
+            }
+        }
+
+        /// <summary>Create an item entry model from the component items of information.</summary>
+        /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
+        /// <param name="name">The display name for the item.</param>
+        /// <param name="item">The instance of the item.</param>
+        /// <param name="min">The minimum number of items needed or created.</param>
+        /// <param name="max">The maximum number of items needed or created.</param>
+        /// <param name="chance">The chance of creating an output item.</param>
+        /// <returns>An item entry model.</returns>
+        private ItemEntry ItemEntryFromItem(GameHelper gameHelper, string name, Item item = null, int min = 1,
+            int max = 1, decimal chance = 100)
+        {
+            string displayText = this.GetRecipeItemDisplayText(name, min, max, chance);
+            return new ItemEntry
+            {
+                Sprite = item != null ? gameHelper.GetSprite(item) : null,
+                DisplayText = displayText
             };
-            return output;
         }
 
         /// <summary>Get the display text for an input or output item.</summary>
@@ -425,19 +380,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 {
                     inds[j--] = 0;
                     inds[j]++;
-                }
-            }
-        }
-
-        private IEnumerable<TSource> DistinctBy<TSource, TKey>(IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector)
-        {
-            var seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
-            {
-                if (seenKeys.Add(keySelector(element)))
-                {
-                    yield return element;
                 }
             }
         }

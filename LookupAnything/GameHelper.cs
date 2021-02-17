@@ -328,19 +328,13 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // ignore invalid ingredients
             if (item.GetItemType() != ItemType.Object)
-                return Enumerable.Empty<RecipeModel>();
+                return new List<RecipeModel>();
 
             // from cached recipes
-            var recipes = new List<RecipeModel>();
-            foreach (RecipeModel recipe in this.GetRecipes())
-            {
-                if (!recipe.Ingredients.Any(p => p.Matches(item)))
-                    continue;
-                if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
-                    continue;
-
-                recipes.Add(recipe);
-            }
+            List<RecipeModel> recipes = this.GetRecipes()
+                .Where(recipe => recipe.Ingredients.Any(p => p.Matches(item)))
+                .Where(recipe => !recipe.ExceptIngredients.Any(p => p.Matches(item)))
+                .ToList();
 
             // resolve conflicts from mods like Producer Framework Mod: if multiple machine recipes
             // take the same item as input, ID takes precedence over category. This only occurs
@@ -364,25 +358,35 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the recipes that create an item.</summary>
         /// <param name="item">The item.</param>
-        public IEnumerable<RecipeModel> GetRecipesForItem(Item item)
+        public IEnumerable<RecipeModel> GetRecipesForOutput(Item item)
         {
             // ignore invalid item
             if (item.GetItemType() != ItemType.Object)
-                return Enumerable.Empty<RecipeModel>();
+                return new List<RecipeModel>();
 
             // from cached recipes
-            var recipes = new List<RecipeModel>();
-            foreach (RecipeModel recipe in this.GetRecipes())
-            {
-                if (recipe.OutputItemIndex != item.ParentSheetIndex)
-                    continue;
-                if (recipe.OutputItemType != item.GetItemType())
-                    continue;
+            return this.GetRecipes()
+                .Where(recipe =>
+                {
+                    if (item is SObject obj)
+                    {
+                        // if only one of
+                        // the recipe output type and the item type
+                        // are big craftable
+                        // remove the recipe
+                        if (obj.bigCraftable.Value && recipe.OutputItemType != ItemType.BigCraftable)
+                            return false;
+                        if (!obj.bigCraftable.Value && recipe.OutputItemType == ItemType.BigCraftable)
+                            return false;
+                    }
 
-                recipes.Add(recipe);
-            }
-
-            return recipes;
+                    // otherwise keep recipe
+                    return true;
+                })
+                .Where(recipe =>
+                    recipe.CreateItem(item).ParentSheetIndex == item.ParentSheetIndex ||
+                    recipe.OutputItemIndex == item.ParentSheetIndex)
+                .ToList();
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -390,14 +394,12 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
         {
             if (machine == null)
-                yield break;
+                return new List<RecipeModel>();
 
             // from cached recipes
-            foreach (var recipe in this.GetRecipes())
-            {
-                if (recipe.IsForMachine(machine))
-                    yield return recipe;
-            }
+            return this.GetRecipes()
+                .Where(recipe => recipe.IsForMachine(machine))
+                .ToList();
         }
 
         /// <summary>Get the current quests which need an item.</summary>
