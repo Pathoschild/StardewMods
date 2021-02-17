@@ -10,7 +10,7 @@ using StardewValley;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 {
     /// <summary>A metadata field which shows a list of recipes containing an ingredient.</summary>
-    internal class RecipesForIngredientField : GenericField
+    internal class ItemRecipesField : GenericField
     {
         /*********
         ** Fields
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="ingredient">The ingredient item.</param>
         /// <param name="recipes">The recipe to list.</param>
-        public RecipesForIngredientField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes)
+        public ItemRecipesField(GameHelper gameHelper, string label, Item ingredient, RecipeModel[] recipes)
             : base(label, hasValue: true)
         {
             this.Recipes = this.GetRecipeEntries(gameHelper, ingredient, recipes).OrderBy(p => p.Type).ThenBy(p => p.Name).ToArray();
