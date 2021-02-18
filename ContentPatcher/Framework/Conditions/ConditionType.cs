@@ -47,6 +47,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 
+        /// <summary>The player's daily luck.</summary>
+        DailyLuck,
+
         /// <summary>The response IDs for the player's answers to question dialogues.</summary>
         HasDialogueAnswer,
 
