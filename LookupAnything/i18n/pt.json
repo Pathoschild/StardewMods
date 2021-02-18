@@ -613,9 +613,9 @@
     // labels
     // TODO
     "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
+    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
     "puzzle.island-shrine.solution.east": "Leste: {{item}}",
     "puzzle.island-shrine.solution.north": "Norte: {{item}}",
     "puzzle.island-shrine.solution.south": "Sul: {{item}}",

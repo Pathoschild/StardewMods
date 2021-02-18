@@ -611,9 +611,9 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Паззл Островного Святилища",
-    "puzzle.island-shrine.description": "Положите на каждый из пьедесталов по предмету, оброненному драгоценными птицами в соответствующих локациях острова во время дождя. Предметы случайные для каждого сохранения.",
 
     // values
+    "puzzle.island-shrine.solution": "Положите на каждый из пьедесталов по предмету, оброненному драгоценными птицами в соответствующих локациях острова во время дождя. Предметы случайные для каждого сохранения.",
     "puzzle.island-shrine.solution.east": "Восток: {{item}}",
     "puzzle.island-shrine.solution.north": "Север: {{item}}",
     "puzzle.island-shrine.solution.south": "Юг: {{item}}",

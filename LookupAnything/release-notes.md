@@ -2,9 +2,10 @@
 
 # Release notes
 ## Upcoming release
-* Add quests to item 'needed for' field (thanks to cofiem!).
+* Add quests and special orders to item 'needed for' field (thanks to cofiem!).
 * Fixed item lookups not showing all cooking/crafting recipes in some cases.
-* Improved translations. Thanks to wally232 (updated Korean)!
+* Fixed island shrine puzzle lookup showing untranslated text for some languages.
+* Improved translations. Thanks to mcBegins2Snow (updated Chinese) and wally232 (updated Korean)!
 
 ## 1.32.4
 Released 06 February 2021.

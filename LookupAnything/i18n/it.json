@@ -610,9 +610,9 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Puzzle del Reliquiario sull'Isola",
-    "puzzle.island-shrine.description": "Per ogni piedistallo, posiziona l'oggetto lasciato dagli uccelli gemma nel luogo dell'isola corrispondente quando piove. Gli oggetti sono casuali per ogni salvataggio.",
 
     // values
+    "puzzle.island-shrine.solution": "Per ogni piedistallo, posiziona l'oggetto lasciato dagli uccelli gemma nel luogo dell'isola corrispondente quando piove. Gli oggetti sono casuali per ogni salvataggio.",
     "puzzle.island-shrine.solution.east": "Est: {{item}}",
     "puzzle.island-shrine.solution.north": "Nord: {{item}}",
     "puzzle.island-shrine.solution.south": "Sud: {{item}}",
