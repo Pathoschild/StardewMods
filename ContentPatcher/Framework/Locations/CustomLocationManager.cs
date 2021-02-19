@@ -100,7 +100,7 @@ namespace ContentPatcher.Framework.Locations
 
             // add locations
             foreach (CustomLocationData location in locations)
-                Game1.locations.Add(new GameLocation(location.ContentPack.GetActualAssetKey(location.FromMapFile), location.Name));
+                Game1.locations.Add(new GameLocation(mapPath: location.PublicMapPath, name: location.Name));
         }
 
         /// <inheritdoc />
