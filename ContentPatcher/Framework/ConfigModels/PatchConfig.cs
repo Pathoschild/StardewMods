@@ -72,6 +72,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The map properties to edit.</summary>
         public InvariantDictionary<string> MapProperties { get; set; }
 
+        /// <summary>The warps to add to the location.</summary>
+        public string[] AddWarps { get; set; }
+
         /// <summary>The map tiles to edit.</summary>
         public PatchMapTileConfig[] MapTiles { get; set; }
 
@@ -112,6 +115,7 @@ namespace ContentPatcher.Framework.ConfigModels
 
             // EditMap
             this.MapProperties = other.MapProperties.Clone();
+            this.AddWarps = other.AddWarps.ToArray();
             this.MapTiles = other.MapTiles.Select(p => new PatchMapTileConfig(p)).ToArray();
         }
 
@@ -133,6 +137,7 @@ namespace ContentPatcher.Framework.ConfigModels
 
             // EditMap
             this.MapProperties ??= new InvariantDictionary<string>();
+            this.AddWarps ??= new string[0];
             this.MapTiles ??= new PatchMapTileConfig[0];
         }
     }

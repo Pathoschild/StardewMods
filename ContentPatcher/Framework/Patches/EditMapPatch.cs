@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using xTile;
@@ -44,6 +46,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The map tiles to change when editing a map.</summary>
         private readonly EditMapPatchTile[] MapTiles;
 
+        /// <summary>The warps that should be added to the location.</summary>
+        public readonly IManagedTokenString[] AddWarps;
+
         /// <summary>The text operations to apply to existing values.</summary>
         private readonly TextOperation[] TextOperations;
 
@@ -67,15 +72,16 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="patchMode">Indicates how the map should be patched.</param>
         /// <param name="toArea">The map area to overwrite.</param>
         /// <param name="mapProperties">The map properties to change when editing a map, if any.</param>
-        /// <param name="textOperations">The text operations to apply to existing values.</param>
         /// <param name="mapTiles">The map tiles to change when editing a map.</param>
+        /// <param name="addWarps">The warps to add to the location.</param>
+        /// <param name="textOperations">The text operations to apply to existing values.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<IManagedTokenString> addWarps, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -94,6 +100,7 @@ namespace ContentPatcher.Framework.Patches
             this.PatchMode = patchMode;
             this.MapProperties = mapProperties?.ToArray() ?? new EditMapPatchProperty[0];
             this.MapTiles = mapTiles?.ToArray() ?? new EditMapPatchTile[0];
+            this.AddWarps = addWarps?.Reverse().ToArray() ?? new IManagedTokenString[0]; // reversing the warps allows later ones to 'overwrite' earlier ones, since the game checks them in the listed order
             this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
             this.Monitor = monitor;
             this.Reflection = reflection;
@@ -103,6 +110,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.ToArea)
                 .Add(this.MapProperties)
                 .Add(this.MapTiles)
+                .Add(this.AddWarps)
                 .Add(this.TextOperations);
         }
 
@@ -159,6 +167,14 @@ namespace ContentPatcher.Framework.Patches
                     target.Properties[key] = value;
             }
 
+            // apply map warps
+            if (this.AddWarps.Any())
+            {
+                this.ApplyWarps(target, out IDictionary<string, string> errors);
+                foreach (var pair in errors)
+                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.AddWarps)} > warp '{pair.Key}' couldn't be applied: {pair.Value}", LogLevel.Warn);
+            }
+
             // apply text operations
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
@@ -173,7 +189,7 @@ namespace ContentPatcher.Framework.Patches
             if (this.AppliesMapPatch || this.AppliesTilePatches)
                 yield return "patched map tiles";
 
-            if (this.MapProperties.Any())
+            if (this.MapProperties.Any() || this.AddWarps.Any())
                 yield return "changed map properties";
 
             if (this.TextOperations.Any())
@@ -265,6 +281,67 @@ namespace ContentPatcher.Framework.Patches
                     tile.Properties[pair.Key] = pair.Value;
                 layer.Tiles[position] = tile;
             }
+
+            error = null;
+            return true;
+        }
+
+        /// <summary>Add warps to the map.</summary>
+        /// <param name="target">The target map to change.</param>
+        /// <param name="errors">The errors indexed by warp string/</param>
+        private void ApplyWarps(Map target, out IDictionary<string, string> errors)
+        {
+            errors = new InvariantDictionary<string>();
+
+            // build new warp string
+            List<string> validWarps = new List<string>(this.AddWarps.Length);
+            foreach (string warp in this.AddWarps.Select(p => p.Value))
+            {
+                if (!this.ValidateWarp(warp, out string error))
+                {
+                    errors[warp ?? "<null>"] = error;
+                    continue;
+                }
+
+                validWarps.Add(warp);
+            }
+
+            // prepend to map property
+            if (validWarps.Any())
+            {
+                string prevWarps = target.Properties.TryGetValue("Warp", out PropertyValue rawWarps)
+                    ? rawWarps.ToString()
+                    : "";
+                string newWarps = string.Join(" ", validWarps);
+
+                target.Properties["Warp"] = $"{newWarps} {prevWarps}".Trim(); // prepend so warps added later 'overwrite' in case of conflict
+            }
+        }
+
+        /// <summary>Validate that a warp string is in the value format.</summary>
+        /// <param name="warp">The raw warp string.</param>
+        /// <param name="error">The error indicating why it's invalid, if applicable.</param>
+        private bool ValidateWarp(string warp, out string error)
+        {
+            // handle null
+            if (warp == null)
+                return this.Fail("warp cannot be null", out error);
+
+            // check field count
+            string[] parts = warp.Split(' ');
+            if (parts.Length != 5)
+                return this.Fail("must have exactly five fields in the form `fromX fromY toMap toX toY`.", out error);
+
+            // check tile coordinates
+            foreach (string part in new[] { parts[0], parts[1], parts[3], parts[4] })
+            {
+                if (!int.TryParse(part, out _) || part.Any(ch => !char.IsDigit(ch) && ch != '-')) // int.TryParse will allow strings like '\t14' which will crash the game
+                    return this.Fail($"can't parse '{part}' as a tile coordinate number.", out error);
+            }
+
+            // check map name
+            if (parts[2].Trim().Length == 0)
+                return this.Fail("the map value can't be blank.", out error);
 
             error = null;
             return true;

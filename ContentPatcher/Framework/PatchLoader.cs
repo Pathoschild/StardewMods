@@ -614,6 +614,16 @@ namespace ContentPatcher.Framework
                                 ));
                             }
 
+                            // parse warps
+                            var addWarps = new List<IManagedTokenString>();
+                            for (int i = 0; i < entry.AddWarps.Length; i++)
+                            {
+                                LogPathBuilder localPath = path.With(nameof(entry.AddWarps), i.ToString());
+                                if (!tokenParser.TryParseString(entry.AddWarps[i], immutableRequiredModIDs, localPath, out string warpError, out IManagedTokenString parsed))
+                                    return TrackSkip($"{nameof(PatchConfig.AddWarps)} > '{entry.AddWarps[i]}' is invalid: {warpError}");
+                                addWarps.Add(parsed);
+                            }
+
                             // parse text operations
                             if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string parseError))
                                 return TrackSkip(parseError);
@@ -632,8 +642,8 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchMapMode)))}]");
 
                             // validate
-                            if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !textOperations.Any())
-                                return TrackSkip($"must specify at least one of {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
+                            if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !addWarps.Any() && !textOperations.Any())
+                                return TrackSkip($"must specify at least one of {nameof(entry.AddWarps)}, {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
                             if (fromAsset != null && entry.ToArea == null)
                                 return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
@@ -649,6 +659,7 @@ namespace ContentPatcher.Framework
                                 patchMode: patchMode,
                                 mapProperties: mapProperties,
                                 mapTiles: mapTiles,
+                                addWarps: addWarps,
                                 textOperations: textOperations,
                                 updateRate: updateRate,
                                 contentPack: pack,

@@ -446,19 +446,13 @@ New entries are added at the bottom of the list by default.
 </dl>
 
 ### `EditMap`
-`"Action": "EditMap"` changes part of an in-game map. This consists of three separate features:
+`"Action": "EditMap"` changes part of an in-game map. Any number of content packs can edit the same
+map. If two patches conflict, whichever one is applied last will take effect for the overlapping
+portions.
 
-* copy tiles, properties, and tilesheets from a source map into the target;
-* add/edit/remove map properties;
-* add/edit/remove individual tiles and tile properties.
-
-Each patch can use any combination of these features, but must set the required fields for at least
-one of them: map overlay (`FromFile` and `ToArea`), map properties (`MapProperties`), or tiles
-(`MapTiles`). When combined into one patch, the changes are applied in this order: overlay, then
-map properties, then map tiles.
-
-Any number of content packs can edit the same map. If two patches conflict, whichever one is applied
-last will take effect for the overlapping portions.
+This consists of three separate features (listed below), which can be used separately or together.
+When combined into one patch, the fields are applied in this order: `FromFile`, `MapTiles`,
+`MapProperties`, `AddWarps`, and `TextOperations`.
 
 <dl>
 <dt id="map-overlay">Map overlay</dt>
@@ -620,6 +614,20 @@ and values.
 <tr>
 <td>
 
+`AddWarps`
+
+</td>
+<td>
+
+Add warps to the map's `Warp` property, creating it if needed. This field supports [tokens](#advanced).
+If there are multiple warps from the same tile, the ones added later win.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `TextOperations`
 
 </td>
@@ -628,11 +636,15 @@ and values.
 The `TextOperations` field lets you change the value for an existing map property (see _[text
 operations](#text-operations)_ for more info).
 
+The only valid path format is `["MapProperties", "PropertyName"]` where `PropertyName` is the
+name of the map property to change.
+
 </td>
 </tr>
 </table>
 
-For example, this replaces the warp map property for the farm cave:
+For example, this changes the `Outdoors` tile for the farm cave and adds a warp (see
+[map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
    "Format": "1.20.0",
@@ -641,29 +653,10 @@ For example, this replaces the warp map property for the farm cave:
          "Action": "EditMap",
          "Target": "Maps/FarmCave",
          "MapProperties": {
-            "Warp": "10 10 Town 0 30"
-         }
-      },
-   ]
-}
-```
-
-Here's the same example, but using `TextOperations` to append a warp to the property instead:
-
-```js
-{
-   "Format": "1.20.0",
-   "Changes": [
-      {
-         "Action": "EditMap",
-         "Target": "Maps/FarmCave",
-         "TextOperations": [
-            {
-               "Operation": "Append",
-               "Target": [ "MapProperties", "Warp" ],
-               "Value": "10 10 Town 0 30",
-               "Delimiter": " " // if the property already has a value, add this between the previous & inserted values
-            }
+            "Outdoors": "T"
+         },
+         "AddWarps": [
+            "10 10 Town 0 30"
          ]
       },
    ]
@@ -893,13 +886,8 @@ Here's how you'd do that:
       {
          "Action": "EditMap",
          "Target": "Maps/SeedShop",
-         "TextOperations": [
-            {
-               "Operation": "Append",
-               "Target": ["MapProperties", "Warp"],
-               "Value": "8 10 Custom_ExampleMod_AbigailCloset 7 20",
-               "Delimiter": " "
-            }
+         "AddWarps": [
+            "8 10 Custom_ExampleMod_AbigailCloset 7 20"
          ]
       },
 

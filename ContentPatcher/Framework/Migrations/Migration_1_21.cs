@@ -25,8 +25,18 @@ namespace ContentPatcher.Framework.Migrations
             // 1.21 adds CustomLocations
             if (content.CustomLocations.Any())
             {
-                error = this.GetNounPhraseError("using the CustomLocations field");
+                error = this.GetNounPhraseError($"using the {nameof(content.CustomLocations)} field");
                 return false;
+            }
+
+            // 1.21 adds AddWarps
+            foreach (PatchConfig patch in content.Changes)
+            {
+                if (patch.AddWarps.Any())
+                {
+                    error = this.GetNounPhraseError($"using the {nameof(patch.AddWarps)} field");
+                    return false;
+                }
             }
 
             return true;
