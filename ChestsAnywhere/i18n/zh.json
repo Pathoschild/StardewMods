@@ -20,11 +20,11 @@
     "label.hide-chest-hidden": "隐藏此箱子（你需要亲自找到该箱子撤销隐藏！）",
     "label.automate-options": "Automate",
     "label.automate-store": "把物品放在这个箱子里",
-    "label.automate-store-first": "优先输出到这个箱子",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-first": "优先把物品放在这个箱子里",
+    "label.automate-store-disabled": "不要把物品放在这个箱子里",
     "label.automate-take": "从这个箱子里拿取物品",
     "label.automate-take-first": "优先从这个箱子里拿取物品",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-take-disabled": "不要从这个箱子里拿取物品",
 
     // button labels
     "button.edit-chest": "编辑箱子",
