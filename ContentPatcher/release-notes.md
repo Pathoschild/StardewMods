@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
 * Added [`Render` token](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
+* Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.
 * Fixed `patch reload` command not reapplying format migrations to reloaded patches.
 
 **Update note for mod authors:**  

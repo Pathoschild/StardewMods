@@ -384,7 +384,20 @@ namespace ContentPatcher
                         {
                             GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(this.Helper.ModRegistry, this.Monitor, current.Manifest, this.ParseCommaDelimitedField, config, saveAndApply: () =>
                             {
+                                // resave config.json
                                 configFileHandler.Save(current.ContentPack, config, this.Helper);
+
+                                // update tokens
+                                this.TokenManager.UpdateContext(out _);
+
+                                // reload changes to force-reset config token references
+                                if (!current.TryReloadContent(out string loadContentError))
+                                {
+                                    this.Monitor.Log($"Failed to reload content pack '{current.Manifest.Name}' for configuration changes: {loadContentError}. The content pack may not be in a valid state.", LogLevel.Error); // should never happen
+                                    return;
+                                }
+
+                                // update patches
                                 this.PatchLoader.UnloadPatchesLoadedBy(current, false);
                                 this.PatchLoader.LoadPatches(
                                     contentPack: current,
@@ -520,7 +533,13 @@ namespace ContentPatcher
         {
             modContext.RemoveLocalToken(name); // only needed when resetting a token for Generic Mod Config Menu, but has no effect otherwise
 
-            IValueProvider valueProvider = new ImmutableValueProvider(name, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
+            IValueProvider valueProvider = new ImmutableValueProvider(
+                name: name,
+                values: field.Value,
+                allowedValues: field.AllowValues,
+                canHaveMultipleValues: field.AllowMultiple,
+                isMutable: true // avoid inlining config values since they can be edited at runtime (e.g. via Generic Mod Config Menu)
+            );
             IToken token = new Token(valueProvider, scope: contentPack.Manifest.UniqueID);
             modContext.AddLocalToken(token);
         }

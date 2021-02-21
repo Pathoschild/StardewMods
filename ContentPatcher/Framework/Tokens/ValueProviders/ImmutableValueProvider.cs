@@ -25,13 +25,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">Get the current token values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
         /// <param name="canHaveMultipleValues">Whether the root may contain multiple values (or <c>null</c> to set it based on the given values).</param>
-        public ImmutableValueProvider(string name, InvariantHashSet values, InvariantHashSet allowedValues = null, bool? canHaveMultipleValues = null)
+        /// <param name="isMutable">Whether to mark the value provider as mutable. The value provider will be immutable regardless, but this avoids optimizations in cases where the value provider may be replaced later.</param>
+        public ImmutableValueProvider(string name, InvariantHashSet values, InvariantHashSet allowedValues = null, bool? canHaveMultipleValues = null, bool isMutable = false)
             : base(name, mayReturnMultipleValuesForRoot: false)
         {
             this.Values = values ?? new InvariantHashSet();
             this.AllowedRootValues = allowedValues?.Any() == true ? allowedValues : null;
             this.MayReturnMultipleValuesForRoot = canHaveMultipleValues ?? (this.Values.Count > 1 || this.AllowedRootValues == null || this.AllowedRootValues.Count > 1);
-            this.IsMutable = false;
+            this.IsMutable = isMutable;
         }
 
         /// <inheritdoc />
