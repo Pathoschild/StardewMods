@@ -70,9 +70,14 @@ namespace ContentPatcher.Framework
             }
 
             // validate base fields
-            if (content.Format == null || !content.Changes.Any())
+            if (content.Format == null)
             {
-                error = $"content pack doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.";
+                error = $"content pack doesn't specify the required {nameof(ContentConfig.Format)} field.";
+                return false;
+            }
+            if (!content.Changes.Any() && !content.CustomLocations.Any())
+            {
+                error = $"content pack must specify the {nameof(ContentConfig.Changes)} or {nameof(ContentConfig.CustomLocations)} fields.";
                 return false;
             }
 
