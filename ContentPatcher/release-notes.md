@@ -12,6 +12,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field for [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
+* Fixed `patch reload` command not reapplying format migrations to reloaded patches.
 
 ## 1.20
 Released 06 February 2021. See the [release highlights](https://www.patreon.com/posts/47213526).

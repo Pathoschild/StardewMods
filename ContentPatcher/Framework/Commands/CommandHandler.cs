@@ -422,8 +422,11 @@ namespace ContentPatcher.Framework.Commands
             this.PatchLoader.UnloadPatchesLoadedBy(pack, false);
 
             // load pack patches
-            var changes = pack.ContentPack.ReadJsonFile<ContentConfig>("content.json").Changes;
-            pack.Content.Changes = changes;
+            if (!pack.TryReloadContent(out string loadContentError))
+            {
+                this.Monitor.Log($"Failed to reload content pack '{pack.Manifest.Name}' for configuration changes: {loadContentError}. The content pack may not be in a valid state.", LogLevel.Error); // should never happen
+                return true;
+            }
 
             // reload patches
             this.PatchLoader.LoadPatches(

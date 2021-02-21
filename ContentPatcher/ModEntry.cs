@@ -27,9 +27,6 @@ namespace ContentPatcher
         /*********
         ** Fields
         *********/
-        /// <summary>The name of the file which contains patch metadata.</summary>
-        private readonly string PatchFileName = "content.json";
-
         /// <summary>The name of the file which contains player settings.</summary>
         private readonly string ConfigFileName = "config.json";
 
@@ -333,30 +330,12 @@ namespace ContentPatcher
                 RawContentPack rawContentPack;
                 try
                 {
-                    // validate content.json has required fields
-                    ContentConfig content = contentPack.ReadJsonFile<ContentConfig>(this.PatchFileName);
-                    if (content == null)
+                    rawContentPack = new RawContentPack(contentPack, ++index, this.GetFormatVersions);
+                    if (!rawContentPack.TryReloadContent(out string error))
                     {
-                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
+                        this.Monitor.Log($"Could not load content pack '{contentPack.Manifest.Name}': {error}.", LogLevel.Error);
                         continue;
                     }
-                    if (content.Format == null || !content.Changes.Any())
-                    {
-                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
-                        continue;
-                    }
-
-                    // apply migrations
-                    IMigration migrator = new AggregateMigration(content.Format, this.GetFormatVersions(content));
-                    if (!migrator.TryMigrate(content, out string error))
-                    {
-                        this.Monitor.Log($"Loading content pack '{contentPack.Manifest.Name}' failed: {error}.", LogLevel.Error);
-                        continue;
-                    }
-
-                    // init
-                    index++;
-                    rawContentPack = new RawContentPack(contentPack, content, migrator, index);
                 }
                 catch (Exception ex)
                 {
