@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Migrations
         ** Fields
         *********/
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private readonly Lazy<Lexer> Lexer = new Lazy<Lexer>(() => new Lexer());
+        private readonly Lazy<Lexer> Lexer = new(() => new Lexer());
 
 
         /*********

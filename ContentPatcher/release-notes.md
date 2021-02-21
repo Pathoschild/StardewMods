@@ -11,9 +11,14 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
-* Added `AddWarps` field for [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
-* Added [`Render` token](docs/author-tokens-guide.md#string-manipulation) to compare rendered strings in `When` blocks.
+* Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
+* Added [`Render` token](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+* The `Enabled` field no longer allows tokens (in format version 1.21.0+).
 * Fixed `patch reload` command not reapplying format migrations to reloaded patches.
+
+**Update note for mod authors:**  
+If you use tokens in the `Enabled` field, updating the `Format` field to `1.21.0` or later will
+cause errors. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.20
 Released 06 February 2021. See the [release highlights](https://www.patreon.com/posts/47213526).

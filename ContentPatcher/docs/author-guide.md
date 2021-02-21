@@ -178,8 +178,7 @@ errors; if not specified, will default to a name like `entry #14 (EditImage Anim
 <td><code>Enabled</code></td>
 <td>
 
-_(optional)_ Whether to apply this patch. Default true. This fields supports immutable
-[tokens](#advanced) (e.g. config tokens) if they return true/false.
+_(optional)_ Whether to apply this patch. Default true.
 
 </td>
 </tr>

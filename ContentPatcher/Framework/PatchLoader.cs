@@ -1006,33 +1006,15 @@ namespace ContentPatcher.Framework
             if (!this.TryParseBoolean(rawValue, tokenParser, assumeModIds, path, out error, out IManagedTokenString tokenString))
                 return false;
 
-            // validate & extract tokens
+            // validate that it has no tokens
             string text = rawValue;
             if (tokenString.HasAnyTokens)
             {
-                // only one token allowed
-                if (!tokenString.IsSingleTokenOnly)
-                {
-                    error = "can't be treated as a true/false value because it contains multiple tokens.";
-                    return false;
-                }
-
-                // parse token
-                LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
-                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
-
-                // check token options
-                if (token == null || token.IsMutable || !token.IsReady)
-                {
-                    error = $"can only use static tokens in this field, consider using a {nameof(PatchConfig.When)} condition instead.";
-                    return false;
-                }
-
-                text = token.GetValues(input).First();
+                error = "cannot contain tokens.";
+                return false;
             }
 
-            // parse text
+            // parse as boolean
             if (!bool.TryParse(text, out parsed))
             {
                 error = $"can't parse {tokenString.Raw} as a true/false value.";

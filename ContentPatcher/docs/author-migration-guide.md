@@ -71,6 +71,12 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](../release-notes.md) for a full list of changes.
 
+## 1.21
+Not released yet.
+
+* **The `Enabled` field no longer allows tokens.** You should use `When` for conditional logic
+  instead.
+
 ## 1.20
 Released 06 February 2021.
 

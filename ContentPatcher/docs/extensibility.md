@@ -172,9 +172,6 @@ Immutability enables several optimizations. For example, since Content Patcher d
 update their value, it also doesn't need to update dependent tokens/patches (and their dependents,
 etc).
 
-Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise
-prohibited.
-
 </dd>
 
 <dt>Input arguments</dt>
