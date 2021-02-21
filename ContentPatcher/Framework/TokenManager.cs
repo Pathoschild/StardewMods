@@ -217,6 +217,7 @@ namespace ContentPatcher.Framework
             // string manipulation
             yield return new LetterCaseValueProvider(ConditionType.Lowercase);
             yield return new LetterCaseValueProvider(ConditionType.Uppercase);
+            yield return new RenderValueProvider();
 
             // metadata
             yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);

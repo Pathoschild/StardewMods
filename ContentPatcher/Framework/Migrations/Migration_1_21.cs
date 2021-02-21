@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -14,7 +16,13 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         public Migration_1_21()
-            : base(new SemanticVersion(1, 21, 0)) { }
+            : base(new SemanticVersion(1, 21, 0))
+        {
+            this.AddedTokens = new InvariantHashSet
+            {
+                ConditionType.Render.ToString()
+            };
+        }
 
         /// <inheritdoc />
         public override bool TryMigrate(ContentConfig content, out string error)

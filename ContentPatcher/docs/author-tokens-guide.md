@@ -689,7 +689,7 @@ parsed input matches one of the above forms.
 <tr>
 <th>condition</th>
 <th>purpose</th>
-
+</tr>
 <tr valign="top">
 <td>Lowercase<br />Uppercase</td>
 <td>
@@ -710,6 +710,31 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 
 </dd>
 </dl>
+</td>
+</tr>
+<tr valign="top">
+<td>Render</td>
+<td>
+
+Get the string representation of the input argument. This is mainly useful in `When` blocks to
+compare the rendered value directly (instead of comparing token set values):
+
+```js
+"When": {
+   "Render:{{season}} {{day}}": "spring 14"
+}
+```
+
+This isn't needed in other contexts, where you can use token placeholders directly. For example,
+these two entries are equivalent:
+
+```js
+"Entries": {
+   "Mon": "It's a lovely {{season}} {{day}}!",
+   "Mon": "It's a lovely {{Render: {{season}} {{day}} }}!",
+}
+```
+
 </td>
 </tr>
 </table>
