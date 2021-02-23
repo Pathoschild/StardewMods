@@ -23,6 +23,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>Simplifies dynamic access to game code.</summary>
+        private readonly IReflectionHelper Reflection;
+
         /// <summary>The data records to edit.</summary>
         private EditDataPatchRecord[] Records;
 
@@ -73,9 +76,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="reflection">Simplifies dynamic access to game code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -95,6 +99,7 @@ namespace ContentPatcher.Framework.Patches
             this.MoveRecords = moveRecords?.ToArray();
             this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
             this.Monitor = monitor;
+            this.Reflection = reflection;
             this.TryParseFields = tryParseFields;
 
             // track contextuals
@@ -568,7 +573,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="entity">The entity whose ID to fetch.</param>
         private string GetKey<TValue>(TValue entity)
         {
-            return InternalConstants.GetListAssetKey(entity);
+            return InternalConstants.GetListAssetKey(entity, this.Reflection);
         }
 
         /// <summary>Get the delimiter used in string entries for an asset.</summary>

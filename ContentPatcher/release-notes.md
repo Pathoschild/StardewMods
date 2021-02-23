@@ -16,6 +16,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
 * Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.
 * Fixed `patch reload` command not reapplying format migrations to reloaded patches.
+* Fixed error patching `Data\Concessions` using `EditData`.
 
 **Update note for mod authors:**  
 If you use tokens in the `Enabled` field, updating the `Format` field to `1.21.0` or later will
