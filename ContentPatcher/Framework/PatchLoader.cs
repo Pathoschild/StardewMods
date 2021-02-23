@@ -94,8 +94,8 @@ namespace ContentPatcher.Framework
                 .ToArray();
 
             // preprocess patches
-            this.NamePatches(patches);
             patches = this.SplitPatches(patches).ToArray();
+            this.UniquelyNamePatches(patches);
 
             // load patches
             int index = -1;
@@ -238,16 +238,29 @@ namespace ContentPatcher.Framework
                 {
                     foreach (string fromFile in AlwaysIterate(fromFiles))
                     {
+                        // create patch
                         var newPatch = new PatchConfig(patch)
                         {
                             Target = target,
                             FromFile = fromFile
                         };
 
-                        if (targets.Length > 1)
-                            newPatch.LogName += $" > {target}";
-                        if (fromFiles.Length > 1)
-                            newPatch.LogName += $" from {fromFile}";
+                        // add descriptive log name
+                        if (string.IsNullOrWhiteSpace(patch.LogName))
+                        {
+                            // Include {target} from {fromFile}
+                            patch.LogName = this.GetDefaultPatchName(newPatch);
+                            if (fromFiles.Length > 1)
+                                patch.LogName += $" from {fromFile}";
+                        }
+                        else
+                        {
+                            // Custom Name > {target} from {fromFile}
+                            if (targets.Length > 1)
+                                newPatch.LogName += $" > {target}";
+                            if (fromFiles.Length > 1)
+                                newPatch.LogName += $" from {fromFile}";
+                        }
 
                         yield return newPatch;
                     }
@@ -257,18 +270,13 @@ namespace ContentPatcher.Framework
 
         /// <summary>Set a unique name for all patches in a content pack.</summary>
         /// <param name="patches">The patches to name.</param>
-        private void NamePatches(PatchConfig[] patches)
+        private void UniquelyNamePatches(PatchConfig[] patches)
         {
             // add default log names
             foreach (PatchConfig patch in patches)
             {
                 if (string.IsNullOrWhiteSpace(patch.LogName))
-                {
-                    if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include)
-                        patch.LogName = $"{type} {PathUtilities.NormalizePath(patch.FromFile)}";
-                    else
-                        patch.LogName = $"{patch.Action} {PathUtilities.NormalizePath(patch.Target)}";
-                }
+                    patch.LogName = this.GetDefaultPatchName(patch);
             }
 
             // make names unique within content pack
@@ -278,6 +286,15 @@ namespace ContentPatcher.Framework
                 foreach (PatchConfig patch in patchGroup)
                     patch.LogName += $" #{++i}";
             }
+        }
+
+        /// <summary>Get the default name for a patch, without accounting for unique discriminators.</summary>
+        /// <param name="patch">The patch to name.</param>
+        private string GetDefaultPatchName(PatchConfig patch)
+        {
+            return Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include
+                ? $"{type} {PathUtilities.NormalizePath(patch.FromFile)}"
+                : $"{patch.Action} {PathUtilities.NormalizePath(patch.Target)}";
         }
 
         /// <summary>Unload patches matching a condition.</summary>
