@@ -70,7 +70,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <remarks>Derived from <see cref="StorageFurniture.checkForAction"/>.</remarks>
         public IClickableMenu OpenMenu()
         {
-            Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems.ToDictionary(item => (ISalable)item, _ => new[] { 0, 1 });
+            Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems
+                .OfType<ISalable>() // cast as ISalable, and also ignore null in rare cases
+                .ToDictionary(item => item, _ => new[] { 0, 1 });
+
             return new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, this.Furniture.GetShopMenuContext())
             {
                 source = this.Furniture,

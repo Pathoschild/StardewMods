@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed error opening dressers in rare cases.
 * Improved translations. Thanks to derJuba007 (updated German)!
 
 ## 1.20.9
