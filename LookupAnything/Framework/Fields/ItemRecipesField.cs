@@ -176,11 +176,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     RecipeItemEntry input = entry.Inputs[i];
 
                     // move the draw position down to a new line if the next item would be drawn off the right edge
-                    float itemWidth = this.AlignColumns
-                        ? this.ColumnWidths[i + 1] + iconSize.X
-                        : input.DisplayTextSize.X + iconSize.X;
+                    Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor, probe: true);
+                    if (this.AlignColumns)
+                        inputSize.X = Math.Max(inputSize.X, this.ColumnWidths[i + 1] + iconSize.X);
 
-                    if (curPos.X + itemWidth > absoluteWrapWidth)
+                    if (curPos.X + inputSize.X > absoluteWrapWidth)
                     {
                         curPos = new Vector2(
                             x: inputLeft,
@@ -189,9 +189,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     }
 
                     // draw input item (icon + name + count)
-                    Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor);
+                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor);
                     curPos = new Vector2(
-                        x: curPos.X + itemWidth,
+                        x: curPos.X + inputSize.X,
                         y: curPos.Y
                     );
 
@@ -239,17 +239,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="icon">The sprite to draw.</param>
         /// <param name="iconSize">The size to draw.</param>
         /// <param name="iconColor">The color to tint the sprite.</param>
+        /// <param name="probe">Whether to calculate the positions without actually drawing anything to the screen.</param>
         /// <returns>Returns the drawn size.</returns>
-        private Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo icon = null, Vector2? iconSize = null, Color? iconColor = null)
+        private Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo icon = null, Vector2? iconSize = null, Color? iconColor = null, bool probe = false)
         {
             // draw icon
+            int textOffset = 0;
             if (icon != null && iconSize.HasValue)
-                batch.DrawSpriteWithin(icon, position.X, position.Y, iconSize.Value, iconColor);
+            {
+                if (!probe)
+                    batch.DrawSpriteWithin(icon, position.X, position.Y, iconSize.Value, iconColor);
+                textOffset = 5;
+            }
             else
                 iconSize = Vector2.Zero;
 
             // draw text
-            Vector2 textSize = batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X, 0), absoluteWrapWidth - position.X, textColor);
+            Vector2 textSize = probe
+                ? font.MeasureString(text)
+                : batch.DrawTextBlock(font, text, position + new Vector2(iconSize.Value.X + textOffset, 0), absoluteWrapWidth - position.X, textColor);
 
             // get drawn size
             return new Vector2(
