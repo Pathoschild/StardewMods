@@ -20,7 +20,7 @@ to change the game's data, images, and maps without replacing game files.
 That's it! Content packs unzipped into `Mods` will be loaded and applied automatically.
 
 ### Compatibility
-Content Patcher is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
+Content Patcher is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 ### Configure content packs

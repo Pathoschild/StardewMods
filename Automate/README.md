@@ -343,7 +343,7 @@ field | purpose
 `Priority` | The order in which this machine should be processed relative to other machines (default `0`). Higher values are processed first for both input and output.
 
 ## Compatibility
-Automate is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
+Automate is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer. In multiplayer mode, only the main player can automate machines; other players can
 keep it installed and use the overlay, their mod just won't automate anything.
 
