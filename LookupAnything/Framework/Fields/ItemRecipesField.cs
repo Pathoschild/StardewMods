@@ -48,98 +48,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             this.Recipes = this.BuildRecipeGroups(ingredient, recipes).ToArray();
         }
 
-        /// <summary>Build an optimized representation of the recipes to display.</summary>
-        /// <param name="ingredient">The ingredient item.</param>
-        /// <param name="rawRecipes">The raw recipes to list.</param>
-        private IEnumerable<RecipeByTypeGroup> BuildRecipeGroups(Item ingredient, RecipeModel[] rawRecipes)
-        {
-            /****
-            ** build models for matching recipes
-            ****/
-            Dictionary<string, RecipeEntry[]> rawGroups = rawRecipes
-                // split into specific recipes that match the item
-                // (e.g. a recipe with several possible inputs => several recipes with one possible input)
-                .SelectMany(recipe =>
-                {
-                    Item outputItem = recipe.CreateItem(ingredient);
-                    RecipeItemEntry output = this.CreateItemEntry(
-                        name: outputItem.DisplayName,
-                        item: outputItem,
-                        minCount: recipe.MinOutput,
-                        maxCount: recipe.MaxOutput,
-                        chance: recipe.OutputChance,
-                        isOutput: true
-                    );
-
-                    return this.GetCartesianInputs(recipe)
-                        .Select(inputIds =>
-                        {
-                            RecipeItemEntry[] inputs = inputIds
-                                .Select((inputId, index) => this.TryCreateItemEntry(inputId, recipe.Ingredients[index]))
-                                .Where(p => p != null)
-                                .OrderBy(entry => entry.DisplayText)
-                                .ToArray();
-
-                            return new RecipeEntry(
-                                name: recipe.Key,
-                                type: recipe.DisplayType,
-                                isKnown: !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                                inputs: inputs,
-                                output: output
-                            );
-                        });
-                })
-
-                // filter to unique recipe
-                // (e.g. two recipe matches => one recipe)
-                .GroupBy(recipe => recipe.UniqueKey)
-                .Select(item => item.First())
-
-                // sort
-                .OrderBy(recipe => recipe.Type)
-                .ThenBy(recipe => recipe.Output.DisplayText)
-
-                // group by type
-                .GroupBy(p => p.Type)
-                .ToDictionary(p => p.Key, p => p.ToArray());
-
-            /****
-            ** build recipe groups with column widths
-            ****/
-            foreach (var rawGroup in rawGroups)
-            {
-                // build column width list
-                var columnWidths = new List<float>();
-                void TrackWidth(int index, string text, SpriteInfo icon)
-                {
-                    while (columnWidths.Count < index + 1)
-                        columnWidths.Add(0);
-
-                    float width = Game1.smallFont.MeasureString(text).X;
-                    if (icon != null)
-                        width += this.IconSize + this.IconMargin;
-
-                    columnWidths[index] = Math.Max(columnWidths[index], width);
-                }
-
-                // get max width of each column in the group
-                foreach (var recipe in rawGroup.Value)
-                {
-                    TrackWidth(0, $"{recipe.Output.DisplayText}:", recipe.Output.Sprite);
-
-                    for (int i = 0; i < recipe.Inputs.Length; i++)
-                        TrackWidth(i + 1, recipe.Inputs[i].DisplayText, recipe.Inputs[i].Sprite);
-                }
-
-                // save widths
-                yield return new RecipeByTypeGroup(
-                    type: rawGroup.Key,
-                    recipes: rawGroup.Value,
-                    columnWidths: columnWidths
-                );
-            }
-        }
-
         /// <inheritdoc />
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
@@ -259,6 +167,98 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Private methods
         *********/
+        /// <summary>Build an optimized representation of the recipes to display.</summary>
+        /// <param name="ingredient">The ingredient item.</param>
+        /// <param name="rawRecipes">The raw recipes to list.</param>
+        private IEnumerable<RecipeByTypeGroup> BuildRecipeGroups(Item ingredient, RecipeModel[] rawRecipes)
+        {
+            /****
+            ** build models for matching recipes
+            ****/
+            Dictionary<string, RecipeEntry[]> rawGroups = rawRecipes
+                // split into specific recipes that match the item
+                // (e.g. a recipe with several possible inputs => several recipes with one possible input)
+                .SelectMany(recipe =>
+                {
+                    Item outputItem = recipe.CreateItem(ingredient);
+                    RecipeItemEntry output = this.CreateItemEntry(
+                        name: outputItem.DisplayName,
+                        item: outputItem,
+                        minCount: recipe.MinOutput,
+                        maxCount: recipe.MaxOutput,
+                        chance: recipe.OutputChance,
+                        isOutput: true
+                    );
+
+                    return this.GetCartesianInputs(recipe)
+                        .Select(inputIds =>
+                        {
+                            RecipeItemEntry[] inputs = inputIds
+                                .Select((inputId, index) => this.TryCreateItemEntry(inputId, recipe.Ingredients[index]))
+                                .Where(p => p != null)
+                                .OrderBy(entry => entry.DisplayText)
+                                .ToArray();
+
+                            return new RecipeEntry(
+                                name: recipe.Key,
+                                type: recipe.DisplayType,
+                                isKnown: !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                                inputs: inputs,
+                                output: output
+                            );
+                        });
+                })
+
+                // filter to unique recipe
+                // (e.g. two recipe matches => one recipe)
+                .GroupBy(recipe => recipe.UniqueKey)
+                .Select(item => item.First())
+
+                // sort
+                .OrderBy(recipe => recipe.Type)
+                .ThenBy(recipe => recipe.Output.DisplayText)
+
+                // group by type
+                .GroupBy(p => p.Type)
+                .ToDictionary(p => p.Key, p => p.ToArray());
+
+            /****
+            ** build recipe groups with column widths
+            ****/
+            foreach (var rawGroup in rawGroups)
+            {
+                // build column width list
+                var columnWidths = new List<float>();
+                void TrackWidth(int index, string text, SpriteInfo icon)
+                {
+                    while (columnWidths.Count < index + 1)
+                        columnWidths.Add(0);
+
+                    float width = Game1.smallFont.MeasureString(text).X;
+                    if (icon != null)
+                        width += this.IconSize + this.IconMargin;
+
+                    columnWidths[index] = Math.Max(columnWidths[index], width);
+                }
+
+                // get max width of each column in the group
+                foreach (var recipe in rawGroup.Value)
+                {
+                    TrackWidth(0, $"{recipe.Output.DisplayText}:", recipe.Output.Sprite);
+
+                    for (int i = 0; i < recipe.Inputs.Length; i++)
+                        TrackWidth(i + 1, recipe.Inputs[i].DisplayText, recipe.Inputs[i].Sprite);
+                }
+
+                // save widths
+                yield return new RecipeByTypeGroup(
+                    type: rawGroup.Key,
+                    recipes: rawGroup.Value,
+                    columnWidths: columnWidths
+                );
+            }
+        }
+
         /// <summary>Draw text with an icon.</summary>
         /// <param name="batch">The sprite batch.</param>
         /// <param name="font">The sprite font.</param>
