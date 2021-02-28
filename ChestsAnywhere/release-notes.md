@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error opening dressers in rare cases.
-* Improved translations. Thanks to derJuba007 (updated German)!
+* Improved translations. Thanks to derJuba007 (updated German), horizon98 (updated Chinese), and zNatural (updated Spanish)!
 
 ## 1.20.9
 Released 06 February 2021.

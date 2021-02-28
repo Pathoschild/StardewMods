@@ -9,7 +9,7 @@
   * Fixed item lookups not showing all cooking/crafting recipes in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
-* Improved translations. Thanks to mcBegins2Snow (updated Chinese) and wally232 (updated Korean)!
+* Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), wally232 (updated Korean), and zNatural (updated Spanish)!
 
 ## 1.32.4
 Released 06 February 2021.

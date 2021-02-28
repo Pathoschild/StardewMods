@@ -8,7 +8,7 @@
     "generic.yesterday": "ayer",
 
     // generic values
-    "generic.unknown": "desconocido", 
+    "generic.unknown": "desconocido",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -200,7 +200,7 @@
     "location.islandSouthEastCave": "Cueva sureste de la isla Jengibre",
     "location.islandWest": "Oeste de la isla Jengibre",
     "location.islandWest.fish-area-1": "Oeste de la isla Jengibre (Oceano)",
-    "location.islandWest.fish-area-2": "Oeste de la isla Jengibre (Estanque)", 
+    "location.islandWest.fish-area-2": "Oeste de la isla Jengibre (Estanque)",
 
     "location.unknown-fish-area": "{{locationName}} (zona de pesca {{id}})",
 
