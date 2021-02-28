@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + height, iconSize, shouldFade ? Color.White * 0.5f : Color.White);
 
                 // draw text
-                string text = isGuaranteed ? item.DisplayName : I18n.Generic_PercentChanceOf(percent: (int)(Math.Round(drop.Probability, 4) * 100), label: item.DisplayName);
+                string text = isGuaranteed ? item.DisplayName : I18n.Generic_PercentChanceOf(percent: (decimal)(Math.Round(drop.Probability, 4) * 100), label: item.DisplayName);
                 if (drop.MinDrop != drop.MaxDrop)
                     text += $" ({I18n.Generic_Range(min: drop.MinDrop, max: drop.MaxDrop)})";
                 else if (drop.MinDrop > 1)
