@@ -17,17 +17,20 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
-        /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
-        private readonly RecipeEntry[] Recipes;
-
-        /// <summary>Whether to align input/output columns.</summary>
-        private readonly bool AlignColumns;
-
-        /// <summary>The column widths, if <see cref="AlignColumns"/> is true.</summary>
-        private readonly float[] ColumnWidths;
+        /// <summary>The recipes to list by type.</summary>
+        private readonly RecipeByTypeGroup[] Recipes;
 
         /// <summary>Provides utility methods for interacting with the game code.</summary>
         private readonly GameHelper GameHelper;
+
+        /// <summary>The number of pixels between an item's icon and text.</summary>
+        private readonly int IconMargin = 5;
+
+        /// <summary>The height of a recipe line.</summary>
+        private readonly float LineHeight = Game1.smallFont.MeasureString("ABC").Y;
+
+        /// <summary>The width and height of an item icon.</summary>
+        private float IconSize => this.LineHeight;
 
 
         /*********
@@ -42,9 +45,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             : base(label, true)
         {
             this.GameHelper = gameHelper;
+            this.Recipes = this.BuildRecipeGroups(ingredient, recipes).ToArray();
+        }
 
-            // build recipe models
-            this.Recipes = recipes
+        /// <summary>Build an optimized representation of the recipes to display.</summary>
+        /// <param name="ingredient">The ingredient item.</param>
+        /// <param name="rawRecipes">The raw recipes to list.</param>
+        private IEnumerable<RecipeByTypeGroup> BuildRecipeGroups(Item ingredient, RecipeModel[] rawRecipes)
+        {
+            /****
+            ** build models for matching recipes
+            ****/
+            Dictionary<string, RecipeEntry[]> rawGroups = rawRecipes
                 // split into specific recipes that match the item
                 // (e.g. a recipe with several possible inputs => several recipes with one possible input)
                 .SelectMany(recipe =>
@@ -78,7 +90,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                         });
                 })
 
-                // group by unique recipe
+                // filter to unique recipe
                 // (e.g. two recipe matches => one recipe)
                 .GroupBy(recipe => recipe.UniqueKey)
                 .Select(item => item.First())
@@ -86,30 +98,45 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // sort
                 .OrderBy(recipe => recipe.Type)
                 .ThenBy(recipe => recipe.Output.DisplayText)
-                .ToArray();
-            if (!this.Recipes.Any())
-                return;
 
-            // align items if all recipes have the same number of inputs
-            int inputCount = this.Recipes.First().Inputs.Length;
-            this.AlignColumns = this.Recipes.All(p => p.Inputs.Length == inputCount);
-            if (this.AlignColumns)
+                // group by type
+                .GroupBy(p => p.Type)
+                .ToDictionary(p => p.Key, p => p.ToArray());
+
+            /****
+            ** build recipe groups with column widths
+            ****/
+            foreach (var rawGroup in rawGroups)
             {
-                this.ColumnWidths = new float[inputCount + 1];
-                foreach (RecipeEntry recipe in this.Recipes)
+                // build column width list
+                var columnWidths = new List<float>();
+                void TrackWidth(int index, string text, SpriteInfo icon)
                 {
-                    for (int col = -1; col < inputCount; col++)
-                    {
-                        RecipeItemEntry itemEntry = col == -1
-                            ? recipe.Output
-                            : recipe.Inputs[col];
+                    while (columnWidths.Count < index + 1)
+                        columnWidths.Add(0);
 
-                        float width = itemEntry.DisplayTextSize.X;
+                    float width = Game1.smallFont.MeasureString(text).X;
+                    if (icon != null)
+                        width += this.IconSize + this.IconMargin;
 
-                        if (this.ColumnWidths[col + 1] < width)
-                            this.ColumnWidths[col + 1] = width;
-                    }
+                    columnWidths[index] = Math.Max(columnWidths[index], width);
                 }
+
+                // get max width of each column in the group
+                foreach (var recipe in rawGroup.Value)
+                {
+                    TrackWidth(0, $"{recipe.Output.DisplayText}:", recipe.Output.Sprite);
+
+                    for (int i = 0; i < recipe.Inputs.Length; i++)
+                        TrackWidth(i + 1, recipe.Inputs[i].DisplayText, recipe.Inputs[i].Sprite);
+                }
+
+                // save widths
+                yield return new RecipeByTypeGroup(
+                    type: rawGroup.Key,
+                    recipes: rawGroup.Value,
+                    columnWidths: columnWidths
+                );
             }
         }
 
@@ -117,7 +144,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public override Vector2? DrawValue(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, float wrapWidth)
         {
             // get margins
-            const int groupTopMargin = 6;
+            const int groupVerticalMargin = 6;
             const int groupLeftMargin = 0;
             const int firstRecipeTopMargin = 5;
             const int firstRecipeLeftMargin = 14;
@@ -130,99 +157,102 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             float absoluteWrapWidth = position.X + wrapWidth;
 
             // icon size and line height
-            float lineHeight = font.MeasureString("ABC").Y;
-            var iconSize = new Vector2(lineHeight);
+            float lineHeight = this.LineHeight;
+            var iconSize = new Vector2(this.IconSize);
             float joinerWidth = inputDividerWidth + (itemSpacer * 2);
 
             // draw recipes
-            string lastGroupType = null;
-            foreach (RecipeEntry entry in this.Recipes)
+            curPos.Y += groupVerticalMargin;
+            foreach (RecipeByTypeGroup group in this.Recipes)
             {
-                // fade recipes which aren't known
-                Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
-                Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
+                // check if we can align columns
+                bool alignColumns = wrapWidth >= (group.TotalColumnWidth + itemSpacer + ((group.ColumnWidths.Length - 1) * joinerWidth)); // columns + space between output/input + space between each input
 
                 // draw group label
-                if (entry.Type != lastGroupType)
+                curPos.X = position.X + groupLeftMargin;
+                curPos += this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, $"{group.Type}:", Color.Black);
+
+                // draw recipe lines
+                foreach (RecipeEntry entry in group.Recipes)
                 {
+                    // fade recipes which aren't known
+                    Color iconColor = entry.IsKnown ? Color.White : Color.White * .5f;
+                    Color textColor = entry.IsKnown ? Color.Black : Color.Gray;
+
+                    // reset position for recipe output
                     curPos = new Vector2(
-                        x: position.X + groupLeftMargin,
-                        y: curPos.Y + (lastGroupType == null ? groupTopMargin : lineHeight)
+                        position.X + firstRecipeLeftMargin,
+                        curPos.Y + firstRecipeTopMargin
                     );
-                    curPos += this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, $"{entry.Type}:", Color.Black);
 
-                    lastGroupType = entry.Type;
-                }
-
-                // reset position for recipe output
-                curPos = new Vector2(
-                    position.X + firstRecipeLeftMargin,
-                    curPos.Y + firstRecipeTopMargin
-                );
-
-                // draw output item (icon + name + count + chance)
-                float inputLeft;
-                {
-                    var outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, textColor, entry.Output.Sprite, iconSize, iconColor);
-                    float outputWidth = Math.Max(outputSize.X, this.AlignColumns ? this.ColumnWidths[0] + iconSize.X : 0);
-
-                    inputLeft = curPos.X + outputWidth + itemSpacer;
-                    curPos.X = inputLeft;
-                }
-
-                // draw input items
-                for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
-                {
-                    RecipeItemEntry input = entry.Inputs[i];
-
-                    // move the draw position down to a new line if the next item would be drawn off the right edge
-                    Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor, probe: true);
-                    if (this.AlignColumns)
-                        inputSize.X = Math.Max(inputSize.X, this.ColumnWidths[i + 1] + iconSize.X);
-
-                    if (curPos.X + inputSize.X > absoluteWrapWidth)
+                    // draw output item (icon + name + count + chance)
+                    float inputLeft;
                     {
-                        curPos = new Vector2(
-                            x: inputLeft,
-                            y: curPos.Y + lineHeight + otherRecipeTopMargin
-                        );
+                        var outputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, entry.Output.DisplayText, textColor, entry.Output.Sprite, iconSize, iconColor);
+                        float outputWidth = alignColumns
+                            ? group.ColumnWidths[0]
+                            : outputSize.X;
+
+                        inputLeft = curPos.X + outputWidth + itemSpacer;
+                        curPos.X = inputLeft;
                     }
 
-                    // draw input item (icon + name + count)
-                    this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor);
-                    curPos = new Vector2(
-                        x: curPos.X + inputSize.X,
-                        y: curPos.Y
-                    );
-
-                    // draw input item joiner
-                    if (i != last)
+                    // draw input items
+                    for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                     {
-                        // move draw position to next line if needed
-                        if (curPos.X + joinerWidth > absoluteWrapWidth)
+                        RecipeItemEntry input = entry.Inputs[i];
+
+                        // move the draw position down to a new line if the next item would be drawn off the right edge
+                        Vector2 inputSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor, probe: true);
+                        if (alignColumns)
+                            inputSize.X = group.ColumnWidths[i + 1];
+
+                        if (curPos.X + inputSize.X > absoluteWrapWidth)
                         {
                             curPos = new Vector2(
                                 x: inputLeft,
                                 y: curPos.Y + lineHeight + otherRecipeTopMargin
                             );
                         }
-                        else
-                            curPos.X += itemSpacer;
 
-                        // draw the input item joiner
-                        var joinerSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, "+", textColor);
-                        curPos.X += joinerSize.X + itemSpacer;
+                        // draw input item (icon + name + count)
+                        this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, input.DisplayText, textColor, input.Sprite, iconSize, iconColor);
+                        curPos = new Vector2(
+                            x: curPos.X + inputSize.X,
+                            y: curPos.Y
+                        );
+
+                        // draw input item joiner
+                        if (i != last)
+                        {
+                            // move draw position to next line if needed
+                            if (curPos.X + joinerWidth > absoluteWrapWidth)
+                            {
+                                curPos = new Vector2(
+                                    x: inputLeft,
+                                    y: curPos.Y + lineHeight + otherRecipeTopMargin
+                                );
+                            }
+                            else
+                                curPos.X += itemSpacer;
+
+                            // draw the input item joiner
+                            var joinerSize = this.DrawIconText(spriteBatch, font, curPos, absoluteWrapWidth, "+", textColor);
+                            curPos.X += joinerSize.X + itemSpacer;
+                        }
                     }
+
+                    curPos.Y += lineHeight;
                 }
 
-                curPos.Y += lineHeight;
+                curPos.Y += lineHeight; // blank line between groups
             }
 
             // vertical spacer at the bottom of the recipes
-            curPos.Y += groupTopMargin;
+            curPos.Y += groupVerticalMargin;
 
             // get drawn dimensions
-            return new Vector2(wrapWidth, curPos.Y - position.Y);
+            return new Vector2(wrapWidth, curPos.Y - position.Y - lineHeight);
         }
 
 
@@ -249,7 +279,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             {
                 if (!probe)
                     batch.DrawSpriteWithin(icon, position.X, position.Y, iconSize.Value, iconColor);
-                textOffset = 5;
+                textOffset = this.IconMargin;
             }
             else
                 iconSize = Vector2.Zero;
@@ -338,8 +368,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             return new RecipeItemEntry(
                 sprite: this.GameHelper.GetSprite(item),
-                displayText: text,
-                displayTextSize: Game1.smallFont.MeasureString(text)
+                displayText: text
             );
         }
 
