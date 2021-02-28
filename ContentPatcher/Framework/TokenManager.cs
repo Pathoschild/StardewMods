@@ -182,6 +182,7 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, this.GetProfessions, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => player.DailyLuck.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, this.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);

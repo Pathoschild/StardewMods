@@ -228,6 +228,26 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
+<td>DailyLuck</td>
+<td>
+
+The [daily luck](https://stardewvalleywiki.com/Luck) for the current player (or the player specified
+with a [`PlayerType`](#playertype) argument).
+
+This is a decimal value usually between -0.1 and 0.1. This **cannot** be compared using the
+`{{Range}}` token, which produces a range of integer values. The value can only be safely compared
+using [query expressions](#query-expressions). For example:
+
+```js
+"When": {
+   "Query: {{DailyLuck}} < 0": true // spirits unhappy today
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasConversationTopic</td>
 <td>
 

@@ -12,7 +12,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
-* Added [`Render` token](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+* Added new tokens:
+  * [`Render`](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+  * `DailyLuck` to get a player's daily luck (thanks to Thom1729!).
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
 * Improved default `LogName` for patches with multiple `Target` or `FromFile` values.
 * Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.
