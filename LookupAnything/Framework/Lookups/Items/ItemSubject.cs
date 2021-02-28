@@ -202,26 +202,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // recipes
             if (showInventoryFields)
             {
-                var recipes = new List<RecipeModel>();
-                switch (itemType)
-                {
-                    // for item
-                    default:
-                        // recipes that take this item as an ingredient
-                        recipes.AddRange(this.GameHelper.GetRecipesForIngredient(this.DisplayItem));
-                        recipes.AddRange(this.GameHelper.GetRecipesForIngredient(item));
+                RecipeModel[] recipes =
+                    // recipes that take this item as ingredient
+                    this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
+                    .Concat(this.GameHelper.GetRecipesForIngredient(item))
 
-                        // recipes that output this item
-                        recipes.AddRange(this.GameHelper.GetRecipesForOutput(this.DisplayItem));
-                        recipes.AddRange(this.GameHelper.GetRecipesForOutput(item));
-                        break;
+                    // recipes which produce this item
+                    .Concat(this.GameHelper.GetRecipesForOutput(this.DisplayItem))
+                    .Concat(this.GameHelper.GetRecipesForOutput(item))
 
-                    // for machine
-                    case ItemType.BigCraftable:
-                        recipes.AddRange(this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject));
-                        recipes.AddRange(this.GameHelper.GetRecipesForMachine(item as SObject));
-                        break;
-                }
+                    // recipes for a machine
+                    .Concat(this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject))
+                    .Concat(this.GameHelper.GetRecipesForMachine(item as SObject))
+                    .ToArray();
 
                 if (recipes.Any())
                     yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes.ToArray());

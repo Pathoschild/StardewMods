@@ -328,12 +328,14 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             // ignore invalid ingredients
             if (item.GetItemType() != ItemType.Object)
-                return new List<RecipeModel>();
+                return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
             List<RecipeModel> recipes = this.GetRecipes()
-                .Where(recipe => recipe.Ingredients.Any(p => p.Matches(item)))
-                .Where(recipe => !recipe.ExceptIngredients.Any(p => p.Matches(item)))
+                .Where(recipe =>
+                    recipe.Ingredients.Any(p => p.Matches(item))
+                    && !recipe.ExceptIngredients.Any(p => p.Matches(item))
+                )
                 .ToList();
 
             // resolve conflicts from mods like Producer Framework Mod: if multiple machine recipes
@@ -360,33 +362,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="item">The item.</param>
         public IEnumerable<RecipeModel> GetRecipesForOutput(Item item)
         {
-            // ignore invalid item
-            if (item.GetItemType() != ItemType.Object)
-                return new List<RecipeModel>();
-
-            // from cached recipes
-            return this.GetRecipes()
-                .Where(recipe =>
-                {
-                    if (item is SObject obj)
-                    {
-                        // if only one of
-                        // the recipe output type and the item type
-                        // are big craftable
-                        // remove the recipe
-                        if (obj.bigCraftable.Value && recipe.OutputItemType != ItemType.BigCraftable)
-                            return false;
-                        if (!obj.bigCraftable.Value && recipe.OutputItemType == ItemType.BigCraftable)
-                            return false;
-                    }
-
-                    // otherwise keep recipe
-                    return true;
-                })
-                .Where(recipe =>
-                    recipe.CreateItem(item).ParentSheetIndex == item.ParentSheetIndex ||
-                    recipe.OutputItemIndex == item.ParentSheetIndex)
-                .ToList();
+            return this
+                .GetRecipes()
+                .Where(recipe => this.AreEquivalent(item, recipe.CreateItem(item)));
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -394,7 +372,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
         {
             if (machine == null)
-                return new List<RecipeModel>();
+                return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
             return this.GetRecipes()
