@@ -202,26 +202,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // recipes
             if (showInventoryFields)
             {
-                switch (itemType)
-                {
-                    // for ingredient
-                    case ItemType.Object:
-                        {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                            if (recipes.Any())
-                                yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes);
-                        }
-                        break;
+                RecipeModel[] recipes =
+                    // recipes that take this item as ingredient
+                    this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
+                    .Concat(this.GameHelper.GetRecipesForIngredient(item))
 
-                    // for machine
-                    case ItemType.BigCraftable:
-                        {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
-                            if (recipes.Any())
-                                yield return new RecipesForMachineField(this.GameHelper, I18n.Item_Recipes(), recipes);
-                        }
-                        break;
-                }
+                    // recipes which produce this item
+                    .Concat(this.GameHelper.GetRecipesForOutput(this.DisplayItem))
+                    .Concat(this.GameHelper.GetRecipesForOutput(item))
+
+                    // recipes for a machine
+                    .Concat(this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject))
+                    .Concat(this.GameHelper.GetRecipesForMachine(item as SObject))
+                    .ToArray();
+
+                if (recipes.Any())
+                    yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes.ToArray());
             }
 
             // fish spawn rules

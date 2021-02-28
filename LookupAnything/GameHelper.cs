@@ -331,16 +331,12 @@ namespace Pathoschild.Stardew.LookupAnything
                 return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            var recipes = new List<RecipeModel>();
-            foreach (RecipeModel recipe in this.GetRecipes())
-            {
-                if (!recipe.Ingredients.Any(p => p.Matches(item)))
-                    continue;
-                if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
-                    continue;
-
-                recipes.Add(recipe);
-            }
+            List<RecipeModel> recipes = this.GetRecipes()
+                .Where(recipe =>
+                    recipe.Ingredients.Any(p => p.Matches(item))
+                    && !recipe.ExceptIngredients.Any(p => p.Matches(item))
+                )
+                .ToList();
 
             // resolve conflicts from mods like Producer Framework Mod: if multiple machine recipes
             // take the same item as input, ID takes precedence over category. This only occurs
@@ -362,19 +358,26 @@ namespace Pathoschild.Stardew.LookupAnything
             return recipes;
         }
 
+        /// <summary>Get the recipes that create an item.</summary>
+        /// <param name="item">The item.</param>
+        public IEnumerable<RecipeModel> GetRecipesForOutput(Item item)
+        {
+            return this
+                .GetRecipes()
+                .Where(recipe => this.AreEquivalent(item, recipe.CreateItem(item)));
+        }
+
         /// <summary>Get the recipes for a given machine.</summary>
         /// <param name="machine">The machine.</param>
         public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
         {
             if (machine == null)
-                yield break;
+                return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            foreach (var recipe in this.GetRecipes())
-            {
-                if (recipe.IsForMachine(machine))
-                    yield return recipe;
-            }
+            return this.GetRecipes()
+                .Where(recipe => recipe.IsForMachine(machine))
+                .ToList();
         }
 
         /// <summary>Get the current quests which need an item.</summary>
