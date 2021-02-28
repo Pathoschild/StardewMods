@@ -1,9 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -19,38 +19,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /*********
         ** Fields
         *********/
-        /// <summary>Metadata for a drawn input or output item.</summary>
-        private struct ItemEntry
-        {
-            /// <summary>The sprite to display.</summary>
-            public SpriteInfo Sprite;
-
-            /// <summary>The display text for the item name and count.</summary>
-            public string DisplayText;
-
-            /// <summary>The pixel size of the display text.</summary>
-            public Vector2 DisplayTextSize;
-        }
-
-        /// <summary>Metadata needed to draw a recipe.</summary>
-        private struct RecipeEntry
-        {
-            /// <summary>The recipe name or key.</summary>
-            public string Name;
-
-            /// <summary>The recipe type.</summary>
-            public string Type;
-
-            /// <summary>Whether the player knows the recipe.</summary>
-            public bool IsKnown;
-
-            /// <summary>The input items.</summary>
-            public ItemEntry[] Inputs;
-
-            /// <summary>The output items.</summary>
-            public ItemEntry Output;
-        }
-
         /// <summary>The recipe data to list (type => recipe => {player knows recipe, number required for recipe}).</summary>
         private readonly RecipeEntry[] Recipes;
 
@@ -76,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 .SelectMany(recipe =>
                 {
                     Item outputItem = recipe.CreateItem(item);
-                    ItemEntry outputEntry = this.CreateItemEntry(
+                    RecipeItemEntry outputEntry = this.CreateItemEntry(
                         gameHelper,
                         outputItem.DisplayName,
                         outputItem,
@@ -88,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     return this.GetCartesianInputs(recipe)
                         .Select(inputIds =>
                             {
-                                ItemEntry[] inputEntries = inputIds
+                                RecipeItemEntry[] inputEntries = inputIds
                                     .Select((inputId, index) =>
                                         this.CreateItemEntry(gameHelper, inputId,
                                             recipe.Ingredients[index]))
@@ -116,8 +84,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 .GroupBy(recipe => string.Join(", ", recipe.Inputs
                     .Select(i => i.DisplayText)
                     .OrderBy(i => i)
-                    .Concat(new[] {recipe.Output.DisplayText})
-                    .Concat(new[] {recipe.Name})
+                    .Concat(new[] { recipe.Output.DisplayText })
+                    .Concat(new[] { recipe.Name })
                 ))
                 .Select(i => i.First())
                 .OrderBy(recipe => recipe.Type)
@@ -150,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     if (col > -1 && col >= recipe.Inputs.Length)
                         continue;
 
-                    ItemEntry itemEntry = col == -1 ? recipe.Output : recipe.Inputs[col];
+                    RecipeItemEntry itemEntry = col == -1 ? recipe.Output : recipe.Inputs[col];
                     float width = itemEntry.DisplayTextSize.X;
 
                     // set the column width
@@ -242,7 +210,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // draw input items
                 for (int i = 0, last = entry.Inputs.Length - 1; i <= last; i++)
                 {
-                    ItemEntry input = entry.Inputs[i];
+                    RecipeItemEntry input = entry.Inputs[i];
 
                     // move the draw position down to a new line if the next item would be drawn off the right edge
                     float itemWidth = this.AlignColumns
@@ -367,7 +335,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="id">The item id.</param>
         /// <param name="ingredient">The recipe ingredient model for the item.</param>
         /// <returns>An item entry model or null.</returns>
-        private ItemEntry? CreateItemEntry(GameHelper gameHelper, int id, RecipeIngredientModel ingredient)
+        private RecipeItemEntry? CreateItemEntry(GameHelper gameHelper, int id, RecipeIngredientModel ingredient)
         {
             // category
             if (id < 0)
@@ -408,7 +376,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="chance">The chance of creating an output item.</param>
         /// <param name="isOutput">Whether the item is output or input.</param>
         /// <returns>An item entry model.</returns>
-        private ItemEntry CreateItemEntry(GameHelper gameHelper, string name, Item item = null, int minCount = 1,
+        private RecipeItemEntry CreateItemEntry(GameHelper gameHelper, string name, Item item = null, int minCount = 1,
             int maxCount = 1, decimal chance = 100, bool isOutput = false)
         {
             string displayText = this.CreateItemText(name, minCount, maxCount, chance);
@@ -417,7 +385,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 displayText += ":";
             }
 
-            return new ItemEntry
+            return new RecipeItemEntry
             {
                 Sprite = item != null ? gameHelper.GetSprite(item) : null,
                 DisplayText = displayText,
