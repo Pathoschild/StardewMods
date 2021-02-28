@@ -159,7 +159,7 @@ namespace ContentPatcher
             LoadStage stage = e.NewStage;
 
             // add locations
-            if (stage == LoadStage.CreatedLocations || stage == LoadStage.SaveLoadedBasicInfo)
+            if (stage == LoadStage.CreatedInitialLocations || stage == LoadStage.SaveAddedLocations)
                 this.CustomLocationManager.Apply();
 
             // update context
