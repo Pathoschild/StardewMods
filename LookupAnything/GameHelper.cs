@@ -10,12 +10,14 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -354,6 +356,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // from tailor recipes
             recipes.AddRange(this.GetTailorRecipes(item));
+
+            // from construction recipes
+            recipes.AddRange(this.GetConstructionRecipes(item));
 
             return recipes;
         }
@@ -748,6 +753,123 @@ namespace Pathoschild.Stardew.LookupAnything
                 // fails for non-social NPCs
                 return null;
             }
+        }
+
+        /// <summary>Parse construction recipe data.</summary>
+        /// <remarks>
+        /// Based on <see cref="StardewValley.Menus.CarpenterMenu(bool)"/>,
+        /// <see cref="StardewValley.Menus.CarpenterMenu.setNewActiveBlueprint()"/>,
+        /// <see cref="StardewValley.Locations.BuildableGameLocation.buildStructure(BluePrint,Vector2,Farmer,bool,bool)"/>,
+        /// and <see cref="StardewValley.BluePrint(string)"/>.
+        /// </remarks>
+        private IEnumerable<RecipeModel> GetConstructionRecipes(Item input)
+        {
+            if (input == null || input.GetItemType() == ItemType.BigCraftable)
+                return new List<RecipeModel>();
+
+            // load blueprints in a similar way to StardewValley.Menus.CarpenterMenu()
+            RecipeModel[] recipes = new[]
+                {
+                    "Junimo Hut",
+
+                    "Earth Obelisk",
+                    "Water Obelisk",
+                    "Desert Obelisk",
+                    "Island Obelisk",
+
+                    "Gold Clock",
+
+                    "Coop",
+                    "Barn",
+                    "Well",
+                    "Silo",
+                    "Mill",
+                    "Shed",
+                    "Fish Pond",
+
+                    "Stone Cabin",
+                    "Plank Cabin",
+                    "Log Cabin",
+
+                    "Stable",
+                    "Slime Hutch",
+
+                    "Big Coop",
+                    "Deluxe Coop",
+                    "Big Barn",
+                    "Deluxe Barn",
+                    "Big Shed",
+
+                    "Shipping Bin",
+                }
+                .Select(name => new BluePrint(name))
+                .Where(bluePrint => bluePrint.itemsRequired.Count > 0)
+                .Select(bluePrint =>
+                {
+                    // create buildings in a similar way to StardewValley.Menus.CarpenterMenu.setNewActiveBlueprint()
+                    // and StardewValley.Locations.BuildableGameLocation.buildStructure()
+                    Building building;
+                    Vector2 tileLocation = Vector2.Zero;
+                    switch (bluePrint.name)
+                    {
+                        case "Barn":
+                        case "Big Barn":
+                        case "Deluxe Barn":
+                            building = new Barn(bluePrint, tileLocation);
+                            break;
+                        case "Big Coop":
+                        case "Coop":
+                        case "Deluxe Coop":
+                            building = new Coop(bluePrint, tileLocation);
+                            break;
+                        case "Fish Pond":
+                            building = new FishPond(bluePrint, tileLocation);
+                            break;
+                        case "Junimo Hut":
+                            building = new JunimoHut(bluePrint, tileLocation);
+                            break;
+                        case "Mill":
+                            building = new Mill(bluePrint, tileLocation);
+                            break;
+                        case "Shipping Bin":
+                            building = new ShippingBin(bluePrint, tileLocation);
+                            break;
+                        case "Stable":
+                            building = new Stable(Guid.NewGuid(), bluePrint, tileLocation);
+                            break;
+                        default:
+                            building = new Building(bluePrint, tileLocation);
+                            break;
+                    }
+
+                    return Tuple.Create(bluePrint, building);
+                })
+                .Select(building =>
+                {
+                    // create recipes from items required for blue print
+                    var ingredients = building.Item1.itemsRequired
+                        .Select(i => new RecipeIngredientModel(new[] {i.Key}, i.Value))
+                        .ToArray();
+
+                    return new RecipeModel(
+                        key: null,
+                        type: RecipeType.BuildingBlueprint,
+                        displayType: I18n.Building_Construction(),
+                        ingredients: ingredients,
+                        item: _ => null,
+                        mustBeLearned: false,
+                        machineParentSheetIndex: null,
+                        isForMachine: _ => false,
+                        exceptIngredients: Enumerable.Empty<RecipeIngredientModel>(),
+                        specialOutput: new RecipeItemEntry(
+                            new SpriteInfo(building.Item2.texture.Value, building.Item2.getSourceRectForMenu()),
+                            building.Item2.buildingType.Value)
+                    );
+                })
+                .Where(recipe => recipe.Ingredients.Any(ingredient => ingredient.Matches(input)))
+                .ToArray();
+
+            return recipes;
         }
     }
 }

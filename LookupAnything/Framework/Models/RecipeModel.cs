@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Items.ItemData;
+using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -59,6 +60,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Whether the recipe must be learned before it can be used.</summary>
         public bool MustBeLearned { get; }
 
+        /// <summary>The sprite and display text for a non-standard recipe output.</summary>
+        public  RecipeItemEntry SpecialOutput { get; }
+
 
         /*********
         ** Public methods
@@ -78,7 +82,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
+        /// <param name="specialOutput">The sprite and display text for a non-standard recipe output (or <c>null</c> if the recipe has a standard object output).</param>
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null, RecipeItemEntry specialOutput = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)
@@ -106,6 +111,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.MinOutput = minOutput.Value;
             this.MaxOutput = maxOutput.Value;
             this.OutputChance = outputChance > 0 && outputChance < 100 ? outputChance.Value : 100;
+            this.SpecialOutput = specialOutput;
         }
 
         /// <summary>Construct an instance.</summary>

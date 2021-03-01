@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
-    /// <summary>Metadata for a building recipe.</summary>
+    /// <summary>Metadata for a recipe that can be crafted using a building.</summary>
     internal class BuildingRecipeData
     {
         /*********

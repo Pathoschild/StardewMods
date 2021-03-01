@@ -12,6 +12,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The recipe represents the input for a crafting machine like a furnace.</summary>
         MachineInput,
 
+        /// <summary>The recipe represents the input for a crafting building like a mill.</summary>
+        BuildingInput,
+
         /// <summary>The recipe represents the materials needed to construct a building through Robin or the Wizard.</summary>
         BuildingBlueprint,
 

@@ -464,7 +464,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 let building = new BluePrint(entry.BuildingKey)
                 select new RecipeModel(
                     key: null,
-                    type: RecipeType.BuildingBlueprint,
+                    type: RecipeType.BuildingInput,
                     displayType: building.displayName,
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
