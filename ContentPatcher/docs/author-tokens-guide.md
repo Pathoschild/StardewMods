@@ -248,6 +248,18 @@ using [query expressions](#query-expressions). For example:
 </tr>
 
 <tr valign="top">
+<td>FarmhouseUpgrade</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the current
+player (or the player specified with a [`PlayerType`](#playertype) argument). The normal values are
+0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may
+add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasConversationTopic</td>
 <td>
 
@@ -543,17 +555,6 @@ conditional map spawn logic.
 
 The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `None`, `Bats`,
 `Mushrooms`.
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>FarmhouseUpgrade</td>
-<td>
-
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values
-are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods
-may add upgrade levels beyond that.
 
 </td>
 </tr>

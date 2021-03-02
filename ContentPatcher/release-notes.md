@@ -15,6 +15,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added new tokens:
   * [`Render`](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
   * `DailyLuck` to get a player's daily luck (thanks to Thom1729!).
+* The `FarmhouseUpgrade` token can now check either the current player (default) or the host player.
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
 * Improved default `LogName` for patches with multiple `Target` or `FromFile` values.
 * Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.

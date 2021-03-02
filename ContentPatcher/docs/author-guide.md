@@ -937,8 +937,9 @@ folder):
 ### Caveats
 * The name must be **globally** unique. If two content packs add a location with the same name,
   both will be rejected with an error message, and the location won't be added at all. If the
-  player saves anyway at that point, anything in that location will be permanently lost. Adding a
-  unique prefix like `YourModName_LocationName` is strongly recommended to avoid that.
+  player saves anyway at that point, anything in that location will be permanently lost. Using a
+  unique prefix for the mod like `Custom_YourModName_LocationName` is strongly recommended to avoid
+  that.
 * This only adds the location to the game. Players won't be able to reach it unless you also add
   warps using [`EditMap`](#editmap) (see the example above). Those warps can be conditional and
   dynamic, so you can decide when it becomes available to players.
