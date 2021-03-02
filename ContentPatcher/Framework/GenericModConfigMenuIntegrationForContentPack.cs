@@ -61,14 +61,14 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Register the config menu if available.</summary>
-        public void Register(Action<string, ConfigField> addConfigToken)
+        public void Register()
         {
             if (!this.ConfigMenu.IsLoaded || !this.Config.Any())
                 return;
 
             this.ConfigMenu.RegisterConfig();
             foreach (var pair in this.Config)
-                this.AddField(pair.Key, pair.Value, resetToken: () => addConfigToken(pair.Key, pair.Value));
+                this.AddField(pair.Key, pair.Value);
         }
 
 
@@ -78,8 +78,7 @@ namespace ContentPatcher.Framework
         /// <summary>Register a config menu field with Generic Mod Config Menu.</summary>
         /// <param name="name">The config field name.</param>
         /// <param name="field">The config field instance.</param>
-        /// <param name="resetToken">Remove and re-register the config token.</param>
-        private void AddField(string name, ConfigField field, Action resetToken)
+        private void AddField(string name, ConfigField field)
         {
             if (!this.ConfigMenu.IsLoaded)
                 return;
@@ -90,15 +89,13 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddTextbox(
                     label: name,
                     description: field.Description,
-                    get: config => string.Join(", ", field.Value.ToArray()),
-                    set: (config, newValue) =>
+                    get: _ => string.Join(", ", field.Value.ToArray()),
+                    set: (_, newValue) =>
                     {
                         field.Value = this.ParseCommaDelimitedField(newValue);
 
                         if (!field.AllowMultiple && field.Value.Count > 1)
                             field.Value = new InvariantHashSet(field.Value.Take(1));
-
-                        resetToken();
                     }
                 );
             }
@@ -111,8 +108,8 @@ namespace ContentPatcher.Framework
                     this.ConfigMenu.AddCheckbox(
                         label: $"{name}.{value}",
                         description: field.Description,
-                        get: config => field.Value.Contains(value),
-                        set: (config, selected) =>
+                        get: _ => field.Value.Contains(value),
+                        set: (_, selected) =>
                         {
                             // toggle value
                             if (selected)
@@ -123,9 +120,6 @@ namespace ContentPatcher.Framework
                             // set default if blank
                             if (!field.AllowBlank && !field.Value.Any())
                                 field.Value = new InvariantHashSet(field.DefaultValues);
-
-                            // update token
-                            resetToken();
                         }
                     );
                 }
@@ -137,13 +131,11 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddCheckbox(
                     label: name,
                     description: field.Description,
-                    get: config => field.Value.Contains(true.ToString()),
-                    set: (config, selected) =>
+                    get: _ => field.Value.Contains(true.ToString()),
+                    set: (_, selected) =>
                     {
                         field.Value.Clear();
                         field.Value.Add(selected.ToString().ToLower());
-
-                        resetToken();
                     }
                 );
             }
@@ -158,13 +150,8 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddNumberField(
                     label: name,
                     description: field.Description,
-                    get: config => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
-                    set: (config, val) =>
-                    {
-                        field.Value = new InvariantHashSet(((int)val).ToString(CultureInfo.InvariantCulture));
-
-                        resetToken();
-                    },
+                    get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
+                    set: (_, val) => field.Value = new InvariantHashSet(val.ToString(CultureInfo.InvariantCulture)),
                     min: min,
                     max: max
                 );
@@ -180,12 +167,8 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddDropdown(
                     label: name,
                     description: field.Description,
-                    get: config => field.Value.FirstOrDefault() ?? "",
-                    set: (config, newValue) =>
-                    {
-                        field.Value = new InvariantHashSet(newValue);
-                        resetToken();
-                    },
+                    get: _ => field.Value.FirstOrDefault() ?? "",
+                    set: (_, newValue) => field.Value = new InvariantHashSet(newValue),
                     choices.ToArray()
                 );
             }

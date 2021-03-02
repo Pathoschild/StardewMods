@@ -1,5 +1,6 @@
 using ContentPatcher.Framework.Locations;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework
 {
@@ -9,23 +10,24 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>Manages state for each screen.</summary>
+        private readonly PerScreen<ScreenManager> ScreenManager;
+
         /// <summary>Manages loaded patches.</summary>
-        private readonly PatchManager PatchManager;
+        private PatchManager PatchManager => this.ScreenManager.Value.PatchManager;
 
         /// <summary>Handles loading custom location data and adding it to the game.</summary>
-        private readonly CustomLocationManager CustomLocationManager;
+        private CustomLocationManager CustomLocationManager => this.ScreenManager.Value.CustomLocationManager;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="patchManager">Manages loaded patches.</param>
-        /// <param name="customLocationManager">Handles loading custom location data and adding it to the game.</param>
-        public AssetInterceptor(PatchManager patchManager, CustomLocationManager customLocationManager)
+        /// <param name="screenManager">Manages state for each screen.</param>
+        public AssetInterceptor(PerScreen<ScreenManager> screenManager)
         {
-            this.PatchManager = patchManager;
-            this.CustomLocationManager = customLocationManager;
+            this.ScreenManager = screenManager;
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>

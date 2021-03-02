@@ -32,20 +32,23 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
+        /// <summary>Manages state for each screen.</summary>
+        private readonly PerScreen<ScreenManager> ScreenManager;
+
         /// <summary>Manages loaded tokens.</summary>
-        private readonly TokenManager TokenManager;
+        private TokenManager TokenManager => this.ScreenManager.Value.TokenManager;
 
         /// <summary>Manages loaded patches.</summary>
-        private readonly PatchManager PatchManager;
+        private PatchManager PatchManager => this.ScreenManager.Value.PatchManager;
 
         /// <summary>Manages loading and unloading patches.</summary>
-        private readonly PatchLoader PatchLoader;
+        private PatchLoader PatchLoader => this.ScreenManager.Value.PatchLoader;
 
         /// <summary>Handles loading custom location data and adding it to the game.</summary>
-        private readonly CustomLocationManager CustomLocationLoader;
+        private CustomLocationManager CustomLocationLoader => this.ScreenManager.Value.CustomLocationManager;
 
         /// <summary>The loaded content packs.</summary>
-        private readonly IList<RawContentPack> ContentPacks;
+        private readonly LoadedContentPack[] ContentPacks;
 
         /// <summary>Get the current token context for a given mod ID, or the global context if given a null mod ID.</summary>
         private readonly Func<string, IContext> GetContext;
@@ -74,20 +77,14 @@ namespace ContentPatcher.Framework.Commands
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="tokenManager">Manages loaded tokens.</param>
-        /// <param name="patchManager">Manages loaded patches.</param>
-        /// <param name="patchLoader">Manages loading and unloading patches.</param>
-        /// <param name="customLocationManager">Handles loading custom location data and adding it to the game.</param>
+        /// <param name="screenManager">Manages state for each screen.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(TokenManager tokenManager, PatchManager patchManager, PatchLoader patchLoader, CustomLocationManager customLocationManager, IMonitor monitor, IList<RawContentPack> contentPacks, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(PerScreen<ScreenManager> screenManager, IMonitor monitor, LoadedContentPack[] contentPacks, Func<string, IContext> getContext, Action updateContext)
         {
-            this.TokenManager = tokenManager;
-            this.PatchManager = patchManager;
-            this.PatchLoader = patchLoader;
-            this.CustomLocationLoader = customLocationManager;
+            this.ScreenManager = screenManager;
             this.Monitor = monitor;
             this.ContentPacks = contentPacks;
             this.GetContext = getContext;

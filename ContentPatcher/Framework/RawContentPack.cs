@@ -28,6 +28,9 @@ namespace ContentPatcher.Framework
         /// <summary>The managed content pack instance.</summary>
         public IContentPack ContentPack { get; }
 
+        /// <summary>The root breadcrumb path for the content pack.</summary>
+        public LogPathBuilder LogPath { get; }
+
         /// <summary>The raw content configuration for this content pack.</summary>
         public ContentConfig Content => this.ContentImpl ?? throw new InvalidOperationException($"Must call {nameof(RawContentPack)}.{nameof(this.TryReloadContent)} before accessing the {nameof(this.Content)} field.");
 
@@ -53,6 +56,16 @@ namespace ContentPatcher.Framework
             this.ContentPack = contentPack;
             this.Index = index;
             this.GetMigrations = getMigrations;
+            this.LogPath = new LogPathBuilder(contentPack.Manifest.Name);
+        }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="copyFrom">A content pack to clone.</param>
+        public RawContentPack(RawContentPack copyFrom)
+            : this(copyFrom.ContentPack, copyFrom.Index, copyFrom.GetMigrations)
+        {
+            this.ContentImpl = copyFrom.Content;
+            this.MigratorImpl = copyFrom.Migrator;
         }
 
         /// <summary>Parse the underlying <c>content.json</c> file and set the <see cref="Content"/> and <see cref="Migrator"/> fields.</summary>
