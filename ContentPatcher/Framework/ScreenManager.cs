@@ -80,7 +80,7 @@ namespace ContentPatcher.Framework
         {
             // add locations
             if (newStage == LoadStage.CreatedInitialLocations || newStage == LoadStage.SaveAddedLocations)
-                this.CustomLocationManager.Apply();
+                this.CustomLocationManager.Apply(saveLocations: SaveGame.loaded.locations, gameLocations: Game1.locations);
 
             // update context
             switch (newStage)

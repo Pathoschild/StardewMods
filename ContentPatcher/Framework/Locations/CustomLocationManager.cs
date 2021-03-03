@@ -56,51 +56,65 @@ namespace ContentPatcher.Framework.Locations
         /// <summary>Enforce that custom location maps have a unique name.</summary>
         public void EnforceUniqueNames()
         {
-            var duplicateLocations = this.CustomLocations
-                .GroupByIgnoreCase(p => p.Name)
-                .OrderByIgnoreCase(p => p.Key)
-                .Where(p => p.Count() > 1);
+            // get locations with duplicated names
+            var duplicateLocations =
+                (
+                    from location in this.CustomLocations
+                    from name in new[] { location.Name }.Concat(location.MigrateLegacyNames)
+                    select new { name, location }
+                )
+                .GroupBy(p => p.name)
+                .Select(p => new { Name = p.Key, Locations = p.Select(p => p.location).ToArray() })
+                .Where(p => p.Locations.Length > 1);
 
-            foreach (var group in duplicateLocations)
+            // warn and disable duplicates
+            foreach (var group in duplicateLocations.OrderByIgnoreCase(p => p.Name))
             {
                 // log error
-                string[] contentPackNames = group.Select(p => p.ContentPack.Manifest.Name).OrderByIgnoreCase(p => p).Distinct().ToArray();
+                string[] contentPackNames = group.Locations.Select(p => p.ContentPack.Manifest.Name).OrderByIgnoreCase(p => p).Distinct().ToArray();
                 string error = contentPackNames.Length > 1
-                    ? $"The '{group.Key}' location was added by multiple content packs ('{string.Join("', '", contentPackNames)}')."
-                    : $"The '{group.Key}' location was added multiple times in the '{contentPackNames[0]}' content pack.";
+                    ? $"The '{group.Name}' location was added by multiple content packs ('{string.Join("', '", contentPackNames)}')."
+                    : $"The '{group.Name}' location was added multiple times in the '{contentPackNames[0]}' content pack.";
                 error += " This location won't be added to the game.";
                 this.Monitor.Log(error, LogLevel.Error);
 
                 // disable locations
-                foreach (var location in group)
+                foreach (var location in group.Locations)
                     location.Disable(error);
-                this.CustomLocationsByMapPath.Remove(group.Key);
             }
+
+            // remove disabled locations
+            foreach (var pair in this.CustomLocationsByMapPath.Where(p => !p.Value.IsEnabled).ToArray())
+                this.CustomLocationsByMapPath.Remove(pair.Key);
         }
 
         /// <summary>Add all locations to the game, if applicable.</summary>
-        public void Apply()
+        /// <param name="saveLocations">The locations in the save file being loaded.</param>
+        /// <param name="gameLocations">The locations that will be populated from the save data.</param>
+        public void Apply(IList<GameLocation> saveLocations, IList<GameLocation> gameLocations)
         {
             // get valid locations
-            var locations = this.CustomLocations.Where(p => p.IsEnabled).ToArray();
-            if (!locations.Any())
+            CustomLocationData[] customLocations = this.CustomLocations.Where(p => p.IsEnabled).ToArray();
+            if (!customLocations.Any())
                 return;
 
+            // migrate legacy locations
+            this.MigrateLegacyLocations(saveLocations, gameLocations, customLocations);
 
             // log location list
             if (this.Monitor.IsVerbose)
             {
-                var locationsByPack = locations
+                var locationsByPack = customLocations
                     .OrderByIgnoreCase(p => p.Name)
-                    .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
+                    .GroupBy(p => p.ContentPack.Manifest.Name)
                     .OrderByIgnoreCase(p => p.Key);
 
-                this.Monitor.VerboseLog($"Adding {locations.Length} locations:\n- {string.Join("\n- ", locationsByPack.Select(group => $"{group.Key}: {string.Join(", ", group.Select(p => p.Name))}"))}.");
+                this.Monitor.VerboseLog($"Adding {customLocations.Length} locations:\n- {string.Join("\n- ", locationsByPack.Select(group => $"{group.Key}: {string.Join(", ", group.Select(p => p.Name))}"))}.");
             }
 
             // add locations
-            foreach (CustomLocationData location in locations)
-                Game1.locations.Add(new GameLocation(mapPath: location.PublicMapPath, name: location.Name));
+            foreach (CustomLocationData location in customLocations)
+                gameLocations.Add(new GameLocation(mapPath: location.PublicMapPath, name: location.Name));
         }
 
         /// <inheritdoc />
@@ -151,14 +165,15 @@ namespace ContentPatcher.Framework.Locations
             // read values
             string name = config?.Name?.Trim();
             string fromMapFile = config?.FromMapFile?.Trim();
-            parsed = new CustomLocationData(name, fromMapFile, contentPack);
+            string[] migrateLegacyNames = config?.MigrateLegacyNames?.Select(p => p.Trim()).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray() ?? new string[0];
+            parsed = new CustomLocationData(name, fromMapFile, migrateLegacyNames, contentPack);
 
             // validate name
             if (string.IsNullOrWhiteSpace(name))
                 return Fail($"the {nameof(config.Name)} field is required.", parsed, out error);
             if (!Regex.IsMatch(name, "^[a-z0-9_]+", RegexOptions.IgnoreCase))
                 return Fail($"the {nameof(config.Name)} field can only contain alphanumeric or underscore characters.", parsed, out error);
-            if (!name.StartsWith("Custom_", StringComparison.OrdinalIgnoreCase))
+            if (!name.StartsWith("Custom_"))
                 return Fail($"the {nameof(config.Name)} field must be prefixed with 'Custom_' to avoid conflicting with current or future vanilla locations.", parsed, out error);
 
             // validate map file
@@ -170,6 +185,52 @@ namespace ContentPatcher.Framework.Locations
             // create instance
             error = null;
             return true;
+        }
+
+
+        /// <summary>Migrate locations which match <see cref="CustomLocationData.MigrateLegacyNames"/> to the new location name.</summary>
+        /// <param name="saveLocations">The locations in the save file being loaded.</param>
+        /// <param name="gameLocations">The locations that will be populated from the save data.</param>
+        /// <param name="customLocations">The custom location data.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("SMAPI.CommonErrors", "AvoidNetField", Justification = "This is deliberate due to the Name property being readonly.")]
+        private void MigrateLegacyLocations(IList<GameLocation> saveLocations, IList<GameLocation> gameLocations, CustomLocationData[] customLocations)
+        {
+            // get name => save location lookup
+            var saveLocationsByName = new Dictionary<string, GameLocation>();
+            foreach (GameLocation location in saveLocations)
+                saveLocationsByName[location.NameOrUniqueName] = location;
+
+            // get legacy name => custom location lookup
+            IDictionary<string, CustomLocationData> migrateLegacyNames =
+                (
+                    from location in customLocations
+                    from legacyName in location.MigrateLegacyNames
+                    select new { location, legacyName }
+                )
+                .ToDictionary(p => p.legacyName, p => p.location, StringComparer.OrdinalIgnoreCase);
+
+            // ignore legacy names which match a vanilla location
+            foreach (GameLocation location in gameLocations)
+            {
+                if (migrateLegacyNames.TryGetValue(location.NameOrUniqueName, out CustomLocationData customLocation))
+                {
+                    this.Monitor.Log($"Ignored legacy location name '{location.NameOrUniqueName}' added by content pack '{customLocation.ContentPack.Manifest.Name}' because it matches a non-Content Patcher location.", LogLevel.Warn);
+                    migrateLegacyNames.Remove(location.NameOrUniqueName);
+                }
+            }
+
+            // migrate save data
+            foreach (var pair in migrateLegacyNames)
+            {
+                string legacyName = pair.Key;
+                CustomLocationData customLocation = pair.Value;
+
+                if (!saveLocationsByName.ContainsKey(customLocation.Name) && saveLocationsByName.TryGetValue(legacyName, out GameLocation location))
+                {
+                    this.Monitor.Log($"Renamed saved location '{legacyName}' to '{customLocation.Name}' for the '{customLocation.ContentPack.Manifest.Name}' content pack.", LogLevel.Info);
+                    location.name.Value = customLocation.Name;
+                }
+            }
         }
     }
 }

@@ -856,6 +856,7 @@ which lists the locations with these required fields:
    ------------- | -------
    `Name`        | The location's unique internal name. This can't contain tokens. The name must begin with `Custom_` (to avoid conflicting with current or future vanilla locations), can only contain alphanumeric or underscore characters, and must be **globally** unique. Prefixing it with your mod name is strongly recommended (see _caveats_).
    `FromMapFile` | The relative path to the location's map file in your content pack folder (file can be `.tmx`, `.tbin`, or `.xnb`). This can't contain tokens, but you can make conditional changes using [`EditMap`](#EditMap) (see example below).
+   `MigrateLegacyNames` | _(optional)_ A list of former location names that may appear in the save file instead of the one given by `Name`. This can't contain tokens. This is only meant to allow migrating older locations, and shouldn't be used in most cases. See [Renaming a location](#renaming-a-location) for usage.
 
 Make sure you read _background_ and _caveats_ below before using this feature.
 
@@ -945,6 +946,37 @@ folder):
   dynamic, so you can decide when it becomes available to players.
 * The `FromMapFile` map is loaded automatically. A separate `Load` patch which targets the
   location's map will have no effect, though you can still use `EditMap` patches fine.
+
+### Renaming a location
+**Renaming a location will permanently lose player changes made for the old name if you're not
+careful.**
+
+Content Patcher lets you define "legacy" names to avoid that. When loading a save file, if it
+doesn't have a location for `Name` but it does have one with a legacy name, the legacy location's
+data will be loaded into the custom location. When the player saves, the legacy location will be
+permanently renamed to match the `Name`.
+
+For example:
+
+```js
+{
+   "Format": "1.21.0",
+   "CustomLocations": [
+      {
+         "Name": "Custom_ExampleMod_AbigailCloset",
+         "FromMapFile": "assets/abigail-closet.tmx",
+         "MigrateLegacyNames": [ "OldName", "EvenOlderName" ]
+      }
+   ]
+}
+```
+
+Legacy names can have any format (including without the `Custom_*` suffix), but they're subject to
+two restrictions:
+
+* They must be globally unique. They can't match the `Name` or `MigrateLegacyNames` for any other
+  custom location.
+* They can't match a vanilla location name.
 
 ## Advanced
 ### Conditions & tokens
