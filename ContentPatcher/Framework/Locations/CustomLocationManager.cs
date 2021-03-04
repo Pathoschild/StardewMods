@@ -92,7 +92,7 @@ namespace ContentPatcher.Framework.Locations
         }
 
         /// <summary>Add all locations to the game, if applicable.</summary>
-        /// <param name="saveLocations">The locations in the save file being loaded.</param>
+        /// <param name="saveLocations">The locations in the save file being loaded, or <c>null</c> when creating a new save.</param>
         /// <param name="gameLocations">The locations that will be populated from the save data.</param>
         public void Apply(IList<GameLocation> saveLocations, IList<GameLocation> gameLocations)
         {
@@ -102,7 +102,8 @@ namespace ContentPatcher.Framework.Locations
                 return;
 
             // migrate legacy locations
-            this.MigrateLegacyLocations(saveLocations, gameLocations, customLocations);
+            if (saveLocations?.Any() == true)
+                this.MigrateLegacyLocations(saveLocations, gameLocations, customLocations);
 
             // log location list
             if (this.Monitor.IsVerbose)
