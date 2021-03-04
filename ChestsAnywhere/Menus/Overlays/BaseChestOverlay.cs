@@ -137,9 +137,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /*********
         ** Accessors
         *********/
-        /// <summary>The menu instance for which the overlay was created.</summary>
-        public IClickableMenu ForMenuInstance { get; }
-
         /// <summary>An event raised when the player selects a chest.</summary>
         public event Action<ManagedChest> OnChestSelected;
 
@@ -191,7 +188,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             : base(events, input, reflection, keepAlive, assumeUiMode: true)
         {
             // data
-            this.ForMenuInstance = menu;
             this.ShowAutomateOptions = showAutomateOptions;
             this.TopOffset = topOffset;
 

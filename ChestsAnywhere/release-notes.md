@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error opening dressers in rare cases.
+* Fixed lag in some cases when opening a chest menu that can't be linked to a chest.
 * Improved translations. Thanks to derJuba007 (updated German), horizon98 (updated Chinese), and zNatural (updated Spanish)!
 
 ## 1.20.9
