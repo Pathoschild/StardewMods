@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
@@ -31,6 +32,9 @@ namespace ContentPatcher.Framework.Locations
         /// <summary>The reason the custom location is disabled, if applicable.</summary>
         public string Error { get; private set; }
 
+        /// <summary>Whether the custom location defines any legacy names.</summary>
+        public bool HasLegacyNames { get; }
+
 
         /*********
         ** Public methods
@@ -48,6 +52,8 @@ namespace ContentPatcher.Framework.Locations
             this.ContentPack = contentPack;
             this.PublicMapPath = PathUtilities.NormalizePath(Path.Combine("Maps", name));
             this.IsEnabled = true;
+
+            this.HasLegacyNames = this.MigrateLegacyNames.Any();
         }
 
         /// <summary>Mark the location as disabled.</summary>

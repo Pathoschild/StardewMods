@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.ConfigModels;
@@ -11,6 +12,9 @@ using xTile;
 namespace ContentPatcher.Framework.Locations
 {
     /// <summary>Encapsulates loading custom location data and adding it to the game.</summary>
+    [SuppressMessage("ReSharper", "CommentTypo", Justification = "'TMXL' is not a typo.")]
+    [SuppressMessage("ReSharper", "IdentifierTypo", Justification = "'TMXL' is not a typo.")]
+    [SuppressMessage("ReSharper", "StringLiteralTypo", Justification = "'TMXL' is not a typo.")]
     internal class CustomLocationManager : IAssetLoader
     {
         /*********
@@ -61,11 +65,10 @@ namespace ContentPatcher.Framework.Locations
                 (
                     from location in this.CustomLocations
                     from name in new[] { location.Name }.Concat(location.MigrateLegacyNames)
-                    select new { name, location }
+                    group location by name into locationGroup
+                    select new { Name = locationGroup.Key, Locations = locationGroup.ToArray() }
                 )
-                .GroupBy(p => p.name)
-                .Select(p => new { Name = p.Key, Locations = p.Select(p => p.location).ToArray() })
-                .Where(p => p.Locations.Length > 1);
+                .Where(group => group.Locations.Length > 1);
 
             // warn and disable duplicates
             foreach (var group in duplicateLocations.OrderByIgnoreCase(p => p.Name))
@@ -187,50 +190,92 @@ namespace ContentPatcher.Framework.Locations
             return true;
         }
 
-
         /// <summary>Migrate locations which match <see cref="CustomLocationData.MigrateLegacyNames"/> to the new location name.</summary>
         /// <param name="saveLocations">The locations in the save file being loaded.</param>
         /// <param name="gameLocations">The locations that will be populated from the save data.</param>
         /// <param name="customLocations">The custom location data.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("SMAPI.CommonErrors", "AvoidNetField", Justification = "This is deliberate due to the Name property being readonly.")]
         private void MigrateLegacyLocations(IList<GameLocation> saveLocations, IList<GameLocation> gameLocations, CustomLocationData[] customLocations)
         {
-            // get name => save location lookup
-            var saveLocationsByName = new Dictionary<string, GameLocation>();
-            foreach (GameLocation location in saveLocations)
-                saveLocationsByName[location.NameOrUniqueName] = location;
+            // get location lookups
+            Lazy<IDictionary<string, GameLocation>> saveLocationsByName = new(() => this.MapByName(saveLocations));
+            Lazy<IDictionary<string, GameLocation>> gameLocationsByName = new(() => this.MapByName(gameLocations));
+            var tmxl = new TmxlLocationLoader(this.Monitor);
 
-            // get legacy name => custom location lookup
-            IDictionary<string, CustomLocationData> migrateLegacyNames =
-                (
-                    from location in customLocations
-                    from legacyName in location.MigrateLegacyNames
-                    select new { location, legacyName }
-                )
-                .ToDictionary(p => p.legacyName, p => p.location, StringComparer.OrdinalIgnoreCase);
-
-            // ignore legacy names which match a vanilla location
-            foreach (GameLocation location in gameLocations)
+            // migrate locations if needed
+            foreach (CustomLocationData customLocation in customLocations.Where(p => p.HasLegacyNames))
             {
-                if (migrateLegacyNames.TryGetValue(location.NameOrUniqueName, out CustomLocationData customLocation))
-                {
-                    this.Monitor.Log($"Ignored legacy location name '{location.NameOrUniqueName}' added by content pack '{customLocation.ContentPack.Manifest.Name}' because it matches a non-Content Patcher location.", LogLevel.Warn);
-                    migrateLegacyNames.Remove(location.NameOrUniqueName);
-                }
+                this.MigrateLegacyLocation(
+                    customLocation: customLocation,
+                    saveLocations: saveLocations,
+                    saveLocationsByName: saveLocationsByName,
+                    gameLocationsByName: gameLocationsByName,
+                    tmxl: tmxl
+                );
+            }
+        }
+
+        /// <summary>Migrate legacy locations in the save file for the given custom location, if needed.</summary>
+        /// <param name="customLocation">The custom location for which to migrate save data.</param>
+        /// <param name="saveLocations">The locations in the save file being loaded.</param>
+        /// <param name="saveLocationsByName">The <paramref name="saveLocations"/> indexed by name.</param>
+        /// <param name="gameLocationsByName">The locations that will be populated from the save data, indexed by name.</param>
+        /// <param name="tmxl">The locations in TMXL Map Toolkit's serialized data.</param>
+        /// <returns>Returns whether any save data was migrated.</returns>
+        [SuppressMessage("SMAPI.CommonErrors", "AvoidNetField", Justification = "This is deliberate due to the Name property being readonly.")]
+        private void MigrateLegacyLocation(CustomLocationData customLocation, IList<GameLocation> saveLocations, Lazy<IDictionary<string, GameLocation>> saveLocationsByName, Lazy<IDictionary<string, GameLocation>> gameLocationsByName, TmxlLocationLoader tmxl)
+        {
+            if (!customLocation.HasLegacyNames)
+                return;
+
+            // ignore names which match an existing in-game location, since that would cause data loss
+            var legacyNames = new List<string>();
+            foreach (string legacyName in customLocation.MigrateLegacyNames)
+            {
+                if (gameLocationsByName.Value.ContainsKey(legacyName))
+                    this.Monitor.Log($"'{customLocation.ContentPack.Manifest.Name}' defines a legacy location name '{legacyName}' which matches a non-Content Patcher location and will be ignored.", LogLevel.Warn);
+                else
+                    legacyNames.Add(legacyName);
             }
 
-            // migrate save data
-            foreach (var pair in migrateLegacyNames)
-            {
-                string legacyName = pair.Key;
-                CustomLocationData customLocation = pair.Value;
+            // already in save file
+            if (saveLocationsByName.Value.ContainsKey(customLocation.Name))
+                return;
 
-                if (!saveLocationsByName.ContainsKey(customLocation.Name) && saveLocationsByName.TryGetValue(legacyName, out GameLocation location))
-                {
-                    this.Monitor.Log($"Renamed saved location '{legacyName}' to '{customLocation.Name}' for the '{customLocation.ContentPack.Manifest.Name}' content pack.", LogLevel.Info);
-                    location.name.Value = customLocation.Name;
-                }
+            // migrate from old name
+            foreach (string legacyName in legacyNames)
+            {
+                if (!saveLocationsByName.Value.TryGetValue(legacyName, out GameLocation location))
+                    continue;
+
+                this.Monitor.Log($"'{customLocation.ContentPack.Manifest.Name}' renamed saved location '{legacyName}' to '{customLocation.Name}'.", LogLevel.Info);
+                location.name.Value = customLocation.Name;
+                saveLocationsByName.Value.Remove(legacyName);
+                saveLocationsByName.Value[location.Name] = location;
+                return;
             }
+
+            // migrate from TMXL Map Toolkit
+            foreach (string legacyName in legacyNames)
+            {
+                if (!tmxl.TryGetLocation(legacyName, out GameLocation tmxlLocation))
+                    continue;
+
+                this.Monitor.Log($"'{customLocation.ContentPack.Manifest.Name}' migrated saved TMXL Map Toolkit location '{legacyName}' to Content Patcher location '{customLocation.Name}'.", LogLevel.Info);
+                saveLocations.Add(tmxlLocation);
+                tmxlLocation.name.Value = customLocation.Name;
+                saveLocationsByName.Value[customLocation.Name] = tmxlLocation;
+                return;
+            }
+        }
+
+        /// <summary>Get a location-by-name lookup.</summary>
+        /// <param name="locations">The locations for which to build a lookup.</param>
+        private IDictionary<string, GameLocation> MapByName(IEnumerable<GameLocation> locations)
+        {
+            var lookup = new Dictionary<string, GameLocation>();
+            foreach (GameLocation location in locations)
+                lookup[location.NameOrUniqueName] = location;
+            return lookup;
         }
     }
 }
