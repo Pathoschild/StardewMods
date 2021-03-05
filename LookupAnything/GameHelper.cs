@@ -10,7 +10,6 @@ using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
-using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.ItemScanning;
 using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
@@ -755,121 +754,42 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
-        /// <summary>Parse construction recipe data.</summary>
-        /// <remarks>
-        /// Based on <see cref="StardewValley.Menus.CarpenterMenu(bool)"/>,
-        /// <see cref="StardewValley.Menus.CarpenterMenu.setNewActiveBlueprint()"/>,
-        /// <see cref="StardewValley.Locations.BuildableGameLocation.buildStructure(BluePrint,Vector2,Farmer,bool,bool)"/>,
-        /// and <see cref="StardewValley.BluePrint(string)"/>.
-        /// </remarks>
+        /// <summary>Get construction recipes which use an item as a building material.</summary>
+        /// <param name="input">The ingredient to match.</param>
+        /// <remarks>Derived from <see cref="CarpenterMenu(bool)"/>.</remarks>
         private IEnumerable<RecipeModel> GetConstructionRecipes(Item input)
         {
-            if (input == null || input.GetItemType() == ItemType.BigCraftable)
-                return new List<RecipeModel>();
+            if (input?.GetItemType() != ItemType.Object)
+                yield break;
 
-            // load blueprints in a similar way to StardewValley.Menus.CarpenterMenu()
-            RecipeModel[] recipes = new[]
+            var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
+            foreach (var pair in data)
+            {
+                // ignore invalid blueprints
+                if (pair.Key == "Mine Elevator" || pair.Value.StartsWith("animal/"))
+                    continue;
+
+                // parse blueprint
+                BluePrint blueprint;
+                try
                 {
-                    "Junimo Hut",
-
-                    "Earth Obelisk",
-                    "Water Obelisk",
-                    "Desert Obelisk",
-                    "Island Obelisk",
-
-                    "Gold Clock",
-
-                    "Coop",
-                    "Barn",
-                    "Well",
-                    "Silo",
-                    "Mill",
-                    "Shed",
-                    "Fish Pond",
-
-                    "Stone Cabin",
-                    "Plank Cabin",
-                    "Log Cabin",
-
-                    "Stable",
-                    "Slime Hutch",
-
-                    "Big Coop",
-                    "Deluxe Coop",
-                    "Big Barn",
-                    "Deluxe Barn",
-                    "Big Shed",
-
-                    "Shipping Bin",
+                    blueprint = new BluePrint(pair.Key);
                 }
-                .Select(name => new BluePrint(name))
-                .Where(bluePrint => bluePrint.itemsRequired.Count > 0)
-                .Select(bluePrint =>
+                catch
                 {
-                    // create buildings in a similar way to StardewValley.Menus.CarpenterMenu.setNewActiveBlueprint()
-                    // and StardewValley.Locations.BuildableGameLocation.buildStructure()
-                    Building building;
-                    Vector2 tileLocation = Vector2.Zero;
-                    switch (bluePrint.name)
-                    {
-                        case "Barn":
-                        case "Big Barn":
-                        case "Deluxe Barn":
-                            building = new Barn(bluePrint, tileLocation);
-                            break;
-                        case "Big Coop":
-                        case "Coop":
-                        case "Deluxe Coop":
-                            building = new Coop(bluePrint, tileLocation);
-                            break;
-                        case "Fish Pond":
-                            building = new FishPond(bluePrint, tileLocation);
-                            break;
-                        case "Junimo Hut":
-                            building = new JunimoHut(bluePrint, tileLocation);
-                            break;
-                        case "Mill":
-                            building = new Mill(bluePrint, tileLocation);
-                            break;
-                        case "Shipping Bin":
-                            building = new ShippingBin(bluePrint, tileLocation);
-                            break;
-                        case "Stable":
-                            building = new Stable(Guid.NewGuid(), bluePrint, tileLocation);
-                            break;
-                        default:
-                            building = new Building(bluePrint, tileLocation);
-                            break;
-                    }
+                    continue;
+                }
 
-                    return Tuple.Create(bluePrint, building);
-                })
-                .Select(building =>
+                // create recipe
+                if (blueprint.itemsRequired.Any())
                 {
-                    // create recipes from items required for blue print
-                    var ingredients = building.Item1.itemsRequired
-                        .Select(i => new RecipeIngredientModel(new[] {i.Key}, i.Value))
-                        .ToArray();
+                    Building building = new Building(blueprint, Vector2.Zero);
+                    var recipe = new RecipeModel(blueprint, building);
 
-                    return new RecipeModel(
-                        key: null,
-                        type: RecipeType.BuildingBlueprint,
-                        displayType: I18n.Building_Construction(),
-                        ingredients: ingredients,
-                        item: _ => null,
-                        mustBeLearned: false,
-                        machineParentSheetIndex: null,
-                        isForMachine: _ => false,
-                        exceptIngredients: Enumerable.Empty<RecipeIngredientModel>(),
-                        specialOutput: new RecipeItemEntry(
-                            new SpriteInfo(building.Item2.texture.Value, building.Item2.getSourceRectForMenu()),
-                            building.Item2.buildingType.Value)
-                    );
-                })
-                .Where(recipe => recipe.Ingredients.Any(ingredient => ingredient.Matches(input)))
-                .ToArray();
-
-            return recipes;
+                    if (recipe.Ingredients.Any(p => p.Matches(input)))
+                        yield return recipe;
+                }
+            }
         }
     }
 }

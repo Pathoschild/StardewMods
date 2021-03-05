@@ -3,22 +3,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
     /// <summary>Indicates an in-game recipe type.</summary>
     internal enum RecipeType
     {
-        /// <summary>The recipe is cooked in the kitchen.</summary>
+        /// <summary>Food cooked in the kitchen.</summary>
         Cooking,
 
-        /// <summary>The recipe is crafted through the game menu.</summary>
+        /// <summary>An object crafted through the game menu.</summary>
         Crafting,
 
-        /// <summary>The recipe represents the input for a crafting machine like a furnace.</summary>
+        /// <summary>The input/output for a crafting machine like a furnace.</summary>
         MachineInput,
 
-        /// <summary>The recipe represents the input for a crafting building like a mill.</summary>
+        /// <summary>The input/output for a crafting building like a mill.</summary>
         BuildingInput,
 
-        /// <summary>The recipe represents the materials needed to construct a building through Robin or the Wizard.</summary>
+        /// <summary>The materials needed to construct a building.</summary>
         BuildingBlueprint,
 
-        /// <summary>The recipe represents the input for tailoring clothes.</summary>
+        /// <summary>Clothing created through the tailoring UI.</summary>
         TailorInput
     }
 }
