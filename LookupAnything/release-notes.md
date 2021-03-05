@@ -2,14 +2,15 @@
 
 # Release notes
 ## Upcoming release
-* Improved item lookups:
+* Improved item recipes field:
   * Added recipes which create the item (thanks to cofiem!).
-  * Added quests and special orders to 'needed for' field (thanks to cofiem!).
+  * Added building construction recipes (thanks to cofiem!).
   * Revamped recipe layout (in collaboration with cofiem).
-  * Fixed item lookups not showing all cooking/crafting recipes in some cases.
+* Added quests and special orders to 'needed for' field (thanks to cofiem!).
+* Fixed some cooking/crafting recipes not shown in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
-* Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), wally232 (updated Korean), and zNatural (updated Spanish)!
+* Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), psychochicken80 (updated German), wally232 (updated Korean), and zNatural (updated Spanish)!
 
 ## 1.32.4
 Released 06 February 2021.
