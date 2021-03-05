@@ -16,6 +16,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -354,6 +355,9 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // from tailor recipes
             recipes.AddRange(this.GetTailorRecipes(item));
+
+            // from construction recipes
+            recipes.AddRange(this.GetConstructionRecipes(item));
 
             return recipes;
         }
@@ -747,6 +751,44 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 // fails for non-social NPCs
                 return null;
+            }
+        }
+
+        /// <summary>Get construction recipes which use an item as a building material.</summary>
+        /// <param name="input">The ingredient to match.</param>
+        /// <remarks>Derived from <see cref="CarpenterMenu(bool)"/>.</remarks>
+        private IEnumerable<RecipeModel> GetConstructionRecipes(Item input)
+        {
+            if (input?.GetItemType() != ItemType.Object)
+                yield break;
+
+            var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
+            foreach (var pair in data)
+            {
+                // ignore invalid blueprints
+                if (pair.Key == "Mine Elevator" || pair.Value.StartsWith("animal/"))
+                    continue;
+
+                // parse blueprint
+                BluePrint blueprint;
+                try
+                {
+                    blueprint = new BluePrint(pair.Key);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                // create recipe
+                if (blueprint.itemsRequired.Any())
+                {
+                    Building building = new Building(blueprint, Vector2.Zero);
+                    var recipe = new RecipeModel(blueprint, building);
+
+                    if (recipe.Ingredients.Any(p => p.Matches(input)))
+                        yield return recipe;
+                }
             }
         }
     }

@@ -182,8 +182,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 {
                     Item outputItem = recipe.CreateItem(ingredient);
                     RecipeItemEntry output = this.CreateItemEntry(
-                        name: outputItem.DisplayName,
+                        name: recipe.SpecialOutput?.DisplayText ?? outputItem?.DisplayName,
                         item: outputItem,
+                        sprite: recipe.SpecialOutput?.Sprite,
                         minCount: recipe.MinOutput,
                         maxCount: recipe.MaxOutput,
                         chance: recipe.OutputChance,
@@ -329,7 +330,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 return this.CreateItemEntry(
-                    name: input.DisplayName,
+                    name: input?.DisplayName,
                     item: input,
                     minCount: ingredient.Count,
                     maxCount: ingredient.Count
@@ -340,11 +341,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Create a recipe item model.</summary>
         /// <param name="name">The display name for the item.</param>
         /// <param name="item">The instance of the item.</param>
+        /// <param name="sprite">The item sprite, or <c>null</c> to generate it automatically.</param>
         /// <param name="minCount">The minimum number of items needed or created.</param>
         /// <param name="maxCount">The maximum number of items needed or created.</param>
         /// <param name="chance">The chance of creating an output item.</param>
         /// <param name="isOutput">Whether the item is output or input.</param>
-        private RecipeItemEntry CreateItemEntry(string name, Item item = null, int minCount = 1, int maxCount = 1, decimal chance = 100, bool isOutput = false)
+        private RecipeItemEntry CreateItemEntry(string name, Item item = null, SpriteInfo sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, bool isOutput = false)
         {
             // get display text
             string text;
@@ -367,7 +369,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             return new RecipeItemEntry(
-                sprite: this.GameHelper.GetSprite(item),
+                sprite: sprite ?? this.GameHelper.GetSprite(item),
                 displayText: text
             );
         }
