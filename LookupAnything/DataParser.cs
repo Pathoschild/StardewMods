@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -435,7 +434,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // machine recipes
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
-                let machine = new SObject(Vector2.Zero, entry.MachineID)
+                let machine = this.GameHelper.GetObjectBySpriteIndex(entry.MachineID, bigcraftable: true)
 
                 from recipe in entry.Recipes
                 from output in recipe.PossibleOutputs

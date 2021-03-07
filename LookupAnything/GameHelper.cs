@@ -411,9 +411,24 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
         public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
         {
-            return bigcraftable
-                ? new SObject(Vector2.Zero, index) { stack = { stack } }
-                : new SObject(index, stack);
+            try
+            {
+                return bigcraftable
+                    ? new SObject(Vector2.Zero, index) { stack = { stack } }
+                    : new SObject(index, stack);
+            }
+            catch (Exception ex)
+            {
+                string error = $"The game can't construct {(bigcraftable ? "bigcraftable" : "object")} #{index}.";
+
+                var data = bigcraftable ? Game1.bigCraftablesInformation : Game1.objectInformation;
+                if (data != null && data.TryGetValue(index, out string dataStr))
+                    error += $"\nRaw data: {dataStr}";
+                else
+                    error += " No raw data found.";
+
+                throw new InvalidOperationException(error, ex);
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>

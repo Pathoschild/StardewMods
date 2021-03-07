@@ -377,7 +377,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (item is Fence fence)
             {
                 int spriteID = fence.GetItemParentSheetIndex();
-                return new SObject(spriteID, 1);
+                return this.GameHelper.GetObjectBySpriteIndex(spriteID);
             }
 
             return item;

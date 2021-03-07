@@ -161,7 +161,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             if (component.containsPoint(cursorX, cursorY))
                             {
                                 int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
-                                SObject obj = new SObject(itemID, 1);
+                                SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
                                 return this.BuildSubject(obj, ObjectContext.Inventory, knownQuality: false);
                             }
                         }
@@ -240,7 +240,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                             // empty slot
                             if (int.TryParse(slot.label, out int itemId))
-                                return this.BuildSubject(new SObject(itemId, 1), ObjectContext.Inventory, knownQuality: false);
+                                return this.BuildSubject(this.GameHelper.GetObjectBySpriteIndex(itemId), ObjectContext.Inventory, knownQuality: false);
                         }
                     }
                     break;
