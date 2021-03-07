@@ -35,6 +35,12 @@ namespace ContentPatcher.Framework.Locations
         /// <summary>Whether the custom location defines any legacy names.</summary>
         public bool HasLegacyNames { get; }
 
+        /// <summary>The unique ID of the content pack which added the location.</summary>
+        public string ModId => this.ContentPack.Manifest.UniqueID;
+
+        /// <summary>The display name of the content pack which added the location.</summary>
+        public string ModName => this.ContentPack.Manifest.Name;
+
 
         /*********
         ** Public methods

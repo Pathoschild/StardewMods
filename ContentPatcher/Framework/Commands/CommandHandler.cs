@@ -557,8 +557,8 @@ namespace ContentPatcher.Framework.Commands
             // list custom locations
             {
                 var locations = this.CustomLocationLoader.GetCustomLocationData()
-                    .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
-                    .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
+                    .Where(p => !forModIds.Any() || forModIds.Contains(p.ModId))
+                    .GroupByIgnoreCase(p => p.ModName)
                     .OrderByIgnoreCase(p => p.Key)
                     .ToArray();
 
