@@ -6,6 +6,7 @@
   * Added recipes which create the item (thanks to cofiem!).
   * Added building construction recipes (thanks to cofiem!).
   * Revamped recipe layout (in collaboration with cofiem).
+  * Fixed the preserves jar recipe for pickled ginger showing 'pickles' instead of 'pickled ginger'.
 * Added quests and special orders to 'needed for' field (thanks to cofiem!).
 * Fixed some cooking/crafting recipes not shown in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.

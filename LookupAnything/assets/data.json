@@ -702,12 +702,27 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ -75, 829 ] // any vegetable, ginger
+                            "PossibleIds": [ -75 ] // any vegetable
                         }
                     ],
                     "PossibleOutputs": [
                         {
                             "Ids": [ 342 ] // pickled
+                        }
+                    ]
+                },
+                {
+                    "Ingredients": [
+                        {
+                            "PossibleIds": [ 829 ] // ginger
+                        }
+                    ],
+                    "PossibleOutputs": [
+                        // pickled ginger
+                        {
+                            "Ids": [ 342 ],
+                            "PreserveType": "Pickle",
+                            "PreservedParentSheetIndex": 829
                         }
                     ]
                 },
@@ -1143,7 +1158,7 @@ You shouldn't change this file unless you know what you're doing.
         "Temp",
         "fishingGame",
         "IslandSecret"
-    ], 
+    ],
 
     /*********
     ** Corrects metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).

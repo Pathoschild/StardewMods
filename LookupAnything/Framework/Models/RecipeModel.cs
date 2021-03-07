@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /*********
         ** Fields
         *********/
-        /// <summary>The item that be created by this recipe, given the ingredient.</summary>
+        /// <summary>The item that can be created by this recipe, given the ingredient.</summary>
         private readonly Func<Item, Item> Item;
 
 

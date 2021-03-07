@@ -445,7 +445,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.MachineInput,
                     displayType: machine.DisplayName,
                     ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, outputId),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, outputId, output),
                     mustBeLearned: false,
                     exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
                     outputItemIndex: outputId,
@@ -466,7 +466,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.BuildingInput,
                     displayType: building.displayName,
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output, null),
                     mustBeLearned: false,
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
@@ -486,7 +486,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Create a custom recipe output.</summary>
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
-        private SObject CreateRecipeItem(int? inputID, int outputID)
+        /// <param name="output">The output data, if applicable.</param>
+        private SObject CreateRecipeItem(int? inputID, int outputID, MachineRecipeOutputData output)
         {
             SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
             if (inputID != null)
@@ -511,6 +512,13 @@ namespace Pathoschild.Stardew.LookupAnything
                         break;
                 }
             }
+
+            if (output != null)
+            {
+                item.preservedParentSheetIndex.Value = output.PreservedParentSheetIndex ?? item.preservedParentSheetIndex.Value;
+                item.preserve.Value = output.PreserveType ?? item.preserve.Value;
+            }
+
             return item;
         }
     }
