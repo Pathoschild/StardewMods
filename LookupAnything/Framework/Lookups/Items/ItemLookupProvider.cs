@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -150,11 +151,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 // derived from CollectionsPage::performHoverAction
                 case CollectionsPage collectionsTab:
                     {
-                        int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
+                        int currentTab = collectionsTab.currentTab;
                         if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
                             break;
 
-                        int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
+                        int currentPage = collectionsTab.currentPage;
 
                         foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
                         {
@@ -172,14 +173,36 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 case CraftingPage crafting:
                     {
                         // player inventory item
-                        Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
-                        if (item != null)
-                            return this.BuildSubject(item, ObjectContext.Inventory);
+                        {
+                            Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
+                            if (item != null)
+                                return this.BuildSubject(item, ObjectContext.Inventory);
+                        }
 
-                        // crafting recipe
-                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
-                        if (recipe != null)
-                            return this.BuildSubject(recipe.createItem(), ObjectContext.Inventory);
+                        // learned crafting recipe
+                        {
+                            CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
+                            if (recipe != null)
+                                return this.BuildSubject(recipe.createItem(), ObjectContext.Inventory);
+                        }
+
+                        // undiscovered crafting recipe
+                        {
+                            int currentCraftingPage = this.Reflection.GetField<int>(crafting, "currentCraftingPage").GetValue();
+                            if (crafting.pagesOfCraftingRecipes.TryGetIndex(currentCraftingPage, out var page))
+                            {
+                                foreach (var recipeSlot in page)
+                                {
+                                    if (!recipeSlot.Key.containsPoint(cursorX, cursorY))
+                                        continue;
+
+                                    var item = recipeSlot.Value?.createItem();
+                                    if (item != null)
+                                        return this.BuildSubject(recipeSlot.Value.createItem(), ObjectContext.Inventory);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
 

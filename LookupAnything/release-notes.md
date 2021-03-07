@@ -8,6 +8,7 @@
   * Revamped recipe layout (in collaboration with cofiem).
   * Fixed the preserves jar recipe for pickled ginger showing 'pickles' instead of 'pickled ginger'.
 * Added quests and special orders to 'needed for' field (thanks to cofiem!).
+* Added support for looking up unknown recipes in the cooking menu.
 * Fixed some cooking/crafting recipes not shown in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
