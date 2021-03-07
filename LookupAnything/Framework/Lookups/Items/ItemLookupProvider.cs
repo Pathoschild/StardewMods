@@ -114,11 +114,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 // shop
                 case ShopMenu shopMenu:
                     {
-                        ISalable entry = shopMenu.hoveredItem;
-                        if (entry is Item item)
-                            return this.BuildSubject(item, ObjectContext.Inventory);
-                        if (entry is MovieConcession snack)
-                            return new MovieSnackSubject(this.GameHelper, snack);
+                        // hovered item
+                        {
+                            ISalable entry = shopMenu.hoveredItem;
+                            if (entry is Item item)
+                                return this.BuildSubject(item, ObjectContext.Inventory);
+                            if (entry is MovieConcession snack)
+                                return new MovieSnackSubject(this.GameHelper, snack);
+                        }
+
+                        // inventory
+                        foreach (ClickableComponent slot in shopMenu.inventory.inventory)
+                        {
+                            if (slot.containsPoint(cursorX, cursorY))
+                            {
+                                if (int.TryParse(slot.name, out int index) && shopMenu.inventory.actualInventory.TryGetIndex(index, out Item item) && item != null)
+                                    return this.BuildSubject(item, ObjectContext.Inventory);
+                                break;
+                            }
+                        }
                     }
                     break;
 

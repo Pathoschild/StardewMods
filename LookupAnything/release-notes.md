@@ -6,13 +6,15 @@
   * Added recipes which create the item (thanks to cofiem!).
   * Added building construction recipes (thanks to cofiem!).
   * Revamped recipe layout (in collaboration with cofiem).
-  * Fixed the preserves jar recipe for pickled ginger showing 'pickles' instead of 'pickled ginger'.
+  * Fixed the pickled ginger recipe shown as 'pickles' instead.
+  * Fixed some cooking/crafting recipes not shown in some cases.
+  * Fixed error when the item matches recipes for a broken machine.
+* You can now look up...
+  * unknown recipes from the cooking UI.
+  * player inventory from the shop UI.
 * Added quests and special orders to 'needed for' field (thanks to cofiem!).
-* Added support for looking up unknown recipes in the cooking menu.
-* Fixed some cooking/crafting recipes not shown in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
-* Fixed item lookup error when it matches recipes for a broken machine.
 * Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), psychochicken80 (updated German), wally232 (updated Korean), and zNatural (updated Spanish)!
 
 ## 1.32.4
