@@ -10,6 +10,7 @@
 * Fixed some cooking/crafting recipes not shown in some cases.
 * Fixed monster lookup drop probability under 1% chance shown as 0%.
 * Fixed island shrine puzzle lookup showing untranslated text for some languages.
+* Fixed item lookup error when it matches recipes for a broken machine.
 * Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), psychochicken80 (updated German), wally232 (updated Korean), and zNatural (updated Spanish)!
 
 ## 1.32.4

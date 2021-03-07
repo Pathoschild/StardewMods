@@ -405,6 +405,25 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
+        /// <summary>Get an object by its parent sprite index if it can be parsed.</summary>
+        /// <param name="index">The parent sprite index.</param>
+        /// <param name="obj">The constructed object.</param>
+        /// <param name="stack">The number of items in the stack.</param>
+        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
+        public bool TryGetObjectBySpriteIndex(int index, out SObject obj, int stack = 1, bool bigcraftable = false)
+        {
+            try
+            {
+                obj = this.GetObjectBySpriteIndex(index, stack, bigcraftable);
+                return true;
+            }
+            catch
+            {
+                obj = null;
+                return false;
+            }
+        }
+
         /// <summary>Get an object by its parent sprite index.</summary>
         /// <param name="index">The parent sprite index.</param>
         /// <param name="stack">The number of items in the stack.</param>
@@ -668,8 +687,11 @@ namespace Pathoschild.Stardew.LookupAnything
                     // This is always an integer currently, but the API may return context_tag keys in the future.
                     recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
 
+                    // get machine
+                    if (!this.TryGetObjectBySpriteIndex(recipe.MachineId, out SObject machine, bigcraftable: true))
+                        continue;
+
                     // add recipe
-                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
                     customRecipes.Add(new RecipeModel(
                         key: null,
                         type: RecipeType.MachineInput,
