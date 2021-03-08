@@ -59,8 +59,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
         public RecipeIngredientModel[] ExceptIngredients { get; }
 
-        /// <summary>Whether the recipe must be learned before it can be used.</summary>
-        public bool MustBeLearned { get; }
+        /// <summary>Whether the player knows this recipe.</summary>
+        public Func<bool> IsKnown { get; }
 
         /// <summary>The sprite and display text for a non-standard recipe output.</summary>
         public RecipeItemEntry SpecialOutput { get; }
@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="displayType">The display name for the machine or building name for which the recipe applies.</param>
         /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
         /// <param name="item">The item that's created by this recipe, given an optional input.</param>
-        /// <param name="mustBeLearned">Whether the recipe must be learned before it can be used.</param>
+        /// <param name="isKnown">Whether the player knows this recipe.</param>
         /// <param name="machineParentSheetIndex">The object parent sheet index for the machine, if applicable.</param>
         /// <param name="isForMachine">Get whether this recipe is for the given machine.</param>
         /// <param name="exceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, bool mustBeLearned, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
+        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, Func<bool> isKnown, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)
@@ -106,7 +106,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.IsForMachine = isForMachine;
             this.ExceptIngredients = exceptIngredients?.ToArray() ?? new RecipeIngredientModel[0];
             this.Item = item;
-            this.MustBeLearned = mustBeLearned;
+            this.IsKnown = isKnown;
             this.OutputItemIndex = outputItemIndex;
             this.OutputItemType = outputItemType;
             this.MinOutput = minOutput.Value;
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
                 ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
                 item: item => recipe.createItem(),
-                mustBeLearned: true,
+                isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
                 machineParentSheetIndex: null,
                 isForMachine: obj => false
@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                     .Select(ingredient => new RecipeIngredientModel(new[] { ingredient.Key }, ingredient.Value))
                     .ToArray(),
                 item: _ => null,
-                mustBeLearned: false,
+                isKnown: () => true,
                 machineParentSheetIndex: null,
                 isForMachine: _ => false
             )
@@ -165,7 +165,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 displayType: other.DisplayType,
                 ingredients: other.Ingredients,
                 item: other.Item,
-                mustBeLearned: other.MustBeLearned,
+                isKnown: other.IsKnown,
                 exceptIngredients: other.ExceptIngredients,
                 outputItemIndex: other.OutputItemIndex,
                 outputItemType: other.OutputItemType,
@@ -180,13 +180,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public Item CreateItem(Item ingredient)
         {
             return this.Item(ingredient);
-        }
-
-        /// <summary>Get whether a player knows this recipe.</summary>
-        /// <param name="farmer">The farmer to check.</param>
-        public bool KnowsRecipe(Farmer farmer)
-        {
-            return this.Key != null && farmer.knowsRecipe(this.Key);
         }
 
         /// <summary>Get the number of times this player has crafted the recipe.</summary>

@@ -203,7 +203,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             return new RecipeEntry(
                                 name: recipe.Key,
                                 type: recipe.DisplayType,
-                                isKnown: !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
+                                isKnown: recipe.IsKnown(),
                                 inputs: inputs,
                                 output: output
                             );

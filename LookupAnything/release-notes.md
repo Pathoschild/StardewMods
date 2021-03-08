@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Tailoring recipes are now faded if you haven't discovered them yet.
+
 ## 1.33
 Released 07 March 2021.
 

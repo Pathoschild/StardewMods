@@ -707,7 +707,7 @@ namespace Pathoschild.Stardew.LookupAnything
                             }
                             return output;
                         },
-                        mustBeLearned: false,
+                        isKnown: () => true,
                         exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(new[] { id.Value }, 1)),
                         outputItemIndex: recipe.OutputId,
                         minOutput: recipe.MinOutput,
@@ -751,7 +751,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         displayType: I18n.RecipeType_Tailoring(),
                         ingredients: new[] { new RecipeIngredientModel(new[] { input.ParentSheetIndex }, 1) },
                         item: _ => this.GetTailoredItem(outputId),
-                        mustBeLearned: false,
+                        isKnown: () => Game1.player.HasTailoredThisItem(this.GetTailoredItem(outputId)),
                         outputItemIndex: recipe.CraftedItemID,
                         machineParentSheetIndex: null,
                         isForMachine: _ => false
