@@ -196,7 +196,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 if (menu is ItemGrabMenu chestMenu && (!chestMenu.showReceivingMenu || !(chestMenu.inventory.highlightMethod?.Target is ShippingBinContainer)))
                 {
                     menu = (ItemGrabMenu)chest.OpenMenu();
-                    Game1.activeClickableMenu = menu;
+                    Game1.activeClickableMenu = this.ForMenuInstance.Value = menu;
                 }
             }
 
