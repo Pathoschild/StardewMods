@@ -4,9 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Xml;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Monsters;
+using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 
 namespace ContentPatcher.Framework.Locations
 {
@@ -24,6 +29,36 @@ namespace ContentPatcher.Framework.Locations
 
         /// <summary>The serialized TMXL location data by name.</summary>
         private readonly Lazy<IDictionary<string, string>> SerializedLocations;
+
+        /// <summary>Equivalent to <see cref="SaveGame.locationSerializer"/>.</summary>
+        /// <remarks>This is separate to avoid 'changes the save serializer' warnings, since it's only for compatibility with older TMXL locations.</remarks>
+        private readonly Lazy<XmlSerializer> LocationSerializer = new(() => new(typeof(GameLocation), new[]
+        {
+            typeof (Tool),
+            typeof (Duggy),
+            typeof (Ghost),
+            typeof (GreenSlime),
+            typeof (LavaCrab),
+            typeof (RockCrab),
+            typeof (ShadowGuy),
+            typeof (Child),
+            typeof (Pet),
+            typeof (Dog),
+            typeof (Cat),
+            typeof (Horse),
+            typeof (SquidKid),
+            typeof (Grub),
+            typeof (Fly),
+            typeof (DustSpirit),
+            typeof (Bug),
+            typeof (BigSlime),
+            typeof (BreakableContainer),
+            typeof (MetalHead),
+            typeof (ShadowGirl),
+            typeof (Monster),
+            typeof (JunimoHarvester),
+            typeof (TerrainFeature)
+        }));
 
 
         /*********
@@ -66,7 +101,7 @@ namespace ContentPatcher.Framework.Locations
                 using var stringReader = new StringReader(xml);
                 using var xmlReader = XmlReader.Create(stringReader, new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Auto });
 
-                location = (GameLocation)SaveGame.locationSerializer.Deserialize(xmlReader);
+                location = (GameLocation)this.LocationSerializer.Value.Deserialize(xmlReader);
                 return true;
             }
             catch (Exception ex)
