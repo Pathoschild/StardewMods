@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.21.1
+Released 07 February 2021.
+
 * Fixed 'changes the save serializer' warning in 1.21.
 
 ## 1.21
