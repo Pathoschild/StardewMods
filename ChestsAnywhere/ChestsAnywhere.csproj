@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>ChestsAnywhere</AssemblyName>
-    <Version>1.20.10</Version>
+    <Version>1.20.11</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
