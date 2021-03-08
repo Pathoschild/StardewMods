@@ -2,6 +2,8 @@
 
 # Release notes
 ## 1.1.3
+Released 07 March 2021.
+
 * Added `reset_horses` command for players affected by a game bug where their horse has no owner.
 
 ## 1.1.2

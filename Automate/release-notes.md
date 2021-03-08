@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.21.1
+Released 07 March 2021.
+
 * Trees that aren't full-grown are no longer automated, to avoid accidental machine links due to spreading seeds.
 
 ## 1.21

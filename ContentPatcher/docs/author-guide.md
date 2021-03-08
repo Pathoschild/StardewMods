@@ -93,7 +93,7 @@ The `content.json` file has three main fields:
 
 field             | purpose
 ----------------- | -------
-`Format`          | The format version. You should always use the latest version (currently `1.20.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Format`          | The format version. You should always use the latest version (currently `1.21.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
 `Changes`         | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
 `ConfigSchema`    | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
 `CustomLocations` | _(optional)_ The custom in-game locations to make available. See [_custom locations_](#custom-locations).
@@ -102,7 +102,7 @@ You can list any number of patches (surrounded by `{` and `}` in the `Changes` f
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Load",
@@ -234,7 +234,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Load",
@@ -265,7 +265,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -317,7 +317,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -340,7 +340,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -366,7 +366,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -423,7 +423,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -560,7 +560,7 @@ Here's how that would be merged with each patch mode (black areas are the empty 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -646,7 +646,7 @@ For example, this changes the `Outdoors` tile for the farm cave and adds a warp 
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -712,7 +712,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -733,7 +733,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -808,7 +808,7 @@ In the simplest case, you can use this to organize your patches into subfiles:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Include",
@@ -826,7 +826,7 @@ You can combine this with tokens and conditions to load files dynamically:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Include",
@@ -1009,7 +1009,7 @@ in any Content Patcher field that allows tokens:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",

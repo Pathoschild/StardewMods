@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.21
+Released 07 February 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
+
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
 * Added new tokens:
