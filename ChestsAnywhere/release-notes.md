@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed shipping bin UI frozen if you have Expanded Storage installed.
+
 ## 1.20.10
 Released 07 March 2021.
 
