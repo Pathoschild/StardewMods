@@ -98,6 +98,8 @@ If you don't have Chests Anywhere or want to replicate it in another mod, you ca
 </tr>
 </table>
 
+If a property is missing, both taking and storing are enabled by default.
+
 ## Extensibility for modders
 See _[core concepts](#core-concepts)_ before reading this section.
 

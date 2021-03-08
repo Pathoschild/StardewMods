@@ -82,7 +82,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -171,9 +171,6 @@ value may change.
 Immutability enables several optimizations. For example, since Content Patcher doesn't need to
 update their value, it also doesn't need to update dependent tokens/patches (and their dependents,
 etc).
-
-Immutable tokens may also be used in certain fields like `Enabled`, where tokens are otherwise
-prohibited.
 
 </dd>
 
@@ -283,7 +280,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",

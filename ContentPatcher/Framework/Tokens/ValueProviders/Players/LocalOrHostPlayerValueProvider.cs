@@ -27,8 +27,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <summary>The values as of the last context update.</summary>
         private readonly IDictionary<PlayerType, InvariantHashSet> Values = new Dictionary<PlayerType, InvariantHashSet>
         {
-            [PlayerType.CurrentPlayer] = new InvariantHashSet(),
-            [PlayerType.HostPlayer] = new InvariantHashSet()
+            [PlayerType.CurrentPlayer] = new(),
+            [PlayerType.HostPlayer] = new()
         };
 
 

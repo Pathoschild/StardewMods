@@ -8,7 +8,7 @@
     "generic.yesterday": "ayer",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "desconocido",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -72,7 +72,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "Tienda del volcán",
     "shop.willy": "Willy",
 
     // recipe types
@@ -135,8 +135,8 @@
     "data.item.topaz-node.description": "Romper para obtener topacio.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "Nodo de fragmento de ceniza",
+    "data.item.cinder-shard-node.description": "Romper para obtejer fragmento de ceniza.",
     "data.item.copper-node.name": "Nodo de cobre",
     "data.item.copper-node.description": "Romper para obtener mineral de cobre.",
     "data.item.gold-node.name": "Nodo de oro",
@@ -145,21 +145,20 @@
     "data.item.iridium-node.description": "Romper para obtener mineral de iridio.",
     "data.item.iron-node.name": "Nodo de hierro",
     "data.item.iron-node.description": "Romper para obtener mineral de hierro.",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "Nodo de Omnigeoda",
+    "data.item.omni-geode-node.description": "Romper para obtener una Omnigeoda",
 
     // mine stones
     "data.item.colored-stone.name": "Piedra de colores",
     "data.item.colored-stone.description": "Una piedra. Tal vez contenga piedras, minerales o geodas.",
     "data.item.mine-stone.name": "Piedra",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "Romper para obtener una piedra. Tiene una probabilidad de obtener carbón",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "Piedra de arcilla",
+    "data.item.clay-stone.description": "Romper para obtener arcilla",
+    "data.item.fossil-stone.name": "Piedra fósil",
+    "data.item.fossil-stone.description": "Romper para obtener fósiles y huesos.",
 
     // mine containers
     "data.item.barrel.name": "Barril",
@@ -193,15 +192,15 @@
     "location.witchSwamp": "pantano de la bruja",
     "location.woods": "bosque secreto",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "Caldera de la isla Jengibre",
+    "location.islandEast": "Este de la isla Jengibre",
+    "location.islandNorth": "Norte de la isla Jengibre",
+    "location.islandSouth": "Sur de la isla Jengibre",
+    "location.islandSouthEast": "Sureste de la isla Jengibre",
+    "location.islandSouthEastCave": "Cueva sureste de la isla Jengibre",
+    "location.islandWest": "Oeste de la isla Jengibre",
+    "location.islandWest.fish-area-1": "Oeste de la isla Jengibre (Oceano)",
+    "location.islandWest.fish-area-2": "Oeste de la isla Jengibre (Estanque)",
 
     "location.unknown-fish-area": "{{locationName}} (zona de pesca {{id}})",
 
@@ -335,8 +334,8 @@
     // labels
     "crop.summary": "Cultivo",
     "crop.harvest": "Cosecha",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "Fertilizado",
+    "crop.watered": "Regado",
 
     // values
     "crop.summary.dead": "Esta cosecha está muerta.",
@@ -382,6 +381,7 @@
     "item.needed-for.full-collection": "Logro de ''full collection'' (donar esto al museo)",
     "item.needed-for.gourmet-chef": "Logro de ''gourmet chef'' (cocina {{recipes}})",
     "item.needed-for.craft-master": "Logro de ''craft master'' (crea {{recipes}})",
+    "item.needed-for.quests": "Mision actual ({{quests}})",
     "item.sells-to.shipping-box": "Caja de envío",
     "item.recipes-for-ingredient.entry": "{{name}} (necesita {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
@@ -464,9 +464,8 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "Tono",
+    "item.music-block.drum-type": "Tipo de tambor",
 
 
     /*********
@@ -578,53 +577,46 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "Solución",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "Acertijo resuelto!",
+    "puzzle.solution.hidden": "Las soluciones del acertijo están ocultas en modo progresión.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "Acertijo de la cueva de Cristal",
+    "puzzle.island-crystal-cave.crystal-id": "Codigo de Cristal",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "Activa la estatua para comenzar el acertijo.",
+    "puzzle.island-crystal-cave.solution.waiting": "Esperando a que el juego genere la secuencia...",
+    "puzzle.island-crystal-cave.solution.activated": "Repite el patrón de cristales activados:",
 
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.title": "Acertijo de la isla de las sirenas",
+    "puzzle.island-mermaid.solution.intro": "Usa bloques de flauta para tocar la cancion de las sirenas del mercado nocturno. Varlores de tono (puede buscar un bloque de flauta para escuchar su tono):",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.title": "Acertijo del santuario de la isla",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution": "Por cada pedestal, coloque el objeto que dejaron caer los pájaros gema en la correspondiente ubicación de la isla, cuando llueva. Los elementos se asignan al azar para cada guardado.",
+    "puzzle.island-shrine.solution.east": "Este: {{item}}",
+    "puzzle.island-shrine.solution.north": "Norte: {{item}}",
+    "puzzle.island-shrine.solution.south": "Sur: {{item}}",
+    "puzzle.island-shrine.solution.west": "Oeste: {{item}}",
 
 
     /*********
@@ -633,7 +625,7 @@
     // labels
     // note from translator: better not to translate the technical terms
     "tile.description": "Una casilla en el mapa. Esto se muestra porque activaste «tile lookups» en la configuracion.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "Locación",
     "tile.map-name": "Nombre del mapa",
     "tile.tile": "Casilla",
     "tile.tile-index": "{{layerName}}: tile index",
@@ -665,7 +657,7 @@
 
     // values
     "tree.name.big-mushroom": "Seta gigante",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "Árbol de Caoba",
     "tree.name.maple": "Arce",
     "tree.name.oak": "Roble",
     "tree.name.palm": "Palmera",

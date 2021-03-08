@@ -383,6 +383,7 @@
     "item.needed-for.full-collection": "teljes gyűjtemény teljesítmény (adományozz egyet a múzeumnak)",
     "item.needed-for.gourmet-chef": "ínyenc szakács teljesítmény (készíts még: {{recipes}})",
     "item.needed-for.craft-master": "kézműves mester teljesítmény (készíts még: {{recipes}})",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "szállítmányos láda",
     "item.recipes-for-ingredient.entry": "{{name}} (szükséges: {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
@@ -617,10 +618,10 @@
     // labels
     // TODO
     "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
     // TODO
+    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
     "puzzle.island-shrine.solution.east": "East: {{item}}",
     "puzzle.island-shrine.solution.north": "North: {{item}}",
     "puzzle.island-shrine.solution.south": "South: {{item}}",

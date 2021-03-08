@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -113,11 +114,25 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 // shop
                 case ShopMenu shopMenu:
                     {
-                        ISalable entry = shopMenu.hoveredItem;
-                        if (entry is Item item)
-                            return this.BuildSubject(item, ObjectContext.Inventory);
-                        if (entry is MovieConcession snack)
-                            return new MovieSnackSubject(this.GameHelper, snack);
+                        // hovered item
+                        {
+                            ISalable entry = shopMenu.hoveredItem;
+                            if (entry is Item item)
+                                return this.BuildSubject(item, ObjectContext.Inventory);
+                            if (entry is MovieConcession snack)
+                                return new MovieSnackSubject(this.GameHelper, snack);
+                        }
+
+                        // inventory
+                        foreach (ClickableComponent slot in shopMenu.inventory.inventory)
+                        {
+                            if (slot.containsPoint(cursorX, cursorY))
+                            {
+                                if (int.TryParse(slot.name, out int index) && shopMenu.inventory.actualInventory.TryGetIndex(index, out Item item) && item != null)
+                                    return this.BuildSubject(item, ObjectContext.Inventory);
+                                break;
+                            }
+                        }
                     }
                     break;
 
@@ -150,18 +165,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 // derived from CollectionsPage::performHoverAction
                 case CollectionsPage collectionsTab:
                     {
-                        int currentTab = this.Reflection.GetField<int>(collectionsTab, "currentTab").GetValue();
+                        int currentTab = collectionsTab.currentTab;
                         if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
                             break;
 
-                        int currentPage = this.Reflection.GetField<int>(collectionsTab, "currentPage").GetValue();
+                        int currentPage = collectionsTab.currentPage;
 
                         foreach (ClickableTextureComponent component in collectionsTab.collections[currentTab][currentPage])
                         {
                             if (component.containsPoint(cursorX, cursorY))
                             {
                                 int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
-                                SObject obj = new SObject(itemID, 1);
+                                SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
                                 return this.BuildSubject(obj, ObjectContext.Inventory, knownQuality: false);
                             }
                         }
@@ -172,14 +187,36 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 case CraftingPage crafting:
                     {
                         // player inventory item
-                        Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
-                        if (item != null)
-                            return this.BuildSubject(item, ObjectContext.Inventory);
+                        {
+                            Item item = this.Reflection.GetField<Item>(crafting, "hoverItem").GetValue();
+                            if (item != null)
+                                return this.BuildSubject(item, ObjectContext.Inventory);
+                        }
 
-                        // crafting recipe
-                        CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
-                        if (recipe != null)
-                            return this.BuildSubject(recipe.createItem(), ObjectContext.Inventory);
+                        // learned crafting recipe
+                        {
+                            CraftingRecipe recipe = this.Reflection.GetField<CraftingRecipe>(crafting, "hoverRecipe").GetValue();
+                            if (recipe != null)
+                                return this.BuildSubject(recipe.createItem(), ObjectContext.Inventory);
+                        }
+
+                        // undiscovered crafting recipe
+                        {
+                            int currentCraftingPage = this.Reflection.GetField<int>(crafting, "currentCraftingPage").GetValue();
+                            if (crafting.pagesOfCraftingRecipes.TryGetIndex(currentCraftingPage, out var page))
+                            {
+                                foreach (var recipeSlot in page)
+                                {
+                                    if (!recipeSlot.Key.containsPoint(cursorX, cursorY))
+                                        continue;
+
+                                    var item = recipeSlot.Value?.createItem();
+                                    if (item != null)
+                                        return this.BuildSubject(recipeSlot.Value.createItem(), ObjectContext.Inventory);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
 
@@ -240,7 +277,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                             // empty slot
                             if (int.TryParse(slot.label, out int itemId))
-                                return this.BuildSubject(new SObject(itemId, 1), ObjectContext.Inventory, knownQuality: false);
+                                return this.BuildSubject(this.GameHelper.GetObjectBySpriteIndex(itemId), ObjectContext.Inventory, knownQuality: false);
                         }
                     }
                     break;

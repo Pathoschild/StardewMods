@@ -53,6 +53,9 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
+
+            // hook commands
+            helper.ConsoleCommands.Add("reset_horses", "Reset the name and ownership for every horse in the game, so you can rename or reclaim a broken horse.", (_, _) => this.ResetHorsesCommand());
         }
 
 
@@ -126,6 +129,45 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)
             if (Game1.CurrentEvent != null)
                 Game1.player.mount.dismount();
+        }
+
+        /// <summary>Reset all horse names and ownership, and log details to the SMAPI console.</summary>
+        private void ResetHorsesCommand()
+        {
+            // validate
+            if (!Context.IsWorldReady)
+            {
+                this.Monitor.Log("You must load a save to use this command.", LogLevel.Error);
+                return;
+            }
+            if (!Context.IsMainPlayer)
+            {
+                this.Monitor.Log("You must be the main player to use this command.", LogLevel.Error);
+                return;
+            }
+
+            // scan for horses
+            Farm farm = Game1.getFarm();
+            bool anyFound = false;
+            foreach (Stable stable in farm.buildings.OfType<Stable>())
+            {
+                // get horse
+                Horse horse = stable.getStableHorse();
+                if (horse == null || this.IsTractor(horse))
+                    continue;
+                anyFound = true;
+
+                // update name & ownership
+                if (horse.Name?.Length == 0)
+                    this.Monitor.Log("Skipped horse with no name or owner.", LogLevel.Info);
+                else
+                {
+                    this.Monitor.Log($"Reset horse with name '{horse.Name}'. The next player who interacts with it will become the owner.", LogLevel.Info);
+                    horse.Name = "";
+                }
+            }
+
+            this.Monitor.Log(anyFound ? "Done!" : "No horses found to reset.", LogLevel.Info);
         }
 
         /// <summary>Update the mod configuration.</summary>

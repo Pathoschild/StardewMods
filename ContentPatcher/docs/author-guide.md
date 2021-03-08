@@ -27,6 +27,7 @@ This document helps mod authors create a content pack for Content Patcher.
     * [Tiles and tile properties](#tiles-and-tile-properties)
     * [Known limitations](#map-known-limitations)
   * [`Include`](#include)
+* [Custom locations](#custom-locations)
 * [Advanced](#advanced)
   * [Conditions & tokens](#conditions--tokens)
   * [Player config](#player-config)
@@ -90,17 +91,18 @@ A content pack is a folder with these files:
 
 The `content.json` file has three main fields:
 
-field          | purpose
--------------- | -------
-`Format`       | The format version. You should always use the latest version (currently `1.20.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
-`Changes`      | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema` | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
+field             | purpose
+----------------- | -------
+`Format`          | The format version. You should always use the latest version (currently `1.21.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
+`Changes`         | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
+`ConfigSchema`    | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
+`CustomLocations` | _(optional)_ The custom in-game locations to make available. See [_custom locations_](#custom-locations).
 
 You can list any number of patches (surrounded by `{` and `}` in the `Changes` field). See the next
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Load",
@@ -176,8 +178,7 @@ errors; if not specified, will default to a name like `entry #14 (EditImage Anim
 <td><code>Enabled</code></td>
 <td>
 
-_(optional)_ Whether to apply this patch. Default true. This fields supports immutable
-[tokens](#advanced) (e.g. config tokens) if they return true/false.
+_(optional)_ Whether to apply this patch. Default true.
 
 </td>
 </tr>
@@ -233,7 +234,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Load",
@@ -264,7 +265,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -316,7 +317,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -339,7 +340,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -365,7 +366,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -422,7 +423,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -444,19 +445,13 @@ New entries are added at the bottom of the list by default.
 </dl>
 
 ### `EditMap`
-`"Action": "EditMap"` changes part of an in-game map. This consists of three separate features:
+`"Action": "EditMap"` changes part of an in-game map. Any number of content packs can edit the same
+map. If two patches conflict, whichever one is applied last will take effect for the overlapping
+portions.
 
-* copy tiles, properties, and tilesheets from a source map into the target;
-* add/edit/remove map properties;
-* add/edit/remove individual tiles and tile properties.
-
-Each patch can use any combination of these features, but must set the required fields for at least
-one of them: map overlay (`FromFile` and `ToArea`), map properties (`MapProperties`), or tiles
-(`MapTiles`). When combined into one patch, the changes are applied in this order: overlay, then
-map properties, then map tiles.
-
-Any number of content packs can edit the same map. If two patches conflict, whichever one is applied
-last will take effect for the overlapping portions.
+This consists of three separate features (listed below), which can be used separately or together.
+When combined into one patch, the fields are applied in this order: `FromFile`, `MapTiles`,
+`MapProperties`, `AddWarps`, and `TextOperations`.
 
 <dl>
 <dt id="map-overlay">Map overlay</dt>
@@ -565,7 +560,7 @@ Here's how that would be merged with each patch mode (black areas are the empty 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -618,6 +613,20 @@ and values.
 <tr>
 <td>
 
+`AddWarps`
+
+</td>
+<td>
+
+Add warps to the map's `Warp` property, creating it if needed. This field supports [tokens](#advanced).
+If there are multiple warps from the same tile, the ones added later win.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `TextOperations`
 
 </td>
@@ -626,42 +635,27 @@ and values.
 The `TextOperations` field lets you change the value for an existing map property (see _[text
 operations](#text-operations)_ for more info).
 
+The only valid path format is `["MapProperties", "PropertyName"]` where `PropertyName` is the
+name of the map property to change.
+
 </td>
 </tr>
 </table>
 
-For example, this replaces the warp map property for the farm cave:
+For example, this changes the `Outdoors` tile for the farm cave and adds a warp (see
+[map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
          "Target": "Maps/FarmCave",
          "MapProperties": {
-            "Warp": "10 10 Town 0 30"
-         }
-      },
-   ]
-}
-```
-
-Here's the same example, but using `TextOperations` to append a warp to the property instead:
-
-```js
-{
-   "Format": "1.20.0",
-   "Changes": [
-      {
-         "Action": "EditMap",
-         "Target": "Maps/FarmCave",
-         "TextOperations": [
-            {
-               "Operation": "Append",
-               "Target": [ "MapProperties", "Warp" ],
-               "Value": "10 10 Town 0 30",
-               "Delimiter": " " // if the property already has a value, add this between the previous & inserted values
-            }
+            "Outdoors": "T"
+         },
+         "AddWarps": [
+            "10 10 Town 0 30"
          ]
       },
    ]
@@ -718,7 +712,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -739,7 +733,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -814,7 +808,7 @@ In the simplest case, you can use this to organize your patches into subfiles:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Include",
@@ -832,7 +826,7 @@ You can combine this with tokens and conditions to load files dynamically:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "Include",
@@ -849,6 +843,140 @@ There's no restriction against including the same file multiple times (as long a
 circular include loop). In that case the patches are duplicated for each inclusion, as if you
 copied & pasted them into each place. This may negatively impact performance though, since each
 patch will be reapplied multiple times.
+
+## Custom locations
+Content Patcher lets you add new locations to the game which work just like the ones that are
+built-in. They're fully persisted in the save file, pathfindable by NPCs, etc. This is only needed
+for new locations; use [`EditMap`](#EditMap) to change existing ones.
+
+This is configured through a `CustomLocations` section in your `content.json` (see example below),
+which lists the locations with these required fields:
+
+   field         | purpose
+   ------------- | -------
+   `Name`        | The location's unique internal name. This can't contain tokens. The name must begin with `Custom_` (to avoid conflicting with current or future vanilla locations), can only contain alphanumeric or underscore characters, and must be **globally** unique. Prefixing it with your mod name is strongly recommended (see _caveats_).
+   `FromMapFile` | The relative path to the location's map file in your content pack folder (file can be `.tmx`, `.tbin`, or `.xnb`). This can't contain tokens, but you can make conditional changes using [`EditMap`](#EditMap) (see example below).
+   `MigrateLegacyNames` | _(optional)_ A list of former location names that may appear in the save file instead of the one given by `Name`. This can't contain tokens. This is only meant to allow migrating older locations, and shouldn't be used in most cases. See [Renaming a location](#renaming-a-location) for usage.
+
+Make sure you read _background_ and _caveats_ below before using this feature.
+
+### Example
+Let's say you want to give Abigail a walk-in closet. This example makes three changes:
+
+1. add the in-game location with the base map;
+2. add a simple warp from Abigail's room;
+3. add a conditional map edit (optional).
+
+Here's how you'd do that:
+
+```js
+{
+   "Format": "1.21.0",
+
+   "CustomLocations": [
+      // add the in-game location
+      {
+         "Name": "Custom_ExampleMod_AbigailCloset",
+         "FromMapFile": "assets/abigail-closet.tmx"
+      }
+   ],
+
+   "Changes": [
+      // add a warp to the new location from Abigail's room
+      {
+         "Action": "EditMap",
+         "Target": "Maps/SeedShop",
+         "AddWarps": [
+            "8 10 Custom_ExampleMod_AbigailCloset 7 20"
+         ]
+      },
+
+      // conditionally edit the map if needed
+      {
+         "Action": "EditMap",
+         "Target": "Maps/Custom_ExampleMod_AbigailCloset",
+         "FromFile": "assets/abigail-closet-clean.tmx",
+         "When": {
+            "HasFlag": "AbigailClosetClean" // example custom mail flag
+         }
+      }
+   ]
+}
+```
+
+### Background
+There's a distinction that's crucial to understanding how this feature works:
+
+* A **map** is an asset file which describes the tile layout, tilesheets, and map/tile properties
+  for the in-game area. The map is reloaded each time you load a save, and each time a mod changes
+  the map.
+* A **location** is [part of the game code](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#GameLocation_et_al)
+  and manages the in-game area and everything inside it (including non-map entities like players).
+  The location is read/written to the save file, and is only loaded when loading the save file.
+
+In other words, a _location_ (part of the game code) contains the _map_ (loaded from the `Content`
+folder):
+```
+┌─────────────────────────────────┐
+│ Location                        │
+│   - objects                     │
+│   - furniture                   │
+│   - crops                       │
+│   - bushes and trees            │
+│   - NPCs and players            │
+│   - etc                         │
+│                                 │
+│   ┌─────────────────────────┐   │
+│   │ Map file                │   │
+│   │   - tile layout         │   │
+│   │   - map/tile properties │   │
+│   │   - tilesheets          │   │
+│   └─────────────────────────┘   │
+└─────────────────────────────────┘
+```
+
+### Caveats
+* The name must be **globally** unique. If two content packs add a location with the same name,
+  both will be rejected with an error message, and the location won't be added at all. If the
+  player saves anyway at that point, anything in that location will be permanently lost. Using a
+  unique prefix for the mod like `Custom_YourModName_LocationName` is strongly recommended to avoid
+  that.
+* This only adds the location to the game. Players won't be able to reach it unless you also add
+  warps using [`EditMap`](#editmap) (see the example above). Those warps can be conditional and
+  dynamic, so you can decide when it becomes available to players.
+* The `FromMapFile` map is loaded automatically. A separate `Load` patch which targets the
+  location's map will have no effect, though you can still use `EditMap` patches fine.
+
+### Renaming a location
+**Renaming a location will permanently lose player changes made for the old name if you're not
+careful.**
+
+Content Patcher lets you define "legacy" names to avoid that. When loading a save file, if it
+doesn't have a location for `Name` but it does have one with a legacy name, the legacy location's
+data will be loaded into the custom location. When the player saves, the legacy location will be
+permanently renamed to match the `Name`.
+
+For example:
+
+```js
+{
+   "Format": "1.21.0",
+   "CustomLocations": [
+      {
+         "Name": "Custom_ExampleMod_AbigailCloset",
+         "FromMapFile": "assets/abigail-closet.tmx",
+         "MigrateLegacyNames": [ "OldName", "EvenOlderName" ]
+      }
+   ]
+}
+```
+
+Legacy names can have any format (including without the `Custom_*` suffix), but they're subject to
+two restrictions:
+
+* They must be globally unique. They can't match the `Name` or `MigrateLegacyNames` for any other
+  custom location.
+* They can't match a vanilla location name.
 
 ## Advanced
 ### Conditions & tokens
@@ -881,7 +1009,7 @@ in any Content Patcher field that allows tokens:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -935,13 +1063,13 @@ Any other arguments provide values for translation tokens. For example, if you h
 like this:
 ```json
 {
-   "dialogue": "It's a beautiful {{day}} morning!"
+   "dialogue": "Hi {{name}}, it's a beautiful {{day}} morning!"
 }
 ```
 
-Then you can do this to provide a value for the token in your patch:
+Then you can do this to provide the token values in your patch:
 ```json
-"{{i18n: dialogue |day={{DayOfWeek}} }}"
+"{{i18n: dialogue |day={{DayOfWeek}} |name=Abigail }}"
 ```
 
   </td>
@@ -1106,8 +1234,14 @@ Content Patcher adds several console commands for testing and troubleshooting. E
 directly into the SMAPI console for more info.
 
 #### patch summary
-`patch summary` lists all the loaded patches, their current values, what they changed, and (if
-applicable) the reasons they weren't applied.
+`patch summary` provides a comprehensive overview of what your content packs are doing. That
+includes...
+
+* global token values;
+* local token values for each pack;
+* custom locations added by each pack;
+* and patches loaded from each pack along with their current values, what they changed, and
+  (if applicable) the reasons they weren't applied.
 
 For example:
 
@@ -1159,8 +1293,8 @@ Example Content Pack:
       TerrainFeatures/tree_palm | edited image
 ```
 
-You can also optionally specify one or more content pack IDs, in which case it'll only show patches for those
-content packs:
+You can also optionally specify one or more content pack IDs, in which case it'll only show data
+for those content packs:
 ```
 > patch summary "LemonEx.HobbitHouse" "Another.Content.Pack"
 ```

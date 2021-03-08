@@ -9,12 +9,11 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
 using ContentPatcher.Framework.Tokens;
-using ContentPatcher.Framework.Tokens.ValueProviders;
 using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
-using StardewModdingAPI.Enums;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 
 [assembly: InternalsVisibleTo("Pathoschild.Stardew.Tests.Mods")]
@@ -26,11 +25,8 @@ namespace ContentPatcher
         /*********
         ** Fields
         *********/
-        /// <summary>The name of the file which contains patch metadata.</summary>
-        private readonly string PatchFileName = "content.json";
-
-        /// <summary>The name of the file which contains player settings.</summary>
-        private readonly string ConfigFileName = "config.json";
+        /// <summary>Manages state for each screen.</summary>
+        private PerScreen<ScreenManager> ScreenManager;
 
         /// <summary>The recognized format versions and their migrations.</summary>
         private readonly Func<ContentConfig, IMigration[]> GetFormatVersions = content => new IMigration[]
@@ -53,7 +49,8 @@ namespace ContentPatcher
             new Migration_1_17(),
             new Migration_1_18(),
             new Migration_1_19(),
-            new Migration_1_20()
+            new Migration_1_20(),
+            new Migration_1_21()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -61,15 +58,6 @@ namespace ContentPatcher
         {
             new StardewValley_1_3_36_Validator()
         };
-
-        /// <summary>Manages the available contextual tokens.</summary>
-        private TokenManager TokenManager;
-
-        /// <summary>Manages loaded patches.</summary>
-        private PatchManager PatchManager;
-
-        /// <summary>Handles loading and unloading patches.</summary>
-        private PatchLoader PatchLoader;
 
         /// <summary>Handles the 'patch' console command.</summary>
         private CommandHandler CommandHandler;
@@ -81,16 +69,13 @@ namespace ContentPatcher
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The debug overlay (if enabled).</summary>
-        private DebugOverlay DebugOverlay;
+        private readonly PerScreen<DebugOverlay> DebugOverlay = new();
 
         /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
         private List<ModProvidedToken> QueuedModTokens = new();
 
-        /// <summary>Whether the next tick is the first one.</summary>
+        /// <summary>Whether the next tick is the first one for the main screen.</summary>
         private bool IsFirstTick = true;
-
-        /// <summary>The loaded content packs.</summary>
-        private readonly List<RawContentPack> RawContentPacks = new();
 
 
         /*********
@@ -129,12 +114,12 @@ namespace ContentPatcher
                 // toggle overlay
                 if (this.Keys.ToggleDebug.JustPressed())
                 {
-                    if (this.DebugOverlay == null)
-                        this.DebugOverlay = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
+                    if (this.DebugOverlay.Value == null)
+                        this.DebugOverlay.Value = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
                     else
                     {
-                        this.DebugOverlay.Dispose();
-                        this.DebugOverlay = null;
+                        this.DebugOverlay.Value.Dispose();
+                        this.DebugOverlay.Value = null;
                     }
                 }
 
@@ -142,9 +127,9 @@ namespace ContentPatcher
                 else if (this.DebugOverlay != null)
                 {
                     if (this.Keys.DebugPrevTexture.JustPressed())
-                        this.DebugOverlay.PrevTexture();
+                        this.DebugOverlay.Value.PrevTexture();
                     if (this.Keys.DebugNextTexture.JustPressed())
-                        this.DebugOverlay.NextTexture();
+                        this.DebugOverlay.Value.NextTexture();
                 }
             }
         }
@@ -154,16 +139,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnLoadStageChanged(object sender, LoadStageChangedEventArgs e)
         {
-            switch (e.NewStage)
-            {
-                case LoadStage.CreatedBasicInfo:
-                case LoadStage.SaveLoadedBasicInfo:
-                case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
-                    this.Monitor.VerboseLog($"Updating context: load stage changed to {e.NewStage}.");
-                    this.TokenManager.IsBasicInfoLoaded = true;
-                    this.UpdateContext(ContextUpdateType.All);
-                    break;
-            }
+            this.ScreenManager.Value.OnLoadStageChanged(e.OldStage, e.NewStage);
         }
 
         /// <summary>The method invoked when a new day starts.</summary>
@@ -171,9 +147,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            this.Monitor.VerboseLog("Updating context: new day started.");
-            this.TokenManager.IsBasicInfoLoaded = true;
-            this.UpdateContext(ContextUpdateType.All);
+            this.ScreenManager.Value.OnDayStarted();
         }
 
         /// <summary>The method invoked when the in-game clock changes.</summary>
@@ -181,8 +155,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
-            this.Monitor.VerboseLog("Updating context: clock changed.");
-            this.UpdateContext(ContextUpdateType.OnTimeChange);
+            this.ScreenManager.Value.OnTimeChanged();
         }
 
         /// <summary>The method invoked when the player warps.</summary>
@@ -190,8 +163,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            this.Monitor.VerboseLog("Updating context: player warped.");
-            this.UpdateContext(ContextUpdateType.OnLocationChange);
+            this.ScreenManager.Value.OnWarped();
         }
 
         /// <summary>The method invoked when the player returns to the title screen.</summary>
@@ -199,9 +171,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
-            this.Monitor.VerboseLog("Updating context: returned to title.");
-            this.TokenManager.IsBasicInfoLoaded = false;
-            this.UpdateContext(ContextUpdateType.All);
+            this.ScreenManager.Value.OnReturnedToTitle();
         }
 
         /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
@@ -215,15 +185,16 @@ namespace ContentPatcher
                 this.IsFirstTick = false;
                 this.Initialize();
             }
+
+            this.ScreenManager.Value.OnUpdateTicked();
         }
 
         /// <summary>Raised after the game language is changed, and after SMAPI handles the change.</summary>
         /// <param name="code">The new language code.</param>
         private void OnLocaleChanged(LocalizedContentManager.LanguageCode code)
         {
-            // update if locale changes after initialization
             if (!this.IsFirstTick)
-                this.UpdateContext(ContextUpdateType.All);
+                this.ScreenManager.Value.OnLocaleChanged();
         }
 
         /****
@@ -235,7 +206,7 @@ namespace ContentPatcher
             var helper = this.Helper;
 
             // fetch content packs
-            RawContentPack[] contentPacks = this.GetContentPacks().ToArray();
+            LoadedContentPack[] contentPacks = this.GetContentPacks().ToArray();
             InvariantHashSet installedMods = new InvariantHashSet(
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
@@ -254,19 +225,23 @@ namespace ContentPatcher
                     this.Monitor.Log($"{group.ModName} added {(group.TokenNames.Length == 1 ? "a custom token" : $"{group.TokenNames.Length} custom tokens")} with prefix '{group.ModPrefix}': {string.Join(", ", group.TokenNames)}.");
             }
 
-            // load content packs and context
-            this.TokenManager = new TokenManager(helper.Content, installedMods, this.QueuedModTokens, this.Helper.Reflection);
-            this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, this.AssetValidators());
-            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, this.Helper.Reflection, installedMods, this.Helper.Content.NormalizeAssetName);
-            this.UpdateContext(ContextUpdateType.All); // set initial context before loading any custom mod tokens
+            // load screen manager
+            var modTokens = this.QueuedModTokens.ToArray();
+            this.ScreenManager = new(() =>
+                new ScreenManager(
+                    helper: this.Helper,
+                    monitor: this.Monitor,
+                    installedMods: installedMods,
+                    modTokens: modTokens,
+                    assetValidators: this.AssetValidators(),
+                    contentPacks: contentPacks
+                )
+            );
 
-            // load context
-            this.LoadContentPacks(contentPacks, installedMods);
-            this.UpdateContext(ContextUpdateType.All); // set initial context once patches + dynamic tokens + custom tokens are loaded
-
-            // register patcher
-            helper.Content.AssetLoaders.Add(this.PatchManager);
-            helper.Content.AssetEditors.Add(this.PatchManager);
+            // register asset interceptor
+            var interceptor = new AssetInterceptor(this.ScreenManager);
+            helper.Content.AssetLoaders.Add(interceptor);
+            helper.Content.AssetEditors.Add(interceptor);
 
             // set up events
             if (this.Config.EnableDebugFeatures)
@@ -278,11 +253,47 @@ namespace ContentPatcher
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
 
             // set up commands
-            this.CommandHandler = new CommandHandler(this.TokenManager, this.PatchManager, this.PatchLoader, this.Monitor, this.RawContentPacks, modID => modID == null ? this.TokenManager : this.TokenManager.GetContextFor(modID), () => this.UpdateContext(ContextUpdateType.All));
+            this.CommandHandler = new CommandHandler(
+                screenManager: this.ScreenManager,
+                monitor: this.Monitor,
+                contentPacks: contentPacks,
+                getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
+                updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)
+            );
             helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (_, args) => this.CommandHandler.Handle(args));
+
+
+            // register content packs with Generic Mod Config Menu
+            foreach (LoadedContentPack contentPack in contentPacks)
+            {
+                if (contentPack.Config.Any())
+                {
+                    GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(
+                        modRegistry: this.Helper.ModRegistry,
+                        monitor: this.Monitor,
+                        manifest: contentPack.Manifest,
+                        parseCommaDelimitedField: this.ParseCommaDelimitedField,
+                        config: contentPack.Config,
+                        saveAndApply: () => this.OnContentPackConfigChanged(contentPack)
+                    );
+                    configMenu.Register();
+                }
+            }
 
             // can no longer queue tokens
             this.QueuedModTokens = null;
+        }
+
+        /// <summary>Raised after a content pack's configuration changed.</summary>
+        /// <param name="contentPack">The content pack instance.</param>
+        private void OnContentPackConfigChanged(LoadedContentPack contentPack)
+        {
+            // resave config.json
+            contentPack.ConfigFileHandler.Save(contentPack.ContentPack, contentPack.Config, this.Helper);
+
+            // update tokens
+            foreach (var screenManager in this.ScreenManager.GetActiveValues())
+                screenManager.Value.OnContentPackConfigChanged(contentPack);
         }
 
         /// <summary>Add a mod-provided token.</summary>
@@ -298,51 +309,27 @@ namespace ContentPatcher
             this.QueuedModTokens.Add(token);
         }
 
-        /// <summary>Update the current context.</summary>
-        /// <param name="updateType">The context update type.</param>
-        private void UpdateContext(ContextUpdateType updateType)
-        {
-            this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens);
-            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens, updateType);
-        }
-
         /// <summary>Load the registered content packs.</summary>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private IEnumerable<RawContentPack> GetContentPacks()
+        private IEnumerable<LoadedContentPack> GetContentPacks()
         {
             this.Monitor.VerboseLog("Preloading content packs...");
 
             int index = -1;
             foreach (IContentPack contentPack in this.Helper.ContentPacks.GetOwned())
             {
+                // load raw content pack
                 RawContentPack rawContentPack;
                 try
                 {
-                    // validate content.json has required fields
-                    ContentConfig content = contentPack.ReadJsonFile<ContentConfig>(this.PatchFileName);
-                    if (content == null)
-                    {
-                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it has no {this.PatchFileName} file.", LogLevel.Error);
-                        continue;
-                    }
-                    if (content.Format == null || !content.Changes.Any())
-                    {
-                        this.Monitor.Log($"Ignored content pack '{contentPack.Manifest.Name}' because it doesn't specify the required {nameof(ContentConfig.Format)} or {nameof(ContentConfig.Changes)} fields.", LogLevel.Error);
-                        continue;
-                    }
+                    rawContentPack = new RawContentPack(contentPack, ++index, this.GetFormatVersions);
 
-                    // apply migrations
-                    IMigration migrator = new AggregateMigration(content.Format, this.GetFormatVersions(content));
-                    if (!migrator.TryMigrate(content, out string error))
+                    if (!rawContentPack.TryReloadContent(out string error))
                     {
-                        this.Monitor.Log($"Loading content pack '{contentPack.Manifest.Name}' failed: {error}.", LogLevel.Error);
+                        this.Monitor.Log($"Could not load content pack '{contentPack.Manifest.Name}': {error}.", LogLevel.Error);
                         continue;
                     }
-
-                    // init
-                    index++;
-                    rawContentPack = new RawContentPack(contentPack, content, migrator, index);
                 }
                 catch (Exception ex)
                 {
@@ -350,148 +337,24 @@ namespace ContentPatcher
                     continue;
                 }
 
-                yield return rawContentPack;
-            }
-        }
-
-        /// <summary>Load the patches from all registered content packs.</summary>
-        /// <param name="contentPacks">The content packs to load.</param>
-        /// <param name="installedMods">The mod IDs which are currently installed.</param>
-        /// <returns>Returns the loaded content pack IDs.</returns>
-        [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private void LoadContentPacks(IEnumerable<RawContentPack> contentPacks, InvariantHashSet installedMods)
-        {
-            // load content packs
-            ConfigFileHandler configFileHandler = new ConfigFileHandler(this.ConfigFileName, this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}", LogLevel.Warn));
-            foreach (RawContentPack current in contentPacks)
-            {
-                this.Monitor.VerboseLog($"Loading content pack '{current.Manifest.Name}'...");
-                LogPathBuilder path = new LogPathBuilder(current.Manifest.Name);
-
+                // load config
+                ConfigFileHandler configFileHandler;
+                InvariantDictionary<ConfigField> config;
                 try
                 {
-                    ContentConfig content = current.Content;
-
-                    // load tokens
-                    ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ContentPack);
-                    TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
-                    {
-                        // load config.json
-                        InvariantDictionary<ConfigField> config = configFileHandler.Read(current.ContentPack, content.ConfigSchema, current.Content.Format);
-                        configFileHandler.Save(current.ContentPack, config, this.Helper);
-                        if (config.Any())
-                            this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
-
-                        // load config tokens
-                        foreach (KeyValuePair<string, ConfigField> pair in config)
-                            this.AddConfigToken(pair.Key, pair.Value, modContext, current);
-
-                        // register with Generic Mod Config Menu
-                        if (config.Any())
-                        {
-                            GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(this.Helper.ModRegistry, this.Monitor, current.Manifest, this.ParseCommaDelimitedField, config, saveAndApply: () =>
-                            {
-                                configFileHandler.Save(current.ContentPack, config, this.Helper);
-                                this.PatchLoader.UnloadPatchesLoadedBy(current, false);
-                                this.PatchLoader.LoadPatches(
-                                    contentPack: current,
-                                    rawPatches: current.Content.Changes,
-                                    rootIndexPath: new[] { current.Index },
-                                    path: path,
-                                    reindex: true,
-                                    parentPatch: null
-                                );
-                            });
-                            configMenu.Register((name, field) => this.AddConfigToken(name, field, modContext, current));
-                        }
-
-                        // load dynamic tokens
-                        IDictionary<string, int> dynamicTokenCountByName = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-                        foreach (DynamicTokenConfig entry in content.DynamicTokens)
-                        {
-                            void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > dynamic token '{entry.Name}': {reason}", LogLevel.Warn);
-
-                            // get path
-                            LogPathBuilder localPath = path.With(nameof(content.DynamicTokens));
-                            {
-                                if (!dynamicTokenCountByName.ContainsKey(entry.Name))
-                                    dynamicTokenCountByName[entry.Name] = -1;
-                                int discriminator = ++dynamicTokenCountByName[entry.Name];
-                                localPath = localPath.With($"{entry.Name} {discriminator}");
-                            }
-
-                            // validate token key
-                            if (string.IsNullOrWhiteSpace(entry.Name))
-                            {
-                                LogSkip("the token name can't be empty.");
-                                continue;
-                            }
-                            if (entry.Name.Contains(InternalConstants.PositionalInputArgSeparator))
-                            {
-                                LogSkip($"the token name can't have positional input arguments ({InternalConstants.PositionalInputArgSeparator} character).");
-                                continue;
-                            }
-                            if (Enum.TryParse<ConditionType>(entry.Name, true, out _))
-                            {
-                                LogSkip("the token name is already used by a global token.");
-                                continue;
-                            }
-                            if (config.ContainsKey(entry.Name))
-                            {
-                                LogSkip("the token name is already used by a config token.");
-                                continue;
-                            }
-
-                            // parse conditions
-                            IList<Condition> conditions;
-                            InvariantHashSet immutableRequiredModIDs;
-                            {
-                                if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string conditionError))
-                                {
-                                    this.Monitor.Log($"Ignored {current.Manifest.Name} > '{entry.Name}' token: its {nameof(DynamicTokenConfig.When)} field is invalid: {conditionError}.", LogLevel.Warn);
-                                    continue;
-                                }
-                            }
-
-                            // parse values
-                            IManagedTokenString values;
-                            if (!string.IsNullOrWhiteSpace(entry.Value))
-                            {
-                                if (!tokenParser.TryParseString(entry.Value, immutableRequiredModIDs, localPath.With(nameof(entry.Value)), out string valueError, out values))
-                                {
-                                    LogSkip($"the token value is invalid: {valueError}");
-                                    continue;
-                                }
-                            }
-                            else
-                                values = new LiteralString("", localPath.With(nameof(entry.Value)));
-
-                            // add token
-                            modContext.AddDynamicToken(entry.Name, values, conditions);
-                        }
-                    }
-
-                    // load patches
-                    this.PatchLoader.LoadPatches(
-                        contentPack: current,
-                        rawPatches: content.Changes,
-                        rootIndexPath: new[] { current.Index },
-                        path: path,
-                        reindex: false,
-                        parentPatch: null
-                    );
-
-                    // add to content pack list
-                    this.RawContentPacks.Add(current);
+                    configFileHandler = new ConfigFileHandler("config.json", this.ParseCommaDelimitedField, (pack, label, reason) => this.Monitor.Log($"Ignored {pack.Manifest.Name} > {label}: {reason}", LogLevel.Warn));
+                    config = configFileHandler.Read(contentPack, rawContentPack.Content.ConfigSchema, rawContentPack.Content.Format);
+                    configFileHandler.Save(contentPack, config, this.Helper);
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
+                    this.Monitor.Log($"Error loading configuration for content pack '{contentPack.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
                     continue;
                 }
-            }
 
-            this.PatchManager.Reindex(patchListChanged: true);
+                // build content pack
+                yield return new LoadedContentPack(rawContentPack, configFileHandler, config);
+            }
         }
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
@@ -507,20 +370,6 @@ namespace ContentPatcher
                 select value.Trim()
             );
             return new InvariantHashSet(values);
-        }
-
-        /// <summary>Register a config token for a content pack.</summary>
-        /// <param name="name">The field name.</param>
-        /// <param name="field">The config field.</param>
-        /// <param name="modContext">The mod context to which to add the token.</param>
-        /// <param name="contentPack">The content pack for which to add the token.</param>
-        private void AddConfigToken(string name, ConfigField field, ModTokenContext modContext, RawContentPack contentPack)
-        {
-            modContext.RemoveLocalToken(name); // only needed when resetting a token for Generic Mod Config Menu, but has no effect otherwise
-
-            IValueProvider valueProvider = new ImmutableValueProvider(name, field.Value, allowedValues: field.AllowValues, canHaveMultipleValues: field.AllowMultiple);
-            IToken token = new Token(valueProvider, scope: contentPack.Manifest.UniqueID);
-            modContext.AddLocalToken(token);
         }
     }
 }

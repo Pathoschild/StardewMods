@@ -60,7 +60,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 return false;
 
             // item fields
-            if (!this.PossibleIds.Contains(item.ParentSheetIndex) && !this.PossibleIds.Contains(item.Category))
+            bool matchesId =
+                this.PossibleIds.Contains(item.Category)
+                || (item.ParentSheetIndex >= 0 && this.PossibleIds.Contains(item.ParentSheetIndex)); // ignore special items like fences which have a negative item ID
+            if (!matchesId)
                 return false;
 
             // object fields

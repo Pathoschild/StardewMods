@@ -202,26 +202,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // recipes
             if (showInventoryFields)
             {
-                switch (itemType)
-                {
-                    // for ingredient
-                    case ItemType.Object:
-                        {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForIngredient(this.DisplayItem).ToArray();
-                            if (recipes.Any())
-                                yield return new RecipesForIngredientField(this.GameHelper, I18n.Item_Recipes(), item, recipes);
-                        }
-                        break;
+                RecipeModel[] recipes =
+                    // recipes that take this item as ingredient
+                    this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
+                    .Concat(this.GameHelper.GetRecipesForIngredient(item))
 
-                    // for machine
-                    case ItemType.BigCraftable:
-                        {
-                            RecipeModel[] recipes = this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject).ToArray();
-                            if (recipes.Any())
-                                yield return new RecipesForMachineField(this.GameHelper, I18n.Item_Recipes(), recipes);
-                        }
-                        break;
-                }
+                    // recipes which produce this item
+                    .Concat(this.GameHelper.GetRecipesForOutput(this.DisplayItem))
+                    .Concat(this.GameHelper.GetRecipesForOutput(item))
+
+                    // recipes for a machine
+                    .Concat(this.GameHelper.GetRecipesForMachine(this.DisplayItem as SObject))
+                    .Concat(this.GameHelper.GetRecipesForMachine(item as SObject))
+                    .ToArray();
+
+                if (recipes.Any())
+                    yield return new ItemRecipesField(this.GameHelper, I18n.Item_Recipes(), item, recipes.ToArray());
             }
 
             // fish spawn rules
@@ -381,7 +377,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (item is Fence fence)
             {
                 int spriteID = fence.GetItemParentSheetIndex();
-                return new SObject(spriteID, 1);
+                return this.GameHelper.GetObjectBySpriteIndex(spriteID);
             }
 
             return item;
@@ -657,6 +653,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     (
                         from recipe in this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
                         let item = recipe.CreateItem(this.DisplayItem)
+                        where item != null
                         orderby item.DisplayName
                         select new { recipe.Type, item.DisplayName, TimesCrafted = recipe.GetTimesCrafted(Game1.player) }
                     )
@@ -671,6 +668,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 string[] uncraftedNames = (from recipe in recipes where recipe.Type == RecipeType.Crafting && recipe.TimesCrafted <= 0 select recipe.DisplayName).ToArray();
                 if (uncraftedNames.Any())
                     neededFor.Add(I18n.Item_NeededFor_CraftMaster(recipes: string.Join(", ", uncraftedNames)));
+            }
+
+            // quests
+            {
+                string[] quests = this.GameHelper
+                    .GetQuestsWhichNeedItem(obj)
+                    .Select(p => p.DisplayText)
+                    .OrderBy(p => p)
+                    .ToArray();
+                if (quests.Any())
+                    neededFor.Add(I18n.Item_NeededFor_Quests(quests: string.Join(", ", quests)));
             }
 
             // yield

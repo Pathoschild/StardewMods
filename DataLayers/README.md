@@ -150,7 +150,7 @@ instead of their individual borders.
 </table>
 
 ## Compatibility
-Data Layers is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
+Data Layers is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it
 installed).
 

@@ -16,6 +16,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models.FishData;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
@@ -331,22 +332,21 @@ namespace Pathoschild.Stardew.LookupAnything
                 return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            var recipes = new List<RecipeModel>();
-            foreach (RecipeModel recipe in this.GetRecipes())
-            {
-                if (!recipe.Ingredients.Any(p => p.Matches(item)))
-                    continue;
-                if (recipe.ExceptIngredients.Any(p => p.Matches(item)))
-                    continue;
+            List<RecipeModel> recipes = this.GetRecipes()
+                .Where(recipe =>
+                    recipe.Ingredients.Any(p => p.Matches(item))
+                    && !recipe.ExceptIngredients.Any(p => p.Matches(item))
+                )
+                .ToList();
 
-                recipes.Add(recipe);
-            }
-
-            // resolve conflicts from mods like Producer Framework Mod: if multiple recipes take the
-            // same item as input, ID takes precedence over category. This only occurs with mod recipes,
-            // since there are no such conflicts in the vanilla recipes.
+            // resolve conflicts from mods like Producer Framework Mod: if multiple machine recipes
+            // take the same item as input, ID takes precedence over category. This only occurs
+            // with mod recipes, since there are no such conflicts in the vanilla recipes.
             recipes.RemoveAll(recipe =>
             {
+                if (recipe.Type != RecipeType.MachineInput)
+                    return false;
+
                 RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
                 return
                     ingredient?.PossibleIds.Any(p => p < 0) == true
@@ -356,7 +356,19 @@ namespace Pathoschild.Stardew.LookupAnything
             // from tailor recipes
             recipes.AddRange(this.GetTailorRecipes(item));
 
+            // from construction recipes
+            recipes.AddRange(this.GetConstructionRecipes(item));
+
             return recipes;
+        }
+
+        /// <summary>Get the recipes that create an item.</summary>
+        /// <param name="item">The item.</param>
+        public IEnumerable<RecipeModel> GetRecipesForOutput(Item item)
+        {
+            return this
+                .GetRecipes()
+                .Where(recipe => this.AreEquivalent(item, recipe.CreateItem(item)));
         }
 
         /// <summary>Get the recipes for a given machine.</summary>
@@ -364,13 +376,51 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
         {
             if (machine == null)
-                yield break;
+                return Enumerable.Empty<RecipeModel>();
 
             // from cached recipes
-            foreach (var recipe in this.GetRecipes())
+            return this.GetRecipes()
+                .Where(recipe => recipe.IsForMachine(machine))
+                .ToList();
+        }
+
+        /// <summary>Get the current quests which need an item.</summary>
+        /// <param name="item">The item to check.</param>
+        public IEnumerable<QuestModel> GetQuestsWhichNeedItem(SObject item)
+        {
+            // get all quests
+            var quests =
+                Game1.player.questLog.Select(quest => new QuestModel(quest))
+                .Concat(Game1.player.team.specialOrders.Select(order => new QuestModel(order)));
+
+            // get matching quests
+            foreach (QuestModel quest in quests)
             {
-                if (recipe.IsForMachine(machine))
-                    yield return recipe;
+                bool needsItem =
+                    !string.IsNullOrWhiteSpace(quest.DisplayText)
+                    && quest.NeedsItem(item);
+
+                if (needsItem)
+                    yield return quest;
+            }
+        }
+
+        /// <summary>Get an object by its parent sprite index if it can be parsed.</summary>
+        /// <param name="index">The parent sprite index.</param>
+        /// <param name="obj">The constructed object.</param>
+        /// <param name="stack">The number of items in the stack.</param>
+        /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
+        public bool TryGetObjectBySpriteIndex(int index, out SObject obj, int stack = 1, bool bigcraftable = false)
+        {
+            try
+            {
+                obj = this.GetObjectBySpriteIndex(index, stack, bigcraftable);
+                return true;
+            }
+            catch
+            {
+                obj = null;
+                return false;
             }
         }
 
@@ -380,9 +430,24 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
         public SObject GetObjectBySpriteIndex(int index, int stack = 1, bool bigcraftable = false)
         {
-            return bigcraftable
-                ? new SObject(Vector2.Zero, index) { stack = { stack } }
-                : new SObject(index, stack);
+            try
+            {
+                return bigcraftable
+                    ? new SObject(Vector2.Zero, index) { stack = { stack } }
+                    : new SObject(index, stack);
+            }
+            catch (Exception ex)
+            {
+                string error = $"The game can't construct {(bigcraftable ? "bigcraftable" : "object")} #{index}.";
+
+                var data = bigcraftable ? Game1.bigCraftablesInformation : Game1.objectInformation;
+                if (data != null && data.TryGetValue(index, out string dataStr))
+                    error += $"\nRaw data: {dataStr}";
+                else
+                    error += " No raw data found.";
+
+                throw new InvalidOperationException(error, ex);
+            }
         }
 
         /// <summary>Get an object by its parent sprite index.</summary>
@@ -622,8 +687,11 @@ namespace Pathoschild.Stardew.LookupAnything
                     // This is always an integer currently, but the API may return context_tag keys in the future.
                     recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
 
+                    // get machine
+                    if (!this.TryGetObjectBySpriteIndex(recipe.MachineId, out SObject machine, bigcraftable: true))
+                        continue;
+
                     // add recipe
-                    SObject machine = this.GetObjectBySpriteIndex(recipe.MachineId, bigcraftable: true);
                     customRecipes.Add(new RecipeModel(
                         key: null,
                         type: RecipeType.MachineInput,
@@ -720,6 +788,44 @@ namespace Pathoschild.Stardew.LookupAnything
             {
                 // fails for non-social NPCs
                 return null;
+            }
+        }
+
+        /// <summary>Get construction recipes which use an item as a building material.</summary>
+        /// <param name="input">The ingredient to match.</param>
+        /// <remarks>Derived from <see cref="CarpenterMenu(bool)"/>.</remarks>
+        private IEnumerable<RecipeModel> GetConstructionRecipes(Item input)
+        {
+            if (input?.GetItemType() != ItemType.Object)
+                yield break;
+
+            var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
+            foreach (var pair in data)
+            {
+                // ignore invalid blueprints
+                if (pair.Key == "Mine Elevator" || pair.Value.StartsWith("animal/"))
+                    continue;
+
+                // parse blueprint
+                BluePrint blueprint;
+                try
+                {
+                    blueprint = new BluePrint(pair.Key);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                // create recipe
+                if (blueprint.itemsRequired.Any())
+                {
+                    Building building = new Building(blueprint, Vector2.Zero);
+                    var recipe = new RecipeModel(blueprint, building);
+
+                    if (recipe.Ingredients.Any(p => p.Matches(input)))
+                        yield return recipe;
+                }
             }
         }
     }

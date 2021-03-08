@@ -382,6 +382,7 @@
     "item.needed-for.full-collection": "succès collection complète (1 à donner au musée)",
     "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",
     "item.needed-for.craft-master": "succès maître artisant (fabriquer {{recipes}})",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "bac d'expédition",
     "item.recipes-for-ingredient.entry": "{{name}} (nécessite {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
@@ -610,9 +611,9 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Puzzle du sanctuaire",
-    "puzzle.island-shrine.description": "Pour chaque piédestal, placez l'objet déposé par les oiseaux gemmes à l'emplacement correspondant de l'île lorsqu'il pleut. Les objects sont randomisés pour chaque sauvegarde.",
 
     // values
+    "puzzle.island-shrine.solution": "Pour chaque piédestal, placez l'objet déposé par les oiseaux gemmes à l'emplacement correspondant de l'île lorsqu'il pleut. Les objects sont randomisés pour chaque sauvegarde.",
     "puzzle.island-shrine.solution.east": "Est: {{item}}",
     "puzzle.island-shrine.solution.north": "Nord: {{item}}",
     "puzzle.island-shrine.solution.south": "Sud: {{item}}",

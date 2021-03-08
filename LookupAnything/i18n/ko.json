@@ -8,7 +8,7 @@
     "generic.yesterday": "어제",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "알 수 없음",
 
     // generic field values 기본적 필드 값들
     "generic.percent": "{{percent}}%",
@@ -72,7 +72,7 @@
     "shop.marnie": "마니의 목장",
     "shop.pierre": "피에르 잡화점",
     "shop.robin": "로빈 목공소",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "화산 상점",
     "shop.willy": "윌리의 낚시용품점",
 
     // recipe types
@@ -135,8 +135,8 @@
     "data.item.topaz-node.description": "부수면 토파즈를 얻을 수 있다.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "잉걸불 노드",
+    "data.item.cinder-shard-node.description": "부스면 잉걸불 파편을 얻을 수 있다.",
     "data.item.copper-node.name": "구리 노드",
     "data.item.copper-node.description": "부수면 구리 광석을 얻을 수 있다.",
     "data.item.gold-node.name": "금 노드",
@@ -145,21 +145,20 @@
     "data.item.iridium-node.description": "부수면 이리듐 광석을 얻을 수 있다.",
     "data.item.iron-node.name": "철 노드",
     "data.item.iron-node.description": "부수면 철 광석을 얻을 수 있다.",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "전 전동석 노드",
+    "data.item.omni-geode-node.description": "부수면 전 전동석을 얻을 수 있다.",
 
     // mine stones
     "data.item.colored-stone.name": "유색의 돌",
     "data.item.colored-stone.description": "평범한 돌이다. 돌, 광석 또는 정동석을 얻을 수 있을지도 모른다.",
     "data.item.mine-stone.name": "돌",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "부수면 돌과 철광석을 얻을 수 있다.",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "점토 노드",
+    "data.item.clay-stone.description": "부수면 점토를 얻을 수 있다.",
+    "data.item.fossil-stone.name": "화석 노드",
+    "data.item.fossil-stone.description": "부수면 화석과  얻을 수 있다.",
 
     // mine containers
     "data.item.barrel.name": "나무통",
@@ -168,7 +167,7 @@
     "data.item.box.description": "부수면 잡다한 물품들을 얻을 수 있다.",
 
     // location names
-    "location.backwoods": "오지",
+    "location.backwoods": "오솔길",
     "location.beach": "해변",
     "location.beach.east-pier": "오른쪽 해변",
     "location.bugLand": "버그랜드",
@@ -193,15 +192,15 @@
     "location.witchSwamp": "마녀의 늪",
     "location.woods": "비밀 숲",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "진저섬 칼데라",
+    "location.islandEast": "진저섬 동쪽",
+    "location.islandNorth": "진저섬 북쪽",
+    "location.islandSouth": "진저섬 남쪽",
+    "location.islandSouthEast": "진저섬 남동쪽",
+    "location.islandSouthEastCave": "진저섬 남동쪽 동굴",
+    "location.islandWest": "진저섬 서쪽",
+    "location.islandWest.fish-area-1": "진저섬 서쪽 (바다)",
+    "location.islandWest.fish-area-2": "진저섬 서쪽 (연못)",
 
     "location.unknown-fish-area": "{{locationName}} (낚시 장소 {{id}})",
 
@@ -336,8 +335,8 @@
     // labels
     "crop.summary": "작물",
     "crop.harvest": "수확",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "비료",
+    "crop.watered": "물 줌",
 
     // values
     "crop.summary.dead": "이 작물은 시들었다.",
@@ -383,6 +382,7 @@
     "item.needed-for.full-collection": "도전과제 '수집 완료' (박물관에 기증)",
     "item.needed-for.gourmet-chef": "도전과제 '미식가 요리사' ({{recipes}}을/를 요리하세요)",
     "item.needed-for.craft-master": "도전과제 '제작의 달인' ({{recipes}}을/를 제작하세요)",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "출하 상자",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}개 필요)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
@@ -465,9 +465,8 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "음 높이",
+    "item.music-block.drum-type": "드럼 타입",
 
 
     /*********
@@ -579,53 +578,46 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "해결책",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "퍼즐 해결!",
+    "puzzle.solution.hidden": "진행 모드에 퍼즐 정답이 숨겨져 있습니다.",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "크리스탈 동굴 퍼즐",
+    "puzzle.island-crystal-cave.crystal-id": "크리스탈 ID",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "퍼즐을 시작하려면 조각상을 작동시키세요.",
+    "puzzle.island-crystal-cave.solution.waiting": "게임의 문제 생성을 기다리는 중...",
+    "puzzle.island-crystal-cave.solution.activated": "활성화 된 크리스탈 패턴 반복:",
 
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.title": "진저섬 인어 퍼즐",
+    "puzzle.island-mermaid.solution.intro": "플루트 블록을 사용하여 야시장 인어 노래를 연주하십시오. 피치 값 (플루트 블록을 검색해서 피치를 볼 수 있음) :",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.title": "진저섬 사당 퍼즐",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution": "각 받침대마다 비가 올 때 보석 새가 떨어뜨린 아이템을 해당 섬 위치에 놓습니다. 개체는 저장할 때마다 무작위로 지정됩니다.",
+    "puzzle.island-shrine.solution.east": "동쪽: {{item}}",
+    "puzzle.island-shrine.solution.north": "북쪽: {{item}}",
+    "puzzle.island-shrine.solution.south": "남쪽: {{item}}",
+    "puzzle.island-shrine.solution.west": "서쪽: {{item}}",
 
 
     /*********
@@ -633,7 +625,7 @@
     *********/
     // labels
     "tile.description": "지도상의 타일 위치. 이는 당신이 '타일 찾아보기(tile lookup)'를 활성화 했기 때문에 표시됨.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "위치",
     "tile.map-name": "맵 이름",
     "tile.tile": "타일",
     "tile.tile-index": "{{layerName}}: 타일 인덱스",
@@ -665,7 +657,7 @@
 
     // values
     "tree.name.big-mushroom": "큰 버섯",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "마호가니 나무",
     "tree.name.maple": "단풍나무",
     "tree.name.oak": "참나무",
     "tree.name.palm": "야자나무",
@@ -673,7 +665,7 @@
     "tree.name.unknown": "알 수 없는 나무",
     "tree.stage.done": "다 자람",
     "tree.stage.partial": "{{stageName}}, {{max}}단계 중 ({{step}}단계)",
-    "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized", // TODO
+    "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
     "tree.next-growth.chance": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
 

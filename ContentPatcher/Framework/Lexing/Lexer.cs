@@ -57,18 +57,20 @@ namespace ContentPatcher.Framework.Lexing
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="rawText">The raw text to tokenize.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
-        public IEnumerable<ILexToken> ParseBits(string rawText, bool impliedBraces)
+        /// <param name="trim">Whether the value should be trimmed.</param>
+        public IEnumerable<ILexToken> ParseBits(string rawText, bool impliedBraces, bool trim = false)
         {
             IEnumerable<LexBit> bits = this.TokenizeString(rawText);
-            return this.ParseBits(bits, impliedBraces);
+            return this.ParseBits(bits, impliedBraces, trim);
         }
 
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="bits">The lexical character patterns to parse.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
-        public IEnumerable<ILexToken> ParseBits(IEnumerable<LexBit> bits, bool impliedBraces)
+        /// <param name="trim">Whether the value should be trimmed.</param>
+        public IEnumerable<ILexToken> ParseBits(IEnumerable<LexBit> bits, bool impliedBraces, bool trim = false)
         {
-            return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: false);
+            return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: trim);
         }
 
         /// <summary>Split a raw comma-delimited string, using only commas at the top lexical level (i.e. <c>{{Random: a, b, c}}, d</c> gets split into two values).</summary>

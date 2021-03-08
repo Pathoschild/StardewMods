@@ -1,5 +1,5 @@
 using System;
-using System.Reflection;
+using StardewModdingAPI;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
 using StardewValley.GameData.Movies;
@@ -34,10 +34,14 @@ namespace ContentPatcher.Framework
         /// <summary>Get the key for a list asset entry.</summary>
         /// <typeparam name="TValue">The list value type.</typeparam>
         /// <param name="entity">The entity whose ID to fetch.</param>
-        public static string GetListAssetKey<TValue>(TValue entity)
+        /// <param name="reflection">Simplifies dynamic access to game code.</param>
+        public static string GetListAssetKey<TValue>(TValue entity, IReflectionHelper reflection)
         {
             switch (entity)
             {
+                case ConcessionItemData entry:
+                    return entry.ID.ToString();
+
                 case ConcessionTaste entry:
                     return entry.Name;
 
@@ -51,11 +55,17 @@ namespace ContentPatcher.Framework
                     return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
 
                 default:
-                    PropertyInfo property = entity.GetType().GetProperty("ID");
-                    if (property != null)
-                        return property.GetValue(entity)?.ToString();
+                    {
+                        var property = reflection.GetProperty<object>(entity, "ID", required: false);
+                        if (property != null)
+                            return property.GetValue()?.ToString();
 
-                    throw new NotSupportedException($"No ID implementation for list asset value type {typeof(TValue).FullName}.");
+                        var field = reflection.GetField<object>(entity, "ID", required: false);
+                        if (field != null)
+                            return field.GetValue()?.ToString();
+
+                        throw new NotSupportedException($"No ID implementation for list asset value type {typeof(TValue).FullName}.");
+                    }
             }
         }
     }

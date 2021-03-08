@@ -384,6 +384,7 @@
     "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
     "item.needed-for.gourmet-chef": "実績:グルメマスター ({{recipes}}を調理する)",
     "item.needed-for.craft-master": "実績:クラフトマスター ({{recipes}}を作成する)",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}個必要)",
     "item.recipes-for-machine.multiple-items": "{{name}}が{{count}}個",
@@ -624,10 +625,10 @@
     // labels
     // TODO
     "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
     // TODO
+    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
     "puzzle.island-shrine.solution.east": "East: {{item}}",
     "puzzle.island-shrine.solution.north": "North: {{item}}",
     "puzzle.island-shrine.solution.south": "South: {{item}}",

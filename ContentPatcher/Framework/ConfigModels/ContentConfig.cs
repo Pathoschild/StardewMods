@@ -16,6 +16,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The user-defined tokens whose values may depend on other tokens.</summary>
         public DynamicTokenConfig[] DynamicTokens { get; set; }
 
+        /// <summary>The custom locations to add to the game.</summary>
+        public CustomLocationConfig[] CustomLocations { get; set; }
+
         /// <summary>The changes to make.</summary>
         public PatchConfig[] Changes { get; set; }
 
@@ -32,6 +35,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public void OnDeserialized(StreamingContext context)
         {
             this.DynamicTokens ??= new DynamicTokenConfig[0];
+            this.CustomLocations ??= new CustomLocationConfig[0];
             this.Changes ??= new PatchConfig[0];
             this.ConfigSchema ??= new InvariantDictionary<ConfigSchemaFieldConfig>();
         }

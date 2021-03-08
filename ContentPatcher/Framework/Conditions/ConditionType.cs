@@ -47,6 +47,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An event ID the player saw.</summary>
         HasSeenEvent,
 
+        /// <summary>The player's daily luck.</summary>
+        DailyLuck,
+
         /// <summary>The response IDs for the player's answers to question dialogues.</summary>
         HasDialogueAnswer,
 
@@ -137,11 +140,14 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** String manipulation
         ****/
+        /// <summary>A token which transforms its input text to lowercase.</summary>
+        Lowercase,
+
         /// <summary>A random value selected from the given input.</summary>
         Random,
 
-        /// <summary>A token which transforms its input text to lowercase.</summary>
-        Lowercase,
+        /// <summary>A token which returns a string representation of its input text.</summary>
+        Render,
 
         /// <summary>A token which transforms its input text to uppercase.</summary>
         Uppercase,

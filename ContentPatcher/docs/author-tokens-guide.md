@@ -228,6 +228,38 @@ The year number (like `1` or `2`).
 </tr>
 
 <tr valign="top">
+<td>DailyLuck</td>
+<td>
+
+The [daily luck](https://stardewvalleywiki.com/Luck) for the current player (or the player specified
+with a [`PlayerType`](#playertype) argument).
+
+This is a decimal value usually between -0.1 and 0.1. This **cannot** be compared using the
+`{{Range}}` token, which produces a range of integer values. The value can only be safely compared
+using [query expressions](#query-expressions). For example:
+
+```js
+"When": {
+   "Query: {{DailyLuck}} < 0": true // spirits unhappy today
+}
+```
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>FarmhouseUpgrade</td>
+<td>
+
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the current
+player (or the player specified with a [`PlayerType`](#playertype) argument). The normal values are
+0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may
+add upgrade levels beyond that.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasConversationTopic</td>
 <td>
 
@@ -528,17 +560,6 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 </tr>
 
 <tr valign="top">
-<td>FarmhouseUpgrade</td>
-<td>
-
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades). The normal values
-are 0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods
-may add upgrade levels beyond that.
-
-</td>
-</tr>
-
-<tr valign="top">
 <td>FarmName</td>
 <td>The name of the current farm.</td>
 </tr>
@@ -689,7 +710,7 @@ parsed input matches one of the above forms.
 <tr>
 <th>condition</th>
 <th>purpose</th>
-
+</tr>
 <tr valign="top">
 <td>Lowercase<br />Uppercase</td>
 <td>
@@ -710,6 +731,31 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 
 </dd>
 </dl>
+</td>
+</tr>
+<tr valign="top">
+<td>Render</td>
+<td>
+
+Get the string representation of the input argument. This is mainly useful in `When` blocks to
+compare the rendered value directly (instead of comparing token set values):
+
+```js
+"When": {
+   "Render:{{season}} {{day}}": "spring 14"
+}
+```
+
+This isn't needed in other contexts, where you can use token placeholders directly. For example,
+these two entries are equivalent:
+
+```js
+"Entries": {
+   "Mon": "It's a lovely {{season}} {{day}}!",
+   "Mon": "It's a lovely {{Render: {{season}} {{day}} }}!",
+}
+```
+
 </td>
 </tr>
 </table>
@@ -991,7 +1037,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1227,7 +1273,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1260,7 +1306,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1385,7 +1431,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.20.0",
+   "Format": "1.21.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1405,7 +1451,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.20.0",
+     "Format": "1.21.0",
      "Changes": [
         {
            "Action": "EditData",

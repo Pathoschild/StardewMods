@@ -111,7 +111,7 @@ location, or get the location name for a chest from its edit screen. You can use
 </table>
 
 ## Compatibility
-Chests Anywhere is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
+Chests Anywhere is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer.
 
 Multiplayer notes:

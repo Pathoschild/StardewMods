@@ -150,11 +150,11 @@ And many other places.
   (gray but not crossed out).
   > ![](screenshots/monster.png)
 
-* See what an item is used for, who likes getting it as a gift, and its dye color (and strength)
-  when used in tailoring. Look up a movie ticket to see what's playing and who would like the movie.
+* See what an item is used for, who likes it as a gift, and what you can use it for. Look up a movie
+  ticket to see what's playing and who would like the movie.
   > ![](screenshots/item.png)
 
-* See where you can catch a fish:
+* See where you can catch a fish and what it'll produce in fish ponds:
   > ![](screenshots/fish.png)
 
 * See when a crop will be ready to harvest.
@@ -177,8 +177,7 @@ And many other places.
 * See how long your fences will last.
   > ![](screenshots/fence.png)
 
-* See what those mine objects do.
-  > ![](screenshots/mine-gem.png)
+* See what mine nodes contain.
   > ![](screenshots/mine-stone.png)
   > ![](screenshots/mine-ore.png)
   > ![](screenshots/mine-ice.png)
@@ -202,6 +201,7 @@ And much more! Here's a rough list of things you can look up (not necessarily co
   * machines;
   * movie snacks;
   * music blocks;
+  * recipes;
   * spawned objects in the world (e.g. mining nodes in the mines);
 * buildings:
   * barns/coops;
@@ -225,15 +225,14 @@ And much more! Here's a rough list of things you can look up (not necessarily co
 ### Data mining fields (advanced)
 Are you a data miner or trying to figure out the game mechanics? [Enable data mining fields](#configuration)
 to see raw game data too. This will show 'pinned' data handpicked by Lookup Anything, along with a
-full dynamic dump of the raw data:
-> ![](screenshots/debug-farm-animal-1.png)
-> ![](screenshots/debug-farm-animal-2.png)
+full dynamic dump of the raw data. Best used with the 'force full-screen' option:
+> ![](screenshots/debug-farm-animal.png)
 
 Enable tile lookups to see information about map tiles:
 > ![](screenshots/map-tile.png)
 
 ## Compatibility
-Lookup Anything is compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and
+Lookup Anything is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer. There are no known issues in multiplayer (even if other players don't have it installed).
 
 ## Extensibility for modders

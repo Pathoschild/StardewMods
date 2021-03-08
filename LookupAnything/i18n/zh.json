@@ -8,12 +8,12 @@
     "generic.yesterday": "昨天",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "未知",
 
     // generic field values
     "generic.percent": "{{percent}}%",
     "generic.percent-chance-of": "{{percent}}%几率{{label}}",
-    "generic.percent-ratio": "{{percent}}% ({{max}}中的{{value}})",
+    "generic.percent-ratio": "{{percent}}%（{{max}}中的{{value}}）",
     "generic.ratio": "总数{{max}}中的{{value}}",
     "generic.range": "{{min}}到{{max}}",
     "generic.yes": "是",
@@ -25,7 +25,7 @@
     "generic.in-x-days": "在{{count}}天内",
     "generic.x-days-ago": "{{count}}天前",
     "generic.price": "{{price}}金",
-    "generic.price-for-quality": "{{price}}金({{quality}})",
+    "generic.price-for-quality": "{{price}}金（{{quality}}）",
     "generic.price-for-stack": "{{count}}个，总共价值{{price}}金",
 
     // types
@@ -72,7 +72,7 @@
     "shop.marnie": "玛妮",
     "shop.pierre": "皮埃尔",
     "shop.robin": "罗宾",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "火山商店",
     "shop.willy": "威利",
 
     // recipe types
@@ -135,8 +135,8 @@
     "data.item.topaz-node.description": "打碎之后可以获得黄水晶。",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "火山晶石矿点",
+    "data.item.cinder-shard-node.description": "打碎之后可以获得火山晶石。",
     "data.item.copper-node.name": "铜矿点",
     "data.item.copper-node.description": "打碎之后可以获得铜矿石。",
     "data.item.gold-node.name": "黄金矿点",
@@ -145,21 +145,20 @@
     "data.item.iridium-node.description": "打碎之后可以获得铱矿石。",
     "data.item.iron-node.name": "铁矿点",
     "data.item.iron-node.description": "打碎之后可以获得铁矿石。",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "万象晶球矿点",
+    "data.item.omni-geode-node.description": "打碎之后可以获得万象晶球。",
 
     // mine stones
     "data.item.colored-stone.name": "各色石头",
     "data.item.colored-stone.description": "一颗常见的石头。可能藏有石头、矿石或晶洞。",
     "data.item.mine-stone.name": "石头",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "打碎之后可以获得石头，有几率获得煤炭。",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "粘土石头",
+    "data.item.clay-stone.description": "打碎之后可以获得粘土。",
+    "data.item.fossil-stone.name": "化石石头",
+    "data.item.fossil-stone.description": "打碎之后可以获得化石和骨头。",
 
     // mine containers
     "data.item.barrel.name": "桶",
@@ -170,7 +169,7 @@
     // location names
     "location.backwoods": "边远森林",
     "location.beach": "沙滩",
-    "location.beach.east-pier": "沙滩(码头东侧)",
+    "location.beach.east-pier": "沙滩（码头东侧）",
     "location.bugLand": "突变虫穴",
     "location.busStop": "巴士站",
     "location.desert": "沙漠",
@@ -180,30 +179,30 @@
     "location.forest": "森林",
     "location.forest.fish-area-0": "煤矿森林河流",
     "location.forest.fish-area-1": "煤矿森林湖泊",
-    "location.forest.island-tip": "煤矿森林河流(大岛南端)",
+    "location.forest.island-tip": "煤矿森林河流（大岛南端）",
     "location.mountain": "山区",
     "location.railroad": "铁路",
     "location.sewer": "下水道",
     "location.submarine": "夜市潜艇",
     "location.town": "城镇",
-    "location.town.northmost-bridge": "城镇(北部桥区)",
+    "location.town.northmost-bridge": "城镇（北部桥区）",
     "location.tunnel": "巴士隧道",
     "location.undergroundMine": "矿井",
     "location.undergroundMine.level": "矿井层数：{{level}}",
     "location.witchSwamp": "女巫的沼泽",
     "location.woods": "秘密森林",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "姜岛火山口",
+    "location.islandEast": "姜岛东部",
+    "location.islandNorth": "姜岛北部",
+    "location.islandSouth": "姜岛南部",
+    "location.islandSouthEast": "姜岛东南部",
+    "location.islandSouthEastCave": "姜岛东南部洞穴",
+    "location.islandWest": "姜岛西部",
+    "location.islandWest.fish-area-1": "姜岛西部（海洋）",
+    "location.islandWest.fish-area-2": "姜岛西部（池塘）",
 
-    "location.unknown-fish-area": "{{locationName}} (钓鱼区 {{id}})",
+    "location.unknown-fish-area": "{{locationName}}（钓鱼区 {{id}}）",
 
 
     /*********
@@ -247,22 +246,22 @@
     "building.construction.summary": "完成至 {{date}}",
     "building.feed-trough.automated": "自动化",
     "building.feed-trough.summary": "{{filled}}喂食格已填充，最大可填充喂食格为{{max}}格",
-    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.horse-location.summary": "{{location}}（{{x}}, {{y}}）",
     "building.junimo-harvesting-enabled": "自动收获已启用",
     "building.owner.none": "没有屋主",
     "building.output-processing": "产品处理中",
     "building.output-ready": "产品完成",
     "building.slimes.summary": "已容纳{{count}}只史莱姆，最大可容纳{{max}}只史莱姆",
-    "building.stored-hay.summary-one-silo": "{{hayCount}} 个干草 (最大容量: {{maxHay}})",
-    "building.stored-hay.summary-multiple-silos": "{{hayCount}} 个干草在 {{siloCount}} 个筒仓 (最大容量: {{maxHay}})",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} 个干草（最大容量: {{maxHay}}）",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} 个干草在 {{siloCount}} 个筒仓（最大容量: {{maxHay}}）",
     "building.upgrades.barn.0": "可容纳动物量上升至 4 只动物，解锁牛",
     "building.upgrades.barn.1": "可容纳动物量上升至 8 只动物，解锁繁殖和山羊",
-    "building.upgrades.barn.2": "可容纳动物量上升至 12 只动物，解锁自动喂食,猪和绵羊",
+    "building.upgrades.barn.2": "可容纳动物量上升至 12 只动物，解锁自动喂食、猪和绵羊",
     "building.upgrades.cabin.0": "初始小屋",
     "building.upgrades.cabin.1": "添加厨房,解锁婚姻",
     "building.upgrades.cabin.2": "解锁孩童",
     "building.upgrades.coop.0": "可容纳动物量上升至 4 只动物，解锁鸡",
-    "building.upgrades.coop.1": "可容纳动物量上升至 8 只动物，解锁孵化器,恐龙和鸭",
+    "building.upgrades.coop.1": "可容纳动物量上升至 8 只动物，解锁孵化器、恐龙和鸭",
     "building.upgrades.coop.2": "可容纳动物量上升至 12 只动物，解锁自动喂食和兔子",
     "building.water-trough.summary": "{{filled}}个水槽已填充，最大可填充水槽量{{max}}个",
 
@@ -303,7 +302,7 @@
     // values
     "bush.growth.summary": "将于 {{date}} 成熟",
     "bush.schedule.berry": "春季15-18日有20%几率生长美洲大树莓，秋季8-11日有20%几率生长黑莓。",
-    "bush.schedule.tea": "每个季节22日开始茶叶可以收获(冬季除外，在温室里种植则四季可收)。",
+    "bush.schedule.tea": "每个季节22日开始茶叶可以收获（冬季除外，在温室里种植则四季可收）。",
 
 
     /*********
@@ -327,7 +326,7 @@
     "fruit-tree.quality.now": "目前{{quality}}",
     "fruit-tree.quality.on-date": "将于{{date}}获得{{quality}}",
     "fruit-tree.quality.on-date-next-year": "将于第二年的{{date}}获得{{quality}}",
-    "fruit-tree.season.summary": "{{season}} (在温室内全年结果)",
+    "fruit-tree.season.summary": "{{season}}（在温室内全年结果）",
 
 
     /*********
@@ -336,18 +335,18 @@
     // labels
     "crop.summary": "作物",
     "crop.harvest": "收割",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "施肥",
+    "crop.watered": "浇水",
 
     // values
     "crop.summary.dead": "作物死亡",
     "crop.summary.drops-X": "收获{{count}}份",
-    "crop.summary.drops-X-to-Y": "收获{{min}}至{{max}}份 ({{percent}}%几率收获额外作物)",
+    "crop.summary.drops-X-to-Y": "收获{{min}}至{{max}}份（{{percent}}%几率收获额外作物）",
     "crop.summary.harvest-once": "{{daysToFirstHarvest}}天后收获",
     "crop.summary.harvest-multi": "{{daysToFirstHarvest}}天后收获，之后每隔{{daysToNextHarvests}}天收获一次",
     "crop.summary.seasons": "在{{seasons}}生长",
     "crop.summary.sells-for": "以{{price}}出售",
-    "crop.harvest.too-late": "下次收获超出本季(下次收获将在{{date}})",
+    "crop.harvest.too-late": "下次收获超出本季（下次收获将在{{date}}）",
 
 
     /*********
@@ -377,14 +376,15 @@
     "item.contents.partial": "{{name}}在{{time}}后完成",
     "item.undiscovered-gift-taste": "{{count}} 位没揭露的村民",
     "item.undiscovered-gift-taste-appended": ", 和 {{count}} 位没揭露的村民",
-    "item.needed-for.community-center": "社区中心({{bundles}})",
-    "item.needed-for.full-shipment": "全部货物成就(出货一个)",
-    "item.needed-for.polyculture": "混合栽培成就(再出货{{count}}个)",
-    "item.needed-for.full-collection": "全套收集成就(向博物馆捐赠一个)",
-    "item.needed-for.gourmet-chef": "美食大厨成就(烹饪{{recipes}})",
-    "item.needed-for.craft-master": "制造大师成就(制造{{recipes}})",
+    "item.needed-for.community-center": "社区中心（{{bundles}}）",
+    "item.needed-for.full-shipment": "全部货物成就（出货一个）",
+    "item.needed-for.polyculture": "混合栽培成就（再出货{{count}}个）",
+    "item.needed-for.full-collection": "全套收集成就（向博物馆捐赠一个）",
+    "item.needed-for.gourmet-chef": "美食大厨成就（烹饪{{recipes}}）",
+    "item.needed-for.craft-master": "制造大师成就（制造{{recipes}}）",
+    "item.needed-for.quests": "当前任务（{{quests}}）",
     "item.sells-to.shipping-box": "出货箱",
-    "item.recipes-for-ingredient.entry": "{{name}} (需要{{count}})",
+    "item.recipes-for-ingredient.entry": "{{name}}（需要{{count}}）",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
     "item.number-owned.summary": "你目前拥有的总数为{{count}}",
     "item.number-crafted.summary": "你已制造{{count}}个此物",
@@ -399,9 +399,9 @@
 
     // values
     "item.cask-schedule.now": "目前{{quality}}",
-    "item.cask-schedule.now-partial": "目前{{quality}}(用镐停止陈酿)",
+    "item.cask-schedule.now-partial": "目前{{quality}}（用镐停止陈酿）",
     "item.cask-schedule.tomorrow": "明天{{quality}}",
-    "item.cask-schedule.in-x-days": "将在{{count}}天({{date}})后提升到{{quality}}",
+    "item.cask-schedule.in-x-days": "将在{{count}}天（{{date}}）后提升到{{quality}}",
 
 
     /*********
@@ -409,7 +409,7 @@
     *********/
     // labels
     "item.crabpot-bait": "鱼饵",
-    "item.crabpot-bait-needed": "需要鱼饵!",
+    "item.crabpot-bait-needed": "需要鱼饵！",
     "item.crabpot-bait-not-needed": "诱饵大师职业不需要鱼饵",
 
 
@@ -421,7 +421,7 @@
 
     // values
     "item.fence-health.gold-clock": "黄金时钟增益，无法腐坏",
-    "item.fence-health.summary": "{{percent}}% (大约还剩{{count}}天)",
+    "item.fence-health.summary": "{{percent}}%（大约还剩{{count}}天）",
 
 
     /*********
@@ -434,7 +434,7 @@
     // values
 
     "item.fish-spawn-rules.min-fishing-level": "最低钓鱼等级：{{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "尚未被抓住(只能被抓住一次)",
+    "item.fish-spawn-rules.not-caught-yet": "尚未被抓住（只能被抓住一次）",
     "item.fish-spawn-rules.locations": "地点：{{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "地点：",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
@@ -466,9 +466,8 @@
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "音调",
+    "item.music-block.drum-type": "鼓点类型",
 
 
     /*********
@@ -485,7 +484,7 @@
 
     // values
     "monster.drops.nothing": "无",
-    "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}} (击杀了总数{{requiredCount}}中的{{count}})",
+    "monster.adventure-guild.eradication-goal": "消灭怪物的目的: {{name}}（击杀了总数{{requiredCount}}中的{{count}}）",
 
 
     /*********
@@ -523,7 +522,7 @@
     "npc.child.age": "年龄",
 
     // values
-    "npc.child.age.description-partial": "目前位于{{label}}，还有({{count}}天进入{{nextLabel}})",
+    "npc.child.age.description-partial": "目前位于{{label}}，还有（{{count}}天进入{{nextLabel}}）",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "新生儿期",
     "npc.child.age.baby": "婴儿期",
@@ -541,11 +540,11 @@
     "pet.water-bowl": "是否给水碗添水",
 
     // values
-    "pet.last-petted.yes": "是的(+12友好度)",
+    "pet.last-petted.yes": "是的（+12友好度）",
     "pet.last-petted.days-ago": "{{days}}天前",
     "pet.last-petted.never": "还没有抚摸",
     "pet.water-bowl.empty": "水碗是空的",
-    "pet.water-bowl.filled": "水碗加满水了(+6友好度)",
+    "pet.water-bowl.filled": "水碗加满水了（+6友好度）",
 
 
     /*********
@@ -572,7 +571,7 @@
     "player.gender.male": "男",
     "player.gender.female": "女",
     "player.luck.summary": "{{percent}}%随机事件概率",
-    "player.skill.progress": "{{level}}级，(下一等级需要{{expNeeded}}经验)",
+    "player.skill.progress": "{{level}}级，（下一等级需要{{expNeeded}}经验）",
     "player.skill.progress-last": "{{level}}级",
 
 
@@ -580,53 +579,46 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "解决方案",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "谜题已解决！",
+    "puzzle.solution.hidden": "谜题解决方案隐藏在进度模式中。",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "水晶洞穴谜题",
+    "puzzle.island-crystal-cave.crystal-id": "水晶 ID",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "激活雕像以开始谜题。",
+    "puzzle.island-crystal-cave.solution.waiting": "等待游戏生成序列…",
+    "puzzle.island-crystal-cave.solution.activated": "重复激活水晶的序列：",
 
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.title": "岛屿美人鱼谜题",
+    "puzzle.island-mermaid.solution.intro": "使用长笛块播放夜市的美人鱼歌曲。音高值（你可以查找长笛块以查看其音调）：",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.title": "岛屿神庙谜题",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution": "对于每个基座，下雨时将宝石鸟掉落的物品放在相应的岛上位置。每个存档都会随机分配物品。",
+    "puzzle.island-shrine.solution.east": "东部：{{item}}",
+    "puzzle.island-shrine.solution.north": "北部：{{item}}",
+    "puzzle.island-shrine.solution.south": "南部：{{item}}",
+    "puzzle.island-shrine.solution.west": "西部：{{item}}",
 
 
     /*********
@@ -634,7 +626,7 @@
     *********/
     // labels
     "tile.description": "地图上此位置的地格。显示此信息是因为你在设置中打开了地格信息显示功能。",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "位置",
     "tile.map-name": "地图名",
     "tile.tile": "地格",
     "tile.tile-index": "{{layerName}}：地格号",
@@ -666,14 +658,14 @@
 
     // values
     "tree.name.big-mushroom": "大蘑菇",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "桃花心木",
     "tree.name.maple": "枫树",
     "tree.name.oak": "橡树",
     "tree.name.palm": "棕榈树",
     "tree.name.pine": "松树",
     "tree.name.unknown": "未知",
     "tree.stage.done": "完全长成",
-    "tree.stage.partial": "{{stageName}} (总共{{max}}个阶段中的第{{step}}阶段)",
+    "tree.stage.partial": "{{stageName}}（总共{{max}}个阶段中的第{{step}}阶段）",
     "tree.next-growth.winter": "除非施肥，冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
     "tree.next-growth.chance": "有{{chance}}%几率明天成长到{{stage}}",

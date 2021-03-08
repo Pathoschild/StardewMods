@@ -56,7 +56,7 @@ If multiple configs apply to a location, the last one specified applies. This is
 so you can't _disable_ crops in a location that normally does allow them.
 
 ## Compatibility
-Compatible with Stardew Valley 1.4+ on Linux/Mac/Windows, both single-player and multiplayer. In
+Compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and multiplayer. In
 multiplayer mode, it must be installed by the main player to work correctly.
 
 ## See also

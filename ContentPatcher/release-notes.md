@@ -9,6 +9,26 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.21
+Released 07 February 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
+
+* Added support for [creating custom locations](docs/author-guide.md#custom-locations).
+* Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
+* Added new tokens:
+  * [`Render`](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+  * `DailyLuck` to get a player's daily luck (thanks to Thom1729!).
+* The `FarmhouseUpgrade` token can now check either the current player (default) or the host player.
+* The `Enabled` field no longer allows tokens (in format version 1.21.0+).
+* Improved default `LogName` for patches with multiple `Target` or `FromFile` values.
+* Improved split-screen support.
+* Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.
+* Fixed `patch reload` command not reapplying format migrations to reloaded patches.
+* Fixed error patching `Data\Concessions` using `EditData`.
+
+**Update note for mod authors:**  
+If you use tokens in the `Enabled` field, updating the `Format` field to `1.21.0` or later will
+cause errors. See the [migration guide](docs/author-migration-guide.md) for more info.
+
 ## 1.20
 Released 06 February 2021. See the [release highlights](https://www.patreon.com/posts/47213526).
 

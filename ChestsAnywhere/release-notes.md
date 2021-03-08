@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.10
+Released 07 March 2021.
+
+* Fixed error opening dressers in rare cases.
+* Fixed lag in some cases when opening a chest menu that can't be linked to a chest.
+* Improved translations. Thanks to derJuba007 (updated German), horizon98 (updated Chinese), and zNatural (updated Spanish)!
+
 ## 1.20.9
 Released 06 February 2021.
 

@@ -382,6 +382,7 @@
     "item.needed-for.full-collection": "conquista da Coleção Completa (doe um para o museu)",
     "item.needed-for.gourmet-chef": "conquista de Chefe Gourmet (cozinhe {{recipes}})",
     "item.needed-for.craft-master": "conquista de Mestre do Artesanato (crie {{recipes}})",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "Caixa de envio",
     "item.recipes-for-ingredient.entry": "{{name}} (precisa de {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
@@ -612,9 +613,9 @@
     // labels
     // TODO
     "puzzle.island-shrine.title": "Island Shrine Puzzle",
-    "puzzle.island-shrine.description": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
 
     // values
+    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
     "puzzle.island-shrine.solution.east": "Leste: {{item}}",
     "puzzle.island-shrine.solution.north": "Norte: {{item}}",
     "puzzle.island-shrine.solution.south": "Sul: {{item}}",

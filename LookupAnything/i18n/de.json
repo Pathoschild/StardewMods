@@ -382,6 +382,7 @@
     "item.needed-for.full-collection": "\"Eine vollständige Sammlung\" Errungenschaft (Spende eines dem Museum)",
     "item.needed-for.gourmet-chef": "\"Gourmetkoch\" Errungenschaft (koche {{recipes}})",
     "item.needed-for.craft-master": "\"Handwerksmeister\" Errungenschaft (stelle {{recipes}} her)",
+    "item.needed-for.quests": "aktuelle Aufgaben ({{quests}})",
     "item.sells-to.shipping-box": "Versandkiste",
     "item.recipes-for-ingredient.entry": "{{name}} (braucht {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",

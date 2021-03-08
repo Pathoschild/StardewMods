@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -30,7 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
                 object curValue = property.GetValue(this);
                 object defaultValue = property.GetValue(defaults);
 
-                if (!curValue.Equals(defaultValue))
+                if (!defaultValue.Equals(curValue))
                     customSettings[property.Name] = curValue?.ToString();
             }
 

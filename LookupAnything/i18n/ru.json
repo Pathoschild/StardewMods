@@ -382,6 +382,7 @@
     "item.needed-for.full-collection": "достижение 'Полная коллекция' (Пожертвуйте музею)",
     "item.needed-for.gourmet-chef": "достижение 'Шеф-повар' (приготовьте рецепт: {{recipes}})",
     "item.needed-for.craft-master": "достижение 'Мастер' (создайте предмет: {{recipes}})",
+    "item.needed-for.quests": "current quests ({{quests}})", // TODO
     "item.sells-to.shipping-box": "Отгрузочный ящик",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}} шт.)",
     "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
@@ -610,9 +611,9 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Паззл Островного Святилища",
-    "puzzle.island-shrine.description": "Положите на каждый из пьедесталов по предмету, оброненному драгоценными птицами в соответствующих локациях острова во время дождя. Предметы случайные для каждого сохранения.",
 
     // values
+    "puzzle.island-shrine.solution": "Положите на каждый из пьедесталов по предмету, оброненному драгоценными птицами в соответствующих локациях острова во время дождя. Предметы случайные для каждого сохранения.",
     "puzzle.island-shrine.solution.east": "Восток: {{item}}",
     "puzzle.island-shrine.solution.north": "Север: {{item}}",
     "puzzle.island-shrine.solution.south": "Юг: {{item}}",
