@@ -121,7 +121,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 key: recipe.name,
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
-                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
+                ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                 item: item => recipe.createItem(),
                 isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
@@ -142,7 +142,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 type: RecipeType.BuildingBlueprint,
                 displayType: I18n.Building_Construction(),
                 ingredients: blueprint.itemsRequired
-                    .Select(ingredient => new RecipeIngredientModel(new[] { ingredient.Key }, ingredient.Value))
+                    .Select(ingredient => new RecipeIngredientModel(ingredient.Key, ingredient.Value))
                     .ToArray(),
                 item: _ => null,
                 isKnown: () => true,

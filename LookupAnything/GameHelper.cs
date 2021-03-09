@@ -696,7 +696,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.MachineInput,
                         displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.InputId.Value }, p.Count)),
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId.Value, p.Count)),
                         item: ingredient =>
                         {
                             SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
@@ -708,7 +708,7 @@ namespace Pathoschild.Stardew.LookupAnything
                             return output;
                         },
                         isKnown: () => true,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(new[] { id.Value }, 1)),
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id.Value, 1)),
                         outputItemIndex: recipe.OutputId,
                         minOutput: recipe.MinOutput,
                         maxOutput: recipe.MaxOutput,
@@ -749,7 +749,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.TailorInput,
                         displayType: I18n.RecipeType_Tailoring(),
-                        ingredients: new[] { new RecipeIngredientModel(new[] { input.ParentSheetIndex }, 1) },
+                        ingredients: new[] { new RecipeIngredientModel(input.ParentSheetIndex, 1) },
                         item: _ => this.GetTailoredItem(outputId),
                         isKnown: () => Game1.player.HasTailoredThisItem(this.GetTailoredItem(outputId)),
                         outputItemIndex: recipe.CraftedItemID,

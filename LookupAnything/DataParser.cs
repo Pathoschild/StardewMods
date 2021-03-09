@@ -465,12 +465,12 @@ namespace Pathoschild.Stardew.LookupAnything
                     key: null,
                     type: RecipeType.BuildingInput,
                     displayType: building.displayName,
-                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
+                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output, null),
                     isKnown: () => true,
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
-                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(new[] { p }, 1)),
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
                     machineParentSheetIndex: null,
                     isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
                 )
