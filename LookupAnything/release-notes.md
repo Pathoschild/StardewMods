@@ -8,6 +8,9 @@
   * Tailoring recipes are now faded if you haven't discovered them yet.
   * The produced item's icon now reflects the dye effect of the spool item.
   * Fixed tailoring recipes shown that aren't actually accessible in-game due to higher-priority recipes.
+* You can now look up...
+  * items in the tailoring UI's spool and output slots;
+  * disabled items in the tailoring UI's inventory box.
 
 ## 1.33
 Released 07 March 2021.
