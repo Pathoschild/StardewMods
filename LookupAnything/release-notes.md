@@ -2,7 +2,12 @@
 
 # Release notes
 ## Upcoming release
-* Tailoring recipes are now faded if you haven't discovered them yet.
+* Improved tailoring recipes in item lookups:
+  * Added reverse lookup (i.e. see tailoring recipes which produce the current item).
+  * Added full ingredient list for tailoring recipes.
+  * Tailoring recipes are now faded if you haven't discovered them yet.
+  * The produced item's icon now reflects the dye effect of the spool item.
+  * Fixed tailoring recipes shown that aren't actually accessible in-game due to higher-priority recipes.
 
 ## 1.33
 Released 07 March 2021.
