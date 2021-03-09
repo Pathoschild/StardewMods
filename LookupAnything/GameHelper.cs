@@ -34,8 +34,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /*********
         ** Fields
         *********/
-        /// <summary>The cached object data.</summary>
-        private Lazy<ObjectModel[]> Objects;
+        /// <summary>The cached item data filtered to <see cref="ItemType.Object"/> items.</summary>
+        private Lazy<SearchableItem[]> Objects;
 
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
@@ -85,8 +85,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="monitor">The monitor with which to log errors.</param>
         public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
-            this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
+            this.Objects = new(() => this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }).ToArray());
+            this.Recipes = new(() => this.GetAllRecipes(reflection, monitor).ToArray());
         }
 
         /****
@@ -157,9 +157,16 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
         {
             return (
-                from obj in this.Objects.Value
-                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && SObject.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
-                select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
+                from entry in this.Objects.Value
+                let obj = (SObject)entry.Item
+                where
+                    obj.Type != "Arch"
+                    && obj.Type != "Fish"
+                    && obj.Type != "Mineral"
+                    && obj.Type != "Cooking"
+                    && SObject.isPotentialBasicShippedCategory(obj.ParentSheetIndex, obj.Category.ToString())
+
+                select new KeyValuePair<int, bool>(obj.ParentSheetIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSheetIndex))
             );
         }
 
@@ -454,8 +461,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="category">The category number.</param>
         public IEnumerable<SObject> GetObjectsByCategory(int category)
         {
-            foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
-                yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
+            foreach (var entry in this.Objects.Value.Where(obj => obj.Item.Category == category))
+                yield return (SObject)entry.CreateItem();
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>

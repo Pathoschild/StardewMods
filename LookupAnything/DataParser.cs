@@ -13,7 +13,6 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.FishPond;
-using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
@@ -345,64 +344,6 @@ namespace Pathoschild.Stardew.LookupAnything
                     isMineMonster: isMineMonster,
                     drops: drops
                 );
-            }
-        }
-
-        /// <summary>Parse gift tastes.</summary>
-        /// <param name="monitor">The monitor with which to log errors.</param>
-        /// <remarks>Derived from the <see cref="CraftingRecipe.createItem"/>.</remarks>
-        public IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
-        {
-            IDictionary<int, string> data = Game1.objectInformation;
-
-            foreach (var pair in data)
-            {
-                int parentSpriteIndex = pair.Key;
-
-                ObjectModel model;
-                try
-                {
-
-                    string[] fields = pair.Value.Split('/');
-
-                    // ring
-                    if (parentSpriteIndex >= Ring.ringLowerIndexRange && parentSpriteIndex <= Ring.ringUpperIndexRange)
-                    {
-                        model = new ObjectModel(
-                            parentSpriteIndex: parentSpriteIndex,
-                            name: fields[0],
-                            description: fields[1],
-                            price: int.Parse(fields[2]),
-                            edibility: -300,
-                            type: fields[3],
-                            category: SObject.ringCategory
-                        );
-                    }
-
-                    // any other object
-                    else
-                    {
-                        string name = fields[SObject.objectInfoNameIndex];
-                        int price = int.Parse(fields[SObject.objectInfoPriceIndex]);
-                        int edibility = int.Parse(fields[SObject.objectInfoEdibilityIndex]);
-                        string description = fields[SObject.objectInfoDescriptionIndex];
-
-                        // type & category
-                        string[] typeParts = fields[SObject.objectInfoTypeIndex].Split(' ');
-                        string typeName = typeParts[0];
-                        int category = 0;
-                        if (typeParts.Length > 1)
-                            category = int.Parse(typeParts[1]);
-
-                        model = new ObjectModel(parentSpriteIndex, name, description, price, edibility, typeName, category);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    monitor.Log($"Couldn't parse object #{parentSpriteIndex} from Content\\Data\\ObjectInformation.xnb due to an invalid format.\nObject data: {pair.Value}\nError: {ex}", LogLevel.Warn);
-                    continue;
-                }
-                yield return model;
             }
         }
 
