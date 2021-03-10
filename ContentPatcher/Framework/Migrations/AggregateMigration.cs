@@ -17,6 +17,9 @@ namespace ContentPatcher.Framework.Migrations
         /// <summary>The valid format versions.</summary>
         private readonly HashSet<string> ValidVersions;
 
+        /// <summary>The latest format version.</summary>
+        private readonly string LatestVersion;
+
         /// <summary>The migrations to apply.</summary>
         private readonly IMigration[] Migrations;
 
@@ -38,6 +41,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             this.Version = version;
             this.ValidVersions = new HashSet<string>(migrations.Select(p => p.Version.ToString()));
+            this.LatestVersion = migrations.Last().Version.ToString();
             this.Migrations = migrations.Where(m => m.Version.IsNewerThan(version)).ToArray();
         }
 
@@ -47,7 +51,10 @@ namespace ContentPatcher.Framework.Migrations
             // validate format version
             if (!this.ValidVersions.Contains(content.Format.ToString()))
             {
-                error = $"unsupported format {content.Format} (supported version: {string.Join(", ", this.ValidVersions)}).";
+                string latestVersion = this.LatestVersion;
+                error = content.Format.IsNewerThan(latestVersion)
+                    ? $"unsupported format version {content.Format}, you may need to update Content Patcher"
+                    : $"unsupported format version {content.Format} (expected {latestVersion})";
                 return false;
             }
 

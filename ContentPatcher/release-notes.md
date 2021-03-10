@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
+
 ## 1.21.1
 Released 07 February 2021.
 
