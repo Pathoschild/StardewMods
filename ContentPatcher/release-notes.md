@@ -13,12 +13,12 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
 
 ## 1.21.1
-Released 07 February 2021.
+Released 07 March 2021.
 
 * Fixed 'changes the save serializer' warning in 1.21.
 
 ## 1.21
-Released 07 February 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
+Released 07 March 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
 
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
