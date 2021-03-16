@@ -27,9 +27,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The MD5 hash for the default data.json file.</summary>
         private const string DataFileHash = "641585fd329fac69e377cb911cf70862";
 
-        /// <summary>The pixel position at which to place the player after they arrive from Marnie's ranch.</summary>
-        private readonly Vector2 MarnieWarpArrivalPixelPos = new Vector2(76, 21) * Game1.tileSize;
-
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
@@ -83,7 +80,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             }
 
             // hook events
-            helper.Events.Player.Warped += this.OnWarped;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
@@ -222,21 +218,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             ).Register();
         }
 
-        /// <summary>Raised after a player warps to a new location.</summary>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
-        {
-            // move player if they warp into the ocean (e.g. from Marnie's ranch)
-            // note: getTileLocation() seems to be unreliable when mounted.
-            if (e.IsLocalPlayer && this.IsSmallBeachFarm(e.NewLocation, out Farm farm))
-            {
-                Vector2 tile = e.Player.Position / Game1.tileSize;
-                if (this.IsInvalidPosition(farm, (int)tile.X, (int)tile.Y))
-                    Game1.player.Position = this.MarnieWarpArrivalPixelPos;
-            }
-        }
-
         /// <summary>Raised before the game ends the current day.</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
@@ -314,20 +295,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm"
                 ? FishType.Ocean
                 : FishType.River;
-        }
-
-        /// <summary>Get whether the player shouldn't be able to access a given position.</summary>
-        /// <param name="farm">The farm instance to check.</param>
-        /// <param name="x">The tile X position.</param>
-        /// <param name="y">The tile Y position.</param>
-        private bool IsInvalidPosition(Farm farm, int x, int y)
-        {
-            return
-                farm.doesTileHaveProperty(x, y, "Water", "Back") != null
-                || (
-                    !farm.isTilePassable(new Location(x, y), Game1.viewport)
-                    && farm.doesTileHaveProperty(x, y, "Passable", "Buildings") != null
-                );
         }
     }
 }
