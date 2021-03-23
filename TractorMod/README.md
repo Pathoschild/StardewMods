@@ -36,8 +36,8 @@ fertilizer | fertilize crops and trees. | —
 grass starter | plant grass. | —
 hoe        | till dirt; clear weeds; dig artifact spots and ginger. | —
 melee blunt | break mine containers. | attack monsters.
-melee dagger | clear dead crops; break mine containers. | attack monsters.
-melee sword | clear dead crops; break mine containers. | attack monsters.
+melee dagger | clear dead crops; break mine containers. | attack monsters; harvest grass.
+melee sword | clear dead crops; break mine containers. | attack monsters; harvest grass.
 milk pail  | collect milk from farm animals. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops; harvest spawned mine items. | break paths/flooring; break placed objects.
 scythe     | harvest crops, flowers, bushes, fruit trees, forage, tree seeds, and spawned mine items; clear weeds and dead crops. | collect machine output.

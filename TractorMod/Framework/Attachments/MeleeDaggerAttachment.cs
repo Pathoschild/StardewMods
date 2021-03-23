@@ -61,6 +61,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
                 return true;
 
+            // harvest grass
+            if (this.Config.HarvestGrass && this.TryHarvestGrass(tileFeature as Grass, location, tile))
+                return true;
+
             // attack monsters
             if (this.Config.AttackMonsters && this.UseWeaponOnTile((MeleeWeapon)tool, tile, player, location))
                 return false;

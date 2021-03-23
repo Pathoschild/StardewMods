@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -20,9 +19,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>The attachment settings.</summary>
         private readonly ScytheConfig Config;
-
-        /// <summary>A fake pickaxe to use for clearing dead crops.</summary>
-        private readonly Pickaxe FakePickaxe = new Pickaxe();
 
         /// <summary>A cache of is-flower checks by item ID for <see cref="ShouldHarvest"/>.</summary>
         private readonly IDictionary<int, bool> IsFlowerCache = new Dictionary<int, bool>();
@@ -85,7 +81,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return true;
 
             // grass
-            if (this.TryHarvestGrass(tileFeature as Grass, location, tile, tool))
+            if (this.Config.HarvestGrass && this.TryHarvestGrass(tileFeature as Grass, location, tile))
                 return true;
 
             // tree
@@ -193,11 +189,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return false;
 
             // clear dead crop
-            if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
-            {
-                this.UseToolOnTile(this.FakePickaxe, tile, player, location); // clear dead crop
+            if (this.Config.ClearDeadCrops && this.TryClearDeadCrop(location, tile, dirt, player))
                 return true;
-            }
 
             // harvest
             if (this.ShouldHarvest(dirt.crop))
@@ -213,35 +206,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     dirt.destroyCrop(tile, showAnimation: false, location);
                     return true;
                 }
-            }
-
-            return false;
-        }
-
-        /// <summary>Try to harvest tall grass.</summary>
-        /// <param name="grass">The grass to harvest.</param>
-        /// <param name="location">The location being harvested.</param>
-        /// <param name="tile">The tile being harvested.</param>
-        /// <param name="tool">The tool selected by the player (if any).</param>
-        /// <returns>Returns whether it was harvested.</returns>
-        /// <remarks>Derived from <see cref="Grass.performToolAction"/>.</remarks>
-        private bool TryHarvestGrass(Grass grass, GameLocation location, Vector2 tile, Tool tool)
-        {
-            if (this.Config.HarvestGrass && grass != null)
-            {
-                location.terrainFeatures.Remove(tile);
-
-                Random random = Game1.IsMultiplayer
-                    ? Game1.recentMultiplayerRandom
-                    : new Random((int)(Game1.uniqueIDForThisGame + tile.X * 1000.0 + tile.Y * 11.0));
-
-                if (random.NextDouble() < (tool.InitialParentTileIndex == MeleeWeapon.goldenScythe ? 0.75 : 0.5))
-                {
-                    if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
-                        Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
-                }
-
-                return true;
             }
 
             return false;
