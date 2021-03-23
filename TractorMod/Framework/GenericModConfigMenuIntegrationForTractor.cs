@@ -320,25 +320,61 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
                 )
 
-                // melee weapon
-                .AddLabel("Melee Weapon Features")
+                // melee blunt weapons
+                .AddLabel("Melee Blunt Weapons Features")
                 .AddCheckbox(
                     label: "Attack Monsters",
-                    description: "Whether melee weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
-                    get: config => config.StandardAttachments.MeleeWeapon.AttackMonsters,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.AttackMonsters = value
-                )
-                .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether melee weapons clear dead crops. Default true.",
-                    get: config => config.StandardAttachments.MeleeWeapon.ClearDeadCrops,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.ClearDeadCrops = value
+                    description: "Whether melee blunt weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeBlunt.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeBlunt.AttackMonsters = value
                 )
                 .AddCheckbox(
                     label: "Break Mine Containers",
-                    description: "Whether melee weapons break containers in the mine. Default true.",
-                    get: config => config.StandardAttachments.MeleeWeapon.BreakMineContainers,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.BreakMineContainers = value
+                    description: "Whether melee blunt weapons break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeBlunt.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeBlunt.BreakMineContainers = value
+                )
+
+                // melee daggers
+                .AddLabel("Melee Dagger Features")
+                .AddCheckbox(
+                    label: "Attack Monsters",
+                    description: "Whether melee daggers attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeDagger.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether melee daggers clear dead crops. Default true.",
+                    get: config => config.StandardAttachments.MeleeDagger.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether melee daggers break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeDagger.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.BreakMineContainers = value
+                )
+
+                // melee sword
+                .AddLabel("Melee Sword Features")
+                .AddCheckbox(
+                    label: "Attack Monsters",
+                    description: "Whether melee swords attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeSword.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether melee swords clear dead crops. Default true.",
+                    get: config => config.StandardAttachments.MeleeSword.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether melee swords break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeSword.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.BreakMineContainers = value
                 )
 
                 // other

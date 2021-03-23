@@ -8,17 +8,16 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 {
-    /// <summary>An attachment for melee weapons.</summary>
-    internal class MeleeWeaponAttachment : BaseAttachment
+    /// <summary>An attachment for melee dagger weapons.</summary>
+    internal class MeleeDaggerAttachment : BaseAttachment
     {
         /*********
         ** Fields
         *********/
         /// <summary>The attachment settings.</summary>
-        private readonly MeleeWeaponConfig Config;
+        private readonly MeleeDaggerConfig Config;
 
-        /// <summary>A fake pickaxe to use for clearing dead crops to ensure consistent behavior.</summary>
-        private readonly Pickaxe FakePickaxe = new Pickaxe();
+
 
 
         /*********
@@ -28,7 +27,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="config">The attachment settings.</param>
         /// <param name="modRegistry">Fetches metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        public MeleeWeaponAttachment(MeleeWeaponConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
+        public MeleeDaggerAttachment(MeleeDaggerConfig config, IModRegistry modRegistry, IReflectionHelper reflection)
             : base(modRegistry, reflection)
         {
             this.Config = config;
@@ -41,7 +40,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
         {
-            return tool is MeleeWeapon weapon && !weapon.isScythe();
+            return tool is MeleeWeapon weapon && weapon.type.Value == MeleeWeapon.dagger;
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -55,16 +54,16 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
             // clear dead crops
-            if (this.Config.ClearDeadCrops && tileFeature is HoeDirt dirt && dirt.crop != null && dirt.crop.dead.Value)
-                return this.UseToolOnTile(this.FakePickaxe, tile, player, location);
+            if (this.Config.ClearDeadCrops && this.TryClearDeadCrop(location, tile, tileFeature, player))
+                return true;
 
             // break mine containers
             if (this.Config.BreakMineContainers && this.TryBreakContainer(tile, tileObj, tool, location))
                 return true;
 
             // attack monsters
-            if (this.Config.AttackMonsters)
-                return this.UseWeaponOnTile((MeleeWeapon)tool, tile, player, location);
+            if (this.Config.AttackMonsters && this.UseWeaponOnTile((MeleeWeapon)tool, tile, player, location))
+                return false;
 
             return false;
         }

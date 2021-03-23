@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Split the `MeleeWeapon` attachment into `MeleeBlunt`, `MeleeDagger`, and `MeleeSword`. If you previously customized melee weapon behavior, you'll need to reconfigure it for the new groups.
+
 ## 4.13.3
 Released 06 February 2021.
 

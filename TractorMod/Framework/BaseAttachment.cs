@@ -35,6 +35,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Whether the Farm Type Manager mod is installed.</summary>
         private readonly bool HasFarmTypeManager;
 
+        /// <summary>A fake pickaxe to use for clearing dead crops to ensure consistent behavior.</summary>
+        private readonly Lazy<Pickaxe> FakePickaxe = new(() => new Pickaxe());
+
 
         /*********
         ** Accessors
@@ -337,6 +340,21 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
 
             return false;
+        }
+
+        /// <summary>Try to harvest tall grass.</summary>
+        /// <param name="location">The location being harvested.</param>
+        /// <param name="tile">The tile being harvested.</param>
+        /// <param name="tileFeature">The terrain feature on the tile.</param>
+        /// <param name="player">The current player.</param>
+        /// <returns>Returns whether it was harvested.</returns>
+        protected bool TryClearDeadCrop(GameLocation location, Vector2 tile, TerrainFeature tileFeature, Farmer player)
+        {
+            return
+                tileFeature is HoeDirt dirt
+                && dirt.crop != null
+                && dirt.crop.dead.Value
+                && this.UseToolOnTile(this.FakePickaxe.Value, tile, player, location);
         }
 
         /// <summary>Cancel the current player animation if it matches one of the given IDs.</summary>

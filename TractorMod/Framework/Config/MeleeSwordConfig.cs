@@ -1,7 +1,7 @@
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>Configuration for the melee weapon attachment.</summary>
-    internal class MeleeWeaponConfig
+    /// <summary>Configuration for the melee sword attachment.</summary>
+    internal class MeleeSwordConfig
     {
         /// <summary>Whether to attack monsters.</summary>
         public bool AttackMonsters { get; set; } = false;
