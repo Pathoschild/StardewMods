@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
 * Fixed error when editing entries in `Data\RandomBundles`.
 * Fixed misplaced warps when replacing some farm types.
+* Fixed setting a map tile property to `null` not deleting it.
 
 ## 1.21.1
 Released 07 March 2021.
