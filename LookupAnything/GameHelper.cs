@@ -198,7 +198,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 let foundItem = found.Item
                 where this.AreEquivalent(foundItem, item)
                 let canStack = foundItem.canStackWith(foundItem)
-                select canStack ? Math.Max(1, foundItem.Stack) : 1
+                select canStack ? found.GetCount() : 1
             ).Sum();
         }
 

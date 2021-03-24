@@ -11,6 +11,7 @@
 * You can now look up...
   * items in the tailoring UI's spool and output slots;
   * disabled items in the tailoring UI's inventory box.
+* Fixed torches on fences counted as owned 93 times due to a game quirk.
 
 ## 1.33
 Released 07 March 2021.

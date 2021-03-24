@@ -51,7 +51,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             {
                 // furniture
                 foreach (Furniture furniture in location.furniture)
-                    this.ScanAndTrack(items, itemsSeen, furniture, isRootInWorld: true);
+                    this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: furniture, parent: location, isRootInWorld: true);
 
                 // farmhouse fridge
                 Chest fridge = location switch
@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     IslandFarmHouse house => house.fridge.Value,
                     _ => null
                 };
-                this.ScanAndTrack(items, itemsSeen, fridge, includeRoot: false);
+                this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: fridge, parent: location, includeRoot: false);
 
                 // character hats
                 foreach (NPC npc in location.characters)
@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     Hat hat =
                         (npc as Child)?.hat.Value
                         ?? (npc as Horse)?.hat.Value;
-                    this.ScanAndTrack(items, itemsSeen, hat);
+                    this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: hat, parent: npc);
                 }
 
                 // building output
@@ -79,11 +79,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                         switch (building)
                         {
                             case Mill mill:
-                                this.ScanAndTrack(items, itemsSeen, mill.output.Value, includeRoot: false);
+                                this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: mill.output.Value, parent: mill, includeRoot: false);
                                 break;
 
                             case JunimoHut hut:
-                                this.ScanAndTrack(items, itemsSeen, hut.output.Value, includeRoot: false);
+                                this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: hut.output.Value, parent: hut, includeRoot: false);
                                 break;
                         }
                     }
@@ -93,16 +93,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 foreach (SObject item in location.objects.Values)
                 {
                     if (item is Chest || !this.IsSpawnedWorldItem(item))
-                        this.ScanAndTrack(items, itemsSeen, item, isRootInWorld: true);
+                        this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: item, parent: location, isRootInWorld: true);
                 }
             }
 
             // inventory
-            this.ScanAndTrack(items, itemsSeen, Game1.player.Items, isInInventory: true);
+            this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, roots: Game1.player.Items, parent: Game1.player, isInInventory: true);
             this.ScanAndTrack(
-                items,
-                itemsSeen,
-                new Item[]
+                tracked: items,
+                itemsSeen: itemsSeen,
+                roots: new Item[]
                 {
                     Game1.player.shirtItem.Value,
                     Game1.player.pantsItem.Value,
@@ -111,17 +111,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     Game1.player.leftRing.Value,
                     Game1.player.rightRing.Value
                 },
+                parent: Game1.player,
                 isInInventory: true
             );
 
             // hay in silos
-            int hayCount = Game1.getFarm()?.piecesOfHay.Value ?? 0;
+            Farm farm = Game1.getFarm();
+            int hayCount = farm?.piecesOfHay.Value ?? 0;
             while (hayCount > 0)
             {
                 SObject hay = new SObject(178, 1);
                 hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
                 hayCount -= hay.Stack;
-                this.ScanAndTrack(items, itemsSeen, hay);
+                this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: hay, parent: farm);
             }
 
             return items;
@@ -149,12 +151,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="tracked">The list to populate.</param>
         /// <param name="itemsSeen">The items which have already been scanned.</param>
         /// <param name="root">The root item to search.</param>
+        /// <param name="parent">The parent entity which contains the <paramref name="root"/> (e.g. location, chest, furniture, etc).</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
         /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, Item root, bool isInInventory = false, bool isRootInWorld = false, bool includeRoot = true)
+        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, Item root, object parent, bool isInInventory = false, bool isRootInWorld = false, bool includeRoot = true)
         {
-            foreach (FoundItem found in this.Scan(itemsSeen, root, isInInventory, isRootInWorld, includeRoot))
+            foreach (FoundItem found in this.Scan(itemsSeen, root, parent, isInInventory, isRootInWorld, includeRoot))
                 tracked.Add(found);
         }
 
@@ -162,31 +165,33 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="tracked">The list to populate.</param>
         /// <param name="itemsSeen">The items which have already been scanned.</param>
         /// <param name="roots">The root items to search.</param>
+        /// <param name="parent">The parent entity which contains the <paramref name="roots"/> (e.g. location, chest, furniture, etc).</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
         /// <param name="includeRoots">Whether to include the root items in the returned values.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, IEnumerable<Item> roots, bool isInInventory = false, bool isRootInWorld = false, bool includeRoots = true)
+        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, IEnumerable<Item> roots, object parent, bool isInInventory = false, bool isRootInWorld = false, bool includeRoots = true)
         {
-            foreach (FoundItem found in roots.SelectMany(root => this.Scan(itemsSeen, root, isInInventory, isRootInWorld, includeRoots)))
+            foreach (FoundItem found in roots.SelectMany(root => this.Scan(itemsSeen, root, parent, isInInventory, isRootInWorld, includeRoots)))
                 tracked.Add(found);
         }
 
         /// <summary>Recursively find all items contained within a root item (including the root item itself).</summary>
         /// <param name="itemsSeen">The items which have already been scanned.</param>
         /// <param name="root">The root item to search.</param>
+        /// <param name="parent">The parent entity which contains the <paramref name="root"/> (e.g. location, chest, furniture, etc).</param>
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
         /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
-        private IEnumerable<FoundItem> Scan(ISet<Item> itemsSeen, Item root, bool isInInventory, bool isRootInWorld, bool includeRoot = true)
+        private IEnumerable<FoundItem> Scan(ISet<Item> itemsSeen, Item root, object parent, bool isInInventory, bool isRootInWorld, bool includeRoot = true)
         {
             if (root == null || !itemsSeen.Add(root))
                 yield break;
 
             // get root
-            yield return new FoundItem(root, isInInventory);
+            yield return new FoundItem(root, parent, isInInventory);
 
             // get direct contents
-            foreach (FoundItem child in this.GetDirectContents(root, isRootInWorld).SelectMany(p => this.Scan(itemsSeen, p, isInInventory, isRootInWorld: false)))
+            foreach (FoundItem child in this.GetDirectContents(root, isRootInWorld).SelectMany(p => this.Scan(itemsSeen, p, root, isInInventory, isRootInWorld: false)))
                 yield return child;
         }
 
