@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added world areas for Ginger Island in balanced mode.
+
 ## 1.20.11
 Released 08 March 2021.
 
