@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added world areas for Ginger Island in balanced mode.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 1.20.11
 Released 08 March 2021.

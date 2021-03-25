@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed error when editing entries in `Data\RandomBundles`.
 * Fixed misplaced warps when replacing some farm types.
 * Fixed setting a map tile property to `null` not deleting it.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 1.21.1
 Released 07 March 2021.
