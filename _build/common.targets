@@ -1,5 +1,4 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <PropertyGroup>
     <!-- metadata -->
     <Authors>Pathoschild</Authors>
@@ -12,5 +11,4 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
-
 </Project>

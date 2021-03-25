@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
                     label: "Summon Horse Button",
                     description: "The button to press which plays the flute and summons a horse. Default H.",
                     get: config => this.GetSingleButton(config.SummonHorseKey),
-                    set: (config, value) => config.SummonHorseKey = KeybindList.ForSingle(value)
+                    set: (config, value) => config.SummonHorseKey = new(value)
                 );
         }
 

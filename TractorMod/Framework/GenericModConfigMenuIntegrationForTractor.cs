@@ -107,19 +107,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     label: "Summon Tractor",
                     description: "Warp an available tractor to your position. Default backspace.",
                     get: config => this.GetSingleButton(config.Controls.SummonTractor),
-                    set: (config, value) => config.Controls.SummonTractor = KeybindList.ForSingle(value)
+                    set: (config, value) => config.Controls.SummonTractor = new(value)
                 )
                 .AddKeyBinding(
                     label: "Dismiss Tractor",
                     description: "Return the tractor you're riding to its home.",
                     get: config => this.GetSingleButton(config.Controls.DismissTractor),
-                    set: (config, value) => config.Controls.DismissTractor = KeybindList.ForSingle(value)
+                    set: (config, value) => config.Controls.DismissTractor = new(value)
                 )
                 .AddKeyBinding(
                     label: "Hold to Activate",
                     description: "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
                     get: config => this.GetSingleButton(config.Controls.HoldToActivate),
-                    set: (config, value) => config.Controls.HoldToActivate = KeybindList.ForSingle(value)
+                    set: (config, value) => config.Controls.HoldToActivate = new(value)
                 )
 
                 // axe

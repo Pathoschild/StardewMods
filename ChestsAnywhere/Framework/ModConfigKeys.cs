@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle the chest UI.</summary>
-        public KeybindList Toggle { get; set; } = KeybindList.ForSingle(SButton.B);
+        public KeybindList Toggle { get; set; } = new(SButton.B);
 
         /// <summary>The keys which navigate to the previous chest.</summary>
         public KeybindList PrevChest { get; set; } = KeybindList.Parse($"{SButton.Left}, {SButton.LeftShoulder}");
@@ -31,9 +31,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public KeybindList SortItems { get; set; } = new();
 
         /// <summary>The keys which, when held, enable scrolling the chest dropdown with the mouse scroll wheel.</summary>
-        public KeybindList HoldToMouseWheelScrollChests { get; set; } = KeybindList.ForSingle(SButton.LeftControl);
+        public KeybindList HoldToMouseWheelScrollChests { get; set; } = new(SButton.LeftControl);
 
         /// <summary>The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.</summary>
-        public KeybindList HoldToMouseWheelScrollCategories { get; set; } = KeybindList.ForSingle(SButton.LeftAlt);
+        public KeybindList HoldToMouseWheelScrollCategories { get; set; } = new(SButton.LeftAlt);
     }
 }

@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The keys which play the flute and summon the horse.</summary>
-        public KeybindList SummonHorseKey { get; set; } = KeybindList.ForSingle(SButton.H);
+        public KeybindList SummonHorseKey { get; set; } = new(SButton.H);
 
         /// <summary>Whether the player must be holding a horse flute to summon the horse.</summary>
         public bool RequireHorseFlute { get; set; } = false;

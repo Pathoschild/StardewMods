@@ -10,6 +10,6 @@ namespace Pathoschild.Stardew.DebugMode.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle debug mode.</summary>
-        public KeybindList ToggleDebug { get; set; } = KeybindList.ForSingle(SButton.OemTilde);
+        public KeybindList ToggleDebug { get; set; } = new(SButton.OemTilde);
     }
 }
