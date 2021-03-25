@@ -3,7 +3,6 @@ using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -106,20 +105,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 .AddKeyBinding(
                     label: "Summon Tractor",
                     description: "Warp an available tractor to your position. Default backspace.",
-                    get: config => this.GetSingleButton(config.Controls.SummonTractor),
-                    set: (config, value) => config.Controls.SummonTractor = new(value)
+                    get: config => config.Controls.SummonTractor,
+                    set: (config, value) => config.Controls.SummonTractor = value
                 )
                 .AddKeyBinding(
                     label: "Dismiss Tractor",
                     description: "Return the tractor you're riding to its home.",
-                    get: config => this.GetSingleButton(config.Controls.DismissTractor),
-                    set: (config, value) => config.Controls.DismissTractor = new(value)
+                    get: config => config.Controls.DismissTractor,
+                    set: (config, value) => config.Controls.DismissTractor = value
                 )
                 .AddKeyBinding(
                     label: "Hold to Activate",
                     description: "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
-                    get: config => this.GetSingleButton(config.Controls.HoldToActivate),
-                    set: (config, value) => config.Controls.HoldToActivate = new(value)
+                    get: config => config.Controls.HoldToActivate,
+                    set: (config, value) => config.Controls.HoldToActivate = value
                 )
 
                 // axe
@@ -437,19 +436,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     get: config => string.Join(", ", config.CustomAttachments),
                     set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
                 );
-        }
-
-        /// <summary>Get the first button in a keybind, if any.</summary>
-        /// <param name="keybindList">The keybind list.</param>
-        private SButton GetSingleButton(KeybindList keybindList)
-        {
-            foreach (var keybind in keybindList.Keybinds)
-            {
-                if (keybind.IsBound)
-                    return keybind.Buttons.First();
-            }
-
-            return SButton.None;
         }
     }
 }

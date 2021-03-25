@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
 {
@@ -51,22 +49,9 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
                 .AddKeyBinding(
                     label: "Summon Horse Button",
                     description: "The button to press which plays the flute and summons a horse. Default H.",
-                    get: config => this.GetSingleButton(config.SummonHorseKey),
-                    set: (config, value) => config.SummonHorseKey = new(value)
+                    get: config => config.SummonHorseKey,
+                    set: (config, value) => config.SummonHorseKey = value
                 );
-        }
-
-        /// <summary>Get the first button in a key binding, if any.</summary>
-        /// <param name="keybindList">The key binding list.</param>
-        private SButton GetSingleButton(KeybindList keybindList)
-        {
-            foreach (Keybind keybind in keybindList.Keybinds)
-            {
-                if (keybind.IsBound)
-                    return keybind.Buttons.First();
-            }
-
-            return SButton.None;
         }
     }
 }

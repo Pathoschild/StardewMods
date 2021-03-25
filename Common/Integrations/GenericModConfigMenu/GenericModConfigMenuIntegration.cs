@@ -1,6 +1,7 @@
 using System;
 using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace Common.Integrations.GenericModConfigMenu
 {
@@ -39,7 +40,7 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="reset">Reset the config model to the default values.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
         public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor, IManifest consumerManifest, Func<TConfig> getConfig, Action reset, Action saveAndApply)
-            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.1.0", modRegistry, monitor)
+            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.3.2", modRegistry, monitor)
         {
             // init
             this.ConsumerManifest = consumerManifest;
@@ -213,7 +214,7 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="get">Get the current value.</param>
         /// <param name="set">Set a new value.</param>
         /// <param name="enable">Whether the field is enabled.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddKeyBinding(string label, string description, Func<TConfig, SButton> get, Action<TConfig, SButton> set, bool enable = true)
+        public GenericModConfigMenuIntegration<TConfig> AddKeyBinding(string label, string description, Func<TConfig, KeybindList> get, Action<TConfig, KeybindList> set, bool enable = true)
         {
             this.AssertLoaded();
 
