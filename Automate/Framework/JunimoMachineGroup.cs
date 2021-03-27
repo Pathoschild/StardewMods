@@ -30,12 +30,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="sortMachines">Sort machines by priority.</param>
-        public JunimoMachineGroup(Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines)
+        /// <param name="buildStorage">Build a storage manager for the given containers.</param>
+        public JunimoMachineGroup(Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines, Func<IContainer[], StorageManager> buildStorage)
             : base(
                 locationKey: null,
                 machines: new IMachine[0],
                 containers: new IContainer[0],
-                tiles: new Vector2[0]
+                tiles: new Vector2[0],
+                buildStorage: buildStorage
             )
         {
             this.IsJunimoGroup = true;

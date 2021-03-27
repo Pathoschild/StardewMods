@@ -27,6 +27,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Sort machines by priority.</summary>
         private readonly Func<IEnumerable<IMachine>, IEnumerable<IMachine>> SortMachines;
 
+        /// <summary>Build a storage manager for the given containers.</summary>
+        private readonly Func<IContainer[], StorageManager> BuildStorage;
+
 
         /*********
         ** Accessors
@@ -41,10 +44,12 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Create an instance.</summary>
         /// <param name="locationKey">The location containing the group, as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>.</param>
         /// <param name="sortMachines">Sort machines by priority.</param>
-        public MachineGroupBuilder(string locationKey, Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines)
+        /// <param name="buildStorage">Build a storage manager for the given containers.</param>
+        public MachineGroupBuilder(string locationKey, Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines, Func<IContainer[], StorageManager> buildStorage)
         {
             this.LocationKey = locationKey;
             this.SortMachines = sortMachines;
+            this.BuildStorage = buildStorage;
         }
 
         /// <summary>Add a machine to the group.</summary>
@@ -82,7 +87,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public IMachineGroup Build()
         {
             var machines = this.SortMachines(this.Machines.Select(p => new MachineWrapper(p)));
-            return new MachineGroup(this.LocationKey, machines, this.Containers, this.Tiles);
+            return new MachineGroup(this.LocationKey, machines, this.Containers, this.Tiles, this.BuildStorage);
         }
 
         /// <summary>Clear the saved data.</summary>

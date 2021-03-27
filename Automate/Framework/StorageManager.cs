@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>Whether to avoid removing the last item in a stack.</summary>
+        private readonly bool PreventRemovingStacks;
+
         /// <summary>The storage containers that accept input, in priority order.</summary>
         private IContainer[] InputContainers;
 
@@ -25,9 +28,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="containers">The storage containers.</param>
-        public StorageManager(IEnumerable<IContainer> containers)
+        /// <param name="preventRemovingStacks">Whether to avoid removing the last item in a stack.</param>
+        public StorageManager(IEnumerable<IContainer> containers, bool preventRemovingStacks)
         {
             this.SetContainers(containers);
+            this.PreventRemovingStacks = preventRemovingStacks;
         }
 
         /// <summary>Set the containers to use.</summary>
@@ -53,24 +58,26 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** GetItems
         ****/
-        /// <summary>Get all items from the given pipes.</summary>
+        /// <inheritdoc />
         public IEnumerable<ITrackedStack> GetItems()
         {
             foreach (IContainer container in this.OutputContainers)
             {
-                foreach (ITrackedStack item in container)
-                    yield return item;
+                foreach (ITrackedStack stack in container)
+                {
+                    if (this.PreventRemovingStacks)
+                        stack.PreventEmptyStacks();
+
+                    if (stack.Count > 0)
+                        yield return stack;
+                }
             }
         }
 
         /****
         ** TryGetIngredient
         ****/
-        /// <summary>Get an ingredient needed for a recipe.</summary>
-        /// <param name="predicate">Returns whether an item should be matched.</param>
-        /// <param name="count">The number of items to find.</param>
-        /// <param name="consumable">The matching consumables.</param>
-        /// <returns>Returns whether the requirement is met.</returns>
+        /// <inheritdoc />
         public bool TryGetIngredient(Func<ITrackedStack, bool> predicate, int count, out IConsumable consumable)
         {
             StackAccumulator stacks = new StackAccumulator();
@@ -88,22 +95,13 @@ namespace Pathoschild.Stardew.Automate.Framework
             return false;
         }
 
-        /// <summary>Get an ingredient needed for a recipe.</summary>
-        /// <param name="id">The item or category ID.</param>
-        /// <param name="count">The number of items to find.</param>
-        /// <param name="consumable">The matching consumables.</param>
-        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
-        /// <returns>Returns whether the requirement is met.</returns>
+        /// <inheritdoc />
         public bool TryGetIngredient(int id, int count, out IConsumable consumable, ItemType? type = ItemType.Object)
         {
             return this.TryGetIngredient(item => (type == null || item.Type == type) && (item.Sample.ParentSheetIndex == id || item.Sample.Category == id), count, out consumable);
         }
 
-        /// <summary>Get an ingredient needed for a recipe.</summary>
-        /// <param name="recipes">The items to match.</param>
-        /// <param name="consumable">The matching consumables.</param>
-        /// <param name="recipe">The matched requisition.</param>
-        /// <returns>Returns whether the requirement is met.</returns>
+        /// <inheritdoc />
         public bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe)
         {
             IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, req => new StackAccumulator());
@@ -135,10 +133,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** TryConsume
         ****/
-        /// <summary>Consume an ingredient needed for a recipe.</summary>
-        /// <param name="predicate">Returns whether an item should be matched.</param>
-        /// <param name="count">The number of items to find.</param>
-        /// <returns>Returns whether the item was consumed.</returns>
+        /// <inheritdoc />
         public bool TryConsume(Func<ITrackedStack, bool> predicate, int count)
         {
             if (this.TryGetIngredient(predicate, count, out IConsumable requirement))
@@ -149,11 +144,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             return false;
         }
 
-        /// <summary>Consume an ingredient needed for a recipe.</summary>
-        /// <param name="itemID">The item ID.</param>
-        /// <param name="count">The number of items to find.</param>
-        /// <param name="type">The item type to find, or <c>null</c> to match any.</param>
-        /// <returns>Returns whether the item was consumed.</returns>
+        /// <inheritdoc />
         public bool TryConsume(int itemID, int count, ItemType? type = ItemType.Object)
         {
             return this.TryConsume(item => (type == null || item.Type == type) && item.Sample.ParentSheetIndex == itemID, count);
@@ -162,8 +153,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** TryPush
         ****/
-        /// <summary>Add the given item stack to the pipes if there's space.</summary>
-        /// <param name="item">The item stack to push.</param>
+        /// <inheritdoc />
         public bool TryPush(ITrackedStack item)
         {
             if (item == null || item.Count <= 0)

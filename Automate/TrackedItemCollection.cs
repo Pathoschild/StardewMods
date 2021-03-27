@@ -66,8 +66,7 @@ namespace Pathoschild.Stardew.Automate
             return this.Sample == null || this.Sample.canStackWith(stack.Sample);
         }
 
-        /// <summary>Remove the specified number of this item from the stack.</summary>
-        /// <param name="count">The number to consume.</param>
+        /// <inheritdoc />
         public void Reduce(int count)
         {
             if (count <= 0 || !this.Stacks.Any())
@@ -95,8 +94,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>Remove the specified number of this item from the stack and return a new stack matching the count.</summary>
-        /// <param name="count">The number to get.</param>
+        /// <inheritdoc />
         public Item Take(int count)
         {
             if (count <= 0 || !this.Stacks.Any())
@@ -109,6 +107,13 @@ namespace Pathoschild.Stardew.Automate
             Item item = this.Sample.getOne();
             item.Stack = count;
             return item;
+        }
+
+        /// <inheritdoc />
+        public void PreventEmptyStacks()
+        {
+            foreach (var stack in this.Stacks)
+                stack.PreventEmptyStacks();
         }
     }
 }

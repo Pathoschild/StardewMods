@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added option to prevent removing the last item in a stack from chests.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 1.21.1

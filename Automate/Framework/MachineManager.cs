@@ -57,10 +57,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.Config = config;
             this.Monitor = monitor;
 
-            this.Factory = new(this.GetMachineOverride);
+            this.Factory = new(this.GetMachineOverride, this.BuildStorage);
             this.Factory.Add(defaultFactory);
 
-            this.JunimoMachineGroup = new(this.Factory.SortMachines);
+            this.JunimoMachineGroup = new(this.Factory.SortMachines, this.BuildStorage);
 
             this.PerMachineSettings = this.ParseMachineOverrides(config, data);
         }
@@ -153,6 +153,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Build a storage manager for the given containers.</summary>
+        /// <param name="containers">The storage containers.</param>
+        private StorageManager BuildStorage(IContainer[] containers)
+        {
+            return new StorageManager(containers, this.Config.PreventRemovingStacks);
+        }
+
         /// <summary>Reload the machines in a given location.</summary>
         /// <param name="locations">The locations whose machines to reload.</param>
         private void ReloadMachinesIn(ISet<GameLocation> locations)

@@ -286,6 +286,15 @@ field | result
 
   </td>
 </tr>
+<tr>
+  <td><code>PreventRemovingStacks</code></td>
+  <td>
+
+Whether Automate should always leave at least one item in each stack when removing items from
+chests, which can be useful to keep items organized. Default `false`.
+
+  </td>
+</tr>
 </table>
 
 ### In-game settings
