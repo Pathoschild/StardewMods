@@ -4,6 +4,7 @@
 * Split the `MeleeWeapon` attachment into `MeleeBlunt`, `MeleeDagger`, and `MeleeSword`. If you previously customized melee weapon behavior, you'll need to reconfigure it.
 * The dagger/sword can now harvest grass (disabled by default).
 * Holding a non-golden scythe to harvest grass now applies the golden scythe bonus if you've found it.
+* Fixed the five [golden walnuts](https://stardewvalleywiki.com/Golden_Walnut) from island crops not dropped when harvested by the tractor.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 4.13.3

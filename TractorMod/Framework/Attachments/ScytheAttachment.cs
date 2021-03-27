@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -183,6 +184,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tile">The tile being harvested.</param>
         /// <param name="player">The current player.</param>
         /// <returns>Returns whether it was harvested.</returns>
+        /// <remarks>Derived from <see cref="HoeDirt.performUseAction"/> and <see cref="HoeDirt.performToolAction"/>.</remarks>
         private bool TryHarvestCrop(HoeDirt dirt, GameLocation location, Vector2 tile, Farmer player)
         {
             if (dirt?.crop == null)
@@ -195,12 +197,19 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // harvest
             if (this.ShouldHarvest(dirt.crop))
             {
+                // scythe or pick crops
                 if (dirt.crop.harvest((int)tile.X, (int)tile.Y, dirt))
                 {
                     bool isScytheCrop = dirt.crop.harvestMethod.Value == Crop.sickleHarvest;
+
                     dirt.destroyCrop(tile, showAnimation: isScytheCrop, location);
+                    if (!isScytheCrop && location is IslandLocation && Game1.random.NextDouble() < 0.05)
+                        Game1.player.team.RequestLimitedNutDrops("IslandFarming", location, (int)tile.X * 64, (int)tile.Y * 64, 5);
+
                     return true;
                 }
+
+                // hoe crops (e.g. ginger)
                 if (dirt.crop.hitWithHoe((int)tile.X, (int)tile.Y, location, dirt))
                 {
                     dirt.destroyCrop(tile, showAnimation: false, location);
