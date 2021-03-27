@@ -3,7 +3,7 @@
     "Author": "Pathoschild",
     "Version": "1.8.1",
     "MinimumApiVersion": "3.9.5",
-    "Description": "A fertile pocket beach farm. Map created by Opalie!",
+    "Description": "A fertile pocket beach farm.",
     "UniqueID": "Pathoschild.SmallBeachFarm",
     "EntryDll": "SmallBeachFarm.dll",
     "UpdateKeys": [ "Nexus:3750" ]
