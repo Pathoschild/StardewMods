@@ -8,7 +8,7 @@
   <property name="Debris" value="8 .01 3"/>
   <property name="FarmCaveEntry" value="34 8"/>
   <property name="Fish" value="142 .1 153 .25 166 .0005"/>
-  <property name="ForestEntry" value="78 20"/>
+  <property name="ForestEntry" value="78 21"/>
   <property name="GreenhouseLocation" value="24 9"/>
   <property name="Outdoors" value="T"/>
   <property name="ShippingBinLocation" value="71 13"/>

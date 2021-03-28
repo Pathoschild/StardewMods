@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fix issue where entering from the forest while riding a horse clips you into the fence in 1.8.2.
+
 ## 1.8.2
 Released 27 March 2021.
 

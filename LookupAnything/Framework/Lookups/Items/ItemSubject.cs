@@ -103,7 +103,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             // get data
             Item item = this.Target;
-            ItemType itemType = item.GetItemType();
             SObject obj = item as SObject;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
