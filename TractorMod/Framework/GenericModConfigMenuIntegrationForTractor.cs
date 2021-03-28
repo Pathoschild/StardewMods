@@ -45,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // register
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: true)
 
                 // main options
                 .AddLabel("Main Options")

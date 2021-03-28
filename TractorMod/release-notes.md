@@ -1,6 +1,8 @@
 ﻿# Release notes
 ## Upcoming release
-* When configuring the mod through Generic Mod Config Menu, you can now set [multi-key bindings](https://stardewvalleywiki.com/Modding:Player_Guide/Key_Bindings).
+* When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now...
+  * configure the mod after loading the save file;
+  * set [multi-key bindings](https://stardewvalleywiki.com/Modding:Player_Guide/Key_Bindings).
 * Split the `MeleeWeapon` attachment into `MeleeBlunt`, `MeleeDagger`, and `MeleeSword`. If you previously customized melee weapon behavior, you'll need to reconfigure it.
 * The dagger/sword can now harvest grass (disabled by default).
 * Holding a non-golden scythe to harvest grass now applies the golden scythe bonus if you've found it.

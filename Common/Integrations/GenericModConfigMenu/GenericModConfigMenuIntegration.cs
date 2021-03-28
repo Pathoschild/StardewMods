@@ -40,7 +40,7 @@ namespace Common.Integrations.GenericModConfigMenu
         /// <param name="reset">Reset the config model to the default values.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
         public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor, IManifest consumerManifest, Func<TConfig> getConfig, Action reset, Action saveAndApply)
-            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.3.2", modRegistry, monitor)
+            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.3.3", modRegistry, monitor)
         {
             // init
             this.ConsumerManifest = consumerManifest;
@@ -57,11 +57,15 @@ namespace Common.Integrations.GenericModConfigMenu
         }
 
         /// <summary>Register the mod config.</summary>
-        public GenericModConfigMenuIntegration<TConfig> RegisterConfig()
+        /// <param name="canConfigureInGame">Whether to allow configuring the mod in-game after the save is loaded.</param>
+        public GenericModConfigMenuIntegration<TConfig> RegisterConfig(bool canConfigureInGame)
         {
             this.AssertLoaded();
 
             this.ModApi.RegisterModConfig(this.ConsumerManifest, this.Reset, this.SaveAndApply);
+
+            if (canConfigureInGame)
+                this.ModApi.SetDefaultIngameOptinValue(this.ConsumerManifest, optedIn: true);
 
             return this;
         }

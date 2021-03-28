@@ -13,9 +13,6 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The Generic Mod Config Menu integration.</summary>
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
 
-        /// <summary>An API for fetching metadata about loaded mods.</summary>
-        private readonly IModRegistry ModRegistry;
-
 
         /*********
         ** Public methods
@@ -29,7 +26,6 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <param name="saveAndApply">Save and apply the current config model.</param>
         public GenericModConfigMenuIntegrationForFastAnimations(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Action reset, Action saveAndApply)
         {
-            this.ModRegistry = modRegistry;
             this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
         }
 
@@ -45,7 +41,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
             const int minSpeed = 1;
             const int maxSpeed = 20;
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: true)
 
                 // main options
                 .AddLabel("General Options")

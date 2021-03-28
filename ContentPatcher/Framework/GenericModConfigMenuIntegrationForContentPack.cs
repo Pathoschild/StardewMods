@@ -66,7 +66,7 @@ namespace ContentPatcher.Framework
             if (!this.ConfigMenu.IsLoaded || !this.Config.Any())
                 return;
 
-            this.ConfigMenu.RegisterConfig();
+            this.ConfigMenu.RegisterConfig(canConfigureInGame: true);
             foreach (var pair in this.Config)
                 this.AddField(pair.Key, pair.Value);
         }

@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
 
             // register
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: true)
                 .AddCheckbox(
                     label: "Require Horse Flute",
                     description: "Whether you need the horse flute item in your inventory to summon a horse. Default false.",

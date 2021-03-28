@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now configure the mod after loading the save file.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 1.9

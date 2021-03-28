@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
             // register
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: false) // configuring in-game would have unintended effects like small beach farm logic being half-applied
 
                 .AddCheckbox(
                     label: "Add Campfire",
