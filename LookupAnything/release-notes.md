@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.34
+Released 27 March 2021.
+
 * Improved tailoring recipes in item lookups:
   * Added reverse lookup (i.e. see tailoring recipes which produce the current item).
   * Added full ingredient list for tailoring recipes.

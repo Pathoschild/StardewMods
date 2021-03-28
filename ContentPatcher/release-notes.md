@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.21.2
+Released 27 March 2021.
+
 * Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
 * When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now configure content packs in-game after loading the save.
 * Fixed error when editing entries in `Data\RandomBundles`.

@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.12
+Released 27 March 2021.
+
 * Added world areas for Ginger Island in balanced mode.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 

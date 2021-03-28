@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1.4
+Released 27 March 2021.
+
 * When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now...
   * configure the mod after loading the save file;
   * set [multi-key bindings](https://stardewvalleywiki.com/Modding:Player_Guide/Key_Bindings).
