@@ -9,13 +9,23 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.21.2
+Released 27 March 2021.
+
+* Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
+* When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now configure content packs in-game after loading the save.
+* Fixed error when editing entries in `Data\RandomBundles`.
+* Fixed misplaced warps when replacing some farm types.
+* Fixed setting a map tile property to `null` not deleting it.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
+
 ## 1.21.1
-Released 07 February 2021.
+Released 07 March 2021.
 
 * Fixed 'changes the save serializer' warning in 1.21.
 
 ## 1.21
-Released 07 February 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
+Released 07 March 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
 
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
@@ -26,7 +36,7 @@ Released 07 February 2021. See the [release highlights](https://www.patreon.com/
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
 * Improved default `LogName` for patches with multiple `Target` or `FromFile` values.
 * Improved split-screen support.
-* Fixed changes through Generic Mod Config Menu not correctly updating dynamic tokens and `Enabled` fields.
+* Fixed changes through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) not correctly updating dynamic tokens and `Enabled` fields.
 * Fixed `patch reload` command not reapplying format migrations to reloaded patches.
 * Fixed error patching `Data\Concessions` using `EditData`.
 
@@ -48,7 +58,7 @@ Released 06 February 2021. See the [release highlights](https://www.patreon.com/
   * `patch dump order` shows the global definition order for all loaded patches.
 * Fixed patch order not guaranteed when `Include` patches get reloaded.
 * Improved performance for content packs using tokenized conditions in patches updated on time change.
-* Config fields consisting of a numeric range are now formatted as a slider in Generic Mod Config Menu.
+* Config fields consisting of a numeric range are now formatted as a slider in [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 
 **Update note for mod authors:**  
 If you use the `Weather` token, updating the `Format` field to `1.20.0` or later changes its
@@ -121,7 +131,7 @@ Released 15 October 2020.
 ## 1.18.2
 Released 13 September 2020.
 
-* `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like Generic Mod Config Menu.
+* `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 * Fixed `TextOperations` incorrectly adding delimiters when there's no previous value.
 * Fixed errors sometimes showing "ContentPatcher.Framework.Conditions.TokenString" instead of the intended value.
 * Fixed error when using a field reference token as the only input to a token which requires input.

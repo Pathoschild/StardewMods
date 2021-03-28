@@ -180,7 +180,7 @@ namespace ContentPatcher.Framework
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"unhandled exception applying patch: {patch.Path}.\n{ex}", LogLevel.Error);
+                    this.Monitor.Log($"Unhandled exception applying patch: {patch.Path}.\n{ex}", LogLevel.Error);
                     patch.IsApplied = false;
                 }
             }

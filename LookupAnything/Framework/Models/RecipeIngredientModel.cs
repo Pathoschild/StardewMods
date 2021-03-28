@@ -17,10 +17,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The number required.</summary>
         public int Count { get; }
 
-        /// <summary>The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</summary>
+        /// <summary>The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</summary>
         public SObject.PreserveType? PreserveType { get; }
 
-        /// <summary>The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</summary>
+        /// <summary>The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</summary>
         public int? PreservedParentSheetIndex { get; }
 
 
@@ -28,10 +28,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="inputId">The unique item ID that can be used for this ingredient slot.</param>
+        /// <param name="count">The number required.</param>
+        /// <param name="preserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
+        /// <param name="preservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+        public RecipeIngredientModel(int inputId, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
+        {
+            this.PossibleIds = new HashSet<int> { inputId };
+            this.Count = count;
+            this.PreserveType = preserveType;
+            this.PreservedParentSheetIndex = preservedParentSheetIndex;
+        }
+
+        /// <summary>Construct an instance.</summary>
         /// <param name="possibleIds">The unique item IDs that can be used for this ingredient slot.</param>
         /// <param name="count">The number required.</param>
-        /// <param name="preserveType">The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</param>
-        /// <param name="preservedParentSheetIndex">The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+        /// <param name="preserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
+        /// <param name="preservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
         public RecipeIngredientModel(int[] possibleIds, int count, SObject.PreserveType? preserveType = null, int? preservedParentSheetIndex = null)
         {
             this.PossibleIds = new HashSet<int>(possibleIds);

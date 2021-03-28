@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.6
+Released 27 March 2021.
+
+* When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now configure the mod after loading the save file.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
+
 ## 1.9.5
 Released 06 February 2021.
 

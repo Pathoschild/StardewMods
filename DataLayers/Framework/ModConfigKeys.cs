@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         ** Accessors
         *********/
         /// <summary>The keys which toggle the data layer overlay.</summary>
-        public KeybindList ToggleLayer { get; set; } = KeybindList.ForSingle(SButton.F2);
+        public KeybindList ToggleLayer { get; set; } = new(SButton.F2);
 
         /// <summary>The keys which cycle backwards through data layers.</summary>
         public KeybindList PrevLayer { get; set; } = KeybindList.Parse($"{SButton.LeftControl}, {SButton.LeftShoulder}");

@@ -26,15 +26,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the configuration for specific machines by ID, if any.</summary>
         private readonly Func<string, ModConfigMachine> GetMachineOverride;
 
+        /// <summary>Build a storage manager for the given containers.</summary>
+        private readonly Func<IContainer[], StorageManager> BuildStorage;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
-        public MachineGroupFactory(Func<string, ModConfigMachine> getMachineOverride)
+        /// <param name="buildStorage">Build a storage manager for the given containers.</param>
+        public MachineGroupFactory(Func<string, ModConfigMachine> getMachineOverride, Func<IContainer[], StorageManager> buildStorage)
         {
             this.GetMachineOverride = getMachineOverride;
+            this.BuildStorage = buildStorage;
         }
 
         /// <summary>Add an automation factory.</summary>
@@ -70,7 +75,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
-            MachineGroupBuilder builder = new MachineGroupBuilder(this.GetLocationKey(location), this.SortMachines);
+            MachineGroupBuilder builder = new MachineGroupBuilder(this.GetLocationKey(location), this.SortMachines, this.BuildStorage);
             LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())

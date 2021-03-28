@@ -2,7 +2,7 @@
     /**
      * The predefined world areas for the CurrentWorldArea range. For areas not listed here:
      *   - Constructed buildings are in the same world area as their parent location.
-     *   - The mines and Skull Cavern are their own world areas (determined in code).
+     *   - The mines, Skull Cavern, and Volcano Dungeon are each their own world area (determined in code).
      *   - Any other location not listed is considered its own separate world area.
      */
     "WorldAreas": {
@@ -35,6 +35,29 @@
             "WizardHouse",
             "WizardHouseBasement",
             "Woods"
+        ],
+        "IslandEast": [
+            "IslandEast",
+            "IslandHut",
+            "IslandShrine"
+        ],
+        "IslandNorth": [
+            "IslandFieldOffice",
+            "IslandNorth",
+            "IslandNorthCave1"
+        ],
+        "IslandSouth": [
+            "IslandSouth",
+            "IslandSouthEast",
+            "IslandSouthEastCave"
+        ],
+        "IslandWest": [
+            "CaptainRoom",
+            "IslandFarmCave",
+            "IslandFarmHouse",
+            "IslandWest",
+            "IslandWestCave1",
+            "QiNutRoom"
         ],
         "Mountain": [
             "AdventureGuild",

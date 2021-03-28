@@ -194,17 +194,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                     return this.GetCartesianInputs(recipe)
                         .Select(inputIds =>
                         {
-                            RecipeItemEntry[] inputs = inputIds
+                            // get ingredient models
+                            IEnumerable<RecipeItemEntry> inputs = inputIds
                                 .Select((inputId, index) => this.TryCreateItemEntry(inputId, recipe.Ingredients[index]))
-                                .Where(p => p != null)
-                                .OrderBy(entry => entry.DisplayText)
-                                .ToArray();
+                                .Where(p => p != null);
+                            if (recipe.Type != RecipeType.TailorInput) // tailoring is always two ingredients with cloth first
+                                inputs = inputs.OrderBy(entry => entry.DisplayText);
 
+                            // build recipe
                             return new RecipeEntry(
                                 name: recipe.Key,
                                 type: recipe.DisplayType,
-                                isKnown: !recipe.MustBeLearned || recipe.KnowsRecipe(Game1.player),
-                                inputs: inputs,
+                                isKnown: recipe.IsKnown(),
+                                inputs: inputs.ToArray(),
                                 output: output
                             );
                         });

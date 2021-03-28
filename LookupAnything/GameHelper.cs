@@ -34,8 +34,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /*********
         ** Fields
         *********/
-        /// <summary>The cached object data.</summary>
-        private Lazy<ObjectModel[]> Objects;
+        /// <summary>The cached item data filtered to <see cref="ItemType.Object"/> items.</summary>
+        private Lazy<SearchableItem[]> Objects;
 
         /// <summary>The cached recipes.</summary>
         private Lazy<RecipeModel[]> Recipes;
@@ -85,8 +85,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="monitor">The monitor with which to log errors.</param>
         public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
-            this.Objects = new Lazy<ObjectModel[]>(() => this.DataParser.GetObjects(monitor).ToArray());
-            this.Recipes = new Lazy<RecipeModel[]>(() => this.GetAllRecipes(reflection, monitor).ToArray());
+            this.Objects = new(() => this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }).ToArray());
+            this.Recipes = new(() => this.GetAllRecipes(reflection, monitor).ToArray());
         }
 
         /****
@@ -157,9 +157,16 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<KeyValuePair<int, bool>> GetFullShipmentAchievementItems()
         {
             return (
-                from obj in this.Objects.Value
-                where obj.Type != "Arch" && obj.Type != "Fish" && obj.Type != "Mineral" && obj.Type != "Cooking" && SObject.isPotentialBasicShippedCategory(obj.ParentSpriteIndex, obj.Category.ToString())
-                select new KeyValuePair<int, bool>(obj.ParentSpriteIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSpriteIndex))
+                from entry in this.Objects.Value
+                let obj = (SObject)entry.Item
+                where
+                    obj.Type != "Arch"
+                    && obj.Type != "Fish"
+                    && obj.Type != "Mineral"
+                    && obj.Type != "Cooking"
+                    && SObject.isPotentialBasicShippedCategory(obj.ParentSheetIndex, obj.Category.ToString())
+
+                select new KeyValuePair<int, bool>(obj.ParentSheetIndex, Game1.player.basicShipped.ContainsKey(obj.ParentSheetIndex))
             );
         }
 
@@ -191,7 +198,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 let foundItem = found.Item
                 where this.AreEquivalent(foundItem, item)
                 let canStack = foundItem.canStackWith(foundItem)
-                select canStack ? Math.Max(1, foundItem.Stack) : 1
+                select canStack ? found.GetCount() : 1
             ).Sum();
         }
 
@@ -353,9 +360,6 @@ namespace Pathoschild.Stardew.LookupAnything
                     && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
             });
 
-            // from tailor recipes
-            recipes.AddRange(this.GetTailorRecipes(item));
-
             // from construction recipes
             recipes.AddRange(this.GetConstructionRecipes(item));
 
@@ -454,8 +458,8 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="category">The category number.</param>
         public IEnumerable<SObject> GetObjectsByCategory(int category)
         {
-            foreach (ObjectModel model in this.Objects.Value.Where(obj => obj.Category == category))
-                yield return this.GetObjectBySpriteIndex(model.ParentSpriteIndex);
+            foreach (var entry in this.Objects.Value.Where(obj => obj.Item.Category == category))
+                yield return (SObject)entry.CreateItem();
         }
 
         /// <summary>Get whether an item can have a quality (which increases its sale price).</summary>
@@ -696,7 +700,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.MachineInput,
                         displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.InputId.Value }, p.Count)),
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId.Value, p.Count)),
                         item: ingredient =>
                         {
                             SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
@@ -707,8 +711,8 @@ namespace Pathoschild.Stardew.LookupAnything
                             }
                             return output;
                         },
-                        mustBeLearned: false,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(new[] { id.Value }, 1)),
+                        isKnown: () => true,
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id.Value, 1)),
                         outputItemIndex: recipe.OutputId,
                         minOutput: recipe.MinOutput,
                         maxOutput: recipe.MaxOutput,
@@ -721,57 +725,114 @@ namespace Pathoschild.Stardew.LookupAnything
                 recipes.AddRange(customRecipes);
             }
 
+            // get tailoring recipes
+            recipes.AddRange(this.GetAllTailorRecipes());
+
             return recipes.ToArray();
         }
 
-        /// <summary>Get all tailoring recipes which take an item as input.</summary>
-        /// <param name="input">The input item.</param>
-        /// <remarks>Derived from <see cref="TailoringMenu.GetRecipeForItems"/>.</remarks>
-        private IEnumerable<RecipeModel> GetTailorRecipes(Item input)
+        /// <summary>Get every valid tailoring recipe.</summary>
+        private IEnumerable<RecipeModel> GetAllTailorRecipes()
         {
-            HashSet<int> seenRecipes = new HashSet<int>();
+            // build tag => items cache
+            var objectList = this.Objects.Value.Select(p => p.Item).ToArray();
+            var contextLookupCache =
+                (
+                    from item in objectList
+                    from tag in item.GetContextTags()
+                    select new { item, tag }
+                )
+                .GroupBy(group => group.tag)
+                .ToDictionary(group => group.Key, group => group.Select(p => p.item).ToArray());
 
-            foreach (TailorItemRecipe recipe in Game1.temporaryContent.Load<List<TailorItemRecipe>>("Data\\TailoringRecipes"))
+            // build cache lookup logic
+            Item[] GetObjectsWithTags(List<string> contextTags)
             {
-                if (recipe.FirstItemTags?.All(input.HasContextTag) == false && recipe.SecondItemTags?.All(input.HasContextTag) == false)
-                    continue; // needs all tags for one of the recipe slots
+                // simple tag lookup
+                if (contextTags.Count == 1 && !contextTags[0].StartsWith("!"))
+                {
+                    return contextLookupCache.TryGetValue(contextTags[0], out Item[] items)
+                        ? items
+                        : new Item[0];
+                }
 
+                // complex lookup
+                {
+                    string cacheKey = string.Join("|", contextTags.OrderBy(p => p));
+
+                    if (!contextLookupCache.TryGetValue(cacheKey, out Item[] items))
+                    {
+                        contextLookupCache[cacheKey] = items = objectList
+                            .Where(entry => contextTags.All(entry.HasContextTag))
+                            .ToArray();
+                    }
+
+                    return items;
+                }
+            }
+
+            // build recipe list
+            var seenPermutation = new HashSet<string>();
+            TailoringMenu tailor = new TailoringMenu();
+            foreach (TailorItemRecipe recipe in tailor._tailoringRecipes)
+            {
+                // get input items
+                Item[] clothItems = GetObjectsWithTags(recipe.FirstItemTags);
+                Item[] spoolItems = GetObjectsWithTags(recipe.SecondItemTags);
+
+                // get output IDs
                 int[] outputItemIds = recipe.CraftedItemIDs?.Any() == true
                     ? recipe.CraftedItemIDs.Select(id => int.TryParse(id, out int value) ? value : -1).ToArray()
                     : new[] { recipe.CraftedItemID };
 
+                // build recipe models
                 foreach (int outputId in outputItemIds)
                 {
-                    if (outputId < 0 || !seenRecipes.Add(outputId))
+                    if (outputId < 0)
                         continue;
 
-                    yield return new RecipeModel(
-                        key: null,
-                        type: RecipeType.TailorInput,
-                        displayType: I18n.RecipeType_Tailoring(),
-                        ingredients: new[] { new RecipeIngredientModel(new[] { input.ParentSheetIndex }, 1) },
-                        item: _ => this.GetTailoredItem(outputId),
-                        mustBeLearned: false,
-                        outputItemIndex: recipe.CraftedItemID,
-                        machineParentSheetIndex: null,
-                        isForMachine: _ => false
-                    );
+                    foreach (Item clothItem in clothItems)
+                    {
+                        foreach (Item spoolItem in spoolItems)
+                        {
+                            // skip if this combination was handled by an earlier recipe
+                            if (!seenPermutation.Add($"{clothItem.ParentSheetIndex}|{spoolItem.ParentSheetIndex}"))
+                                continue;
+
+                            // build recipe
+                            Lazy<Item> output = new(() => this.GetTailoredItem(outputId, tailor, spoolItem));
+                            yield return new RecipeModel(
+                                key: null,
+                                type: RecipeType.TailorInput,
+                                displayType: I18n.RecipeType_Tailoring(),
+                                ingredients: new[]
+                                {
+                                    new RecipeIngredientModel(clothItem.ParentSheetIndex, 1),
+                                    new RecipeIngredientModel(spoolItem.ParentSheetIndex, 1)
+                                },
+                                item: _ => output.Value,
+                                isKnown: () => Game1.player.HasTailoredThisItem(output.Value),
+                                outputItemIndex: recipe.CraftedItemID,
+                                machineParentSheetIndex: null,
+                                isForMachine: _ => false
+                            );
+                        }
+                    }
                 }
             }
         }
 
         /// <summary>Get the item produced by a tailoring recipe based on the output ID.</summary>
-        /// <param name="id">The output item ID.</param>
+        /// <param name="craftedItemId">The output item ID.</param>
+        /// <param name="tailor">The tailoring menu.</param>
+        /// <param name="spoolItem">The item in the tailoring spool slot.</param>
         /// <remarks>Derived from <see cref="TailoringMenu.CraftItem"/>.</remarks>
-        private Item GetTailoredItem(int id)
+        private Item GetTailoredItem(int craftedItemId, TailoringMenu tailor, Item spoolItem)
         {
-            if (id < 0)
-                return new SObject(-id, 1);
-
-            if (id < 2000 || id >= 3000)
-                return new Clothing(id);
-
-            return new Hat(id - 2000);
+            Item obj = craftedItemId >= 0 ? (craftedItemId < 2000 || craftedItemId >= 3000 ? new Clothing(craftedItemId) : (Item)new Hat(craftedItemId - 2000)) : new SObject(-craftedItemId, 1);
+            if (obj is Clothing clothing)
+                tailor.DyeItems(clothing, spoolItem, 1);
+            return obj;
         }
 
         /// <summary>Get an NPC's preference for an item.</summary>

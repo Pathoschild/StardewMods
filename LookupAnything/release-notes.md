@@ -1,6 +1,21 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.34
+Released 27 March 2021.
+
+* Improved tailoring recipes in item lookups:
+  * Added reverse lookup (i.e. see tailoring recipes which produce the current item).
+  * Added full ingredient list for tailoring recipes.
+  * Tailoring recipes are now faded if you haven't discovered them yet.
+  * The produced item's icon now reflects the dye effect of the spool item.
+  * Fixed tailoring recipes shown that aren't actually accessible in-game due to higher-priority recipes.
+* You can now look up...
+  * items in the tailoring UI's spool and output slots;
+  * disabled items in the tailoring UI's inventory box.
+* Fixed torches on fences counted as owned 93 times due to a game quirk.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
+
 ## 1.33
 Released 07 March 2021.
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Items.ItemData;
+using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
@@ -34,6 +35,15 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Whether the Farm Type Manager mod is installed.</summary>
         private readonly bool HasFarmTypeManager;
+
+        /// <summary>Whether the current player found the golden scythe.</summary>
+        private readonly Cached<bool> FoundGoldenScythe = new(
+            getCacheKey: () => $"{Game1.uniqueIDForThisGame},{Game1.ticks / 300}", // refresh every 5 seconds
+            fetchNew: () => Game1.player?.mailReceived?.Contains("gotGoldenScythe") == true
+        );
+
+        /// <summary>A fake pickaxe to use for clearing dead crops to ensure consistent behavior.</summary>
+        private readonly Lazy<Pickaxe> FakePickaxe = new(() => new Pickaxe());
 
 
         /*********
@@ -337,6 +347,48 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             }
 
             return false;
+        }
+
+        /// <summary>Try to harvest tall grass.</summary>
+        /// <param name="location">The location being harvested.</param>
+        /// <param name="tile">The tile being harvested.</param>
+        /// <param name="tileFeature">The terrain feature on the tile.</param>
+        /// <param name="player">The current player.</param>
+        /// <returns>Returns whether it was harvested.</returns>
+        protected bool TryClearDeadCrop(GameLocation location, Vector2 tile, TerrainFeature tileFeature, Farmer player)
+        {
+            return
+                tileFeature is HoeDirt dirt
+                && dirt.crop != null
+                && dirt.crop.dead.Value
+                && this.UseToolOnTile(this.FakePickaxe.Value, tile, player, location);
+        }
+
+        /// <summary>Try to harvest tall grass.</summary>
+        /// <param name="grass">The grass to harvest.</param>
+        /// <param name="location">The location being harvested.</param>
+        /// <param name="tile">The tile being harvested.</param>
+        /// <returns>Returns whether it was harvested.</returns>
+        /// <remarks>Derived from <see cref="Grass.performToolAction"/>.</remarks>
+        protected bool TryHarvestGrass(Grass grass, GameLocation location, Vector2 tile)
+        {
+            if (grass == null)
+                return false;
+
+            // remove grass
+            location.terrainFeatures.Remove(tile);
+
+            // collect hay
+            Random random = Game1.IsMultiplayer
+                ? Game1.recentMultiplayerRandom
+                : new Random((int)(Game1.uniqueIDForThisGame + tile.X * 1000.0 + tile.Y * 11.0));
+            if (random.NextDouble() < (this.FoundGoldenScythe.Value ? 0.75 : 0.5))
+            {
+                if (Game1.getFarm().tryToAddHay(1) == 0) // returns number left
+                    Game1.addHUDMessage(new HUDMessage("Hay", HUDMessage.achievement_type, true, Color.LightGoldenrodYellow, new SObject(178, 1)));
+            }
+
+            return true;
         }
 
         /// <summary>Cancel the current player animation if it matches one of the given IDs.</summary>

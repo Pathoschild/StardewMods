@@ -1,7 +1,7 @@
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
-    /// <summary>Configuration for the melee weapon attachment.</summary>
-    internal class MeleeWeaponConfig
+    /// <summary>Configuration for the melee sword attachment.</summary>
+    internal class MeleeSwordConfig
     {
         /// <summary>Whether to attack monsters.</summary>
         public bool AttackMonsters { get; set; } = false;
@@ -11,5 +11,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Config
 
         /// <summary>Whether to break containers in the mine.</summary>
         public bool BreakMineContainers { get; set; } = true;
+
+        /// <summary>Whether to cut tall grass.</summary>
+        public bool HarvestGrass { get; set; } = false;
     }
 }

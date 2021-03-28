@@ -22,18 +22,20 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>The last stack size handlers were notified of.</summary>
         private int LastCount;
 
+        /// <summary>Whether <see cref="PreventEmptyStacks"/> has already been applied.</summary>
+        private bool PreventedEmptyStacks;
+
 
         /*********
         ** Accessors
         *********/
-        /// <summary>A sample item for comparison.</summary>
-        /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
+        /// <inheritdoc />
         public Item Sample { get; }
 
-        /// <summary>The underlying item type.</summary>
+        /// <inheritdoc />
         public ItemType Type { get; }
 
-        /// <summary>The number of items in the stack.</summary>
+        /// <inheritdoc />
         public int Count { get; private set; }
 
 
@@ -55,8 +57,7 @@ namespace Pathoschild.Stardew.Automate
             this.LastCount = this.Count;
         }
 
-        /// <summary>Remove the specified number of this item from the stack.</summary>
-        /// <param name="count">The number to consume.</param>
+        /// <inheritdoc />
         public void Reduce(int count)
         {
             if (count <= 0)
@@ -68,8 +69,7 @@ namespace Pathoschild.Stardew.Automate
             this.Delegate();
         }
 
-        /// <summary>Remove the specified number of this item from the stack and return a new stack matching the count.</summary>
-        /// <param name="count">The number to get.</param>
+        /// <inheritdoc />
         public Item Take(int count)
         {
             if (count <= 0)
@@ -77,6 +77,16 @@ namespace Pathoschild.Stardew.Automate
 
             this.Reduce(count);
             return this.GetNewStack(this.Item, count);
+        }
+
+        /// <inheritdoc />
+        public void PreventEmptyStacks()
+        {
+            if (!this.PreventedEmptyStacks)
+            {
+                this.PreventedEmptyStacks = true;
+                this.Count = Math.Max(0, this.Count - 1);
+            }
         }
 
 
@@ -93,7 +103,7 @@ namespace Pathoschild.Stardew.Automate
 
             // notify handlers
             this.OnReduced?.Invoke(this.Item);
-            if (this.Count <= 0)
+            if (this.Count <= 0 && !this.PreventedEmptyStacks)
                 this.OnEmpty?.Invoke(this.Item);
         }
 

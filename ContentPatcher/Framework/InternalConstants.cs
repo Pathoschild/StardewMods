@@ -1,5 +1,6 @@
 using System;
 using StardewModdingAPI;
+using StardewValley.GameData;
 using StardewValley.GameData.Crafting;
 using StardewValley.GameData.FishPond;
 using StardewValley.GameData.Movies;
@@ -50,6 +51,9 @@ namespace ContentPatcher.Framework
 
                 case MovieCharacterReaction entry:
                     return entry.NPCName;
+
+                case RandomBundleData entry:
+                    return entry.AreaName;
 
                 case TailorItemRecipe entry:
                     return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
@@ -278,7 +277,13 @@ namespace ContentPatcher.Framework.Patches
             {
                 var tile = new StaticTile(layer, setTilesheet ?? original.TileSheet, original?.BlendMode ?? BlendMode.Alpha, setIndex ?? original.TileIndex);
                 foreach (var pair in setProperties)
-                    tile.Properties[pair.Key] = pair.Value;
+                {
+                    if (pair.Value == null)
+                        tile.Properties.Remove(pair.Key);
+                    else
+                        tile.Properties[pair.Key] = pair.Value;
+                }
+
                 layer.Tiles[position] = tile;
             }
 

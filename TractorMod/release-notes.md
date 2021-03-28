@@ -1,4 +1,16 @@
 ﻿# Release notes
+## 4.14
+Released 27 March 2021.
+
+* The dagger/sword can now harvest grass (disabled by default).
+* Split the `MeleeWeapon` attachment into `MeleeBlunt`, `MeleeDagger`, and `MeleeSword`. If you changed melee weapon options, you'll need to reconfigure them.
+* Holding a non-golden scythe to harvest grass now applies the golden scythe bonus if you've found it.
+* When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now...
+  * configure the mod after loading the save file;
+  * set [multi-key bindings](https://stardewvalleywiki.com/Modding:Player_Guide/Key_Bindings).
+* Fixed the five [golden walnuts](https://stardewvalleywiki.com/Golden_Walnut) from island crops not dropped when harvested by the tractor.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
+
 ## 4.13.3
 Released 06 February 2021.
 

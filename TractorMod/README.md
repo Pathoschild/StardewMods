@@ -35,7 +35,9 @@ axe        | clear debris; clear dead crops; cut giant crops. | chop down bushes
 fertilizer | fertilize crops and trees. | —
 grass starter | plant grass. | —
 hoe        | till dirt; clear weeds; dig artifact spots and ginger. | —
-melee weapon | clear dead crops; break mine containers. | attack monsters.
+melee blunt | break mine containers. | attack monsters.
+melee dagger | clear dead crops; break mine containers. | attack monsters; harvest grass.
+melee sword | clear dead crops; break mine containers. | attack monsters; harvest grass.
 milk pail  | collect milk from farm animals. | —
 pickaxe    | break rocks; clear tilled dirt; clear dead crops; harvest spawned mine items. | break paths/flooring; break placed objects.
 scythe     | harvest crops, flowers, bushes, fruit trees, forage, tree seeds, and spawned mine items; clear weeds and dead crops. | collect machine output.
@@ -50,8 +52,9 @@ consume fertilizer or seeds when you sow those, though.
 ## Configure
 ### In-game settings
 If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
-you can click the cog button (⚙) on the title screen to configure the mod. Hover the cursor over
-a field for details, or see the next section.
+you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
+the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
+section.
 
 ![](screenshots/generic-config-menu.png)
 

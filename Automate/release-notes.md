@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.22
+Released 27 March 2021.
+
+* Added option to prevent removing the last item in a stack from chests.
+* Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
+
 ## 1.21.1
 Released 07 March 2021.
 

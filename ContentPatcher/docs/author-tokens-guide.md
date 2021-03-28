@@ -1018,7 +1018,7 @@ automatically create and load the file, and you can use the config values as
 
 If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
 installed, they'll be able to configure the mod through an in-game options menu on the title
-screen.
+screen or the in-game menu.
 
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).

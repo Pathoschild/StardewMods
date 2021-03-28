@@ -13,7 +13,6 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.GameData.FishPond;
-using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
@@ -348,64 +347,6 @@ namespace Pathoschild.Stardew.LookupAnything
             }
         }
 
-        /// <summary>Parse gift tastes.</summary>
-        /// <param name="monitor">The monitor with which to log errors.</param>
-        /// <remarks>Derived from the <see cref="CraftingRecipe.createItem"/>.</remarks>
-        public IEnumerable<ObjectModel> GetObjects(IMonitor monitor)
-        {
-            IDictionary<int, string> data = Game1.objectInformation;
-
-            foreach (var pair in data)
-            {
-                int parentSpriteIndex = pair.Key;
-
-                ObjectModel model;
-                try
-                {
-
-                    string[] fields = pair.Value.Split('/');
-
-                    // ring
-                    if (parentSpriteIndex >= Ring.ringLowerIndexRange && parentSpriteIndex <= Ring.ringUpperIndexRange)
-                    {
-                        model = new ObjectModel(
-                            parentSpriteIndex: parentSpriteIndex,
-                            name: fields[0],
-                            description: fields[1],
-                            price: int.Parse(fields[2]),
-                            edibility: -300,
-                            type: fields[3],
-                            category: SObject.ringCategory
-                        );
-                    }
-
-                    // any other object
-                    else
-                    {
-                        string name = fields[SObject.objectInfoNameIndex];
-                        int price = int.Parse(fields[SObject.objectInfoPriceIndex]);
-                        int edibility = int.Parse(fields[SObject.objectInfoEdibilityIndex]);
-                        string description = fields[SObject.objectInfoDescriptionIndex];
-
-                        // type & category
-                        string[] typeParts = fields[SObject.objectInfoTypeIndex].Split(' ');
-                        string typeName = typeParts[0];
-                        int category = 0;
-                        if (typeParts.Length > 1)
-                            category = int.Parse(typeParts[1]);
-
-                        model = new ObjectModel(parentSpriteIndex, name, description, price, edibility, typeName, category);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    monitor.Log($"Couldn't parse object #{parentSpriteIndex} from Content\\Data\\ObjectInformation.xnb due to an invalid format.\nObject data: {pair.Value}\nError: {ex}", LogLevel.Warn);
-                    continue;
-                }
-                yield return model;
-            }
-        }
-
         /// <summary>Get the recipe ingredients.</summary>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
@@ -446,7 +387,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     displayType: machine.DisplayName,
                     ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, outputId, output),
-                    mustBeLearned: false,
+                    isKnown: () => true,
                     exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
                     outputItemIndex: outputId,
                     minOutput: output.MinOutput,
@@ -465,12 +406,12 @@ namespace Pathoschild.Stardew.LookupAnything
                     key: null,
                     type: RecipeType.BuildingInput,
                     displayType: building.displayName,
-                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(new[] { p.Key }, p.Value)),
+                    ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
                     item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output, null),
-                    mustBeLearned: false,
+                    isKnown: () => true,
                     outputItemIndex: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
-                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(new[] { p }, 1)),
+                    exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
                     machineParentSheetIndex: null,
                     isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
                 )

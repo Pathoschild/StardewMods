@@ -10,6 +10,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         ** Accessors
         *********/
         /// <summary>The keys which toggle the automation overlay.</summary>
-        public KeybindList ToggleOverlay { get; set; } = KeybindList.ForSingle(SButton.U);
+        public KeybindList ToggleOverlay { get; set; } = new(SButton.U);
     }
 }

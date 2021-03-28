@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.SkipIntro.Framework
 
             // register
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: true)
                 .AddDropdown(
                     label: "Skip to",
                     description: "Which screen to skip to. Default Title.",

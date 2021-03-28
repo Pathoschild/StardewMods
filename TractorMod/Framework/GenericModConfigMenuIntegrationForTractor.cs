@@ -3,7 +3,6 @@ using System.Linq;
 using Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -46,7 +45,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // register
             menu
-                .RegisterConfig()
+                .RegisterConfig(canConfigureInGame: true)
 
                 // main options
                 .AddLabel("Main Options")
@@ -106,20 +105,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 .AddKeyBinding(
                     label: "Summon Tractor",
                     description: "Warp an available tractor to your position. Default backspace.",
-                    get: config => this.GetSingleButton(config.Controls.SummonTractor),
-                    set: (config, value) => config.Controls.SummonTractor = KeybindList.ForSingle(value)
+                    get: config => config.Controls.SummonTractor,
+                    set: (config, value) => config.Controls.SummonTractor = value
                 )
                 .AddKeyBinding(
                     label: "Dismiss Tractor",
                     description: "Return the tractor you're riding to its home.",
-                    get: config => this.GetSingleButton(config.Controls.DismissTractor),
-                    set: (config, value) => config.Controls.DismissTractor = KeybindList.ForSingle(value)
+                    get: config => config.Controls.DismissTractor,
+                    set: (config, value) => config.Controls.DismissTractor = value
                 )
                 .AddKeyBinding(
                     label: "Hold to Activate",
                     description: "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
-                    get: config => this.GetSingleButton(config.Controls.HoldToActivate),
-                    set: (config, value) => config.Controls.HoldToActivate = KeybindList.ForSingle(value)
+                    get: config => config.Controls.HoldToActivate,
+                    set: (config, value) => config.Controls.HoldToActivate = value
                 )
 
                 // axe
@@ -320,25 +319,61 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
                 )
 
-                // melee weapon
-                .AddLabel("Melee Weapon Features")
+                // melee blunt weapons
+                .AddLabel("Melee Blunt Weapons Features")
                 .AddCheckbox(
                     label: "Attack Monsters",
-                    description: "Whether melee weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
-                    get: config => config.StandardAttachments.MeleeWeapon.AttackMonsters,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.AttackMonsters = value
-                )
-                .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether melee weapons clear dead crops. Default true.",
-                    get: config => config.StandardAttachments.MeleeWeapon.ClearDeadCrops,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.ClearDeadCrops = value
+                    description: "Whether melee blunt weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeBlunt.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeBlunt.AttackMonsters = value
                 )
                 .AddCheckbox(
                     label: "Break Mine Containers",
-                    description: "Whether melee weapons break containers in the mine. Default true.",
-                    get: config => config.StandardAttachments.MeleeWeapon.BreakMineContainers,
-                    set: (config, value) => config.StandardAttachments.MeleeWeapon.BreakMineContainers = value
+                    description: "Whether melee blunt weapons break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeBlunt.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeBlunt.BreakMineContainers = value
+                )
+
+                // melee daggers
+                .AddLabel("Melee Dagger Features")
+                .AddCheckbox(
+                    label: "Attack Monsters",
+                    description: "Whether melee daggers attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeDagger.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether melee daggers clear dead crops. Default true.",
+                    get: config => config.StandardAttachments.MeleeDagger.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether melee daggers break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeDagger.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeDagger.BreakMineContainers = value
+                )
+
+                // melee sword
+                .AddLabel("Melee Sword Features")
+                .AddCheckbox(
+                    label: "Attack Monsters",
+                    description: "Whether melee swords attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    get: config => config.StandardAttachments.MeleeSword.AttackMonsters,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.AttackMonsters = value
+                )
+                .AddCheckbox(
+                    label: "Clear Dead Crops",
+                    description: "Whether melee swords clear dead crops. Default true.",
+                    get: config => config.StandardAttachments.MeleeSword.ClearDeadCrops,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.ClearDeadCrops = value
+                )
+                .AddCheckbox(
+                    label: "Break Mine Containers",
+                    description: "Whether melee swords break containers in the mine. Default true.",
+                    get: config => config.StandardAttachments.MeleeSword.BreakMineContainers,
+                    set: (config, value) => config.StandardAttachments.MeleeSword.BreakMineContainers = value
                 )
 
                 // other
@@ -401,19 +436,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     get: config => string.Join(", ", config.CustomAttachments),
                     set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
                 );
-        }
-
-        /// <summary>Get the first button in a keybind, if any.</summary>
-        /// <param name="keybindList">The keybind list.</param>
-        private SButton GetSingleButton(KeybindList keybindList)
-        {
-            foreach (var keybind in keybindList.Keybinds)
-            {
-                if (keybind.IsBound)
-                    return keybind.Buttons.First();
-            }
-
-            return SButton.None;
         }
     }
 }
