@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to J3yEreN (updated Turkish!).
+
 ## 1.20.12
 Released 27 March 2021.
 

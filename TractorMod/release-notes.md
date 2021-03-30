@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Improved translations. Thanks to J3yEreN (updated Turkish!).
+
 ## 4.14
 Released 27 March 2021.
 
