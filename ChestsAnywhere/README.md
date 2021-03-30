@@ -9,6 +9,7 @@ Transfer items without having to run around, from the comfort of your bed to the
 * [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
+* [FAQs](#mod-integrations)
 * [See also](#see-also)
 
 ## Install
@@ -117,6 +118,22 @@ multiplayer.
 Multiplayer notes:
 * There's no problem with some players not having the mod.
 * If you're not the main player, you can only access chests in synced locations (usually the farm, farmhouse, constructed farm buildings, and your current location). This is due to limitations in how the game syncs data.
+
+## Mod integrations
+### Setting chest options
+Chests Anywhere stores its options in each chest's `modData` field. You can add them explicitly to
+set the options yourself (e.g. to hide chests that shouldn't appear in the dropdowns).
+
+Here are the recognized options:
+
+`modData` key | description
+------------- | -----------
+`Pathoschild.ChestsAnywhere/Name` | The chest name. Defaults to a name like "Chest #7".
+`Pathoschild.ChestsAnywhere/Category` | The category name. Defaults to the location name.
+`Pathoschild.ChestsAnywhere/IsIgnored` | Set to `true` to hide the chest from the dropdowns. Defaults to `false`.
+`Pathoschild.ChestsAnywhere/Order` | An integer sort order in the dropdowns, relative to other chests. Defaults to 0.
+`Pathoschild.Automate/StoreItems`<br />`Pathoschild.Automate/TakeItems` | How Automate stores/takes items in the chest. The possible values are `Allow` (_store/take items in this chest_), `Prefer` (_store/take items in this chest first_), or `Disabled` (_never store/take items in this chest_). Defaults to `Allow`.
+`Pathoschild.Automate/PreventRemovingStacks` | Set to `true` to prevent Automate from removing the last item in a stack. Default `false`.
 
 ## See also
 * [Release notes](release-notes.md)
