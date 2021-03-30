@@ -157,7 +157,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="containers">The storage containers.</param>
         private StorageManager BuildStorage(IContainer[] containers)
         {
-            return new StorageManager(containers, this.Config.PreventRemovingStacks);
+            return new StorageManager(containers);
         }
 
         /// <summary>Reload the machines in a given location.</summary>

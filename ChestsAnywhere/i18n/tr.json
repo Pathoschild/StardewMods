@@ -25,6 +25,7 @@
     "label.automate-take": "Bu kutudan nesne alma",
     "label.automate-take-first": "Bu kutudan ilk önce bir nesne alın",
     "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "kutuyu düzenle",

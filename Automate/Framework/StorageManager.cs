@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Storage;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 using SObject = StardewValley.Object;
 
@@ -13,9 +14,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>Whether to avoid removing the last item in a stack.</summary>
-        private readonly bool PreventRemovingStacks;
-
         /// <summary>The storage containers that accept input, in priority order.</summary>
         private IContainer[] InputContainers;
 
@@ -28,11 +26,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="containers">The storage containers.</param>
-        /// <param name="preventRemovingStacks">Whether to avoid removing the last item in a stack.</param>
-        public StorageManager(IEnumerable<IContainer> containers, bool preventRemovingStacks)
+        public StorageManager(IEnumerable<IContainer> containers)
         {
             this.SetContainers(containers);
-            this.PreventRemovingStacks = preventRemovingStacks;
         }
 
         /// <summary>Set the containers to use.</summary>
@@ -63,9 +59,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             foreach (IContainer container in this.OutputContainers)
             {
+                bool preventRemovingStacks = container.ModData.ReadField(AutomateContainerHelper.PreventRemovingStacksKey, bool.Parse);
+
                 foreach (ITrackedStack stack in container)
                 {
-                    if (this.PreventRemovingStacks)
+                    if (preventRemovingStacks)
                         stack.PreventEmptyStacks();
 
                     if (stack.Count > 0)

@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* The option to prevent removing the last item in a stack is now configured per-chest.
+
 ## 1.22
 Released 27 March 2021.
 

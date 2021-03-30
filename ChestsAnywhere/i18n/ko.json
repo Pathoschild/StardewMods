@@ -25,6 +25,7 @@
     "label.automate-take": "이 상자에서 물건을 가져 가십시오",
     "label.automate-take-first": "이 상자에서 먼저 물건을 가져 가십시오",
     "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "상자 편집",
