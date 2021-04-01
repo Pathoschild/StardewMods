@@ -220,6 +220,30 @@ namespace ContentPatcher.Framework
                 this.QueuedTokenChanges[updateType].Clear();
             }
 
+            // run code patches
+            // needs to come before next block, since it returns early
+            foreach ( var patch in this.Patches )
+            {
+                if ( patch is CodePatch codePatch )
+                {
+                    this.Monitor.Log( "Checking code patch " + patch.Path + " " + patch.UpdateRate + " " + updateType );
+                    if ( patch.UpdateRate.HasFlag( UpdateRate.OnDayStart ) && updateType == ContextUpdateType.All ||
+                         patch.UpdateRate.HasFlag( UpdateRate.OnLocationChange ) && updateType == ContextUpdateType.OnLocationChange ||
+                         patch.UpdateRate.HasFlag( UpdateRate.OnTimeChange ) && updateType == ContextUpdateType.OnTimeChange )
+                    {
+                        this.Monitor.Log( "Running code patch " + patch.Path );
+                        try
+                        {
+                            codePatch.Run();
+                        }
+                        catch ( Exception e )
+                        {
+                            this.Monitor.Log( $"Exception when running patch {patch.Path}: {e}", LogLevel.Error );
+                        }
+                    }
+                }
+            }
+
             // get changes to apply
             HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
             InvariantHashSet reloadAssetNames = new InvariantHashSet(this.AssetsWithRemovedPatches);

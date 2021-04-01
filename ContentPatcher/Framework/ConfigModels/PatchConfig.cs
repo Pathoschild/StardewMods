@@ -78,6 +78,11 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The map tiles to edit.</summary>
         public PatchMapTileConfig[] MapTiles { get; set; }
 
+        /****
+        ** Code
+        ****/
+        public string[] CodeLines { get; set; }
+
 
         /*********
         ** Public methods
@@ -117,6 +122,9 @@ namespace ContentPatcher.Framework.ConfigModels
             this.MapProperties = other.MapProperties.Clone();
             this.AddWarps = other.AddWarps.ToArray();
             this.MapTiles = other.MapTiles.Select(p => new PatchMapTileConfig(p)).ToArray();
+
+            // Code
+            this.CodeLines = other.CodeLines.ToArray();
         }
 
         /// <summary>Normalize the model after it's deserialized.</summary>
@@ -139,6 +147,9 @@ namespace ContentPatcher.Framework.ConfigModels
             this.MapProperties ??= new InvariantDictionary<string>();
             this.AddWarps ??= new string[0];
             this.MapTiles ??= new PatchMapTileConfig[0];
+
+            // Code
+            this.CodeLines ??= new string[0];
         }
     }
 }

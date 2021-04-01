@@ -360,7 +360,7 @@ namespace ContentPatcher.Framework
 
                 // parse target asset
                 IManagedTokenString targetAsset = null;
-                if (action != PatchType.Include)
+                if (action != PatchType.Include && action != PatchType.Code)
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                         return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
@@ -684,6 +684,33 @@ namespace ContentPatcher.Framework
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
                                 reflection: this.Reflection,
+                                normalizeAssetName: this.NormalizeAssetName
+                            );
+                        }
+                        break;
+
+                    // code
+                    case PatchType.Code:
+                        {
+                            // validate
+                            var codeLines = new List<IManagedTokenString>();
+                            for ( int i = 0; i < entry.CodeLines.Length; ++i )
+                            {
+                                LogPathBuilder localPath = path.With(nameof(entry.CodeLines), i.ToString());
+                                if ( !tokenParser.TryParseString( entry.CodeLines[ i ], immutableRequiredModIDs, localPath, out string lineError, out IManagedTokenString parsed ) )
+                                    return TrackSkip( $"{nameof( PatchConfig.CodeLines )} > '{entry.CodeLines[ i ]}' is invalid: {lineError}" );
+                                codeLines.Add( parsed );
+                            }
+
+                            // save
+                            patch = new CodePatch(
+                                indexPath: indexPath,
+                                path: path,
+                                conditions: conditions,
+                                codeLines: codeLines,
+                                updateRate: updateRate,
+                                contentPack: pack,
+                                parentPatch: parentPatch,
                                 normalizeAssetName: this.NormalizeAssetName
                             );
                         }
