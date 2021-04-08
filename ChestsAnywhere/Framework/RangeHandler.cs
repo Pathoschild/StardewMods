@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
-using StardewValley.Buildings;
 using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -107,23 +106,47 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             foreach (GameLocation location in Game1.locations)
             {
                 // get zone key
-                string zone = (from area in worldAreas where area.Value.Contains(location.Name) select area.Key).FirstOrDefault()
-                    ?? location.Name;
+                string explicitZone = (from area in worldAreas where area.Value.Contains(location.Name) select area.Key).FirstOrDefault();
+                string zone = explicitZone ?? location.Name;
 
-                // add location + buildings
-                zones[location] = zone;
-                if (location is BuildableGameLocation buildableLocation)
+                // map locations to zone (unless already mapped through a parent location)
+                if (!zones.ContainsKey(location) || explicitZone != null)
                 {
-                    foreach (Building building in buildableLocation.buildings)
-                    {
-                        GameLocation indoors = building.indoors.Value;
-                        if (indoors != null)
-                            zones[indoors] = zone;
-                    }
+                    zones[location] = zone;
+                    foreach (GameLocation child in this.GetNestedLocations(location))
+                        zones[child] = zone;
                 }
             }
 
             return zones;
+        }
+
+        /// <summary>Get all locations nested within the given location.</summary>
+        /// <param name="location">The root location to search.</param>
+        private IEnumerable<GameLocation> GetNestedLocations(GameLocation location)
+        {
+            // building interiors
+            if (location is BuildableGameLocation buildableLocation)
+            {
+                foreach (GameLocation interior in buildableLocation.buildings.Select(p => p.indoors.Value).Where(p => p != null))
+                {
+                    yield return interior;
+                    foreach (GameLocation child in this.GetNestedLocations(interior))
+                        yield return child;
+                }
+            }
+
+            // farmhouse/cabin
+            if (location is FarmHouse house)
+            {
+                GameLocation cellar = Game1.getLocationFromName(house.GetCellarName());
+                if (cellar != null)
+                {
+                    yield return cellar;
+                    foreach (GameLocation child in this.GetNestedLocations(cellar))
+                        yield return child;
+                }
+            }
         }
     }
 }

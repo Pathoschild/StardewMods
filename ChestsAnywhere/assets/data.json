@@ -1,7 +1,7 @@
 ﻿{
     /**
      * The predefined world areas for the CurrentWorldArea range. For areas not listed here:
-     *   - Constructed buildings are in the same world area as their parent location.
+     *   - Constructed buildings and cellars are in the same world area as their parent location.
      *   - The mines, Skull Cavern, and Volcano Dungeon are each their own world area (determined in code).
      *   - Any other location not listed is considered its own separate world area.
      */

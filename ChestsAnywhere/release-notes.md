@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Cellars now inherit their cabin/farmhouse's world area in balanced mode.
 * Improved translations. Thanks to J3yEreN (updated Turkish!).
 
 ## 1.20.12
