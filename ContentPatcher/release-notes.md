@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed default log names for patches with multiple `FromFile` or `Target` values.
+
 ## 1.21.2
 Released 27 March 2021.
 

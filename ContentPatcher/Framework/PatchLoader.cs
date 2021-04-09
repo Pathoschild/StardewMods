@@ -246,13 +246,8 @@ namespace ContentPatcher.Framework
                         };
 
                         // add descriptive log name
-                        if (string.IsNullOrWhiteSpace(patch.LogName))
-                        {
-                            // Include {target} from {fromFile}
-                            patch.LogName = this.GetDefaultPatchName(newPatch);
-                            if (fromFiles.Length > 1)
-                                patch.LogName += $" from {fromFile}";
-                        }
+                        if (string.IsNullOrWhiteSpace(newPatch.LogName))
+                            newPatch.LogName = this.GetDefaultPatchName(newPatch);
                         else
                         {
                             // Custom Name > {target} from {fromFile}
