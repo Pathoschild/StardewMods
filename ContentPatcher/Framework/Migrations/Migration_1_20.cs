@@ -20,11 +20,10 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_20()
             : base(new SemanticVersion(1, 20, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.LocationContext.ToString(),
                 ConditionType.LocationUniqueName.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

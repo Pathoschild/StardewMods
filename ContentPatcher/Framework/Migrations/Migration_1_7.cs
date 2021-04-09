@@ -19,13 +19,12 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_7()
             : base(new SemanticVersion(1, 7, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.HasReadLetter.ToString(),
                 ConditionType.HasValue.ToString(),
                 ConditionType.IsCommunityCenterComplete.ToString(),
                 ConditionType.IsMainPlayer.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

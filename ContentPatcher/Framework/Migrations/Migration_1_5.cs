@@ -18,8 +18,7 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_5()
             : base(new SemanticVersion(1, 5, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.FarmCave.ToString(),
                 ConditionType.FarmhouseUpgrade.ToString(),
                 ConditionType.FarmName.ToString(),
@@ -29,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
                 ConditionType.PlayerName.ToString(),
                 ConditionType.PreferredPet.ToString(),
                 ConditionType.Year.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

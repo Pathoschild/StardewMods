@@ -18,13 +18,12 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_8()
             : base(new SemanticVersion(1, 8, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.IsOutdoors.ToString(),
                 ConditionType.LocationName.ToString(),
                 ConditionType.Target.ToString(),
                 ConditionType.TargetWithoutPath.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

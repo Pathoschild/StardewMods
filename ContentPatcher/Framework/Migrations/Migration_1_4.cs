@@ -16,15 +16,14 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_4()
             : base(new SemanticVersion(1, 4, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.DayEvent.ToString(),
                 ConditionType.HasFlag.ToString(),
                 ConditionType.HasSeenEvent.ToString(),
                 ConditionType.Hearts.ToString(),
                 ConditionType.Relationship.ToString(),
                 ConditionType.Spouse.ToString()
-            };
+            );
         }
     }
 }
