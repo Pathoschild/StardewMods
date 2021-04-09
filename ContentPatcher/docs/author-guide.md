@@ -187,9 +187,19 @@ _(optional)_ Whether to apply this patch. Default true.
 <td><code>Update</code></td>
 <td>
 
-_(optional)_ When the patch should update if it changed. The possible values are...
-* `OnDayStart` (default): when the in-game day starts;
-* `OnLocationChange`: when the current player warps to a new location (includes day start).
+_(optional)_ If token values change after the patch was already applied, how often the patch should
+be updated and reapplied to the game. The possible values are...
+
+* `OnDayStart` _(default)_: update when the in-game day starts. This is always enabled even if you
+  omit it.
+* `OnLocationChange`: update when the player warps to a new location.
+* `OnTimeChange`: update when the in-game clock changes.
+
+You can specify multiple values:
+
+```js
+"Update": "OnLocationChange, OnTimeChange"
+```
 
 Note that dialogue ignores changes after the day starts (see [known limitations](#known-limitations)).
 
@@ -202,18 +212,7 @@ Your changes apply at the start of each day by default. For example, if you chan
 texture depending on your friendship level with your spouse, it'll use the friendship level at the
 start of the current day.
 
-You can optionally use the [`Update` field](#common-fields) to update more often:
-
-update rate  | effect
------------- | ------
-`OnLocationChange` | The patch updates each time the player warps to a new location.
-`OnTimeChange` | The patch updates each time the in-game clock changes.
-
-You can also specify multiple values:
-
-```js
-"Update": "OnLocationChange, OnTimeChange"
-```
+You can optionally use the [`Update` field](#common-fields) to update more often.
 
 ## Actions
 ### `Load`
@@ -1466,7 +1465,9 @@ you have multiple content packs, each one is applied in the order they're loaded
 need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Known limitations
-* Dialogue is set when the day starts, so setting `"Update": "OnLocationChange"` won't affect dialogue after the day starts.
+* Dialogue is set when the day starts, so setting a [custom update rate](#update-rate) won't affect
+  dialogue after the day starts. (You can use [location-specific dialogue keys](https://stardewvalleywiki.com/Modding:Dialogue#Location_dialogue)
+  to circumvent that though.)
 * Some game assets have special logic. This isn't specific to Content Patcher, but they're
   documented here for convenience.
 
