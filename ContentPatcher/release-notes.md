@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* The `Format` version now always matches Content Patcher's minor version. Previously it only changed if the format changed.
 * Fixed default log names for patches with multiple `FromFile` or `Target` values.
 
 ## 1.21.2

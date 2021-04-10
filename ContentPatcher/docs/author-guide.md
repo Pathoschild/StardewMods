@@ -89,14 +89,59 @@ A content pack is a folder with these files:
 * a `content.json` which describes the changes you want to make;
 * and any images or files you want to use.
 
-The `content.json` file has three main fields:
+The `content.json` file has four main fields:
 
-field             | purpose
------------------ | -------
-`Format`          | The format version. You should always use the latest version (currently `1.21.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
-`Changes`         | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema`    | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
-`CustomLocations` | _(optional)_ The custom in-game locations to make available. See [_custom locations_](#custom-locations).
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+
+<tr>
+<td><code>Format</code></td>
+<td>
+
+The Content Patcher version the content pack is designed for (ignoring the third number in the
+version), to enable backwards compatibility.
+
+**You should use the latest format version (currently `1.21.0`), and update it when updating the
+content pack.** This enables the latest features, avoids undocumented obsolete behavior, and
+reduces startup time. When updating an older content pack, see the [migration
+guide](author-migration-guide.md) in case any changes are needed.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Changes</code></td>
+<td>
+
+The changes you want to make. Each entry is called a **patch**, and describes a specific action to
+perform: replace this file, copy this image into the file, etc. You can list any number of patches.
+
+</td>
+</tr>
+
+<tr>
+<td><code>ConfigSchema</code></td>
+<td>
+
+_(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_
+in the token guide](#advanced).
+
+</td>
+</tr>
+
+<tr>
+<td><code>CustomLocations</code></td>
+<td>
+
+_(optional)_ The custom in-game locations to make available. See [_custom
+locations_](#custom-locations).
+
+</td>
+</tr>
+</table>
 
 You can list any number of patches (surrounded by `{` and `}` in the `Changes` field). See the next
 few sections for more info about the format. For example:
