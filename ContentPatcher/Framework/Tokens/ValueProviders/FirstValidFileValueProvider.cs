@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
-    /// <summary>A value provider which checks whether a file exists in the content pack's folder.</summary>
-    internal class HasFileValueProvider : BaseValueProvider
+    /// <summary>A value provider which returns the first input argument which matches an existing file in the content pack.</summary>
+    internal class FirstValidFileValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -22,8 +23,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="relativePathExists">Get whether a relative file path exists in the content pack.</param>
-        public HasFileValueProvider(Func<string, bool> relativePathExists)
-            : base(ConditionType.HasFile, mayReturnMultipleValuesForRoot: false)
+        public FirstValidFileValueProvider(Func<string, bool> relativePathExists)
+            : base(ConditionType.FirstValidFile, mayReturnMultipleValuesForRoot: false)
         {
             this.RelativePathExists = relativePathExists;
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
@@ -40,7 +41,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
         {
-            allowedValues = InvariantHashSet.Boolean();
+            allowedValues = new InvariantHashSet(input.PositionalArgs);
             return true;
         }
 
@@ -49,7 +50,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.GetPathExists(input.GetPositionalSegment()).ToString();
+            return input.PositionalArgs
+                .Where(this.GetPathExists)
+                .Take(1);
         }
 
 

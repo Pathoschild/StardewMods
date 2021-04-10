@@ -230,6 +230,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
+            yield return new FirstValidFileValueProvider(contentPack.HasFile);
             yield return new HasFileValueProvider(contentPack.HasFile);
             yield return new TranslationValueProvider(contentPack.Translation);
         }
