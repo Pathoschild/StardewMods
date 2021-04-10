@@ -40,7 +40,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
 
         /// <summary>Whether the condition matches the current context.</summary>
-        public bool IsMatch { get; set; }
+        public bool IsMatch { get; private set; }
 
 
         /*********
