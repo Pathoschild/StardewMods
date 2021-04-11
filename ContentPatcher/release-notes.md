@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
   * `FirstValidFile` to enable fallback files without duplicating patches.
 * The `Format` version now always matches Content Patcher's minor version. Previously it only changed if the format changed.

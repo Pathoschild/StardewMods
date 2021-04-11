@@ -1,8 +1,9 @@
 ﻿← [README](../README.md)
 
-This document helps SMAPI mod authors extend Content Patcher with custom functionality.
+This doc helps SMAPI mod authors extend Content Patcher with custom functionality.
 
-**See the [main README](../README.md) for other info**.
+**To use Content Patcher conditions in your mod, see the [conditions API](conditions-api.md). See
+the [main README](../README.md) for other info**.
 
 ## Contents
 * [Overview](#overview)

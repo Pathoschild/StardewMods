@@ -27,7 +27,31 @@ namespace ContentPatcher.Framework
         private readonly Action<ModProvidedToken> AddModToken;
 
         /// <summary>A regex pattern matching a valid token name.</summary>
-        private readonly Regex ValidNameFormat = new Regex("^[a-z]+$", RegexOptions.IgnoreCase);
+        private readonly Regex ValidNameFormat = new("^[a-z]+$", RegexOptions.IgnoreCase);
+
+        /// <summary>Whether the conditions API is initialized and ready for use.</summary>
+        private readonly Func<bool> IsConditionsApiReadyImpl;
+
+        /// <summary>Parse raw conditions for an API consumer.</summary>
+        private readonly ParseConditionsDelegate ParseConditionsImpl;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc />
+        public bool IsConditionsApiReady => this.IsConditionsApiReadyImpl();
+
+
+        /*********
+        ** Public delegates
+        *********/
+        /// <summary>Parse raw conditions for an API consumer.</summary>
+        /// <param name="manifest">The manifest of the mod parsing the conditions.</param>
+        /// <param name="rawConditions">The raw conditions to parse.</param>
+        /// <param name="formatVersion">The format version for which to parse conditions.</param>
+        /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
+        internal delegate IManagedConditions ParseConditionsDelegate(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null);
 
 
         /*********
@@ -38,27 +62,42 @@ namespace ContentPatcher.Framework
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="addModToken">The action to add a mod token.</param>
-        internal ContentPatcherAPI(string contentPatcherID, IMonitor monitor, IReflectionHelper reflection, Action<ModProvidedToken> addModToken)
+        /// <param name="isConditionsApiReady">Whether the conditions API is initialized and ready for use.</param>
+        /// <param name="parseConditions">Parse raw conditions for an API consumer.</param>
+        internal ContentPatcherAPI(string contentPatcherID, IMonitor monitor, IReflectionHelper reflection, Action<ModProvidedToken> addModToken, Func<bool> isConditionsApiReady, ParseConditionsDelegate parseConditions)
         {
             this.ContentPatcherID = contentPatcherID;
             this.Monitor = monitor;
             this.Reflection = reflection;
             this.AddModToken = addModToken;
+            this.IsConditionsApiReadyImpl = isConditionsApiReady;
+            this.ParseConditionsImpl = parseConditions;
         }
 
-        /// <summary>Register a simple token.</summary>
-        /// <param name="mod">The manifest of the mod defining the token (see <see cref="Mod.ModManifest"/> on your entry class).</param>
-        /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>YourName.ExampleMod/SomeTokenName</c>.</param>
-        /// <param name="getValue">A function which returns the current token value. If this returns a null or empty list, the token is considered unavailable in the current context and any patches or dynamic tokens using it are disabled.</param>
+        /// <inheritdoc />
+        public IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null)
+        {
+            // validate lifecycle
+            if (!this.IsConditionsApiReady)
+                throw new InvalidOperationException($"'{manifest.Name}' accessed Content Patcher's conditions API before it was ready to use. (For mod authors: see the documentation on {nameof(IContentPatcherAPI)}.{nameof(IContentPatcherAPI.IsConditionsApiReady)} for details.)");
+
+            // validate dependency on Content Patcher
+            if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion minVersion, canBeOptional: false))
+                throw new InvalidOperationException($"'{manifest.Name}' must list Content Patcher as a required dependency in its manifest.json to access the conditions API.");
+            if (minVersion == null || minVersion.IsOlderThan("1.21.0"))
+                throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 1.21.0 as the minimum required version in its manifest.json to access the conditions API.");
+
+            // parse conditions
+            return this.ParseConditionsImpl(manifest, rawConditions, formatVersion, assumeModIds);
+        }
+
+        /// <inheritdoc />
         public void RegisterToken(IManifest mod, string name, Func<IEnumerable<string>> getValue)
         {
             this.RegisterValueProvider(mod, new ModSimpleValueProvider(name, getValue));
         }
 
-        /// <summary>Register a complex token. This is an advanced API; only use this method if you've read the documentation and are aware of the consequences.</summary>
-        /// <param name="mod">The manifest of the mod defining the token (see <see cref="Mod.ModManifest"/> on your entry class).</param>
-        /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>YourName.ExampleMod/SomeTokenName</c>.</param>
-        /// <param name="token">An arbitrary class with one or more methods from <see cref="ConventionDelegates"/>.</param>
+        /// <inheritdoc />
         public void RegisterToken(IManifest mod, string name, object token)
         {
             this.RegisterValueProviderByConvention(mod, name, token);

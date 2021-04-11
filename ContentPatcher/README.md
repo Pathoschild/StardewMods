@@ -45,7 +45,8 @@ data       | Only directly affects players that have it installed, but can indir
 
 ## For mod authors
 * To create content packs, see the [author guide](docs/author-guide.md) and its [tokens subpage](docs/author-tokens-guide.md).
-* To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility guide](docs/extensibility.md).
+* To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](docs/extensibility.md).
+* To use Content Patcher conditions in your own SMAPI mod, see the [conditions API](docs/conditions-api.md).
 
 ## See also
 * [Release notes](release-notes.md)

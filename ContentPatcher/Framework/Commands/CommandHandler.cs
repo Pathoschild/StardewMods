@@ -707,7 +707,7 @@ namespace ContentPatcher.Framework.Commands
                         }
 
                         // log reason not applied
-                        string errorReason = this.GetReasonNotLoaded(patch);
+                        string errorReason = patch.GetReasonNotLoaded();
                         if (errorReason != null)
                             output.Append($"  // {errorReason}");
 
@@ -817,52 +817,6 @@ namespace ContentPatcher.Framework.Commands
                 yield return new PatchInfo(patch);
             foreach (DisabledPatch patch in this.PatchManager.GetPermanentlyDisabledPatches())
                 yield return new PatchInfo(patch);
-        }
-
-        /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
-        /// <param name="patch">The patch to check.</param>
-        private string GetReasonNotLoaded(PatchInfo patch)
-        {
-            if (patch.IsApplied)
-                return null;
-
-            IContextualState state = patch.State;
-
-            // state error
-            if (state.InvalidTokens.Any())
-                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
-            if (state.UnreadyTokens.Any())
-                return $"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByIgnoreCase(p => p))}";
-            if (state.Errors.Any())
-                return string.Join("; ", state.Errors);
-
-            // conditions not matched
-            if (!patch.MatchesContext && patch.ParsedConditions != null)
-            {
-                string[] failedConditions = (
-                    from condition in patch.ParsedConditions
-                    let displayText = !condition.Is(ConditionType.HasFile) && !string.IsNullOrWhiteSpace(condition.Input.TokenString?.Raw)
-                        ? $"{condition.Name}:{condition.Input.TokenString.Raw}"
-                        : condition.Name
-                    orderby displayText
-                    where !condition.IsMatch
-                    select $"{displayText}"
-                ).ToArray();
-
-                if (failedConditions.Any())
-                    return $"conditions don't match: {string.Join(", ", failedConditions)}";
-            }
-
-            // fallback to unavailable tokens (should never happen due to HasMod check)
-            if (state.UnavailableModTokens.Any())
-                return $"tokens provided by an unavailable mod: {string.Join(", ", state.UnavailableModTokens.OrderByIgnoreCase(p => p))}";
-
-            // non-matching for an unknown reason
-            if (!patch.MatchesContext)
-                return "doesn't match context (unknown reason)";
-
-            // seems fine, just not applied yet
-            return null;
         }
 
         /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>

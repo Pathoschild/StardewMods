@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Migrations
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="content">The content pack being validated.</param>
+        /// <param name="content">The content pack being validated, if any.</param>
         public Migration_1_15_Rewrites(ContentConfig content)
             : base(new SemanticVersion(1, 15, 0))
         {
@@ -126,24 +126,27 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="content">The content pack to read.</param>
         private ISet<string> GetLocalTokenNames(ContentConfig content)
         {
-            InvariantHashSet names = new InvariantHashSet();
+            InvariantHashSet names = new();
 
-            // dynamic tokens
-            foreach (string name in content.DynamicTokens.Select(p => p.Name))
+            if (content != null)
             {
-                if (!string.IsNullOrWhiteSpace(name))
-                    names.Add(name);
-            }
+                // dynamic tokens
+                foreach (string name in content.DynamicTokens.Select(p => p.Name))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        names.Add(name);
+                }
 
-            // config schema
-            foreach (string name in content.ConfigSchema.Select(p => p.Key))
-            {
-                if (!string.IsNullOrWhiteSpace(name))
-                    names.Add(name);
-            }
+                // config schema
+                foreach (string name in content.ConfigSchema.Select(p => p.Key))
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                        names.Add(name);
+                }
 
-            // exclude tokens that conflict with a built-in condition, which will be ignored
-            names.RemoveWhere(p => this.GetEnum<ConditionType>(p) != null);
+                // exclude tokens that conflict with a built-in condition, which will be ignored
+                names.RemoveWhere(p => this.GetEnum<ConditionType>(p) != null);
+            }
 
             return names;
         }
