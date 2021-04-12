@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added new tokens:
   * `FirstValidFile` to enable fallback files without duplicating patches.
 * The `Format` version now always matches Content Patcher's minor version. Previously it only changed if the format changed.
+* Tweaked console command handling.
 * Fixed default log names for patches with multiple `FromFile` or `Target` values.
 
 ## 1.21.2
