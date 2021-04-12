@@ -13,8 +13,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
   * `FirstValidFile` to enable fallback files without duplicating patches.
+* Improved console commands:
+  * Added `patch export` optional argument to specify the data type.
+  * Tweaked console command handling.
+  * Fixed `patch export` for an asset that's not already loaded causing the wrong data type to be cached.
 * The `Format` version now always matches Content Patcher's minor version. Previously it only changed if the format changed.
-* Tweaked console command handling.
 * Fixed default log names for patches with multiple `FromFile` or `Target` values.
 
 ## 1.21.2
