@@ -4,6 +4,7 @@
 ## Upcoming release
 * Added support for replacing the new beach farm.
 * The mod now replaces the new beach farm by default. (This only affects new installs without a `config.json`.)
+* Improved compatibility with recolor mods. All beach land tiles now use the new vanilla beach farm tilesheet; only the river/sea transition still uses custom tiles.
 * Fixed issue where entering from the forest while riding a horse clips you into the fence in 1.8.2.
 * Fixed farm warp obelisk on Ginger Island warping you into the ocean.
 

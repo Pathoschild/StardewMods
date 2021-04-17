@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using Harmony;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
@@ -30,9 +29,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
 
-        /// <summary>The relative path to the folder containing tilesheet overlays.</summary>
-        private readonly string OverlaysPath = Path.Combine("assets", "overlays");
-
         /// <summary>The asset name for the map to replace.</summary>
         private string FarmMapAssetName;
 
@@ -41,10 +37,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>The mod's hardcoded data.</summary>
         private ModData Data;
-
-        /// <summary>The minimum value to consider non-transparent.</summary>
-        /// <remarks>On Linux/Mac, fully transparent pixels may have an alpha up to 4 for some reason.</remarks>
-        private const byte MinOpacity = 5;
 
         /// <summary>A fake asset key prefix from which to load tilesheets.</summary>
         private string FakeAssetPrefix => Path.Combine("Mods", this.ModManifest.UniqueID);
@@ -161,31 +153,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
                 // load asset
                 Texture2D tilesheet = this.Helper.Content.Load<Texture2D>(relativePath);
-                var tilesheetPixels = new Lazy<Color[]>(() => this.GetPixels(tilesheet));
-
-                // apply overlays
-                foreach (DirectoryInfo folder in new DirectoryInfo(this.GetFullPath(this.OverlaysPath)).EnumerateDirectories())
-                {
-                    if (!this.Helper.ModRegistry.IsLoaded(folder.Name))
-                        continue;
-
-                    // get overlay
-                    Texture2D overlay = this.Helper.Content.Load<Texture2D>(Path.Combine(this.OverlaysPath, folder.Name, filename));
-                    Color[] overlayPixels = this.GetPixels(overlay);
-
-                    // apply
-                    Color[] target = tilesheetPixels.Value;
-                    for (int i = 0; i < overlayPixels.Length; i++)
-                    {
-                        Color pixel = overlayPixels[i];
-                        if (pixel.A >= ModEntry.MinOpacity)
-                            target[i] = overlayPixels[i];
-                    }
-                }
-
-                if (tilesheetPixels.IsValueCreated)
-                    tilesheet.SetData(tilesheetPixels.Value);
-
                 return (T)(object)tilesheet;
             }
 
@@ -226,7 +193,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm farm))
                 return;
 
-            // update ocean crabpots before the game does
+            // update ocean crab pots before the game does
             GameLocation beach = Game1.getLocationFromName("Beach");
             foreach (CrabPot pot in farm.objects.Values.OfType<CrabPot>())
             {
@@ -242,21 +209,12 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             return Path.Combine(this.Helper.DirectoryPath, relative);
         }
 
-        /// <summary>Get the pixel data for a texture.</summary>
-        /// <param name="texture">The texture asset.</param>
-        private Color[] GetPixels(Texture2D texture)
-        {
-            Color[] pixels = new Color[texture.Width * texture.Height];
-            texture.GetData(pixels);
-            return pixels;
-        }
-
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="farm">The farm instance.</param>
         private bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
-            if (Game1.whichFarm == this.Config.ReplaceFarmID && location is Farm farmInstance && farmInstance.Name == "Farm")
+            if (Game1.whichFarm == this.Config.ReplaceFarmID && location is Farm { Name: "Farm" } farmInstance)
             {
                 farm = farmInstance;
                 return true;

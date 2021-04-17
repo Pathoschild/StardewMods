@@ -90,15 +90,11 @@ Other mods can patch Small Beach Farm's tilesheets directly. For example, in a C
 **Option B:**  
 Compatibility files can be added to the Small Beach Farm folder instead.
 
-1. Choose the compatibility folder you need:
-
-   folder | purpose
-   :----- | :------
-   `assets/tilesheets` | Replace the entire tilesheet. If the player has multiple mods with a matching folder, only the first one alphabetically will be used.
-   `assets/overlays` | Make changes to the tilesheet loaded from `assets/tilesheets` (recommended if you only change some of the colors). If the player has multiple mods with a matching folder, they'll be applied sequentially in alphabetical order. Transparent pixels won't change the tilesheet, so you can leave areas you don't need to change empty.
-
-2. Create a subfolder whose name is the recolor mod's ID (from its `manifest.json`).
-3. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
+1. Create a subfolder in `assets/tilesheets` whose name is the recolor mod's ID (from its
+   `manifest.json`).
+2. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
+3. If the player has multiple mods with a matching folder, only the first one alphabetically will be
+   used.
 
 If you send me the files, I'll add official support for the recolor!
 
