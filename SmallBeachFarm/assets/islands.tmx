@@ -2246,6 +2246,9 @@
    </properties>
   </tile>
  </tileset>
+ <tileset firstgid="2563" name="untitled tile sheet2" tilewidth="16" tileheight="16" tilecount="1280" columns="32">
+  <image source="spring_island_tilesheet_1.png" width="512" height="640"/>
+ </tileset>
  <layer id="1" name="Back" width="56" height="49">
   <data encoding="csv">
 2033,2100,2119,2119,2119,2080,2037,2549,2552,2553,2083,2119,2119,2119,2119,2119,2119,2119,2119,2119,2097,2099,2549,2552,2553,2031,2054,2098,2033,2100,2119,2119,2119,2119,2119,2119,2119,2097,2099,2030,2549,2552,2553,2098,2033,2033,2100,2119,2119,2119,2119,2119,2119,2119,2119,2119,
