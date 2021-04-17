@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
   * `FirstValidFile` to enable fallback files without duplicating patches.
+  * `HasActiveQuest` to check a player's current quest list.
 * Improved console commands:
   * Added `patch export` optional argument to specify the data type.
   * Tweaked console command handling.

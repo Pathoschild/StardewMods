@@ -260,6 +260,17 @@ add upgrade levels beyond that.
 </tr>
 
 <tr valign="top">
+<td>HasActiveQuest</td>
+<td>
+
+The active quest IDs in the current player's quest list (or the player specified with a
+[`PlayerType`](#playertype) argument). See [Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data)
+on the wiki for valid quest IDs.
+
+</td>
+</tr>
+
+<tr valign="top">
 <td>HasConversationTopic</td>
 <td>
 

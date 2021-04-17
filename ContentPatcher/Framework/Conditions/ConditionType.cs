@@ -32,6 +32,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Player
         ****/
+        /// <summary>An active quest in the player's quest log.</summary>
+        HasActiveQuest,
+
         /// <summary>A conversation topic ID set for the player.</summary>
         HasConversationTopic,
 
