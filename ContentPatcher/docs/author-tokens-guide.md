@@ -383,10 +383,10 @@ flag                       | meaning
 `ClubCard`                 | Unlocks the desert casino.
 `KeyToTheTown`             | Allows access to all buildings in town, at any time of day.
 `SpecialCharm`             | Permanently increases daily luck.
-`SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
+`SkullKey`                 | Unlocks the [Skull Cavern](https://stardewvalleywiki.com/Skull_Cavern) and the Saloon's Junimo Kart machine.
 `MagnifyingGlass`          | Unlocks the ability to find secret notes.
 `DarkTalisman`             | Unlocks the Witch's Swamp.
-`MagicInk`                 | Unlocks magical buildings through the Wizard, and the dark shrines in the Witch's Swamp.
+`MagicInk`                 | Unlocks [magical buildings](https://stardewvalleywiki.com/Wizard%27s_Tower#Buildings) and [dark shrines](https://stardewvalleywiki.com/Witch%27s_Hut).
 `BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
 `SpringOnionMastery`       | Increases sell price of spring onions.
 
@@ -710,7 +710,7 @@ usage | result | description
 ----- | ------ | -----------
 `Round(2.5555)` | `3` | Round to the nearest whole number.
 `Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
-`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` to the given number of fractional digits. This overrides the default [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) behavior.
+`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` (defaults to [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) if not specified).
 
 This is mainly useful in combination with [query expressions](#query-expressions). For example,
 monster HP must be a whole number, so this rounds the result of a calculation to the nearest whole
@@ -963,47 +963,11 @@ This is mainly useful for checking if the path exists:
 </tr>
 
 <tr valign="top" id="Target">
-<td>Target</td>
-<td>
+<td id="TargetPathOnly">Target<br />TargetPathOnly<br />TargetWithoutPath</td>
+<td id="TargetWithoutPath">
 
 The patch's `Target` field value for the current asset. Path separators are normalized for the OS.
 This is mainly useful for patches which specify multiple targets:
-
-```js
-{
-   "Action": "EditImage",
-   "Target": "Characters/Abigail, Characters/Sam",
-   "FromFile": "assets/{{Target}}.png" // assets/Characters/Abigail.png *or* assets/Characters/Sam.png
-}
-```
-
-</td>
-<td><a href="#Target">#</a></td>
-</tr>
-
-<tr valign="top" id="TargetPathOnly">
-<td>TargetPathOnly</td>
-<td>
-
-Equivalent to `Target`, but only the part before the last path separator:
-
-```js
-{
-   "Action": "EditImage",
-   "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{TargetPathOnly}}/recolor.png" // assets/Characters/recolor.png *or* assets/Portraits/recolor.png
-}
-```
-
-</td>
-<td><a href="#TargetPathOnly">#</a></td>
-</tr>
-
-<tr valign="top" id="TargetWithoutPath">
-<td>TargetWithoutPath</td>
-<td>
-
-Equivalent to `Target`, but only the part after the last path separator:
 
 ```js
 {
@@ -1013,8 +977,17 @@ Equivalent to `Target`, but only the part after the last path separator:
 }
 ```
 
+The difference between the three tokens is the part they return. For example, given the target value
+`Characters/Dialogue/Abigail`:
+
+token               | part returned | example
+------------------- | ------------- | ------
+`Target`            | The full path. | `Characters/Dialogue/Abigail`
+`TargetPathOnly`    | The part before the last separator. | `Characters/Dialogue`
+`TargetWithoutPath` | The part after the last separator. | `Abigail`
+
 </td>
-<td><a href="#TargetWithoutPath">#</a></td>
+<td><a href="#Target">#</a></td>
 </tr>
 </table>
 
