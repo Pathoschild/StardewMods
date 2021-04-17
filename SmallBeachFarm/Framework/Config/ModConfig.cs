@@ -15,6 +15,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework.Config
         public bool UseBeachMusic { get; set; } = false;
 
         /// <summary>The farm layout ID to replace.</summary>
-        public int ReplaceFarmID { get; set; } = Farm.riverlands_layout;
+        public int ReplaceFarmID { get; set; } = Farm.beach_layout;
     }
 }

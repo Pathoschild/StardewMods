@@ -72,7 +72,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     label: "Replace Farm Type",
                     description: "The farm layout to replace.",
                     get: config => this.GetFarmName(config.ReplaceFarmID),
-                    set: (config, value) => config.ReplaceFarmID = this.GetFarmID(value, defaultValue: this.GetFarmID("Riverland", defaultValue: config.ReplaceFarmID)),
+                    set: (config, value) => config.ReplaceFarmID = this.GetFarmID(value, defaultValue: new ModConfig().ReplaceFarmID),
                     choices: this.FarmChoices.Values.OrderBy(p => p).ToArray()
                 );
         }

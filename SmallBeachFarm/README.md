@@ -10,7 +10,7 @@ You can optionally enable islands and beach sounds.
 3. Run the game using SMAPI.
 
 ## Usage
-Just load a save with the riverlands farm, and you'll see the new map! You can change which farm is
+Just load a save with the beach farm, and you'll see the new map! You can change which farm is
 replaced in the [configuration](#configure).
 
 A few highlights:
@@ -56,7 +56,7 @@ setting         | default | what it affects
 `AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
 `EnableIslands` | `false` | Whether to add ocean islands with extra land area.
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
-`ReplaceFarmID` | `1`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), `5` (four corners), and `6` (beach).
+`ReplaceFarmID` | `6`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), `5` (four corners), and `6` (beach).
 
 ## FAQs
 ### Can I use this with an existing save?

@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added support for replacing new beach farm type.
+* Added support for replacing the new beach farm.
+* The mod now replaces the new beach farm by default. (This only affects new installs without a `config.json`.)
 * Fixed issue where entering from the forest while riding a horse clips you into the fence in 1.8.2.
 * Fixed farm warp obelisk on Ginger Island warping you into the ocean.
 
