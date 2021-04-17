@@ -4,7 +4,7 @@
 ## Upcoming release
 * Cellars now inherit their cabin/farmhouse's world area in balanced mode.
 * Fixed Automate chest options shown for mini-shipping bins.
-* Improved translations. Thanks to J3yEreN (updated Turkish!).
+* Improved translations. Thanks to Caco-o-sapo (updated Portuguese) and J3yEreN (updated Turkish!).
 
 ## 1.20.12
 Released 27 March 2021.
