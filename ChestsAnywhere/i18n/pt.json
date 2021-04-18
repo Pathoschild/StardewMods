@@ -25,6 +25,7 @@
     "label.automate-take": "Pegue itens deste baú",
     "label.automate-take-first": "Primeiro pegue itens deste baú",
     "label.automate-take-disabled": "Nunca pegue itens deste baú",
+    "label.automate-prevent-remove-stacks": "Previnir de remover o ultimo item do grupo",
 
     // button labels
     "button.edit-chest": "editar baú",

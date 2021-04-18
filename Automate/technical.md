@@ -5,6 +5,7 @@
 * [FAQs](#faqs)
 * [Extensibility for modders](#extensibility-for-modders)
   * [APIs](#apis)
+  * [Chest automation options](#chest-automation-options)
   * [Custom chest capacity](#custom-chest-capacity)
   * [Patch Automate](#patch-automate)
 * [Implementation details](#technical-details)
@@ -67,38 +68,17 @@ Normally you'd change how chests are automated through [Chests Anywhere](https:/
 chest options UI:
 > ![](screenshots/chests-anywhere-config.png)
 
-If you don't have Chests Anywhere or want to replicate it in another mod, you can edit the chest's
-`modData` field a different way and add these entries:
+If you don't want Chests Anywhere's functionality, you have a few options:
 
-<table>
-<tr>
-  <th>key</th>
-  <th>value</th>
-  <th>description</th>
-</tr>
-<tr>
-  <td><code>Pathoschild.Automate/StoreItems</code></td>
-  <td><code>Disable</code></td>
-  <td><strong>don't</strong> store items in this chest.</td>
-</tr>
-<tr>
-  <td><code>Pathoschild.Automate/StoreItems</code></td>
-  <td><code>Prefer</code></td>
-  <td>store items in this chest first.</td>
-</tr>
-<tr>
-  <td><code>Pathoschild.Automate/TakeItems</code></td>
-  <td><code>Disable</code></td>
-  <td><strong>don't</strong> take items from this chest.</td>
-</tr>
-<tr>
-  <td><code>Pathoschild.Automate/TakeItems</code></td>
-  <td><code>Prefer</code></td>
-  <td>take items from this chest first.</td>
-</tr>
-</table>
-
-If a property is missing, both taking and storing are enabled by default.
+* You can install Chests Anywhere, but set the `"Range": "None"` option in its `config.json`. That
+  will let you edit an opened chest, but you won't have any option to navigate chests or open them
+  remotely.
+* _Or_ you can install Chests Anywhere temporarily, set the options you want and save, then remove
+  it. The options will still work after it's uninstalled.
+* _Or_ you can [edit your save file](https://stardewvalleywiki.com/Saves#Edit_a_save) manually and
+  [set the chest options directly](#chest-automation-options). That's more complicated, but you
+  can ask for help in [#making-mods on Discord](https://smapi.io/community#Discord) if you're
+  interested.
 
 ## Extensibility for modders
 See _[core concepts](#core-concepts)_ before reading this section.
@@ -282,6 +262,10 @@ automate.AddFactory(new MyAutomationFactory());
 
 That's it! When Automate scans a location for automatables, it'll call your `GetFor` method and add
 your custom machine to its normal automation.
+
+### Chest automation options
+You can change how Automate uses a chest by editing its `modData` field. See [_mod integrations_ in
+the Chests Anywhere docs](../ChestsAnywhere/README.md#mod-integrations) for more info.
 
 ### Custom chest capacity
 Automate uses the value returned by `chest.GetActualCapacity()`. You can override or patch that

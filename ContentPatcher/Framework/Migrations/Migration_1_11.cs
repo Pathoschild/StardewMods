@@ -18,11 +18,10 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_11()
             : base(new SemanticVersion(1, 11, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.Lowercase.ToString(),
                 ConditionType.Uppercase.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

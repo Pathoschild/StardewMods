@@ -122,14 +122,16 @@ Global token values are defined by Content Patcher, so you can use them without 
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Day">
 <td>Day</td>
 <td>The day of month. Possible values: any integer from 1 through 28.</td>
+<td><a href="#Day">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="DayEvent">
 <td>DayEvent</td>
 <td>
 
@@ -146,9 +148,10 @@ The festival or wedding happening today. Possible values:
 * a custom festival name.
 
 </td>
+<td><a href="#DayEvent">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="DayOfWeek">
 <td>DayOfWeek</td>
 <td>
 
@@ -156,23 +159,26 @@ The day of week. Possible values: `Monday`, `Tuesday`, `Wednesday`, `Thursday`, 
 `Saturday`, and `Sunday`.
 
 </td>
+<td><a href="#DayOfWeek">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="DaysPlayed">
 <td>DaysPlayed</td>
 <td>The total number of in-game days played for the current save (starting from one when the first day starts).</td>
+<td><a href="#DaysPlayed">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Season">
 <td>Season</td>
 <td>
 
 The season name. Possible values: `Spring`, `Summer`, `Fall`, and `Winter`.
 
 </td>
+<td><a href="#Season">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Time">
 <td>Time</td>
 <td>
 
@@ -187,9 +193,10 @@ This can also be used with range tokens:
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
+<td><a href="#Time">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Weather">
 <td>Weather</td>
 <td>
 
@@ -208,15 +215,17 @@ value   | meaning
 location context.
 
 </td>
+<td><a href="#Weather">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Year">
 <td>Year</td>
 <td>
 
 The year number (like `1` or `2`).
 
 </td>
+<td><a href="#Year">#</a></td>
 </tr>
 </table>
 
@@ -225,9 +234,10 @@ The year number (like `1` or `2`).
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="DailyLuck">
 <td>DailyLuck</td>
 <td>
 
@@ -245,9 +255,10 @@ using [query expressions](#query-expressions). For example:
 ```
 
 </td>
+<td><a href="#DailyLuck">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FarmhouseUpgrade">
 <td>FarmhouseUpgrade</td>
 <td>
 
@@ -257,9 +268,22 @@ player (or the player specified with a [`PlayerType`](#playertype) argument). Th
 add upgrade levels beyond that.
 
 </td>
+<td><a href="#FarmhouseUpgrade">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasActiveQuest">
+<td>HasActiveQuest</td>
+<td>
+
+The active quest IDs in the current player's quest list (or the player specified with a
+[`PlayerType`](#playertype) argument). See [Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data)
+on the wiki for valid quest IDs.
+
+</td>
+<td><a href="#HasActiveQuest">#</a></td>
+</tr>
+
+<tr valign="top" id="HasConversationTopic">
 <td>HasConversationTopic</td>
 <td>
 
@@ -267,9 +291,10 @@ The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#
 for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
 
 </td>
+<td><a href="#HasConversationTopic">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasDialogueAnswer">
 <td>HasDialogueAnswer</td>
 <td>
 
@@ -278,9 +303,10 @@ question dialogues by the current player (or the player specified with a [`Playe
 argument).
 
 </td>
+<td><a href="#HasDialogueAnswer">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasFlag">
 <td>HasFlag</td>
 <td>
 
@@ -291,34 +317,13 @@ argument). That includes...
 * non-letter mail flags (used to track game info);
 * world state IDs.
 
-Some useful flags:
-
-flag | meaning
----- | -------
-`abandonedJojaMartAccessible` | The [abandoned JojaMart](https://stardewvalleywiki.com/Bundles#Abandoned_JojaMart) is accessible.
-`artifactFound` | The player has found at least one artifact.
-`Beat_PK` | The player has beaten the Prairie King arcade game.
-`beenToWoods` | The player has entered the Secret Woods at least once.
-`beachBridgeFixed` | The bridge to access the second beach area is repaired.
-`canReadJunimoText` | The player can read the language of Junimos (i.e. the plaques in the Community Center).
-`ccIsComplete` | The player has completed the Community Center. Note that this isn't set reliably; see the `IsCommunityCenterComplete` and `IsJojaMartComplete` tokens instead.  See also flags for specific sections: `ccBoilerRoom`, `ccBulletin`, `ccCraftsRoom`, `ccFishTank`, `ccPantry`, and `ccVault`. The equivalent section flags for the Joja warehouse are `jojaBoilerRoom`, `jojaCraftsRoom`, `jojaFishTank`, `jojaPantry`, and `jojaVault`.
-`ccMovieTheater`<br />`ccMovieTheaterJoja` | The movie theater has been constructed, either through the community path (only `ccMovieTheater` is set) or through Joja (both are set).
-`doorUnlockAbigail` | The player has unlocked access to Abigail's room. See also flags for other NPCs: `doorUnlockAlex`, `doorUnlockCaroline`, `doorUnlockEmily`, `doorUnlockHaley`, `doorUnlockHarvey`, `doorUnlockJas`, `doorUnlockJodi`, `doorUnlockMarnie`, `doorUnlockMaru`, `doorUnlockPenny`, `doorUnlockPierre`, `doorUnlockRobin`, `doorUnlockSam`, `doorUnlockSebastian`, `doorUnlockVincent`.
-`Farm_Eternal` | The player has reached a 100% completion score.
-`galaxySword` | The player has acquired the Galaxy Sword.
-`geodeFound` | The player has found at least one geode.
-`guildMember` | The player is a member of the Adventurer's Guild.
-`jojaMember` | The player bought a Joja membership.
-`JunimoKart` | The player has beaten the Junimo Kart arcade game.
-`landslideDone` | The landside blocking access to the mines has been cleared.
-`museumComplete` | The player has completed the Museum artifact collection.
-`openedSewer` | The player has unlocked the sewers.
-`qiChallengeComplete` | The player completed the Qi's Challenge quest by reaching level 25 in the Skull Cavern.
+See [useful flags on the wiki](https://stardewvalleywiki.com/Modding:Mail_data#List).
 
 </td>
+<td><a href="#HasFlag">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasProfession">
 <td>HasProfession</td>
 <td>
 
@@ -336,9 +341,10 @@ Possible values:
 Custom professions added by a mod are represented by their integer profession ID.
 
 </td>
+<td><a href="#HasProfession">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasReadLetter">
 <td>HasReadLetter</td>
 <td>
 
@@ -346,9 +352,10 @@ The letter IDs opened by the current player (or the player specified with a
 [`PlayerType`](#playertype) argument). A letter is considered 'opened' if the letter UI was shown.
 
 </td>
+<td><a href="#HasReadLetter">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasSeenEvent">
 <td>HasSeenEvent</td>
 <td>
 
@@ -358,9 +365,10 @@ argument), matching IDs in the `Data/Events` files.
 You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
 
 </td>
+<td><a href="#HasSeenEvent">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasWalletItem">
 <td>HasWalletItem</td>
 <td>
 
@@ -375,26 +383,28 @@ flag                       | meaning
 `ClubCard`                 | Unlocks the desert casino.
 `KeyToTheTown`             | Allows access to all buildings in town, at any time of day.
 `SpecialCharm`             | Permanently increases daily luck.
-`SkullKey`                 | Unlocks the Skull Cavern in the desert, and the Junimo Kart machine in the Stardrop Saloon.
+`SkullKey`                 | Unlocks the [Skull Cavern](https://stardewvalleywiki.com/Skull_Cavern) and the Saloon's Junimo Kart machine.
 `MagnifyingGlass`          | Unlocks the ability to find secret notes.
 `DarkTalisman`             | Unlocks the Witch's Swamp.
-`MagicInk`                 | Unlocks magical buildings through the Wizard, and the dark shrines in the Witch's Swamp.
+`MagicInk`                 | Unlocks [magical buildings](https://stardewvalleywiki.com/Wizard%27s_Tower#Buildings) and [dark shrines](https://stardewvalleywiki.com/Witch%27s_Hut).
 `BearsKnowledge`           | Increases sell price of blackberries and salmonberries.
 `SpringOnionMastery`       | Increases sell price of spring onions.
 
 </td>
+<td><a href="#HasWalletItem">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="IsMainPlayer">
 <td>IsMainPlayer</td>
 <td>
 
 Whether the player is the main player. Possible values: `true`, `false`.
 
 </td>
+<td><a href="#IsMainPlayer">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="IsOutdoors">
 <td>IsOutdoors</td>
 <td>
 
@@ -403,9 +413,10 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
+<td><a href="#IsOutdoors">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="LocationContext">
 <td>LocationContext</td>
 <td>
 
@@ -415,10 +426,11 @@ The general world area recognize by the game. Possible values: `Island` (locatio
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
+<td><a href="#LocationContext">#</a></td>
 </tr>
 
-<tr valign="top">
-<td>LocationName<br />LocationUniqueName</td>
+<tr valign="top" id="LocationName">
+<td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
 The internal name of the player's current location, like `FarmHouse` or `Town`. You can see the name
@@ -435,32 +447,36 @@ Notes:
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
 </td>
+<td><a href="#LocationName">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="PlayerGender">
 <td>PlayerGender</td>
 <td>
 
 The player's gender. Possible values: `Female`, `Male`.
 
 </td>
+<td><a href="#PlayerGender">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="PlayerName">
 <td>PlayerName</td>
 <td>The player's name.</td>
+<td><a href="#PlayerName">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="PreferredPet">
 <td>PreferredPet</td>
 <td>
 
 The player's preferred pet. Possible values: `Cat`, `Dog`.
 
 </td>
+<td><a href="#PreferredPet">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="SkillLevel">
 <td>SkillLevel</td>
 <td>
 
@@ -476,6 +492,7 @@ The valid skills are `Combat`, `Farming`, `Fishing`, `Foraging`, `Luck` (unused 
 and `Mining`.
 
 </td>
+<td><a href="#SkillLevel">#</a></td>
 </tr>
 </table>
 
@@ -484,9 +501,10 @@ and `Mining`.
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Hearts">
 <td>Hearts</td>
 <td>
 
@@ -503,9 +521,10 @@ The player's heart level with a given NPC. You can specify the character name as
 conditional map spawn logic.
 
 </td>
+<td><a href="#Hearts">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Relationship">
 <td>Relationship</td>
 <td>
 
@@ -533,13 +552,14 @@ Divorced | The player married and then divorced them.
 conditional map spawn logic.
 
 </td>
+<td><a href="#Relationship">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Spouse">
 <td>Spouse</td>
 <td>The player's spouse name (using their English name regardless of translations).</td>
+<td><a href="#Spouse">#</a></td>
 </tr>
-
 </table>
 
 ### World
@@ -547,9 +567,10 @@ conditional map spawn logic.
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FarmCave">
 <td>FarmCave</td>
 <td>
 
@@ -557,14 +578,16 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 `Mushrooms`.
 
 </td>
+<td><a href="#FarmCave">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FarmName">
 <td>FarmName</td>
 <td>The name of the current farm.</td>
+<td><a href="#FarmName">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FarmType">
 <td>FarmType</td>
 <td>
 
@@ -572,18 +595,20 @@ The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible valu
 `FourCorners`, `Forest`, `Hilltop`, `Riverland`, `Wilderness`, `Custom`.
 
 </td>
+<td><a href="#FarmType">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="IsCommunityCenterComplete">
 <td>IsCommunityCenterComplete</td>
 <td>
 
 Whether all bundles in the community center are completed. Possible values: `true`, `false`.
 
 </td>
+<td><a href="#IsCommunityCenterComplete">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="IsJojaMartComplete">
 <td>IsJojaMartComplete</td>
 <td>
 
@@ -591,9 +616,10 @@ Whether the player bought a Joja membership and completed all Joja bundles. Poss
  `false`.
 
 </td>
+<td><a href="#IsJojaMartComplete">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HavingChild">
 <td>HavingChild</td>
 <td>
 
@@ -612,10 +638,10 @@ Usage notes:
 * See also the `Pregnant` token.
 
 </td>
-</td>
+<td><a href="#HavingChild">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Pregnant">
 <td>Pregnant</td>
 <td>
 
@@ -623,6 +649,7 @@ The players or NPCs who are currently pregnant. This is a subset of `HavingChild
 to the female partner in heterosexual relationships. (Same-sex partners adopt a child instead.)
 
 </td>
+<td><a href="#Pregnant">#</a></td>
 </tr>
 </table>
 
@@ -631,8 +658,10 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
+</tr>
 
-<tr valign="top">
+<tr valign="top" id="Query">
 <td>Query</td>
 <td>
 
@@ -640,9 +669,10 @@ Evaluate arbitrary arithmetic and logical operations; see [_query expressions_](
 for more info.
 
 </td>
+<td><a href="#Query">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Range">
 <td>Range</td>
 <td>
 
@@ -662,9 +692,10 @@ To minimise the possible performance impact, the range can't exceed 5000 numbers
 smaller if possible.
 
 </td>
+<td><a href="#Range">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Round">
 <td>Round</td>
 <td>
 
@@ -679,7 +710,7 @@ usage | result | description
 ----- | ------ | -----------
 `Round(2.5555)` | `3` | Round to the nearest whole number.
 `Round(2.5555, 2)` | `2.56` | Round to the nearest value with the given number of fractional digits.
-`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` to the given number of fractional digits. This overrides the default [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) behavior.
+`Round(2.5555, 2, down)` | `2.55` | Round `up` or `down` (defaults to [half rounded to even](https://en.wikipedia.org/wiki/Rounding#Round_half_to_even) if not specified).
 
 This is mainly useful in combination with [query expressions](#query-expressions). For example,
 monster HP must be a whole number, so this rounds the result of a calculation to the nearest whole
@@ -702,6 +733,7 @@ at once (like `{{Round: {{Settings}}}}` where `{{Settings}}` = `2.5, 3, up`), as
 parsed input matches one of the above forms.
 
 </td>
+<td><a href="#Round">#</a></td>
 </tr>
 </table>
 
@@ -710,9 +742,11 @@ parsed input matches one of the above forms.
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
-<tr valign="top">
-<td>Lowercase<br />Uppercase</td>
+
+<tr valign="top" id="Lowercase">
+<td id="Uppercase">Lowercase<br />Uppercase</td>
 <td>
 
 Convert the input text to a different letter case:
@@ -732,8 +766,10 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 </dd>
 </dl>
 </td>
+<td><a href="#Lowercase">#</a></td>
 </tr>
-<tr valign="top">
+
+<tr valign="top" id="Render">
 <td>Render</td>
 <td>
 
@@ -757,6 +793,7 @@ these two entries are equivalent:
 ```
 
 </td>
+<td><a href="#Render">#</a></td>
 </tr>
 </table>
 
@@ -767,18 +804,38 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FirstValidFile">
+<td>FirstValidFile</td>
+<td>
+
+Get the first path which matches a file in the content pack folder, given a list of
+relative file paths. You can specify any number of files.
+
+For example:
+
+```js
+// load `assets/<language>.json` if it exists, otherwise `assets/default.json`
+"FromFile": "{{FirstValidFile: assets/{{language}}.json, assets/default.json }}"
+```
+
+</td>
+<td><a href="#FirstValidFile">#</a></td>
+</tr>
+
+<tr valign="top" id="HasMod">
 <td>HasMod</td>
 <td>
 
 The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 
 </td>
+<td><a href="#HasMod">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasFile">
 <td>HasFile</td>
 <td>
 
@@ -794,9 +851,10 @@ argument. Returns `true` or `false`. For example:
 If the input has commas like `HasFile: a, b.png`, they're treated as part of the filename.
 
 </td>
+<td><a href="#HasFile">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="HasValue">
 <td>HasValue</td>
 <td>
 
@@ -818,9 +876,10 @@ return true if the resulting string is non-blank:
 ```
 
 </td>
+<td><a href="#HasValue">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="I18n">
 <td>i18n</td>
 <td>
 
@@ -828,9 +887,10 @@ Get text from the content pack's `i18n` translation files. See [_Translations_ i
 guide](author-guide.md#Translations) for more info.
 
 </td>
+<td><a href="#I18n">#</a></td>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="Language">
 <td>Language</td>
 <td>
 
@@ -852,6 +912,7 @@ code | meaning
 `zh` | Chinese
 
 </td>
+<td><a href="#Language">#</a></td>
 </tr>
 </table>
 
@@ -870,9 +931,10 @@ These have some restrictions:
 <tr>
 <th>condition</th>
 <th>purpose</th>
+<th>&nbsp;</th>
 </tr>
 
-<tr valign="top">
+<tr valign="top" id="FromFile">
 <td>FromFile</td>
 <td>
 
@@ -891,48 +953,15 @@ This is mainly useful for checking if the path exists:
 ```
 
 </td>
+<td><a href="#FromFile">#</a></td>
 </tr>
 
-<tr valign="top">
-<td>Target</td>
-<td>
+<tr valign="top" id="Target">
+<td id="TargetPathOnly">Target<br />TargetPathOnly<br />TargetWithoutPath</td>
+<td id="TargetWithoutPath">
 
 The patch's `Target` field value for the current asset. Path separators are normalized for the OS.
 This is mainly useful for patches which specify multiple targets:
-
-```js
-{
-   "Action": "EditImage",
-   "Target": "Characters/Abigail, Characters/Sam",
-   "FromFile": "assets/{{Target}}.png" // assets/Characters/Abigail.png *or* assets/Characters/Sam.png
-}
-```
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>TargetPathOnly</td>
-<td>
-
-Equivalent to `Target`, but only the part before the last path separator:
-
-```js
-{
-   "Action": "EditImage",
-   "Target": "Characters/Abigail, Portraits/Abigail",
-   "FromFile": "assets/{{TargetPathOnly}}/recolor.png" // assets/Characters/recolor.png *or* assets/Portraits/recolor.png
-}
-```
-
-</td>
-</tr>
-
-<tr valign="top">
-<td>TargetWithoutPath</td>
-<td>
-
-Equivalent to `Target`, but only the part after the last path separator:
 
 ```js
 {
@@ -942,7 +971,17 @@ Equivalent to `Target`, but only the part after the last path separator:
 }
 ```
 
+The difference between the three tokens is the part they return. For example, given the target value
+`Characters/Dialogue/Abigail`:
+
+token               | part returned | example
+------------------- | ------------- | ------
+`Target`            | The full path. | `Characters/Dialogue/Abigail`
+`TargetPathOnly`    | The part before the last separator. | `Characters/Dialogue`
+`TargetWithoutPath` | The part after the last separator. | `Abigail`
+
 </td>
+<td><a href="#Target">#</a></td>
 </tr>
 </table>
 
@@ -1037,7 +1076,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1273,7 +1312,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1306,7 +1345,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1431,7 +1470,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1451,7 +1490,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.21.0",
+     "Format": "1.22.0",
      "Changes": [
         {
            "Action": "EditData",

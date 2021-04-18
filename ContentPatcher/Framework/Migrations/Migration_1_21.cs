@@ -21,7 +21,7 @@ namespace ContentPatcher.Framework.Migrations
         private readonly Lazy<Lexer> Lexer = new(() => new Lexer());
 
         /// <summary>Literal token strings to ignore when validating use of the <see cref="ConditionType.Render"/> token, since they were added by this migration.</summary>
-        private readonly HashSet<string> IgnoreRenderStrings = new HashSet<string>();
+        private readonly HashSet<string> IgnoreRenderStrings = new();
 
 
         /*********
@@ -94,7 +94,7 @@ namespace ContentPatcher.Framework.Migrations
         ** Private methods
         *********/
         /// <summary>Get whether a lexical token represents a custom <see cref="ConditionType.Render"/> token usage, excluding <see cref="IgnoreRenderStrings"/>.</summary>
-        /// <param name="token">The token to check.</param>
+        /// <param name="lexToken">The token to check.</param>
         private bool IsCustomRender(ILexToken lexToken)
         {
             return

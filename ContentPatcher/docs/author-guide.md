@@ -89,20 +89,65 @@ A content pack is a folder with these files:
 * a `content.json` which describes the changes you want to make;
 * and any images or files you want to use.
 
-The `content.json` file has three main fields:
+The `content.json` file has four main fields:
 
-field             | purpose
------------------ | -------
-`Format`          | The format version. You should always use the latest version (currently `1.21.0`) to use the latest features and avoid obsolete behavior.<br />(**Note:** this is not the Content Patcher version!)
-`Changes`         | The changes you want to make. Each entry is called a **patch**, and describes a specific action to perform: replace this file, copy this image into the file, etc. You can list any number of patches.
-`ConfigSchema`    | _(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_ in the token guide](#advanced).
-`CustomLocations` | _(optional)_ The custom in-game locations to make available. See [_custom locations_](#custom-locations).
+<table>
+<tr>
+<th>field</th>
+<th>purpose</th>
+</tr>
+
+<tr>
+<td><code>Format</code></td>
+<td>
+
+The Content Patcher version the content pack is designed for (ignoring the third number in the
+version), to enable backwards compatibility.
+
+**You should use the latest format version (currently `1.22.0`), and update it when updating the
+content pack.** This enables the latest features, avoids undocumented obsolete behavior, and
+reduces startup time. When updating an older content pack, see the [migration
+guide](author-migration-guide.md) in case any changes are needed.
+
+</td>
+</tr>
+
+<tr>
+<td><code>Changes</code></td>
+<td>
+
+The changes you want to make. Each entry is called a **patch**, and describes a specific action to
+perform: replace this file, copy this image into the file, etc. You can list any number of patches.
+
+</td>
+</tr>
+
+<tr>
+<td><code>ConfigSchema</code></td>
+<td>
+
+_(optional)_ Defines the `config.json` format, to support more complex mods. See [_player config_
+in the token guide](#advanced).
+
+</td>
+</tr>
+
+<tr>
+<td><code>CustomLocations</code></td>
+<td>
+
+_(optional)_ The custom in-game locations to make available. See [_custom
+locations_](#custom-locations).
+
+</td>
+</tr>
+</table>
 
 You can list any number of patches (surrounded by `{` and `}` in the `Changes` field). See the next
 few sections for more info about the format. For example:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "Load",
@@ -187,9 +232,19 @@ _(optional)_ Whether to apply this patch. Default true.
 <td><code>Update</code></td>
 <td>
 
-_(optional)_ When the patch should update if it changed. The possible values are...
-* `OnDayStart` (default): when the in-game day starts;
-* `OnLocationChange`: when the current player warps to a new location (includes day start).
+_(optional)_ If token values change after the patch was already applied, how often the patch should
+be updated and reapplied to the game. The possible values are...
+
+* `OnDayStart` _(default)_: update when the in-game day starts. This is always enabled even if you
+  omit it.
+* `OnLocationChange`: update when the player warps to a new location.
+* `OnTimeChange`: update when the in-game clock changes.
+
+You can specify multiple values:
+
+```js
+"Update": "OnLocationChange, OnTimeChange"
+```
 
 Note that dialogue ignores changes after the day starts (see [known limitations](#known-limitations)).
 
@@ -202,18 +257,7 @@ Your changes apply at the start of each day by default. For example, if you chan
 texture depending on your friendship level with your spouse, it'll use the friendship level at the
 start of the current day.
 
-You can optionally use the [`Update` field](#common-fields) to update more often:
-
-update rate  | effect
------------- | ------
-`OnLocationChange` | The patch updates each time the player warps to a new location.
-`OnTimeChange` | The patch updates each time the in-game clock changes.
-
-You can also specify multiple values:
-
-```js
-"Update": "OnLocationChange, OnTimeChange"
-```
+You can optionally use the [`Update` field](#common-fields) to update more often.
 
 ## Actions
 ### `Load`
@@ -234,7 +278,7 @@ Required fields: `FromFile`.
 For example, this replaces the dinosaur sprite with your own image:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "Load",
@@ -265,7 +309,7 @@ Required fields: `FromFile`.
 For example, this changes one object sprite:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -317,7 +361,7 @@ description fields for an existing entry (item #70):
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -340,7 +384,7 @@ You can also delete entries entirely by setting their value to `null`. For examp
 used to change event conditions:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -366,7 +410,7 @@ structures instead of strings.
 For example, this renames a movie to _The Brave Little Pikmin_ and adds a new movie:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -423,7 +467,7 @@ Here's an example showing all possible reorder options. (If you specify a `Befor
 that doesn't match any entry, a warning will be shown.)
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -560,7 +604,7 @@ Here's how that would be merged with each patch mode (black areas are the empty 
 For example, this replaces the town square with the one in another map:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -646,7 +690,7 @@ For example, this changes the `Outdoors` tile for the farm cave and adds a warp 
 [map documentation](https://stardewvalleywiki.com/Modding:Maps) for the warp syntax):
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -712,7 +756,7 @@ field | purpose
 For example, this extends the farm path one extra tile to the shipping bin:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -733,7 +777,7 @@ You can use tokens in all of the fields. For example, this adds a warp in front 
 that leads to a different location each day:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditMap",
@@ -808,7 +852,7 @@ In the simplest case, you can use this to organize your patches into subfiles:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "Include",
@@ -826,7 +870,7 @@ You can combine this with tokens and conditions to load files dynamically:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "Include",
@@ -871,7 +915,7 @@ Here's how you'd do that:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
 
    "CustomLocations": [
       // add the in-game location
@@ -960,7 +1004,7 @@ For example:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "CustomLocations": [
       {
          "Name": "Custom_ExampleMod_AbigailCloset",
@@ -1009,7 +1053,7 @@ in any Content Patcher field that allows tokens:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1466,7 +1510,9 @@ you have multiple content packs, each one is applied in the order they're loaded
 need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Known limitations
-* Dialogue is set when the day starts, so setting `"Update": "OnLocationChange"` won't affect dialogue after the day starts.
+* Dialogue is set when the day starts, so setting a [custom update rate](#update-rate) won't affect
+  dialogue after the day starts. (You can use [location-specific dialogue keys](https://stardewvalleywiki.com/Modding:Dialogue#Location_dialogue)
+  to circumvent that though.)
 * Some game assets have special logic. This isn't specific to Content Patcher, but they're
   documented here for convenience.
 

@@ -25,6 +25,7 @@
     "label.automate-take": "Prendi oggetti da questo baule",
     "label.automate-take-first": "Prendi prima gli oggetti da questo baule",
     "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "modifica baule",

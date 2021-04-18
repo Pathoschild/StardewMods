@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ContentPatcher.Framework;
+using ContentPatcher.Framework.Api;
 using ContentPatcher.Framework.Commands;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -50,7 +51,8 @@ namespace ContentPatcher
             new Migration_1_18(),
             new Migration_1_19(),
             new Migration_1_20(),
-            new Migration_1_21()
+            new Migration_1_21(),
+            new Migration_1_22()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -74,6 +76,9 @@ namespace ContentPatcher
         /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
         private List<ModProvidedToken> QueuedModTokens = new();
 
+        /// <summary>The game tick when the conditions API became ready for use.</summary>
+        private int ConditionsApiReadyTick = int.MaxValue;
+
         /// <summary>Whether the next tick is the first one for the main screen.</summary>
         private bool IsFirstTick = true;
 
@@ -94,7 +99,14 @@ namespace ContentPatcher
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
         public override object GetApi()
         {
-            return new ContentPatcherAPI(this.ModManifest.UniqueID, this.Monitor, this.Helper.Reflection, this.AddModToken);
+            return new ContentPatcherAPI(
+                contentPatcherID: this.ModManifest.UniqueID,
+                monitor: this.Monitor,
+                reflection: this.Helper.Reflection,
+                addModToken: this.AddModToken,
+                isConditionsApiReady: () => Game1.ticks >= this.ConditionsApiReadyTick,
+                parseConditions: this.ParseConditionsForApi
+            );
         }
 
 
@@ -184,6 +196,7 @@ namespace ContentPatcher
             {
                 this.IsFirstTick = false;
                 this.Initialize();
+                this.ConditionsApiReadyTick = Game1.ticks + 1; // mods can only use conditions API on the next tick, to avoid race conditions
             }
 
             this.ScreenManager.Value.OnUpdateTicked();
@@ -307,6 +320,32 @@ namespace ContentPatcher
             }
 
             this.QueuedModTokens.Add(token);
+        }
+
+        /// <summary>Parse raw conditions for an API consumer.</summary>
+        /// <param name="manifest">The manifest of the mod parsing the conditions.</param>
+        /// <param name="rawConditions">The raw conditions to parse.</param>
+        /// <param name="formatVersion">The format version for which to parse conditions.</param>
+        /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
+        private IManagedConditions ParseConditionsForApi(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null)
+        {
+            InvariantHashSet assumeModIdsLookup = new(assumeModIds ?? Enumerable.Empty<string>()) { manifest.UniqueID };
+            IMigration migrator = new AggregateMigration(formatVersion, this.GetFormatVersions(null));
+
+            return new ApiManagedConditions(
+                parse: () =>
+                {
+                    ScreenManager screen = this.ScreenManager.Value;
+                    IContext context = screen.TokenManager;
+                    TokenParser tokenParser = new(context, manifest, migrator, assumeModIdsLookup);
+
+                    bool isValid = screen.PatchLoader.TryParseConditions(rawConditions, tokenParser, new LogPathBuilder(), out IList<Condition> conditions, out _, out string error);
+                    var managed = new ApiManagedConditionsForSingleScreen(conditions?.ToArray() ?? new Condition[0], context, isValid: isValid, validationError: error);
+                    managed.UpdateContext();
+
+                    return managed;
+                }
+            );
         }
 
         /// <summary>Load the registered content packs.</summary>

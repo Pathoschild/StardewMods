@@ -1,0 +1,679 @@
+﻿{
+    /*********
+    ** Generic translations
+    *********/
+    // date names
+    "generic.now": "şimdi",
+    "generic.tomorrow": "yarın",
+    "generic.yesterday": "dün",
+
+    // generic values
+    "generic.unknown": "bilinmiyor",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% şansla {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} of {{max}})",
+    "generic.ratio": "{{value}} of {{max}}",
+    "generic.range": "{{min}} ile {{max}}",
+    "generic.yes": "evet",
+    "generic.no": "hayır",
+    "generic.seconds": "{{count}} saniye",
+    "generic.minutes": "{{count}} dakika",
+    "generic.hours": "{{count}} saat",
+    "generic.days": "{{count}} gün",
+    "generic.in-x-days": "{{count}} gün içinde",
+    "generic.x-days-ago": "{{count}} gün sonra",
+    "generic.price": "{{price}}g",
+    "generic.price-for-quality": "{{price}}g ({{quality}})",
+    "generic.price-for-stack": "{{count}} tane için {{price}}g",
+
+    // types
+    "type.building": "Bina",
+    "type.bush": "Çalı",
+    "type.fruit-tree": "Meyve ağacı",
+    "type.map-tile": "Harita karosu",
+    "type.monster": "Canavar",
+    "type.player": "Oyuncu",
+    "type.tree": "Ağaç",
+    "type.villager": "Köylü",
+    "type.other": "Diğer", // default type
+
+    // item qualities
+    "quality.normal": "normal",
+    "quality.silver": "gümüş",
+    "quality.gold": "altın",
+    "quality.iridium": "iridyum",
+
+    // NPC friendship
+    "friendship-status.friendly": "Arkadaş",
+    "friendship-status.dating": "Sevgili",
+    "friendship-status.engaged": "Nişanlı",
+    "friendship-status.married": "Evli",
+    "friendship-status.divorced": "Boşanmış",
+    "friendship-status.kicked-out": "Terkedilmiş",
+
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Kiler",
+    "bundle-area.crafts-room": "El Sanatları Odası",
+    "bundle-area.fish-tank": "Akvaryum",
+    "bundle-area.boiler-room": "Kazan Dairesi",
+    "bundle-area.vault": "Kasa",
+    "bundle-area.bulletin-board": "İlan Panosu",
+    "bundle-area.abandoned-joja-mart": "Terkedilmiş Joja Mart",
+
+    // shop names
+    "shop.adventure-guild": "Maceraperestler Loncası",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.volcano": "Volkan Dükkanı",
+    "shop.willy": "Willy",
+
+    // recipe types
+    "recipe-type.cooking": "Pişirme",
+    "recipe-type.crafting": "Zanaatkarlık",
+    "recipe-type.tailoring": "Terzilik",
+
+    // NPC descriptions
+    "data.npc.pet.description": "Sadık evcil hayvanın.",
+    "data.npc.horse.description": "Sadık küheylanın.",
+    "data.npc.junimo.description": "Ruh dünyasından bir orman ruhu. Onlar hakkında çok az şey biliniyor.",
+    "data.npc.trash-bear.description": "Çöpleri temizleyen arkadaş canlısı bir ruh",
+
+    // item types
+    "data.type.debris": "Moloz",
+    "data.type.stone": "Taş",
+    "data.type.container": "Konteyner",
+
+    // farm items
+    "data.item.egg-incubator.description": "Yumurtadan yavru tavuklar ve ördekler çıkarır.",
+    "data.item.broken-branch.name": "Kırık Dal",
+    "data.item.broken-branch.description": "Kırık bir dal. Odun elde etmek için balta ile kırın.",
+    "data.item.stone.name": "Taş",
+    "data.item.stone.description": "Sıradan bir gri taş. Taş elde etmek için kırın.",
+    "data.item.geode.name": "Jeot Cevheri",
+    "data.item.geode.description": "Jeot elde etmek için kırın.",
+    "data.item.frozen-geode.name": "Donmuş Jeot Cevheri",
+    "data.item.frozen-geode.description": "Donmuş jeot elde etmek için kırın.",
+    "data.item.magma-geode.name": "Yanık Jeot Cevheri",
+    "data.item.magma-geode.description": "Yanık jeot elde etmek için kırın.",
+
+    // weeds & crystals
+    "data.item.weed.name": "Yabani Ot",
+    "data.item.weed.description": "Sıradan bir ot. Lif veya karışık tohum içerebilir.",
+    "data.item.fertile-weed.name": "Verimli Yabani Ot",
+    "data.item.fertile-weed.description": "Karışık tohum düşürme garantili.",
+    "data.item.ice-crystal.name": "Buz Kristali",
+    "data.item.ice-crystal.description": "Sıradan bir buz kristali. Çok düşük şansla işlenmiş kuvars içerebilir.",
+
+    // mine gems
+    "data.item.amethyst-node.name": "Ametist Cevheri",
+    "data.item.amethyst-node.description": "Ametist elde etmek için kırın.",
+    "data.item.aquamarine-node.name": "Gök Zümrütü Cevheri",
+    "data.item.aquamarine-node.description": "Gök zümrütü elde etmek için kırın.",
+    "data.item.diamond-node.name": "Elmas Cevheri",
+    "data.item.diamond-node.description": "Elmas elde etmek için kırın.",
+    "data.item.emerald-node.name": "Zümrüt Cevheri",
+    "data.item.emerald-node.description": "Zümrüt elde etmek için kırın.",
+    "data.item.gem-node.name": "Değerli Taş Cevheri",
+    "data.item.gem-node.description": "Zümrüt, gök zümrütü, yakut, ametist, topaz, yeşim, yada elmas elde etmek için kırın.",
+    "data.item.jade-node.name": "Yeşim Cevheri",
+    "data.item.jade-node.description": "Yeşim elde etmek için kırın.",
+    "data.item.mystic-stone.name": "Mistik Taş",
+    "data.item.mystic-stone.description": "Ender mücevherler ve cevherler elde etmek için kırın, prizma parçasıda çıkabilir.",
+    "data.item.prismatic-node.name": "Prizma Cevheri",
+    "data.item.prismatic-node.description": "Prizma parçası elde etmek için kırın.",
+    "data.item.ruby-node.name": "Yakut Cevheri",
+    "data.item.ruby-node.description": "Yakut elde etmek için kırın.",
+    "data.item.topaz-node.name": "Topaz Cevheri",
+    "data.item.topaz-node.description": "Topaz elde etmek için kırın.",
+
+    // mine ores
+    "data.item.cinder-shard-node.name": "Yıldız Parçaçığı Cevheri",
+    "data.item.cinder-shard-node.description": "Yıldız parçaçığı elde etmek için kırın.",
+    "data.item.copper-node.name": "Bakır Cevheri",
+    "data.item.copper-node.description": "Bakır elde etmek için kırın.",
+    "data.item.gold-node.name": "Altın Cevheri",
+    "data.item.gold-node.description": "Altın elde etmek için kırın.",
+    "data.item.iridium-node.name": "İridyum Cevheri",
+    "data.item.iridium-node.description": " İridyum elde etmek için kırın.",
+    "data.item.iron-node.name": "Demir Cevheri",
+    "data.item.iron-node.description": "Demir elde etmek için kırın.",
+    "data.item.omni-geode-node.name": "Bütünjeot Cevheri",
+    "data.item.omni-geode-node.description": "Bütünjeot elde etmek için kırın.",
+
+    // mine stones
+    "data.item.colored-stone.name": "Renkli Taş",
+    "data.item.colored-stone.description": "Sıradan bir taş. İçinde taş, cevher ya da jeot olabilir.",
+    "data.item.mine-stone.name": "Taş",
+    "data.item.mine-stone.description": "Taş ve ufak bir şans ile kömür elde etmek için kırın.",
+
+    // other stones
+    "data.item.clay-stone.name": "Kil Taşı",
+    "data.item.clay-stone.description": "Kil elde etmek için kır.",
+    "data.item.fossil-stone.name": "Fosilleşmiş Taş",
+    "data.item.fossil-stone.description": "Fosil ve kemik elde etmek için kır.",
+
+    // mine containers
+    "data.item.barrel.name": "Fıçı",
+    "data.item.barrel.description": "Çeşitli eşyalar elde etmek için parçala.",
+    "data.item.box.name": "Kutu",
+    "data.item.box.description": "Çeşitli eşyalar elde etmek için parçala.",
+
+    // location names
+    "location.backwoods": "Kömürözü Ormanı",
+    "location.beach": "Sahil",
+    "location.beach.east-pier": "Sahil (doğu iskelesi)",
+    "location.bugLand": "Mutant böcek yuvası",
+    "location.busStop": "Otobüs Durağı",
+    "location.desert": "Çöl",
+    "location.farm": "Çiftlik",
+    "location.farmCave": "Çiftlik Mağarası",
+    "location.farmHouse": "Çiftlik Evi",
+    "location.forest": "Orman",
+    "location.forest.fish-area-0": "Orman Nehri",
+    "location.forest.fish-area-1": "Orman Göleti",
+    "location.forest.island-tip": "Orman Nehri (büyük adanın güney ucu)",
+    "location.mountain": "Dağ",
+    "location.railroad": "Demiryolu",
+    "location.sewer": "Kanalizasyon",
+    "location.submarine": "Akşam Pazarı Denizaltısı",
+    "location.town": "Kasaba",
+    "location.town.northmost-bridge": "Kasaba (en kuzeydeki köprü)",
+    "location.tunnel": "Otobüs Tüneli",
+    "location.undergroundMine": "Maden",
+    "location.undergroundMine.level": "Maden seviyesi {{level}}",
+    "location.witchSwamp": "Cadı'nın Bataklığı",
+    "location.woods": "Gizli Orman",
+
+    "location.caldera": "Zencefil Adası krateri",
+    "location.islandEast": "Zencefil Adası doğu",
+    "location.islandNorth": "Zencefil Adası kuzey",
+    "location.islandSouth": "Zencefil Adası güney",
+    "location.islandSouthEast": "Zencefil Adası güneydoğu",
+    "location.islandSouthEastCave": "Zencefil Adası güneydoğu mağarası",
+    "location.islandWest": "Zencefil Adası batı",
+    "location.islandWest.fish-area-1": "Zencefil Adası batı (okyanus)",
+    "location.islandWest.fish-area-2": "Zencefil Adası batı (gölet)",
+
+    "location.unknown-fish-area": "{{locationName}} (balıkçılık alanı {{id}})",
+
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Sevgi",
+    "animal.happiness": "Mutluluk",
+    "animal.mood": "Ruh hali",
+    "animal.complaints": "Şikayetler",
+    "animal.produce-ready": "Ürün hazır",
+    "animal.growth": "Büyüme",
+    "animal.sells-for": "Karşılığında sat",
+
+    // values
+    "animal.complaints.hungry": "dün beslenmedi",
+    "animal.complaints.left-out": "dün gece dışarıda kaldı",
+    "animal.complaints.new-home": "yeni evine taşındı",
+    "animal.complaints.no-heater": "kış için ısıtıcı yok",
+    "animal.complaints.not-petted": "henüz bugün sevilmedi",
+    "animal.complaints.wild-animal-attack": "gece vahşi hayvanların saldırısına uğradı",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Hayvanlar",
+    "building.construction": "İnşaat",
+    "building.feed-trough": "Yemlik",
+    "building.horse": "At",
+    "building.horse-location": "At konumu",
+    "building.owner": "Sahibi",
+    "building.slimes": "Balçıkcalar",
+    "building.stored-hay": "Depolanmış saman",
+    "building.upgrades": "Yükseltmeler",
+    "building.water-trough": "Su yalağı",
+
+    // values
+    "building.animals.summary": "şuan {{count}} hayvan, maksimum {{max}} hayvan ",
+    "building.construction.summary": "{{date}} günü hazır",
+    "building.feed-trough.automated": "otomatikleştirilmiş",
+    "building.feed-trough.summary": "{{max}} yemlikten {{filled}} tanesi dolu",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Hasat etkin",
+    "building.owner.none": "sahipsiz",
+    "building.output-processing": "Ürün işleniyor",
+    "building.output-ready": "Ürün hazır",
+    "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca ",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} saman (kapasite: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{siloCount}} siloda {{hayCount}} saman var (kapasite: {{maxHay}})",
+    "building.upgrades.barn.0": "4 hayvana kadar, inekler eklenebilir",
+    "building.upgrades.barn.1": "8 hayvana kadar, hamilelik ve keçiler eklenebilir",
+    "building.upgrades.barn.2": "12 hayvana kadar, oto yemleme, domuzlar, ve koyunlar eklenebilir",
+    "building.upgrades.cabin.0": "ilkel baraka",
+    "building.upgrades.cabin.1": "mutfak eklenir, evlenilebilir",
+    "building.upgrades.cabin.2": "çocuk yapılabilir",
+    "building.upgrades.coop.0": "4 hayvana kadar; tavuklar eklenebilir",
+    "building.upgrades.coop.1": "8 hayvana kadar; kuluçka, dinazorlar, ve ördekler eklenebilir",
+    "building.upgrades.coop.2": "12 hayvana kadar; oto yemleme ve tavşanlar eklenebilir",
+    "building.water-trough.summary": "{{max}} sudan {{filled}} tanesi dolduruldu",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Nüfus",
+    "building.fish-pond.drops": "Çıkanlar",
+    "building.fish-pond.quests": "Görevler",
+
+    // values
+    "building.fish-pond.population.empty": "Bu havuzu başlatmak için balık ekleyin",
+    "building.fish-pond.population.next-spawn": "{{relativeDate}} yeni bir balık yumurtlayacak",
+    "building.fish-pond.drops.preface": "Her gün ilk eşleşen nesneyi üretme şansı {{chance}}% :",
+    "building.fish-pond.drops.min-fish": "{{count}} balık gerekli:",
+    "building.fish-pond.quests.done": "{{count}} balık",
+    "building.fish-pond.quests.incomplete-one": "{{count}} balık: lazım {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} balık: bunlardan biri lazım {{itemList}}",
+    "building.fish-pond.quests.available": "mevcut {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Yemiş Çalısı",
+    "bush.name.plain": "Ova Çalısı",
+    "bush.name.tea": "Çay Çalısı",
+    "bush.description.berry": "Ahududu ve böğürtlen yetiştiren bir çalı.",
+    "bush.description.plain": "Hiçbir şey yetiştirmeyen ova çalısı.",
+    "bush.description.Tea": "Çay yaprakları yetiştiren bir çalı.",
+    "bush.date-planted": "Ekim tarihi ",
+    "bush.growth": "Büyüme",
+    "bush.next-harvest": "Sonraki hasat",
+
+    // values
+    "bush.growth.summary": "olgunlaşma {{date}}",
+    "bush.schedule.berry": "15-18 baharda ahududu ve 8-11 güzde böğürtlen yetişme şansı %20.",
+    "bush.schedule.tea": "Her mevsimin 22'sinden itibaren çay yaprakları yetişir (serada değilse kış hariç).",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Şikayetler",
+    "fruit-tree.name": "{{fruitName}} Ağaçı",
+    "fruit-tree.growth": "Büyüme",
+    "fruit-tree.next-fruit": "Sonraki meyve",
+    "fruit-tree.season": "Mevsim",
+    "fruit-tree.quality": "Kalite",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "büyüyemiyor çünkü bitişik nesneler var",
+    "fruit-tree.growth.summary": "olgunlaşma {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "meyveleri toplayana kadar daha fazla meyve yetişmeyecek",
+    "fruit-tree.next-fruit.out-of-season": "mevsimi bitti",
+    "fruit-tree.next-fruit.struck-by-lightning": "yıldırım çarptı! {{count}} gün sonra iyileşecek.",
+    "fruit-tree.next-fruit.too-young": "meyve veremeyecek kadar genç",
+    "fruit-tree.quality.now": "şuan {{quality}} kalite",
+    "fruit-tree.quality.on-date": "{{date}} tarihinde {{quality}} kalite",
+    "fruit-tree.quality.on-date-next-year": "gelecek yıl {{date}} tarihinde {{quality}} kalite",
+    "fruit-tree.season.summary": "{{season}} (veya serada her zaman)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Ekin",
+    "crop.harvest": "Hasat",
+    "crop.fertilized": "Gübrelendi",
+    "crop.watered": "Sulandı",
+
+    // values
+    "crop.summary.dead": "Bu ekin ölmüş.",
+    "crop.summary.drops-X": "{{count}} tane olgunlaşır",
+    "crop.summary.drops-X-to-Y": "{{min}}'den {{max}} taneye kadar düşer ({{percent}}% ekstra mahsul şansı)",
+    "crop.summary.harvest-once": "{{daysToFirstHarvest}} gün sonra hasat edilir",
+    "crop.summary.harvest-multi": "{{daysToFirstHarvest}} günün ardından her {{daysToNextHarvests}} günde bir hasat edilir",
+    "crop.summary.seasons": "{{seasons}} mevsiminde büyür",
+    "crop.summary.sells-for": "{{price}} satılır",
+    "crop.harvest.too-late": "sonraki hasat için sezon çok geç (muhtemelen {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "İçindekiler",
+    "item.loves-this": "Bunu seviyor",
+    "item.likes-this": "Bunu beğeniyor",
+    "item.neutral-about-this": "Buna nötr",
+    "item.dislikes-this": "Bunu beğenmez",
+    "item.hates-this": "Bundan nefret eder",
+    "item.needed-for": "Şunun için lazım",
+    "item.number-owned": "Sahip",
+    "item.number-cooked": "Pişmiş",
+    "item.number-crafted": "Yapılmış",
+    "item.recipes": "Tarifler",
+    "item.see-also": "Ayrıca",
+    "item.sells-for": "Satış",
+    "item.sells-to": "Sat",
+    "item.can-be-dyed": "Boyanabilir",
+    "item.produces-dye": "Boya üretir",
+
+    // values
+    "item.contents.placed": "{{name}} yerleştirildi",
+    "item.contents.ready": "{{name}} hazır",
+    "item.contents.partial": "{{name}} içinde {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} gizli köylüler",
+    "item.undiscovered-gift-taste-appended": ", ve {{count}} gizli köylüler",
+    "item.needed-for.community-center": "halkevi ({{bundles}})",
+    "item.needed-for.full-shipment": "tam sevkiyat başarısı (herşeyden bir tane gönder)",
+    "item.needed-for.polyculture": "polikültür başarısı (her ekinden {{count}}'den fazla gönder)",
+    "item.needed-for.full-collection": "tam koleksiyon başarısı (müze koleksiyonunu tamamla)",
+    "item.needed-for.gourmet-chef": "gurme şef başarısı (pişir {{recipes}})",
+    "item.needed-for.craft-master": "zanaat ustası başarısı (yap {{recipes}})",
+    "item.needed-for.quests": "şuanki görevler ({{quests}})",
+    "item.sells-to.shipping-box": "gönderi kutusu",
+    "item.recipes-for-ingredient.entry": "{{name}} (lazım {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "bundan {{count}} tane sahipsin",
+    "item.number-crafted.summary": "bundan {{count}} tane yaptın",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "İçindekiler",
+    "item.cask-schedule": "Yıllanma",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} şimdi hazır",
+    "item.cask-schedule.now-partial": "şuan {{quality}} kalite (yıllandırmayı durdurmak için kazma kullan)",
+    "item.cask-schedule.tomorrow": "{{quality}} yarın",
+    "item.cask-schedule.in-x-days": "{{count}} gün içinde {{quality}} ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Yem",
+    "item.crabpot-bait-needed": "Yem lazım!",
+    "item.crabpot-bait-not-needed": "Yem Ustası yeteneği nedeniyle gerekli değil.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Sağlık",
+
+    // values
+    "item.fence-health.gold-clock": "Altın saat ile parçalanmaz",
+    "item.fence-health.summary": "{{percent}}% (tahminen {{count}} gün kaldı)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Balık havuzu düşenler",
+    "item.fish-spawn-rules": "Spawn kuralları",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "minimum balıkçılık seviyesi: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "henüz yakalanmamış (sadece bir defa yakalanabilir)",
+    "item.fish-spawn-rules.locations": "bölgeler: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "bölgeler:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "her mevsim",
+    "item.fish-spawn-rules.season-list": "mevsim: {{seasons}}",
+    "item.fish-spawn-rules.time": "günün saati: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "hava: güneşli",
+    "item.fish-spawn-rules.weather-rainy": "hava: yağmurlu",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Tercihler",
+    "item.movie-ticket.movie-this-week": "Bu haftaki film",
+    "item.movie-ticket.loves-movie": "Filmi sevenler",
+    "item.movie-ticket.likes-movie": "Filmi beğenenler",
+    "item.movie-ticket.dislikes-movie": "Filmi beğenmeyenler",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} bunu seviyor",
+    "item.movie-snack-preference.like": "{{name}} bunu beğeniyor",
+    "item.movie-snack-preference.dislike": "{{name}} bunu sevmiyor",
+    "item.movie-ticket.movie-this-week.none": "Bu hafta film yok",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Perde",
+    "item.music-block.drum-type": "Davul türü",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Yenilmez",
+    "monster.health": "Sağlık",
+    "monster.drops": "Düşenler",
+    "monster.experience": "XP",
+    "monster.defense": "Savunma",
+    "monster.attack": "Saldırı",
+    "monster.adventure-guild": "Maceraperestler Loncası",
+
+    // values
+    "monster.drops.nothing": "hiçbir şey",
+    "monster.adventure-guild.eradication-goal": "öldürme hedefi: {{name}} (öldürüldü {{requiredCount}} taneden {{count}})",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "Doğum günü",
+    "npc.can-romance": "Romantizm yapılabilir",
+    "npc.friendship": "Arkadaşlık",
+    "npc.talked-today": "Bugün konuşuldu",
+    "npc.gifted-today": "Bugün hediye verildi",
+    "npc.gifted-this-week": "Bu hafta hediye verildi",
+    "npc.kissed-today": "Bugün öpüldü",
+    "npc.hugged-today": "Bugün kucaklandı",
+    "npc.loves-gifts": "Sevilen hediyeler",
+    "npc.likes-gifts": "Beğenilen hediyeler",
+    "npc.neutral-gifts": "Nötr hediyeler",
+    "npc.dislikes-gifts": "Beğenilmeyen hediyeler",
+    "npc.hates-gifts": "Nefret edilen hediyeler",
+
+    // values
+    "npc.can-romance.married": "Evlisin! <", // < turns into a heart
+    "npc.can-romance.housemate": "Ev arkadaşısınız!",
+    "npc.friendship.not-met": "Henüz onla tanışmadın.",
+    "npc.friendship.need-bouquet": "ilerlemek için buket gerekli",
+    "npc.friendship.need-points": "{{count}} puana gelişir",
+    "npc.undiscovered-gift-taste": "{{count}} gizli nesneler",
+    "npc.undiscovered-gift-taste-appended": ", ve {{count}} gizli nesneler",
+
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Yaş",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} ({{count}} gün sonra {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "yenidoğan",
+    "npc.child.age.baby": "bebek",
+    "npc.child.age.crawler": "emekleme",
+    "npc.child.age.toddler": "yürüme",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Sevgi",
+    "pet.petted-today": "Bugün sevildi",
+    "pet.last-petted": "Son sevilme",
+    "pet.water-bowl": "Su kabı",
+
+    // values
+    "pet.last-petted.yes": "evet (+12 sevgi)",
+    "pet.last-petted.days-ago": "{{days}} gün önce",
+    "pet.last-petted.never": "hiçbir zaman",
+    "pet.water-bowl.empty": "boş",
+    "pet.water-bowl.filled": "dolduruldu (+6 sevgi)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Çiftlik ismi",
+    "player.farm-map": "Çiftlik haritası",
+    "player.favorite-thing": "Favori şey",
+    "player.gender": "Cinsiyet",
+    "player.housemate": "Ev arkadaşı",
+    "player.spouse": "Eş",
+    "player.watched-movie-this-week": "Bu hafta film izledi",
+    "player.combat-skill": "Savaşma",
+    "player.farming-skill": "Çiftçilik",
+    "player.fishing-skill": "Balıkçılık",
+    "player.foraging-skill": "Toplayıcılık",
+    "player.mining-skill": "Madencilik",
+    "player.luck": "Şans",
+    "player.save-format": "Kayıt formatı",
+
+    // values
+    "player.farm-map.custom": "Özel",
+    "player.gender.male": "erkek",
+    "player.gender.female": "kadın",
+    "player.luck.summary": "{{percent}}% birçok rastgele olay",
+    "player.skill.progress": "seviye {{level}} için ({{expNeeded}} XP gerekli)",
+    "player.skill.progress-last": "seviye {{level}}",
+
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Çözüm",
+
+    // values
+    "puzzle.solution.solved": "Bulmaca çözüldü!",
+    "puzzle.solution.hidden": "Bulmaca çözümleri ilerleme modun gizlidir.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Kristal Mağara Bulmacası",
+    "puzzle.island-crystal-cave.crystal-id": "Kristal ID",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Bulmacayı başlatmak için heykeli etkinleştir.",
+    "puzzle.island-crystal-cave.solution.waiting": "Oyunun dizi oluşturması bekleniyor...",
+    "puzzle.island-crystal-cave.solution.activated": "Aktifleşen kristallerin dizilişini tekrarla:",
+
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Deniz Kızı Adası Bulmacası",
+    "puzzle.island-mermaid.solution.intro": "Flüt kullanarak Akşam Pazarı deniz kızı şarkısını çal. Perde değerleri (perdeyi görmek için flüt bloğuna bakabilirsin):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Ada Tapınak Bulmacası",
+
+    // values
+    "puzzle.island-shrine.solution": "Her sutün için, yağmur yağdığında mücevher kuşlarından düşen mücevheri karşılık gelen sutüna koy. Mücevherler her kayıt için rastgeledir.",
+    "puzzle.island-shrine.solution.east": "Doğu: {{item}}",
+    "puzzle.island-shrine.solution.north": "Kuzey: {{item}}",
+    "puzzle.island-shrine.solution.south": "Güney: {{item}}",
+    "puzzle.island-shrine.solution.west": "Batı: {{item}}",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
+    "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
+    "tile.game-location": "Konum",
+    "tile.map-name": "Harita ismi",
+    "tile.tile": "Tile",
+    "tile.tile-index": "{{layerName}}: tile index",
+    "tile.tilesheet": "{{layerName}}: tilesheet",
+    "tile.blend-mode": "{{layerName}}: blend mode",
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+
+    // values
+    "tile.tile.none-here": "no tile here",
+
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "İstenen nesne",
+    "trash-bear-or-gourmand.quest-progress": "Görev ilerlemesi",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Büyüme durumu",
+    "tree.next-growth": "Sonraki büyüme",
+    "tree.has-seed": "Tohum var",
+    "tree.is-fertilized": "Gübrelenmiş",
+
+    // values
+    "tree.name.big-mushroom": "Mantar Ağaçı",
+    "tree.name.mahogany": "Maun Ağaçı",
+    "tree.name.maple": "Akçaağaç",
+    "tree.name.oak": "Meşe Ağaçı",
+    "tree.name.palm": "Palmiye Ağaçı",
+    "tree.name.pine": "Çam Ağaçı",
+    "tree.name.unknown": "Bilinmeyen Ağaç",
+    "tree.stage.done": "Tamamen olgunlaşmış",
+    "tree.stage.partial": "{{stageName}} ({{step}} of {{max}})",
+    "tree.next-growth.winter": "gübrelenmediği sürece kışın sera dışında büyüyemez",
+    "tree.next-growth.adjacent-trees": "büyüyemiyor çünkü diğer ağaçlar çok yakın",
+    "tree.next-growth.chance": "{{chance}}% şansla yarın {{stage}} aşamasına olgunlaşacak",
+
+    // growth stages
+    "tree.stages.seed": "tohum",
+    "tree.stages.sprout": "filiz",
+    "tree.stages.sapling": "fidan",
+    "tree.stages.bush": "çalı",
+    "tree.stages.smallTree": "ağaççık",
+    "tree.stages.tree": "ağaç"
+}

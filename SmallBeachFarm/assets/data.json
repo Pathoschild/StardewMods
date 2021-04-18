@@ -44,6 +44,11 @@
             "ID": 5,
             "Name": "Four Corners",
             "Map": "Maps/Farm_FourCorners"
+        },
+        {
+            "ID": 6,
+            "Name": "Beach",
+            "Map": "Maps/Farm_Island"
         }
     ]
 }

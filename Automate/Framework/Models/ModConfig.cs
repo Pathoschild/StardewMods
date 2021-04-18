@@ -25,8 +25,5 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
 
         /// <summary>The configuration for specific machines by ID.</summary>
         public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
-
-        /// <summary>Whether to avoid removing the last item in a stack.</summary>
-        public bool PreventRemovingStacks { get; set; }
     }
 }

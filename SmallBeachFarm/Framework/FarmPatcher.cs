@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Harmony;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.SmallBeachFarm.Framework
@@ -31,6 +33,15 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
         /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
         private static bool IsInPatch = false;
+
+        /// <summary>The arrival tiles by farm type when the player warps from the <see cref="IslandWest"/> obelisk, with a <c>-1</c> key for the default.</summary>
+        /// <remarks>Derived from <see cref="IslandWest.performAction"/>.</remarks>
+        private static readonly Dictionary<int, Point> IslandWarpTargets = new()
+        {
+            [Farm.fourCorners_layout] = new Point(48, 39),
+            [Farm.beach_layout] = new Point(82, 29),
+            [-1] = new Point(48, 7)
+        };
 
 
         /*********
@@ -129,6 +140,13 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
             // change background track
             if (FarmPatcher.ShouldUseBeachMusic())
                 Game1.changeMusicTrack("ocean", music_context: Game1.MusicContext.SubLocation);
+
+            // fix island totem warp
+            if (FarmPatcher.IsOnIslandWarpArrivalTile())
+            {
+                var tile = __instance.GetMapPropertyPosition("WarpTotemEntry", 48, 7);
+                Game1.player.Position = new Vector2(tile.X * Game1.tileSize, tile.Y * Game1.tileSize);
+            }
         }
 
         /// <summary>A method called via Harmony after <see cref="Farm.resetSharedState"/>.</summary>
@@ -173,6 +191,17 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         private static bool ShouldUseBeachMusic()
         {
             return FarmPatcher.UseBeachMusic && !Game1.isRaining;
+        }
+
+        /// <summary>Whether the player is on the arrival tile for the <see cref="IslandWest"/> obelisk warp.</summary>
+        private static bool IsOnIslandWarpArrivalTile()
+        {
+            Point curTile = Utility.Vector2ToPoint(Game1.player.Position / Game1.tileSize);
+
+            if (!FarmPatcher.IslandWarpTargets.TryGetValue(Game1.whichFarm, out Point arrivalTile))
+                arrivalTile = FarmPatcher.IslandWarpTargets[-1];
+
+            return curTile == arrivalTile;
         }
     }
 }

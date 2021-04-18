@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             return I18n.GetByKey("label.hide-chest-hidden");
         }
 
-        /// <summary>Get a translation equivalent to "Automate options".</summary>
+        /// <summary>Get a translation equivalent to "Automate".</summary>
         public static string Label_AutomateOptions()
         {
             return I18n.GetByKey("label.automate-options");
@@ -159,6 +159,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public static string Label_AutomateTakeDisabled()
         {
             return I18n.GetByKey("label.automate-take-disabled");
+        }
+
+        /// <summary>Get a translation equivalent to "Avoid removing the last item in a stack".</summary>
+        public static string Label_AutomatePreventRemoveStacks()
+        {
+            return I18n.GetByKey("label.automate-prevent-remove-stacks");
         }
 
         /// <summary>Get a translation equivalent to "edit chest".</summary>

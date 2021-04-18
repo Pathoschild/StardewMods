@@ -16,11 +16,10 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_14()
             : base(new SemanticVersion(1, 14, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.FromFile.ToString(),
                 ConditionType.Round.ToString()
-            };
+            );
         }
     }
 }

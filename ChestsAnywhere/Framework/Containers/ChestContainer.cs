@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         public ContainerData Data { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
-        public bool CanConfigureAutomate => this.Chest.SpecialChestType != Chest.SpecialChestTypes.JunimoChest;
+        public bool CanConfigureAutomate => this.Chest.SpecialChestType != Chest.SpecialChestTypes.JunimoChest && this.Chest.SpecialChestType != Chest.SpecialChestTypes.MiniShippingBin;
 
 
         /*********

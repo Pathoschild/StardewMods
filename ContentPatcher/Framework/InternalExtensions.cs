@@ -135,6 +135,17 @@ namespace ContentPatcher.Framework
         /// <param name="canBeOptional">Whether the dependency can be optional.</param>
         public static bool HasDependency(this IManifest manifest, string modID, bool canBeOptional = true)
         {
+            return manifest.HasDependency(modID, out _, canBeOptional);
+        }
+
+        /// <summary>Get whether the manifest lists a given mod ID as a dependency.</summary>
+        /// <param name="manifest">The manifest.</param>
+        /// <param name="modID">The mod ID.</param>
+        /// <param name="minVersion">The minimum version required by the mod, if any.</param>
+        /// <param name="canBeOptional">Whether the dependency can be optional.</param>
+        public static bool HasDependency(this IManifest manifest, string modID, out ISemanticVersion minVersion, bool canBeOptional = true)
+        {
+            minVersion = null;
             if (manifest == null)
                 return false;
 
@@ -144,6 +155,7 @@ namespace ContentPatcher.Framework
 
             // check dependencies
             IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
+            minVersion = dependency?.MinimumVersion;
             return
                 dependency != null
                 && (canBeOptional || dependency.IsRequired);

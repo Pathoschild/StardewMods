@@ -27,10 +27,9 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_19()
             : base(new SemanticVersion(1, 19, 0))
         {
-            this.AddedTokens = new InvariantHashSet
-            {
+            this.AddedTokens.AddMany(
                 ConditionType.Time.ToString()
-            };
+            );
         }
 
         /// <inheritdoc />

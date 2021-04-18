@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.34.1
+Released 17 April 2021.
+
+* Improved translations. Thanks to J3yEreN (added Turkish)!
+
 ## 1.34
 Released 27 March 2021.
 

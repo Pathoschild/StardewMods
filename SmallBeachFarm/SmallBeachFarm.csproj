@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.8.2</Version>
+    <Version>1.9.0</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
     <EnableHarmony>true</EnableHarmony>
-    <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
+    <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|island_tilesheet_1|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
   </PropertyGroup>
 
   <ItemGroup>

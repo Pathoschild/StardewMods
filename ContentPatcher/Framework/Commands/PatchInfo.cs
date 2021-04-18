@@ -7,7 +7,7 @@ using StardewModdingAPI;
 namespace ContentPatcher.Framework.Commands
 {
     /// <summary>A summary of patch info shown in the SMAPI console.</summary>
-    internal class PatchInfo
+    internal class PatchInfo : PatchBaseInfo
     {
         /*********
         ** Accessors
@@ -36,23 +36,14 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>The parsed asset name (if available).</summary>
         public ITokenString ParsedTargetAsset { get; }
 
-        /// <summary>The parsed conditions (if available).</summary>
-        public Condition[] ParsedConditions { get; }
-
         /// <summary>The content pack which requested the patch.</summary>
         public IContentPack ContentPack { get; }
 
         /// <summary>Whether the patch is loaded.</summary>
         public bool IsLoaded { get; }
 
-        /// <summary>Whether the patch should be applied in the current context.</summary>
-        public bool MatchesContext { get; }
-
         /// <summary>Whether the patch is currently applied.</summary>
         public bool IsApplied { get; }
-
-        /// <summary>Diagnostic info about the patch.</summary>
-        public IContextualState State { get; }
 
         /// <summary>The underlying patch, if any.</summary>
         public IPatch Patch { get; }
@@ -64,17 +55,30 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(DisabledPatch patch)
-            : this(patch.Path, patch.RawType, patch.ParsedType)
+            : this(
+                path: patch.Path,
+                rawType: patch.RawType,
+                parsedType: patch.ParsedType,
+                conditions: new Condition[0],
+                matchesContext: false,
+                state: new ContextualState().AddErrors(patch.ReasonDisabled)
+            )
         {
             this.RawTargetAsset = patch.AssetName;
             this.ContentPack = patch.ContentPack;
-            this.State = new ContextualState().AddErrors(patch.ReasonDisabled);
         }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="patch">The patch to represent.</param>
         public PatchInfo(IPatch patch)
-            : this(patch.Path, patch.Type.ToString(), patch.Type)
+            : this(
+                path: patch.Path,
+                rawType: patch.Type.ToString(),
+                parsedType: patch.Type,
+                conditions: patch.Conditions,
+                matchesContext: patch.IsReady,
+                state: patch.GetDiagnosticState()
+            )
         {
             this.ParsedType = patch.Type;
             this.RawFromAsset = patch.RawFromAsset?.Raw;
@@ -82,12 +86,9 @@ namespace ContentPatcher.Framework.Commands
 
             this.RawTargetAsset = patch.RawTargetAsset?.Raw;
             this.ParsedTargetAsset = patch.RawTargetAsset;
-            this.ParsedConditions = patch.Conditions;
             this.ContentPack = patch.ContentPack;
             this.IsLoaded = true;
-            this.MatchesContext = patch.IsReady;
             this.IsApplied = patch.IsApplied;
-            this.State = patch.GetDiagnosticState();
             this.Patch = patch;
         }
 
@@ -95,6 +96,14 @@ namespace ContentPatcher.Framework.Commands
         public IEnumerable<string> GetChangeLabels()
         {
             return this.Patch?.GetChangeLabels() ?? Enumerable.Empty<string>();
+        }
+
+        /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
+        public override string GetReasonNotLoaded()
+        {
+            return !this.IsApplied
+                ? base.GetReasonNotLoaded()
+                : null;
         }
 
 
@@ -105,7 +114,11 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="path">The path to the patch from the root content file.</param>
         /// <param name="rawType">The raw patch type.</param>
         /// <param name="parsedType">The parsed patch type, if valid.</param>
-        private PatchInfo(LogPathBuilder path, string rawType, PatchType? parsedType)
+        /// <param name="conditions">The parsed conditions (if available).</param>
+        /// <param name="matchesContext">Whether the patch should be applied in the current context.</param>
+        /// <param name="state">Diagnostic info about the patch.</param>
+        private PatchInfo(LogPathBuilder path, string rawType, PatchType? parsedType, Condition[] conditions, bool matchesContext, IContextualState state)
+            : base(conditions, matchesContext, state)
         {
             this.Path = path;
             this.RawType = rawType;

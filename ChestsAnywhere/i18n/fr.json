@@ -25,6 +25,7 @@
     "label.automate-take": "Obtenir les objets dans ce coffre",
     "label.automate-take-first": "Obtenir les objets dans ce coffre d'abord",
     "label.automate-take-disabled": "Ne prenez jamais les objets de ce coffre",
+    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "modifier coffre",

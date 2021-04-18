@@ -69,9 +69,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             // validate
             if (Path.IsPathRooted(path))
-                throw new InvalidOperationException($"The {ConditionType.HasFile} token requires a relative path.");
+                throw new InvalidOperationException($"The {this.Name} token requires a relative path.");
             if (!PathUtilities.IsSafeRelativePath(path))
-                throw new InvalidOperationException($"The {ConditionType.HasFile} token requires a relative path and cannot contain directory climbing (../).");
+                throw new InvalidOperationException($"The {this.Name} token requires a relative path and cannot contain directory climbing (../).");
 
             // check file existence
             return this.RelativePathExists(path);

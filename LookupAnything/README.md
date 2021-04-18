@@ -145,9 +145,12 @@ And many other places.
   > ![](screenshots/player.png)
 
 * See a monster's stats, your progress towards the Adventurer's Guild eradication goals, and what
-  items the monster will drop when killed. The drop list will highlight which items will definitely
-  drop (black), and which might drop because you have the [Burglar's Ring](https://stardewvalleywiki.com/Burglar%27s_Ring)
-  (gray but not crossed out).
+  items the monster will drop when killed.
+
+  The drop list will highlight which items will definitely drop (black), might drop because you have
+  the [Burglar's Ring](https://stardewvalleywiki.com/Burglar%27s_Ring) (gray but not crossed out),
+  or won't drop this time (crossed out). **Note:** this shows the normal monster drops, but the game
+  may add special drops that are hardcoded and can't be detected by mods.
   > ![](screenshots/monster.png)
 
 * See what an item is used for, who likes it as a gift, and what you can use it for. Look up a movie

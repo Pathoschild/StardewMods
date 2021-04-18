@@ -21,10 +21,11 @@
     "label.automate-options": "Automate",
     "label.automate-store": "Kutuya nesne koyma",
     "label.automate-store-first": "Nesneleri ilk önce bu kutuya koy",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "Asla bu kutuya nesneleri koyma",
     "label.automate-take": "Bu kutudan nesne alma",
     "label.automate-take-first": "Bu kutudan ilk önce bir nesne alın",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
+    "label.automate-take-disabled": "Asla bu kutudan nesneleri alma",
+    "label.automate-prevent-remove-stacks": "Yığındaki son nesneye dokunma",
 
     // button labels
     "button.edit-chest": "kutuyu düzenle",

@@ -302,20 +302,21 @@ Installing [Chests Anywhere](https://www.nexusmods.com/stardewvalley/mods/518) l
 per-chest options directly in-game:
 > ![](screenshots/chests-anywhere-config.png)
 
-This adds two dropdowns for Automate:
+This adds three options for Automate:
 
-* Put items:
-  * **Put items in this chest** (default).
-  * **Put items in this chest first:** Automate will push machine output into this chest first, and
+* Avoid removing the last item in a stack.
+* Whether to put items in this chest. Possible values:
+  * _Put items in this chest_ (default).
+  * _Put items in this chest first_: Automate will push machine output into this chest first, and
     only try other chests if it's full.
-  * **Never put items in this chest.**
-* Take items:
-  * **Take items from this chest** (default).
-  * **Take items from this chest first:** Automate will take machine input from this chest first,
+  * _Never put items in this chest._
+* Whether to take items out of this chest. Possible values:
+  * _Take items from this chest_ (default).
+  * _Take items from this chest first_: Automate will take machine input from this chest first,
     and only try other chests if it doesn't have any input for a machine.
-  * **Never take items from this chest.**
+  * _Never take items from this chest._
 
-(To configure chest automation from another mod, see the [technical documentation](technical.md).)
+(To configure chest automation from another mod, see the [technical documentation](technical.md#can-i-change-in-game-settings-without-chests-anywhere).)
 
 ### Per-machine settings
 _This is advanced; most players won't need to configure Automate to this extent._

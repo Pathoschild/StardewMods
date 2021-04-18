@@ -25,6 +25,7 @@
     "label.automate-take": "Nimm Gegenstände von dieser Kiste",
     "label.automate-take-first": "Nimm zuerst Gegenstände von dieser Kiste",
     "label.automate-take-disabled": "Nimm niemals Gegenstände aus dieser Kiste",
+    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
 
     // button labels
     "button.edit-chest": "Bearbeite Kiste",

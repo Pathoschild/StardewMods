@@ -1,6 +1,17 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9
+Released 17 April 2021.
+
+* Added support for replacing the new beach farm in Stardew Valley 1.5.
+* The default replaced farm is now the beach farm. (This only affects new installs that don't already have a `config.json`.)
+* Improved compatibility with recolor mods. All tiles now use vanilla tilesheets (except the river/sea transition which is still custom).
+* You can now walk closer to the water.
+* Fixed two impassable tiles near bridge between the islands.
+* Fixed issue where entering from the forest while riding a horse clipped you into the fence in 1.8.2.
+* Fixed farm warp obelisk on Ginger Island warping you into the ocean.
+
 ## 1.8.2
 Released 27 March 2021.
 

@@ -184,6 +184,7 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, this.GetProfessions, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, this.GetActiveQuests, NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, this.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
             yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
             yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
@@ -230,6 +231,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
+            yield return new FirstValidFileValueProvider(contentPack.HasFile);
             yield return new HasFileValueProvider(contentPack.HasFile);
             yield return new TranslationValueProvider(contentPack.Translation);
         }
@@ -352,6 +354,18 @@ namespace ContentPatcher.Framework
             return player.dialogueQuestionsAnswered
                 .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>Get the active quests in the player's quest log.</summary>
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetActiveQuests(Farmer player)
+        {
+            return (
+                from quest in player.questLog
+                let id = quest.id.Value
+                orderby id
+                select id.ToString(CultureInfo.InvariantCulture)
+            );
         }
     }
 }

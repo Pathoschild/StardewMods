@@ -10,7 +10,7 @@ You can optionally enable islands and beach sounds.
 3. Run the game using SMAPI.
 
 ## Usage
-Just load a save with the riverlands farm, and you'll see the new map! You can change which farm is
+Just load a save with the beach farm, and you'll see the new map! You can change which farm is
 replaced in the [configuration](#configure).
 
 A few highlights:
@@ -56,7 +56,7 @@ setting         | default | what it affects
 `AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
 `EnableIslands` | `false` | Whether to add ocean islands with extra land area.
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
-`ReplaceFarmID` | `1`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), and `5` (four corners).
+`ReplaceFarmID` | `6`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), `5` (four corners), and `6` (beach).
 
 ## FAQs
 ### Can I use this with an existing save?
@@ -90,15 +90,11 @@ Other mods can patch Small Beach Farm's tilesheets directly. For example, in a C
 **Option B:**  
 Compatibility files can be added to the Small Beach Farm folder instead.
 
-1. Choose the compatibility folder you need:
-
-   folder | purpose
-   :----- | :------
-   `assets/tilesheets` | Replace the entire tilesheet. If the player has multiple mods with a matching folder, only the first one alphabetically will be used.
-   `assets/overlays` | Make changes to the tilesheet loaded from `assets/tilesheets` (recommended if you only change some of the colors). If the player has multiple mods with a matching folder, they'll be applied sequentially in alphabetical order. Transparent pixels won't change the tilesheet, so you can leave areas you don't need to change empty.
-
-2. Create a subfolder whose name is the recolor mod's ID (from its `manifest.json`).
-3. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
+1. Create a subfolder in `assets/tilesheets` whose name is the recolor mod's ID (from its
+   `manifest.json`).
+2. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
+3. If the player has multiple mods with a matching folder, only the first one alphabetically will be
+   used.
 
 If you send me the files, I'll add official support for the recolor!
 
