@@ -811,21 +811,15 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <td>FirstValidFile</td>
 <td>
 
-**This is part of the upcoming Content Patcher 1.22 and isn't available yet.**
-
-<s>
-
 Get the first path which matches a file in the content pack folder, given a list of
 relative file paths. You can specify any number of files.
 
-For example, you can fallback automatically to a different file if a path doesn't exist:
+For example:
 
 ```js
 // load `assets/<language>.json` if it exists, otherwise `assets/default.json`
 "FromFile": "{{FirstValidFile: assets/{{language}}.json, assets/default.json }}"
 ```
-
-</s>
 
 </td>
 <td><a href="#FirstValidFile">#</a></td>
@@ -1082,7 +1076,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1318,7 +1312,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1351,7 +1345,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1476,7 +1470,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.21.0",
+   "Format": "1.22.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1496,7 +1490,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.21.0",
+     "Format": "1.22.0",
      "Changes": [
         {
            "Action": "EditData",

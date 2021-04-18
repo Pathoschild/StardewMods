@@ -84,8 +84,8 @@ namespace ContentPatcher.Framework
             // validate dependency on Content Patcher
             if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion minVersion, canBeOptional: false))
                 throw new InvalidOperationException($"'{manifest.Name}' must list Content Patcher as a required dependency in its manifest.json to access the conditions API.");
-            if (minVersion == null || minVersion.IsOlderThan("1.21.0"))
-                throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 1.21.0 as the minimum required version in its manifest.json to access the conditions API.");
+            if (minVersion == null || minVersion.IsOlderThan("1.22.0"))
+                throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 1.22.0 as the minimum required version in its manifest.json to access the conditions API.");
 
             // parse conditions
             return this.ParseConditionsImpl(manifest, rawConditions, formatVersion, assumeModIds);

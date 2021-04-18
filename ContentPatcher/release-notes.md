@@ -9,16 +9,18 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.22
+Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).
+
 * Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
-  * `FirstValidFile` to enable fallback files without duplicating patches.
-  * `HasActiveQuest` to check a player's current quest list.
+  * [`FirstValidFile`](docs/author-tokens-guide.md#FirstValidFile) to enable fallback files without duplicating patches.
+  * [`HasActiveQuest`](docs/author-tokens-guide.md#HasActiveQuest) to check a player's current quest list.
 * Improved console commands:
-  * Added `patch export` optional argument to specify the data type.
+  * Added `patch export` argument to optionally set the data type.
   * Tweaked console command handling.
   * Fixed `patch export` for an asset that's not already loaded causing the wrong data type to be cached.
-* The `Format` version now always matches Content Patcher's minor version. Previously it only changed if the format changed.
+* The latest `Format` version now always matches the main Content Patcher version. Previously it only changed if the format changed.
 * Fixed default log names for patches with multiple `FromFile` or `Target` values.
 
 ## 1.21.2

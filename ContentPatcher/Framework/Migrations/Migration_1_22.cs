@@ -17,7 +17,8 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 22, 0))
         {
             this.AddedTokens.AddMany(
-                ConditionType.FirstValidFile.ToString()
+                ConditionType.FirstValidFile.ToString(),
+                ConditionType.HasActiveQuest.ToString()
             );
         }
     }

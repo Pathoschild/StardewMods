@@ -1,8 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* The option to prevent removing the last item in a stack is now configured per-chest.
+## 1.22.1
+Released 17 April 2021.
+
+* The option to prevent removing the last item in a stack (added in Automate 1.22) is now [configured per-chest](README.md#in-game-settings) instead of globally.
 
 ## 1.22
 Released 27 March 2021.
