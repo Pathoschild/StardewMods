@@ -2471,52 +2471,6 @@
 2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087,2087
 </data>
  </layer>
- <objectgroup id="2" name="Back">
-  <object id="1" name="TileData" x="768" y="112" width="16" height="16">
-   <properties>
-    <property name="NPCBarrier" value="T"/>
-    <property name="NoSpawn" value="All"/>
-   </properties>
-  </object>
-  <object id="2" name="TileData" x="1008" y="240" width="16" height="16">
-   <properties>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
-  <object id="3" name="TileData" x="1024" y="240" width="16" height="16">
-   <properties>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
-  <object id="4" name="TileData" x="1040" y="240" width="16" height="16">
-   <properties>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
-  <object id="5" name="TileData" x="1056" y="240" width="16" height="16">
-   <properties>
-    <property name="NoFurniture" value="T"/>
-   </properties>
-  </object>
-  <object id="6" name="TileData" x="1008" y="256" width="16" height="16">
-   <properties>
-    <property name="NPCBarrier" value="T"/>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
-  <object id="7" name="TileData" x="1024" y="256" width="16" height="16">
-   <properties>
-    <property name="NPCBarrier" value="T"/>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
-  <object id="8" name="TileData" x="1040" y="256" width="16" height="16">
-   <properties>
-    <property name="NPCBarrier" value="T"/>
-    <property name="NoFurniture" value="t"/>
-   </properties>
-  </object>
- </objectgroup>
  <layer id="3" name="Buildings" width="80" height="75">
   <data encoding="csv">
 388,388,388,388,388,388,388,388,388,388,388,389,431,295,0,0,0,0,0,272,478,0,0,0,0,0,388,388,388,388,388,388,388,388,388,388,388,389,456,0,0,0,453,387,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,388,
@@ -2596,28 +2550,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="Buildings">
-  <object id="9" name="TileData" x="960" y="224" width="16" height="16">
-   <properties>
-    <property name="Action" value="LumberPile"/>
-   </properties>
-  </object>
-  <object id="10" name="TileData" x="976" y="224" width="16" height="16">
-   <properties>
-    <property name="Action" value="LumberPile"/>
-   </properties>
-  </object>
-  <object id="11" name="TileData" x="1024" y="224" width="16" height="16">
-   <properties>
-    <property name="Action" value="Warp 3 11 FarmHouse"/>
-   </properties>
-  </object>
-  <object id="13" name="TileData" x="1088" y="256" width="16" height="16">
-   <properties>
-    <property name="Action" value="Mailbox"/>
-   </properties>
-  </object>
- </objectgroup>
  <layer id="5" name="Paths" width="80" height="75">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -2697,38 +2629,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="Paths">
-  <object id="14" name="TileData" x="288" y="128" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="15" name="TileData" x="304" y="128" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="3"/>
-   </properties>
-  </object>
-  <object id="16" name="TileData" x="32" y="320" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="1"/>
-   </properties>
-  </object>
-  <object id="17" name="TileData" x="368" y="336" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="18" name="TileData" x="384" y="336" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="2"/>
-   </properties>
-  </object>
-  <object id="19" name="TileData" x="448" y="336" width="16" height="16">
-   <properties>
-    <property name="Order" type="int" value="3"/>
-   </properties>
-  </object>
- </objectgroup>
  <layer id="7" name="Front" width="80" height="75">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,144,145,0,0,0,144,145,0,0,0,0,144,145,0,0,0,0,0,0,0,0,0,0,0,0,148,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -2808,7 +2708,6 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="8" name="Front"/>
  <layer id="9" name="AlwaysFront" width="80" height="75">
   <data encoding="csv">
 1033,983,983,983,983,983,983,1008,983,977,978,980,978,980,1007,981,1007,982,983,983,983,983,983,983,983,983,983,1008,977,978,980,978,980,1007,980,978,980,978,1003,1029,1030,1006,1007,982,983,983,983,977,978,980,1007,982,983,983,983,983,983,1033,977,978,980,978,981,1007,982,1033,983,983,983,983,983,983,983,983,983,983,983,1008,983,983,
@@ -2888,5 +2787,106 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="2" name="Back">
+  <object id="1" name="TileData" x="768" y="112" width="16" height="16">
+   <properties>
+    <property name="NPCBarrier" value="T"/>
+    <property name="NoSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="2" name="TileData" x="1008" y="240" width="16" height="16">
+   <properties>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="3" name="TileData" x="1024" y="240" width="16" height="16">
+   <properties>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="4" name="TileData" x="1040" y="240" width="16" height="16">
+   <properties>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="5" name="TileData" x="1056" y="240" width="16" height="16">
+   <properties>
+    <property name="NoFurniture" value="T"/>
+   </properties>
+  </object>
+  <object id="6" name="TileData" x="1008" y="256" width="16" height="16">
+   <properties>
+    <property name="NPCBarrier" value="T"/>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="7" name="TileData" x="1024" y="256" width="16" height="16">
+   <properties>
+    <property name="NPCBarrier" value="T"/>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="8" name="TileData" x="1040" y="256" width="16" height="16">
+   <properties>
+    <property name="NPCBarrier" value="T"/>
+    <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="4" name="Buildings">
+  <object id="9" name="TileData" x="960" y="224" width="16" height="16">
+   <properties>
+    <property name="Action" value="LumberPile"/>
+   </properties>
+  </object>
+  <object id="10" name="TileData" x="976" y="224" width="16" height="16">
+   <properties>
+    <property name="Action" value="LumberPile"/>
+   </properties>
+  </object>
+  <object id="11" name="TileData" x="1024" y="224" width="16" height="16">
+   <properties>
+    <property name="Action" value="Warp 3 11 FarmHouse"/>
+   </properties>
+  </object>
+  <object id="13" name="TileData" x="1088" y="256" width="16" height="16">
+   <properties>
+    <property name="Action" value="Mailbox"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="Paths">
+  <object id="14" name="TileData" x="288" y="128" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="15" name="TileData" x="304" y="128" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="3"/>
+   </properties>
+  </object>
+  <object id="16" name="TileData" x="32" y="320" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="1"/>
+   </properties>
+  </object>
+  <object id="17" name="TileData" x="368" y="336" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="18" name="TileData" x="384" y="336" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="2"/>
+   </properties>
+  </object>
+  <object id="19" name="TileData" x="448" y="336" width="16" height="16">
+   <properties>
+    <property name="Order" type="int" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="Front"/>
  <objectgroup id="10" name="AlwaysFront"/>
 </map>
