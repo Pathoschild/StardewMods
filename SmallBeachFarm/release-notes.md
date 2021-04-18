@@ -7,6 +7,7 @@
 * Improved compatibility with recolor mods. All beach land tiles now use the new vanilla beach farm tilesheet; only the river/sea transition still uses custom tiles.
 * Fixed issue where entering from the forest while riding a horse clips you into the fence in 1.8.2.
 * Fixed farm warp obelisk on Ginger Island warping you into the ocean.
+* Fixed two impassable tiles near bridge between the islands.
 
 ## 1.8.2
 Released 27 March 2021.
