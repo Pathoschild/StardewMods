@@ -226,6 +226,12 @@ namespace ContentPatcher.Framework
             if (!patches.Any() && !reloadAssetNames.Any())
                 return;
 
+            // reset queued patches
+            // This needs to be done *before* we update patches, to avoid clearing patches added by Include patches
+            IPatch[] wasPending = this.PendingPatches.ToArray();
+            this.PendingPatches.Clear();
+            this.AssetsWithRemovedPatches.Clear();
+
             // init for verbose logging
             List<PatchAuditChange> verbosePatchesReloaded = this.Monitor.IsVerbose
                 ? new()
@@ -245,7 +251,7 @@ namespace ContentPatcher.Framework
                 // track old values
                 string wasFromAsset = patch.FromAsset;
                 string wasTargetAsset = patch.TargetAsset;
-                bool wasReady = patch.IsReady && !this.PendingPatches.Contains(patch);
+                bool wasReady = patch.IsReady && !wasPending.Contains(patch);
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
@@ -307,8 +313,6 @@ namespace ContentPatcher.Framework
             }
 
             // reset indexes
-            this.PendingPatches.Clear();
-            this.AssetsWithRemovedPatches.Clear();
             this.Reindex(patchListChanged: false);
 
             // log changes
