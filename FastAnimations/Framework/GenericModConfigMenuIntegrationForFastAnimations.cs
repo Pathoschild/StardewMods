@@ -154,6 +154,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
 
                 .AddLabel("UI Animation Speeds")
                 .AddNumberField(
+                    label: "Shipping menu transitions",
+                    description: "How fast the shipping menu transitions between screens. Default 1x.",
+                    get: config => config.ShippingMenuTransitionSpeed,
+                    set: (config, value) => config.ShippingMenuTransitionSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
+                .AddNumberField(
                     label: "Title menu transitions",
                     description: "How fast the title menu transitions between screens. Default 10x.",
                     get: config => config.TitleMenuTransitionSpeed,
