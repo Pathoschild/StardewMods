@@ -249,6 +249,14 @@ internal class GenericModConfigMenuIntegrationForFastAnimations : IGenericModCon
                 max: maxSpeed
             )
             .AddNumberField(
+                label: "Shipping menu transitions",
+                description: "How fast the shipping menu transitions between screens. Default 1x.",
+                get: config => config.ShippingMenuTransitionSpeed,
+                set: (config, value) => config.ShippingMenuTransitionSpeed = value,
+                min: minSpeed,
+                max: maxSpeed
+            )
+            .AddNumberField(
                 name: I18n.Config_TitleMenu_Name,
                 tooltip: () => I18n.Config_TitleMenu_Tooltip(defaultValue: defaultConfig.TitleMenuTransitionSpeed),
                 get: config => config.TitleMenuTransitionSpeed,
