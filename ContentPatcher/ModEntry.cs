@@ -136,7 +136,7 @@ namespace ContentPatcher
                 }
 
                 // cycle textures
-                else if (this.DebugOverlay != null)
+                else if (this.DebugOverlay.Value != null)
                 {
                     if (this.Keys.DebugPrevTexture.JustPressed())
                         this.DebugOverlay.Value.PrevTexture();

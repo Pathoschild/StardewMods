@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
+* Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed when there's no debug overlay open.
 
 ## 1.22
 Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).
