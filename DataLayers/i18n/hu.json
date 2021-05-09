@@ -1,10 +1,10 @@
 ﻿{
     // accessible
-    "accessible.name": "Elérhető",
+    "accessible.name": "Megközelíthetőség",
     "accessible.clear": "Tiszta",
     "accessible.occupied": "Foglalt",
-    "accessible.impassable": "Átjárthatatlan",
-    "accessible.warp": "Teleport",
+    "accessible.impassable": "Átjárhatatlan",
+    "accessible.warp": "Átjáró",
 
     // buildable
     "buildable.name": "Beépíthető",
@@ -13,22 +13,22 @@
     "buildable.not-buildable": "Nem lehet ide építeni",
 
     // coverage: bee houses
-    "bee-houses.name": "Lefedve: Méhkaptár",
-    "bee-houses.range": "Virágok elérése",
+    "bee-houses.name": "Lefedettség: Méhkaptár",
+    "bee-houses.range": "Virág hatótávolság",
 
     // coverage: Junimo huts
-    "junimo-huts.name": "Lefedve: Junimo kunyhó",
+    "junimo-huts.name": "Lefedettség: Junimo kunyhók",
     "junimo-huts.can-harvest": "Le tudják aratni",
     "junimo-huts.cannot-harvest": "Nem tudják learatni",
 
     // coverage: scarecrows
-    "scarecrows.name": "Lefedve: Madárijesztő",
+    "scarecrows.name": "Lefedettség: Madárijesztők",
     "scarecrows.protected": "Védett",
     "scarecrows.exposed": "Veszélyeztetett",
 
     // coverage: sprinklers
-    "sprinklers.name": "Lefedve: Öntöző",
-    "sprinklers.covered": "Lefedve",
+    "sprinklers.name": "Lefedettség: Öntözők",
+    "sprinklers.covered": "Locsolt termések",
     "sprinklers.dry-crops": "Száradó termések",
 
     // crops: harvest
@@ -38,29 +38,29 @@
     "crop-harvest.not-enough-time": "Nincs elég idő",
 
     // crops: watered
-    "crop-water.name": "Termések: Öntözés",
+    "crop-water.name": "Öntözés",
     "crop-water.watered": "Megöntözött termések",
     "crop-water.dry": "Száradó termések",
 
     // crops: water for paddy crops
-    "crop-paddy-water.name": "Termések: Víz az árasztásos termésekek",
+    "crop-paddy-water.name": "Víz az árasztásos terméseken",
     "crop-paddy-water.in-range": "Víz közelében",
     "crop-paddy-water.not-in-range": "Száraz föld",
 
     // crops: fertilized
-    "crop-fertilizer.name": "Termések: Trágyázva",
+    "crop-fertilizer.name": "Trágyázás",
     "crop-fertilizer.fertilizer": "Trágya",
     "crop-fertilizer.retaining-soil": "Hidrogél",
     "crop-fertilizer.speed-gro": "Gyorsnövesztő",
 
     // machine processing
-    "machines.name": "Gépi termelés",
+    "machines.name": "Gépi feldolgozás",
     "machines.empty": "Üres",
     "machines.processing": "Feldolgoz",
     "machines.finished": "Befejezve",
 
     // tile grid
-    "grid.name": "Pozíciórács",
+    "grid.name": "Pozíció rács",
 
     // tillable
     "tillable.name": "Megművelhető",
