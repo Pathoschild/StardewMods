@@ -10,6 +10,7 @@ your horse anywhere (even indoors or in caves/dungeons) at the press of a button
 * [Use](#use)
 * [Configure](#configure)
 * [Compatibility](#compatibility)
+* [Troubleshooting](#troubleshooting)
 * [See also](#see-also)
 
 ## Install

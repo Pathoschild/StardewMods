@@ -146,28 +146,64 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                 return;
             }
 
-            // scan for horses
+            // reset horse instances
             Farm farm = Game1.getFarm();
-            bool anyFound = false;
+            bool anyChanged = false;
             foreach (Stable stable in farm.buildings.OfType<Stable>())
             {
-                // get horse
-                Horse horse = stable.getStableHorse();
-                if (horse == null || this.IsTractor(horse))
-                    continue;
-                anyFound = true;
+                bool curChanged = false;
 
-                // update name & ownership
-                if (horse.Name?.Length == 0)
-                    this.Monitor.Log("Skipped horse with no name or owner.", LogLevel.Info);
-                else
+                // fetch info
+                Horse horse = stable.getStableHorse();
+                bool isTractor = this.IsTractor(horse);
+                bool hadName = !string.IsNullOrEmpty(horse?.Name);
+
+                // fix stable
+                if (stable.owner.Value != 0)
                 {
-                    this.Monitor.Log($"Reset horse with name '{horse.Name}'. The next player who interacts with it will become the owner.", LogLevel.Info);
-                    horse.Name = "";
+                    stable.owner.Value = 0;
+                    curChanged = true;
+                }
+
+                // fix horse
+                if (horse != null)
+                {
+                    if (horse.ownerId.Value != 0)
+                    {
+                        horse.ownerId.Value = 0;
+                        curChanged = true;
+                    }
+
+                    if (!isTractor && hadName)
+                    {
+                        horse.Name = "";
+                        curChanged = true;
+                    }
+                }
+
+                // log
+                if (curChanged)
+                {
+                    string message = isTractor
+                        ? $"Reset tractor {(hadName ? $"'{horse.Name}'" : "with no name")}."
+                        : $"Reset horse '{(hadName ? $"'{horse.Name}'" : "with no name")}'. The next player who interacts with it will become the owner.";
+                    this.Monitor.Log(message, LogLevel.Info);
+                }
+                anyChanged |= curChanged;
+            }
+
+            // reset player horse names
+            foreach (Farmer farmer in Game1.getAllFarmers())
+            {
+                if (!string.IsNullOrEmpty(farmer.horseName.Value))
+                {
+                    farmer.horseName.Value = null;
+                    anyChanged = true;
+                    this.Monitor.Log($"Reset horse link for player '{farmer.Name}'.", LogLevel.Info);
                 }
             }
 
-            this.Monitor.Log(anyFound ? "Done!" : "No horses found to reset.", LogLevel.Info);
+            this.Monitor.Log(anyChanged ? "Done!" : "No horses found to reset.", LogLevel.Info);
         }
 
         /// <summary>Update the mod configuration.</summary>
