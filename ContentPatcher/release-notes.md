@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added support for changing `EditData` fields using `TextOperations` like append or prepend.
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed when there's no debug overlay open.
 

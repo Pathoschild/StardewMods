@@ -331,7 +331,7 @@ field      | purpose
 `Fields`   | The individual fields you want to change for existing entries. This field supports [tokens](#advanced) in field keys and values. The key for each field is the field index (starting at zero) for a slash-delimited string, or the field name for an object.
 `Entries`  | The entries in the data file you want to add, replace, or delete. If you only want to change a few fields, use `Fields` instead for best compatibility with other mods. To add an entry, just specify a key that doesn't exist; to delete an entry, set the value to `null` (like `"some key": null`). This field supports [tokens](#advanced) in entry keys and values.<br />**Caution:** some XNB files have extra fields at the end for translations; when adding or replacing an entry for all locales, make sure you include the extra fields to avoid errors for non-English players.
 `MoveEntries` | Change the entry order in a list asset like `Data/MoviesReactions`. (Using this with a non-list asset will cause an error, since those have no order.)
-`TextOperations` | Change the value of an existing string entry; see _[text operations](#text-operations)_ for more info. The path format is `["Entries", "key"]`, where `"key"` should be replaced with the entry key you'd specify via `Entries`.
+`TextOperations` | <p>Change the value of an existing string entry or field; see _[text operations](#text-operations)_ for more info.</p><p>To change an entry, use the format `["Entries", "entry key"]` and replace `"entry key"` with the key you'd specify for `Entries` above. If the entry doesn't exist, it'll be created and the text operation will be applied as if it was an empty string.</p><p>To change a field, use the format `["Entries", "entry key", "field key"]` and replace `"entry key"` and `"field key"` with the keys you'd specify for `Fields` above. If the entry doesn't exist, the operation will fail with an error message. If the field doesn't exist, it'll be created if the entry is an object, or fail with an error if the entry is a delimited string. Currently you can only target top-level fields.</p>
 
 Required fields: at least one of `Fields`, `Entries`, `MoveEntries`, or `TextOperations`.
 
@@ -1137,31 +1137,32 @@ can't precalculate the result ahead of time).
 <dt>Example:</dt>
 <dd>
 
-First, here's an example of setting a map warp **_without_** text operations. This overwrites any
-previous warps, so only the new warp remains:
+First, here's an example of adding a universally-loved gift **_without_** text operations. This
+overwrites any previous value, which will break compatibility with other mods (or future game
+updates) which add gift tastes:
 
 ```js
 {
-   "Action": "EditMap",
-   "Target": "Maps/Town",
-   "MapProperties": {
-      "Warp": "8 12 Farm 34 6" // replaces current value (any other warps removed)
+   "Action": "EditData",
+   "Target": "Data/NPCGiftTastes",
+   "Entries": {
+      "Universal_Love": "74 446 797 373 279 127 128" // replaces current value
    }
 }
 ```
 
-Here's the same example, but appending to any current warps using a text operation instead:
+Here's the same example, but appending to the existing entry using a text operation instead:
 
 ```js
 {
-   "Action": "EditMap",
-   "Target": "Maps/Town",
+   "Action": "EditData",
+   "Target": "Data/NPCGiftTastes",
    "TextOperations": [
       {
          "Operation": "Append",
-         "Target": ["MapProperties", "Warp"],
-         "Value": "8 12 Farm 34 6",
-         "Delimiter": " " // if there are already warps, add a space between them and the new one
+         "Target": ["Entries", "Universal_Love"],
+         "Value": "127 128",
+         "Delimiter": " " // if there are already values, add a space between them and the new ones
       }
    ]
 }
