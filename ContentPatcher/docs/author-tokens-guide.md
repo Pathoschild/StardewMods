@@ -283,6 +283,17 @@ on the wiki for valid quest IDs.
 <td><a href="#HasActiveQuest">#</a></td>
 </tr>
 
+<tr valign="top" id="HasCaughtFish">
+<td>HasCaughtFish</td>
+<td>
+
+The fish IDs caught by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
+
+</td>
+<td><a href="#HasCaughtFish">#</a></td>
+</tr>
+
 <tr valign="top" id="HasConversationTopic">
 <td>HasConversationTopic</td>
 <td>

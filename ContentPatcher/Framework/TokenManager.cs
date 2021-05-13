@@ -178,6 +178,7 @@ namespace ContentPatcher.Framework
             // player
             yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => player.DailyLuck.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, this.GetCaughtFish, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
@@ -245,6 +246,14 @@ namespace ContentPatcher.Framework
             return Enum.IsDefined(typeof(TEnum), value)
                 ? (TEnum)(object)value
                 : defaultValue;
+        }
+
+        /// <summary>Get the fish IDs caught by the the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetCaughtFish(Farmer player)
+        {
+            foreach (int key in player.fishCaught.Keys)
+                yield return key.ToString();
         }
 
         /// <summary>Get the event IDs seen by the player.</summary>

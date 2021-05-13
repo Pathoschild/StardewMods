@@ -35,6 +35,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An active quest in the player's quest log.</summary>
         HasActiveQuest,
 
+        /// <summary>The fish IDs caught by the player.</summary>
+        HasCaughtFish,
+
         /// <summary>A conversation topic ID set for the player.</summary>
         HasConversationTopic,
 
