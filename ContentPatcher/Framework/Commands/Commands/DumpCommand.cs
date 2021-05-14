@@ -2,9 +2,9 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Common.Utilities;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Patches;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Commands.Commands

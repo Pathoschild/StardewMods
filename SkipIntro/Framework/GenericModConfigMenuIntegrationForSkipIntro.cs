@@ -1,5 +1,5 @@
 using System;
-using Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.SkipIntro.Framework

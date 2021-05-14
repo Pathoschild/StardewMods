@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.TractorMod.Framework.ModAttachments;
 using StardewModdingAPI;
 

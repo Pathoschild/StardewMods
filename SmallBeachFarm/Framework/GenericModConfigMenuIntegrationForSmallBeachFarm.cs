@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Integrations.GenericModConfigMenu;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using StardewModdingAPI;
 
