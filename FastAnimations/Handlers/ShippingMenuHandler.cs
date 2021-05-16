@@ -26,6 +26,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             : base(multiplier)
         {
             this.Reflection = reflection;
+            this.NeedsUnvalidatedUpdateTick = true;
         }
 
         /// <summary>Get whether the animation is currently active.</summary>
@@ -34,7 +35,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         {
             return
                 Game1.activeClickableMenu is ShippingMenu shippingMenu
-                && this.GetIsTransitionField(shippingMenu).GetValue();
+                && !this.GetIsTransitionField(shippingMenu).GetValue();
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>
