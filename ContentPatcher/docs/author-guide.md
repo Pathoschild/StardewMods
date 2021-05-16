@@ -1511,17 +1511,16 @@ you have multiple content packs, each one is applied in the order they're loaded
 need to explicitly patch after another content pack, see [manifest dependencies](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Dependencies).
 
 ### Known limitations
-* Dialogue is set when the day starts, so setting a [custom update rate](#update-rate) won't affect
-  dialogue after the day starts. (You can use [location-specific dialogue keys](https://stardewvalleywiki.com/Modding:Dialogue#Location_dialogue)
-  to circumvent that though.)
-* Some game assets have special logic. This isn't specific to Content Patcher, but they're
-  documented here for convenience.
+Some game assets have special logic. This isn't specific to Content Patcher, but they're documented
+here for convenience.
 
-  asset | notes
-  ----- | -----
-  `Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
-  `Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
-  `Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
+asset | notes
+----- | -----
+`Characters/Dialogue/*` | Dialogue is set when the day starts, so setting a [custom update rate](#update-rate) won't affect dialogue after the day starts. (You can use [location-specific dialogue keys](https://stardewvalleywiki.com/Modding:Dialogue#Location_dialogue) to circumvent that though.)
+`Characters/Farmer/accessories` | The number of accessories is hardcoded, so custom accessories need to replace an existing one.
+`Characters/Farmer/skinColors` | The number of skin colors is hardcoded, so custom colors need to replace an existing one.
+`Data/SpecialOrders` | The game caches a copy of this asset _before_ the game saves, and loads a separate copy the first time you open the special orders board for the session. Be very careful adding/removing special orders conditionally, which may cause a crash when the player tries to accepts a special order from the new list which doesn't exist in the cached one.
+`Maps/*` | See [Modding:Maps#Potential issues](https://stardewvalleywiki.com/Modding:Maps#Potential_issues) on the wiki.
 
 ## Configure
 Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can
