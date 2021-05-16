@@ -79,7 +79,7 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // parse arguments
             bool showFull = false;
-            var forModIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var forModIds = new InvariantHashSet();
             foreach (string arg in args)
             {
                 // flags
@@ -251,16 +251,16 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 from IToken token in tokenContext.GetTokens(enforceContext: false)
                                 where token.Scope != null
 
-                                    // get input arguments
-                                    let validInputs = token.IsReady && token.RequiresInput
-                                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
-                                                : new ITokenString[] { null }
+                                // get input arguments
+                                let validInputs = token.IsReady && token.RequiresInput
+                                    ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
+                                    : new ITokenString[] { null }
                                 from ITokenString input in validInputs
 
                                 where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
 
-                                    // select display data
-                                    let result = new
+                                // select display data
+                                let result = new
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
                                     Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
