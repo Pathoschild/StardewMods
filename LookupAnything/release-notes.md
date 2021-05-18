@@ -5,6 +5,7 @@
 * Improved the drop list in monster lookups:
   * Fixed issue where an item has multiple chances to drop and every chance was marked guaranteed if any of them was.
   * Fixed issue where a guaranteed drop that's not in the monster's list of possible drops wasn't listed.
+* Fixed some items with duplicate names (like the many `Shirt` items) not shown in the search UI.
 
 ## 1.34.1
 Released 17 April 2021.
