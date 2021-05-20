@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public CoopIncubatorMachine(SObject machine, GameLocation location, Vector2 tile)
             : base(machine, location, tile)
         {
-            int minutesUntilReady = Game1.player.professions.Contains(Farmer.butcher) ? 9000 : 18000; // coopmaster
+            int minutesUntilReady = this.GetOwner().professions.Contains(Farmer.butcher) ? 9000 : 18000; // coopmaster
             this.Recipes = new IRecipe[]
             {
                 // egg (except ostrich) => chicken

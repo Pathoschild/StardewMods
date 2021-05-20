@@ -1,12 +1,29 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
+using StardewValley.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
-    /// <summary>A generic machine instance.</summary>
+    /// <summary>A generic machine instance for an object.</summary>
     internal abstract class GenericObjectMachine<TMachine> : BaseMachine<TMachine> where TMachine : SObject
     {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The cached player list used by <see cref="GetOwner"/>, including offline players.</summary>
+        private readonly Cached<IDictionary<long, Farmer>> Players = new(
+            getCacheKey: () => Game1.timeOfDay.ToString(), // update on in-game clock change if needed
+            fetchNew: () => Game1
+                .getAllFarmhands()
+                .GroupBy(p => p.UniqueMultiplayerID)
+                .ToDictionary(p => p.Key, p => p.First())
+        );
+
+
         /*********
         ** Public methods
         *********/
@@ -78,6 +95,16 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             input = null;
             return false;
+        }
+
+        /// <summary>Get the player who 'owns' the machine.</summary>
+        /// <remarks>The vanilla game tracks the player who placed a machine using the <see cref="SObject.owner"/> field. For vanilla machines that only affects crab pots (see <see cref="CrabPot.performObjectDropInAction"/> and <see cref="CrabPot.DayUpdate"/>). Since <see cref="Object.getOne"/> doesn't copy the owner field, this isn't set correctly for most machine types and will default to the main player.</remarks>
+        protected Farmer GetOwner()
+        {
+            long ownerId = this.Machine.owner.Value;
+            return ownerId != 0 && this.Players.Value.TryGetValue(ownerId, out Farmer owner)
+                ? owner
+                : Game1.player;
         }
     }
 }

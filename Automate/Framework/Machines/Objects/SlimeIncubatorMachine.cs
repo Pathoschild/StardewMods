@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public SlimeIncubatorMachine(SObject machine, GameLocation location, Vector2 tile)
             : base(machine, location, tile)
         {
-            int minutesUntilReady = Game1.player.professions.Contains(2) ? 2000 : 4000;
+            int minutesUntilReady = this.GetOwner().professions.Contains(Farmer.butcher) ? 2000 : 4000; // coopmaster
             this.Recipes = new IRecipe[] {
                 new Recipe(
                     input: p =>

@@ -6,7 +6,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A fish pond that accepts input and provides output.</summary>
     /// <remarks>Derived from <see cref="FishPond.doAction"/>.</remarks>
-    internal class FishPondMachine : BaseMachine<FishPond>
+    internal class FishPondMachine : BaseMachineForBuilding<FishPond>
     {
         /*********
         ** Public methods
@@ -57,7 +57,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             int addedExperience = item is SObject obj
                 ? (int)(obj.sellToStorePrice() * (double)FishPond.HARVEST_OUTPUT_EXP_MULTIPLIER)
                 : 0;
-            Game1.player.gainExperience(Farmer.fishingSkill, addedExperience + FishPond.HARVEST_BASE_EXP);
+
+            this.GetOwner().gainExperience(Farmer.fishingSkill, addedExperience + FishPond.HARVEST_BASE_EXP);
 
         }
     }
