@@ -252,8 +252,9 @@ namespace ContentPatcher.Framework
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetCaughtFish(Farmer player)
         {
-            foreach (int key in player.fishCaught.Keys)
-                yield return key.ToString();
+            return player.fishCaught.Keys
+                .OrderBy(p => p)
+                .Select(id => id.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>Get the event IDs seen by the player.</summary>
@@ -262,7 +263,7 @@ namespace ContentPatcher.Framework
         {
             return player.eventsSeen
                 .OrderBy(p => p)
-                .Select(p => p.ToString(CultureInfo.InvariantCulture));
+                .Select(id => id.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
@@ -270,25 +271,24 @@ namespace ContentPatcher.Framework
         /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
         private IEnumerable<string> GetFlags(Farmer player)
         {
-            // mail flags
-            foreach (string flag in player.mailReceived.Union(player.mailForTomorrow).Union(player.mailbox))
-                yield return flag;
-
-            // world state flags
-            foreach (string flag in Game1.worldStateIDs)
-                yield return flag;
+            return player
+                .mailReceived
+                .Union(player.mailForTomorrow)
+                .Union(player.mailbox)
+                .Concat(Game1.worldStateIDs)
+                .OrderByHuman();
         }
 
         /// <summary>Get the professions for the player.</summary>
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetProfessions(Farmer player)
         {
-            foreach (int professionID in player.professions)
-            {
-                yield return Enum.IsDefined(typeof(Profession), professionID)
-                    ? ((Profession)professionID).ToString()
-                    : professionID.ToString();
-            }
+            return player.professions
+                .Select(id => Enum.IsDefined(typeof(Profession), id)
+                    ? ((Profession)id).ToString()
+                    : id.ToString()
+                )
+                .OrderByHuman();
         }
 
         /// <summary>Get the wallet items for the current player.</summary>
@@ -298,26 +298,26 @@ namespace ContentPatcher.Framework
             if (player == null)
                 yield break;
 
-            if (player.canUnderstandDwarves)
-                yield return WalletItem.DwarvishTranslationGuide.ToString();
-            if (player.hasRustyKey)
-                yield return WalletItem.RustyKey.ToString();
-            if (player.hasClubCard)
-                yield return WalletItem.ClubCard.ToString();
-            if (player.HasTownKey)
-                yield return WalletItem.KeyToTheTown.ToString();
-            if (player.hasSpecialCharm)
-                yield return WalletItem.SpecialCharm.ToString();
-            if (player.hasSkullKey)
-                yield return WalletItem.SkullKey.ToString();
-            if (player.hasMagnifyingGlass)
-                yield return WalletItem.MagnifyingGlass.ToString();
-            if (player.hasDarkTalisman)
-                yield return WalletItem.DarkTalisman.ToString();
-            if (player.hasMagicInk)
-                yield return WalletItem.MagicInk.ToString();
             if (player.eventsSeen.Contains(2120303))
                 yield return WalletItem.BearsKnowledge.ToString();
+            if (player.hasClubCard)
+                yield return WalletItem.ClubCard.ToString();
+            if (player.hasDarkTalisman)
+                yield return WalletItem.DarkTalisman.ToString();
+            if (player.canUnderstandDwarves)
+                yield return WalletItem.DwarvishTranslationGuide.ToString();
+            if (player.HasTownKey)
+                yield return WalletItem.KeyToTheTown.ToString();
+            if (player.hasMagicInk)
+                yield return WalletItem.MagicInk.ToString();
+            if (player.hasMagnifyingGlass)
+                yield return WalletItem.MagnifyingGlass.ToString();
+            if (player.hasRustyKey)
+                yield return WalletItem.RustyKey.ToString();
+            if (player.hasSkullKey)
+                yield return WalletItem.SkullKey.ToString();
+            if (player.hasSpecialCharm)
+                yield return WalletItem.SpecialCharm.ToString();
             if (player.eventsSeen.Contains(3910979))
                 yield return WalletItem.SpringOnionMastery.ToString();
         }
@@ -369,12 +369,9 @@ namespace ContentPatcher.Framework
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetActiveQuests(Farmer player)
         {
-            return (
-                from quest in player.questLog
-                let id = quest.id.Value
-                orderby id
-                select id.ToString(CultureInfo.InvariantCulture)
-            );
+            return player.questLog
+                .OrderBy(quest => quest.id.Value)
+                .Select(quest => quest.id.Value.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

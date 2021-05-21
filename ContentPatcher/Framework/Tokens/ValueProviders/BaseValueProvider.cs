@@ -296,7 +296,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="values">The underlying values to check.</param>
         /// <param name="action">The action to perform.</param>
-        protected bool IsChanged<T>(HashSet<T> values, Action action)
+        protected bool IsChanged<T>(ISet<T> values, Action action)
         {
             return this.IsChanged(() =>
             {
@@ -357,7 +357,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="oldValues">The old values to check.</param>
         /// <param name="newValues">The new values to check.</param>
-        protected bool IsChanged<T>(HashSet<T> oldValues, HashSet<T> newValues)
+        protected bool IsChanged<T>(ISet<T> oldValues, ISet<T> newValues)
         {
             return newValues.Count != oldValues.Count || newValues.Any(p => !oldValues.Contains(p));
         }

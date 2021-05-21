@@ -17,6 +17,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed when there's no debug overlay open.
 
+**Update note for SMAPI mod authors:**  
+If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values
+they return will affect upcoming features like `valueAt`. See the [updated
+docs](docs/extensibility.md#Concepts) for details.
+
 ## 1.22
 Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).
 

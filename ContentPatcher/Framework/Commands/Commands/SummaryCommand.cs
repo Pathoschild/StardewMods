@@ -174,7 +174,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty).OrderByHuman()));
+                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty)));
                     }
 
                     output.AppendLine();

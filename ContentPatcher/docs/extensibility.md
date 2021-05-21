@@ -59,7 +59,7 @@ To access the API:
 
 ## Basic API
 ### Concepts
-The basic API handles most of the design considerations for you. There's just one thing to keep in
+The basic API handles most of the design considerations for you. There's just two things to keep in
 mind:
 
 <dl>
@@ -70,6 +70,15 @@ Content Patcher will call your code to get the values each time it updates token
 before a save is loaded, while it's still loading, and after it's loaded. You can return null or an
 empty list if your token isn't ready yet. See the example under _[add a token](#add-a-token)_ which
 handles all three cases.
+
+</dd>
+
+<dt>Value order</dt>
+<dd>
+
+The order you return values will affect upcoming features like `valueAt`. You should use the order
+which makes most sense for your token, since content pack authors can't change it. For most tokens,
+alphanumeric order is fine (e.g. `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`).
 
 </dd>
 </dl>
@@ -137,7 +146,7 @@ When registering a token through the advanced API, here are some design consider
 problems.
 
 <dl>
-<dt>Scope</dt>
+<dt>Scope and value order</dt>
 <dd>
 
 See [_Basic API: concepts_](#concepts) above.

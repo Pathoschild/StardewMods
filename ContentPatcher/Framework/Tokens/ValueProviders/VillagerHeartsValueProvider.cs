@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -14,7 +15,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The relationships by NPC.</summary>
-        private readonly InvariantDictionary<string> Values = new InvariantDictionary<string>();
+        private readonly SortedDictionary<string, string> Values = new(HumanSortComparer.DefaultIgnoreCase);
 
 
         /*********
@@ -62,14 +63,12 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (input.HasPositionalArgs)
             {
-                if (this.Values.TryGetValue(input.GetFirstPositionalArg(), out string value))
-                    yield return value;
+                return this.Values.TryGetValue(input.GetFirstPositionalArg(), out string value)
+                    ? new[] { value }
+                    : Enumerable.Empty<string>();
             }
             else
-            {
-                foreach (var pair in this.Values)
-                    yield return $"{pair.Key}:{pair.Value}";
-            }
+                return this.Values.Select(pair => $"{pair.Key}:{pair.Value}");
         }
     }
 }

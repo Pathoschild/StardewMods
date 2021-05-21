@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<bool> IsPlayerDataAvailable;
 
         /// <summary>The names and genders of NPCs/players having children.</summary>
-        private readonly InvariantHashSet PartnersHavingChild = new InvariantHashSet();
+        private readonly SortedSet<string> PartnersHavingChild = new(HumanSortComparer.DefaultIgnoreCase);
 
         /// <summary>Whether to only include pregnant NPCs.</summary>
         private readonly bool PregnancyOnly;

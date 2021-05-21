@@ -72,13 +72,15 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (input.HasPositionalArgs)
             {
-                if (this.TryParseEnum(input.GetFirstPositionalArg(), out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level))
-                    yield return level.ToString();
+                return this.TryParseEnum(input.GetFirstPositionalArg(), out Skill skill) && this.SkillLevels.TryGetValue(skill, out int level)
+                    ? new[] { level.ToString() }
+                    : Enumerable.Empty<string>();
             }
             else
             {
-                foreach (var pair in this.SkillLevels)
-                    yield return $"{pair.Key}:{pair.Value}";
+                return this.SkillLevels
+                    .Select(pair => $"{pair.Key}:{pair.Value}")
+                    .OrderByHuman();
             }
         }
     }

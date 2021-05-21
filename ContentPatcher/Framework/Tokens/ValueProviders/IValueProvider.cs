@@ -63,7 +63,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="value">The raw value.</param>
         string NormalizeValue(string value);
 
-        /// <summary>Get the current values.</summary>
+        /// <summary>Get the current values in the expected sort order for indexing.</summary>
         /// <param name="input">The input arguments.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         IEnumerable<string> GetValues(IInputArguments input);
