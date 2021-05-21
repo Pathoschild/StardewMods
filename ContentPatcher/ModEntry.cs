@@ -224,14 +224,13 @@ namespace ContentPatcher
             InvariantHashSet installedMods = new InvariantHashSet(
                 (contentPacks.Select(p => p.Manifest.UniqueID))
                 .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderByIgnoreCase(p => p)
+                .OrderByHuman()
             );
 
             // log custom tokens
             {
                 var tokensByMod = (
-                    from token in this.QueuedModTokens
-                    orderby token.Name
+                    from token in this.QueuedModTokens.OrderByHuman(p => p.Name)
                     group token by token.Mod into modGroup
                     select new { ModName = modGroup.Key.Name, ModPrefix = modGroup.First().NamePrefix, TokenNames = modGroup.Select(p => p.NameWithoutPrefix).ToArray() }
                 );

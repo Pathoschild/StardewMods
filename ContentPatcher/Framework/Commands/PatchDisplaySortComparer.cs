@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI.Utilities;
 
 namespace ContentPatcher.Framework.Commands
@@ -16,7 +16,7 @@ namespace ContentPatcher.Framework.Commands
         public int Compare(PatchInfo left, PatchInfo right)
         {
             // equivalent
-            if (object.ReferenceEquals(left, right) || left?.Path == null || right?.Path == null || string.Equals(left.Path.ToString(), right.Path.ToString()))
+            if (object.ReferenceEquals(left, right) || left?.Path == null || right?.Path == null)
                 return 0;
 
             // sort by path segments
@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Commands
             string[] rightParts = this.GetComparablePathSegments(right);
             for (int i = 0; i < leftParts.Length && i < rightParts.Length; i++)
             {
-                int sort = string.Compare(leftParts[i], rightParts[i], StringComparison.OrdinalIgnoreCase);
+                int sort = this.CompareHuman(leftParts[i], rightParts[i]);
                 if (sort != 0)
                     return sort;
             }
@@ -52,6 +52,14 @@ namespace ContentPatcher.Framework.Commands
             }
 
             return path.Segments;
+        }
+
+        /// <summary>Compare two string values using <see cref="HumanSortComparer.DefaultIgnoreCase"/>.</summary>
+        /// <param name="left">The first string to compare.</param>
+        /// <param name="right">The second string to compare.</param>
+        private int CompareHuman(string left, string right)
+        {
+            return HumanSortComparer.DefaultIgnoreCase.Compare(left, right);
         }
     }
 }

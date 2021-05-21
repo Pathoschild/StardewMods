@@ -48,7 +48,7 @@ namespace ContentPatcher.Framework
             : base(events, inputHelper, reflection)
         {
             this.Content = contentHelper;
-            this.TextureNames = this.GetTextureNames(contentHelper).OrderByIgnoreCase(p => p).ToArray();
+            this.TextureNames = this.GetTextureNames(contentHelper).OrderByHuman().ToArray();
             this.NextTexture();
         }
 

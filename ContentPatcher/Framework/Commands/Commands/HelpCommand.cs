@@ -56,7 +56,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                     + "intended for troubleshooting and aren't intended for players. You use it by specifying a more "
                     + "specific command (like 'help' in 'patch help'). Here are the available commands:\n\n"
                 );
-                foreach (var entry in commands.OrderByIgnoreCase(p => p.Key))
+                foreach (var entry in commands.OrderByHuman(p => p.Key))
                 {
                     help.AppendLine(entry.Value.Description);
                     help.AppendLine();

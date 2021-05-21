@@ -113,7 +113,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                             {
                                 string raw = input.TokenString.Raw;
                                 string parsed = input.TokenString.Value;
-                                error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
+                                error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByHuman())}'";
                                 return false;
                             }
                         }
@@ -134,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                         string invalidKey = (from arg in input.NamedArgs where !this.ValidNamedArguments.Contains(arg.Key) select arg.Key).FirstOrDefault();
                         if (invalidKey != null)
                         {
-                            error = $"invalid named argument '{invalidKey}' for {this.Name} token, expected any of '{string.Join("', '", this.ValidNamedArguments.OrderByIgnoreCase(p => p))}'";
+                            error = $"invalid named argument '{invalidKey}' for {this.Name} token, expected any of '{string.Join("', '", this.ValidNamedArguments.OrderByHuman())}'";
                             return false;
                         }
                     }

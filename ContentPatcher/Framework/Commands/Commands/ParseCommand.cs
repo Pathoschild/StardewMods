@@ -106,7 +106,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
             output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
             if (tokenStr.HasAnyTokens)
-                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
+                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderByHuman())}");
             output.AppendLine();
 
             output.AppendLine("Diagnostic state");

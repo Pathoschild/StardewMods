@@ -62,7 +62,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                         StringBuilder str = new();
                         str.AppendLine("Here are the active patches grouped by their current target value. Within each group, patches are listed in the expected apply order and the checkbox indicates whether each patch is currently applied. See `patch summary` for more info about each patch, including reasons it may not be applied.");
 
-                        foreach (var group in patchManager.GetPatchesByTarget().OrderBy(p => p.Key, HumanSortComparer.DefaultIgnoreCase))
+                        foreach (var group in patchManager.GetPatchesByTarget().OrderByHuman(p => p.Key))
                         {
                             str.AppendLine();
                             str.AppendLine(group.Key);

@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added support for changing `EditData` fields using `TextOperations` like append or prepend.
 * Added new tokens:
   * [`HasCaughtFish`](docs/author-tokens-guide.md#HasCaughtFish) to check fish caught by a player.
+* Improved sort order used in token values, patch commands, and error messages.
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed when there's no debug overlay open.
 
