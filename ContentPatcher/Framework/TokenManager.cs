@@ -39,6 +39,9 @@ namespace ContentPatcher.Framework
         /*********
         ** Accessors
         *********/
+        /// <inheritdoc />
+        public int UpdateTick { get; private set; }
+
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
@@ -60,7 +63,7 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens, IReflectionHelper reflection)
         {
             this.InstalledMods = installedMods;
-            this.GlobalContext = new GenericTokenContext(this.IsModInstalled);
+            this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
             this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
@@ -103,6 +106,8 @@ namespace ContentPatcher.Framework
         /// <param name="changedGlobalTokens">The global tokens which changed value.</param>
         public void UpdateContext(out InvariantHashSet changedGlobalTokens)
         {
+            this.UpdateTick++;
+
             // update global tokens
             changedGlobalTokens = new InvariantHashSet();
             foreach (IToken token in this.GlobalContext.Tokens.Values)

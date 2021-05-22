@@ -14,22 +14,30 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether a mod is installed.</summary>
         private readonly Func<string, bool> IsModInstalledImpl;
 
+        /// <summary>Get the value for the <see cref="UpdateTick"/> field.</summary>
+        private readonly Func<int> GetUpdateTick;
+
 
         /*********
         ** Accessors
         *********/
         /// <summary>The available tokens.</summary>
-        public InvariantDictionary<IToken> Tokens { get; } = new InvariantDictionary<IToken>();
+        public InvariantDictionary<IToken> Tokens { get; } = new();
+
+        /// <inheritdoc />
+        public int UpdateTick => this.GetUpdateTick();
 
 
         /*********
-        ** Accessors
+        ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="isModInstalled">Get whether a mod is installed.</param>
-        public GenericTokenContext(Func<string, bool> isModInstalled)
+        /// <param name="getUpdateTick">Get the value for the <see cref="IContext.UpdateTick"/> field.</param>
+        public GenericTokenContext(Func<string, bool> isModInstalled, Func<int> getUpdateTick)
         {
             this.IsModInstalledImpl = isModInstalled;
+            this.GetUpdateTick = getUpdateTick;
         }
 
         /// <inheritdoc />
