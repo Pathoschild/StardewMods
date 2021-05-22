@@ -673,6 +673,17 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <th>&nbsp;</th>
 </tr>
 
+<tr valign="top" id="Count">
+<td>Count</td>
+<td>
+
+Get the number of values currently contained by a token. For example, `{{Count:{{HasActiveQuest}}}}`
+is the number of currently active quests.
+
+</td>
+<td><a href="#Count">#</a></td>
+</tr>
+
 <tr valign="top" id="Query">
 <td>Query</td>
 <td>

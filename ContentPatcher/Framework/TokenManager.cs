@@ -212,6 +212,7 @@ namespace ContentPatcher.Framework
             yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
 
             // number manipulation
+            yield return new CountValueProvider();
             yield return new QueryValueProvider();
             yield return new RandomValueProvider();
             yield return new RangeValueProvider();

@@ -22,6 +22,7 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 23, 0))
         {
             this.AddedTokens.AddMany(
+                ConditionType.Count.ToString(),
                 ConditionType.HasCaughtFish.ToString()
             );
         }

@@ -134,6 +134,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Number manipulation
         ****/
+        /// <summary>The number of values contained in the input.</summary>
+        Count,
+
         /// <summary>A dynamic query expression.</summary>
         Query,
 
