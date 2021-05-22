@@ -76,8 +76,8 @@ handles all three cases.
 <dt>Value order</dt>
 <dd>
 
-The order you return values will affect upcoming features like `valueAt`. You should use the order
-which makes most sense for your token, since content pack authors can't change it. For most tokens,
+The order you return values affects features like `valueAt`. You should use the order which makes
+most sense for your token, since content pack authors can't change it. For most tokens,
 alphanumeric order is fine (e.g. `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`).
 
 </dd>

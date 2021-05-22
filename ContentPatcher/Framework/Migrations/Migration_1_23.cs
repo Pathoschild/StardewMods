@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
+using ContentPatcher.Framework.Lexing.LexTokens;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -43,6 +45,26 @@ namespace ContentPatcher.Framework.Migrations
                             return false;
                         }
                     }
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryMigrate(ref ILexToken lexToken, out string error)
+        {
+            if (!base.TryMigrate(ref lexToken, out error))
+                return false;
+
+            // 1.23 adds 'valueAt' input argument
+            if (lexToken is LexTokenToken token && token.HasInputArgs())
+            {
+                string inputStr = token.InputArgs.ToString();
+                if (inputStr.ContainsIgnoreCase("valueAt") && Regex.IsMatch(inputStr, @"\|\s*valueAt\s*="))
+                {
+                    error = this.GetNounPhraseError("using the 'valueAt' argument");
+                    return false;
                 }
             }
 

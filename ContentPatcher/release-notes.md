@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Added support for changing `EditData` fields using `TextOperations` like append or prepend.
+* Added [`valueAt`](docs/author-tokens-guide.md#valueat) to get one value from a list token.
 * Added new tokens:
   * [`HasCaughtFish`](docs/author-tokens-guide.md#HasCaughtFish) to check fish caught by a player.
 * Improved sort order used in token values, patch commands, and error messages.
@@ -19,8 +20,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 **Update note for SMAPI mod authors:**  
 If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values
-they return will affect upcoming features like `valueAt`. See the [updated
-docs](docs/extensibility.md#Concepts) for details.
+they return affects new features like `valueAt`. See the [updated docs](docs/extensibility.md#Concepts)
+for details.
 
 ## 1.22
 Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).

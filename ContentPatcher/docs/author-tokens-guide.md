@@ -20,7 +20,8 @@ This document lists the tokens available in Content Patcher packs.
   * [Metadata](#metadata)
   * [Field references](#field-references)
 * [Global input arguments](#global-input-arguments)
-  * [Token search](#token-search)
+  * [`contains`](#contains)
+  * [`valueAt`](#valueat)
   * [Custom input value separator](#custom-input-value-separator)
 * [Player config](#player-config)
 * [Randomization](#randomization)
@@ -998,11 +999,13 @@ token               | part returned | example
 
 ## Global input arguments
 Global [input arguments](#input-arguments) are handled by Content Patcher itself, so they work with
-all tokens (including mod-provided tokens).
+all tokens (including mod-provided tokens). If you use multiple input arguments, they're applied
+sequentially in left-to-right order.
 
-### Token search
-The `contains` argument returns `true` or `false` depending on whether the token contains any of
-the given values. This is mainly useful for logic in [conditions](#conditions):
+### `contains`
+The `contains` argument lets you search a token's values. It returns `true` or `false` depending on
+whether the token contains any of the given values. This is mainly useful for logic in
+[conditions](#conditions):
 
 ```js
 // player has blacksmith OR gemologist
@@ -1045,6 +1048,36 @@ You can specify multiple values, in which case it returns whether _any_ of them 
 }
 ```
 
+### `valueAt`
+The `valueAt` argument gets one value from a token at the given position (starting at zero for the
+first value). If the index is outside the list, this returns an empty list.
+
+This depends on the token's order, which you can check with the [`patch summary` console
+command](author-guide.md#patch-summary). Most built-in tokens use a 'human' sort order, which sorts
+by sequences of numeric and non-numeric characters (i.e. values are sorted like `John1` → `John9` →
+`John10`).
+
+For example:
+
+token | value
+----- | -----
+`{{ChildNames}}` | `Angus, Bob, Carrie`
+`{{ChildNames |valueAt=0}}` | `Angus`
+`{{ChildNames |valueAt=1}}` | `Bob`
+`{{ChildNames |valueAt=2}}` | `Carrie`
+`{{ChildNames |valueAt=3}}` | _empty list_
+
+You can use a negative index to get a value starting from the _end_ of the list, where -1 is
+the last item. For example:
+
+token | value
+----- | -----
+`{{ChildNames}}` | `Angus, Bob, Carrie`
+`{{ChildNames |valueAt=-1}}` | `Carrie`
+`{{ChildNames |valueAt=-2}}` | `Bob`
+`{{ChildNames |valueAt=-3}}` | `Angus`
+`{{ChildNames |valueAt=-4}}` | _empty list_
+
 ### Custom input value separator
 By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
 input values. You can use the `inputSeparator` argument to use a different separator (which can be
@@ -1072,6 +1105,7 @@ screen or the in-game menu.
 
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
+
 Available fields for each field:
 
    field               | meaning
