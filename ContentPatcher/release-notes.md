@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added support for changing `EditData` fields using `TextOperations` like append or prepend.
 * Added [`valueAt`](docs/author-tokens-guide.md#valueat) to get one value from a list token.
 * Added new tokens:
+  * [`ChildGenders`](docs/author-tokens-guide.md#ChildGenders) and [`ChildNames`](docs/author-tokens-guide.md#ChildNames) to get the genders/names of a given player's children.
   * [`Count`](docs/author-tokens-guide.md#HasCaughtFish) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of currently active quests).
   * [`HasCaughtFish`](docs/author-tokens-guide.md#HasCaughtFish) to check fish caught by a player.
 * Improved sort order used in token values, patch commands, and error messages.

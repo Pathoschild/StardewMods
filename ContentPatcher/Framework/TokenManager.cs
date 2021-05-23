@@ -11,6 +11,8 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Locations;
 
 namespace ContentPatcher.Framework
 {
@@ -203,6 +205,8 @@ namespace ContentPatcher.Framework
             yield return new SkillLevelValueProvider(NeedsBasicInfo);
 
             // relationships
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildNames, player => this.GetChildValues(player, ConditionType.ChildNames), NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => this.GetChildValues(player, ConditionType.ChildGenders), NeedsBasicInfo);
             yield return new VillagerHeartsValueProvider();
             yield return new VillagerRelationshipValueProvider();
             yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
@@ -345,6 +349,30 @@ namespace ContentPatcher.Framework
             GameLocation town = Game1.getLocationFromName("Town");
             return this.Reflection.GetMethod(town, "checkJojaCompletePrerequisite").Invoke<bool>();
 
+        }
+
+        /// <summary>Get values for a given player's children.</summary>
+        /// <param name="player">The player whose children to get.</param>
+        /// <param name="type">The token values to get.</param>
+        private IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
+        {
+            // get home
+            FarmHouse home = Context.IsWorldReady
+                ? Game1.getLocationFromName(player.homeLocation.Value) as FarmHouse
+                : SaveGame.loaded?.locations.OfType<FarmHouse>().FirstOrDefault(p => p.Name == player.homeLocation.Value);
+            if (home == null)
+                yield break;
+
+            // get children
+            foreach (Child child in home.getChildren())
+            {
+                yield return type switch
+                {
+                    ConditionType.ChildNames => child.Name,
+                    ConditionType.ChildGenders => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString(),
+                    _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
+                };
+            }
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>

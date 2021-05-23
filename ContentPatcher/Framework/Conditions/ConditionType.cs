@@ -92,6 +92,12 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Relationships
         ****/
+        /// <summary>The names of the player's children.</summary>
+        ChildNames,
+
+        /// <summary>The genders of the player's children.</summary>
+        ChildGenders,
+
         /// <summary>The current player's number of hearts with the character.</summary>
         Hearts,
 

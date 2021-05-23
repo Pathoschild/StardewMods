@@ -516,6 +516,21 @@ and `Mining`.
 <th>&nbsp;</th>
 </tr>
 
+<tr valign="top" id="ChildNames">
+<td id="ChildGenders">ChildNames<br />ChildGenders</td>
+<td>
+
+The names and genders (`Female` or `Male`) for the current player's children (or those for the
+player specified with a [`PlayerType`](#playertype) argument).
+
+These are listed in order of birth for use with the [`valueAt` argument](#valueAt). For example,
+`{{ChildNames |valueAt=0}}` and `{{ChildGenders |valueAt=0}}` is the name and gender of the oldest
+child.
+
+</td>
+<td><a href="#ChildNames">#</a></td>
+</tr>
+
 <tr valign="top" id="Hearts">
 <td>Hearts</td>
 <td>
