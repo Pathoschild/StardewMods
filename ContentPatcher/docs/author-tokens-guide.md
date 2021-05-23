@@ -1085,24 +1085,58 @@ by sequences of numeric and non-numeric characters (i.e. values are sorted like 
 
 For example:
 
-token | value
------ | -----
-`{{ChildNames}}` | `Angus, Bob, Carrie`
-`{{ChildNames |valueAt=0}}` | `Angus`
-`{{ChildNames |valueAt=1}}` | `Bob`
-`{{ChildNames |valueAt=2}}` | `Carrie`
-`{{ChildNames |valueAt=3}}` | _empty list_
+<table>
+  <tr>
+    <th>token</th>
+    <th>value</th>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames}}</code></td>
+    <td><code>Angus, Bob, Carrie</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=0}}</code></td>
+    <td><code>Angus</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=1}}</code></td>
+    <td><code>Bob</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=2}}</code></td>
+    <td><code>Carrie</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=3}}</code></td>
+    <td><em>empty list</em></td>
+  </tr>
+</table>
 
 You can use a negative index to get a value starting from the _end_ of the list, where -1 is
 the last item. For example:
 
-token | value
------ | -----
-`{{ChildNames}}` | `Angus, Bob, Carrie`
-`{{ChildNames |valueAt=-1}}` | `Carrie`
-`{{ChildNames |valueAt=-2}}` | `Bob`
-`{{ChildNames |valueAt=-3}}` | `Angus`
-`{{ChildNames |valueAt=-4}}` | _empty list_
+<table>
+  <tr>
+    <th>token</th>
+    <th>value</th>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames}}</code></td>
+    <td><code>Angus, Bob, Carrie</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-1}}</code></td>
+    <td><code>Carrie</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-2}}</code></td>
+    <td><code>Bob</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-3}}</code></td>
+    <td><code>Angus</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-4}}</code></td>
+    <td><em>empty list</em></td>
+  </tr>
+</table>
 
 ### Custom input value separator
 By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
