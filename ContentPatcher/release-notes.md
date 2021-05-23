@@ -19,6 +19,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Improved sort order used in token values, patch commands, and error messages.
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed when there's no debug overlay open.
+* Fixed tokens which accept a [`PlayerType`](docs/author-tokens-guide.md#playertype) argument always marked as returning multiple values for input arguments.
 
 **Update note for SMAPI mod authors:**  
 If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values

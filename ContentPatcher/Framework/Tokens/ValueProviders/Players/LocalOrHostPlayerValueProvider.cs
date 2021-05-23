@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             this.IsPlayerLoaded = isPlayerLoaded;
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = player => new InvariantHashSet(values(player));
-            this.EnableInputArguments(required: false, mayReturnMultipleValues: true, maxPositionalArgs: null);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
         }
 
         /// <summary>Construct an instance.</summary>
