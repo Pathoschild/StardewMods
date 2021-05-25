@@ -11,6 +11,8 @@ using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Locations;
 
 namespace ContentPatcher.Framework
 {
@@ -39,6 +41,9 @@ namespace ContentPatcher.Framework
         /*********
         ** Accessors
         *********/
+        /// <inheritdoc />
+        public int UpdateTick { get; private set; }
+
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         public bool IsBasicInfoLoaded { get; set; }
 
@@ -60,7 +65,7 @@ namespace ContentPatcher.Framework
         public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens, IReflectionHelper reflection)
         {
             this.InstalledMods = installedMods;
-            this.GlobalContext = new GenericTokenContext(this.IsModInstalled);
+            this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
             this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
@@ -103,6 +108,8 @@ namespace ContentPatcher.Framework
         /// <param name="changedGlobalTokens">The global tokens which changed value.</param>
         public void UpdateContext(out InvariantHashSet changedGlobalTokens)
         {
+            this.UpdateTick++;
+
             // update global tokens
             changedGlobalTokens = new InvariantHashSet();
             foreach (IToken token in this.GlobalContext.Tokens.Values)
@@ -178,6 +185,7 @@ namespace ContentPatcher.Framework
             // player
             yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => player.DailyLuck.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, this.GetCaughtFish, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
@@ -197,6 +205,8 @@ namespace ContentPatcher.Framework
             yield return new SkillLevelValueProvider(NeedsBasicInfo);
 
             // relationships
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildNames, player => this.GetChildValues(player, ConditionType.ChildNames), NeedsBasicInfo);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => this.GetChildValues(player, ConditionType.ChildGenders), NeedsBasicInfo);
             yield return new VillagerHeartsValueProvider();
             yield return new VillagerRelationshipValueProvider();
             yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
@@ -211,6 +221,7 @@ namespace ContentPatcher.Framework
             yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
 
             // number manipulation
+            yield return new CountValueProvider();
             yield return new QueryValueProvider();
             yield return new RandomValueProvider();
             yield return new RangeValueProvider();
@@ -247,13 +258,22 @@ namespace ContentPatcher.Framework
                 : defaultValue;
         }
 
+        /// <summary>Get the fish IDs caught by the the player.</summary>
+        /// <param name="player">The player whose values to get.</param>
+        private IEnumerable<string> GetCaughtFish(Farmer player)
+        {
+            return player.fishCaught.Keys
+                .OrderBy(p => p)
+                .Select(id => id.ToString(CultureInfo.InvariantCulture));
+        }
+
         /// <summary>Get the event IDs seen by the player.</summary>
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetEventsSeen(Farmer player)
         {
             return player.eventsSeen
                 .OrderBy(p => p)
-                .Select(p => p.ToString(CultureInfo.InvariantCulture));
+                .Select(id => id.ToString(CultureInfo.InvariantCulture));
         }
 
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
@@ -261,25 +281,24 @@ namespace ContentPatcher.Framework
         /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
         private IEnumerable<string> GetFlags(Farmer player)
         {
-            // mail flags
-            foreach (string flag in player.mailReceived.Union(player.mailForTomorrow).Union(player.mailbox))
-                yield return flag;
-
-            // world state flags
-            foreach (string flag in Game1.worldStateIDs)
-                yield return flag;
+            return player
+                .mailReceived
+                .Union(player.mailForTomorrow)
+                .Union(player.mailbox)
+                .Concat(Game1.worldStateIDs)
+                .OrderByHuman();
         }
 
         /// <summary>Get the professions for the player.</summary>
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetProfessions(Farmer player)
         {
-            foreach (int professionID in player.professions)
-            {
-                yield return Enum.IsDefined(typeof(Profession), professionID)
-                    ? ((Profession)professionID).ToString()
-                    : professionID.ToString();
-            }
+            return player.professions
+                .Select(id => Enum.IsDefined(typeof(Profession), id)
+                    ? ((Profession)id).ToString()
+                    : id.ToString()
+                )
+                .OrderByHuman();
         }
 
         /// <summary>Get the wallet items for the current player.</summary>
@@ -289,26 +308,26 @@ namespace ContentPatcher.Framework
             if (player == null)
                 yield break;
 
-            if (player.canUnderstandDwarves)
-                yield return WalletItem.DwarvishTranslationGuide.ToString();
-            if (player.hasRustyKey)
-                yield return WalletItem.RustyKey.ToString();
-            if (player.hasClubCard)
-                yield return WalletItem.ClubCard.ToString();
-            if (player.HasTownKey)
-                yield return WalletItem.KeyToTheTown.ToString();
-            if (player.hasSpecialCharm)
-                yield return WalletItem.SpecialCharm.ToString();
-            if (player.hasSkullKey)
-                yield return WalletItem.SkullKey.ToString();
-            if (player.hasMagnifyingGlass)
-                yield return WalletItem.MagnifyingGlass.ToString();
-            if (player.hasDarkTalisman)
-                yield return WalletItem.DarkTalisman.ToString();
-            if (player.hasMagicInk)
-                yield return WalletItem.MagicInk.ToString();
             if (player.eventsSeen.Contains(2120303))
                 yield return WalletItem.BearsKnowledge.ToString();
+            if (player.hasClubCard)
+                yield return WalletItem.ClubCard.ToString();
+            if (player.hasDarkTalisman)
+                yield return WalletItem.DarkTalisman.ToString();
+            if (player.canUnderstandDwarves)
+                yield return WalletItem.DwarvishTranslationGuide.ToString();
+            if (player.HasTownKey)
+                yield return WalletItem.KeyToTheTown.ToString();
+            if (player.hasMagicInk)
+                yield return WalletItem.MagicInk.ToString();
+            if (player.hasMagnifyingGlass)
+                yield return WalletItem.MagnifyingGlass.ToString();
+            if (player.hasRustyKey)
+                yield return WalletItem.RustyKey.ToString();
+            if (player.hasSkullKey)
+                yield return WalletItem.SkullKey.ToString();
+            if (player.hasSpecialCharm)
+                yield return WalletItem.SpecialCharm.ToString();
             if (player.eventsSeen.Contains(3910979))
                 yield return WalletItem.SpringOnionMastery.ToString();
         }
@@ -330,6 +349,30 @@ namespace ContentPatcher.Framework
             GameLocation town = Game1.getLocationFromName("Town");
             return this.Reflection.GetMethod(town, "checkJojaCompletePrerequisite").Invoke<bool>();
 
+        }
+
+        /// <summary>Get values for a given player's children.</summary>
+        /// <param name="player">The player whose children to get.</param>
+        /// <param name="type">The token values to get.</param>
+        private IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
+        {
+            // get home
+            FarmHouse home = Context.IsWorldReady
+                ? Game1.getLocationFromName(player.homeLocation.Value) as FarmHouse
+                : SaveGame.loaded?.locations.OfType<FarmHouse>().FirstOrDefault(p => p.Name == player.homeLocation.Value);
+            if (home == null)
+                yield break;
+
+            // get children
+            foreach (Child child in home.getChildren())
+            {
+                yield return type switch
+                {
+                    ConditionType.ChildNames => child.Name,
+                    ConditionType.ChildGenders => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString(),
+                    _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
+                };
+            }
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
@@ -360,12 +403,9 @@ namespace ContentPatcher.Framework
         /// <param name="player">The player whose values to get.</param>
         private IEnumerable<string> GetActiveQuests(Farmer player)
         {
-            return (
-                from quest in player.questLog
-                let id = quest.id.Value
-                orderby id
-                select id.ToString(CultureInfo.InvariantCulture)
-            );
+            return player.questLog
+                .OrderBy(quest => quest.id.Value)
+                .Select(quest => quest.id.Value.ToString(CultureInfo.InvariantCulture));
         }
     }
 }

@@ -40,9 +40,9 @@ namespace ContentPatcher.Framework.Commands
 
             // state error
             if (state.InvalidTokens.Any())
-                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByIgnoreCase(p => p))}";
+                return $"invalid tokens: {string.Join(", ", state.InvalidTokens.OrderByHuman())}";
             if (state.UnreadyTokens.Any())
-                return $"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByIgnoreCase(p => p))}";
+                return $"tokens not ready: {string.Join(", ", state.UnreadyTokens.OrderByHuman())}";
             if (state.Errors.Any())
                 return string.Join("; ", state.Errors);
 
@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework.Commands
 
             // fallback to unavailable tokens (should never happen due to HasMod check)
             if (state.UnavailableModTokens.Any())
-                return $"tokens provided by an unavailable mod: {string.Join(", ", state.UnavailableModTokens.OrderByIgnoreCase(p => p))}";
+                return $"tokens provided by an unavailable mod: {string.Join(", ", state.UnavailableModTokens.OrderByHuman())}";
 
             // non-matching for an unknown reason
             if (!this.MatchesContext)

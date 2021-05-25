@@ -7,7 +7,7 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A Junimo hut machine that accepts input and provides output.</summary>
-    internal class JunimoHutMachine : BaseMachine<JunimoHut>
+    internal class JunimoHutMachine : BaseMachineForBuilding<JunimoHut>
     {
         /*********
         ** Fields

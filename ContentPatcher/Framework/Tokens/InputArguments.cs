@@ -18,6 +18,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The 'contains' argument key.</summary>
         internal const string ContainsKey = "contains";
 
+        /// <summary>The 'valueAt' argument key.</summary>
+        internal const string ValueAtKey = "valueAt";
+
         /// <summary>The 'inputSeparator' argument key.</summary>
         internal const string InputSeparatorKey = "inputSeparator";
 
@@ -25,6 +28,7 @@ namespace ContentPatcher.Framework.Tokens
         private static readonly ISet<string> ReservedArgKeys = new InvariantHashSet
         {
             InputArguments.ContainsKey,
+            InputArguments.ValueAtKey,
             InputArguments.InputSeparatorKey
         };
 
@@ -32,10 +36,10 @@ namespace ContentPatcher.Framework.Tokens
         ** State
         ****/
         /// <summary>The last raw value that was parsed.</summary>
-        private string LastRawValue = null;
+        private string LastRawValue;
 
-        /// <summary>The last tokenisable value that was parsed.</summary>
-        private string LastParsedValue = null;
+        /// <summary>The last tokenizable value that was parsed.</summary>
+        private string LastParsedValue;
 
         /// <summary>The raw input argument segment containing positional arguments, after parsing tokens but before splitting into individual arguments.</summary>
         private string PositionalSegment;
@@ -48,6 +52,9 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>The backing field for <see cref="ReservedArgs"/>.</summary>
         private IDictionary<string, IInputArgumentValue> ReservedArgsImpl = new InvariantDictionary<IInputArgumentValue>();
+
+        /// <summary>The backing field for <see cref="ReservedArgsList"/>.</summary>
+        private KeyValuePair<string, IInputArgumentValue>[] ReservedArgsListImpl = new KeyValuePair<string, IInputArgumentValue>[0];
 
 
         /*********
@@ -71,6 +78,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public IDictionary<string, IInputArgumentValue> ReservedArgs => this.ParseIfNeeded().ReservedArgsImpl;
 
+        /// <inheritdoc />
+        public KeyValuePair<string, IInputArgumentValue>[] ReservedArgsList => this.ParseIfNeeded().ReservedArgsListImpl;
+
         /****
         ** Metadata
         ****/
@@ -91,7 +101,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="tokenString">The underlying tokenised string.</param>
+        /// <param name="tokenString">The underlying tokenized string.</param>
         public InputArguments(ITokenString tokenString)
         {
             this.TokenString = tokenString;
@@ -127,7 +137,8 @@ namespace ContentPatcher.Framework.Tokens
         {
             if (this.LastParsedValue != this.TokenString?.Value || this.LastRawValue != this.TokenString?.Raw)
             {
-                InputArguments.Parse(this.TokenString, out this.PositionalSegment, out this.PositionalArgsImpl, out this.NamedArgsImpl, out this.ReservedArgsImpl);
+                InputArguments.Parse(this.TokenString, out this.PositionalSegment, out this.PositionalArgsImpl, out this.NamedArgsImpl, out this.ReservedArgsImpl, out var reservedArgsList);
+                this.ReservedArgsListImpl = reservedArgsList.ToArray();
                 this.LastParsedValue = this.TokenString?.Value;
                 this.LastRawValue = this.TokenString?.Raw;
             }
@@ -135,13 +146,14 @@ namespace ContentPatcher.Framework.Tokens
             return this;
         }
 
-        /// <summary>Parse arguments from a tokenised string.</summary>
-        /// <param name="input">The tokenised string to parse.</param>
+        /// <summary>Parse arguments from a tokenized string.</summary>
+        /// <param name="input">The tokenized string to parse.</param>
         /// <param name="positionalSegment">The raw input argument segment containing positional arguments, after parsing tokens but before splitting into individual arguments.</param>
         /// <param name="positionalArgs">The positional arguments.</param>
         /// <param name="namedArgs">The named arguments.</param>
         /// <param name="reservedArgs">The named arguments handled by Content Patcher.</param>
-        private static void Parse(ITokenString input, out string positionalSegment, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs, out IDictionary<string, IInputArgumentValue> reservedArgs)
+        /// <param name="reservedArgsList">An ordered list of the <paramref name="reservedArgs"/>, including duplicate args.</param>
+        private static void Parse(ITokenString input, out string positionalSegment, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs, out IDictionary<string, IInputArgumentValue> reservedArgs, out IList<KeyValuePair<string, IInputArgumentValue>> reservedArgsList)
         {
             InputArguments.GetRawArguments(input, out positionalSegment, out InvariantDictionary<string> rawNamedArgs);
 
@@ -149,23 +161,27 @@ namespace ContentPatcher.Framework.Tokens
             if (!rawNamedArgs.TryGetValue(InputArguments.InputSeparatorKey, out string inputSeparator) || string.IsNullOrWhiteSpace(inputSeparator))
                 inputSeparator = ",";
 
-            // parse arguments
+            // parse args
             positionalArgs = positionalSegment.SplitValuesNonUnique(separator: inputSeparator).ToArray();
             namedArgs = new InvariantDictionary<IInputArgumentValue>();
             reservedArgs = new InvariantDictionary<IInputArgumentValue>();
+            reservedArgsList = new List<KeyValuePair<string, IInputArgumentValue>>();
             foreach (var arg in rawNamedArgs)
             {
                 var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique(separator: inputSeparator).ToArray());
 
                 if (InputArguments.ReservedArgKeys.Contains(arg.Key))
+                {
                     reservedArgs[arg.Key] = values;
+                    reservedArgsList.Add(new KeyValuePair<string, IInputArgumentValue>(arg.Key, values));
+                }
                 else
                     namedArgs[arg.Key] = values;
             }
         }
 
         /// <summary>Get the raw positional and named argument strings.</summary>
-        /// <param name="input">The tokenised string to parse.</param>
+        /// <param name="input">The tokenized string to parse.</param>
         /// <param name="rawPositional">The positional arguments string.</param>
         /// <param name="rawNamed">The named argument string.</param>
         private static void GetRawArguments(ITokenString input, out string rawPositional, out InvariantDictionary<string> rawNamed)

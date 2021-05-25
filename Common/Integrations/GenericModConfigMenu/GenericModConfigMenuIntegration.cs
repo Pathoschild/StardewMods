@@ -1,9 +1,8 @@
 using System;
-using Pathoschild.Stardew.Common.Integrations;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
-namespace Common.Integrations.GenericModConfigMenu
+namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
 {
     /// <summary>Handles the logic for integrating with the Generic Mod Configuration Menu mod.</summary>
     /// <typeparam name="TConfig">The mod configuration type.</typeparam>

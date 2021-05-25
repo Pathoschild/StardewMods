@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Common.Integrations.GenericModConfigMenu;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 

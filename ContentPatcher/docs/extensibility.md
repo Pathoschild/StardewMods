@@ -6,18 +6,18 @@ This doc helps SMAPI mod authors extend Content Patcher with custom functionalit
 the [main README](../README.md) for other info**.
 
 ## Contents
-* [Overview](#overview)
-  * [Introduction](#introduction)
-  * [Access the API](#access-the-api)
+* [Introduction](#introduction)
+* [Access the API](#access-the-api)
 * [Basic API](#basic-api)
+  * [Concepts](#concepts)
+  * [Add a token](#add-a-token)
 * [Advanced API](#advanced-api)
   * [Caveats](#caveats)
-  * [Token concepts](#token-concepts)
+  * [Concepts](#concepts-1)
   * [Add a token](#add-a-token)
 * [See also](#see-also)
 
-## Overview
-### Introduction
+## Introduction
 Content Patcher has a [mod-provided API](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
 you can use from your own SMAPI mod to add custom tokens. Custom tokens are always prefixed with
 the ID of the mod that created them, like `your-mod-id/SomeTokenName`.
@@ -37,7 +37,7 @@ There are two parts of the API you can use:
 
 Note that you can use both at once from your mod code.
 
-### Access the API
+## Access the API
 To access the API:
 
 1. Add Content Patcher as [a dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
@@ -58,16 +58,47 @@ To access the API:
 4. Use the API to extend Content Patcher (see below).
 
 ## Basic API
+### Concepts
+The basic API handles most of the design considerations for you. There's just two things to keep in
+mind:
+
+<dl>
+<dt>Scope</dt>
+<dd>
+
+Content Patcher will call your code to get the values each time it updates tokens. That can happen
+before a save is loaded, while it's still loading, and after it's loaded. You can return null or an
+empty list if your token isn't ready yet. See the example under _[add a token](#add-a-token)_ which
+handles all three cases.
+
+</dd>
+
+<dt>Value order</dt>
+<dd>
+
+The order you return values affects features like `valueAt`. You should use the order which makes
+most sense for your token, since content pack authors can't change it. For most tokens,
+alphanumeric order is fine (e.g. `.OrderBy(p => p, StringComparer.OrdinalIgnoreCase)`).
+
+</dd>
+</dl>
+
+### Add a token
 You can add a simple token by calling `RegisterToken` from SMAPI's `GameLaunched` event (see
-_Access the API_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
+_[Access the API](#access-the-api)_ above). For example, this creates a `{{your-mod-id/PlayerName}}` token for the
 current player's name:
 ```c#
 api.RegisterToken(this.ModManifest, "PlayerName", () =>
 {
+    // save is loaded
     if (Context.IsWorldReady)
         return new[] { Game1.player.Name };
+
+    // or save is currently loading
     if (SaveGame.loaded?.player != null)
-        return new[] { SaveGame.loaded.player.Name }; // lets token be used before save is fully loaded
+        return new[] { SaveGame.loaded.player.Name };
+
+    // no save loaded (e.g. on the title screen)
     return null;
 });
 ```
@@ -83,7 +114,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -110,11 +141,18 @@ Content Patcher core). However:
 * <strong>This is low-level. You must account for the token design considerations documented below,
   unlike the basic API above which handles them for you.</strong>
 
-### Token concepts
+### Concepts
 When registering a token through the advanced API, here are some design considerations to avoid
 problems.
 
 <dl>
+<dt>Scope and value order</dt>
+<dd>
+
+See [_Basic API: concepts_](#concepts) above.
+
+</dd>
+
 <dt>Context updates</dt>
 <dd>
 
@@ -281,7 +319,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "Changes": [
       {
          "Action": "EditData",

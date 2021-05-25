@@ -79,7 +79,7 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // parse arguments
             bool showFull = false;
-            var forModIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var forModIds = new InvariantHashSet();
             foreach (string arg in args)
             {
                 // flags
@@ -114,7 +114,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 // get data
                 var tokensByProvider =
                     (
-                        from token in tokenManager.GetTokens(enforceContext: false)
+                        from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
                         let rootValues = !token.RequiresInput ? token.GetValues(InputArguments.Empty).ToArray() : new string[0]
                         let isMultiValue =
@@ -122,11 +122,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                             || rootValues.Length > 1
                             || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input")))).Count() > 1)
                         let mod = (token as ModProvidedToken)?.Mod
-                        orderby isMultiValue, token.Name // single-value tokens first, then alphabetically
+                        orderby isMultiValue // single-value tokens first, then alphabetically
                         select new { Mod = mod, Token = token }
                     )
                     .GroupBy(p => p.Mod?.Name?.Trim())
-                    .OrderBy(p => p.Key) // default tokens (key is null), then tokens added by other mods
+                    .OrderByHuman(p => p.Key) // default tokens (key is null), then tokens added by other mods
                     .ToArray();
                 int labelWidth = Math.Max(tokensByProvider.Max(group => group.Max(p => p.Token.Name.Length)), "token name".Length);
 
@@ -157,7 +157,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                             if (allowedInputs.Any())
                             {
                                 bool isFirst = true;
-                                foreach (string input in allowedInputs.OrderByIgnoreCase(input => input))
+                                foreach (string input in allowedInputs.OrderByHuman())
                                 {
                                     if (isFirst)
                                     {
@@ -174,7 +174,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty).OrderByIgnoreCase(p => p)));
+                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty)));
                     }
 
                     output.AppendLine();
@@ -186,7 +186,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 var locations = this.GetCustomLocationLoader().GetCustomLocationData()
                     .Where(p => !forModIds.Any() || forModIds.Contains(p.ModId))
                     .GroupByIgnoreCase(p => p.ModName)
-                    .OrderByIgnoreCase(p => p.Key)
+                    .OrderByHuman(p => p.Key)
                     .ToArray();
 
                 if (locations.Any())
@@ -196,7 +196,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                         + "== Custom locations ==\n"
                         + "======================\n"
                         + "The following custom locations were created by content packs.\n"
-                        + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
+                        + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByHuman())}.)\n" : "")
                     );
 
                     foreach (var locationGroup in locations)
@@ -208,7 +208,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                         output.AppendLine();
                         output.AppendLine($"   {"location name".PadRight(nameWidth)}  | status");
                         output.AppendLine($"   {"".PadRight(nameWidth, '-')}  | ------");
-                        foreach (CustomLocationData location in locationGroup.OrderByIgnoreCase(p => p.Name))
+                        foreach (CustomLocationData location in locationGroup.OrderByHuman(p => p.Name))
                             output.AppendLine($"   {location.Name.PadRight(nameWidth)}  | {(location.IsEnabled ? "[X] ok" : $"[ ] error: {location.Error}")}");
                         output.AppendLine();
                     }
@@ -223,7 +223,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 var patches = this.GetAllPatches(patchManager)
                     .Where(p => !forModIds.Any() || forModIds.Contains(p.ContentPack.Manifest.UniqueID))
                     .GroupByIgnoreCase(p => p.ContentPack.Manifest.Name)
-                    .OrderByIgnoreCase(p => p.Key)
+                    .OrderByHuman(p => p.Key)
                     .ToArray();
 
                 output.AppendLine(
@@ -234,7 +234,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                     + "  - 'loaded' shows whether the patch is loaded and enabled (see details for the reason if not).\n"
                     + "  - 'conditions' shows whether the patch matches with the current conditions (see details for the reason if not). If this is unexpectedly false, check (a) the conditions above and (b) your Where field.\n"
                     + "  - 'applied' shows whether the target asset was loaded and patched. If you expected it to be loaded by this point but it's false, double-check (a) that the game has actually loaded the asset yet, and (b) your Targets field is correct.\n"
-                    + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByIgnoreCase(p => p))}.)\n" : "")
+                    + (forModIds.Any() ? $"\n(Filtered to content pack ID{(forModIds.Count > 1 ? "s" : "")}: {string.Join(", ", forModIds.OrderByHuman())}.)\n" : "")
                     + "\n"
                 );
                 foreach (var patchGroup in patches)
@@ -251,16 +251,16 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 from IToken token in tokenContext.GetTokens(enforceContext: false)
                                 where token.Scope != null
 
-                                    // get input arguments
-                                    let validInputs = token.IsReady && token.RequiresInput
-                                                ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
-                                                : new ITokenString[] { null }
+                                // get input arguments
+                                let validInputs = token.IsReady && token.RequiresInput
+                                    ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
+                                    : new ITokenString[] { null }
                                 from ITokenString input in validInputs
 
                                 where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
 
-                                    // select display data
-                                    let result = new
+                                // select display data
+                                let result = new
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
                                     Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
@@ -409,8 +409,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
                             output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
-                            foreach (var pair in effectsByPatch.OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
-                                output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderBy(p => p, StringComparer.OrdinalIgnoreCase))}");
+                            foreach (var pair in effectsByPatch.OrderByHuman(p => p.Key))
+                                output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderByHuman())}");
                         }
                         else
                             output.AppendLine("   No current changes.");

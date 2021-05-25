@@ -470,7 +470,7 @@ namespace ContentPatcher.Framework.Patches
                         {
                             if (!int.TryParse(field.FieldKey.Value, out int index))
                             {
-                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\"instead)).", LogLevel.Warn);
+                                this.Monitor.Log($"{errorPrefix}: record '{key}' under {nameof(PatchConfig.Fields)} is a string, so it requires a field index between 0 and {actualFields.Length - 1} (received \"{field.FieldKey}\" instead)).", LogLevel.Warn);
                                 continue;
                             }
                             if (index < 0 || index > actualFields.Length - 1)
@@ -502,20 +502,22 @@ namespace ContentPatcher.Framework.Patches
             // apply text operations
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
-                if (!this.TryApplyTextOperation(this.TextOperations[i], hasEntry, getEntry, removeEntry, setEntry, out string error))
+                if (!this.TryApplyTextOperation(asset, this.TextOperations[i], hasEntry, getEntry, setEntry, out string error))
                     this.Monitor.Log($"Can't data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
             }
         }
 
         /// <summary>Try to apply a text operation.</summary>
+        /// <typeparam name="TKey">The dictionary key type.</typeparam>
+        /// <typeparam name="TValue">The dictionary value type.</typeparam>
+        /// <param name="asset">The asset being edited.</param>
         /// <param name="operation">The text operation to apply.</param>
         /// <param name="hasEntry">Get whether the collection has the given entry.</param>
         /// <param name="getEntry">Get an entry from the collection.</param>
-        /// <param name="removeEntry">Remove an entry from the collection.</param>
         /// <param name="setEntry">Add or replace an entry in the collection.</param>
         /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
         /// <returns>Returns whether applying the operation succeeded.</returns>
-        private bool TryApplyTextOperation<TKey, TValue>(TextOperation operation, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry, out string error)
+        private bool TryApplyTextOperation<TKey, TValue>(IAssetInfo asset, TextOperation operation, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey, TValue> setEntry, out string error)
         {
             var targetRoot = operation.GetTargetRoot();
             switch (targetRoot)
@@ -525,22 +527,12 @@ namespace ContentPatcher.Framework.Patches
                         // validate
                         if (typeof(TValue) != typeof(string))
                             return this.Fail($"an '{TextOperationTargetRoot.Entries}' text operation can only be used for string entries. For data model entries, use '{TextOperationTargetRoot.Fields}' instead.", out error);
-                        if (operation.Target.Length > 2)
-                            return this.Fail($"an '{TextOperationTargetRoot.Entries}' path must only have one other segment for the property name.", out error);
+                        if (operation.Target.Length != 2)
+                            return this.Fail($"an '{TextOperationTargetRoot.Entries}' path must have exactly one other segment: the entry key.", out error);
 
-                        // get key
-                        string rawKey = operation.Target[1].Value;
-                        TKey key;
-                        if (typeof(TKey) == typeof(string))
-                            key = (TKey)(object)rawKey;
-                        else if (typeof(TKey) == typeof(int))
-                        {
-                            if (!int.TryParse(rawKey, out int intKey))
-                                return this.Fail($"can't use value '{rawKey}' as an entry key because this asset uses numeric keys.", out error);
-                            key = (TKey)(object)intKey;
-                        }
-                        else
-                            return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
+                        // parse path
+                        if (!this.TryParseEntryKey(operation.Target[1].Value, out TKey key, out error))
+                            return false;
 
                         // get value
                         string value = hasEntry(key)
@@ -553,7 +545,64 @@ namespace ContentPatcher.Framework.Patches
                     break;
 
                 case TextOperationTargetRoot.Fields:
-                    throw new NotImplementedException("TODO");
+                    {
+                        // validate
+                        if (operation.Target.Length != 3)
+                            return this.Fail($"a '{TextOperationTargetRoot.Fields}' path must have exactly two other segments: one for the entry key, and one for the field key or index.", out error);
+
+                        // parse path
+                        if (!this.TryParseEntryKey(operation.Target[1].Value, out TKey entryKey, out error))
+                            return false;
+                        string fieldKey = operation.Target[2].Value;
+
+                        // get entry
+                        TValue entry;
+                        {
+                            bool entryExists = hasEntry(entryKey);
+                            entry = entryExists
+                                ? getEntry(entryKey)
+                                : default;
+
+                            if (!entryExists || entry is null)
+                                return this.Fail($"record '{entryKey}' has no value, so field '{fieldKey}' can't be modified using text operations.", out error);
+                        }
+
+                        // edit field value
+                        if (typeof(TValue) == typeof(string))
+                        {
+                            // read fields
+                            char fieldDelimiter = this.GetStringFieldDelimiter(asset);
+                            string[] actualFields = ((string)(object)entry).Split(fieldDelimiter);
+
+                            // validate key
+                            if (!int.TryParse(fieldKey, out int fieldIndex))
+                                return this.Fail($"record '{entryKey}' needs a field index between 0 and {actualFields.Length - 1} (received \"{fieldKey}\" instead)).", out error);
+                            if (fieldIndex < 0 || fieldIndex > actualFields.Length - 1)
+                                return this.Fail($"record '{entryKey}' has no field with index {fieldIndex} (must be 0 to {actualFields.Length - 1}).", out error);
+
+                            // apply change
+                            actualFields[fieldIndex] = operation.Apply(actualFields[fieldIndex]);
+                            setEntry(entryKey, (TValue)(object)string.Join(fieldDelimiter.ToString(), actualFields));
+                        }
+                        else
+                        {
+                            // get field
+                            JObject entryToken = (JObject)(object)entry;
+                            JProperty field = entryToken.Property(fieldKey);
+
+                            // apply change
+                            if (field == null)
+                                entryToken[fieldKey] = operation.Apply("");
+                            else
+                            {
+                                if (field.Value.Type != JTokenType.String)
+                                    return this.Fail($"field '{entryKey}' > '{fieldKey}' has type '{entryToken.Type}', but you can only apply text operations to a text field.", out error);
+
+                                field.Value = operation.Apply(field.Value<string>());
+                            }
+                        }
+                    }
+                    break;
 
                 default:
                     return this.Fail(
@@ -566,6 +615,39 @@ namespace ContentPatcher.Framework.Patches
 
             error = null;
             return true;
+        }
+
+        /// <summary>Try to parse a raw string into an entry key.</summary>
+        /// <typeparam name="TKey">The dictionary key type.</typeparam>
+        /// <param name="rawKey">The string key to parse.</param>
+        /// <param name="parsed">The parsed key.</param>
+        /// <param name="error">The error indicating why the <paramref name="rawKey"/> couldn't be parsed, if applicable.</param>
+        /// <returns>Returns whether parsing succeeded.</returns>
+        bool TryParseEntryKey<TKey>(string rawKey, out TKey parsed, out string error)
+        {
+            parsed = default;
+            error = null;
+
+            // to string
+            if (typeof(TKey) == typeof(string))
+            {
+                parsed = (TKey)(object)rawKey;
+                return true;
+            }
+
+            // to int
+            if (typeof(TKey) == typeof(int))
+            {
+                if (!int.TryParse(rawKey, out int intKey))
+                    return this.Fail($"can't use value '{rawKey}' as an entry key because this asset uses numeric keys.", out error);
+
+                parsed = (TKey)(object)intKey;
+                return true;
+            }
+
+            // invalid
+            parsed = default;
+            return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
         }
 
         /// <summary>Get the key for a list asset entry.</summary>

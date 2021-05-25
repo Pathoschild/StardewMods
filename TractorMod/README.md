@@ -489,7 +489,6 @@ example:
 </dd>
 </dl>
 
-
 ## Custom textures
 You can drop new PNGs into the `assets` folder to change the appearance of tractors or garages.
 For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`). The mod

@@ -2,7 +2,7 @@ using System;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 
-namespace Common.Integrations.GenericModConfigMenu
+namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
 {
     /// <summary>The API provided by the Generic Mod Config Menu mod.</summary>
     public interface IGenericModConfigMenuApi

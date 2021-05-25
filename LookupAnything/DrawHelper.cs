@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using StardewValley;
 

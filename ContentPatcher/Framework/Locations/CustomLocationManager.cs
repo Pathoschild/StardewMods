@@ -71,10 +71,10 @@ namespace ContentPatcher.Framework.Locations
                 .Where(group => group.Locations.Length > 1);
 
             // warn and disable duplicates
-            foreach (var group in duplicateLocations.OrderByIgnoreCase(p => p.Name))
+            foreach (var group in duplicateLocations.OrderByHuman(p => p.Name))
             {
                 // log error
-                string[] contentPackNames = group.Locations.Select(p => p.ModName).OrderByIgnoreCase(p => p).Distinct().ToArray();
+                string[] contentPackNames = group.Locations.Select(p => p.ModName).OrderByHuman().Distinct().ToArray();
                 string error = contentPackNames.Length > 1
                     ? $"The '{group.Name}' location was added by multiple content packs ('{string.Join("', '", contentPackNames)}')."
                     : $"The '{group.Name}' location was added multiple times in the '{contentPackNames[0]}' content pack.";
@@ -111,9 +111,9 @@ namespace ContentPatcher.Framework.Locations
             if (this.Monitor.IsVerbose)
             {
                 var locationsByPack = customLocations
-                    .OrderByIgnoreCase(p => p.Name)
+                    .OrderByHuman(p => p.Name)
                     .GroupBy(p => p.ModName)
-                    .OrderByIgnoreCase(p => p.Key);
+                    .OrderByHuman(p => p.Key);
 
                 this.Monitor.VerboseLog($"Adding {customLocations.Length} locations:\n- {string.Join("\n- ", locationsByPack.Select(group => $"{group.Key}: {string.Join(", ", group.Select(p => p.Name))}"))}.");
             }

@@ -35,6 +35,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>An active quest in the player's quest log.</summary>
         HasActiveQuest,
 
+        /// <summary>The fish IDs caught by the player.</summary>
+        HasCaughtFish,
+
         /// <summary>A conversation topic ID set for the player.</summary>
         HasConversationTopic,
 
@@ -89,6 +92,12 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Relationships
         ****/
+        /// <summary>The names of the player's children.</summary>
+        ChildNames,
+
+        /// <summary>The genders of the player's children.</summary>
+        ChildGenders,
+
         /// <summary>The current player's number of hearts with the character.</summary>
         Hearts,
 
@@ -131,6 +140,9 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Number manipulation
         ****/
+        /// <summary>The number of values contained in the input.</summary>
+        Count,
+
         /// <summary>A dynamic query expression.</summary>
         Query,
 

@@ -28,17 +28,24 @@ namespace ContentPatcher.Framework
         private readonly GenericTokenContext DynamicContext;
 
         /// <summary>The dynamic tokens stored in the <see cref="DynamicContext"/>.</summary>
-        private readonly InvariantDictionary<ManagedManualToken> DynamicTokens = new InvariantDictionary<ManagedManualToken>();
+        private readonly InvariantDictionary<ManagedManualToken> DynamicTokens = new();
 
         /// <summary>The possible values for the <see cref="DynamicTokens"/>.</summary>
         /// <remarks>These must be stored in registration order, since each token value may affect the value of subsequent tokens.</remarks>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
 
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
-        private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new InvariantDictionary<InvariantHashSet>();
+        private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new();
 
         /// <summary>Whether any tokens haven't received a context update yet.</summary>
         private bool HasNewTokens;
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc />
+        public int UpdateTick => this.ParentContext.UpdateTick;
 
 
         /*********
@@ -54,8 +61,8 @@ namespace ContentPatcher.Framework
         {
             this.Scope = scope;
             this.ParentContext = parentContext;
-            this.LocalContext = new GenericTokenContext(this.IsModInstalled);
-            this.DynamicContext = new GenericTokenContext(this.IsModInstalled);
+            this.LocalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
+            this.DynamicContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
         }
 
         /// <summary>Add a standard token to the context.</summary>

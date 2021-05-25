@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
-using SFarmer = StardewValley.Farmer;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -47,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             MachineState state = this.GetGenericState();
 
-            if (state == MachineState.Empty && (this.Machine.bait.Value != null || !this.PlayerNeedsBait()))
+            if (state == MachineState.Empty && (this.Machine.bait.Value != null || !this.PlayerNeedsBait(this.GetOwner())))
                 state = MachineState.Processing;
 
             return state;
@@ -86,9 +85,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         private void Reset(Item item)
         {
             CrabPot pot = this.Machine;
+            Farmer owner = this.GetOwner();
 
             // add fishing XP
-            Game1.player.gainExperience(SFarmer.fishingSkill, 5);
+            owner.gainExperience(Farmer.fishingSkill, 5);
 
             // mark fish caught for achievements and stats
             IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                         this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}", LogLevel.Trace);
                 }
 
-                Game1.player.caughtFish(item.ParentSheetIndex, size);
+                owner.caughtFish(item.ParentSheetIndex, size);
             }
 
             // reset pot
@@ -124,9 +124,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get whether the current player needs to bait crab pots.</summary>
-        private bool PlayerNeedsBait()
+        /// <param name="owner">The player who owns the machine.</param>
+        private bool PlayerNeedsBait(Farmer owner)
         {
-            return !Game1.player.professions.Contains(11); // no bait needed if luremaster
+            return !owner.professions.Contains(11); // no bait needed if luremaster
         }
     }
 }

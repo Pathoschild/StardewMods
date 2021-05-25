@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Common.Utilities
+namespace Pathoschild.Stardew.Common.Utilities
 {
     /// <summary>A comparer which sorts values by comparing alphabetical and numeric sequences within the strings, resulting in a more intuitive order like "1, 2, 10" instead of "1, 10, 2".</summary>
     internal class HumanSortComparer : IComparer<string>
@@ -17,7 +17,7 @@ namespace Common.Utilities
         ** Accessors
         *********/
         /// <summary>A default instance which ignores letter case.</summary>
-        public static readonly HumanSortComparer DefaultIgnoreCase = new HumanSortComparer(ignoreCase: true);
+        public static readonly HumanSortComparer DefaultIgnoreCase = new(ignoreCase: true);
 
 
         /*********

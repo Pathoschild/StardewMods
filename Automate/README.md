@@ -286,15 +286,6 @@ field | result
 
   </td>
 </tr>
-<tr>
-  <td><code>PreventRemovingStacks</code></td>
-  <td>
-
-Whether Automate should always leave at least one item in each stack when removing items from
-chests, which can be useful to keep items organized. Default `false`.
-
-  </td>
-</tr>
 </table>
 
 ### In-game settings
@@ -386,6 +377,26 @@ Enter `automate summary` directly in the SMAPI console to view a summary of your
 There's no strict limit, since Automate optimises machine connections internally. I've officially
 tested with up to [630 machines in one group](https://community.playstarbound.com/threads/automate.131913/page-11#post-3238142)
 (which didn't cause any issues), and some players have thousands of automated machines.
+
+### In multiplayer, who gets XP and whose professions apply?
+A few machines give XP, update player stats, or check player skills based on the player who uses
+them. Since there's no player when they're automated, Automate uses the machine owner (i.e. who
+placed or built the machine) if possible, and defaults to the main player if not.<sup>1</sup>
+
+More specifically:
+
+machine        | player effects
+:------------- | :-------------
+bushes         | The main player's foraging level and [botanist](https://stardewvalleywiki.com/Skills#Foraging) profession applies.
+crab pots      | The machine owner's [luremaster](https://stardewvalleywiki.com/Skills#Fishing) profession applies, and their `caughtFish` stat is updated.
+fish ponds     | The machine owner gets XP for collected items.
+egg incubators,<br />slime incubators | The main player's [coopmaster](https://stardewvalleywiki.com/Skills#Farming) profession applies.
+shipping bin   | Prices are set by the _online_ player whose professions would most increase it (see [multiplayer](https://stardewvalleywiki.com/Multiplayer#Money) on the wiki).
+trees          | The main player's foraging level applies.
+custom machines | The logic for machines added by other mods is decided by those mods, not Automate.
+
+<small><sup>1</sup> Due to a bug in the game code, the owner is only tracked correctly for crab pots
+and fish ponds.</small>
 
 ### Can I prevent a chest from being automated?
 Yep; see _[in-game settings](#in-game-settings)_.

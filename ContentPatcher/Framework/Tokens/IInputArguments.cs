@@ -14,16 +14,19 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The positional input arguments.</summary>
         string[] PositionalArgs { get; }
 
-        /// <summary>The named input arguments.</summary>
+        /// <summary>The named input arguments, excluding <see cref="ReservedArgs"/>.</summary>
         IDictionary<string, IInputArgumentValue> NamedArgs { get; }
 
         /// <summary>The named input arguments handled by Content Patcher. Tokens should generally ignore these.</summary>
         IDictionary<string, IInputArgumentValue> ReservedArgs { get; }
 
-        /// <summary>Whether any named arguments were provided.</summary>
+        /// <summary>An ordered list of the <see cref="ReservedArgs"/>, including duplicate args.</summary>
+        KeyValuePair<string, IInputArgumentValue>[] ReservedArgsList { get; }
+
+        /// <summary>Whether any <see cref="NamedArgs"/> were provided.</summary>
         bool HasNamedArgs { get; }
 
-        /// <summary>Whether any positional arguments were provided.</summary>
+        /// <summary>Whether any <see cref="PositionalArgs"/> were provided.</summary>
         bool HasPositionalArgs { get; }
 
         /// <summary>Whether the input arguments contain tokens that may change depending on the context.</summary>

@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.23.0
+Released 25 May 2021.
+
+* In multiplayer mode, machines which give XP, update stats, or check professions now target the farmer who placed them instead of the host player where possible.  
+  _(Due to a game bug, this only affects crab pots and fish ponds currently; see a [summary for each machine](README.md#in-multiplayer-who-gets-xp-and-whose-professions-apply).)_
+
 ## 1.22.1
 Released 17 April 2021.
 

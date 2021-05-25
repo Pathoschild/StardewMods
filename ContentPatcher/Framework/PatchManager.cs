@@ -86,8 +86,8 @@ namespace ContentPatcher.Framework
             if (patches.Length > 1)
             {
                 // show simple error for most common cases
-                string[] modNames = patches.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByIgnoreCase(p => p).ToArray();
-                string[] patchNames = patches.Select(p => p.Path.ToString()).OrderByIgnoreCase(p => p).ToArray();
+                string[] modNames = patches.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByHuman().ToArray();
+                string[] patchNames = patches.Select(p => p.Path.ToString()).OrderByHuman().ToArray();
                 switch (modNames.Length)
                 {
                     case 1:
@@ -134,7 +134,7 @@ namespace ContentPatcher.Framework
             if (!patches.Any())
                 throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because no patches currently apply. This should never happen because it means validation failed.");
             if (patches.Length > 1)
-                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because multiple patches apply ({string.Join(", ", from entry in patches orderby entry.Path select entry.Path)}). This should never happen because it means validation failed.");
+                throw new InvalidOperationException($"Can't load asset key '{asset.AssetName}' because multiple patches apply ({string.Join(", ", from entry in patches.OrderByHuman(p => p.Path.ToString()) select entry.Path)}). This should never happen because it means validation failed.");
 
             // apply patch
             IPatch patch = patches.Single();
@@ -226,6 +226,12 @@ namespace ContentPatcher.Framework
             if (!patches.Any() && !reloadAssetNames.Any())
                 return;
 
+            // reset queued patches
+            // This needs to be done *before* we update patches, to avoid clearing patches added by Include patches
+            IPatch[] wasPending = this.PendingPatches.ToArray();
+            this.PendingPatches.Clear();
+            this.AssetsWithRemovedPatches.Clear();
+
             // init for verbose logging
             List<PatchAuditChange> verbosePatchesReloaded = this.Monitor.IsVerbose
                 ? new()
@@ -245,7 +251,7 @@ namespace ContentPatcher.Framework
                 // track old values
                 string wasFromAsset = patch.FromAsset;
                 string wasTargetAsset = patch.TargetAsset;
-                bool wasReady = patch.IsReady && !this.PendingPatches.Contains(patch);
+                bool wasReady = patch.IsReady && !wasPending.Contains(patch);
 
                 // update patch
                 IContext tokenContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
@@ -307,8 +313,6 @@ namespace ContentPatcher.Framework
             }
 
             // reset indexes
-            this.PendingPatches.Clear();
-            this.AssetsWithRemovedPatches.Clear();
             this.Reindex(patchListChanged: false);
 
             // log changes
@@ -317,7 +321,7 @@ namespace ContentPatcher.Framework
                 StringBuilder report = new StringBuilder();
                 report.AppendLine($"{verbosePatchesReloaded.Count} patches were rechecked for {updateType} tick.");
 
-                foreach (PatchAuditChange entry in verbosePatchesReloaded.OrderBy(p => p.Patch.Path.ToString()))
+                foreach (PatchAuditChange entry in verbosePatchesReloaded.OrderByHuman(p => p.Patch.Path.ToString()))
                 {
                     var patch = entry.Patch;
 
@@ -329,7 +333,7 @@ namespace ContentPatcher.Framework
                             .Select(p => p?.Trim())
                             .Where(p => !string.IsNullOrEmpty(p))
                             .Distinct(StringComparer.OrdinalIgnoreCase);
-                        notes.Add($"invalidates {string.Join(", ", assetNames.OrderBy(p => p))}");
+                        notes.Add($"invalidates {string.Join(", ", assetNames.OrderByHuman())}");
                     }
 
                     if (entry.WasReady != patch.IsReady)
@@ -350,7 +354,7 @@ namespace ContentPatcher.Framework
             // reload assets if needed
             if (reloadAssetNames.Any())
             {
-                this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByIgnoreCase(p => p))}");
+                this.Monitor.VerboseLog($"   reloading {reloadAssetNames.Count} assets: {string.Join(", ", reloadAssetNames.OrderByHuman())}");
                 contentHelper.InvalidateCache(asset =>
                 {
                     this.Monitor.VerboseLog($"      [{(reloadAssetNames.Contains(asset.AssetName) ? "X" : " ")}] reload {asset.AssetName}");

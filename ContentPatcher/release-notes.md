@@ -9,6 +9,24 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.23.0
+Released 25 May 2021. See the [release highlights](https://www.patreon.com/posts/51685726).
+
+* Added [`valueAt` argument](docs/author-tokens-guide.md#valueat) to get one value from any token.
+* Added `TextOperations` support for `EditData` fields.
+* Added new tokens:
+  * [`ChildGenders`](docs/author-tokens-guide.md#ChildGenders) and [`ChildNames`](docs/author-tokens-guide.md#ChildNames) to get the genders/names of a given player's children.
+  * [`Count`](docs/author-tokens-guide.md#Count) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of active quests).
+  * [`HasCaughtFish`](docs/author-tokens-guide.md#HasCaughtFish) to get fish caught by a player.
+* Improved sort order used in token values, patch commands, and error messages.
+* Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
+* Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed without a debug overlay open.
+* Fixed tokens which accept a [`PlayerType`](docs/author-tokens-guide.md#playertype) argument always marked as returning multiple values for input arguments.
+
+**Note for SMAPI mod authors:**  
+If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values
+they return affects the `valueAt` argument.
+
 ## 1.22
 Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).
 

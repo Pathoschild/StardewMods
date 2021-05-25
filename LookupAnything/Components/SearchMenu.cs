@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
@@ -296,8 +297,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // get matches
             this.SearchResults = this.SearchLookup
                 .Where(entry => words.All(word => entry.Key.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
-                .OrderBy(entry => entry.Key)
-                .SelectMany(this.FilterUniqueSubjects)
+                .SelectMany(entry => entry)
+                .OrderBy(subject => subject.Name, StringComparer.OrdinalIgnoreCase)
                 .Select((subject, index) => new SearchResultComponent(subject, index))
                 .ToArray();
         }
@@ -323,20 +324,6 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             float contentWidth = this.width - gutter * 2;
             float contentHeight = this.height - gutter * 2;
             this.SearchResultArea = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
-        }
-
-        /// <summary>Filter a list of subjects to remove duplicate entries (like multiples of a monster type).</summary>
-        /// <param name="subjects">The subjects to filter.</param>
-        private IEnumerable<ISubject> FilterUniqueSubjects(IEnumerable<ISubject> subjects)
-        {
-            HashSet<string> seen = new HashSet<string>();
-            foreach (ISubject subject in subjects)
-            {
-                if (!seen.Add($"{subject.GetType().FullName}::{subject.Type}::{subject.Name}"))
-                    continue;
-
-                yield return subject;
-            }
         }
     }
 }

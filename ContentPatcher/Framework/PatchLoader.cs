@@ -909,7 +909,7 @@ namespace ContentPatcher.Framework
             // get token
             IToken token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
             if (token == null)
-                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderBy(p => p))}", out error, out condition, out immutableRequiredModIDs);
+                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition, out immutableRequiredModIDs);
             if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: null, out error))
                 return Fail(error, out error, out condition, out immutableRequiredModIDs);
 

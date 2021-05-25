@@ -22,6 +22,13 @@ namespace ContentPatcher.Framework
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <inheritdoc />
+        public int UpdateTick => this.LastParentContext?.UpdateTick ?? 0;
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>

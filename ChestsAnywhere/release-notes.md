@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.14
+Released 25 May 2021.
+
+* Improved translations. Thanks to randomC0der (updated German)!
+
 ## 1.20.13
 Released 17 April 2021.
 

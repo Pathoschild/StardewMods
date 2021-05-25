@@ -467,9 +467,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="monster">The monster whose drops to get.</param>
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
-            // get actual drops
-            int[] drops = monster.objectsToDrop.ToArray();
-
             // get possible drops
             ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
             if (possibleDrops == null && this.IsHauntedSkull)
@@ -477,17 +474,37 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             if (possibleDrops == null)
                 possibleDrops = new ItemDropData[0];
 
-            // get combined data
-            return (
-                from possibleDrop in possibleDrops
-                let isGuaranteed = drops.Contains(possibleDrop.ItemID)
-                select new ItemDropData(
-                    itemID: possibleDrop.ItemID,
+            // get actual drops
+            IDictionary<int, int> dropsLeft = monster
+                .objectsToDrop
+                .GroupBy(id => id)
+                .ToDictionary(group => group.Key, group => group.Count());
+
+            // return possible drops
+            foreach (var drop in possibleDrops.OrderByDescending(p => p.Probability))
+            {
+                bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemID, out int count) && count > 0;
+                if (isGuaranteed)
+                    dropsLeft[drop.ItemID]--;
+
+                yield return new ItemDropData(
+                    itemID: drop.ItemID,
                     minDrop: 1,
-                    maxDrop: possibleDrop.MaxDrop,
-                    probability: isGuaranteed ? 1 : possibleDrop.Probability
-                )
-            );
+                    maxDrop: drop.MaxDrop,
+                    probability: isGuaranteed ? 1 : drop.Probability
+                );
+            }
+
+            // special case: return guaranteed drops that weren't matched
+            foreach (var pair in dropsLeft.Where(p => p.Value > 0))
+            {
+                yield return new ItemDropData(
+                    itemID: pair.Key,
+                    minDrop: pair.Value,
+                    maxDrop: pair.Value,
+                    probability: 1
+                );
+            }
         }
     }
 }

@@ -20,7 +20,8 @@ This document lists the tokens available in Content Patcher packs.
   * [Metadata](#metadata)
   * [Field references](#field-references)
 * [Global input arguments](#global-input-arguments)
-  * [Token search](#token-search)
+  * [`contains`](#contains)
+  * [`valueAt`](#valueat)
   * [Custom input value separator](#custom-input-value-separator)
 * [Player config](#player-config)
 * [Randomization](#randomization)
@@ -283,6 +284,17 @@ on the wiki for valid quest IDs.
 <td><a href="#HasActiveQuest">#</a></td>
 </tr>
 
+<tr valign="top" id="HasCaughtFish">
+<td>HasCaughtFish</td>
+<td>
+
+The fish IDs caught by the current player (or the player specified with a [`PlayerType`](#playertype)
+argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
+
+</td>
+<td><a href="#HasCaughtFish">#</a></td>
+</tr>
+
 <tr valign="top" id="HasConversationTopic">
 <td>HasConversationTopic</td>
 <td>
@@ -504,6 +516,21 @@ and `Mining`.
 <th>&nbsp;</th>
 </tr>
 
+<tr valign="top" id="ChildNames">
+<td id="ChildGenders">ChildNames<br />ChildGenders</td>
+<td>
+
+The names and genders (`Female` or `Male`) for the current player's children (or those for the
+player specified with a [`PlayerType`](#playertype) argument).
+
+These are listed in order of birth for use with the [`valueAt` argument](#valueAt). For example,
+`{{ChildNames |valueAt=0}}` and `{{ChildGenders |valueAt=0}}` is the name and gender of the oldest
+child.
+
+</td>
+<td><a href="#ChildNames">#</a></td>
+</tr>
+
 <tr valign="top" id="Hearts">
 <td>Hearts</td>
 <td>
@@ -659,6 +686,17 @@ to the female partner in heterosexual relationships. (Same-sex partners adopt a 
 <th>condition</th>
 <th>purpose</th>
 <th>&nbsp;</th>
+</tr>
+
+<tr valign="top" id="Count">
+<td>Count</td>
+<td>
+
+Get the number of values currently contained by a token. For example, `{{Count:{{HasActiveQuest}}}}`
+is the number of currently active quests.
+
+</td>
+<td><a href="#Count">#</a></td>
 </tr>
 
 <tr valign="top" id="Query">
@@ -987,11 +1025,13 @@ token               | part returned | example
 
 ## Global input arguments
 Global [input arguments](#input-arguments) are handled by Content Patcher itself, so they work with
-all tokens (including mod-provided tokens).
+all tokens (including mod-provided tokens). If you use multiple input arguments, they're applied
+sequentially in left-to-right order.
 
-### Token search
-The `contains` argument returns `true` or `false` depending on whether the token contains any of
-the given values. This is mainly useful for logic in [conditions](#conditions):
+### `contains`
+The `contains` argument lets you search a token's values. It returns `true` or `false` depending on
+whether the token contains any of the given values. This is mainly useful for logic in
+[conditions](#conditions):
 
 ```js
 // player has blacksmith OR gemologist
@@ -1034,6 +1074,70 @@ You can specify multiple values, in which case it returns whether _any_ of them 
 }
 ```
 
+### `valueAt`
+The `valueAt` argument gets one value from a token at the given position (starting at zero for the
+first value). If the index is outside the list, this returns an empty list.
+
+This depends on the token's order, which you can check with the [`patch summary` console
+command](author-guide.md#patch-summary). Most built-in tokens use a 'human' sort order, which sorts
+by sequences of numeric and non-numeric characters (i.e. values are sorted like `John1` → `John9` →
+`John10`).
+
+For example:
+
+<table>
+  <tr>
+    <th>token</th>
+    <th>value</th>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames}}</code></td>
+    <td><code>Angus, Bob, Carrie</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=0}}</code></td>
+    <td><code>Angus</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=1}}</code></td>
+    <td><code>Bob</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=2}}</code></td>
+    <td><code>Carrie</code></td>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames |valueAt=3}}</code></td>
+    <td><em>empty list</em></td>
+  </tr>
+</table>
+
+You can use a negative index to get a value starting from the _end_ of the list, where -1 is
+the last item. For example:
+
+<table>
+  <tr>
+    <th>token</th>
+    <th>value</th>
+  </tr>
+  <tr>
+    <td><code>{{ChildNames}}</code></td>
+    <td><code>Angus, Bob, Carrie</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-1}}</code></td>
+    <td><code>Carrie</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-2}}</code></td>
+    <td><code>Bob</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-3}}</code></td>
+    <td><code>Angus</code></td>
+  </tr>
+    <td><code>{{ChildNames |valueAt=-4}}</code></td>
+    <td><em>empty list</em></td>
+  </tr>
+</table>
+
 ### Custom input value separator
 By default input arguments are comma-separated, but sometimes it's useful to allow commas in the
 input values. You can use the `inputSeparator` argument to use a different separator (which can be
@@ -1061,6 +1165,7 @@ screen or the in-game menu.
 
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
+
 Available fields for each field:
 
    field               | meaning
@@ -1076,7 +1181,7 @@ patch is applied. See below for more details.
 
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1312,7 +1417,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1345,7 +1450,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1470,7 +1575,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.22.0",
+   "Format": "1.23.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1490,7 +1595,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.22.0",
+     "Format": "1.23.0",
      "Changes": [
         {
            "Action": "EditData",

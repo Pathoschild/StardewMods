@@ -1,6 +1,5 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.LookupAnything;
 using StardewValley;
 using StardewValley.Objects;
 

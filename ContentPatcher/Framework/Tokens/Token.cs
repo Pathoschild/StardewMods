@@ -72,8 +72,8 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public virtual bool CanHaveMultipleValues(IInputArguments input)
         {
-            // 'contains' limited to true/false
-            if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
+            // 'contains' and 'valueAt' filter to a single value
+            if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey) || input.ReservedArgs.ContainsKey(InputArguments.ValueAtKey))
                 return false;
 
             // default logic
@@ -83,6 +83,17 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public virtual bool TryValidateInput(IInputArguments input, out string error)
         {
+            // validate 'valueAt'
+            foreach (var arg in input.ReservedArgsList)
+            {
+                if (InputArguments.ValueAtKey.EqualsIgnoreCase(arg.Key) && !int.TryParse(arg.Value.Raw, out _))
+                {
+                    error = $"invalid '{InputArguments.ValueAtKey}' index '{arg.Value.Raw}', must be a numeric value.";
+                    return false;
+                }
+            }
+
+            // default logic
             return this.Values.TryValidateInput(input, out error);
         }
 
@@ -158,15 +169,21 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
-            // get values
-            var values = this.Values.GetValues(input);
+            // default logic
+            if (!input.ReservedArgs.Any())
+                return this.Values.GetValues(input);
 
-            // apply contains
-            if (input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue rawSearch))
+            // apply global input arguments
+            string[] values = this.Values.GetValues(input).ToArray();
+
+            foreach (KeyValuePair<string, IInputArgumentValue> arg in input.ReservedArgsList)
             {
-                InvariantHashSet search = new InvariantHashSet(rawSearch.Parsed.Select(this.NormalizeValue));
-                bool match = search.Any() && values.Any(value => search.Contains(value));
-                values = new[] { match.ToString() };
+                if (InputArguments.ContainsKey.EqualsIgnoreCase(arg.Key))
+                    values = this.ApplyContains(values, arg.Value);
+                else if (InputArguments.ValueAtKey.EqualsIgnoreCase(arg.Key))
+                    values = this.ApplyValueAt(values, arg.Value);
+                else
+                    throw new NotSupportedException($"Unknown reserved argument key '{arg.Key}'.");
             }
 
             return values;
@@ -184,6 +201,33 @@ namespace ContentPatcher.Framework.Tokens
             : this(provider, scope)
         {
             this.Name = name;
+        }
+
+        /// <summary>Apply the <see cref="InputArguments.ContainsKey"/> argument.</summary>
+        /// <param name="values">The underlying values to modify.</param>
+        /// <param name="argValue">The argument value.</param>
+        private string[] ApplyContains(string[] values, IInputArgumentValue argValue)
+        {
+            InvariantHashSet search = new(argValue.Parsed.Select(this.NormalizeValue));
+            bool match = search.Any() && values.Any(value => search.Contains(value));
+            return new[] { match.ToString() };
+        }
+
+        /// <summary>Apply the <see cref="InputArguments.ValueAtKey"/> argument.</summary>
+        /// <param name="values">The underlying values to modify.</param>
+        /// <param name="argValue">The argument value.</param>
+        private string[] ApplyValueAt(string[] values, IInputArgumentValue argValue)
+        {
+            // parse index
+            if (!int.TryParse(argValue.Raw, out int index))
+                throw new FormatException($"Invalid '{InputArguments.ValueAtKey}' index '{argValue.Raw}', must be a numeric index."); // should never happen since it's validated before this point
+            if (Math.Abs(index) >= values.Length)
+                return new string[0];
+
+            // get value at index (negative index = from end)
+            return index >= 0
+                ? new[] { values[index] }
+                : new[] { values[values.Length + index] };
         }
     }
 }

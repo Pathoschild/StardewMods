@@ -190,27 +190,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <inheritdoc />
         public override IEnumerable<ISubject> GetSearchSubjects()
         {
-            // NPCs
-            foreach (NPC npc in Utility.getAllCharacters())
-                yield return this.BuildSubject(npc);
-
-            // animals
-            foreach (var location in CommonHelper.GetLocations())
+            // get all matching NPCs
+            IEnumerable<ISubject> GetAll()
             {
-                IEnumerable<FarmAnimal> animals =
-                    (location as Farm)?.animals.Values
-                    ?? (location as AnimalHouse)?.animals.Values;
 
-                if (animals != null)
+                // NPCs
+                foreach (NPC npc in Utility.getAllCharacters())
+                    yield return this.BuildSubject(npc);
+
+                // animals
+                foreach (var location in CommonHelper.GetLocations())
                 {
-                    foreach (var animal in animals)
-                        yield return this.BuildSubject(animal);
+                    IEnumerable<FarmAnimal> animals =
+                        (location as Farm)?.animals.Values
+                        ?? (location as AnimalHouse)?.animals.Values;
+
+                    if (animals != null)
+                    {
+                        foreach (var animal in animals)
+                            yield return this.BuildSubject(animal);
+                    }
                 }
+
+                // players
+                foreach (Farmer player in Game1.getAllFarmers())
+                    yield return this.BuildSubject(player);
             }
 
-            // players
-            foreach (Farmer player in Game1.getAllFarmers())
-                yield return this.BuildSubject(player);
+            // filter duplicates (e.g. multiple monsters)
+            HashSet<string> seen = new HashSet<string>();
+            foreach (ISubject subject in GetAll())
+            {
+                if (!seen.Add($"{subject.GetType().FullName}::{subject.Type}::{subject.Name}"))
+                    continue;
+
+                yield return subject;
+            }
         }
 
 

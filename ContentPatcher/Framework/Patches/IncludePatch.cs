@@ -122,7 +122,7 @@ namespace ContentPatcher.Framework.Patches
                     string[] invalidFields = this.GetInvalidFields(content).ToArray();
                     if (invalidFields.Any())
                     {
-                        this.Monitor.Log($"{errorPrefix}: file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderBy(p => p))}).", LogLevel.Warn);
+                        this.Monitor.Log($"{errorPrefix}: file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).", LogLevel.Warn);
                         return true;
                     }
 

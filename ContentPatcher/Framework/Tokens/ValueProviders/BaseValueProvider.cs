@@ -113,7 +113,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                             {
                                 string raw = input.TokenString.Raw;
                                 string parsed = input.TokenString.Value;
-                                error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByIgnoreCase(p => p))}'";
+                                error = $"invalid input arguments ({(raw != parsed ? $"{raw} => {parsed}" : parsed)}) for {this.Name} token, expected any of '{string.Join("', '", validInputs.OrderByHuman())}'";
                                 return false;
                             }
                         }
@@ -134,7 +134,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                         string invalidKey = (from arg in input.NamedArgs where !this.ValidNamedArguments.Contains(arg.Key) select arg.Key).FirstOrDefault();
                         if (invalidKey != null)
                         {
-                            error = $"invalid named argument '{invalidKey}' for {this.Name} token, expected any of '{string.Join("', '", this.ValidNamedArguments.OrderByIgnoreCase(p => p))}'";
+                            error = $"invalid named argument '{invalidKey}' for {this.Name} token, expected any of '{string.Join("', '", this.ValidNamedArguments.OrderByHuman())}'";
                             return false;
                         }
                     }
@@ -296,7 +296,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="values">The underlying values to check.</param>
         /// <param name="action">The action to perform.</param>
-        protected bool IsChanged<T>(HashSet<T> values, Action action)
+        protected bool IsChanged<T>(ISet<T> values, Action action)
         {
             return this.IsChanged(() =>
             {
@@ -357,7 +357,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <typeparam name="T">The value type.</typeparam>
         /// <param name="oldValues">The old values to check.</param>
         /// <param name="newValues">The new values to check.</param>
-        protected bool IsChanged<T>(HashSet<T> oldValues, HashSet<T> newValues)
+        protected bool IsChanged<T>(ISet<T> oldValues, ISet<T> newValues)
         {
             return newValues.Count != oldValues.Count || newValues.Any(p => !oldValues.Contains(p));
         }

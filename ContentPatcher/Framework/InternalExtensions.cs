@@ -56,14 +56,21 @@ namespace ContentPatcher.Framework
             return source.GroupBy(keySelector, StringComparer.OrdinalIgnoreCase);
         }
 
-        /// <summary>Sort the elements of a sequence in ascending order by using a specified comparer.</summary>
-        /// <typeparam name="TSource">The type of the elements of <paramref name="source" />.</typeparam>
+        /// <summary>Sort the elements of a sequence in ascending order using <see cref="HumanSortComparer.DefaultIgnoreCase"/>.</summary>
+        /// <param name="source">A sequence of values to order.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source" /> is <see langword="null" />.</exception>
+        public static IOrderedEnumerable<string> OrderByHuman(this IEnumerable<string> source)
+        {
+            return source.OrderBy(p => p, HumanSortComparer.DefaultIgnoreCase);
+        }
+
+        /// <summary>Sort the elements of a sequence in ascending order using <see cref="HumanSortComparer.DefaultIgnoreCase"/>.</summary>
         /// <param name="source">A sequence of values to order.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source" /> or <paramref name="keySelector" /> is <see langword="null" />.</exception>
-        public static IOrderedEnumerable<TSource> OrderByIgnoreCase<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector)
+        /// <exception cref="ArgumentNullException"><paramref name="source" /> is <see langword="null" />.</exception>
+        public static IOrderedEnumerable<TSource> OrderByHuman<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector)
         {
-            return source.OrderBy(keySelector, StringComparer.OrdinalIgnoreCase);
+            return source.OrderBy(keySelector, HumanSortComparer.DefaultIgnoreCase);
         }
 
         /****

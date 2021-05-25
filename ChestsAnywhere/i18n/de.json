@@ -2,8 +2,8 @@
     // default chest names
     "default-name.fridge": "Kühlschrank",
     "default-name.other": "{{name}} #{{number}}",
-    "default-name.shipping-bin.store": "verschicken",
-    "default-name.shipping-bin.take": "zurückholen",
+    "default-name.shipping-bin.store": "Verschicken",
+    "default-name.shipping-bin.take": "Zurückholen",
 
     // default category names
     "default-category.owned-cabin": "Hütte ({{owner}})",
@@ -25,11 +25,11 @@
     "label.automate-take": "Nimm Gegenstände von dieser Kiste",
     "label.automate-take-first": "Nimm zuerst Gegenstände von dieser Kiste",
     "label.automate-take-disabled": "Nimm niemals Gegenstände aus dieser Kiste",
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
+    "label.automate-prevent-remove-stacks": "Entferne niemals den letzten Gegenstand eines Stapels",
 
     // button labels
     "button.edit-chest": "Bearbeite Kiste",
-    "button.sort-inventory": "sortiere Inventar",
+    "button.sort-inventory": "Sortiere Inventar",
     "button.save": "Speichern",
     "button.reset": "Zurücksetzen",
 

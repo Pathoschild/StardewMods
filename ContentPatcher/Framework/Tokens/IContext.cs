@@ -6,6 +6,17 @@ namespace ContentPatcher.Framework.Tokens
     /// <summary>Provides access to contextual tokens.</summary>
     internal interface IContext
     {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The number of context updates since the game was launched, including the current one if applicable.</summary>
+        /// <remarks>This can be used to detect whether something has already been updated for the current context update, for cases where multiple tokens have common update logic.</remarks>
+        int UpdateTick { get; }
+
+
+        /*********
+        ** Methods
+        *********/
         /// <summary>Get whether a mod is installed.</summary>
         /// <param name="id">The mod ID.</param>
         bool IsModInstalled(string id);

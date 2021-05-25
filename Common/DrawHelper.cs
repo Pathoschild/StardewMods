@@ -1,9 +1,8 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common;
 
-namespace Pathoschild.Stardew.LookupAnything
+namespace Pathoschild.Stardew.Common
 {
     /// <summary>Provides utility methods for drawing to the screen.</summary>
     internal static class DrawHelper

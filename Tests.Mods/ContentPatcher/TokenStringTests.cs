@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         public void TokenStringBuilder_PlainString(string raw)
         {
             // act
-            TokenString tokenStr = new TokenString(raw, new GenericTokenContext(modId => false), new LogPathBuilder("unit test"));
+            TokenString tokenStr = new TokenString(raw, this.GetGenericTokenContext(), new LogPathBuilder("unit test"));
             IContextualState diagnosticState = tokenStr.GetDiagnosticState();
 
             // assert
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             // arrange
             const string configKey = "tokenKey";
-            var context = new GenericTokenContext(modId => false);
+            var context = this.GetGenericTokenContext();
             context.Save(this.GetImmutableToken(configKey, "value"));
 
             // act
@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             const string configValue = "A";
             const string tokenKey = "season";
             const string raw = "  assets/{{configKey}}_{{season}}_{{ invalid  }}.png  ";
-            var context = new GenericTokenContext(modId => false);
+            var context = this.GetGenericTokenContext();
             context.Save(this.GetImmutableToken(configKey, configValue));
             context.Save(this.GetImmutableToken(tokenKey, "A"));
 
@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
             // assert
             tokenStr.Raw.Should().Be("assets/{{configKey}}_{{season}}_{{invalid}}.png");
             tokenStr.GetTokenPlaceholders(recursive: false).Should().HaveCount(3);
-            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.ToString()).Should().BeEquivalentTo(new[] { "{{configKey}}", "{{season}}", "{{invalid}}" });
+            tokenStr.GetTokenPlaceholders(recursive: false).Select(name => name.ToString()).Should().BeEquivalentTo("{{configKey}}", "{{season}}", "{{invalid}}");
             tokenStr.IsReady.Should().BeFalse();
             tokenStr.HasAnyTokens.Should().BeTrue();
             tokenStr.IsSingleTokenOnly.Should().BeFalse();
@@ -102,6 +102,12 @@ namespace Pathoschild.Stardew.Tests.Mods.ContentPatcher
         {
             IValueProvider valueProvider = new ImmutableValueProvider(name, new InvariantHashSet(values));
             return new Token(valueProvider);
+        }
+
+        /// <summary>Get a generic token context.</summary>
+        private GenericTokenContext GetGenericTokenContext()
+        {
+            return new(isModInstalled: _ => false, getUpdateTick: () => 0);
         }
     }
 }
