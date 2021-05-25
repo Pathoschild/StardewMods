@@ -1,5 +1,7 @@
 ﻿# Release notes
-## Upcoming release
+## 1.14.4
+Released 25 May 2021.
+
 * Improved translations. Thanks to martin66789 (updated Hungarian)!
 
 ## 1.14.3

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>HorseFluteAnywhere</AssemblyName>
-    <Version>1.1.4</Version>
+    <Version>1.1.5</Version>
     <RootNamespace>Pathoschild.Stardew.HorseFluteAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 

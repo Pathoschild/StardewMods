@@ -1,21 +1,21 @@
 ﻿# Release notes
-## Upcoming release
+## 4.14.2
 * Fixed [horse flute](https://stardewvalleywiki.com/Horse_Flute) summoning the tractor if you built
   a tractor garage before the stable.
 
-  _**This fix is not retroactive.** If your horse flute summons the tractor, here's how to fix it as
-  the main player:_
+**How to fix affected saves:**  
+The fix isn't retroactive; here's how to fix an existing save if your horse flute summons the
+tractor. In multiplayer, this must be done by the main player.
 
-  1. _Install [Horse Flute Anywhere](https://www.nexusmods.com/stardewvalley/mods/7500) 1.1.5 or
-     later._
-  2. _Load the save in-game._
-  3. _Run this command in the SMAPI console window:_
-     ```
-     reset_horses
-     ```
-  4. _That will reset **all** horses in the game. Each player should then interact with their horse
-     to name it and take ownership._
-  5. _After saving in-game, you can safely remove Horse Flute Anywhere if you don't need it._
+1. _Install [Horse Flute Anywhere](https://www.nexusmods.com/stardewvalley/mods/7500) 1.1.5 or later._
+2. _Load the save in-game._
+3. _Run this command in the SMAPI console window:_
+   ```
+   reset_horses
+   ```
+4. _That will reset the ownership for **all** horses in the game. Each player should then interact
+   with their horse to name it and take ownership._
+5. _After saving in-game, you can safely remove Horse Flute Anywhere if you don't need it._
 
 ## 4.14.1
 Released 17 April 2021.

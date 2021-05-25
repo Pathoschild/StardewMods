@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1.5
+Released 25 May 2021.
+
 * Fixed `reset_horses` command not fully resetting horse ownership in some cases.
 
 ## 1.1.4
