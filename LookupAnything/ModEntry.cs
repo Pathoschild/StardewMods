@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
             {
-                if (e.NewMenu == null && e.OldMenu is LookupMenu && this.PreviousMenus.Value.Any())
+                if (e.NewMenu == null && (e.OldMenu is LookupMenu or SearchMenu) && this.PreviousMenus.Value.Any())
                     Game1.activeClickableMenu = this.PreviousMenus.Value.Pop();
             });
         }
@@ -269,7 +269,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             if (Game1.activeClickableMenu is SearchMenu)
                 this.HideSearch();
-            else if (Context.IsPlayerFree)
+            else if (Context.IsWorldReady && Game1.activeClickableMenu is not LookupMenu)
                 this.ShowSearch();
         }
 

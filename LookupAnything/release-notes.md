@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* You can now open the search UI when another menu is open, similar to the lookup UI.
+
 ## 1.34.2
 Released 25 May 2021.
 
