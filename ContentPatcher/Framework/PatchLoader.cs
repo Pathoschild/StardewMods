@@ -657,8 +657,6 @@ namespace ContentPatcher.Framework
                             // validate
                             if (fromAsset == null && !mapProperties.Any() && !mapTiles.Any() && !addWarps.Any() && !textOperations.Any())
                                 return TrackSkip($"must specify at least one of {nameof(entry.AddWarps)}, {nameof(entry.FromFile)}, {nameof(entry.MapProperties)}, {nameof(entry.MapTiles)}, or {nameof(entry.TextOperations)}");
-                            if (fromAsset != null && entry.ToArea == null)
-                                return TrackSkip($"must specify {nameof(entry.ToArea)} when using {nameof(entry.FromFile)} (use \"Action\": \"Load\" if you want to replace the whole map file)");
 
                             // save
                             patch = new EditMapPatch(
