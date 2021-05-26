@@ -170,23 +170,25 @@ namespace ContentPatcher.Framework.Tokens
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
             // default logic
-            if (!input.ReservedArgs.Any())
-                return this.Values.GetValues(input);
+            IEnumerable<string> rawValues = this.Values.GetValues(input);
 
             // apply global input arguments
-            string[] values = this.Values.GetValues(input).ToArray();
-
-            foreach (KeyValuePair<string, IInputArgumentValue> arg in input.ReservedArgsList)
+            if (input.ReservedArgs.Any())
             {
-                if (InputArguments.ContainsKey.EqualsIgnoreCase(arg.Key))
-                    values = this.ApplyContains(values, arg.Value);
-                else if (InputArguments.ValueAtKey.EqualsIgnoreCase(arg.Key))
-                    values = this.ApplyValueAt(values, arg.Value);
-                else
-                    throw new NotSupportedException($"Unknown reserved argument key '{arg.Key}'.");
+                string[] values = rawValues.ToArray();
+
+                foreach (KeyValuePair<string, IInputArgumentValue> arg in input.ReservedArgsList)
+                {
+                    if (InputArguments.ContainsKey.EqualsIgnoreCase(arg.Key))
+                        values = this.ApplyContains(values, arg.Value);
+                    else if (InputArguments.ValueAtKey.EqualsIgnoreCase(arg.Key))
+                        values = this.ApplyValueAt(values, arg.Value);
+                }
+
+                rawValues = values;
             }
 
-            return values;
+            return rawValues;
         }
 
 

@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * `EditMap` patches with `FromFile` no longer require `ToArea`. (It now defaults defaults to an area starting from the the top-left.)
+* Fixed 'unknown reserved argument' errors in Content Patcher 1.23.0 for content packs which use `inputSeparator`.
 
 ## 1.23.0
 Released 25 May 2021. See the [release highlights](https://www.patreon.com/posts/51685726).
