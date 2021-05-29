@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed broken custom locations also preventing valid custom locations from loading.
+
 ## 1.23.1
 Released 25 May 2021.
 

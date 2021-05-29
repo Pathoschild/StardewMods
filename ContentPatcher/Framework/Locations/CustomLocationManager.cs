@@ -120,7 +120,16 @@ namespace ContentPatcher.Framework.Locations
 
             // add locations
             foreach (CustomLocationData location in customLocations)
-                gameLocations.Add(new GameLocation(mapPath: location.PublicMapPath, name: location.Name));
+            {
+                try
+                {
+                    gameLocations.Add(new GameLocation(mapPath: location.PublicMapPath, name: location.Name));
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"{location.ContentPack.Manifest.Name} failed to load location '{location.Name}'. If you save after this point, any previous content in that location will be lost permanently.\nTechnical details: {ex}", LogLevel.Error);
+                }
+            }
         }
 
         /// <inheritdoc />
