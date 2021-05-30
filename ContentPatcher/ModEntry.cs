@@ -269,6 +269,7 @@ namespace ContentPatcher
             this.CommandHandler = new CommandHandler(
                 screenManager: this.ScreenManager,
                 monitor: this.Monitor,
+                contentHelper: this.Helper.Content,
                 contentPacks: contentPacks,
                 getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
                 updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)

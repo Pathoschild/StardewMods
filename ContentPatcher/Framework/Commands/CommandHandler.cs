@@ -34,10 +34,11 @@ namespace ContentPatcher.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="screenManager">Manages state for each screen.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        /// <param name="contentHelper">Provides an API for managing content assets.</param>
         /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PerScreen<ScreenManager> screenManager, IMonitor monitor, LoadedContentPack[] contentPacks, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(PerScreen<ScreenManager> screenManager, IMonitor monitor, IContentHelper contentHelper, LoadedContentPack[] contentPacks, Func<string, IContext> getContext, Action updateContext)
         {
             this.Monitor = monitor;
 
@@ -54,6 +55,10 @@ namespace ContentPatcher.Framework.Commands
                     new HelpCommand(
                         monitor: this.Monitor,
                         getCommands: () => this.Commands
+                    ),
+                    new InvalidateCommand(
+                        monitor: this.Monitor,
+                        contentHelper: contentHelper
                     ),
                     new ParseCommand(
                         monitor: this.Monitor,

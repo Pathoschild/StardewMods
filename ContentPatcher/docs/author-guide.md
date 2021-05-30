@@ -1412,7 +1412,7 @@ This can also be used to troubleshoot token syntax:
 [ERROR] Can't parse that token value: Reached end of input, expected end of token ('}}').
 ```
 
-### patch dump
+#### patch dump
 `patch dump` provides specialized reports about the internal Content Patcher state. These are meant
 for technical troubleshooting; in most cases you should use `patch summary` instead.
 
@@ -1421,6 +1421,22 @@ Available reports:
 * `patch dump order` shows the global definition order for all loaded patches.
 * `patch dump applied` shows all active patches grouped by target in their apply order, including
   whether each patch is applied.
+
+#### patch invalidate
+`patch invalidate` immediately removes a named asset from the game/SMAPI content cache. If it's an
+asset handled by SMAPI, the asset will be reloaded immediately and Content Patcher will reapply its
+changes to it. Otherwise the next code which loads the same asset will get a new instance.
+
+For example:
+
+```
+> patch invalidate "Buildings/houses"
+
+[Content Patcher] Requested cache invalidation for 'Portraits\Abigail'.
+[SMAPI]           Invalidated 1 asset names (Portraits\Abigail).
+[SMAPI]           Propagated 1 core assets (Portraits\Abigail).
+[Content Patcher] Invalidated asset 'Portraits/Abigail'.
+```
 
 ### Debug mode
 Content Patcher has a 'debug mode' which lets you view loaded textures directly in-game with any

@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added [`patch invalidate` console command](docs/author-guide.md#patch-invalidate).
 * Fixed broken custom locations also preventing valid custom locations from loading.
 
 ## 1.23.1
