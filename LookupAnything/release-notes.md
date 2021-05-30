@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * You can now open the search UI when another menu is open, similar to the lookup UI.
+* Fixed some fish pond drops shown as requiring zero fish instead of one.
 
 ## 1.34.2
 Released 25 May 2021.
