@@ -457,6 +457,7 @@ _default_ | `ID` if it exists.
 `Data/ConcessionTastes` | `Name`
 `Data/FishPondData` | The `RequiredTags` field with comma-separated tags (like `fish_ocean,fish_crab_pot`). The key is space-sensitive.
 `Data/MoviesReactions` | `NPCName`
+`Data/RandomBundles` | `AreaName`
 `Data/TailoringRecipes` | `FirstItemTags` and `SecondItemTags`, with comma-separated tags and a pipe between them (like <code>item_cloth&#124;category_fish,fish_semi_rare</code>). The key is space-sensitive.
 
 List assets also have an order which can affect game logic (e.g. the first entry in
