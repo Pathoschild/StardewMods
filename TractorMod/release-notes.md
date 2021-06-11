@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Fixed crash if mod is installed incorrectly and its textures files don't exist.
+
 ## 4.14.2
 * Fixed [horse flute](https://stardewvalleywiki.com/Horse_Flute) summoning the tractor if you built
   a tractor garage before the stable.
