@@ -17,6 +17,7 @@ using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Network;
 using StardewValley.Objects;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 {
@@ -460,7 +461,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             return pet.lastPetDay.TryGetValue(playerID, out int lastDay)
                 ? lastDay
-                : null as int?;
+                : null;
         }
 
         /// <summary>Get a monster's possible drops.</summary>
@@ -469,23 +470,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             // get possible drops
             ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
-            if (possibleDrops == null && this.IsHauntedSkull)
-                possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
-            if (possibleDrops == null)
-                possibleDrops = new ItemDropData[0];
+            if (this.IsHauntedSkull)
+                possibleDrops ??= this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
+            possibleDrops ??= new ItemDropData[0];
 
             // get actual drops
-            IDictionary<int, int> dropsLeft = monster
+            IDictionary<int, List<ItemDropData>> dropsLeft = monster
                 .objectsToDrop
-                .GroupBy(id => id)
-                .ToDictionary(group => group.Key, group => group.Count());
+                .Select(this.GetActualDrop)
+                .GroupBy(p => p.ItemID)
+                .ToDictionary(group => group.Key, group => group.ToList());
 
             // return possible drops
             foreach (var drop in possibleDrops.OrderByDescending(p => p.Probability))
             {
-                bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemID, out int count) && count > 0;
+                bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemID, out List<ItemDropData> actualDrops) && actualDrops.Any();
                 if (isGuaranteed)
-                    dropsLeft[drop.ItemID]--;
+                {
+                    ItemDropData[] matches = actualDrops.Where(p => p.MinDrop >= drop.MinDrop && p.MaxDrop <= drop.MaxDrop).ToArray();
+                    ItemDropData bestMatch =
+                        matches.FirstOrDefault(p => p.MinDrop == drop.MinDrop && p.MaxDrop == drop.MaxDrop)
+                        ?? matches.FirstOrDefault();
+                    actualDrops.Remove(bestMatch);
+                }
 
                 yield return new ItemDropData(
                     itemID: drop.ItemID,
@@ -496,15 +503,44 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // special case: return guaranteed drops that weren't matched
-            foreach (var pair in dropsLeft.Where(p => p.Value > 0))
+            foreach (var pair in dropsLeft.Where(p => p.Value.Any()))
             {
-                yield return new ItemDropData(
-                    itemID: pair.Key,
-                    minDrop: pair.Value,
-                    maxDrop: pair.Value,
-                    probability: 1
-                );
+                foreach (var drop in pair.Value)
+                    yield return drop;
             }
+        }
+
+        /// <summary>Get the drop info for a <see cref="Monster.objectsToDrop"/> ID, if it's valid.</summary>
+        /// <param name="id">The ID to parse.</param>
+        /// <remarks>Derived from <see cref="GameLocation.monsterDrop"/> and the <see cref="Debris"/> constructor.</remarks>
+        private ItemDropData GetActualDrop(int id)
+        {
+            // basic info
+            int minDrop = 1;
+            int maxDrop = 1;
+
+            // negative ID means the monster will drop 1-3 of the item
+            if (id < 0)
+            {
+                id = -id;
+                maxDrop = 3;
+            }
+
+            // handle hardcoded ID mappings in Debris constructor
+            id = id switch
+            {
+                0 => SObject.copper,
+                2 => SObject.iron,
+                4 => SObject.coal,
+                6 => SObject.gold,
+                10 => SObject.iridium,
+                12 => SObject.wood,
+                14 => SObject.stone,
+                _ => id
+            };
+
+            // build model
+            return new ItemDropData(itemID: id, minDrop: minDrop, maxDrop: maxDrop, probability: 1);
         }
     }
 }
