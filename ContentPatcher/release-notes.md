@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added [`patch invalidate` console command](docs/author-guide.md#patch-invalidate).
 * Fixed issue where editing a list field using `EditData` and `Fields` would append the values instead of replacing them.
 * Fixed broken custom locations also preventing valid custom locations from loading.
+* Fixed `Query` token not allowing queries that contain a comma.
 
 ## 1.23.1
 Released 25 May 2021.
