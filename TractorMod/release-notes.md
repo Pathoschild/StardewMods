@@ -1,5 +1,6 @@
 ﻿# Release notes
 ## Upcoming release
+* Fixed tractor watering can not playing any sound.
 * Fixed crash if mod is installed incorrectly and its textures files don't exist.
 
 ## 4.14.2
