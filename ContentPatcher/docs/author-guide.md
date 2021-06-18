@@ -1485,7 +1485,7 @@ To target a specific language, you can add a language condition:
 {
    "Action": "EditImage",
    "Target": "LooseSprites/Cursors",
-   "FromFile": "assets/cursors.de.json",
+   "FromFile": "assets/cursors.de.png",
    "When": {
       "Language": "de"
    }
