@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 // cut non-fruit tree
                 case Tree tree:
-                    return this.ShouldCut(tree) && this.UseToolOnTile(tool, tile, player, location);
+                    return this.ShouldCut(tree, tile, location) && this.UseToolOnTile(tool, tile, player, location);
 
                 // cut fruit tree
                 case FruitTree tree:
@@ -130,7 +130,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         *********/
         /// <summary>Get whether a given tree should be chopped.</summary>
         /// <param name="tree">The tree to check.</param>
-        private bool ShouldCut(Tree tree)
+        /// <param name="tile">The tile containing the tree.</param>
+        /// <param name="location">The location containing the tree.</param>
+        private bool ShouldCut(Tree tree, Vector2 tile, GameLocation location)
         {
             var config = this.Config;
 
@@ -143,7 +145,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return config.ClearTreeSaplings;
 
             // full-grown
-            return tree.tapped.Value ? config.CutTappedTrees : config.CutGrownTrees;
+            if (config.CutGrownTrees == config.CutTappedTrees)
+                return config.CutGrownTrees;
+            return this.IsTapped(tree, tile, location)
+                ? config.CutTappedTrees
+                : config.CutGrownTrees;
         }
 
         /// <summary>Get whether a given tree should be chopped.</summary>
@@ -171,6 +177,24 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             var config = this.Config;
 
             return config.CutBushes;
+        }
+
+        /// <summary>Get whether a given tree has a tapper attached.</summary>
+        /// <param name="tree">The tree to check.</param>
+        /// <param name="tile">The tile containing the tree.</param>
+        /// <param name="location">The location containing the tree.</param>
+        private bool IsTapped(Tree tree, Vector2 tile, GameLocation location)
+        {
+            return
+                // tree is known tapped
+                tree.tapped.Value
+
+                // the game doesn't reliably track heavy tappers, so we need to check manually
+                || (
+                    location.objects.TryGetValue(tile, out SObject obj)
+                    && obj.bigCraftable.Value
+                    && obj.ParentSheetIndex is 105 or 264
+                );
         }
     }
 }
