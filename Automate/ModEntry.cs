@@ -159,7 +159,7 @@ namespace Pathoschild.Stardew.Automate
             try
             {
                 if (e.Removed.Any())
-                    this.MachineManager.QueueReload(e.Removed);
+                    this.MachineManager.QueueRemove(e.Removed);
 
                 this.MachineManager.QueueReload(e.Added);
             }
