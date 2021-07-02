@@ -138,17 +138,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 return true;
 
             // check map warps
-            try
-            {
-                if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
-                    return true;
-            }
-            catch
-            {
-                // This fails in some cases like the movie theater entrance (which is checked via
-                // this.WarpActions above) or TMX Loader's custom tile properties. It's safe to
-                // ignore the error here, since that means it's not a valid warp.
-            }
+            if (this.IsCollidingWithWarpOrDoor(location, tilePixels))
+                return true;
 
             // check mine ladders/shafts
             const int ladderID = 173, shaftID = 174;
@@ -214,6 +205,31 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             {
                 if (farm.resourceClumps.Any(p => p.getBoundingBox(p.tile.Value).Intersects(tilePixels)))
                     return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>Get whether there's a warp or door that overlaps the given tile.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tilePixels">The tile area in pixels.</param>
+        private bool IsCollidingWithWarpOrDoor(GameLocation location, Rectangle tilePixels)
+        {
+            try
+            {
+                if (location.isCollidingWithWarpOrDoor(tilePixels) != null)
+                {
+                    // check again without the tile edges to avoid adjacent tiles being marked as warps
+                    const int narrowBy = 2;
+                    Rectangle narrowerArea = new Rectangle(tilePixels.X + narrowBy, tilePixels.Y + narrowBy, tilePixels.Width - 2 * narrowBy, tilePixels.Height - 2 * narrowBy);
+                    return location.isCollidingWithWarpOrDoor(narrowerArea) != null;
+                }
+            }
+            catch
+            {
+                // This fails in some cases like the movie theater entrance (which is checked via
+                // this.WarpActions above) or TMX Loader's custom tile properties. It's safe to
+                // ignore the error here, since that means it's not a valid warp.
             }
 
             return false;

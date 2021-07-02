@@ -1,4 +1,7 @@
 ﻿# Release notes
+## Upcoming release
+* Fixed _accessibility_ layer incorrectly marking some tiles adjacent to warps as warps.
+
 ## 1.14.4
 Released 25 May 2021.
 
