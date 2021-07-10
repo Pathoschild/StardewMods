@@ -15,6 +15,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed broken custom locations also preventing valid custom locations from loading.
 * Fixed `Query` token not allowing queries that contain a comma.
 * Fixed include-file-doesn't-exist message incorrectly logged as `TRACE` instead of `WARN`.
+* Fixed error using `patch export` command with the `Data\RandomBundles` file.
 
 ## 1.23.1
 Released 25 May 2021.
