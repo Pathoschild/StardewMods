@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.23.1
+Released 09 July 2021.
+
 * Fixed issue where upgrading a building which contains machines wouldn't always update automation correctly until the save was reloaded.
 
 ## 1.23.0

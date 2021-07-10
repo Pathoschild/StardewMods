@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.3.2
+Released 09 July 2021.
+
 * Fixed some tiles not diggable. (Thanks to KMFrench for a list of affected tiles!)
 
 ## 1.3.1

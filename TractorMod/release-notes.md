@@ -1,5 +1,7 @@
 ﻿# Release notes
-## Upcoming release
+## 4.14.3
+Released 09 July 2021.
+
 * Fixed heavy tappers not detected consistently due to a game bug.
 * Fixed tractor watering can not playing any sound.
 * Fixed crash if mod is installed incorrectly and its textures files don't exist.

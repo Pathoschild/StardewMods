@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.34.3
+Released 09 July 2021.
+
 * You can now open the search UI when another menu is open, similar to the lookup UI.
 * Fixed lookups for custom seeds added via Json Assets not showing crop info.
 * Fixed some fish pond drops shown as requiring zero fish instead of one.
