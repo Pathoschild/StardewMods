@@ -44,6 +44,12 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily means it succeeded (e.g. the file may not have existed).</summary>
         private bool AttemptedDataLoad;
 
+        /// <summary>The cached JSON serializer used to apply JSON structures to a model.</summary>
+        private readonly Lazy<JsonSerializer> Serializer = new(() => new()
+        {
+            ObjectCreationHandling = ObjectCreationHandling.Replace
+        });
+
 
         /*********
         ** Accessors
@@ -488,13 +494,11 @@ namespace ContentPatcher.Framework.Patches
                     // apply object
                     else
                     {
-                        JObject obj = new JObject();
+                        JObject obj = new();
                         foreach (EditDataPatchField field in recordGroup)
                             obj[field.FieldKey.Value] = field.Value.Value;
-
-                        JsonSerializer serializer = new JsonSerializer();
                         using JsonReader reader = obj.CreateReader();
-                        serializer.Populate(reader, getEntry(key));
+                        this.Serializer.Value.Populate(reader, getEntry(key));
                     }
                 }
             }

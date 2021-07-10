@@ -376,7 +376,27 @@ Enter `automate summary` directly in the SMAPI console to view a summary of your
 ### How many machines can I automate at once?
 There's no strict limit, since Automate optimises machine connections internally. I've officially
 tested with up to [630 machines in one group](https://community.playstarbound.com/threads/automate.131913/page-11#post-3238142)
-(which didn't cause any issues), and some players have thousands of automated machines.
+(which worked fine). The most I've seen is [21,134 automated machines in one save](https://smapi.io/log/24Q970ju).
+
+### Does Automate support custom machines?
+Yes, but some custom machines need a separate mod which tells Automate how they work:
+
+* For Custom Farming Redux machines, install [CFAutomate](https://www.nexusmods.com/stardewvalley/mods/991?tab=files) 
+  from its optional downloads.
+* For Producer Framework Mod machines (including PPJA Artisan Valley), install [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038).
+
+(For mod authors: you can [use the Automate API](https://github.com/Pathoschild/StardewMods/blob/develop/Automate/technical.md#extensibility-for-modders)
+to add custom machines to Automate.)
+
+### How do I use path connectors?
+Path connectors aren't enabled by default. See the "Enable path connectors (config.json)" download
+on [the mod page's Files tab](https://www.nexusmods.com/stardewvalley/mods/1063/?tab=files) which
+enables some for you, or see [_connectors_ above](#connectors) for more info.
+
+### Why aren't my crystalariums starting automatically?
+Once a crystalarium is started, it continues producing the initial gem forever. So you need to
+start them with the gem you want manually, then Automate will collect their output automatically.
+(You can check the machine list in the mod description, it has notes about how some machines work.)
 
 ### In multiplayer, who gets XP and whose professions apply?
 A few machines give XP, update player stats, or check player skills based on the player who uses
@@ -400,6 +420,17 @@ and fish ponds.</small>
 
 ### Can I prevent a chest from being automated?
 Yep; see _[in-game settings](#in-game-settings)_.
+
+### Can I disable the shipping bin automation?
+Yep, you can disable it using [per-machine settings](#per-machine-settings). More specifically,
+replace the `"MachineOverrides": {}` line in to your `config.json` file with this:
+```js
+"MachineOverrides": {
+    "ShippingBin": {
+        "Enabled": false
+    }
+}
+```
 
 ### Why did my chests/machines disappear?
 Some common reasons:

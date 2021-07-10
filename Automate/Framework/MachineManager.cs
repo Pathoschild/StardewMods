@@ -33,6 +33,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>The disabled machine groups (e.g. machines not connected to a chest).</summary>
         private readonly List<IMachineGroup> DisabledMachineGroups = new();
 
+        /// <summary>The locations that should be removed on the next update tick.</summary>
+        private readonly HashSet<GameLocation> RemoveQueue = new(new ObjectReferenceComparer<GameLocation>());
+
         /// <summary>The locations that should be reloaded on the next update tick.</summary>
         private readonly HashSet<GameLocation> ReloadQueue = new(new ObjectReferenceComparer<GameLocation>());
 
@@ -121,6 +124,13 @@ namespace Pathoschild.Stardew.Automate.Framework
             this.ReloadQueue.AddMany(CommonHelper.GetLocations());
         }
 
+        /// <summary>Queue locations to remove and whose machines should be reloaded when <see cref="ReloadQueuedLocations"/> is called.</summary>
+        /// <param name="locations">The locations to remove.</param>
+        public void QueueRemove(IEnumerable<GameLocation> locations)
+        {
+            this.RemoveQueue.AddMany(locations);
+        }
+
         /// <summary>Queue a location for which to reload machines when <see cref="ReloadQueuedLocations"/> is called.</summary>
         /// <param name="location">The location to reload.</param>
         public void QueueReload(GameLocation location)
@@ -139,10 +149,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns whether any locations were reloaded.</returns>
         public bool ReloadQueuedLocations()
         {
-            if (this.ReloadQueue.Any())
+            if (this.ReloadQueue.Any() || this.RemoveQueue.Any())
             {
-                this.ReloadMachinesIn(this.ReloadQueue);
+                this.ReloadMachinesIn(this.ReloadQueue, this.RemoveQueue);
                 this.ReloadQueue.Clear();
+                this.RemoveQueue.Clear();
                 return true;
             }
 
@@ -162,13 +173,14 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Reload the machines in a given location.</summary>
         /// <param name="locations">The locations whose machines to reload.</param>
-        private void ReloadMachinesIn(ISet<GameLocation> locations)
+        /// <param name="removedLocations">The locations which have been removed, and whose machines should be reloaded if they still exist.</param>
+        private void ReloadMachinesIn(ISet<GameLocation> locations, ISet<GameLocation> removedLocations)
         {
             bool junimoGroupChanged;
 
             // remove old groups
             {
-                HashSet<string> locationKeys = new(locations.Select(this.Factory.GetLocationKey));
+                HashSet<string> locationKeys = new(locations.Concat(removedLocations).Select(this.Factory.GetLocationKey));
                 this.Monitor.VerboseLog($"Reloading machines in {locationKeys.Count} locations: {string.Join(", ", locationKeys)}...");
 
                 this.DisabledMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey));

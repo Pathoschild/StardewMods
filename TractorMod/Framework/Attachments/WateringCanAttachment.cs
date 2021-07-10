@@ -19,6 +19,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <summary>The attachment settings.</summary>
         private readonly GenericAttachmentConfig Config;
 
+        /// <summary>An infinite watering can to apply.</summary>
+        private readonly WateringCan WateringCan = new()
+        {
+            IsBottomless = true, // no water drain
+            IsEfficient = true, // no stamina drain
+            WaterLeft = 100
+        };
+
 
         /*********
         ** Public methods
@@ -56,13 +64,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             // water dirt
             if (this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out _, out _) && dirt.state.Value != HoeDirt.watered)
-                return this.UseWateringCanOnTile(tool, tile, player, location);
+                return this.UseWateringCanOnTile(tile, player, location);
 
             // cool lava
             int x = (int)tile.X;
             int y = (int)tile.Y;
             if (location is VolcanoDungeon dungeon && dungeon.isTileOnMap(x, y) && dungeon.waterTiles[x, y] && !dungeon.cooledLavaTiles.ContainsKey(tile))
-                return this.UseWateringCanOnTile(tool, tile, player, location);
+                return this.UseWateringCanOnTile(tile, player, location);
 
             return false;
         }
@@ -71,25 +79,20 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /*********
         ** Private methods
         *********/
-        /// <summary>Use a tool on a tile.</summary>
-        /// <param name="tool">The tool to use.</param>
+        /// <summary>Use the watering can on a tile.</summary>
         /// <param name="tile">The tile to affect.</param>
         /// <param name="player">The current player.</param>
         /// <param name="location">The current location.</param>
         /// <returns>Returns <c>true</c> for convenience when implementing tools.</returns>
-        private bool UseWateringCanOnTile(Tool tool, Vector2 tile, Farmer player, GameLocation location)
+        private bool UseWateringCanOnTile(Vector2 tile, Farmer player, GameLocation location)
         {
-            WateringCan can = (WateringCan)tool;
-            int prevWater = can.WaterLeft;
-            can.WaterLeft = 100;
-            try
+            if (this.UseToolOnTile(this.WateringCan, tile, player, location))
             {
-                return this.UseToolOnTile(tool, tile, player, location);
+                location.localSound("wateringCan"); // normally played in Tool.endUsing
+                return true;
             }
-            finally
-            {
-                can.WaterLeft = prevWater;
-            }
+
+            return false;
         }
     }
 }

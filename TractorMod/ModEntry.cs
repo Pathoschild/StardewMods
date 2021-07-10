@@ -214,8 +214,8 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // reload textures
-            this.TractorTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("tractor"));
-            this.GarageTexture = this.Helper.Content.Load<Texture2D>(this.GetTextureKey("garage"));
+            if (!this.TryGetTexture("tractor", out this.TractorTexture, out string error) || !this.TryGetTexture("garage", out this.GarageTexture, out error))
+                this.Monitor.Log(error, LogLevel.Error);
 
             // init garages + tractors
             if (Context.IsMainPlayer)
@@ -710,17 +710,41 @@ namespace Pathoschild.Stardew.TractorMod
             return new Vector2(garage.tileX.Value + 1, garage.tileY.Value + 1);
         }
 
-        /// <summary>Get the asset key for a texture from the assets folder (including seasonal logic if applicable).</summary>
+        /// <summary>Try to load the asset for a texture from the assets folder (including seasonal logic if applicable).</summary>
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
-        private string GetTextureKey(string spritesheet)
+        /// <param name="texture">The loaded texture, if found.</param>
+        /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
+        private bool TryGetTexture(string spritesheet, out Texture2D texture, out string error)
         {
-            // try seasonal texture
-            string seasonalKey = $"assets/{Game1.currentSeason}_{spritesheet}.png";
-            if (File.Exists(Path.Combine(this.Helper.DirectoryPath, seasonalKey)))
-                return seasonalKey;
+            texture = this.TryGetTextureKey(spritesheet, out string key, out error)
+                ? this.Helper.Content.Load<Texture2D>(key)
+                : null;
 
-            // default to single texture
-            return $"assets/{spritesheet}.png";
+            return texture != null;
+        }
+
+        /// <summary>Try to get the asset key for a texture from the assets folder (including seasonal logic if applicable).</summary>
+        /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
+        /// <param name="key">The asset key to use, if found.</param>
+        /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
+        private bool TryGetTextureKey(string spritesheet, out string key, out string error)
+        {
+            string seasonalKey = $"assets/{Game1.currentSeason}_{spritesheet}.png";
+            string defaultKey = $"assets/{spritesheet}.png";
+
+            foreach (string possibleKey in new[] { seasonalKey, defaultKey })
+            {
+                if (File.Exists(Path.Combine(this.Helper.DirectoryPath, possibleKey)))
+                {
+                    key = possibleKey;
+                    error = null;
+                    return true;
+                }
+            }
+
+            key = null;
+            error = $"Couldn't find file '{defaultKey}' in the mod folder. This mod isn't installed correctly; try reinstalling the mod to fix it.";
+            return false;
         }
 
         /// <summary>Apply the mod textures to the given menu, if applicable.</summary>
@@ -733,7 +757,7 @@ namespace Pathoschild.Stardew.TractorMod
                 if (carpenterMenu.CurrentBlueprint.maxOccupants == this.MaxOccupantsID)
                 {
                     Building building = this.Helper.Reflection.GetField<Building>(carpenterMenu, "currentBuilding").GetValue();
-                    if (building.texture.Value != this.GarageTexture)
+                    if (building.texture.Value != this.GarageTexture && this.GarageTexture != null)
                         building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
                 }
                 return;
@@ -748,7 +772,7 @@ namespace Pathoschild.Stardew.TractorMod
                 if (currentBlueprint.maxOccupants == this.MaxOccupantsID)
                 {
                     Building building = this.Helper.Reflection.GetField<Building>(menu, "currentBuilding").GetValue();
-                    if (building.texture.Value != this.GarageTexture)
+                    if (building.texture.Value != this.GarageTexture && this.GarageTexture != null)
                         building.texture = new Lazy<Texture2D>(() => this.GarageTexture);
                 }
             }
@@ -758,7 +782,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="horse">The horse to change.</param>
         private void ApplyTextures(Horse horse)
         {
-            if (this.IsTractor(horse))
+            if (this.TractorTexture != null && this.IsTractor(horse))
                 horse.Sprite.spriteTexture = this.TractorTexture;
         }
 
@@ -766,7 +790,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="stable">The stable to change.</param>
         private void ApplyTextures(Stable stable)
         {
-            if (this.IsGarage(stable))
+            if (this.GarageTexture != null && this.IsGarage(stable))
                 stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
         }
     }

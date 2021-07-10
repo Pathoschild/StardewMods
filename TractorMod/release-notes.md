@@ -1,4 +1,11 @@
 ﻿# Release notes
+## 4.14.3
+Released 09 July 2021.
+
+* Fixed heavy tappers not detected consistently due to a game bug.
+* Fixed tractor watering can not playing any sound.
+* Fixed crash if mod is installed incorrectly and its textures files don't exist.
+
 ## 4.14.2
 * Fixed [horse flute](https://stardewvalleywiki.com/Horse_Flute) summoning the tractor if you built
   a tractor garage before the stable.

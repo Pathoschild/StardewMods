@@ -9,6 +9,16 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.23.2
+Released 09 July 2021.
+
+* Added [`patch invalidate` console command](docs/author-guide.md#patch-invalidate).
+* Fixed issue where editing a list field using `EditData` and `Fields` would append the values instead of replacing them.
+* Fixed broken custom locations also preventing valid custom locations from loading.
+* Fixed `Query` token not allowing queries that contain a comma.
+* Fixed include-file-doesn't-exist message incorrectly logged as `TRACE` instead of `WARN`.
+* Fixed error using `patch export` command with the `Data\RandomBundles` file.
+
 ## 1.23.1
 Released 25 May 2021.
 

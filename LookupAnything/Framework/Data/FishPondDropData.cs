@@ -1,3 +1,5 @@
+using System;
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>An item that can be produced by a fish pond.</summary>
@@ -22,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public FishPondDropData(int minPopulation, int itemID, int minDrop, int maxDrop, float probability)
             : base(itemID, minDrop, maxDrop, probability)
         {
-            this.MinPopulation = minPopulation;
+            this.MinPopulation = Math.Max(minPopulation, 1); // rule only applies if the pond has at least one fish, so assume minimum of 1 to avoid player confusion
         }
     }
 }

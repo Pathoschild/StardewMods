@@ -88,12 +88,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             this.DisplayItem = this.GetMenuItem(item);
             this.FromCrop = fromCrop ?? fromDirt?.crop;
             this.FromDirt = fromDirt;
-
-            if ((item as SObject)?.Type == "Seeds" && this.FromCrop == null) // fromCrop == null to exclude unplanted coffee beans
-                this.SeedForCrop = new Crop(item.ParentSheetIndex, 0, 0);
             this.Context = context;
             this.KnownQuality = knownQuality;
             this.GetCropSubject = getCropSubject;
+
+            this.SeedForCrop = item.ParentSheetIndex != 433 || this.FromCrop == null // ignore unplanted coffee beans (to avoid "see also: coffee beans" loop)
+                ? this.TryGetCropForSeed(item)
+                : null;
 
             this.Initialize(this.DisplayItem.DisplayName, this.GetDescription(this.DisplayItem), this.GetTypeValue(this.DisplayItem));
         }
@@ -406,6 +407,23 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             return !string.IsNullOrWhiteSpace(categoryName)
                 ? categoryName
                 : I18n.Type_Other();
+        }
+
+        /// <summary>Get the crop which grows from the given seed, if applicable.</summary>
+        /// <param name="seed">The potential seed item to check.</param>
+        private Crop TryGetCropForSeed(Item seed)
+        {
+            try
+            {
+                Crop crop = new Crop(seed.ParentSheetIndex, 0, 0);
+                return crop.netSeedIndex.Value > -1
+                    ? crop
+                    : null;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>Get the custom fields for a crop.</summary>
