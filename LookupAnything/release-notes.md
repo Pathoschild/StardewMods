@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed social menu lookups not working from lower half of character slots.
+
 ## 1.34.3
 Released 09 July 2021.
 
