@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             // player slot
                             if (socialID is long playerID)
                             {
-                                Farmer player = Game1.getFarmer(playerID);
+                                Farmer player = Game1.getFarmerMaybeOffline(playerID);
                                 return this.BuildSubject(player);
                             }
 

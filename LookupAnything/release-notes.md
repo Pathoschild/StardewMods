@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed social menu lookups not working from lower half of character slots.
+* Fixed social menu lookup for an offline player showing the wrong player.
 
 ## 1.34.3
 Released 09 July 2021.
