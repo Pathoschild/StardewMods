@@ -150,6 +150,10 @@ namespace Pathoschild.Stardew.LookupAnything
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollUp();
                 else if (keys.ScrollDown.JustPressed())
                     (Game1.activeClickableMenu as LookupMenu)?.ScrollDown();
+                else if (keys.PageUp.JustPressed())
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollUp(Game1.activeClickableMenu.height);
+                else if (keys.PageDown.JustPressed())
+                    (Game1.activeClickableMenu as LookupMenu)?.ScrollDown(Game1.activeClickableMenu.height);
                 else if (keys.ToggleDebug.JustPressed() && Context.IsPlayerFree)
                     this.DebugInterface.Value.Enabled = !this.DebugInterface.Value.Enabled;
 

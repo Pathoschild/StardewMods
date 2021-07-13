@@ -54,7 +54,8 @@ field | action | default
 ----- | ------ | -------
 `ToggleLookup` | Look up a subject (see _use_ section). | `F1`
 `ToggleSearch` | Show a search UI to find something by name. | `LeftShift + F1`
-`ScrollUp`, `ScrollDown` | Scroll the displayed lookup results. | `Up`, `Down`
+`ScrollUp`, `ScrollDown` | Scroll the displayed lookup results by a few lines. | `Up`, `Down`
+`PageUp`, `PageDown` | Scroll the displayed lookup results by a full page. | `PageUp`, `PageDown`
 `ToggleDebug` | Show information intended for developers. | _none_
 
 You can separate bindings with commas (like `F1, LeftShoulder` for either one), and set
