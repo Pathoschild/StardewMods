@@ -184,12 +184,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
                 case MarriageDialogueReference dialogue:
                     return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
+                case ModDataDictionary data when data?.Any() == true:
+                    {
+                        StringBuilder str = new StringBuilder();
+                        str.AppendLine();
+                        foreach (var pair in data.Pairs.OrderBy(p => p.Key))
+                            str.AppendLine($"- {pair.Key}: {pair.Value}");
+                        return str.ToString().TrimEnd();
+                    }
                 case Stats stats:
                     {
                         StringBuilder str = new StringBuilder();
+                        str.AppendLine();
                         foreach (FieldInfo field in stats.GetType().GetFields())
                             str.AppendLine($"- {field.Name}: {I18n.Stringify(field.GetValue(stats))}");
-                        return str.ToString();
+                        return str.ToString().TrimEnd();
                     }
                 case Warp warp:
                     return $"([{warp.X}, {warp.Y}] to {warp.TargetName}[{warp.TargetX}, {warp.TargetY}])";

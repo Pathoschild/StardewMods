@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added support for scrolling up/down by a full page with `PageUp` and `PageDown` (configurable).
+* Improved formatting for `modData` fields in datamining mode.
 * Fixed social menu lookups not working from lower half of character slots.
 * Fixed social menu lookup for an offline player showing the wrong player.
 
