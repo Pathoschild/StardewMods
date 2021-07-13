@@ -6,6 +6,7 @@
 * Improved formatting for `modData` fields in datamining mode.
 * Fixed social menu lookups not working from lower half of character slots.
 * Fixed social menu lookup for an offline player showing the wrong player.
+* Fixed datamining showing both `modData` and `modDataForSerialization` fields.
 
 ## 1.34.3
 Released 09 July 2021.
