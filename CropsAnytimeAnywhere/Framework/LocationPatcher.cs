@@ -100,7 +100,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         /// <param name="propertyName">The property name to match.</param>
         /// <param name="layerName">The map layer name to check.</param>
         /// <param name="__result">The return value to use for the method.</param>
-        private static void After_DoesTileHaveProperty(GameLocation __instance, int xTile, int yTile, string propertyName, string layerName, ref bool __result)
+        private static void After_DoesTileHaveProperty(GameLocation __instance, int xTile, int yTile, string propertyName, string layerName, ref string __result)
         {
             if (!Context.IsWorldReady || !__instance.farmers.Any())
                 return; // don't affect game logic for spawning ores, etc
@@ -110,7 +110,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
                 try
                 {
                     if (LocationPatcher.ShouldMakeTillable(__instance, xTile, yTile))
-                        __result = true;
+                        __result = "T";
                 }
                 catch (Exception ex)
                 {

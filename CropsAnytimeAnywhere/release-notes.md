@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed Harmony patch error in the upcoming SMAPI 3.12.0.
+
 ## 1.3.2
 Released 09 July 2021.
 
