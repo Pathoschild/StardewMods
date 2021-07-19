@@ -76,7 +76,7 @@ namespace ContentPatcher.Framework
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
-            foreach (ConditionType type in new[] { ConditionType.FromFile, ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath })
+            foreach (ConditionType type in InternalConstants.FromFileTokens.Concat(InternalConstants.TargetTokens))
                 fakePatchContext.SetLocalValue(type.ToString(), InternalConstants.TokenPlaceholder);
 
             // get token parser for fake context
@@ -388,15 +388,15 @@ namespace ContentPatcher.Framework
                 // validate field reference tokens
                 if (targetAsset != null)
                 {
-                    if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
+                    if (targetAsset.UsesTokens(InternalConstants.TargetTokens))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{string.Join("', '", InternalConstants.TargetTokens)}' tokens.");
                 }
                 if (fromAsset != null)
                 {
-                    if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.FromFile}' token if the {nameof(entry.FromFile)} field uses the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
-                    if (fromAsset.UsesTokens(ConditionType.FromFile))
-                        return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{ConditionType.FromFile}' token.");
+                    if (fromAsset.UsesTokens(InternalConstants.FromFileTokens))
+                        return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{string.Join("', '", InternalConstants.FromFileTokens)}' tokens.");
+                    if (fromAsset.UsesTokens(InternalConstants.TargetTokens) && targetAsset?.UsesTokens(InternalConstants.FromFileTokens) == true)
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{string.Join("', '", InternalConstants.FromFileTokens)}' tokens if the {nameof(entry.FromFile)} field uses '{string.Join("', '", InternalConstants.TargetTokens)}' tokens.");
                 }
 
                 // get patch instance
@@ -408,7 +408,7 @@ namespace ContentPatcher.Framework
                         {
                             // validate
                             if (fromAsset == null)
-                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Include} patch.");
+                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for an {PatchType.Include} patch.");
 
                             // save
                             patch = new IncludePatch(
