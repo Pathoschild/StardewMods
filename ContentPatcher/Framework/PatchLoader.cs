@@ -250,11 +250,15 @@ namespace ContentPatcher.Framework
                             newPatch.LogName = this.GetDefaultPatchName(newPatch);
                         else
                         {
-                            // Custom Name > {target} from {fromFile}
+                            List<string> labels = new();
+
                             if (targets.Length > 1)
-                                newPatch.LogName += $" > {target}";
+                                labels.Add($"{target}");
                             if (fromFiles.Length > 1)
-                                newPatch.LogName += $" from {fromFile}";
+                                labels.Add($"from {fromFile}");
+
+                            if (labels.Any())
+                                newPatch.LogName += $" ({string.Join(" ", labels)})";
                         }
 
                         yield return newPatch;
