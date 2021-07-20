@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Improved patch validation to detect more common mistakes.
 * Tweaked the naming for patches with multiple `FromFile`/`Target` values to reduce confusion.
 
 ## 1.23.2

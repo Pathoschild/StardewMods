@@ -359,11 +359,13 @@ namespace ContentPatcher.Framework
 
                 // parse target asset
                 IManagedTokenString targetAsset = null;
-                if (action != PatchType.Include)
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
-                        return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
-                    if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string error, out targetAsset))
+                    {
+                        if (action != PatchType.Include)
+                            return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
+                    }
+                    else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string error, out targetAsset))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
@@ -413,6 +415,8 @@ namespace ContentPatcher.Framework
                             // validate
                             if (fromAsset == null)
                                 return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for an {PatchType.Include} patch.");
+                            if (targetAsset != null)
+                                return TrackSkip($"can't use the {nameof(PatchConfig.Target)} field with an {PatchType.Include} patch.");
 
                             // save
                             patch = new IncludePatch(
