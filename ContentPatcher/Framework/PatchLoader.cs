@@ -699,6 +699,25 @@ namespace ContentPatcher.Framework
                 if (!enabled)
                     return TrackSkip($"{nameof(PatchConfig.Enabled)} is false", warn: false);
 
+                // validate high-level issues
+                {
+                    var tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+
+                    // any field uses {{FromFile}} without a FromFile field
+                    foreach (ConditionType token in InternalConstants.FromFileTokens)
+                    {
+                        if (tokensUsed.Contains(token.ToString()) && patch.RawFromAsset == null)
+                            return TrackSkip($"can't use the {{{{{token}}}}} token because the patch has no {nameof(PatchConfig.FromFile)} field.");
+                    }
+
+                    // any field uses {{Target*}} without a Target field
+                    foreach (ConditionType type in InternalConstants.TargetTokens)
+                    {
+                        if (tokensUsed.Contains(type.ToString()) && patch.RawTargetAsset == null)
+                            return TrackSkip($"can't use the {{{{{type}}}}} token because the patch has no {nameof(PatchConfig.Target)} field.");
+                    }
+                }
+
                 // save patch
                 this.PatchManager.Add(patch, reindex);
                 return true;
