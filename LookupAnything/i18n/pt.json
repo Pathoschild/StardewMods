@@ -194,13 +194,13 @@
 
     "location.caldera": "Caverna do Vulcão",
     "location.islandEast": "Ilha Gengibre Leste",
-    "location.islandNorth": "Ilha Gengibre Norte", 
-    "location.islandSouth": "Ilha Gengibre Sul", 
-    "location.islandSouthEast": "Ilha Gengibre Sudeste", 
-    "location.islandSouthEastCave": "Ilha Gengibre Caverna Sudeste", 
-    "location.islandWest": "Ilha Gengibre Oeste", 
-    "location.islandWest.fish-area-1": "Ilha Gengibre Ocean Oeste", 
-    "location.islandWest.fish-area-2": "Ilha Gengibre Lagoa Oeste", 
+    "location.islandNorth": "Ilha Gengibre Norte",
+    "location.islandSouth": "Ilha Gengibre Sul",
+    "location.islandSouthEast": "Ilha Gengibre Sudeste",
+    "location.islandSouthEastCave": "Ilha Gengibre Caverna Sudeste",
+    "location.islandWest": "Ilha Gengibre Oeste",
+    "location.islandWest.fish-area-1": "Ilha Gengibre Ocean Oeste",
+    "location.islandWest.fish-area-2": "Ilha Gengibre Lagoa Oeste",
 
     "location.unknown-fish-area": "{{locationName}} (área de pesca {{id}})",
 
