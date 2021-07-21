@@ -17,8 +17,11 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
-        /// <summary>The animation handlers which skip or accelerate specific animations.</summary>
+        /// <summary>The animation handlers which skip or accelerate specific animations, excluding <see cref="UnvalidatedTickHandlers"/>.</summary>
         private IAnimationHandler[] Handlers;
+
+        /// <summary>The animation handlers which skip or accelerate specific animations using the <see cref="ISpecializedEvents.UnvalidatedUpdateTicked"/> event.</summary>
+        private IAnimationHandler[] UnvalidatedTickHandlers;
 
 
         /*********
@@ -29,12 +32,8 @@ namespace Pathoschild.Stardew.FastAnimations
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
-            this.UpdateConfig();
 
-            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            helper.Events.Player.Warped += this.OnWarped;
+            this.Reinitialize();
         }
 
 
@@ -56,12 +55,12 @@ namespace Pathoschild.Stardew.FastAnimations
                 {
                     this.Config = new ModConfig();
                     this.Helper.WriteConfig(this.Config);
-                    this.UpdateConfig();
+                    this.Reinitialize();
                 },
                 saveAndApply: () =>
                 {
                     this.Helper.WriteConfig(this.Config);
-                    this.UpdateConfig();
+                    this.Reinitialize();
                 },
                 modRegistry: this.Helper.ModRegistry,
                 monitor: this.Monitor,
@@ -91,32 +90,48 @@ namespace Pathoschild.Stardew.FastAnimations
                 handler.OnNewLocation(e.NewLocation);
         }
 
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            if (Game1.eventUp || !this.Handlers.Any())
-                return;
+            this.Apply(this.Handlers);
+        }
 
-            int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
-            foreach (IAnimationHandler handler in this.Handlers)
-            {
-                if (handler.IsEnabled(playerAnimationID))
-                {
-                    handler.Update(playerAnimationID);
-                    break;
-                }
-            }
+        /// <summary>Raised after the game state is updated (≈60 times per second), regardless of normal SMAPI validation.</summary>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnUnvalidatedUpdateTicked(object sender, UnvalidatedUpdateTickedEventArgs e)
+        {
+            this.Apply(this.UnvalidatedTickHandlers);
         }
 
         /****
         ** Methods
         ****/
-        /// <summary>Apply the mod configuration if it changed.</summary>
-        private void UpdateConfig()
+        /// <summary>Reapply the mod configuration and rehook events.</summary>
+        private void Reinitialize()
         {
-            this.Handlers = this.GetHandlers(this.Config).ToArray();
+            // get animation handlers
+            var handlers = this.GetHandlers(this.Config).ToArray();
+            this.Handlers = handlers.Where(p => !p.NeedsUnvalidatedUpdateTick).ToArray();
+            this.UnvalidatedTickHandlers = handlers.Where(p => p.NeedsUnvalidatedUpdateTick).ToArray();
+
+            // unhook events
+            var events = this.Helper.Events;
+            events.GameLoop.GameLaunched -= this.OnGameLaunched;
+            events.GameLoop.SaveLoaded -= this.OnSaveLoaded;
+            events.GameLoop.UpdateTicked -= this.OnUpdateTicked;
+            events.Player.Warped -= this.OnWarped;
+            events.Specialized.UnvalidatedUpdateTicked -= this.OnUnvalidatedUpdateTicked;
+
+            // hook events
+            events.GameLoop.GameLaunched += this.OnGameLaunched;
+            events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            events.Player.Warped += this.OnWarped;
+            if (this.UnvalidatedTickHandlers.Any())
+                events.Specialized.UnvalidatedUpdateTicked += this.OnUnvalidatedUpdateTicked;
         }
 
         /// <summary>Get the enabled animation handlers.</summary>
@@ -151,10 +166,30 @@ namespace Pathoschild.Stardew.FastAnimations
                 yield return new TreeFallingHandler(config.TreeFallSpeed, this.Helper.Reflection);
 
             // UI animations
+            if (config.ShippingMenuTransitionSpeed > 1)
+                yield return new ShippingMenuHandler(config.ShippingMenuTransitionSpeed, this.Helper.Reflection);
             if (config.TitleMenuTransitionSpeed > 1)
                 yield return new TitleMenuHandler(config.TitleMenuTransitionSpeed, this.Helper.Reflection);
             if (config.LoadGameBlinkSpeed > 1)
                 yield return new LoadGameMenuHandler(config.LoadGameBlinkSpeed, this.Helper.Reflection);
+        }
+
+        /// <summary>Apply the given animation handlers.</summary>
+        /// <param name="handlers">The animation handlers.</param>
+        private void Apply(IAnimationHandler[] handlers)
+        {
+            if (Game1.eventUp || !handlers.Any())
+                return;
+
+            int playerAnimationID = this.Helper.Reflection.GetField<int>(Game1.player.FarmerSprite, "currentSingleAnimation").GetValue();
+            foreach (IAnimationHandler handler in handlers)
+            {
+                if (handler.IsEnabled(playerAnimationID))
+                {
+                    handler.Update(playerAnimationID);
+                    break;
+                }
+            }
         }
     }
 }

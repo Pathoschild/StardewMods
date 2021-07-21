@@ -54,6 +54,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /****
         ** UI animations
         ****/
+        /// <summary>The speed multiplier for shipping menu transitions.</summary>
+        public float ShippingMenuTransitionSpeed { get; set; } = 1;
+
         /// <summary>The speed multiplier for title menu transitions.</summary>
         public float TitleMenuTransitionSpeed { get; set; } = 10;
 
