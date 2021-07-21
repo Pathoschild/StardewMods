@@ -348,16 +348,15 @@ Automate is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both singl
 multiplayer. In multiplayer mode, only the main player can automate machines; other players can
 keep it installed and use the overlay, their mod just won't automate anything.
 
-Automate is compatible with...
+Pairs well with...
 
-* [Auto-Grabber Mod](https://www.nexusmods.com/stardewvalley/mods/2783) (seeds/fertilizer in
-  auto-grabbers will be ignored).
-* [Better Junimos](https://www.nexusmods.com/stardewvalley/mods/2221) (seeds/fertilizer in Junimo
-  huts will be ignored).
-* [Custom Farming Redux](https://www.nexusmods.com/stardewvalley/mods/991) (see its optional
-  'CFAutomate' download to enable automation).
-* [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) (with the
-  [PFMAutomate](https://www.nexusmods.com/stardewvalley/mods/5038) addon).
+* [Better Junimos﻿](https://www.nexusmods.com/stardewvalley/mods/2221) adds more crop automation
+  (like replanting) and other improvements. Automate will automaticall ignore seeds/fertilizer in
+  Junimo huts if it's installed.
+* [Deluxe Grabber Redux﻿](https://www.nexusmods.com/stardewvalley/mods/7920) makes auto-grabbers
+  collect nearby animal products, forage, crops, and indoor pot crops too.
+* [Non-Destructive NPCs﻿](https://www.nexusmods.com/stardewvalley/mods/5176) prevents NPCs from
+  destroying chests and machines.
 
 ## Troubleshooting
 ### In-game overlay
