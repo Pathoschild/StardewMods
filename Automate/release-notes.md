@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Removed integration with Auto-Grabber Mod (which was deleted).
+
 ## 1.23.1
 Released 09 July 2021.
 

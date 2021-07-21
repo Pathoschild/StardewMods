@@ -10,30 +10,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
     internal class AutoGrabberMachine : GenericObjectMachine<SObject>
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>Whether seeds should be ignored when selecting output.</summary>
-        private readonly bool IgnoreSeedOutput;
-
-        /// <summary>Whether fertilizer should be ignored when selecting output.</summary>
-        private readonly bool IgnoreFertilizerOutput;
-
-
-        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="machine">The underlying machine.</param>
         /// <param name="location">The in-game location.</param>
         /// <param name="tile">The tile covered by the machine.</param>
-        /// <param name="ignoreSeedOutput">Whether seeds should be ignored when selecting output.</param>
-        /// <param name="ignoreFertilizerOutput">Whether fertilizer should be ignored when selecting output.</param>
-        public AutoGrabberMachine(SObject machine, GameLocation location, Vector2 tile, bool ignoreSeedOutput, bool ignoreFertilizerOutput)
-            : base(machine, location, tile)
-        {
-            this.IgnoreSeedOutput = ignoreSeedOutput;
-            this.IgnoreFertilizerOutput = ignoreFertilizerOutput;
-        }
+        public AutoGrabberMachine(SObject machine, GameLocation location, Vector2 tile)
+            : base(machine, location, tile) { }
 
         /// <summary>Get the machine's processing state.</summary>
         public override MachineState GetState()
@@ -84,11 +68,6 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             foreach (Item item in this.GetOutputChest().items)
             {
                 if (item == null)
-                    continue;
-
-                if (this.IgnoreSeedOutput && item.Category == SObject.SeedsCategory)
-                    continue;
-                if (this.IgnoreFertilizerOutput && item.Category == SObject.fertilizerCategory)
                     continue;
 
                 return item;
