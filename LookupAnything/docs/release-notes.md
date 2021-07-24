@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.35.0
+Released 24 July 2021 for SMAPI 3.9.5 or later.
+
 * Added support for scrolling up/down by a full page with `PageUp` and `PageDown` (configurable).
 * Improved formatting for `modData` fields in datamining mode.
 * Fixed social menu lookups not working from lower half of character slots.

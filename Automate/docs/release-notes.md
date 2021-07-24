@@ -1,8 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Removed integration with Auto-Grabber Mod (which was deleted).
+## 1.23.2
+Released 24 July 2021 for SMAPI 3.9.5 or later.
+
+* Removed integration with the deleted Auto-Grabber Mod.
 
 ## 1.23.1
 Released 09 July 2021 for SMAPI 3.9.5 or later.
