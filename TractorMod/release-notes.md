@@ -1,12 +1,14 @@
 ﻿# Release notes
 ## 4.14.3
-Released 09 July 2021.
+Released 09 July 2021 for SMAPI 3.9.5 or later.
 
 * Fixed heavy tappers not detected consistently due to a game bug.
 * Fixed tractor watering can not playing any sound.
 * Fixed crash if mod is installed incorrectly and its textures files don't exist.
 
 ## 4.14.2
+Released 25 May 2021 for SMAPI 3.9.5 or later.
+
 * Fixed [horse flute](https://stardewvalleywiki.com/Horse_Flute) summoning the tractor if you built
   a tractor garage before the stable.
 
@@ -25,12 +27,12 @@ tractor. In multiplayer, this must be done by the main player.
 5. _After saving in-game, you can safely remove Horse Flute Anywhere if you don't need it._
 
 ## 4.14.1
-Released 17 April 2021.
+Released 17 April 2021 for SMAPI 3.9.5 or later.
 
 * Improved translations. Thanks to J3yEreN (updated Turkish!).
 
-## 4.14
-Released 27 March 2021.
+## 4.14.0
+Released 27 March 2021 for SMAPI 3.9.5 or later.
 
 * The dagger/sword can now harvest grass (disabled by default).
 * Split the `MeleeWeapon` attachment into `MeleeBlunt`, `MeleeDagger`, and `MeleeSword`. If you changed melee weapon options, you'll need to reconfigure them.
@@ -42,28 +44,28 @@ Released 27 March 2021.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 4.13.3
-Released 06 February 2021.
+Released 06 February 2021 for SMAPI 3.9.0 or later.
 
 * Fixed support for Seed Bag mod.
 
 ## 4.13.2
-Released 23 January 2021.
+Released 23 January 2021 for SMAPI 3.9.0 or later.
 
 * Updated for multi-key bindings in SMAPI 3.9.
 
 ## 4.13.1
-Released 17 January 2021.
+Released 17 January 2021 for SMAPI 3.8.0 or later.
 
 * Fixed issues when farmhands ride tractors in split-screen mode.
 
-## 4.13
-Released 16 January 2021.
+## 4.13.0
+Released 16 January 2021 for SMAPI 3.8.0 or later.
 
 * The watering can now cools lava in the volcano dungeon.
 * Fixed tractor affecting other players' tools in split-screen mode.
 
 ## 4.12.2
-Released 04 January 2021.
+Released 04 January 2021 for SMAPI 3.8.0 or later.
 
 * Updated to use `modData` field in Stardew Valley 1.5.
 * Internal refactoring to legacy data migrations.
@@ -75,34 +77,34 @@ Released 04 January 2021.
   `horse.modData` field instead. Existing tractors will be migrated automatically.
 
 ## 4.12.1
-Released 21 December 2020.
+Released 21 December 2020 for SMAPI 3.8.0 or later.
 
 * Updated for Stardew Valley 1.5, including split-screen mode and UI scaling.
 
-## 4.12
-Released 05 December 2020.
+## 4.12.0
+Released 05 December 2020 for SMAPI 3.7.3 or later.
 
 * The pickaxe now collects spawned mine items like quartz.
 * The scythe now harvests palm tree coconuts and tree seeds.
 * Fixed scythe harvesting spring onions based on 'harvest crops' option instead of 'harvest forage'.
 
 ## 4.11.3
-Released 15 October 2020.
+Released 15 October 2020 for SMAPI 3.7.3 or later.
 
 * Refactored translation handling.
 
 ## 4.11.2
-Released 12 September 2020.
+Released 12 September 2020 for SMAPI 3.7.3 or later.
 
 * Fixed error in some cases when a multiplayer farmhand warps while riding a tractor.
 
 ## 4.11.1
-Released 28 August 2020.
+Released 28 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed incorrectly mapped options in Generic Mod Config Menu.
 
-## 4.11
-Released 04 July 2020.
+## 4.11.0
+Released 04 July 2020 for SMAPI 3.6.1 or later.
 
 * You can now configure the mod in-game if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed (thanks to collaboration with NexusFlight!).
 * Added compatibility with boulders and stumps added by Farm Type Manager.
@@ -110,12 +112,12 @@ Released 04 July 2020.
 * Fixed broken event when riding the tractor into the event for the Cryptic Note quest.
 
 ## 4.10.1
-Released 02 May 2020.
+Released 02 May 2020 for SMAPI 3.5.0 or later.
 
 * Improved translations. Thanks to D0n-A (updated Russian)!
 
-## 4.10
-Released 09 March 2020.
+## 4.10.0
+Released 09 March 2020 for SMAPI 3.3.0 or later.
 
 * Added support for multi-key bindings (like `LeftShift + BackSpace`).
 * Fixed slingshot enabled by default.
@@ -125,19 +127,19 @@ Released 09 March 2020.
 * Improved translations. Thanks to therealmate (added Hungarian)!
 
 ## 4.9.2
-Released 01 February 2020.
+Released 01 February 2020 for SMAPI 3.2.0 or later.
 
 * Fixed `HarvestFlowers` scythe option not working for some custom mod flowers.
 * Fixed fertilizer not working if applied to crops after planting.
 
 ## 4.9.1
-Released 15 December 2019.
+Released 15 December 2019 for SMAPI 3.0.0 or later.
 
 * Added tree fertilizer support.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
-## 4.9
-Released 26 November 2019.
+## 4.9.0
+Released 26 November 2019 for SMAPI 3.0.0 or later.
 
 * Updated for Stardew Valley 1.4, including...
   * fertiliser can now be applied to planted crops;
@@ -160,31 +162,31 @@ Released 26 November 2019.
 * Improved translations. Thanks to Hesperusrus (updated Russian)!
 
 ## 4.8.4
-Released 25 July 2019.
+Released 25 July 2019 for SMAPI 2.11.2 or later.
 
 * Improved translations. Thanks to cilekli-link (added Turkish)!
 
 ## 4.8.3
-Released 09 June 2019.
+Released 09 June 2019 for SMAPI 2.11.1 or later.
 
 * Fixed config parsing errors for some players.
 * Fixed tractor not working in Deep Woods after the first screen.
 * Fixed issue where pressing the dismiss-tractor key while riding a horse caused the horse to disappear.
 
 ## 4.8.2
-Released 07 March 2019.
+Released 07 March 2019 for SMAPI 2.11.0 or later.
 
 * Fixed scythe no longer harvesting in 4.8.1.
 
 ## 4.8.1
-Released 06 April 2019.
+Released 06 April 2019 for SMAPI 2.11.0 or later.
 
 * Fixed chests being treated as weeds in some cases.
 * Fixed scythe and some melee weapons not clearing dead crops if enabled.
 * Improved translations. Thanks to Mysti57 (added French)!
 
-## 4.8
-Released 05 March 2019.
+## 4.8.0
+Released 05 March 2019 for SMAPI 2.11.0 or later.
 
 * Added attachment features:
   * pickaxe: break mine containers (enabled by default), break placed objects (disabled by default).
@@ -202,28 +204,28 @@ Released 05 March 2019.
 * Improved translations. Thanks to S2SKY (added Korean)!
 
 ## 4.7.3
-Released 04 January 2019.
+Released 04 January 2019 for SMAPI 2.10.1 or later.
 
 * Fixed stable no longer in Robin's carpenter menu after building a tractor garage.
 * Fixed fertilizer applied to existing crops.
 * Fixed compatibility with Tool Geodes mod.
 
 ## 4.7.2
-Released 09 December 2018.
+Released 09 December 2018 for SMAPI 2.9.0 or later.
 
 * Fixed horses becoming tractors in some cases. (If you saved after that happened, [see this forum comment](https://community.playstarbound.com/threads/tractor-mod.136649/page-14#post-3319770)).
 * Fixed tractors sometimes not in their garage after loading a save.
 
 ## 4.7.1
-Released 08 December 2018.
+Released 08 December 2018 for SMAPI 2.9.0 or later.
 
 * Fixed tractor getting lost in the mines when players cruelly abandon it.
 * Fixed tractor/garage looking like a horse/stable in some cases.
 * Fixed mines not spawning a ladder on infestation levels if the tractor is present.
 * Fixed old tractor data not deleted after migration, which caused duplicate garages in some cases.
 
-## 4.7
-Released 14 November 2018.
+## 4.7.0
+Released 14 November 2018 for SMAPI 2.6.0 or later.
 
 * Added support for multiplayer mode. The mod must be installed by the host player, and installed by any farmhand that wants to use the tractor features.
 * Added support for custom mod locations.
@@ -241,8 +243,8 @@ Released 14 November 2018.
 * If Robin started building your tractor garage in an earlier version, it will be completed when you update.
 * Any current tractors/garages will be migrated to a new format next time you save. If you install an older version of Tractor Mod later, those tractors/garages will turn into horses/stables.
 
-## 4.6
-Released 26 August 2018.
+## 4.6.0
+Released 26 August 2018 for SMAPI 2.8.0 or later.
 
 * Updated for Stardew Valley 1.3.29.
 * Tractor data is now safely stored in the save file, so you no longer need to keep the `data` subfolder when updating (once your save is migrated).
@@ -255,8 +257,8 @@ Released 26 August 2018.
 the previous tractor won't be migrated. You can edit the `config.json` to make the tractor free and
 rebuild it.
 
-## 4.5
-Released 02 August 2018.
+## 4.5.0
+Released 02 August 2018 for SMAPI 2.6.0 or later.
 
 * Updated for Stardew Valley 1.3 (disabled in multiplayer mode).
 * Player is now invincible while riding the tractor (configurable).
@@ -272,20 +274,20 @@ Released 02 August 2018.
 * Improved translations. Thanks to alca259 (added Spanish)!
 
 ## 4.4.1
-Released 09 March 2018.
+Released 09 March 2018 for SMAPI 2.5.0 or later.
 
 * Fixed error opening the game menu if the tractor hasn't been bought yet (thanks to f4iTh!).
 
-## 4.4
-Released 02 March 2018.
+## 4.4.0
+Released 02 March 2018 for SMAPI 2.5.0 or later.
 
 * Added support for using the tractor in the mines.
 * Added options to toggle all standard features (thanks to Fox536!).
 * Fixed tractor appearing in social menu.
 * Fixed tractor not appearing in Farm Expansion's carpenter menu (requires Farm Expansion 3.3+).
 
-## 4.3
-Released 14 February 2018.
+## 4.3.0
+Released 14 February 2018 for SMAPI 2.4.0 or later.
 
 * Updated to SMAPI 2.4.
 * Added support for grass starters.
@@ -296,8 +298,8 @@ Released 14 February 2018.
 * Improved tractor and garage sprites. (Thanks to allanbachti!)
 * Improved translations. Thanks to Husky110 (German)!
 
-## 4.2
-Released 03 December 2017.
+## 4.2.0
+Released 03 December 2017 for SMAPI 2.1.0 or later.
 
 * Updated to SMAPI 2.1.
 * Added support for axe clearing weeds (default) and live crops (optional).
@@ -307,8 +309,8 @@ Released 03 December 2017.
 * Switched to SMAPI update checks.
 * Improved translations. Thanks to Fabilows & TaelFayre (added Portuguese)!
 
-## 4.1
-Released 04 September 2017.
+## 4.1.0
+Released 04 September 2017 for SMAPI 1.15.0 or later.
 
 New features:
 * Added an optional hold-to-activate mode (tractor won't do anything unless you hold a key).
@@ -345,8 +347,8 @@ Fixes:
 * Fixed tractor interaction grid being offset in some cases.
 * Fixed visual bugs in tractor sprite.
 
-## 4.0
-Released 18 August 2017.
+## 4.0.0
+Released 18 August 2017 for SMAPI 1.15.0 or later.
 
 * The tractor garage is now sold by Robin, requires some building materials, and takes a few days for her to build. The price and whether resources are needed can be changed in `config.json`.
 * The tractor and garage have a new look to match the game style thanks to [@Zero-ui9](https://github.com/Zero-ui9) and [@Acerbicon](https://github.com/Acerbicon) respectively.
@@ -362,17 +364,17 @@ Released 18 August 2017.
 * Improved translations. Thanks to Sasara (added German)!
 
 ## 3.2.1
-Released 26 April 2017 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 26 April 2017 for SMAPI 1.10.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed initialization errors.
 
-## 3.2
-Released 26 April 2017 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 3.2.0
+Released 26 April 2017 for SMAPI 1.10.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Updated for Stardew Valley 1.2 and SMAPI 1.10.
 
 ## 3.1.1
-Released 19 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 19 December 2016 for SMAPI 1.4.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed being able to call while another menu is open, which caused an error.
 * Fixed hang-up dialogue not being shown after closing building menu.
@@ -380,20 +382,20 @@ Released 19 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod
 * Fixed tool quality turning iridium quality after using tractor.
 * Fixed tractor getting stuck when harvesting hand-harvested crops.
 
-## 3.1
-Released 15 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 3.1.0
+Released 15 December 2016 for SMAPI 1.4.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * The tractor is now one tile wide.
 * Fixed tractor unable to spawn in garage on start of new day.
 
 ## 3.0.1
-Released 14 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 14 December 2016 for SMAPI 1.4.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed issue where two tractors appeared.
 * Fixed error when events happen after sleep (like the fairy or witch).
 
-## 3.0
-Released 08 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 3.0.0
+Released 08 December 2016 for SMAPI 1.3.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added ability to buy a new tractor and garage through a phone menu, with configurable phone key + tractor price.
 * Fixed tractor spawning behind shipping box each morning.
@@ -402,12 +404,12 @@ Released 08 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod
 * Removed global tractor mode from config (now default).
 
 ## 2.1.3
-Released 03 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 03 December 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed game freezing if player uses tools in tractor mode on objects that need a higher-level tool to break.
 
 ## 2.1.2
-Released 02 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 02 December 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added setting to customize tool use frequency to reduce performance impact.
 * Added item radius setting (for seeding and fertilizing).
@@ -415,20 +417,20 @@ Released 02 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod
 * Fixed a bug that prevents game from saving.
 
 ## 2.1.1
-Released 02 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 02 December 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed issue which prevents game from saving if player left tractor outside farm.
 * Fixed issue which prevents player from summoning horse if the horse is outside farm.
 
-## 2.1
-Released 02 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 2.1.0
+Released 02 December 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added per-tool settings.
 * Improved algorithm and reduce performance impact.
 * Removed unneeded settings from config (`WTFMode`, `harvestMode`, `harvestRadius`, `minToolPower`, `mapWidth`, `mapHeight`).
 
-## 2.0
-Released 01 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 2.0.0
+Released 01 December 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Add tractor:
   - Now you have a tractor separate from your horse ([sprite and animation by Pewtershmitz](http://community.playstarbound.com/threads/tractor-v-1-3-horse-replacement.108604/)).
@@ -440,55 +442,55 @@ Released 01 December 2016 [by lambui](https://github.com/lambui/StardewValleyMod
 * Reduced speed in tractor mode (configurable).
 * Remove horse tractor mode.
 
-## 1.3
-Released 29 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 1.3.0
+Released 29 November 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added global option which lets you use tractor mode everywhere (not just on the farm).
 * Added ability to harvest weeds.
 
 ## 1.2.4
-Released 28 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 28 November 2016  for SMAPI 1.2.0 or later[by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Harvesting animal produce now drops items instead of adding them directly to inventory.
 * Fixed harvesting sunflower not yielding seeds.
 
 ## 1.2.3
-Released 27 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 27 November 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added ability to harvest grass into hay.
 * Fixed young non-regrowable crops being harvestable.
 
 ## 1.2.2
-Released 27 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 27 November 2016 for SMAPI 1.2.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed infinite harvest when harvesting non-regrowable crops.
 
 ## 1.2.1
-Released 21 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 21 November 2016 for SMAPI 1.1.1 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Fixed occasional crash when player runs out of fertilizer/seeds while fertilizing/planting.
 
-## 1.2
-Released 20 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 1.2.0
+Released 20 November 2016 for SMAPI 1.1.1 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Updated to SMAPI 1.1.1.
 * Added ability to harvest crops, fruit trees, and dropped items (like truffles or eggs) when holding scythe.
 * Now work in farm buildings.
 
-## 1.1
-Released 17 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 1.1.0
+Released 17 November 2016 for SMAPI 1.1.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added horse tractor mode.
 * Added WTF mode (which lets you use your pickaxe and axe with tractor mode).
 
 ## 1.0.2
-Released 16 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+Released 16 November 2016 for SMAPI 1.0.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Added activation by holding right mouse.
 * Removed activation by keyboard toggle.
 * Tractor mode now automatically turns itself off outside the farm.
 
-## 1.0
-Released 16 November 2016 [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
+## 1.0.0
+Released 16 November 2016 for SMAPI 1.0.0 or later [by lambui](https://github.com/lambui/StardewValleyMod_TractorMod).
 
 * Initial release.

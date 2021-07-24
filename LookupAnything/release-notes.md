@@ -10,7 +10,7 @@
 * Improved translations. Thanks to tonhodamoon (updated Portuguese)!
 
 ## 1.34.3
-Released 09 July 2021.
+Released 09 July 2021 for SMAPI 3.9.5 or later.
 
 * You can now open the search UI when another menu is open, similar to the lookup UI.
 * Fixed lookups for custom seeds added via Json Assets not showing crop info.
@@ -18,7 +18,7 @@ Released 09 July 2021.
 * Fixed monster drop list showing 'Error Item' in some special cases.
 
 ## 1.34.2
-Released 25 May 2021.
+Released 25 May 2021 for SMAPI 3.9.5 or later.
 
 * Improved the drop list in monster lookups:
   * Fixed every possible drop for an item marked guaranteed if at least one of them is.
@@ -26,12 +26,12 @@ Released 25 May 2021.
 * Fixed some items with duplicate names (like the many `Shirt` items) not shown in the search UI.
 
 ## 1.34.1
-Released 17 April 2021.
+Released 17 April 2021 for SMAPI 3.9.5 or later.
 
 * Improved translations. Thanks to J3yEreN (added Turkish)!
 
-## 1.34
-Released 27 March 2021.
+## 1.34.0
+Released 27 March 2021 for SMAPI 3.9.5 or later.
 
 * Improved tailoring recipes in item lookups:
   * Added reverse lookup (i.e. see tailoring recipes which produce the current item).
@@ -45,8 +45,8 @@ Released 27 March 2021.
 * Fixed torches on fences counted as owned 93 times due to a game quirk.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
-## 1.33
-Released 07 March 2021.
+## 1.33.0
+Released 07 March 2021 for SMAPI 3.9.0 or later.
 
 * Improved item recipes field:
   * Overhauled recipe layout (in collaboration with cofiem) to be more consistent and better handle long recipes.
@@ -64,7 +64,7 @@ Released 07 March 2021.
 * Improved translations. Thanks to horizon98 and mcBegins2Snow (updated Chinese), psychochicken80 (updated German), wally232 (updated Korean), and zNatural (updated Spanish)!
 
 ## 1.32.4
-Released 06 February 2021.
+Released 06 February 2021 for SMAPI 3.9.0 or later.
 
 * Fixed NPC lookup not working from their profile menu.
 * Fixed NPC lookup showing gift tastes for flavored variants in 1.32.3.
@@ -77,7 +77,7 @@ Released 06 February 2021.
 * Improved translations. Thanks to carloshbcabral (updated Portuguese) and Kareolis (updated Russian)!
 
 ## 1.32.3
-Released 23 January 2021.
+Released 23 January 2021 for SMAPI 3.9.0 or later.
 
 * Updated for multi-key bindings in SMAPI 3.9.
 * Fixed NPC lookups taking a long time to open when using mods that add a large number of custom items.
@@ -86,13 +86,13 @@ Released 23 January 2021.
 * Fixed lookup background too short when 'force full-screen' is enabled in split-screen mode.
 
 ## 1.32.2
-Released 17 January 2021.
+Released 17 January 2021 for SMAPI 3.8.0 or later.
 
 * Fixed some crop fields not shown for growing mixed seeds.
 * Improved translations. Thanks to norges (updated German)!
 
 ## 1.32.1
-Released 16 January 2021.
+Released 16 January 2021 for SMAPI 3.8.0 or later.
 
 * The search menu now shows unlimited results.
 * Fixed search menu letting you click on off-screen results.
@@ -101,8 +101,8 @@ Released 16 January 2021.
 * Fixed datamining mode not showing non-datamining fields in 1.32.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
-## 1.32
-Released 11 January 2021.
+## 1.32.0
+Released 11 January 2021 for SMAPI 3.8.0 or later.
 
 * Added 'force full-screen' option (disabled by default).
 * Added missing mill recipe for rice.
@@ -115,13 +115,13 @@ Released 11 January 2021.
 * Improved translations. Thanks to LeecanIt (updated Italian)!
 
 ## 1.31.1
-Released 10 January 2021.
+Released 10 January 2021 for SMAPI 3.8.0 or later.
 
 * Added names for Ginger Island fishing locations.
 * Fixed rare issue where item lookup fails due to mismatched bundle game data.
 
-## 1.31
-Released 08 January 2021.
+## 1.31.0
+Released 08 January 2021 for SMAPI 3.8.0 or later.
 
 * Added support for NPC lookups at festivals.
 * Added target redirection, which fixes an issue where looking up Abigail in the mines wouldn't show her real data.
@@ -133,13 +133,13 @@ Released 08 January 2021.
 * Fixed items counted more than once for 'owned' stats if they're in a Junimo chest.
 * Fixed mahogany tree lookups showing wrong percentage growth chance.
 
-## 1.30
-Released 04 January 2021.
+## 1.30.0
+Released 04 January 2021 for SMAPI 3.8.0 or later.
 
 * Looking up a planted crop now shows its water and fertilizer state.
 
-## 1.29
-Released 21 December 2020.
+## 1.29.0
+Released 21 December 2020 for SMAPI 3.8.0 or later.
 
 * Updated for Stardew Valley 1.5, including support for...
   * split-screen mode and UI scaling;
@@ -151,19 +151,19 @@ Released 21 December 2020.
 * Improved translations. Thanks to spindensity (updated Chinese)!
 
 ## 1.28.3
-Released 05 December 2020.
+Released 05 December 2020 for SMAPI 3.7.3 or later.
 
 * Moved `data.json` into standard `assets` folder.
 * Fixed crop fields shown for forage crops.
 * Fixed item lookups no longer showing iridium or stack prices.
 
 ## 1.28.2
-Released 21 November 2020.
+Released 21 November 2020 for SMAPI 3.7.3 or later.
 
 * Fixed search UI lookups for certain item types causing an error.
 
 ## 1.28.1
-Released 04 November 2020.
+Released 04 November 2020 for SMAPI 3.7.3 or later.
 
 * Fixed 'number owned' field sometimes counting two of the same tool/weapon as different items.
 * Fixed lookups on forage items.
@@ -172,8 +172,8 @@ Released 04 November 2020.
 * Fixed some translation issues in 1.28.
 * Improved translations. Thanks to Caco-o-sapo (updated Portuguese) and therealmate (updated Hungarian)!
 
-## 1.28
-Released 15 October 2020.
+## 1.28.0
+Released 15 October 2020 for SMAPI 3.7.3 or later.
 
 * Added music block lookups.
 * Improved Adventurer's Guild eradication goal info in monster lookups.
@@ -185,23 +185,23 @@ Released 15 October 2020.
 * Improved translations. Thanks to Enaium (updated Chinese), Macskasajt05 (added Hungarian), and zhxxn (updated Korean)!
 
 ## 1.27.5
-Released 28 August 2020.
+Released 28 August 2020 for SMAPI 3.6.0 or later.
 
 * Improved translations. Thanks to wally232 on Nexus (updated Korean)!
 
 ## 1.27.4
-Released 02 August 2020.
+Released 02 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed string sorting/comparison for some special characters.
 
 ## 1.27.3
-Released 21 July 2020.
+Released 21 July 2020 for SMAPI 3.6.1 or later.
 
 * Fixed error looking up items when some item data is invalid.
 * Fixed incorrect color for sturgeon roe image.
 
 ## 1.27.2
-Released 03 July 2020.
+Released 03 July 2020 for SMAPI 3.6.1 or later.
 
 * Fixed display for tailored hat recipes.
 * Fixed the search key working during cutscenes or when a menu is already open.
@@ -210,12 +210,12 @@ Released 03 July 2020.
 * Improved translations. Thanks to AndyAllanPoe (updated Italian) and Rittsuka (updated Portuguese)!
 
 ## 1.27.1
-Released 02 May 2020.
+Released 02 May 2020 for SMAPI 3.5.0 or later.
 
 * Fixed compatibility issue with Mega Storage in 1.27.
 
-## 1.27
-Released 02 May 2020.
+## 1.27.0
+Released 02 May 2020 for SMAPI 3.5.0 or later.
 
 * The lookup menu is now centered again. (It will fallback to non-centered mode only if needed for compatibility.)
 * Improved compatibility with custom NPC mods (including mods which replace non-social NPCs with social ones).
@@ -232,8 +232,8 @@ Released 02 May 2020.
 * Fixed issue where closing the search menu with the default key bindings could trigger a lookup after the menu closes.
 * Improved translations. Thanks to Andites (updated Russian) and niniack (updated Chinese)!
 
-## 1.26
-Released 09 March 2020.
+## 1.26.0
+Released 09 March 2020 for SMAPI 3.3.0 or later.
 
 * Added search feature (thanks to collaboration with mattfeldman!).
 * Added support for multi-key bindings (like `LeftShift + F1`).
@@ -247,19 +247,19 @@ Released 09 March 2020.
 * Improved translations. Thanks to Jeardius (updated German), Hesper (updated Korean), and mael-belval (updated French)!
 
 ## 1.25.2
-Released 03 February 2020.
+Released 03 February 2020 for SMAPI 3.2.0 or later.
 
 * Fixed 'needed for' shown for incorrect item types in some cases.
 * Fixed some Producer Framework Mod recipes not shown correctly.
 
 ## 1.25.1
-Released 02 February 2020.
+Released 02 February 2020 for SMAPI 3.2.0 or later.
 
 * Errors in Producer Framework Mod integration can no longer break lookups.
 * Fixed errors reading some Producer Framework Mod recipes.
 
-## 1.25
-Released 01 February 2020.
+## 1.25.0
+Released 01 February 2020 for SMAPI 3.2.0 or later.
 
 * Added support for most custom machine recipes from Producer Framework Mod (thanks to Digus!).
 * Added number owned to tool/weapon lookups.
@@ -270,8 +270,8 @@ Released 01 February 2020.
 * Fixed fish spawn location names not being translated.
 * Improved translations. Thanks to asqwedcxz741 (updated Chinese) and corrinr (updated Spanish)!
 
-## 1.24
-Released 27 December 2019.
+## 1.24.0
+Released 27 December 2019 for SMAPI 3.0.0 or later.
 
 * Added fish spawn rules to fish lookups.
 * Added fish pond drops to fish lookups.
@@ -285,7 +285,7 @@ Released 27 December 2019.
 * Improved translations. Thanks to jahangmar (updated German), L30Bola (updated Portuguese), and PlussRolf (updated Spanish)!
 
 ## 1.23.1
-Released 15 December 2019.
+Released 15 December 2019 for SMAPI 3.0.0 or later.
 
 * Updated for recent versions of Json Assets.
 * Fixed lookup on Haunted Skulls.
@@ -293,8 +293,8 @@ Released 15 December 2019.
 * Fixed rare issue where the HUD isn't restored when the lookup menu is force-replaced by another menu.
 * Improved translations. Thanks to LeecanIt (added Italian)!
 
-## 1.23
-Released 26 November 2019.
+## 1.23.0
+Released 26 November 2019 for SMAPI 3.0.0 or later.
 
 * Updated for Stardew Valley 1.4, including...
   * per-player shipping bins;
@@ -320,17 +320,17 @@ Released 26 November 2019.
 * Improved translations. Thanks to Hesperusrus (updated Russian), pomepome (updated Japanese), and shiro2579 (updated Portuguese)!
 
 ## 1.22.2
-Released 25 July 2019.
+Released 25 July 2019 for SMAPI 2.11.2 or later.
 
 * Improved translations. Thanks to FixThisPlz (updated Russian) and jahangmar (updated German)!
 
 ## 1.22.1
-Released 10 June 2019.
+Released 10 June 2019 for SMAPI 2.11.1 or later.
 
 * Fixed HUD left hidden if you close lookup menu by pressing lookup key.
 
-## 1.22
-Released 09 June 2019.
+## 1.22.0
+Released 09 June 2019 for SMAPI 2.11.1 or later.
 
 * Added recipes to machine lookups (except for custom machines).
 * Added bush lookups.
@@ -349,13 +349,13 @@ Released 09 June 2019.
 * Fixed unable to lookup inventory items from kitchen cooking menu.
 
 ## 1.21.2
-Released 06 April 2019.
+Released 06 April 2019 for SMAPI 2.11.0 or later.
 
 * Fixed debug fields that only differ by name capitalisation not being merged correctly.
 * Improved translations. Thanks to binxhlin (updated Chinese), kelvindules (updated Portuguese), and TheOzonO3 (updated Russian)!
 
 ## 1.21.1
-Released 05 March 2019.
+Released 05 March 2019 for SMAPI 2.11.0 or later.
 
 * Added readable debug fields for more types.
 * Improved debug fields to only show one value if a field/property differ only by the capitalisation of their name.
@@ -363,8 +363,8 @@ Released 05 March 2019.
 * Fixed invalid stack prices when looking up shop inventory items.
 * Improved translations. Thanks to Nanogamer7 (improved German), S2SKY (added Korean), and VincentRoth (added French)!
 
-## 1.21
-Released 04 January 2019.
+## 1.21.0
+Released 04 January 2019 for SMAPI 2.10.1 or later.
 
 * Added building lookups. That includes general info (like name and description) and info specific to barns, coops, cabins, Junimo huts, mills, silos, slime hutches, and stables.
 * Added support for lookups from the cooking, crafting, and collection menus.
@@ -377,13 +377,13 @@ Released 04 January 2019.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
 ## 1.20.1
-Released 07 December 2018.
+Released 07 December 2018 for SMAPI 2.9.0 or later.
 
 * Updated for the upcoming SMAPI 3.0.
 * Improved translations. Thanks to Nanogamer7 (German)!
 
-## 1.20
-Released 08 November 2018.
+## 1.20.0
+Released 08 November 2018 for SMAPI 2.8.0 or later.
 
 * Added support for looking up a load-game slot.
 * Added farm type to player lookup.
@@ -393,18 +393,18 @@ Released 08 November 2018.
 * Fixed display issues when returning to the previous menu after a lookup in some cases.
 
 ## 1.19.2
-Released 17 September 2018.
+Released 17 September 2018 for SMAPI 2.8.0 or later.
 
 * Improved translations. Thanks to pomepome (Japanese)!
 
 ## 1.19.1
-Released 26 August 2018.
+Released 26 August 2018 for SMAPI 2.8.0 or later.
 
 * Updated for Stardew Valley 1.3.29.
 * Improved translations. Thanks to pomepome (added Japanese) and Yllelder (Spanish)!
 
-## 1.19
-Released 01 August 2018.
+## 1.19.0
+Released 01 August 2018 for SMAPI 2.6.0 or later.
 
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added support for...
@@ -422,12 +422,12 @@ Released 01 August 2018.
 * Improved translations. Thanks to alca259 (Spanish), fadedDexofan (Russian), and TaelFayre (Portuguese)!
 
 ## 1.18.1
-Released 09 March 2018.
+Released 09 March 2018 for SMAPI 2.4.0 or later.
 
 * Fixed error when looking up something before the save is loaded (thanks to f4iTh!).
 
-## 1.18
-Released 14 February 2018.
+## 1.18.0
+Released 14 February 2018 for SMAPI 2.4.0 or later.
 
 * Updated to SMAPI 2.4.
 * Added support for furniture.
@@ -436,8 +436,8 @@ Released 14 February 2018.
 * Fixed typo in debug interface.
 * Improved translations. Thanks to Husky110 (German) and yuwenlan (Chinese)!
 
-## 1.17
-Released 03 December 2017.
+## 1.17.0
+Released 03 December 2017 for SMAPI 1.17.0 or later.
 
 * Updated to SMAPI 2.0.
 * Switched to SMAPI unified controller/keyboard/mouse bindings in `config.json`.
@@ -447,8 +447,8 @@ Released 03 December 2017.
 * Fixed `HideOnKeyUp` mode not returning to previous menu on close.
 * Improved translations. Thanks to d0x7 (German) and TaelFayre (Portuguese)!
 
-## 1.16
-Released 04 September 2017.
+## 1.16.0
+Released 04 September 2017 for SMAPI 1.15.0 or later.
 
 * NPC gift tastes now list inventory and owned items first.
 * Added warning when translation files are missing.
@@ -456,14 +456,14 @@ Released 04 September 2017.
 * Fixed lookup errors with some custom NPCs.
 
 ## 1.15.1
-Released 06 August 2017.
+Released 06 August 2017 for SMAPI 1.15.0 or later.
 
 * Fixed missing translation in child 'age' field.
 * Fixed incorrect child age calculation.
 * Improved translations. Thanks to SteaNN (added Russian)!
 
-## 1.15
-Released 14 June 2017.
+## 1.15.0
+Released 14 June 2017 for SMAPI 1.15.0 or later.
 
 * You can now look up your children.
 * Improved lookup matching — if there's no sprite under the cursor, it now tries to look up the tile contents.
@@ -472,8 +472,8 @@ Released 14 June 2017.
 * Fixed item 'needed for' field not showing bundle area names in English.
 * Improved translations. Thanks to Fabilows (added Portuguese) and ThomasGabrielDelavault (added Spanish)!
 
-## 1.14
-Released 04 June 2017.
+## 1.14.0
+Released 04 June 2017 for SMAPI 1.14.0 or later.
 
 * Updated to SMAPI 1.14.
 * Added translation support.
@@ -481,18 +481,18 @@ Released 04 June 2017.
 * Fixed a few lookup errors when playing in a language other than English.
 * Improved translations. Thansk to Sasara (added German) and yuwenlan (added Chinese)!
 
-## 1.13
-Released 24 April 2017.
+## 1.13.0
+Released 24 April 2017 for SMAPI 1.10.0 or later.
 
 * Updated for Stardew Valley 1.2.
 
 ## 1.12.1
-Released 22 April 2017.
+Released 22 April 2017 for SMAPI 1.9.0 and 1.10.0 or later.
 
 * Fixed calendar lookup not working in Stardew Valley 1.2 beta.
 
-## 1.12
-Released 06 April 2017.
+## 1.12.0
+Released 06 April 2017 for SMAPI 1.9.0 and 1.10.0 or later.
 
 * Updated to SMAPI 1.9.
 * Backported to Stardew Valley 1.11 until 1.2 is released.
@@ -501,26 +501,26 @@ Released 06 April 2017.
 * Fixed rare error caused by duplicate NPC names.
 * Fixed furniture/wallpaper being shown as potential recipe ingredients.
 
-## 1.11
-Released 24 February 2017.
+## 1.11.0
+Released 24 February 2017 for SMAPI 1.9.0 or later.
 
 * Updated for Stardew Valley 1.2.
 
 ## 1.10.1
-Released 06 February 2017.
+Released 06 February 2017 for SMAPI 1.8.0 or later.
 
 * Fixed tile lookups always enabled regardless of `config.json`.
 
-## 1.10
-Released 04 February 2017.
+## 1.10.0
+Released 04 February 2017 for SMAPI 1.8.0 or later.
 
 * You can now look up an item from the kitchen cooking menu.
 * You can now look up map tile info (disabled by default).
 * Updated to SMAPI 1.8.
 * Updated new-version-available check.
 
-## 1.9
-Released 17 December 2016.
+## 1.9.0
+Released 17 December 2016 for SMAPI 1.4.0 or later.
 
 * Villager lookups now highlight gifts you carry or own.
 * Added optional data mining fields which show raw game data.
@@ -534,8 +534,8 @@ Released 17 December 2016.
 * Fixed input bindings in `config.json` being case-sensitive.
 * Fixed input bindings in `config.json` being discarded silently if invalid.
 
-## 1.8
-Released 04 December 2016.
+## 1.8.0
+Released 04 December 2016 for SMAPI 1.3.0 or later.
 
 * Added museum donations to item 'needed for' field.
 * You can now look up things behind trees when you're behind them.
@@ -544,8 +544,8 @@ Released 04 December 2016.
 * Fixed incorrect farmer luck message when the spirits are feeling neutral.
 * Fixed social menu lookup sometimes showing the wrong villager.
 
-## 1.7
-Released 18 November 2016.
+## 1.7.0
+Released 18 November 2016 for SMAPI 1.1.0 or later.
 
 * You can now look up a villager from the social page.
 * You can now look up an item from the toolbar.
@@ -555,8 +555,8 @@ Released 18 November 2016.
 * Fixed iridium prices being shown for items that can't have iridium quality.
 * `F2` debug mode is no longer suppressed (removed in latest version of SMAPI).
 
-## 1.6
-Released 25 October 2016.
+## 1.6.0
+Released 25 October 2016 for SMAPI 0.40.1.1 or later.
 
 * Added support for Linux and Mac.
 * Added item 'needed for' field for community center bundles, full shipment achievement, and polyculture achievement.
@@ -572,8 +572,8 @@ Released 25 October 2016.
 * Fixed error when looking up a villager you haven't met.
 * Fixed error when looking up certain NPCs with no social data.
 
-## 1.5
-Released 11 October 2016.
+## 1.5.0
+Released 11 October 2016 for SMAPI 0.40.1.1 or later.
 
 * You can now look up a villager from the calendar.
 * You can now look up items from an open chest.
@@ -588,8 +588,8 @@ Released 11 October 2016.
 * Fixed error when calculating a day offset that wraps into the next year.
 * Fixed errors crashing the game in rare cases.
 
-## 1.4
-Released 04 October 2016.
+## 1.4.0
+Released 04 October 2016 for SMAPI 0.40.1.1 or later.
 
 * Updated for Stardew Valley 1.1:
   * added new fertile weeds (forest farm) and geode stones (hilltop farm);
@@ -598,8 +598,8 @@ Released 04 October 2016.
   * updated to latest binaries & increased minimum versions.
 * Fixed a few missing stones & weeds.
 
-## 1.3
-Released 25 September 2016.
+## 1.3.0
+Released 25 September 2016 for SMAPI 0.40.0 or later.
 
 * Added possible drops and their probability to monster lookup.
 * Added item icons to crafting output, farm animal produce, and monster drops.
@@ -608,8 +608,8 @@ Released 25 September 2016.
 * Fixed fields being shown for dead crops.
 * Internal refactoring.
 
-## 1.2
-Released 21 September 2016.
+## 1.2.0
+Released 21 September 2016 for SMAPI 0.40.0 or later.
 
 * On item lookup:
   * added crop info for seeds;
@@ -620,16 +620,16 @@ Released 21 September 2016.
 * Added optional mode which hides the lookup UI when you release the button.
 * `F1` now toggles the lookup UI (i.e. will close the lookup if it's already open).
 
-## 1.1
-Released 19 September 2016.
+## 1.1.0
+Released 19 September 2016 for SMAPI 0.40.0 or later.
 
 * On item lookup:
   * removed crafting recipe;
   * added crafting, cooking, and furnace recipes which use this item as an ingredient.
 * Added error if game or SMAPI are out of date.
 
-## 1.0
-Released 18 September 2016.
+## 1.0.0
+Released 18 September 2016 for SMAPI 0.40.0 or later.
 
 * Initial version.
 * Added support for NPCs (villagers, pets, farm animals, monsters, and players), items (crops and
@@ -638,4 +638,3 @@ Released 18 September 2016.
 * Added hidden debug mode.
 * Added version check on load.
 * Let players look up a target from any visible part of its sprite.
-

@@ -17,7 +17,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed incorrect "file does not exist" warnings shown for `Include` patches that use tokens in their `FromFile` field.
 
 ## 1.23.2
-Released 09 July 2021.
+Released 09 July 2021 for SMAPI 3.9.5 or later.
 
 * Added [`patch invalidate` console command](docs/author-guide.md#patch-invalidate).
 * Fixed issue where editing a list field using `EditData` and `Fields` would append the values instead of replacing them.
@@ -27,13 +27,13 @@ Released 09 July 2021.
 * Fixed error using `patch export` command with the `Data\RandomBundles` file.
 
 ## 1.23.1
-Released 25 May 2021.
+Released 25 May 2021 for SMAPI 3.9.5 or later.
 
 * `EditMap` patches with `FromFile` no longer require `ToArea`. (It now defaults defaults to an area starting from the the top-left.)
 * Fixed 'unknown reserved argument' errors in Content Patcher 1.23.0 for content packs which use `inputSeparator`.
 
 ## 1.23.0
-Released 25 May 2021. See the [release highlights](https://www.patreon.com/posts/51685726).
+Released 25 May 2021 for SMAPI 3.9.5 or later. See the [release highlights](https://www.patreon.com/posts/51685726).
 
 * Added [`valueAt` argument](docs/author-tokens-guide.md#valueat) to get one value from any token.
 * Added `TextOperations` support for `EditData` fields.
@@ -50,8 +50,8 @@ Released 25 May 2021. See the [release highlights](https://www.patreon.com/posts
 If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values
 they return affects the `valueAt` argument.
 
-## 1.22
-Released 17 April 2021. See the [release highlights](https://www.patreon.com/posts/50144071).
+## 1.22.0
+Released 17 April 2021 for SMAPI 3.9.5 or later. See the [release highlights](https://www.patreon.com/posts/50144071).
 
 * Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
@@ -65,7 +65,7 @@ Released 17 April 2021. See the [release highlights](https://www.patreon.com/pos
 * Fixed default log names for patches with multiple `FromFile` or `Target` values.
 
 ## 1.21.2
-Released 27 March 2021.
+Released 27 March 2021 for SMAPI 3.9.5 or later.
 
 * Simplified 'unsupported format' message to avoid confusion when players need to update Content Patcher.
 * When using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098), you can now configure content packs in-game after loading the save.
@@ -75,12 +75,12 @@ Released 27 March 2021.
 * Fixed compatibility with [unofficial 64-bit mode](https://stardewvalleywiki.com/Modding:Migrate_to_64-bit_on_Windows).
 
 ## 1.21.1
-Released 07 March 2021.
+Released 07 March 2021 for SMAPI 3.9.3 or later.
 
 * Fixed 'changes the save serializer' warning in 1.21.
 
-## 1.21
-Released 07 March 2021. See the [release highlights](https://www.patreon.com/posts/48471994).
+## 1.21.0
+Released 07 March 2021 for SMAPI 3.9.3 or later. See the [release highlights](https://www.patreon.com/posts/48471994).
 
 * Added support for [creating custom locations](docs/author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
@@ -99,8 +99,8 @@ Released 07 March 2021. See the [release highlights](https://www.patreon.com/pos
 If you use tokens in the `Enabled` field, updating the `Format` field to `1.21.0` or later will
 cause errors. See the [migration guide](docs/author-migration-guide.md) for more info.
 
-## 1.20
-Released 06 February 2021. See the [release highlights](https://www.patreon.com/posts/47213526).
+## 1.20.0
+Released 06 February 2021 for SMAPI 3.9.0 or later. See the [release highlights](https://www.patreon.com/posts/47213526).
 
 * Improved tokens:
   * Added `LocationContext` (the world area recognized by the game like `Island` or `Valley`).
@@ -120,34 +120,34 @@ If you use the `Weather` token, updating the `Format` field to `1.20.0` or later
 behavior. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.19.4
-Released 23 January 2021.
+Released 23 January 2021 for SMAPI 3.9.0 or later.
 
 * Updated for multi-key bindings in SMAPI 3.9.
 
 ## 1.19.3
-Released 10 January 2021.
+Released 10 January 2021 for SMAPI 3.8.0 or later.
 
 * Fixed `Include` patches skipped if they have multiple `FromFile` values.
 * Fixed `FarmType` token returning `Custom` for the beach farm; it now returns `Beach` instead.
 * Fixed patches not applied for farmhands in some highly specific cases resulting in an _invalid input arguments_ error.
 
 ## 1.19.2
-Released 04 January 2021.
+Released 04 January 2021 for SMAPI 3.8.0 or later.
 
 * Improved `patch summary` command:
   * Added optional arguments to filter by content packs IDs.
   * Long token values are now truncated to 200 characters by default to improve readability. You can use `patch summary full` to see the full summary.
 
 ## 1.19.1
-Released 21 December 2020.
+Released 21 December 2020 for SMAPI 3.8.0 or later.
 
 * Updated for Stardew Valley 1.5, including...
   * split-screen mode and UI scaling;
   * added `KeyToTheTown` value to `HasWalletItem` token.
 * Fixed patch not applied correctly if `FromFile` or `Target` contains a single value with a trailing comma.
 
-## 1.19
-Released 05 December 2020. See the [release highlights](https://www.patreon.com/posts/44708077).
+## 1.19.0
+Released 05 December 2020 for SMAPI 3.7.3 or later. See the [release highlights](https://www.patreon.com/posts/44708077).
 
 * Added [query expressions](docs/author-tokens-guide.md#query-expressions).
 * Added support for updating patches [on in-game time change](docs/author-guide.md#update-rate).
@@ -159,24 +159,24 @@ Released 05 December 2020. See the [release highlights](https://www.patreon.com/
 * Fixed error when `FromFile` has tokens containing comma-delimited input arguments.
 
 ## 1.18.6
-Released 21 November 2020.
+Released 21 November 2020 for SMAPI 3.7.3 or later.
 
 * Fixed validation for `Include` patches in 1.18.5.
 
 ## 1.18.5
-Released 21 November 2020.
+Released 21 November 2020 for SMAPI 3.7.3 or later.
 
 * Improved error-handling for some content packs with invalid formats.
 * Fixed `EditData` patches with multiple targets sometimes applied incorrectly to some targets.
 
 ## 1.18.4
-Released 04 November 2020.
+Released 04 November 2020 for SMAPI 3.7.3 or later.
 
 * Fixed tokens which use input arguments failing to update silently in rare cases.
 * Fixed 'collection was modified' error in some cases when patching a data model asset.
 
 ## 1.18.3
-Released 15 October 2020.
+Released 15 October 2020 for SMAPI 3.7.3 or later.
 
 * Added support for setting the default value for an `i18n` token.
 * Fixed `i18n` token not accepting named arguments.
@@ -184,7 +184,7 @@ Released 15 October 2020.
 * Fixed errors using a dynamic token in some cases when it's set to the value of an immutable token like `{{HasMod |contains=X}}`.
 
 ## 1.18.2
-Released 13 September 2020.
+Released 13 September 2020 for SMAPI 3.7.2 or later.
 
 * `ConfigSchema` options can now have an optional `Description` field, which is shown in UIs like [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 * Fixed `TextOperations` incorrectly adding delimiters when there's no previous value.
@@ -192,12 +192,12 @@ Released 13 September 2020.
 * Fixed error when using a field reference token as the only input to a token which requires input.
 
 ## 1.18.1
-Released 13 September 2020.
+Released 13 September 2020 for SMAPI 3.7.2 or later.
 
 * Fixed format issue when applying field edits to `Data\Achievements`.
 
-## 1.18
-Released 12 September 2020. See the [release highlights](https://www.patreon.com/posts/41527845).
+## 1.18.0
+Released 12 September 2020 for SMAPI 3.7.2 or later. See the [release highlights](https://www.patreon.com/posts/41527845).
 
 * Added [content pack translation](docs/author-guide.md#translations) support using `i18n` files.
 * Added [text operations](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
@@ -215,19 +215,19 @@ later requires changes to your `content.json`. See the
 [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.17.2
-Released 28 August 2020.
+Released 28 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed patches not always updated if they depend on mod-provided tokens that incorrectly change outside a context update.
 
 ## 1.17.1
-Released 19 August 2020.
+Released 19 August 2020 for SMAPI 3.6.0 or later.
 
 * Made 'multiple patches want to load asset' errors more user-friendly.
 * Fixed error in some cases when warping to a new location as a farmhand in multiplayer.
 * Fixed error editing an image previously loaded through the Scale Up mod.
 
-## 1.17
-Released 16 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
+## 1.17.0
+Released 16 August 2020 for SMAPI 3.6.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
 
 * Patches can now optionally [update on location change](docs/author-guide.md#update-rate), including all tokens (not only location-specific tokens).
 * Patches can now resize maps automatically using `Action: EditMap` (just patch past the bottom or right edges).
@@ -244,29 +244,29 @@ If you use the `LocationName` or `IsOutdoors` token/condition, updating the `For
 [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.16.4
-Released 12 August 2020.
+Released 12 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed 'collection was modified' error when unloading `Action: Include` patches.
 
 ## 1.16.3
-Released 08 August 2020.
+Released 08 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed incorrect token input validation in some cases with 1.16.2.
 
 ## 1.16.2
-Released 08 August 2020.
+Released 08 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed patches not always unapplied when an `Include` patch changes.
 * Fixed error using some tokens within the `contains` input argument.
 * Fixed broken error message when multiple load patches apply in 1.16.
 
 ## 1.16.1
-Released 03 August 2020.
+Released 03 August 2020 for SMAPI 3.6.0 or later.
 
 * Fixed some patches not applied correctly in 1.16.
 
-## 1.16
-Released 02 August 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/40028155).
+## 1.16.0
+Released 02 August 2020 for SMAPI 3.6.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/40028155).
 
 * Added [an `Include` action](docs/author-guide.md#include) to load patches from another JSON file. That includes full token support, so you can load files dynamically or conditionally.
 * Randomization is now consistent between players, regardless of installed content packs.
@@ -284,19 +284,19 @@ Migrating to an `"Action": "Include"` patch is recommended; it's more flexible a
 intuitively. (That doesn't apply to `"Action": "EditData"` patches without a `FromFile` field.)
 
 ## 1.15.2
-Released 21 July 2020.
+Released 21 July 2020 for SMAPI 3.6.1 or later.
 
 * Fixed error using `HasFile` with filenames containing commas.
 * Fixed broken patches preventing other patches from being applied/updated in rare cases.
 * Internal changes to prepare for 1.16.
 
 ## 1.15.1
-Released 06 July 2020.
+Released 06 July 2020 for SMAPI 3.6.1 or later.
 
 * Fixed error loading pre-1.15 content packs that use a token with empty input arguments like `{{token:}}`.
 
-## 1.15
-Released 04 July 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
+## 1.15.0
+Released 04 July 2020 for SMAPI 3.6.1 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
 
 * Added [named token arguments](docs/author-tokens-guide.md#global-input-arguments).
 * Added a universal `|contains=` argument to search token values.
@@ -315,12 +315,12 @@ Released 04 July 2020. See the [release highlights for mod authors](https://www.
 Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.14.1
-Released 14 May 2020.
+Released 14 May 2020 for SMAPI 3.5.0 or later.
 
 * Fixed patches not updating correctly in 1.14 when a changed token is only in their `FromFile` field.
 
-## 1.14
-Released 02 May 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-36931803).
+## 1.14.0
+Released 02 May 2020 for SMAPI 3.5.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-36931803).
 
 * Added `Round` token.
 * Added `FromFile` patch token (e.g. so you can do `"HasFile:{{FromFile}}": true`).
@@ -333,8 +333,8 @@ Released 02 May 2020. See the [release highlights for mod authors](https://www.p
 * Fixed token handling in map tile/property fields.
 * Fixed format validation for 1.13 features not applied.
 
-## 1.13
-Released 09 March 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-34749703).
+## 1.13.0
+Released 09 March 2020 for SMAPI 3.3.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-34749703).
 
 * Added support for arithmetic expressions.
 * Added support for editing map tiles.
@@ -345,8 +345,8 @@ Released 09 March 2020. See the [release highlights for mod authors](https://www
 * Improved logic for matching tilesheets when applying a map patch.
 * Fixed incorrect warning when using `HasWalletItem` token in 1.12.
 
-## 1.12
-Released 01 February 2020. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-33691875).
+## 1.12.0
+Released 01 February 2020 for SMAPI 3.2.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-33691875).
 
 * Added advanced API to let other mods add more flexible tokens.
 * Added support for mod-provided tokens in `EditData` fields.
@@ -357,7 +357,7 @@ Released 01 February 2020. See the [release highlights for mod authors](https://
 * Fixed whitespace between tokens being ignored (e.g. `{{season}} {{day}}` now outputs `Summer 14` instead of `Summer14`).
 
 ## 1.11.1
-Released 27 December 2019.
+Released 27 December 2019 for SMAPI 3.0.1 or later.
 
 * Mitigated `OutOfMemoryException` issue for some players. (The underlying issue in SMAPI is still being investigated.)
 * Reduced performance impact in some cases when warping with content packs which have a large number of seasonal changes.
@@ -366,8 +366,8 @@ Released 27 December 2019.
 * Fixed `Random` tokens being rerolled when warping if the patch is location-dependent.
 * Fixed error when married to an NPC that's not loaded.
 
-## 1.11
-Released 15 December 2019. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
+## 1.11.0
+Released 15 December 2019 for SMAPI 3.0.1 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
 
 * Added `Lowercase` and `Uppercase` tokens.
 * `Random` tokens can have 'pinned keys' to support many new scenarios (see readme).
@@ -379,13 +379,13 @@ Released 15 December 2019. See the [release highlights for mod authors](https://
 * Fixed error if a content pack has a null patch.
 
 ## 1.10.1
-Released 02 December 2019.
+Released 02 December 2019 for SMAPI 3.0.1 or later.
 
 * Updated for Stardew Valley 1.4.0.1.
 * Fixed error when an `EditData` patch uses tokens in `FromFile` that aren't available.
 
-## 1.10
-Released 26 November 2019. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
+## 1.10.0
+Released 26 November 2019 for SMAPI 3.0.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/whats-new-in-1-1-32382030).
 
 * Updated for Stardew Valley 1.4, including new farm type.
 * Added new tokens:
@@ -410,7 +410,7 @@ Released 26 November 2019. See the [release highlights for mod authors](https://
 * Fixed `NullReferenceException` in some cases with invalid `Entries` keys.
 
 ## 1.9.2
-Released 25 July 2019.
+Released 25 July 2019 for SMAPI 2.11.2 or later.
 
 * Fixed `Day` token not allowing zero values.
 * Fixed dynamic tokens validated before they're ready.
@@ -418,13 +418,13 @@ Released 25 July 2019.
 * Fixed Linux/Mac players getting `HasFile`-related errors in some cases.
 
 ## 1.9.1
-Released 12 June 2019.
+Released 12 June 2019 for SMAPI 2.11.1 or later.
 
 * Fixed error loading local XNB files in some cases with Content Patcher 1.9.
 * Fixed mod-provided tokens being asked for values when they're marked non-ready.
 
-## 1.9
-Released 09 June 2019.
+## 1.9.0
+Released 09 June 2019 for SMAPI 2.11.1 or later.
 
 * Added API to let other mods create custom tokens and conditions.
 * Fixed config parsing errors for some players.
@@ -432,13 +432,13 @@ Released 09 June 2019.
 * Fixed a broken warning message.
 
 ## 1.8.2
-Released 27 May 2019.
+Released 27 May 2019 for SMAPI 2.11.1 or later.
 
 * Fixed some patches broken in Content Patcher 1.8.1.
 * Fixed `EditMap` working with older format versions.
 
 ## 1.8.1
-Released 26 May 2019.
+Released 26 May 2019 for SMAPI 2.11.1 or later.
 
 * Improved `patch summary`:
   * now tracks the reason a patch wasn't loaded (instead of showing a heuristic guess);
@@ -447,8 +447,8 @@ Released 26 May 2019.
 * Improved errors when a local file doesn't exist.
 * Fixed patch update bugs in Content Patcher 1.8.
 
-## 1.8
-Released 16 May 2019.
+## 1.8.0
+Released 16 May 2019 for SMAPI 2.11.1 or later.
 
 * Added new tokens:
   * `IsOutdoors`: whether the player is outdoors.
@@ -464,8 +464,8 @@ Released 16 May 2019.
 
 Thanks to spacechase0 for contributions to support the new tokens!
 
-## 1.7
-Released 08 May 2019.
+## 1.7.0
+Released 08 May 2019 for SMAPI 2.11.0 or later.
 
 * Added new tokens:
   * `HasReadLetter`: whether the player has opened a given mail letter.
@@ -486,7 +486,7 @@ Released 08 May 2019.
 Updating the `Format` field to `1.7.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.6.5
-Released 06 April 2019.
+Released 06 April 2019 for SMAPI 2.11.0 or later.
 
 * Fixed `EditData` allowing field values containing `/` (which is the field delimiter).
 * Fixed error with upcoming SMAPI 3.0 changes.
@@ -495,30 +495,30 @@ Released 06 April 2019.
 * Internal rewriting to support upcoming features.
 
 ## 1.6.4
-Released 05 March 2019.
+Released 05 March 2019 for SMAPI 2.11.0 or later.
 
 * Added detection for most custom maps broken by Stardew Valley 1.3.36 (they'll now be rejected instead of crashing the game).
 
 ## 1.6.3
-Released 15 January 2019.
+Released 15 January 2019 for SMAPI 2.10.1 or later.
 
 * Fixed some conditions not available for multiplayer farmhands after 1.6.2.
 
 ## 1.6.2
-Released 04 January 2019.
+Released 04 January 2019 for SMAPI 2.10.1 or later.
 
 * Conditions are now checked much sooner when loading a save, so early setup like map debris spawning can be affected conditionally.
 * Fixed token subkey form not allowed in boolean fields.
 * Updated for changes in the upcoming SMAPI 3.0.
 
 ## 1.6.1
-Released 08 December 2018.
+Released 08 December 2018 for SMAPI 2.9.0 or later.
 
 * Fixed error when a content pack has a patch with no `Target` field.
 * Fixed some conditions using subkeys marked invalid incorrectly.
 
-## 1.6
-Released 08 December 2018.
+## 1.6.0
+Released 08 December 2018 for SMAPI 2.9.0 or later.
 
 * Added new tokens:
   * `DaysPlayed`: the number of in-game days played for the current save.
@@ -539,27 +539,27 @@ Released 08 December 2018.
 Updating the `Format` field to `1.6.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
 
 ## 1.5.3
-Released 08 November 2018.
+Released 08 November 2018 for SMAPI 2.8.0 or later.
 
 * Added `patch summary` hint if `Target` value incorrectly includes a file extension.
 * Migrated verbose logs to SMAPI's verbose logging feature.
 * Fixed yet another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.2
-Released 29 September 2018.
+Released 29 September 2018 for SMAPI 2.8.0 or later.
 
 * Improved `patch summary` output a bit.
 * Fixed another error setting `EditData` entries to `null` since 1.5.
 
 ## 1.5.1
-Released 23 September 2018.
+Released 23 September 2018 for SMAPI 2.8.0 or later.
 
 * Added token support in `EditData` keys.
 * Fixed error setting `EditData` entries to `null` since 1.5.
 * Fixed error using tokens in `Enabled` field since 1.5.
 
-## 1.5
-Released 17 September 2018.
+## 1.5.0
+Released 17 September 2018 for SMAPI 2.8.0 or later.
 * Added support for dynamic tokens defined by the modder.
 * Added new tokens:
   * `FarmCave` (the current farm cave type);
@@ -585,13 +585,13 @@ Released 17 September 2018.
 * Fixed `patch summary` showing tokens that aren't valid in the current context.
 
 ## 1.4.1
-Released 26 August 2018.
+Released 26 August 2018 for SMAPI 2.8.0 or later.
 
 * Updated for Stardew Valley 1.3.29.
 * Fixed broken error message.
 
-## 1.4
-Released 01 August 2018.
+## 1.4.0
+Released 01 August 2018 for SMAPI 2.6.0 or later.
 
 * Updated for Stardew Valley 1.3 (including multiplayer support).
 * Added new tokens:
@@ -607,15 +607,15 @@ Released 01 August 2018.
 * Fixed case sensitivity issues in some cases.
 
 ## 1.3.1
-Released 08 April 2018.
+Released 08 April 2018 for SMAPI 2.5.4 or later.
 
 * Added more detailed info to `patch summary` command.
 * Improved error handling for image edits.
 * Fixed unnecessary warnings when a patch is disabled.
 * Fixed error when a content pack's `config.json` has invalid keys.
 
-## 1.3
-Released 26 March 2018.
+## 1.3.0
+Released 26 March 2018 for SMAPI 2.5.4 or later.
 
 * Added support for patch conditions (with initial support for season, day of month, day of week, and language).
 * Added support for content packs having `config.json`.
@@ -629,23 +629,23 @@ Released 26 March 2018.
 * Fixed `Target` not being normalized.
 * Fixed errors using debug overlay on Linux/Mac.
 
-## 1.2
-Released 09 March 2018.
+## 1.2.0
+Released 09 March 2018 for SMAPI 2.5.2 or later.
 
 * Added support for overlaying images.
 * Added optional debug mode for modders.
 * `FromFile`, `Target`, and map tilesheets are now case-insensitive.
 * Fixed null fields not being ignored after warning.
 
-## 1.1
-Released 02 March 2018.
+## 1.1.0
+Released 02 March 2018 for SMAPI 2.5.2 or later.
 
 * Added `Enabled` field to disable individual patches (thanks to f4iTh!).
 * Added support for XNB files in `FromFile`.
 * Added support for maps in `FromFile` which reference unpacked PNG tilesheets.
 
-## 1.0
-Released 25 February 2018.
+## 1.0.0
+Released 25 February 2018 for SMAPI 2.5.2 or later.
 
 * Initial release.
 * Added support for replacing assets, editing images, and editing data files.
