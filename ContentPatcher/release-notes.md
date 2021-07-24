@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
   * using an `Include` patch with a `Target` field;
   * using a field reference token when the patch doesn't have that field.
 * Tweaked the naming for patches with multiple `FromFile`/`Target` values to reduce confusion.
+* Fixed incorrect "file does not exist" warnings shown for `Include` patches that use tokens in their `FromFile` field.
 
 ## 1.23.2
 Released 09 July 2021.

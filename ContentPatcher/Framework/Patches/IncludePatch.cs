@@ -86,7 +86,8 @@ namespace ContentPatcher.Framework.Patches
                     // validate file existence
                     if (!this.FromAssetExists())
                     {
-                        this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
+                        if (this.IsReady)
+                            this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
                         return true;
                     }
 
