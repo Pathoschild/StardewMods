@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Harmony;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common.Patching;
+using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using SObject = StardewValley.Object;
 
-namespace Pathoschild.Stardew.SmallBeachFarm.Framework
+namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 {
     /// <summary>Encapsulates Harmony patches for the <see cref="Farm"/> instance.</summary>
-    internal static class FarmPatcher
+    internal class FarmPatcher : BasePatcher
     {
         /*********
         ** Fields
@@ -32,7 +34,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         private static Func<Farm, int, int, FishType> GetFishType;
 
         /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
-        private static bool IsInPatch = false;
+        private static bool IsInPatch;
 
         /// <summary>The arrival tiles by farm type when the player warps from the <see cref="IslandWest"/> obelisk, with a <c>-1</c> key for the default.</summary>
         /// <remarks>Derived from <see cref="IslandWest.performAction"/>.</remarks>
@@ -47,36 +49,39 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /*********
         ** Public methods
         *********/
-        /// <summary>Initialize the Harmony patches.</summary>
-        /// <param name="harmony">The Harmony patching API.</param>
+        /// <summary>Initialize the patcher.</summary>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
         /// <param name="addCampfire">Whether to add the campfire to the farm map.</param>
         /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
         /// <param name="getFishType">Get the fish that should be available from the given tile.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
+        public FarmPatcher(IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
         {
             FarmPatcher.Monitor = monitor;
             FarmPatcher.AddCampfire = addCampfire;
             FarmPatcher.UseBeachMusic = useBeachMusic;
             FarmPatcher.IsSmallBeachFarm = isSmallBeachFarm;
             FarmPatcher.GetFishType = getFishType;
+        }
 
+        /// <inheritdoc />
+        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        {
             harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.getFish)),
-                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.Before_GetFish))
+                original: this.RequireMethod<Farm>(nameof(Farm.getFish)),
+                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.Before_GetFish))
             );
             harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), "resetLocalState"),
-                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_ResetLocalState))
+                original: this.RequireMethod<Farm>("resetLocalState"),
+                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetLocalState))
             );
             harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), "resetSharedState"),
-                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_ResetSharedState))
+                original: this.RequireMethod<Farm>("resetSharedState"),
+                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_ResetSharedState))
             );
             harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.cleanupBeforePlayerExit)),
-                prefix: new HarmonyMethod(typeof(FarmPatcher), nameof(FarmPatcher.After_CleanupBeforePlayerExit))
+                original: this.RequireMethod<GameLocation>(nameof(GameLocation.cleanupBeforePlayerExit)),
+                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_CleanupBeforePlayerExit))
             );
         }
 

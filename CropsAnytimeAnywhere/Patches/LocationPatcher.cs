@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using Harmony;
+using Pathoschild.Stardew.Common.Patching;
+using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.ObjectModel;
 using xTile.Tiles;
 
-namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
+namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
 {
     /// <summary>Encapsulates Harmony patches for the <see cref="Farm"/> instance.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-    internal static class LocationPatcher
+    internal class LocationPatcher : BasePatcher
     {
         /*********
         ** Fields
@@ -34,36 +36,39 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         ** Public methods
         *********/
         /// <summary>Initialize the Harmony patches.</summary>
-        /// <param name="harmony">The Harmony patching API.</param>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="fallbackTileTypes">The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor, ModConfig config, IDictionary<string, IDictionary<int, string>> fallbackTileTypes)
+        public LocationPatcher(IMonitor monitor, ModConfig config, IDictionary<string, IDictionary<int, string>> fallbackTileTypes)
         {
             LocationPatcher.Monitor = monitor;
             LocationPatcher.Config = config;
             LocationPatcher.FallbackTileTypes = fallbackTileTypes;
+        }
 
+        /// <inheritdoc />
+        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        {
             harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.CanPlantSeedsHere)),
-                postfix: new HarmonyMethod(typeof(LocationPatcher), nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
+                original: this.RequireMethod<GameLocation>(nameof(GameLocation.CanPlantSeedsHere)),
+                postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
             );
 
             harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.CanPlantTreesHere)),
-                postfix: new HarmonyMethod(typeof(LocationPatcher), nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
+                original: this.RequireMethod<GameLocation>(nameof(GameLocation.CanPlantTreesHere)),
+                postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
             );
 
             harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.SeedsIgnoreSeasonsHere)),
-                postfix: new HarmonyMethod(typeof(LocationPatcher), nameof(LocationPatcher.After_SeedsIgnoreSeasonsHere))
+                original: this.RequireMethod<GameLocation>(nameof(GameLocation.SeedsIgnoreSeasonsHere)),
+                postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_SeedsIgnoreSeasonsHere))
             );
 
-            if (config.ForceTillable.IsAnyEnabled())
+            if (LocationPatcher.Config.ForceTillable.IsAnyEnabled())
             {
                 harmony.Patch(
-                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.doesTileHaveProperty)),
-                    postfix: new HarmonyMethod(typeof(LocationPatcher), nameof(LocationPatcher.After_DoesTileHaveProperty))
+                    original: this.RequireMethod<GameLocation>(nameof(GameLocation.doesTileHaveProperty)),
+                    postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_DoesTileHaveProperty))
                 );
             }
         }

@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Fixed Harmony patch error in the upcoming SMAPI 3.12.0.
+* Internal changes to prepare for the upcoming [Harmony 2.x migration](https://stardewvalleywiki.com/Modding:Migrate_to_Harmony_2.0).
 
 ## 1.3.2
 Released 09 July 2021 for SMAPI 3.9.5 or later.

@@ -1,11 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
-using Harmony;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
+using Pathoschild.Stardew.SmallBeachFarm.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -76,14 +77,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
             // hook Harmony patch
-            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            FarmPatcher.Hook(
-                harmony,
-                this.Monitor,
-                addCampfire: this.Config.AddCampfire,
-                useBeachMusic: this.Config.UseBeachMusic,
-                isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
-                getFishType: this.GetFishType
+            HarmonyPatcher.Apply(this,
+                new FarmPatcher(
+                    this.Monitor,
+                    addCampfire: this.Config.AddCampfire,
+                    useBeachMusic: this.Config.UseBeachMusic,
+                    isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
+                    getFishType: this.GetFishType
+                )
             );
         }
 

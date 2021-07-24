@@ -6,15 +6,16 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Harmony;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Patching;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
-namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
+namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
 {
     /// <summary>Encapsulates Harmony patches for the <see cref="Utility"/> class.</summary>
     [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-    internal static class UtilityPatcher
+    internal class UtilityPatcher : BasePatcher
     {
         /*********
         ** Fields
@@ -27,26 +28,29 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         ** Public methods
         *********/
         /// <summary>Initialize the Harmony patches.</summary>
-        /// <param name="harmony">The Harmony patching API.</param>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
-        public static void Hook(HarmonyInstance harmony, IMonitor monitor)
+        public UtilityPatcher(IMonitor monitor)
         {
             UtilityPatcher.Monitor = monitor;
+        }
 
+        /// <inheritdoc />
+        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        {
             // disable indoor warp restriction
             harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.GetHorseWarpRestrictionsForFarmer)),
-                transpiler: new HarmonyMethod(typeof(UtilityPatcher), nameof(UtilityPatcher.Transpile_GetHorseWarpRestrictionsForFarmer))
+                original: this.RequireMethod<Utility>(nameof(Utility.GetHorseWarpRestrictionsForFarmer)),
+                transpiler: this.GetHarmonyMethod(nameof(UtilityPatcher.Transpile_GetHorseWarpRestrictionsForFarmer))
             );
 
             // let game find horses indoors
             harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.findHorse)),
-                postfix: new HarmonyMethod(typeof(UtilityPatcher), nameof(UtilityPatcher.After_FindHorse))
+                original: this.RequireMethod<Utility>(nameof(Utility.findHorse)),
+                postfix: this.GetHarmonyMethod(nameof(UtilityPatcher.After_FindHorse))
             );
             harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.findHorseForPlayer)),
-                postfix: new HarmonyMethod(typeof(UtilityPatcher), nameof(UtilityPatcher.After_FindHorseForPlayer))
+                original: this.RequireMethod<Utility>(nameof(Utility.findHorseForPlayer)),
+                postfix: this.GetHarmonyMethod(nameof(UtilityPatcher.After_FindHorseForPlayer))
             );
         }
 

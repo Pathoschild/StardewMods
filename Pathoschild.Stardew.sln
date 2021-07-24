@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5950ED4C
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = ".Common", "Common\.Common.shproj", "{B9E9EDFC-E98A-4370-994F-40A9F39A0284}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = ".Common.Patching", "Common.Patching\.Common.Patching.shproj", "{49C40E04-5A9F-47DA-8906-FA717816E772}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Automate", "Automate\Automate.csproj", "{4456349C-749D-430B-8295-D70D2B2D3649}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChestsAnywhere", "ChestsAnywhere\ChestsAnywhere.csproj", "{FCA458CF-D872-47B7-9048-403C56A20905}"
@@ -63,11 +65,15 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Common\Common.projitems*{44366a09-9a49-49b5-9d5f-51dc3f751fcb}*SharedItemsImports = 5
 		Common\Common.projitems*{4456349c-749d-430b-8295-d70d2b2d3649}*SharedItemsImports = 5
+		Common.Patching\Common.Patching.projitems*{495aa31a-abfd-402d-a091-620cdb4bc7e1}*SharedItemsImports = 5
 		Common\Common.projitems*{495aa31a-abfd-402d-a091-620cdb4bc7e1}*SharedItemsImports = 5
+		Common.Patching\Common.Patching.projitems*{49c40e04-5a9f-47da-8906-fa717816e772}*SharedItemsImports = 13
+		Common.Patching\Common.Patching.projitems*{5588ce27-a617-4c20-bc14-6ffb9a6313dd}*SharedItemsImports = 5
 		Common\Common.projitems*{5588ce27-a617-4c20-bc14-6ffb9a6313dd}*SharedItemsImports = 5
 		Common\Common.projitems*{5ee9feb7-e8b4-4cbb-878b-b794810dd94b}*SharedItemsImports = 5
 		Common\Common.projitems*{6a78a4d9-bce8-43a4-8938-aedba5be98c0}*SharedItemsImports = 5
 		Common\Common.projitems*{7c05ff17-e7aa-485a-a0e9-bab0248cf653}*SharedItemsImports = 5
+		Common.Patching\Common.Patching.projitems*{7cd586e4-e766-494a-a06f-abac3e0e6c90}*SharedItemsImports = 5
 		Common\Common.projitems*{7cd586e4-e766-494a-a06f-abac3e0e6c90}*SharedItemsImports = 5
 		Common\Common.projitems*{81b42938-5567-469b-8b92-56e006df588d}*SharedItemsImports = 5
 		Common\Common.projitems*{8fe9bd36-31eb-4a47-9c98-c216ff361664}*SharedItemsImports = 5

@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Harmony;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.HorseFluteAnywhere.Framework;
+using Pathoschild.Stardew.HorseFluteAnywhere.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -45,8 +46,9 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             this.UpdateConfig();
 
             // add patches
-            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            UtilityPatcher.Hook(harmony, this.Monitor);
+            HarmonyPatcher.Apply(this,
+                new UtilityPatcher(this.Monitor)
+            );
 
             // hook events
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
