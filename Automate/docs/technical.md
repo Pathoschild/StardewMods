@@ -90,7 +90,7 @@ you can use to add custom machines, containers, and connectors.
 #### Access the API
 To access the API:
 
-1. Add a reference to the `Automate.dll` file. Make sure it's [_not_ copied to your build output](https://github.com/Pathoschild/SMAPI/blob/develop/docs/mod-build-config.md#ignore-files).
+1. Add a reference to the `Automate.dll` file. Make sure it's [_not_ copied to your build output](https://smapi.io/package/how-do-i-change-which-files-are-included-in-the-mod-deployzip).
 2. Hook into [SMAPI's `GameLoop.GameLaunched` event](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Events#GameLoop.GameLaunched)
    and get a copy of the API:
    ```c#

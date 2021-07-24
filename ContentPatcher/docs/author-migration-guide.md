@@ -1,8 +1,8 @@
-﻿← [README](../README.md)
+﻿← [README](README.md)
 
 This document helps mod authors update their content packs for newer versions of Content Patcher.
 
-**See the [main README](../README.md) for other info**.
+**See the [main README](README.md) for other info**.
 
 ## Contents
 * [FAQs](#faqs)
@@ -70,7 +70,7 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
-version or higher. See [release notes](../release-notes.md) for a full list of changes.
+version or higher. See [release notes](release-notes.md) for a full list of changes.
 
 ## 1.21
 Released 07 March 2021.
@@ -193,5 +193,5 @@ Released 08 December 2018.
 * The `Weather` token now returns `Wind` on windy days instead of `Sun`.
 
 ## See also
-* [README](../README.md) for other info
+* [README](README.md) for other info
 * [Ask for help](https://stardewvalleywiki.com/Modding:Help)

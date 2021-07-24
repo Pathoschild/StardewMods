@@ -19,7 +19,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## 1.23.2
 Released 09 July 2021 for SMAPI 3.9.5 or later.
 
-* Added [`patch invalidate` console command](docs/author-guide.md#patch-invalidate).
+* Added [`patch invalidate` console command](author-guide.md#patch-invalidate).
 * Fixed issue where editing a list field using `EditData` and `Fields` would append the values instead of replacing them.
 * Fixed broken custom locations also preventing valid custom locations from loading.
 * Fixed `Query` token not allowing queries that contain a comma.
@@ -35,28 +35,28 @@ Released 25 May 2021 for SMAPI 3.9.5 or later.
 ## 1.23.0
 Released 25 May 2021 for SMAPI 3.9.5 or later. See the [release highlights](https://www.patreon.com/posts/51685726).
 
-* Added [`valueAt` argument](docs/author-tokens-guide.md#valueat) to get one value from any token.
+* Added [`valueAt` argument](author-tokens-guide.md#valueat) to get one value from any token.
 * Added `TextOperations` support for `EditData` fields.
 * Added new tokens:
-  * [`ChildGenders`](docs/author-tokens-guide.md#ChildGenders) and [`ChildNames`](docs/author-tokens-guide.md#ChildNames) to get the genders/names of a given player's children.
-  * [`Count`](docs/author-tokens-guide.md#Count) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of active quests).
-  * [`HasCaughtFish`](docs/author-tokens-guide.md#HasCaughtFish) to get fish caught by a player.
+  * [`ChildGenders`](author-tokens-guide.md#ChildGenders) and [`ChildNames`](author-tokens-guide.md#ChildNames) to get the genders/names of a given player's children.
+  * [`Count`](author-tokens-guide.md#Count) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of active quests).
+  * [`HasCaughtFish`](author-tokens-guide.md#HasCaughtFish) to get fish caught by a player.
 * Improved sort order used in token values, patch commands, and error messages.
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed without a debug overlay open.
-* Fixed tokens which accept a [`PlayerType`](docs/author-tokens-guide.md#playertype) argument always marked as returning multiple values for input arguments.
+* Fixed tokens which accept a [`PlayerType`](author-tokens-guide.md#playertype) argument always marked as returning multiple values for input arguments.
 
 **Note for SMAPI mod authors:**  
-If you use the [extensibility API](docs/extensibility.md) to add custom tokens, the order of values
+If you use the [extensibility API](extensibility.md) to add custom tokens, the order of values
 they return affects the `valueAt` argument.
 
 ## 1.22.0
 Released 17 April 2021 for SMAPI 3.9.5 or later. See the [release highlights](https://www.patreon.com/posts/50144071).
 
-* Added a [conditions API](docs/conditions-api.md), which lets other mods parse and use Content Patcher conditions.
+* Added a [conditions API](conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
-  * [`FirstValidFile`](docs/author-tokens-guide.md#FirstValidFile) to enable fallback files without duplicating patches.
-  * [`HasActiveQuest`](docs/author-tokens-guide.md#HasActiveQuest) to check a player's current quest list.
+  * [`FirstValidFile`](author-tokens-guide.md#FirstValidFile) to enable fallback files without duplicating patches.
+  * [`HasActiveQuest`](author-tokens-guide.md#HasActiveQuest) to check a player's current quest list.
 * Improved console commands:
   * Added `patch export` argument to optionally set the data type.
   * Tweaked console command handling.
@@ -82,10 +82,10 @@ Released 07 March 2021 for SMAPI 3.9.3 or later.
 ## 1.21.0
 Released 07 March 2021 for SMAPI 3.9.3 or later. See the [release highlights](https://www.patreon.com/posts/48471994).
 
-* Added support for [creating custom locations](docs/author-guide.md#custom-locations).
-* Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/docs/author-guide.md#editmap).
+* Added support for [creating custom locations](author-guide.md#custom-locations).
+* Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/author-guide.md#editmap).
 * Added new tokens:
-  * [`Render`](docs/author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+  * [`Render`](author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
   * `DailyLuck` to get a player's daily luck (thanks to Thom1729!).
 * The `FarmhouseUpgrade` token can now check either the current player (default) or the host player.
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
@@ -97,7 +97,7 @@ Released 07 March 2021 for SMAPI 3.9.3 or later. See the [release highlights](ht
 
 **Update note for mod authors:**  
 If you use tokens in the `Enabled` field, updating the `Format` field to `1.21.0` or later will
-cause errors. See the [migration guide](docs/author-migration-guide.md) for more info.
+cause errors. See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.20.0
 Released 06 February 2021 for SMAPI 3.9.0 or later. See the [release highlights](https://www.patreon.com/posts/47213526).
@@ -117,7 +117,7 @@ Released 06 February 2021 for SMAPI 3.9.0 or later. See the [release highlights]
 
 **Update note for mod authors:**  
 If you use the `Weather` token, updating the `Format` field to `1.20.0` or later changes its
-behavior. See the [migration guide](docs/author-migration-guide.md) for more info.
+behavior. See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.19.4
 Released 23 January 2021 for SMAPI 3.9.0 or later.
@@ -149,8 +149,8 @@ Released 21 December 2020 for SMAPI 3.8.0 or later.
 ## 1.19.0
 Released 05 December 2020 for SMAPI 3.7.3 or later. See the [release highlights](https://www.patreon.com/posts/44708077).
 
-* Added [query expressions](docs/author-tokens-guide.md#query-expressions).
-* Added support for updating patches [on in-game time change](docs/author-guide.md#update-rate).
+* Added [query expressions](author-tokens-guide.md#query-expressions).
+* Added support for updating patches [on in-game time change](author-guide.md#update-rate).
 * Added support for patches with multiple `FromFile` values.
 * Added map patch modes for `"Action": "EditMap"`.
 * Added `Time` token.
@@ -199,8 +199,8 @@ Released 13 September 2020 for SMAPI 3.7.2 or later.
 ## 1.18.0
 Released 12 September 2020 for SMAPI 3.7.2 or later. See the [release highlights](https://www.patreon.com/posts/41527845).
 
-* Added [content pack translation](docs/author-guide.md#translations) support using `i18n` files.
-* Added [text operations](docs/author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
+* Added [content pack translation](author-guide.md#translations) support using `i18n` files.
+* Added [text operations](author-guide.md#text-operations), which let you change a value instead of replacing it (e.g. append to a map's `Warp` property).
 * You can now [configure content packs in-game](README.md#configure-content-packs) if you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed (thanks to a collaboration with spacechase0!). This works automatically for any content pack that has configuration options, no changes needed by mod authors.
 * You can now edit fields via `EditData` for `Data\Achievements` too.
 * Patches now update immediately when you change language.
@@ -212,7 +212,7 @@ Released 12 September 2020 for SMAPI 3.7.2 or later. See the [release highlights
 **Update note for mod authors:**  
 If you use the `FromFile` field with `EditData` patches, updating the `Format` field to `1.18.0` or
 later requires changes to your `content.json`. See the
-[migration guide](docs/author-migration-guide.md) for more info.
+[migration guide](author-migration-guide.md) for more info.
 
 ## 1.17.2
 Released 28 August 2020 for SMAPI 3.6.0 or later.
@@ -229,10 +229,10 @@ Released 19 August 2020 for SMAPI 3.6.0 or later.
 ## 1.17.0
 Released 16 August 2020 for SMAPI 3.6.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/40495753).
 
-* Patches can now optionally [update on location change](docs/author-guide.md#update-rate), including all tokens (not only location-specific tokens).
+* Patches can now optionally [update on location change](author-guide.md#update-rate), including all tokens (not only location-specific tokens).
 * Patches can now resize maps automatically using `Action: EditMap` (just patch past the bottom or right edges).
 * Added `TargetPathOnly` token (the target field value for the current patch, without the filename).
-* Added [`patch reload`](docs/author-guide.md#patch-reload) console command (thanks to spacechase0!).
+* Added [`patch reload`](author-guide.md#patch-reload) console command (thanks to spacechase0!).
 * Added troubleshooting hints related to update rate in `patch summary` console command.
 * Removed legacy token API obsolete since Content Patcher 1.12.
 * Fixed ambiguous-method detection in advanced API.
@@ -241,7 +241,7 @@ Released 16 August 2020 for SMAPI 3.6.0 or later. See the [release highlights fo
 **Update note for mod authors:**  
 If you use the `LocationName` or `IsOutdoors` token/condition, updating the `Format` field to
 `1.17.0` or later requires changes to your `content.json`. See the
-[migration guide](docs/author-migration-guide.md) for more info.
+[migration guide](author-migration-guide.md) for more info.
 
 ## 1.16.4
 Released 12 August 2020 for SMAPI 3.6.0 or later.
@@ -268,7 +268,7 @@ Released 03 August 2020 for SMAPI 3.6.0 or later.
 ## 1.16.0
 Released 02 August 2020 for SMAPI 3.6.0 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/40028155).
 
-* Added [an `Include` action](docs/author-guide.md#include) to load patches from another JSON file. That includes full token support, so you can load files dynamically or conditionally.
+* Added [an `Include` action](author-guide.md#include) to load patches from another JSON file. That includes full token support, so you can load files dynamically or conditionally.
 * Randomization is now consistent between players, regardless of installed content packs.
 * Content packs containing `null` patches are no longer disabled; instead those patches are now skipped with a warning.
 * Improved performance when updating very large content packs.
@@ -298,11 +298,11 @@ Released 06 July 2020 for SMAPI 3.6.1 or later.
 ## 1.15.0
 Released 04 July 2020 for SMAPI 3.6.1 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
 
-* Added [named token arguments](docs/author-tokens-guide.md#global-input-arguments).
+* Added [named token arguments](author-tokens-guide.md#global-input-arguments).
 * Added a universal `|contains=` argument to search token values.
 * Added a universal `|inputSeparator=` argument to allow commas in input values using a custom separator.
 * Added a `key` argument to `{{Random}}`.
-* Several [player tokens](docs/author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
+* Several [player tokens](author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
 * Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed custom tokens added by other mods able to break Content Patcher in some cases.
@@ -312,7 +312,7 @@ Released 04 July 2020 for SMAPI 3.6.1 or later. See the [release highlights for 
 * Fixed multiple input arguments allowed for tokens that only recognize one (like `{{HasFile: fileA.png, fileB.png}}`). Doing so now shows an error.
 
 **Update note for mod authors:**  
-Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
+Updating the `Format` field to `1.15.0` or later requires changes to your `content.json`. See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.14.1
 Released 14 May 2020 for SMAPI 3.5.0 or later.
@@ -400,7 +400,7 @@ Released 26 November 2019 for SMAPI 3.0.0 or later. See the [release highlights 
 * Added `patch parse` console command, which parses an arbitrary tokenizable string and shows the result.
 * Added new 'current changes' list for each content pack to `patch summary` output.
 * Added world state IDs to the `HasFlag` token.
-* Added [`manifest.json` and `content.json` validator](docs/author-guide.md#schema-validator) for content pack authors.
+* Added [`manifest.json` and `content.json` validator](author-guide.md#schema-validator) for content pack authors.
 * Content packs can now use mod-provided tokens without a dependency if the patch has an appropriate `HasMod` condition.
 * Improved error if a content pack sets a `FromFile` path with invalid characters.
 * Fixed `Hearts` and `Relationship` tokens not working for unmet NPCs. They now return `0` and `Unmet` respectively.
@@ -483,7 +483,7 @@ Released 08 May 2019 for SMAPI 2.11.0 or later.
 * Removed support for the condition value subkey syntax (like `"Relationship": "Abigail:Married"` instead of `"Relationship:Abigail": "Married"`). This only affects one content pack on Nexus.
 
 **Update note for mod authors:**  
-Updating the `Format` field to `1.7.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
+Updating the `Format` field to `1.7.0` or later requires changes to your `content.json`. See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.6.5
 Released 06 April 2019 for SMAPI 2.11.0 or later.
@@ -536,7 +536,7 @@ Released 08 December 2018 for SMAPI 2.9.0 or later.
 * Fixed some 1.5 tokens not validated for format version compatibility.
 
 **Update note for mod authors:**  
-Updating the `Format` field to `1.6.0` or later requires changes to your `content.json`. See the [migration guide](docs/author-migration-guide.md) for more info.
+Updating the `Format` field to `1.6.0` or later requires changes to your `content.json`. See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.5.3
 Released 08 November 2018 for SMAPI 2.8.0 or later.

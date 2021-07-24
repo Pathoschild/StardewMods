@@ -2,7 +2,7 @@
 [noclip mode](https://en.wikipedia.org/wiki/Noclip_mode) at the press of a button, letting you walk
 through anything (even map boundaries).
 
-![](docs/animated.gif)
+![](animated.gif)
 
 ## Contents
 * [Install](#install)

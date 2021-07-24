@@ -26,65 +26,65 @@ Below are the current data layers.
 
 ### Accessible
 Shows where you can walk and highlights warp tiles; useful for finding hidden paths and nooks.
-> ![](docs/screenshots/accessible.png)
+> ![](screenshots/accessible.png)
 
 ### Buildable
 Shows where you can construct buildings on the farm. Useful for spotting issues before you try to
 build at Robin's.
-> ![](docs/screenshots/buildable.png)
+> ![](screenshots/buildable.png)
 
 ### Coverage: bee houses
 Shows bee houses' flower search range.
-> ![](docs/screenshots/bee-houses.png)
+> ![](screenshots/bee-houses.png)
 
 ### Coverage: Junimo huts
 Shows Junimo hut coverage, and highlights crops they won't reach. Also works when placing a Junimo
 hut from the Wizard's build menu.
-> ![](docs/screenshots/junimo-huts.png)
+> ![](screenshots/junimo-huts.png)
 
 ### Coverage: scarecrows
 Shows scarecrow coverage, and highlights unprotected crops. Also works on scarecrows being placed.
-> ![](docs/screenshots/scarecrows.png)
+> ![](screenshots/scarecrows.png)
 
 ### Coverage: sprinklers
 Shows sprinkler coverage, and highlights unsprinkled crops. Also works on sprinklers being placed.
-> ![](docs/screenshots/sprinklers.png)
+> ![](screenshots/sprinklers.png)
 
 ### Crops: fertilized
 Shows which crops have fertilizer applied.
-> ![](docs/screenshots/crops-fertilized.png)
+> ![](screenshots/crops-fertilized.png)
 
 ### Crops: watered
 Shows which crops have been watered today.
-> ![](docs/screenshots/crops-watered.png)
+> ![](screenshots/crops-watered.png)
 
 ### Crops: ready for harvest
 Shows which crops are ready to harvest, or which won't be ready before they die due to a season
 change.
-> ![](docs/screenshots/crops-harvest.png)
+> ![](screenshots/crops-harvest.png)
 
 ### Crops: water for paddy crops
 Shows which tiles are close enough to water for paddy crops to get auto-watered and bonus growth.
-> ![](docs/screenshots/crops-paddy-water.png)
+> ![](screenshots/crops-paddy-water.png)
 
 ### Machine processing
 Shows whether your machines are empty, processing, or finished. (You need to install
 [Automate](https://www.nexusmods.com/stardewvalley/mods/1063) for this layer to appear, but it'll
 work for machines that aren't being automated too.)
-> ![](docs/screenshots/machines.png)
+> ![](screenshots/machines.png)
 
 ### Tillable
 Shows where you can till dirt with your hoe. Useful for planning crop layouts.
-> ![](docs/screenshots/tillable.png)
+> ![](screenshots/tillable.png)
 
 ### Grid
 The grid layer shows [tile borders](https://stardewvalleywiki.com/Modding:Modder_Guide/Game_Fundamentals#Tiles)
 useful for planning layouts, calculating fishing distance, etc:
-> ![](docs/screenshots/grid-layer.png)
+> ![](screenshots/grid-layer.png)
 
 You can optionally [edit the `config.json` file](#configure) to enable the grid for all layers
 instead:
-> ![](docs/screenshots/grid-option.png)
+> ![](screenshots/grid-option.png)
 
 ## Configure
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that

@@ -2,7 +2,7 @@
 pocket beach farm suitable for slower/challenge runs, and lets you catch both river and ocean fish.
 You can optionally enable islands and beach sounds.
 
-> ![](docs/farm.png)
+> ![](screenshots/farm.png)
 
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
@@ -16,26 +16,26 @@ replaced in the [configuration](#configure).
 A few highlights:
 
 * The beach is fertile, so you can plant crops in the grass and sand too:  
-  > ![](docs/tilled.png)
+  > ![](screenshots/tilled.png)
 * You can catch riverlands fish in the river and ocean fish in the ocean (for both fishing and
   crab pots):
-  > ![](docs/fish-areas.png)
+  > ![](screenshots/fish-areas.png)
 * The exit to Marnie's ranch is on the right:
-  > ![](docs/exits.png)
+  > ![](screenshots/exits.png)
 * The beach has a functional campfire you can use (pairs well with
   [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking)):  
-  > ![](docs/campfire.gif)
+  > ![](screenshots/campfire.gif)
 
 Tips:
 
 * Fish quality depends on how far from shore the bobber is. The bottom-left area of the river
   mouth is wide enough to catch max-quality river fish:
-  > ![](docs/best-river-spot.png)
+  > ![](screenshots/best-river-spot.png)
 * If you need more space, you can enable ocean islands for extra land area:
-  > ![](docs/farm-islands.png)
+  > ![](screenshots/farm-islands.png)
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), you can connect chests
   to crab pots all along the beach:
-  > ![](docs/automate-crabpots.png)
+  > ![](screenshots/automate-crabpots.png)
 
 ## Configure
 ### In-game settings
@@ -43,7 +43,7 @@ If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mo
 you can click the cog button (⚙) on the title screen to configure the mod. Hover the cursor over
 a field for details, or see the next section.
 
-![](docs/generic-config-menu.png)
+![](screenshots/generic-config-menu.png)
 
 ### `config.json` file
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that

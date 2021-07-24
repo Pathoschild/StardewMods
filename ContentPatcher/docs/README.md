@@ -31,7 +31,7 @@ the mod probably isn't configurable.)
 If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
 Content Patcher will automatically add configurable content packs to its in-game menu:
 
-![](docs/screenshots/generic-config-menu.png)
+![](screenshots/generic-config-menu.png)
 
 ### Multiplayer
 Content Patcher works fine in multiplayer. It's best if all players have the same content packs,
@@ -44,9 +44,9 @@ maps       | Only visible to players that have it installed. Players without the
 data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
 
 ## For mod authors
-* To create content packs, see the [author guide](docs/author-guide.md) and its [tokens subpage](docs/author-tokens-guide.md).
-* To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](docs/extensibility.md).
-* To use Content Patcher conditions in your own SMAPI mod, see the [conditions API](docs/conditions-api.md).
+* To create content packs, see the [author guide](author-guide.md) and its [tokens subpage](author-tokens-guide.md).
+* To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](extensibility.md).
+* To use Content Patcher conditions in your own SMAPI mod, see the [conditions API](conditions-api.md).
 
 ## See also
 * [Release notes](release-notes.md)

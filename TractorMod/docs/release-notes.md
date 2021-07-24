@@ -1,4 +1,6 @@
-﻿# Release notes
+﻿[← back to readme](README.md)
+
+# Release notes
 ## 4.14.3
 Released 09 July 2021 for SMAPI 3.9.5 or later.
 
