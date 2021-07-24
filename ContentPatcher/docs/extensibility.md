@@ -1,9 +1,9 @@
-﻿← [README](../README.md)
+﻿← [README](README.md)
 
 This doc helps SMAPI mod authors extend Content Patcher with custom functionality.
 
 **To use Content Patcher conditions in your mod, see the [conditions API](conditions-api.md). See
-the [main README](../README.md) for other info**.
+the [main README](README.md) for other info**.
 
 ## Contents
 * [Introduction](#introduction)
@@ -333,4 +333,4 @@ That's it! Now any content pack which lists your mod as a dependency can use the
 ```
 
 ## See also
-* [README](../README.md) for other info
+* [README](README.md) for other info

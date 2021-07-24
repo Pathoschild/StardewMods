@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>49c40e04-5a9f-47da-8906-fa717816e772</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Common.Patching</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BasePatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HarmonyPatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IPatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PatchHelper.cs" />
+  </ItemGroup>
+</Project>

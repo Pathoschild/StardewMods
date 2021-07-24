@@ -72,7 +72,7 @@
     "shop.marnie": "Marnie",
     "shop.pierre": "Pierre",
     "shop.robin": "Robin",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "Shop do Vulcão",
     "shop.willy": "Willy",
 
     // recipe types
@@ -192,15 +192,15 @@
     "location.witchSwamp": "Pântano da bruxa",
     "location.woods": "Bosque Secreto",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "Caverna do Vulcão",
+    "location.islandEast": "Ilha Gengibre Leste",
+    "location.islandNorth": "Ilha Gengibre Norte",
+    "location.islandSouth": "Ilha Gengibre Sul",
+    "location.islandSouthEast": "Ilha Gengibre Sudeste",
+    "location.islandSouthEastCave": "Ilha Gengibre Caverna Sudeste",
+    "location.islandWest": "Ilha Gengibre Oeste",
+    "location.islandWest.fish-area-1": "Ilha Gengibre Ocean Oeste",
+    "location.islandWest.fish-area-2": "Ilha Gengibre Lagoa Oeste",
 
     "location.unknown-fish-area": "{{locationName}} (área de pesca {{id}})",
 
@@ -382,7 +382,7 @@
     "item.needed-for.full-collection": "conquista da Coleção Completa (doe um para o museu)",
     "item.needed-for.gourmet-chef": "conquista de Chefe Gourmet (cozinhe {{recipes}})",
     "item.needed-for.craft-master": "conquista de Mestre do Artesanato (crie {{recipes}})",
-    "item.needed-for.quests": "current quests ({{quests}})", // TODO
+    "item.needed-for.quests": "Missões atuais ({{quests}})",
     "item.sells-to.shipping-box": "Caixa de envio",
     "item.recipes-for-ingredient.entry": "{{name}} (precisa de {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
@@ -601,21 +601,19 @@
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
-    // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    // label
+    "puzzle.island-mermaid.title": "Puzzle da Sereia",
+    "puzzle.island-mermaid.solution.intro": "Use blocos de flauta para tocar a música da Sereia.",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
+    "puzzle.island-shrine.title": "Pássaro-Gema",
 
     // values
-    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
+    "puzzle.island-shrine.solution": "Para cada pedestal, bote os itens dropados pelos pássaros-gema em seu correspondente local da ilha quando chove. Os itens são randômicos.",
     "puzzle.island-shrine.solution.east": "Leste: {{item}}",
     "puzzle.island-shrine.solution.north": "Norte: {{item}}",
     "puzzle.island-shrine.solution.south": "Sul: {{item}}",

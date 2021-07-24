@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -99,27 +98,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
                 // social tab
                 case SocialPage socialPage:
+                    foreach (ClickableTextureComponent slot in socialPage.characterSlots)
                     {
-                        // get villagers on current page
-                        int scrollOffset = this.Reflection.GetField<int>(socialPage, "slotPosition").GetValue();
-                        ClickableTextureComponent[] entries = this.Reflection
-                            .GetField<List<ClickableTextureComponent>>(socialPage, "sprites")
-                            .GetValue()
-                            .Skip(scrollOffset)
-                            .ToArray();
-
-                        // find hovered villager
-                        ClickableTextureComponent entry = entries.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
-                        if (entry != null)
+                        if (slot.containsPoint(cursorX, cursorY))
                         {
-                            int index = Array.IndexOf(entries, entry) + scrollOffset;
-                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[index];
+                            object socialID = this.Reflection.GetField<List<object>>(socialPage, "names").GetValue()[slot.myID];
+
+                            // player slot
                             if (socialID is long playerID)
                             {
-                                Farmer player = Game1.getFarmer(playerID);
+                                Farmer player = Game1.getFarmerMaybeOffline(playerID);
                                 return this.BuildSubject(player);
                             }
-                            else if (socialID is string villagerName)
+
+                            // NPC slot
+                            if (socialID is string villagerName)
                             {
                                 NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)

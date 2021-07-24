@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.9.0</Version>
+    <Version>1.9.1</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
@@ -14,5 +14,6 @@
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
+  <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
 </Project>

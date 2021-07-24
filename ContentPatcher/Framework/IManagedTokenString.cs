@@ -18,7 +18,11 @@ namespace ContentPatcher.Framework
         IEnumerable<LexTokenToken> GetTokenPlaceholders(bool recursive);
 
         /// <summary>Get whether a token string uses the given token.</summary>
-        /// <param name="tokens">The token to find.</param>
-        bool UsesTokens(params ConditionType[] tokens);
+        /// <param name="token">The token to find.</param>
+        bool UsesToken(ConditionType token);
+
+        /// <summary>Get whether a token string uses the given tokens.</summary>
+        /// <param name="tokens">The tokens to find.</param>
+        bool UsesTokens(IEnumerable<ConditionType> tokens);
     }
 }

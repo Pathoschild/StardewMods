@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework.Patches
             // patch is loaded.)
             this.PrivateContext.Update(context);
             bool changed = false;
-            if (this.ManagedRawTargetAsset?.UsesTokens(ConditionType.FromFile) == true)
+            if (this.ManagedRawTargetAsset?.UsesTokens(InternalConstants.FromFileTokens) == true)
                 changed |= this.UpdateFromFile(this.PrivateContext) | this.UpdateTargetPath(this.PrivateContext);
             else
                 changed |= this.UpdateTargetPath(this.PrivateContext) | this.UpdateFromFile(this.PrivateContext);

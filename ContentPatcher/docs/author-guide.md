@@ -1,8 +1,8 @@
-﻿← [README](../README.md)
+﻿← [README](README.md)
 
 This document helps mod authors create a content pack for Content Patcher.
 
-**See the [main README](../README.md) for other info**.
+**See the [main README](README.md) for other info**.
 
 ## Contents
 * [Intro](#intro)
@@ -1272,7 +1272,7 @@ Tips:
   futureproofing.
 * If you get an error like `Unexpected character`, your JSON syntax is invalid. Try checking the
   line mentioned (or the one above it) for a missing comma, bracket, etc.
-* If you need help figuring out an error, see [_see also_](../README.md#see-also) for some links to places you
+* If you need help figuring out an error, see [_see also_](README.md#see-also) for some links to places you
   can ask.
 
 ### Patch commands
@@ -1578,6 +1578,6 @@ bindings with plus signs (like `LeftShift + B`).
 </table>
 
 ## See also
-* [README](../README.md) for other info
+* [README](README.md) for other info
 * [Tokens guide](author-tokens-guide.md)
 * [Ask for help](https://stardewvalleywiki.com/Modding:Help)

@@ -217,15 +217,17 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         }
 
         /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
-        public void ScrollUp()
+        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        public void ScrollUp(int? amount = null)
         {
-            this.CurrentScroll -= this.ScrollAmount;
+            this.CurrentScroll -= amount ?? this.ScrollAmount;
         }
 
         /// <summary>Scroll down the menu content by the specified amount (if possible).</summary>
-        public void ScrollDown()
+        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        public void ScrollDown(int? amount = null)
         {
-            this.CurrentScroll += this.ScrollAmount;
+            this.CurrentScroll += amount ?? this.ScrollAmount;
         }
 
         /// <summary>Handle a left-click from the player's mouse or controller.</summary>

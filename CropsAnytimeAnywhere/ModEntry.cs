@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Harmony;
+using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
+using Pathoschild.Stardew.CropsAnytimeAnywhere.Patches;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere
@@ -31,8 +32,9 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
             var fallbackTileTypes = this.LoadFallbackTileTypes();
 
             // add patches
-            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
-            LocationPatcher.Hook(harmony, this.Monitor, this.Config, fallbackTileTypes);
+            HarmonyPatcher.Apply(this,
+                new LocationPatcher(this.Monitor, this.Config, fallbackTileTypes)
+            );
         }
 
 

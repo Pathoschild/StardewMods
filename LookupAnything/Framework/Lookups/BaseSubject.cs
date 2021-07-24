@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI.Utilities;
+using StardewValley;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
 {
@@ -117,11 +118,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
                 // yield valid values
                 foreach (var field in fields)
                 {
+                    // skip: key/value pair differs only in the key case
                     if (seenValues.TryGetValue(field.Name, out string value) && value == field.Value)
-                        continue; // key/value pair differs only in the key case
-                    if (field.Value == field.Type.ToString())
-                        continue; // can't be displayed
+                        continue;
 
+                    // skip: equivalent field already added
+                    if (field.Name == nameof(Farmer.modDataForSerialization) && seenValues.ContainsKey(nameof(Farmer.modData)))
+                        continue;
+
+                    // skip: can't be displayed
+                    if (field.Value == field.Type.ToString())
+                        continue;
+
+                    // add field
                     seenValues[field.Name] = field.Value;
                     yield return new GenericDebugField($"{type.Name}::{field.Name}", field.Value);
                 }

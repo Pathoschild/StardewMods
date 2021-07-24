@@ -149,9 +149,15 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public bool UsesTokens(params ConditionType[] tokens)
+        public bool UsesToken(ConditionType token)
         {
-            return tokens.Any(token => this.TokensUsed.Contains(token.ToString()));
+            return this.TokensUsed.Contains(token.ToString());
+        }
+
+        /// <inheritdoc />
+        public bool UsesTokens(IEnumerable<ConditionType> tokens)
+        {
+            return tokens.Any(this.UsesToken);
         }
 
         /// <inheritdoc />

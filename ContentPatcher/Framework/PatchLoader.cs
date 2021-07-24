@@ -76,7 +76,7 @@ namespace ContentPatcher.Framework
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
             LocalContext fakePatchContext = new LocalContext(contentPack.Manifest.UniqueID, parentContext: modContext);
-            foreach (ConditionType type in new[] { ConditionType.FromFile, ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath })
+            foreach (ConditionType type in InternalConstants.FromFileTokens.Concat(InternalConstants.TargetTokens))
                 fakePatchContext.SetLocalValue(type.ToString(), InternalConstants.TokenPlaceholder);
 
             // get token parser for fake context
@@ -250,11 +250,15 @@ namespace ContentPatcher.Framework
                             newPatch.LogName = this.GetDefaultPatchName(newPatch);
                         else
                         {
-                            // Custom Name > {target} from {fromFile}
+                            List<string> labels = new();
+
                             if (targets.Length > 1)
-                                newPatch.LogName += $" > {target}";
+                                labels.Add($"{target}");
                             if (fromFiles.Length > 1)
-                                newPatch.LogName += $" from {fromFile}";
+                                labels.Add($"from {fromFile}");
+
+                            if (labels.Any())
+                                newPatch.LogName += $" ({string.Join(" ", labels)})";
                         }
 
                         yield return newPatch;
@@ -355,11 +359,13 @@ namespace ContentPatcher.Framework
 
                 // parse target asset
                 IManagedTokenString targetAsset = null;
-                if (action != PatchType.Include)
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
-                        return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
-                    if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string error, out targetAsset))
+                    {
+                        if (action != PatchType.Include)
+                            return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
+                    }
+                    else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string error, out targetAsset))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
@@ -388,15 +394,15 @@ namespace ContentPatcher.Framework
                 // validate field reference tokens
                 if (targetAsset != null)
                 {
-                    if (targetAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
+                    if (targetAsset.UsesTokens(InternalConstants.TargetTokens))
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{string.Join("', '", InternalConstants.TargetTokens)}' tokens.");
                 }
                 if (fromAsset != null)
                 {
-                    if (fromAsset.UsesTokens(ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath) && targetAsset.UsesTokens(ConditionType.FromFile))
-                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{ConditionType.FromFile}' token if the {nameof(entry.FromFile)} field uses the '{ConditionType.Target}', '{ConditionType.TargetPathOnly}', or '{ConditionType.TargetWithoutPath}' tokens.");
-                    if (fromAsset.UsesTokens(ConditionType.FromFile))
-                        return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{ConditionType.FromFile}' token.");
+                    if (fromAsset.UsesTokens(InternalConstants.FromFileTokens))
+                        return TrackSkip($"circular field reference: {nameof(entry.FromFile)} field can't use the '{string.Join("', '", InternalConstants.FromFileTokens)}' tokens.");
+                    if (fromAsset.UsesTokens(InternalConstants.TargetTokens) && targetAsset?.UsesTokens(InternalConstants.FromFileTokens) == true)
+                        return TrackSkip($"circular field reference: {nameof(entry.Target)} field can't use the '{string.Join("', '", InternalConstants.FromFileTokens)}' tokens if the {nameof(entry.FromFile)} field uses '{string.Join("', '", InternalConstants.TargetTokens)}' tokens.");
                 }
 
                 // get patch instance
@@ -408,7 +414,9 @@ namespace ContentPatcher.Framework
                         {
                             // validate
                             if (fromAsset == null)
-                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for a {PatchType.Include} patch.");
+                                return TrackSkip($"must set the {nameof(PatchConfig.FromFile)} field for an {PatchType.Include} patch.");
+                            if (targetAsset != null)
+                                return TrackSkip($"can't use the {nameof(PatchConfig.Target)} field with an {PatchType.Include} patch.");
 
                             // save
                             patch = new IncludePatch(
@@ -690,6 +698,25 @@ namespace ContentPatcher.Framework
                 // note: we process the patch even if it's disabled, so any errors are caught by the modder instead of only failing after the patch is enabled.
                 if (!enabled)
                     return TrackSkip($"{nameof(PatchConfig.Enabled)} is false", warn: false);
+
+                // validate high-level issues
+                {
+                    var tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+
+                    // any field uses {{FromFile}} without a FromFile field
+                    foreach (ConditionType token in InternalConstants.FromFileTokens)
+                    {
+                        if (tokensUsed.Contains(token.ToString()) && patch.RawFromAsset == null)
+                            return TrackSkip($"can't use the {{{{{token}}}}} token because the patch has no {nameof(PatchConfig.FromFile)} field.");
+                    }
+
+                    // any field uses {{Target*}} without a Target field
+                    foreach (ConditionType type in InternalConstants.TargetTokens)
+                    {
+                        if (tokensUsed.Contains(type.ToString()) && patch.RawTargetAsset == null)
+                            return TrackSkip($"can't use the {{{{{type}}}}} token because the patch has no {nameof(PatchConfig.Target)} field.");
+                    }
+                }
 
                 // save patch
                 this.PatchManager.Add(patch, reindex);

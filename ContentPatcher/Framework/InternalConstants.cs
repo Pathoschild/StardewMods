@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using StardewModdingAPI;
 using StardewValley.GameData;
 using StardewValley.GameData.Crafting;
@@ -27,6 +30,12 @@ namespace ContentPatcher.Framework
 
         /// <summary>A temporary value assigned to input arguments during early patch loading, before the patch is updated with the context values.</summary>
         public const string TokenPlaceholder = "$~placeholder";
+
+        /// <summary>The tokens which depend on the <see cref="PatchConfig.FromFile"/> field.</summary>
+        public static readonly ISet<ConditionType> FromFileTokens = new HashSet<ConditionType> { ConditionType.FromFile };
+
+        /// <summary>The tokens which depend on the <see cref="PatchConfig.Target"/> field.</summary>
+        public static readonly ISet<ConditionType> TargetTokens = new HashSet<ConditionType> { ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath };
 
 
         /*********

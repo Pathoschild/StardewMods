@@ -40,9 +40,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Whether to enable compatibility with the Better Junimos mod.</summary>
         private readonly bool BetterJunimosCompat;
 
-        /// <summary>Whether to enable compatibility with Auto-Grabber Mod.</summary>
-        private readonly bool AutoGrabberModCompat;
-
         /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
         public bool PullGemstonesFromJunimoHuts { get; set; }
 
@@ -56,16 +53,14 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="data">The internal Automate data that can't be derived automatically.</param>
         /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
-        /// <param name="autoGrabberModCompat">Whether to enable compatibility with Auto-Grabber Mod.</param>
         /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public AutomationFactory(string[] connectors, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool autoGrabberModCompat, bool pullGemstonesFromJunimoHuts)
+        public AutomationFactory(string[] connectors, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool pullGemstonesFromJunimoHuts)
         {
             this.Connectors = new HashSet<string>(connectors, StringComparer.OrdinalIgnoreCase);
             this.Monitor = monitor;
             this.Reflection = reflection;
             this.Data = data;
             this.BetterJunimosCompat = betterJunimosCompat;
-            this.AutoGrabberModCompat = autoGrabberModCompat;
             this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
         }
 
@@ -118,7 +113,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 switch (obj.ParentSheetIndex)
                 {
                     case 165:
-                        return new AutoGrabberMachine(obj, location, tile, ignoreSeedOutput: this.AutoGrabberModCompat, ignoreFertilizerOutput: this.AutoGrabberModCompat);
+                        return new AutoGrabberMachine(obj, location, tile);
 
                     case 246:
                         return new CoffeeMakerMachine(obj, location, tile);
