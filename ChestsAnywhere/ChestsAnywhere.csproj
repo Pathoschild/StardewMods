@@ -4,6 +4,7 @@
     <Version>1.20.14</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
+    <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
   <ItemGroup>

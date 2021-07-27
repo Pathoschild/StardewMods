@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Harmony;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
@@ -62,6 +63,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
             helper.Events.Display.RenderedHud += this.OnRenderedHud;
             helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+
+            ItemGrabMenuPatches.Initialize(this.Monitor, this.ChestFactory, this.GetCurrentRange);
+            var harmony = HarmonyInstance.Create(this.ModManifest.UniqueID);
+            harmony.PatchAll();
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
