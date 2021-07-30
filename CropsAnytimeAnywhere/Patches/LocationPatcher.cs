@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Harmony;
+using HarmonyLib;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         }
 
         /// <inheritdoc />
-        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        public override void Apply(Harmony harmony, IMonitor monitor)
         {
             harmony.Patch(
                 original: this.RequireMethod<GameLocation>(nameof(GameLocation.CanPlantSeedsHere)),

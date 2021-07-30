@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Harmony;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         }
 
         /// <inheritdoc />
-        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        public override void Apply(Harmony harmony, IMonitor monitor)
         {
             harmony.Patch(
                 original: this.RequireMethod<Farm>(nameof(Farm.getFish)),

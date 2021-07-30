@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using Harmony;
+using HarmonyLib;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
 using StardewModdingAPI;
@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         }
 
         /// <inheritdoc />
-        public override void Apply(HarmonyInstance harmony, IMonitor monitor)
+        public override void Apply(Harmony harmony, IMonitor monitor)
         {
             // disable indoor warp restriction
             harmony.Patch(

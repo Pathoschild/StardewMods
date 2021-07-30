@@ -1,5 +1,5 @@
 using System;
-using Harmony;
+using HarmonyLib;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common.Patching
@@ -13,9 +13,9 @@ namespace Pathoschild.Stardew.Common.Patching
         /// <summary>Apply the given Harmony patchers.</summary>
         /// <param name="mod">The mod applying the patchers.</param>
         /// <param name="patchers">The patchers to apply.</param>
-        public static HarmonyInstance Apply(Mod mod, params IPatcher[] patchers)
+        public static Harmony Apply(Mod mod, params IPatcher[] patchers)
         {
-            HarmonyInstance harmony = HarmonyInstance.Create(mod.ModManifest.UniqueID);
+            Harmony harmony = new Harmony(mod.ModManifest.UniqueID);
 
             foreach (IPatcher patcher in patchers)
             {

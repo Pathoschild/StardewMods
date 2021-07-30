@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Harmony;
+using HarmonyLib;
 
 namespace Pathoschild.Stardew.Common.Patching
 {
