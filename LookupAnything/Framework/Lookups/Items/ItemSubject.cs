@@ -138,11 +138,21 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             if (obj is IndoorPot pot)
             {
                 Crop potCrop = pot.hoeDirt.Value.crop;
+                Bush potBush = pot.bush.Value;
+
                 if (potCrop != null)
                 {
                     Item drop = this.GameHelper.GetObjectBySpriteIndex(potCrop.indexOfHarvest.Value);
                     yield return new LinkField(I18n.Item_Contents(), drop.DisplayName, () => this.GetCropSubject(potCrop, ObjectContext.World, pot.hoeDirt.Value));
                 }
+
+                if (potBush != null)
+                {
+                    ISubject subject = this.Codex.GetByEntity(potBush);
+                    if (subject != null)
+                        yield return new LinkField(I18n.Item_Contents(), subject.Name, () => subject);
+                }
+
             }
 
             // machine output
