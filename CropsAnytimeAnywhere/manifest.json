@@ -1,8 +1,8 @@
 ﻿{
     "Name": "Crops Anytime Anywhere",
     "Author": "Pathoschild",
-    "Version": "1.3.3",
-    "MinimumApiVersion": "3.9.5",
+    "Version": "1.3.4",
+    "MinimumApiVersion": "3.12.0",
     "Description": "Lets you grow crops in any season and location (configurable).",
     "UniqueID": "Pathoschild.CropsAnytimeAnywhere",
     "EntryDll": "CropsAnytimeAnywhere.dll",

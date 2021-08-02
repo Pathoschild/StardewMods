@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // load & validate database
             this.LoadMetadata();
-            this.IsDataValid = this.Metadata.LooksValid();
+            this.IsDataValid = this.Metadata?.LooksValid() == true;
             if (!this.IsDataValid)
             {
                 this.Monitor.Log($"The {this.DatabaseFileName} file seems to be missing or corrupt. Lookups will be disabled.", LogLevel.Error);

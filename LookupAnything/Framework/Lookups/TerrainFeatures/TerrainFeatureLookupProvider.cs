@@ -81,6 +81,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             }
         }
 
+        /// <inheritdoc />
+        public override ISubject GetSubjectFor(object entity)
+        {
+            return entity switch
+            {
+                Bush bush => this.BuildSubject(bush),
+                _ => null
+            };
+        }
+
 
         /*********
         ** Private methods
