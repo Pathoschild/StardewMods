@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.35.1
+Released 01 August 2021 for SMAPI 3.12.0 or later.
+
 * Added support for looking up bushes planted in indoor pot.
 * Fixed error if `assets/data.json` file is missing.
 
