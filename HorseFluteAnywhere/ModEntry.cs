@@ -94,8 +94,13 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
-            if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
-                this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+            if (this.SummonKey.JustPressed() && Context.IsPlayerFree) {
+                this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
+                if (this.CanPlayFlute(Game1.player))
+                {
+                    this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+                }
+            }
         }
 
         /// <summary>The event called after the location list changes.</summary>
@@ -238,12 +243,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="player">The player to check.</param>
         private bool CanPlayFlute(Farmer player)
         {
-            return
-                Context.IsPlayerFree
-                && (
-                    !this.Config.RequireHorseFlute
-                    || player.Items.Any(p => Utility.IsNormalObjectAtParentSheetIndex(p, ModEntry.HorseFluteId))
-                );
+            return !this.Config.RequireHorseFlute || player.Items.Any(p => Utility.IsNormalObjectAtParentSheetIndex(p, ModEntry.HorseFluteId));
         }
 
         /// <summary>Get whether a player is riding a (non-tractor) horse.</summary>
