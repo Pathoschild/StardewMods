@@ -3,7 +3,7 @@
     <AssemblyName>SmallBeachFarm</AssemblyName>
     <Version>1.9.2</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <EnableHarmony>true</EnableHarmony>
     <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|island_tilesheet_1|outdoorsTileSheet|town).png</IgnoreModFilePatterns>

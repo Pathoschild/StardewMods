@@ -3,7 +3,7 @@
     <AssemblyName>ChestsAnywhere</AssemblyName>
     <Version>1.20.14</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@
     <AssemblyName>Automate</AssemblyName>
     <Version>1.23.2</Version>
     <RootNamespace>Pathoschild.Stardew.Automate</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
