@@ -123,7 +123,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 ); // don't use named parameters, which are inconsistent between MonoGame (e.g. 'alpha') and XNA (e.g. 'a')
             }
 
-            Texture2D result = new Texture2D(texture.GraphicsDevice, texture.Width, texture.Height);
+            Texture2D result = new Texture2D(texture.GraphicsDevice ?? Game1.graphics.GraphicsDevice, texture.Width, texture.Height);
             result.SetData(data);
             return result;
         }
