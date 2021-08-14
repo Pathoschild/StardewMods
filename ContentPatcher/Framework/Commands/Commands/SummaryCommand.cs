@@ -298,7 +298,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log target value if different from name
                         {
                             // get patch values
-                            string rawIdentifyingPath = PathUtilities.NormalizePath(patch.ParsedType == PatchType.Include
+                            string rawIdentifyingPath = PathUtilities.NormalizeAssetName(patch.ParsedType == PatchType.Include
                                 ? patch.RawFromAsset
                                 : patch.RawTargetAsset
                             );
@@ -308,13 +308,13 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                             // get raw name if different
                             // (ignore differences in whitespace, capitalization, and path separators)
-                            string rawValue = !PathUtilities.NormalizePath(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
+                            string rawValue = !PathUtilities.NormalizeAssetName(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
                                 ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
                                 : null;
 
                             // get parsed value
                             string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
-                                ? PathUtilities.NormalizePath(parsedIdentifyingPath.Value)
+                                ? PathUtilities.NormalizeAssetName(parsedIdentifyingPath.Value)
                                 : null;
 
                             // format

@@ -56,7 +56,7 @@ namespace ContentPatcher.Framework.Locations
             this.FromMapFile = fromMapFile;
             this.MigrateLegacyNames = migrateLegacyNames;
             this.ContentPack = contentPack;
-            this.PublicMapPath = PathUtilities.NormalizePath(Path.Combine("Maps", name));
+            this.PublicMapPath = PathUtilities.NormalizeAssetName($"Maps/{name}");
             this.IsEnabled = true;
 
             this.HasLegacyNames = this.MigrateLegacyNames.Any();
