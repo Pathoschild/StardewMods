@@ -95,7 +95,10 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
             if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
+            {
+                this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
                 this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+            }
         }
 
         /// <summary>The event called after the location list changes.</summary>
