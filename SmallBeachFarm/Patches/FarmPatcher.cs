@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         private static readonly Dictionary<int, Point> IslandWarpTargets = new()
         {
             [Farm.fourCorners_layout] = new Point(48, 39),
-            [Farm.beach_layout] = new Point(82, 29),
+            [Farm.beach_layout] = new Point(81, 29),
             [-1] = new Point(48, 7)
         };
 
