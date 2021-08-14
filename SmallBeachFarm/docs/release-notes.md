@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.5.5.
 * Fixed error replacing the vanilla beach farm when married.
 
 ## 1.9.2

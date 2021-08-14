@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for Stardew Valley 1.5.5.
 * Playing the flute with the keybind no longer triggers vanilla actions bound to the same key too (thanks to Deflaktor!).
 
 ## 1.1.7
