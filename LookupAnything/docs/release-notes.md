@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Opening a search/lookup with a keybind no longer triggers vanilla actions bound to the same key too (thanks to Deflaktor!).
+
 ## 1.35.1
 Released 01 August 2021 for SMAPI 3.12.0 or later.
 
