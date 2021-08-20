@@ -1,8 +1,8 @@
 ﻿{
     "Name": "Noclip Mode",
     "Author": "Pathoschild",
-    "Version": "1.2.6",
-    "MinimumApiVersion": "3.9.5",
+    "Version": "1.2.7-beta.20210819",
+    "MinimumApiVersion": "3.13.0-beta",
     "Description": "Press a key to enable noclip mode (which lets you walk through anything).",
     "UniqueID": "Pathoschild.NoclipMode",
     "EntryDll": "NoclipMode.dll",

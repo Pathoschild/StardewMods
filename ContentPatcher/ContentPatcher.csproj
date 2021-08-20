@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>ContentPatcher</AssemblyName>
-    <Version>1.23.3</Version>
+    <Version>1.23.4-beta.20210819</Version>
     <RootNamespace>ContentPatcher</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>

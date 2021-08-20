@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>1.9.2</Version>
+    <Version>1.9.3-beta.20210819</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 
