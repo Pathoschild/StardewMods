@@ -423,6 +423,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="seed">The potential seed item to check.</param>
         private Crop TryGetCropForSeed(Item seed)
         {
+            if (seed is not SObject obj || obj.bigCraftable.Value)
+                return null;
+
             try
             {
                 Crop crop = new Crop(seed.ParentSheetIndex, 0, 0);
