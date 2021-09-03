@@ -2,7 +2,6 @@
 
 # Release notes
 ## Upcoming release
-* Updated for Stardew Valley 1.5.5.
 * Opening a search/lookup with a keybind no longer triggers vanilla actions bound to the same key too (thanks to Deflaktor!).
 * Fixed seed fields shown for non-seed items in some cases.
 

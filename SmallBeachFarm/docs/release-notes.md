@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Updated for Stardew Valley 1.5.5.
+* Internal changes for compatibility with the upcoming Stardew Valley 1.5.5.
 * Fixed error replacing the vanilla beach farm when married.
 * Fixed wrong island warp arrival tile when replacing the vanilla beach farm.
 

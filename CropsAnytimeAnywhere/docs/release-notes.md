@@ -2,7 +2,6 @@
 
 # Release notes
 ## Upcoming release
-* Updated for Stardew Valley 1.5.5.
 * Fixed fruit trees not plantable in town.
 
 ## 1.3.4

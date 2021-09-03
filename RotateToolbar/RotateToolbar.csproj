@@ -3,11 +3,11 @@
     <AssemblyName>RotateToolbar</AssemblyName>
     <Version>1.3.3</Version>
     <RootNamespace>Pathoschild.Stardew.RotateToolbar</RootNamespace>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.4.0-beta.20210813" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
