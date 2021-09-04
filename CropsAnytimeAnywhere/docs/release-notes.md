@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.3.5
+Released 04 September 2021 for SMAPI 3.12.6 or later.
+
+* Fixed fruit trees not plantable in town.
+
 ## 1.3.4
 Released 01 August 2021 for SMAPI 3.12.0 or later.
 

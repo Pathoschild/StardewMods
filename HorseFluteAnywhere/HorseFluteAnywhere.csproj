@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>HorseFluteAnywhere</AssemblyName>
-    <Version>1.1.7</Version>
+    <Version>1.1.8</Version>
     <RootNamespace>Pathoschild.Stardew.HorseFluteAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
 
@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.2.2" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

@@ -13,6 +13,7 @@
   <property name="Outdoors" value="T"/>
   <property name="ShippingBinLocation" value="71 13"/>
   <property name="Spouse" value="3 22 2 11 11 2 4 5 0 1 12 2 17 11 2 23 3 2"/>
+  <property name="SpouseAreaLocation" value="69 6"/>
   <property name="Warp" value="80 16 BusStop 0 23 80 17 BusStop 0 23 80 18 BusStop 0 23 80 20 Forest 69 0 80 21 Forest 68 0 39 -1 Backwoods 13 38 40 -1 Backwoods 14 39 41 -1 Backwoods 15 39 34 5 FarmCave 8 11"/>
   <property name="WarpTotemEntry" value="48 7"/>
  </properties>

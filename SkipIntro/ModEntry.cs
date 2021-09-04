@@ -85,10 +85,14 @@ namespace Pathoschild.Stardew.SkipIntro
         {
             try
             {
+                // wait until game window opens
+                if (Game1.ticks <= 1)
+                    return;
+
                 // start intro skip on game launch
                 if (!this.IsLaunched)
                 {
-                    if (!(Game1.activeClickableMenu is TitleMenu))
+                    if (Game1.activeClickableMenu is not TitleMenu)
                         return;
 
                     this.IsLaunched = true;

@@ -9,6 +9,7 @@ using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using Pathoschild.Stardew.SmallBeachFarm.Patches;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 using xTile;
@@ -40,7 +41,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         private ModData Data;
 
         /// <summary>A fake asset key prefix from which to load tilesheets.</summary>
-        private string FakeAssetPrefix => Path.Combine("Mods", this.ModManifest.UniqueID);
+        private string FakeAssetPrefix => PathUtilities.NormalizeAssetName($"Mods/{this.ModManifest.UniqueID}");
 
 
         /*********
@@ -128,11 +129,11 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 }
 
                 // apply tilesheet recolors
-                string internalRootKey = this.Helper.Content.GetActualAssetKey(Path.Combine(this.TilesheetsPath, "_default"));
+                string internalRootKey = this.Helper.Content.GetActualAssetKey($"{this.TilesheetsPath}/_default");
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
-                    if (tilesheet.ImageSource.StartsWith(internalRootKey + Path.DirectorySeparatorChar))
-                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey(Path.Combine(this.FakeAssetPrefix, Path.GetFileNameWithoutExtension(tilesheet.ImageSource)), ContentSource.GameContent);
+                    if (tilesheet.ImageSource.StartsWith(internalRootKey + PathUtilities.PreferredAssetSeparator))
+                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey($"{this.FakeAssetPrefix}/{Path.GetFileNameWithoutExtension(tilesheet.ImageSource)}", ContentSource.GameContent);
                 }
 
                 return (T)(object)map;
@@ -251,7 +252,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 ?.PickTile(new Location(x * Game1.tileSize, y * Game1.tileSize), Game1.viewport.Size)
                 ?.TileSheet
                 ?.Id;
-            return tilesheetId == "zbeach" || tilesheetId == "zbeach_farm"
+            return tilesheetId is "zbeach" or "zbeach_farm"
                 ? FishType.Ocean
                 : FishType.River;
         }

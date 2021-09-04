@@ -38,10 +38,11 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 
         /// <summary>The arrival tiles by farm type when the player warps from the <see cref="IslandWest"/> obelisk, with a <c>-1</c> key for the default.</summary>
         /// <remarks>Derived from <see cref="IslandWest.performAction"/>.</remarks>
+        [Obsolete("This will no longer be needed in Stardew Valley 1.5.5.")]
         private static readonly Dictionary<int, Point> IslandWarpTargets = new()
         {
             [Farm.fourCorners_layout] = new Point(48, 39),
-            [Farm.beach_layout] = new Point(82, 29),
+            [Farm.beach_layout] = new Point(81, 29),
             [-1] = new Point(48, 7)
         };
 
@@ -147,6 +148,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
                 Game1.changeMusicTrack("ocean", music_context: Game1.MusicContext.SubLocation);
 
             // fix island totem warp
+            // TODO: remove in Stardew Valley 1.5.5
             if (FarmPatcher.IsOnIslandWarpArrivalTile())
             {
                 var tile = __instance.GetMapPropertyPosition("WarpTotemEntry", 48, 7);
@@ -199,6 +201,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         }
 
         /// <summary>Whether the player is on the arrival tile for the <see cref="IslandWest"/> obelisk warp.</summary>
+        [Obsolete("This will no longer be needed in Stardew Valley 1.5.5.")]
         private static bool IsOnIslandWarpArrivalTile()
         {
             Point curTile = Utility.Vector2ToPoint(Game1.player.Position / Game1.tileSize);

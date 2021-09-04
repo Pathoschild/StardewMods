@@ -179,8 +179,8 @@ namespace ContentPatcher.Framework.Patches
             if (left == null || right == null)
                 return false;
 
-            left = PathUtilities.NormalizePath(left);
-            right = PathUtilities.NormalizePath(right);
+            left = PathUtilities.NormalizeAssetName(left);
+            right = PathUtilities.NormalizeAssetName(right);
             return left.EqualsIgnoreCase(right);
         }
 
@@ -207,9 +207,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="filePath">The file path being loaded.</param>
         private LogPathBuilder GetIncludedLogPath(string filePath)
         {
-            filePath = PathUtilities.NormalizePath(filePath);
+            filePath = PathUtilities.NormalizeAssetName(filePath);
 
-            string logName = PathUtilities.NormalizePath(this.Path.Segments.Last());
+            string logName = PathUtilities.NormalizeAssetName(this.Path.Segments.Last());
             return logName.ContainsIgnoreCase(filePath)
                 ? this.Path // no need to add file to path if it's already in the name
                 : this.Path.With(filePath);

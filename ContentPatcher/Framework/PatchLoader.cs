@@ -292,8 +292,8 @@ namespace ContentPatcher.Framework
         private string GetDefaultPatchName(PatchConfig patch)
         {
             return Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include
-                ? $"{type} {PathUtilities.NormalizePath(patch.FromFile)}"
-                : $"{patch.Action} {PathUtilities.NormalizePath(patch.Target)}";
+                ? $"{type} {PathUtilities.NormalizeAssetName(patch.FromFile)}"
+                : $"{patch.Action} {PathUtilities.NormalizeAssetName(patch.Target)}";
         }
 
         /// <summary>Unload patches matching a condition.</summary>

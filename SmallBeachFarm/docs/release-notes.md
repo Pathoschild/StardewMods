@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.3
+Released 04 September 2021 for SMAPI 3.12.6 or later.
+
+* Internal changes for compatibility with the upcoming Stardew Valley 1.5.5.
+* Fixed error replacing the vanilla beach farm when married.
+* Fixed wrong island warp arrival tile when replacing the vanilla beach farm.
+
 ## 1.9.2
 Released 01 August 2021 for SMAPI 3.12.0 or later.
 

@@ -669,9 +669,9 @@ namespace ContentPatcher.Framework.Patches
             if (string.IsNullOrWhiteSpace(path))
                 return string.Empty;
 
-            path = PathUtilities.NormalizePath(path);
-            if (path.StartsWith($"Maps{System.IO.Path.DirectorySeparatorChar}", StringComparison.OrdinalIgnoreCase))
-                path = path.Substring($"Maps{System.IO.Path.DirectorySeparatorChar}".Length);
+            path = PathUtilities.NormalizeAssetName(path);
+            if (path.StartsWith($"Maps{PathUtilities.PreferredAssetSeparator}", StringComparison.OrdinalIgnoreCase))
+                path = path.Substring($"Maps{PathUtilities.PreferredAssetSeparator}".Length);
             if (path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
                 path = path.Substring(0, path.Length - 4);
 

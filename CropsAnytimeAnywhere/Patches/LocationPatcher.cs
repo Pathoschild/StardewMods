@@ -7,6 +7,7 @@ using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using xTile.ObjectModel;
 using xTile.Tiles;
 
@@ -56,6 +57,10 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
 
             harmony.Patch(
                 original: this.RequireMethod<GameLocation>(nameof(GameLocation.CanPlantTreesHere)),
+                postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
+            );
+            harmony.Patch(
+                original: this.RequireMethod<Town>(nameof(Town.CanPlantTreesHere)), // need to override town separately since it doesn't check base
                 postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_CanPlantSeedsOrTreesHere))
             );
 
