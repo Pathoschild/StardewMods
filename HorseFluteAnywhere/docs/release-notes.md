@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.1.8
+Released 04 September 2021 for SMAPI 3.12.6 or later.
+
 * Playing the flute with the keybind no longer triggers vanilla actions bound to the same key too (thanks to Deflaktor!).
 
 ## 1.1.7

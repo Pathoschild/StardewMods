@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.20.15
+Released 04 September 2021 for SMAPI 3.12.6 or later.
+
 * Improved translations. Thanks to adnan-shoukfeh (updated Spanish) and pikulet (updated Chinese)!
 
 ## 1.20.14

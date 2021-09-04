@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.35.2
+Released 04 September 2021 for SMAPI 3.12.6 or later.
+
 * Opening a search/lookup with a keybind no longer triggers vanilla actions bound to the same key too (thanks to Deflaktor!).
 * Fixed seed fields shown for non-seed items in some cases.
 
