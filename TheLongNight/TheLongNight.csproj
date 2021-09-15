@@ -3,7 +3,7 @@
     <AssemblyName>TheLongNight</AssemblyName>
     <Version>1.2.0</Version>
     <RootNamespace>Pathoschild.Stardew.TheLongNight</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

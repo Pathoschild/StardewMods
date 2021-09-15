@@ -3,7 +3,7 @@
     <AssemblyName>Pathoschild.Stardew.Tests.Mods</AssemblyName>
     <Version>1.0.0</Version>
     <RootNamespace>Pathoschild.Stardew.Tests.Mods</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <EnableModDeploy>False</EnableModDeploy>
     <EnableModZip>False</EnableModZip>

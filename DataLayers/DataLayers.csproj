@@ -3,7 +3,7 @@
     <AssemblyName>DataLayers</AssemblyName>
     <Version>1.14.8</Version>
     <RootNamespace>Pathoschild.Stardew.DataLayers</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

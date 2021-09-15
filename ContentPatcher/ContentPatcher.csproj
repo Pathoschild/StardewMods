@@ -3,7 +3,7 @@
     <AssemblyName>ContentPatcher</AssemblyName>
     <Version>1.24.4</Version>
     <RootNamespace>ContentPatcher</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

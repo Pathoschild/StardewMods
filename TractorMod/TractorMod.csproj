@@ -3,7 +3,7 @@
     <AssemblyName>TractorMod</AssemblyName>
     <Version>4.14.6</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
