@@ -681,8 +681,13 @@ The [farm cave](https://stardewvalleywiki.com/The_Cave) type. Possible values: `
 <td>FarmType</td>
 <td>
 
-The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). Possible values: `Standard`, `Beach`,
-`FourCorners`, `Forest`, `Hilltop`, `Riverland`, `Wilderness`, `Custom`.
+The [farm type](https://stardewvalleywiki.com/The_Farm#Farm_Maps). This will be one of...
+
+value | description
+----- | -----------
+`Standard`<br />`Beach`<br />`FourCorners`<br />`Forest`<br />`Hilltop`<br />`Riverland`<br />`Wilderness` | A farm type from the base game.
+_custom farm ID_ | A custom farm type, using the `ID` value from the mod's farm data.
+`Custom` | _(rare)_ A custom farm type from mods using an old approach for custom farm types.
 
 </td>
 <td><a href="#FarmType">#</a></td>

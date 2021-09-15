@@ -220,7 +220,7 @@ namespace ContentPatcher.Framework
                 // world
                 new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave),
                 new ConditionTypeValueProvider(ConditionType.FarmName, save.GetFarmName, NeedsSave),
-                new ConditionTypeValueProvider(ConditionType.FarmType, () => save.GetFarmType().ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.FarmType, () => save.GetFarmType(), NeedsSave),
                 new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => save.GetIsCommunityCenterComplete().ToString(), NeedsSave),
                 new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => save.GetIsJojaMartComplete().ToString(), NeedsSave),
                 new HavingChildValueProvider(ConditionType.Pregnant, save),
