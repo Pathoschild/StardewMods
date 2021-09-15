@@ -243,7 +243,7 @@ namespace ContentPatcher.Framework
                 // metadata
                 new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true),
                 new HasValueValueProvider(),
-                new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()))
+                new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper))
             };
         }
 
@@ -257,6 +257,21 @@ namespace ContentPatcher.Framework
                 new HasFileValueProvider(contentPack.HasFile),
                 new TranslationValueProvider(contentPack.Translation)
             };
+        }
+
+        /// <summary>Get the current language code.</summary>
+        /// <param name="contentHelper">The content helper from which to get the locale.</param>
+        private IEnumerable<string> GetLanguage(IContentHelper contentHelper)
+        {
+            // get vanilla language
+            LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;
+            string code = language.ToString();
+
+            // handle custom language
+            if (language == LocalizedContentManager.LanguageCode.mod)
+                code = contentHelper.CurrentLocale ?? code;
+
+            yield return code;
         }
     }
 }

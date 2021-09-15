@@ -1087,6 +1087,9 @@ code | meaning
 `tr` | Turkish
 `zh` | Chinese
 
+For custom languages added via `Data/AdditionalLanguages`, the token will contain their
+`LanguageCode` value.
+
 </td>
 <td><a href="#Language">#</a></td>
 </tr>
