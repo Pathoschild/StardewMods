@@ -1,0 +1,4 @@
+﻿{
+    "enabled-message": "เปิดใช้งานโหมด noclip แล้ว; กด {{button}} อีกครั้งเพื่อปิด",
+    "disabled-message": "ปิดใช้งานโหมด noclip แล้ว; กด {{button}} อีกครั้งเพื่อเปิด"
+}

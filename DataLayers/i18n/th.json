@@ -1,0 +1,71 @@
+﻿{
+    // accessible
+    "accessible.name": "เดินได้รึเปล่า",
+    "accessible.clear": "เดินได้สบายมาก",
+    "accessible.occupied": "เดินจะติดหน่อยๆ",
+    "accessible.impassable": "เดินไม่ได้แน่นอน",
+    "accessible.warp": "วาร์ป",
+
+    // buildable
+    "buildable.name": "สร้างตรงนี้ได้มั้ย",
+    "buildable.buildable": "สร้างไปเถอะ",
+    "buildable.occupied": "มีอะไรมาขวางการก่อสร้าง",
+    "buildable.not-buildable": "สร้างไม่ได้แน่นอน",
+
+    // coverage: bee houses
+    "bee-houses.name": "ความครอบคลุม: บ้านผึ้ง",
+    "bee-houses.range": "ระยะของบ้านผึ้ง",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "ความครอบคลุม: กระท่อมจูนิโม่",
+    "junimo-huts.can-harvest": "จูนิโม่เก็บเกี่ยวถึง",
+    "junimo-huts.cannot-harvest": "จูนิโม่เก็บเกี่ยวไม่ถึง",
+
+    // coverage: scarecrows
+    "scarecrows.name": "ความครอบคลุม: หุ่นไล่กา",
+    "scarecrows.protected": "ป้องกันจากอีกา",
+    "scarecrows.exposed": "โดนอีกากินแน่นอน",
+
+    // coverage: sprinklers
+    "sprinklers.name": "ความครอบคลุม: สปริงเกอร์",
+    "sprinklers.covered": "รดน้ำอย่างแน่นอน",
+    "sprinklers.dry-crops": "แห้งตายแน่ๆ",
+
+    // crops: harvest
+    "crop-harvest.name": "พืชผล: พร้อมเก็บเกี่ยวรึยัง",
+    "crop-harvest.ready": "เก็บไปโลด",
+    "crop-harvest.not-ready": "ยังก่อนพี่บ่าว",
+    "crop-harvest.not-enough-time": "หมดฤดูก่อนที่จะเก็บเกี่ยวได้",
+
+    // crops: watered
+    "crop-water.name": "พืชผล: ชุ่มฉ่ำรึยัง",
+    "crop-water.watered": "ชุ่มฉ่ำแล้ว",
+    "crop-water.dry": "อาบน้ำให้หน่อย",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "พืชผล: แหล่งน้ำสำหรับนาข้าว",
+    "crop-paddy-water.in-range": "ใกล้แหล่งน้ำ",
+    "crop-paddy-water.not-in-range": "นอกระยะแหล่งน้ำ",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "พืชผล: ใส่ปุ๋ยอะไรไปบ้างนะ",
+    "crop-fertilizer.fertilizer": "ปุ๋ยเพิ่มคุณภาพดิน",
+    "crop-fertilizer.retaining-soil": "ปุ๋ยรักษาความชื้น",
+    "crop-fertilizer.speed-gro": "ปุ๋ยเร่งโต",
+
+    // machine processing
+    "machines.name": "เครื่องจักรกำลังทำงานอยู่มั้ย",
+    "machines.empty": "ว่างงาน",
+    "machines.processing": "ทำงานอยู่",
+    "machines.finished": "เสร็จแล้วค้าบ",
+
+    // tile grid
+    "grid.name": "เส้นตาราง",
+
+    // tillable
+    "tillable.name": "ตรงนี้ขุดได้มั้ย",
+    "tillable.tillable": "ขุดได้เลย",
+    "tillable.tilled": "ขุดไปแล้ว",
+    "tillable.occupied": "มีอะไรมาขวางการขุด",
+    "tillable.not-tillable": "ขุดไม่ได้แน่นอน"
+}
