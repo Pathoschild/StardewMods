@@ -1,0 +1,41 @@
+﻿{
+    // default chest names
+    "default-name.fridge": "ตู้เย็น",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "ไอเท็มนำขาย",
+    "default-name.shipping-bin.take": "ไอเท็มนำออก",
+
+    // default category names
+    "default-category.owned-cabin": "กระท่อม ({{owner}})",
+    "default-category.unowned-cabin": "กระท่อม (ว่าง)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "ตำแหน่งที่ตั้ง",
+    "label.location.tile": "พื้นที่ตาราง {{x}}, {{y}}",
+    "label.name": "ชื่อ",
+    "label.category": "หมวดหมู่",
+    "label.order": "ลำดับ",
+    "label.hide-chest": "ซ่อนกล่องเก็บของใบนี้",
+    "label.hide-chest-hidden": "ซ่อนกล่องเก็บของใบนี้ (คุณจำเป็นต้องหากล่องเพื่อยกเลิกสถานะนี้!)",
+    "label.automate-options": "ระบบอัตโนมัติ (Automate)",
+    "label.automate-store": "นำไอเท็มใส่ลงในกล่องใบนี้",
+    "label.automate-store-first": "นำไอเท็มใส่ลงในกล่องนี้เป็นลำดับแรก",
+    "label.automate-store-disabled": "ไม่นำไอเท็มใส่ลงในกล่องใบนี้",
+    "label.automate-take": "ใช้ไอเท็มจากกล่องใบนี้",
+    "label.automate-take-first": "ใช้ไอเท็มจากกล่องใบนี้เป็นลำดับแรก",
+    "label.automate-take-disabled": "ไม่นำไอเท็มออกจากกล่องใบนี้",
+    "label.automate-prevent-remove-stacks": "หลีกเลี่ยงการนำไอเท็มชิ้นสุดท้ายในกองออกมา",
+
+    // button labels
+    "button.edit-chest": "ตั้งค่ากล่องใส่ของ",
+    "button.sort-inventory": "จัดเรียงไอเท็ม",
+    "button.save": "บันทึก",
+    "button.reset": "ล้างข้อมูล",
+
+    // errors
+    "errors.disabled-from-here": "คุณไม่สามารถเข้าถึงกล่องเก็บของจากที่นี่ได้",
+    "errors.no-chests": "คุณยังไม่เคยมีกล่องเก็บของมาก่อน",
+    "errors.no-chests-in-location": "คุณไม่มีกล่องเก็บของอยู่ในบริเวณนี้",
+    "errors.no-chests-in-range": "คุณไม่มีกล่องเก็บของที่อยู่ในระยะ"
+}
