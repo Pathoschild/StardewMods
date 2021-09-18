@@ -148,16 +148,15 @@ namespace ContentPatcher.Framework
             }
 
             // parse conditions
-            foreach (KeyValuePair<string, string> pair in raw)
+            immutableRequiredModIDs = new InvariantHashSet();
+            foreach (KeyValuePair<string, string> pair in raw.OrderBy(p => this.GetConditionParseOrder(p.Key, p.Value)))
             {
-                if (!this.TryParseCondition(pair.Key, pair.Value, tokenParser, path.With(pair.Key), out Condition condition, out InvariantHashSet localImmutableRequiredModIDs, out error))
+                if (!this.TryParseCondition(pair.Key, pair.Value, tokenParser, path.With(pair.Key), out Condition condition, immutableRequiredModIDs, out error))
                 {
                     conditions = null;
                     return false;
                 }
 
-                if (localImmutableRequiredModIDs != null)
-                    immutableRequiredModIDs.AddMany(localImmutableRequiredModIDs);
                 conditions.Add(condition);
             }
 
@@ -900,14 +899,13 @@ namespace ContentPatcher.Framework
         /// <param name="tokenParser">Handles low-level parsing and validation for tokens.</param>
         /// <param name="path">The path to the condition from the root content file.</param>
         /// <param name="condition">The normalized condition.</param>
-        /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by this condition (if it's <see cref="ConditionType.HasMod"/> and immutable).</param>
+        /// <param name="immutableRequiredModIDs">The mod IDs always available when the condition is applied. If the condition has an immutable <see cref="ConditionType.HasMod"/> condition, it'll be added to this list.</param>
         /// <param name="error">An error message indicating why normalization failed.</param>
-        private bool TryParseCondition(string name, string value, TokenParser tokenParser, LogPathBuilder path, out Condition condition, out InvariantHashSet immutableRequiredModIDs, out string error)
+        private bool TryParseCondition(string name, string value, TokenParser tokenParser, LogPathBuilder path, out Condition condition, InvariantHashSet immutableRequiredModIDs, out string error)
         {
-            bool Fail(string reason, out string setError, out Condition setCondition, out InvariantHashSet setImmutableRequiredModIDs)
+            bool Fail(string reason, out string setError, out Condition setCondition)
             {
                 setCondition = null;
-                setImmutableRequiredModIDs = null;
                 setError = reason;
                 return false;
             }
@@ -920,12 +918,12 @@ namespace ContentPatcher.Framework
                 for (int i = 0; i < lexTokens.Length; i++)
                 {
                     if (!tokenParser.Migrator.TryMigrate(ref lexTokens[i], out error))
-                        return Fail(error, out error, out condition, out immutableRequiredModIDs);
+                        return Fail(error, out error, out condition);
                 }
 
                 // parse condition key
                 if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
-                    return Fail($"'{name}' isn't a valid token name", out error, out condition, out immutableRequiredModIDs);
+                    return Fail($"'{name}' isn't a valid token name", out error, out condition);
                 keyLexToken = lexToken;
             }
             IManagedTokenString keyInputStr = new TokenString(keyLexToken.InputArgs, tokenParser.Context, path.With("key"));
@@ -934,43 +932,42 @@ namespace ContentPatcher.Framework
             // get token
             IToken token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
             if (token == null)
-                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition, out immutableRequiredModIDs);
-            if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: null, out error))
-                return Fail(error, out error, out condition, out immutableRequiredModIDs);
+                return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition);
+            if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIDs, out error))
+                return Fail(error, out error, out condition);
 
             // validate input
             if (!token.TryValidateInput(keyInputArgs, out error))
-                return Fail(error, out error, out condition, out immutableRequiredModIDs);
+                return Fail(error, out error, out condition);
 
             // parse values
             if (string.IsNullOrWhiteSpace(value))
-                return Fail($"can't parse condition {name}: value can't be empty", out error, out condition, out immutableRequiredModIDs);
-            if (!tokenParser.TryParseString(value, assumeModIds: null, path.With("value"), out error, out IManagedTokenString values))
-                return Fail($"can't parse condition {name}: {error}", out error, out condition, out immutableRequiredModIDs);
+                return Fail($"can't parse condition {name}: value can't be empty", out error, out condition);
+            if (!tokenParser.TryParseString(value, assumeModIds: immutableRequiredModIDs, path.With("value"), out error, out IManagedTokenString values))
+                return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
             // validate token keys & values
             if (!values.IsMutable && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string customError))
-                return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition, out immutableRequiredModIDs);
+                return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
             // create condition
             condition = new Condition(name: token.Name, input: keyInputStr, values: values);
             if (!tokenParser.Migrator.TryMigrate(condition, out error))
-                return Fail(error, out error, out condition, out immutableRequiredModIDs);
+                return Fail(error, out error, out condition);
 
             // extract HasMod required IDs if immutable
-            immutableRequiredModIDs = null;
             if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
             {
                 // contains
                 if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue contains))
                 {
                     if (bool.TryParse(condition.Values.Value, out bool required) && required)
-                        immutableRequiredModIDs = new InvariantHashSet(contains.Parsed);
+                        immutableRequiredModIDs.AddMany(contains.Parsed);
                 }
 
                 // values
                 else
-                    immutableRequiredModIDs = condition.CurrentValues;
+                    immutableRequiredModIDs.AddMany(condition.CurrentValues);
             }
 
             return true;
@@ -1230,6 +1227,23 @@ namespace ContentPatcher.Framework
             }
 
             return false;
+        }
+
+        /// <summary>Get a key which sorts conditions into the order they should be parsed.</summary>
+        /// <param name="key">The condition key.</param>
+        /// <param name="value">The condition value.</param>
+        private int GetConditionParseOrder(string key, string value)
+        {
+            // parse HasMod conditions first (they allow mod-provided tokens in other conditions)
+            if (key.Contains(ConditionType.HasMod.ToString()))
+            {
+                return !this.Lexer.MightContainTokens(key) && !this.Lexer.MightContainTokens(value)
+                    ? 1 // check immutable conditions first
+                    : 2;
+            }
+
+            // any other condition
+            return 3;
         }
     }
 }
