@@ -128,19 +128,19 @@ namespace ContentPatcher.Framework.Lexing
                 .Where(p => !string.IsNullOrEmpty(p));
         }
 
-
-        /*********
-        ** Private methods
-        *********/
         /// <summary>Perform a quick check to see if the string might contain tokens. This is only a preliminary check for optimizations and may have false positives.</summary>
         /// <param name="rawText">The raw text to check.</param>
-        private bool MightContainTokens(string rawText)
+        public bool MightContainTokens(string rawText)
         {
             return
                 !string.IsNullOrEmpty(rawText)
                 && rawText.Contains("{{");
         }
 
+
+        /*********
+        ** Private methods
+        *********/
         /// <summary>Parse a sequence of lexical character patterns into higher-level lexical tokens.</summary>
         /// <param name="input">The lexical character patterns to parse.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>

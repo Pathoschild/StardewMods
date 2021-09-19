@@ -1,15 +1,15 @@
 ﻿{
     // accessible
     "accessible.name": "Accessibilité",
-    "accessible.clear": "Vide",
-    "accessible.occupied": "Occupé",
+    "accessible.clear": "Libre",
+    "accessible.occupied": "Occupée",
     "accessible.impassable": "Infranchissable",
     "accessible.warp": "Passage",
 
     // buildable
-    "buildable.name": "Constructible",
-    "buildable.buildable": "Non constructible",
-    "buildable.occupied": "Occupé",
+    "buildable.name": "Construction",
+    "buildable.buildable": "Constructible",
+    "buildable.occupied": "Occupée",
     "buildable.not-buildable": "Non constructible",
 
     // coverage: bee houses
@@ -18,13 +18,13 @@
 
     // coverage: Junimo huts
     "junimo-huts.name": "Couverture : Hutte Junimo",
-    "junimo-huts.can-harvest": "Peut récolter",
-    "junimo-huts.cannot-harvest": "Ne peut pas récolter",
+    "junimo-huts.can-harvest": "Récoltable",
+    "junimo-huts.cannot-harvest": "Non récoltable",
 
     // coverage: scarecrows
-    "scarecrows.name": "Couverture : Epouvantail",
-    "scarecrows.protected": "Protégé",
-    "scarecrows.exposed": "Exposé",
+    "scarecrows.name": "Couverture : Épouvantail",
+    "scarecrows.protected": "Protégée",
+    "scarecrows.exposed": "Exposée",
 
     // coverage: sprinklers
     "sprinklers.name": "Couverture : Arroseur",
@@ -32,13 +32,13 @@
     "sprinklers.dry-crops": "Non couverte",
 
     // crops: harvest
-    "crop-harvest.name": "Culture : prête à être récoltée",
+    "crop-harvest.name": "Culture : Récoltes",
     "crop-harvest.ready": "Prête",
     "crop-harvest.not-ready": "Pas prête",
     "crop-harvest.not-enough-time": "Pas assez de temps",
 
     // crops: watered
-    "crop-water.name": "Culture : arrosage",
+    "crop-water.name": "Culture : Arrosage",
     "crop-water.watered": "Culture arrosée",
     "crop-water.dry": "Culture sèche",
 
@@ -57,7 +57,7 @@
     "machines.name": "Traitement des Machines",
     "machines.empty": "Vide",
     "machines.processing": "En cours",
-    "machines.finished": "Terminé",
+    "machines.finished": "Terminée",
 
     // tile grid
     "grid.name": "Grille de cases",
@@ -65,7 +65,7 @@
     // tillable
     "tillable.name": "Labourable",
     "tillable.tillable": "Labourable",
-    "tillable.tilled": "Labouré",
-    "tillable.occupied": "Occupé",
+    "tillable.tilled": "Labourée",
+    "tillable.occupied": "Occupée",
     "tillable.not-tillable": "Non Labourable"
 }

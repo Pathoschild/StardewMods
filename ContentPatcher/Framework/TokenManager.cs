@@ -121,6 +121,10 @@ namespace ContentPatcher.Framework
                     changedGlobalTokens.Add(token.Name);
             }
 
+            // special case: language change implies i18n change
+            if (changedGlobalTokens.Contains(ConditionType.Language.ToString()))
+                changedGlobalTokens.Add(ConditionType.I18n.ToString());
+
             // update mod contexts
             foreach (ModTokenContext localContext in this.LocalTokens.Values)
                 localContext.UpdateContext(changedGlobalTokens);

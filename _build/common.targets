@@ -1,14 +1,18 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- common build settings -->
   <PropertyGroup>
-    <!-- metadata -->
     <Authors>Pathoschild</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Pathoschild/StardewMods</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
-    <!-- build settings -->
     <LangVersion>latest</LangVersion>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <ModZipPath>$(SolutionDir)\_releases</ModZipPath>
   </PropertyGroup>
+
+  <!-- mod build package -->
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
+  </ItemGroup>
 </Project>

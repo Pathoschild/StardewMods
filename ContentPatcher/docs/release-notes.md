@@ -9,6 +9,12 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.23.5
+Released 18 September 2021 for SMAPI 3.12.6 or later.
+
+* Fixed patches which use the `i18n` token not always updated on language change.
+* Fixed `HasMod` condition not enabling mod-provided tokens within the same `When` block.
+
 ## 1.23.4
 Released 04 September 2021 for SMAPI 3.12.6 or later.
 

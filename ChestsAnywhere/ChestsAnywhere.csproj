@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>ChestsAnywhere</AssemblyName>
-    <Version>1.20.15</Version>
+    <Version>1.20.16</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
     <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.0" />
   </ItemGroup>
 

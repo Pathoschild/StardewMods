@@ -9,10 +9,6 @@
     <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|island_tilesheet_1|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
-  </ItemGroup>
-
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />

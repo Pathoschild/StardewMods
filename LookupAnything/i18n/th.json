@@ -1,0 +1,679 @@
+﻿{
+    /*********
+    ** Generic translations
+    *********/
+    // date names
+    "generic.now": "ขณะนี้",
+    "generic.tomorrow": "พรุ่งนี้",
+    "generic.yesterday": "เมื่อวาน",
+
+    // generic values
+    "generic.unknown": "ไม่ทราบ",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% ที่จะพบ {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}}/{{max}})",
+    "generic.ratio": "{{value}}/{{max}}",
+    "generic.range": "{{min}}-{{max}}",
+    "generic.yes": "ใช่",
+    "generic.no": "ไม่",
+    "generic.seconds": "{{count}} วินาที",
+    "generic.minutes": "{{count}} นาที",
+    "generic.hours": "{{count}} ชั่วโมง",
+    "generic.days": "{{count}} วัน",
+    "generic.in-x-days": "ใน {{count}} วัน",
+    "generic.x-days-ago": "{{count}} วันก่อน",
+    "generic.price": "{{price}}g",
+    "generic.price-for-quality": "{{price}}g ({{quality}})",
+    "generic.price-for-stack": "{{price}}g สำหรับปริมาณ {{count}} ชิ้น",
+
+    // types
+    "type.building": "สิ่งก่อสร้าง",
+    "type.bush": "พุ่มไม้",
+    "type.fruit-tree": "ต้นผลไม้",
+    "type.map-tile": "Map tile",
+    "type.monster": "มอนสเตอร์",
+    "type.player": "ผู้เล่น",
+    "type.tree": "ต้นไม้",
+    "type.villager": "ชาวบ้าน",
+    "type.other": "อื่นๆ", // default type
+
+    // item qualities
+    "quality.normal": "ธรรมดา",
+    "quality.silver": "ดาวเงิน",
+    "quality.gold": "ดาวทอง",
+    "quality.iridium": "อิริเดียม",
+
+    // NPC friendship
+    "friendship-status.friendly": "เพื่อน",
+    "friendship-status.dating": "คนรัก",
+    "friendship-status.engaged": "คู่หมั้น",
+    "friendship-status.married": "สามี-ภรรยา",
+    "friendship-status.divorced": "หย่าร้าง",
+    "friendship-status.kicked-out": "ถูกขับไส",
+
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "ห้องครัว",
+    "bundle-area.crafts-room": "ห้องประดิษฐ์",
+    "bundle-area.fish-tank": "ตู้ปลา",
+    "bundle-area.boiler-room": "ห้องเตาไอน้ำ",
+    "bundle-area.vault": "ตู้นิรภัย",
+    "bundle-area.bulletin-board": "กระดานปิดประกาศ",
+    "bundle-area.abandoned-joja-mart": "ร้านโจจ้าที่ถูกทิ้งร้าง",
+
+    // shop names
+    "shop.adventure-guild": "กิลด์นักผจญภัย",
+    "shop.clint": "คลินท์",
+    "shop.marnie": "มานี",
+    "shop.pierre": "ปิแอร์",
+    "shop.robin": "โรบิน",
+    "shop.volcano": "ร้านคนแคระ (ภูเขาไฟ)",
+    "shop.willy": "วิลลี่",
+
+    // recipe types
+    "recipe-type.cooking": "การทำอาหาร",
+    "recipe-type.crafting": "การประดิษฐ์",
+    "recipe-type.tailoring": "การตัดเย็บ",
+
+    // NPC descriptions
+    "data.npc.pet.description": "สัตว์เลี้ยงของคุณ",
+    "data.npc.horse.description": "ม้าของคุณ",
+    "data.npc.junimo.description": "วิญญาณแห่งป่าที่มาจากแห่งภูติ น้อยคนนักที่จะรู้จักพวกเขา",
+    "data.npc.trash-bear.description": "วิญญาณที่แสนเป็นมิตร ผู้คอยช่วยจัดการกับขยะ",
+
+    // item types
+    "data.type.debris": "ซากผุพัง",
+    "data.type.stone": "ก้อนหิน",
+    "data.type.container": "ภาชนะ",
+
+    // farm items
+    "data.item.egg-incubator.description": "ใช้ฟักไข่ให้กลายเป็น ลูกเจี๊ยบ หรือลูกเป็ด",
+    "data.item.broken-branch.name": "กิ่งไม้หัก",
+    "data.item.broken-branch.description": "กิ่งไม้หัก เมื่อสับด้วยขวาน จะได้เป็นท่อนไม้ (Wood)",
+    "data.item.stone.name": "ก้อนหิน",
+    "data.item.stone.description": "ก้อนหินสีเทาที่ระบุประเภทไม่ได้ เมื่อทำลายมันจะได้รับ ก้อนหิน (Stone)",
+    "data.item.geode.name": "ผลึกโพรง",
+    "data.item.geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรง (Geodes)",
+    "data.item.frozen-geode.name": "ก้อนผลึกโพรงน้ำแข็ง",
+    "data.item.frozen-geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงน้ำแข็ง (Frozen Geodes)",
+    "data.item.magma-geode.name": "ก้อนผลึกโพรงแม็กม่า",
+    "data.item.magma-geode.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงแม็กม่า (Magma Geodes)",
+
+    // weeds & crystals
+    "data.item.weed.name": "วัชพืช",
+    "data.item.weed.description": "วัชพืชที่ระบุประเภทไม่ได้ มีโอกาสได้รับ ใยพืช (Fibers) หรือ เมล็ดพันธุ์คละชนิด (Mixed Seeds)",
+    "data.item.fertile-weed.name": "วัชพืชเจริญพันธุ์",
+    "data.item.fertile-weed.description": "จะได้รับ เมล็ดพันธุ์คละชนิด (Mixed Seeds) ทุกครั้ง",
+    "data.item.ice-crystal.name": "คริสตัลน้ำแข็ง",
+    "data.item.ice-crystal.description": "คริสตัลน้ำแข็งที่ระบุประเภทไม่ได้ มีโอกาสเล็กน้อยที่จะได้รับควอตซ์บริสุทธิ์ (Refined Quartz)",
+
+    // mine gems
+    "data.item.amethyst-node.name": "ก้อนอเมทิสต์",
+    "data.item.amethyst-node.description": "เมื่อทำลายมันจะได้ รับอเมทิสต์ (Amethyst)",
+    "data.item.aquamarine-node.name": "ก้อนอะความารีน",
+    "data.item.aquamarine-node.description": "เมื่อทำลายมันจะได้รับ อะความารีน (Aquamarine)",
+    "data.item.diamond-node.name": "ก้อนเพชร",
+    "data.item.diamond-node.description": "เมื่อทำลายมันจะได้รับ เพชร (Diamond)",
+    "data.item.emerald-node.name": "ก้อนมรกต",
+    "data.item.emerald-node.description": "เมื่อทำลายมันจะได้รับ มรกต (Emerald)",
+    "data.item.gem-node.name": "ก้อนแร่อัญมณี",
+    "data.item.gem-node.description": "เมื่อทำลายมันจะได้รับ มรกต (Emerald), อะความารีน (Aquamarines), ทับทิม (Ruby), อเมทิสต์ (Amethyst), โทแพส (Topaz), หยก (Jade), หรือ เพชร (Diamond)",
+    "data.item.jade-node.name": "ก้อนหยก",
+    "data.item.jade-node.description": "เมื่อทำลายมันจะได้รับ หยก (Jade)",
+    "data.item.mystic-stone.name": "ก้อนหินปริศนา",
+    "data.item.mystic-stone.description": "เมื่อทำลายมันจะได้รับ อัญมณีหายาก (Rare Gems) หรือ แร่ (Ores), รวมถึง สะเก็ดแก้วปริซึม (Prismatic Shard)",
+    "data.item.prismatic-node.name": "ก้อนสะเก็ดแก้วปริซึม",
+    "data.item.prismatic-node.description": "เมื่อทำลายมันจะได้รับ (Prismatic shard)",
+    "data.item.ruby-node.name": "ก้อนทับทิม",
+    "data.item.ruby-node.description": "เมื่อทำลายมันจะได้รับ ทับทิม (Ruby)",
+    "data.item.topaz-node.name": "ก้อนโทแพส",
+    "data.item.topaz-node.description": "เมื่อทำลายมันจะได้รับ โทแพส (Topaz)",
+
+    // mine ores
+    "data.item.cinder-shard-node.name": "ก้อนสะเก็ดแม็กม่า",
+    "data.item.cinder-shard-node.description": "เมื่อทำลายมันจะได้รับ สะเก็ดแม็กม่า (Cinder Shards)",
+    "data.item.copper-node.name": "ก้อนแร่ทองแดง",
+    "data.item.copper-node.description": "เมื่อทำลายมันจะได้รับ แร่ทองแดง (Copper Ore)",
+    "data.item.gold-node.name": "ก้อนแร่ทองคำ",
+    "data.item.gold-node.description": "เมื่อทำลายมันจะได้รับ แร่ทองคำ (Gold Ore)",
+    "data.item.iridium-node.name": "ก้อนแร่อิริเดียม",
+    "data.item.iridium-node.description": "เมื่อทำลายมันจะได้รับ แร่อิริเดียม (Iridium Ore)",
+    "data.item.iron-node.name": "ก้อนแร่เหล็ก",
+    "data.item.iron-node.description": "เมื่อทำลายมันจะได้รับ แร่เหล็ก (Iron Ore)",
+    "data.item.omni-geode-node.name": "ก้อนผลึกโพรงผสม",
+    "data.item.omni-geode-node.description": "เมื่อทำลายมันจะได้รับ ผลึกโพรงผสม (Omni Geode)",
+
+    // mine stones
+    "data.item.colored-stone.name": "หินสี",
+    "data.item.colored-stone.description": "ก้อนหินที่ระบุประเภทไม่ได้ มีโอกาสได้รับ ก้อนหิน (Stone), แร่ (Ores), หรือผลึกโพรง (Geodes)",
+    "data.item.mine-stone.name": "ก้อนหิน",
+    "data.item.mine-stone.description": "เมื่อทำลายมันจะได้รับ ก้อนหิน (Stone) และมีโอกาสจะได้รับ ถ่านหิน (Coal)",
+
+    // other stones
+    "data.item.clay-stone.name": "หินโคลน",
+    "data.item.clay-stone.description": "เมื่อทำลายมันจะได้รับ ดินเหนียว (Clay)",
+    "data.item.fossil-stone.name": "หินฟอสซิล",
+    "data.item.fossil-stone.description": "เมื่อทำลายมันจะได้รับ ฟอสซิล (Fossil) และ กระดูก (Bone)",
+
+    // mine containers
+    "data.item.barrel.name": "ถัง",
+    "data.item.barrel.description": "เมื่อทำลายมันจะได้รับของจิปาถะ",
+    "data.item.box.name": "กล่อง",
+    "data.item.box.description": "เมื่อทำลายมันจะได้รับของจิปาถะ",
+
+    // location names
+    "location.backwoods": "ป่าด้านหลังฟาร์ม",
+    "location.beach": "ชายหาด",
+    "location.beach.east-pier": "ชายหาด (ฝั่งขวา)",
+    "location.bugLand": "ลังแมลงกลายพันธุ์",
+    "location.busStop": "ป้ายรถประจำทาง",
+    "location.desert": "ทะเลทราย",
+    "location.farm": "ฟาร์ม",
+    "location.farmCave": "ถ้ำในฟาร์ม",
+    "location.farmHouse": "บ้านของเรา",
+    "location.forest": "ป่า",
+    "location.forest.fish-area-0": "แม่น้ำในป่า",
+    "location.forest.fish-area-1": "ทะลสาบในป่า",
+    "location.forest.island-tip": "แม่น้ำในป่า (ปลายทางใต้สุดของเกาะใหญ่กลางแม่น้ำ)",
+    "location.mountain": "ภูเขา",
+    "location.railroad": "ทางรถไฟ",
+    "location.sewer": "ท่อระบายน้ำ",
+    "location.submarine": "เรือดำน้ำในงานตลาดกลางคืน",
+    "location.town": "เมือง",
+    "location.town.northmost-bridge": "เมือง (สะพานที่อยู่ทิศเหนือสุดของเมือง)",
+    "location.tunnel": "อุโมงค์รถประจำทาง",
+    "location.undergroundMine": "เหมือง",
+    "location.undergroundMine.level": "เหมือง ชั้นที่ {{level}}",
+    "location.witchSwamp": "บึงน้ำของแม่มด",
+    "location.woods": "ป่าลึกลับ",
+
+    "location.caldera": "ปล่องภูเขาไฟของเกาะขิง",
+    "location.islandEast": "เกาะขิงฝั่งตะวันออก",
+    "location.islandNorth": "เกาะขิงทางตอนเหนือ",
+    "location.islandSouth": "เกาะขิงทางตอนใต้",
+    "location.islandSouthEast": "เกาะขิงฝั่งตะวันออกเฉียงใต้",
+    "location.islandSouthEastCave": "ถ้ำที่เกาะขิงฝั่งตะวันออกเฉียงใต้",
+    "location.islandWest": "เกาะขิงฝั่งตะวันตก",
+    "location.islandWest.fish-area-1": "เกาะขิงฝั่งตะวันตก (ทะเล)",
+    "location.islandWest.fish-area-2": "เกาะขิงฝั่งตะวันตก (ทะเลสาบ)",
+
+    "location.unknown-fish-area": "{{locationName}} (จุดตกปลา {{id}})",
+
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "ค่าความรัก",
+    "animal.happiness": "ค่าความสุข",
+    "animal.mood": "อารมณ์วันนี้",
+    "animal.complaints": "เรื่องที่ไม่พอใจ",
+    "animal.produce-ready": "พร้อมให้ผลผลิต",
+    "animal.growth": "การเติบโต",
+    "animal.sells-for": "ราคาขาย",
+
+    // values
+    "animal.complaints.hungry": "ไม่มีอะไรตกถึงท้อง ตั้งแต่เมื่อวาน",
+    "animal.complaints.left-out": "ถูกปล่อยทิ้งไว้ข้างนอกเมื่อคืน",
+    "animal.complaints.new-home": "ย้ายไปยังบ้านหลังใหม่",
+    "animal.complaints.no-heater": "ไม่มีฮีตเตอร์ให้อบอุ่น ในอากาศหนาวเหน็บ",
+    "animal.complaints.not-petted": "ยังไม่ถูกลูบหัวเลยนะวันนี้",
+    "animal.complaints.wild-animal-attack": "ถูกโจมตีจากสัตว์ป่าเมื่อกลางดึกที่ผ่านมา",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "จำนวนสัตว์เลี้ยง",
+    "building.construction": "กำลังก่อสร้าง",
+    "building.feed-trough": "การให้อาหาร",
+    "building.horse": "ม้าชื่อ",
+    "building.horse-location": "ตำแหน่งของม้า",
+    "building.owner": "เจ้าของ",
+    "building.slimes": "จำนวนสไลม์",
+    "building.stored-hay": "ฟางในคลัง",
+    "building.upgrades": "การอัพเกรด",
+    "building.water-trough": "Water trough",
+
+    // values
+    "building.animals.summary": "{{count}} ตัว จากจำนวนสูงสุด {{max}} ตัว",
+    "building.construction.summary": "พร้อมใช้งานเมื่อ {{date}}",
+    "building.feed-trough.automated": "อัตโนมัติ",
+    "building.feed-trough.summary": "{{filled}}/{{max}} ช่องให้อาหาร",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "อนุญาตให้เก็บเกี่ยว",
+    "building.owner.none": "ไม่มีใครเป็นเจ้าของ",
+    "building.output-processing": "กำลังทำผลผลิต",
+    "building.output-ready": "ผลผลิตพร้อมใช้งาน",
+    "building.slimes.summary": "{{count}} ตัว จากจำนวนสูงสุด {{max}} ตัว",
+    "building.stored-hay.summary-one-silo": "มี {{hayCount}} ฟาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
+    "building.stored-hay.summary-multiple-silos": "มี {{hayCount}} ฟางใน {{siloCount}} ยุ้งฉาง (ความจุสูงสุด: {{maxHay}} ฟาง)",
+    "building.upgrades.barn.0": "มีสัตว์เลี้ยงสูงสุด 4 ตัว, สามารถเลี้ยงวัวได้",
+    "building.upgrades.barn.1": "มีสัตว์เลี้ยงสูงสุด 8 ตัว, สัตว์เลี้ยงสามารถสืบพันธุ์ได้ และสามารถเลี้ยงแพะได้",
+    "building.upgrades.barn.2": "มีสัตว์เลี้ยงสูงสุด 12 ตัว, ให้อาหารอัตโนมัติ, สามารถเลี้ยงหมูและแกะได้",
+    "building.upgrades.cabin.0": "กระท่อมเริ่มต้น",
+    "building.upgrades.cabin.1": "เพิ่มห้องครัว, สามารถแต่งงานได้",
+    "building.upgrades.cabin.2": "สามารถมีลูกได้",
+    "building.upgrades.coop.0": "มีสัตว์เลี้ยงสูงสุด 4 ตัว; สามารถเลี้ยงไก่ได้",
+    "building.upgrades.coop.1": "มีสัตว์เลี้ยงสูงสุด 8 ตัว; สามารถฟักไข่ได้, สามารถเลี้ยงไดโนเสาร์และเป็ดได้",
+    "building.upgrades.coop.2": "มีสัตว์เลี้ยงสูงสุด 12 ตัว; ให้อาหารอัตโนมัติและสามารถเลี้ยงกระต่ายได้",
+    "building.water-trough.summary": "{{filled}} ใน {{max}} รางน้ำเติมแล้ว",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "ปลาที่เลี้ยง",
+    "building.fish-pond.drops": "ดรอป",
+    "building.fish-pond.quests": "เควส",
+
+    // values
+    "building.fish-pond.population.empty": "โยนปลาลงไปเพื่อเริ่มเลี้ยงปลาได้เลย!",
+    "building.fish-pond.population.next-spawn": "ปลาตัวใหม่จะเกิดในอีก {{relativeDate}}",
+    "building.fish-pond.drops.preface": "โอกาส {{chance}}% ที่ในแต่ละวันจะผลิตไอเทมต่อไปนี้:",
+    "building.fish-pond.drops.min-fish": "ปลา {{count}} ตัว:",
+    "building.fish-pond.quests.done": "ปลา {{count}} ตัว",
+    "building.fish-pond.quests.incomplete-one": "ปลา {{count}} ตัว: ต้องการ {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "ปลา {{count}} ตัว: ต้องการไอเทมต่อไปนี้ {{itemList}}",
+    "building.fish-pond.quests.available": "พร้อมทำเควสในอีก {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "พุ่มเบอร์รี่",
+    "bush.name.plain": "พุ่มไม้ธรรมดา",
+    "bush.name.tea": "พุ่มชา",
+    "bush.description.berry": "พุ่มไม้ที่มีแซลมอนเบอร์รี่และแบล็กเบอร์รี่งอกออกมา",
+    "bush.description.plain": "พุ่มไม้ธรรมดาที่ไม่มีอะไรเลย",
+    "bush.description.Tea": "พุ่มไม้ที่มีชางอกออกมา",
+    "bush.date-planted": "วันที่ปลูก",
+    "bush.growth": "การเจริญเติบโต",
+    "bush.next-harvest": "การเก็บเกี่ยวครั้งถัดไป",
+
+    // values
+    "bush.growth.summary": "เติบโตเต็มที่ {{date}}",
+    "bush.schedule.berry": "มีโอกาส 20% ที่จะงอกแซลมอนเบอร์รี่ในฤดูใบไม้ผลิ วันที่ 15-18 และแบล็กเบอร์รี่ในฤดูใบไม้ร่วง วันที่ 8-11",
+    "bush.schedule.tea": "ใบชาจะงอกขึ้นตั้งแต่วันที่ 22 ของแต่ละฤดูกาล (ยกเว้นในฤดูหนาวถ้าไม่ได้อยู่ในเรือนกระจก)",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "ร้องเรียน",
+    "fruit-tree.name": "ต้น {{fruitName}}",
+    "fruit-tree.growth": "การเจริญเติบโต",
+    "fruit-tree.next-fruit": "ผลไม้ครั้งถัดไป",
+    "fruit-tree.season": "ฤดูกาล",
+    "fruit-tree.quality": "คุณภาพ",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "เติบโตไม่ได้เพราะมีวัตถุอื่นอยู่ติดกัน",
+    "fruit-tree.growth.summary": "เติบโตเต็มที่ {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "จะไม่มีผลงอกออกมาเพิ่มจนกว่าคุณจะเก็บเกี่ยวผลที่มีอยู่",
+    "fruit-tree.next-fruit.out-of-season": "นอกฤดูกาล",
+    "fruit-tree.next-fruit.struck-by-lightning": "โดนฟ้าผ่า! จะฟื้นตัวใน {{count}} วัน",
+    "fruit-tree.next-fruit.too-young": "ยังเด็กเกินไปที่จะออกผล",
+    "fruit-tree.quality.now": "{{quality}} ตอนนี้",
+    "fruit-tree.quality.on-date": "{{quality}} เมื่อ {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} เมื่อ {{date}} ปีหน้า",
+    "fruit-tree.season.summary": "{{season}} (หรือเมื่อใดก็ได้ในเรือนกระจก)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "พืชผล",
+    "crop.harvest": "เก็บเกี่ยว",
+    "crop.fertilized": "ปุ๋ย",
+    "crop.watered": "รดน้ำ",
+
+    // values
+    "crop.summary.dead": "พืชต้นนี้ตายแล้ว",
+    "crop.summary.drops-X": "ได้รับ {{count}}",
+    "crop.summary.drops-X-to-Y": "ได้รับ {{min}}-{{max}} ({{percent}}% โอกาสของพืชผลพิเศษ)",
+    "crop.summary.harvest-once": "เก็บเกี่ยวได้หลังผ่านไป {{daysToFirstHarvest}} วัน",
+    "crop.summary.harvest-multi": "เก็บเกี่ยวได้หลังผ่านไป {{daysToFirstHarvest}} วัน, แล้วก็ทุก {{daysToNextHarvests}} วัน",
+    "crop.summary.seasons": "เติบโตใน{{seasons}}",
+    "crop.summary.sells-for": "ขายได้ {{price}}",
+    "crop.harvest.too-late": "สายเกินไปสำหรับฤดูเก็บเกี่ยวครั้งถัดไป (จะอยู่ถึงวันที่ {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "รายละเอียด",
+    "item.loves-this": "ชอบสิ่งนี้มากๆ",
+    "item.likes-this": "ชอบสิ่งนี้",
+    "item.neutral-about-this": "เฉยๆ กับสิ่งนี้",
+    "item.dislikes-this": "ไม่ชอบสิ่งนี้",
+    "item.hates-this": "เกลียดสิ่งนี้",
+    "item.needed-for": "ต้องใช้สำหรับ",
+    "item.number-owned": "มีแล้ว",
+    "item.number-cooked": "ปรุงแล้ว",
+    "item.number-crafted": "สร้างแล้ว",
+    "item.recipes": "สูตรอาหาร",
+    "item.see-also": "ดูเพิ่ม",
+    "item.sells-for": "ขายได้",
+    "item.sells-to": "ขายให้",
+    "item.can-be-dyed": "ย้อมได้",
+    "item.produces-dye": "ทำสีย้อมได้",
+
+    // values
+    "item.contents.placed": "{{name}} วางแล้ว",
+    "item.contents.ready": "{{name}} พร้อมแล้ว",
+    "item.contents.partial": "{{name}} ใน {{time}}",
+    "item.undiscovered-gift-taste": "ชาวบ้าน {{count}} คนยังไม่เปิดเผย",
+    "item.undiscovered-gift-taste-appended": ", และชาวบ้านอีก {{count}} คนยังไม่เปิดเผย",
+    "item.needed-for.community-center": "({{bundles}}) ของศูนย์ชุมชน",
+    "item.needed-for.full-shipment": "ความสำเร็จส่งขายครบทุกรายการ (ส่งหนึ่งชิ้น)",
+    "item.needed-for.polyculture": "ความสำเร็จพหุวัฒนธรรม (ส่งอีก {{count}} ชิ้น)",
+    "item.needed-for.full-collection": "ความสำเร็จเก็บสะสมครบ (บริจาคหนึ่งชิ้นให้พิพิธภัณฑ์)",
+    "item.needed-for.gourmet-chef": "ความสำเร็จพ่อครัวหัวป่าก์ (ปรุงอาหาร {{recipes}} เมนู)",
+    "item.needed-for.craft-master": "ความสำเร็จนักประดิษฐ์ (สร้าง {{recipes}} อย่าง)",
+    "item.needed-for.quests": "เควสปัจจุบัน ({{quests}})",
+    "item.sells-to.shipping-box": "กล่องส่งสินค้า",
+    "item.recipes-for-ingredient.entry": "{{name}} (ต้องใช้ {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "คุณมีแล้ว {{count}} ชิ้น",
+    "item.number-crafted.summary": "คุณสร้างแล้ว {{count}} ชิ้น",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "รายการ",
+    "item.cask-schedule": "เสื่อมสภาพ",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} พร้อมแล้ว",
+    "item.cask-schedule.now-partial": "ตอนนี้เป็น {{quality}} แล้ว (ใช้เสียมเพื่อหยุดการเสื่อมสภาพ)",
+    "item.cask-schedule.tomorrow": "{{quality}} พรุ่งนี้",
+    "item.cask-schedule.in-x-days": "จะเป็น {{quality}} ใน {{count}} วัน ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "เหยื่อ",
+    "item.crabpot-bait-needed": "ต้องใช้เหยื่อ!",
+    "item.crabpot-bait-not-needed": "ไม่ต้องใช้เพราะเป็นสาย Luremaster",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "สภาพ",
+
+    // values
+    "item.fence-health.gold-clock": "ไม่ผุพังเพราะมีนาฬิกาทอง (Gold Clock)",
+    "item.fence-health.summary": "{{percent}}% (เหลืออีกประมาณ {{count}} วัน)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "ผลผลิตจากบ่อเลี้ยงปลา",
+    "item.fish-spawn-rules": "เงื่อนไขการเกิด",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "เลเวลตกปลาขั้นต่ำ: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "ยังตกไม่ได้ (ตกได้ครั้งเดียว)",
+    "item.fish-spawn-rules.locations": "สถานที่: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "สถานที่:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "ฤดูใดก็ได้",
+    "item.fish-spawn-rules.season-list": "ฤดู: {{seasons}}",
+    "item.fish-spawn-rules.time": "ช่วงเวลา: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "สภาพอากาศ: แดดสดใส",
+    "item.fish-spawn-rules.weather-rainy": "สภาพอากาศ: ฝนตก",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "ของโปรด",
+    "item.movie-ticket.movie-this-week": "หนังฉายสัปดาห๋นี้",
+    "item.movie-ticket.loves-movie": "รักหนังเรื่องนี้",
+    "item.movie-ticket.likes-movie": "ชอบหนังเรื่องนี้",
+    "item.movie-ticket.dislikes-movie": "ไม่ชอบหนังเรื่องนี้",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} ชอบสิ่งนี้มากๆ",
+    "item.movie-snack-preference.like": "{{name}} ชอบสิ่งนี้",
+    "item.movie-snack-preference.dislike": "{{name}} ไม่ชอบสิ่งนี้",
+    "item.movie-ticket.movie-this-week.none": "สัปดาห์นี้ไม่มีหนังเข้าฉาย",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "ระดับเสียง",
+    "item.music-block.drum-type": "ประเภทกลอง",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "ฆ่าไม่ตาย",
+    "monster.health": "เลือด",
+    "monster.drops": "ให้ของ",
+    "monster.experience": "XP",
+    "monster.defense": "ป้องกัน",
+    "monster.attack": "โจมตี",
+    "monster.adventure-guild": "กิลด์ของนักผจญภัย",
+
+    // values
+    "monster.drops.nothing": "ไม่มี",
+    "monster.adventure-guild.eradication-goal": "เป้าหมายในการกำจัด: {{name}} (ฆ่าไป {{count}}/{{requiredCount}})",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "วันเกิด",
+    "npc.can-romance": "จีบได้",
+    "npc.friendship": "มิตรภาพ",
+    "npc.talked-today": "คุยแล้ว",
+    "npc.gifted-today": "ให้ของแล้ว",
+    "npc.gifted-this-week": "สัปดาห์นี้ให้ของแล้ว",
+    "npc.kissed-today": "วันนี้จูบแล้ว",
+    "npc.hugged-today": "วันนี้กอดแล้ว",
+    "npc.loves-gifts": "ของขวัญที่ชอบมากๆ",
+    "npc.likes-gifts": "ของขวัญที่ชอบ",
+    "npc.neutral-gifts": "ของขวัญที่เฉยๆ",
+    "npc.dislikes-gifts": "ของขวัญที่ไม่ชอบ",
+    "npc.hates-gifts": "ของขวัญที่เกลียด",
+
+    // values
+    "npc.can-romance.married": "คุณแต่งงานกันแล้ว! <3", // < turns into a heart
+    "npc.can-romance.housemate": "คุณอยู่บ้านด้วยกัน!",
+    "npc.friendship.not-met": "คุณยังไม่เจอพวกเขา",
+    "npc.friendship.need-bouquet": "ต้องให้ช่อดอกไม้เพื่อเลื่อนขั้น",
+    "npc.friendship.need-points": "เลื่อนขั้นใน {{count}} แต้ม",
+    "npc.undiscovered-gift-taste": "{{count}} ชิ้นที่ยังไม่เปิดเผย",
+    "npc.undiscovered-gift-taste-appended": ", และ {{count}} ชิ้นที่ยังไม่เปิดเผย",
+
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "อายุ",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} อีก ({{count}} วันถึง {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "ทารกแรกคลอด",
+    "npc.child.age.baby": "ทารก",
+    "npc.child.age.crawler": "วัยคลาน",
+    "npc.child.age.toddler": "วัยกระเตาะกระแตะ",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "รัก",
+    "pet.petted-today": "วันนี้ลูบหัวแล้ว",
+    "pet.last-petted": "ลูบหัวครั้งสุดท้ายเมื่อ",
+    "pet.water-bowl": "ชามน้ำ",
+
+    // values
+    "pet.last-petted.yes": "ใช่ (ความรัก +12)",
+    "pet.last-petted.days-ago": "{{days}} วันที่แล้ว",
+    "pet.last-petted.never": "ไม่เคย",
+    "pet.water-bowl.empty": "ว่างเปล่า",
+    "pet.water-bowl.filled": "เติมแล้ว (ความรัก +6)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "ชื่อฟาร์ม",
+    "player.farm-map": "แผนที่ฟาร์ม",
+    "player.favorite-thing": "ของโปรด",
+    "player.gender": "เพศ",
+    "player.housemate": "เพื่อนร่วมบ้าน",
+    "player.spouse": "คู่แต่งงาน",
+    "player.watched-movie-this-week": "หนังที่ดูแล้วสัปดาห์นี้",
+    "player.combat-skill": "การต่อสู้",
+    "player.farming-skill": "การทำฟาร์ม",
+    "player.fishing-skill": "การตกปลา",
+    "player.foraging-skill": "การหาของป่า",
+    "player.mining-skill": "การลงเหมือง",
+    "player.luck": "โชค",
+    "player.save-format": "บันทึกการตั้งค่า",
+
+    // values
+    "player.farm-map.custom": "กำหนดเอง",
+    "player.gender.male": "ชาย",
+    "player.gender.female": "หญิง",
+    "player.luck.summary": "{{percent}}% โชคที่จะได้รับแบบสุ่ม",
+    "player.skill.progress": "เลเวล {{level}} ต้องการอีก ({{expNeeded}} XP เพื่อเลื่อนขั้น)",
+    "player.skill.progress-last": "เลเวล {{level}}",
+
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "เฉลย",
+
+    // values
+    "puzzle.solution.solved": "แก้ได้แล้ว!",
+    "puzzle.solution.hidden": "เฉลยถูกซ่อนอยู่ในโหมด progression",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "ปริศนาถ้ำคริสตัล",
+    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "เปิดใช้งานรูปปั้นเพื่อเริ่มปริศนา",
+    "puzzle.island-crystal-cave.solution.waiting": "กำลังรอให้เกมสร้างลำดับ...",
+    "puzzle.island-crystal-cave.solution.activated": "ทำซ้ำรูปแบบของผลึกที่เปิดใช้งานแปล:",
+
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "ปริศนานางเงือกบนเกาะ",
+    "puzzle.island-mermaid.solution.intro": "ใช้แผ่นฟลุตเพื่อเล่นเพลงของนางเงือกที่ตลาดราตรี ค่าระดับเสียง (คุณสามารถดูรายละเอียดของแผ่นฟลุต เพื่อดูระดับเสียงของมันได้):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "ปริศนาศาลเจ้าบนเกาะ",
+
+    // values
+    "puzzle.island-shrine.solution": "วางไอเท็มที่ได้จากนกอัญมณีจากเกาะที่สัมพันธ์กันลงบนแต่ละแท่นเมื่อฝนตก ไอเท็มจะถูกสุ่มใหม่ในแต่ละเซฟ",
+    "puzzle.island-shrine.solution.east": "ทิศตะวันออก: {{item}}",
+    "puzzle.island-shrine.solution.north": "ทิศเหนือ: {{item}}",
+    "puzzle.island-shrine.solution.south": "ทิศใต้: {{item}}",
+    "puzzle.island-shrine.solution.west": "ทิศตะวันตก: {{item}}",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
+    "tile.description": "ตำแหน่ง tile บนแผนที่ สิ่งนี้แสดงขึ้นเนื่องจากคุณเปิดใช้งานการค้นหา tile ในการกำหนดค่า",
+    "tile.game-location": "ตำแหน่งที่ตั้ง",
+    "tile.map-name": "ชื่อแผนที่",
+    "tile.tile": "Tile",
+    "tile.tile-index": "{{layerName}}: tile index",
+    "tile.tilesheet": "{{layerName}}: tilesheet",
+    "tile.blend-mode": "{{layerName}}: blend mode",
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+
+    // values
+    "tile.tile.none-here": "ไม่มี tile ที่นี้",
+
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "ไอเทมที่ต้องการ",
+    "trash-bear-or-gourmand.quest-progress": "ความคืบหน้าของเควส",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "ระยะการเจริญเติบโต",
+    "tree.next-growth": "การเติบโตถัดไป",
+    "tree.has-seed": "มีเมล็ด",
+    "tree.is-fertilized": "ใส่ปุ๋ยแล้วหรือยัง",
+
+    // values
+    "tree.name.big-mushroom": "เห็ดขนาดใหญ่ (Big Mushroom)",
+    "tree.name.mahogany": "ต้นมะฮอกกานี (Mahogany Tree)",
+    "tree.name.maple": "ต้นเมเปิ้ล (Maple Tree)",
+    "tree.name.oak": "ต้นโอ๊ก (Oak Tree)",
+    "tree.name.palm": "ต้นปาล์ม (Palm Tree)",
+    "tree.name.pine": "ต้นสน (Pine Tree)",
+    "tree.name.unknown": "ต้นไม้ไม่ทราบชนิด (Unknown Tree)",
+    "tree.stage.done": "โตเต็มที่",
+    "tree.stage.partial": "{{stageName}} ({{step}}/{{max}})",
+    "tree.next-growth.winter": "ไม่สามารถเติบโตได้ ในสภาพอากาศหนาว ภายนอกเรือนกระจก (Green House)",
+    "tree.next-growth.adjacent-trees": "ไม่สามารถเติบโตได้ เนื่องจากมีต้นไม้อยู่ใกล้ ๆ",
+    "tree.next-growth.chance": "โอกาส {{chance}}% ที่จะโตเป็น{{stage}}ในวันพรุ่งนี้",
+
+    // growth stages
+    "tree.stages.seed": "เมล็ดพันธุ์",
+    "tree.stages.sprout": "ต้นอ่อน",
+    "tree.stages.sapling": "ต้นกล้า",
+    "tree.stages.bush": "พุ่มไม้",
+    "tree.stages.smallTree": "ไม้ต้นขนาดเล็ก",
+    "tree.stages.tree": "ต้นไม้"
+}
