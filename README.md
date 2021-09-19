@@ -87,10 +87,13 @@ Korean     | [↻ partial](ChestsAnywhere/i18n/ko.json) | [✓](DataLayers/i18n/
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json)         | [✓](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json) | [✓](LookupAnything/i18n/pt.json)         | [✓](NoclipMode/i18n/pt.json) | [✓](TractorMod/i18n/pt.json)
 Russian    | [↻ partial](ChestsAnywhere/i18n/ru.json) | [✓](DataLayers/i18n/ru.json) | [✓](DebugMode/i18n/ru.json) | [↻ partial](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | [✓](TractorMod/i18n/ru.json)
 Spanish    | [✓](ChestsAnywhere/i18n/es.json)         | [✓](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json) | [✓](LookupAnything/i18n/es.json)         | [✓](NoclipMode/i18n/es.json) | [✓](TractorMod/i18n/es.json)
+Thai¹      | [✓](ChestsAnywhere/i18n/th.json)         | [✓](DataLayers/i18n/th.json) | [✓](DebugMode/i18n/th.json) | [✓](LookupAnything/i18n/th.json)         | [✓](NoclipMode/i18n/th.json) | [✓](TractorMod/i18n/th.json)
 Turkish    | [✓](ChestsAnywhere/i18n/tr.json)         | [✓](DataLayers/i18n/tr.json) | [✓](DebugMode/i18n/tr.json) | [✓](LookupAnything/i18n/tr.json)         | [✓](NoclipMode/i18n/tr.json) | [✓](TractorMod/i18n/tr.json)
 
 Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
 on the wiki for help contributing translations.
+
+¹ Requires [Stardew Valley - THAI](https://www.nexusmods.com/stardewvalley/mods/7052) or similar.
 
 ## Compiling the mods
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
