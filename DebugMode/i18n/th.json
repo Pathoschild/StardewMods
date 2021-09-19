@@ -1,0 +1,12 @@
+﻿{
+    // labels shown on the debug screen
+    "label.tile": "ไทล์",
+    "label.map": "แผนที่",
+    "label.menu": "เมนู",
+    "label.submenu": "เมนูย่อย",
+    "label.minigame": "มินิเกม",
+    "label.festival-name": "เทศกาล",
+    "label.event-id": "รหัสเหตุการณ์",
+    "label.event-script": "สคริปต์เหตุการณ์",
+    "label.song": "เพลง"
+}
