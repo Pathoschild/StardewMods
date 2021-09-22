@@ -1501,7 +1501,7 @@ translation exists:
 {
    "Action": "EditImage",
    "Target": "LooseSprites/Cursors",
-   "FromFile": "assets/cursors.{{language}}.json",
+   "FromFile": "assets/cursors.{{language}}.png",
    "When": {
       "HasFile:{{FromFile}}": true
    }
@@ -1511,9 +1511,9 @@ translation exists:
 {
    "Action": "EditImage",
    "Target": "LooseSprites/Cursors",
-   "FromFile": "assets/cursors.json",
+   "FromFile": "assets/cursors.png",
    "When": {
-      "HasFile: assets/cursors.{{language}}.json": false
+      "HasFile: assets/cursors.{{language}}.png": false
    }
 },
 ```
