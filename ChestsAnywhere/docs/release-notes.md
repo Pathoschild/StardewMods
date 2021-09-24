@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed compatibility with recent Expanded Storage versions.
+
 ## 1.20.16
 Released 18 September 2021 for SMAPI 3.12.5 or later.
 

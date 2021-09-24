@@ -33,6 +33,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                 if (item == null)
                     continue;
 
+                // ignore custom chests added by another mod
+                if (item.modData.ContainsKey("furyx639.ExpandedStorage/Storage"))
+                    continue;
+
                 // migrate legacy data
                 if (Migrator.TryParseLegacyData(item, out string originalName, out ContainerData data))
                 {
