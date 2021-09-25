@@ -8,7 +8,6 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 using xTile;
 using xTile.Layers;
 using xTile.ObjectModel;
@@ -229,7 +228,7 @@ namespace ContentPatcher.Framework.Patches
 
             // apply source map
             this.ExtendMap(target, minWidth: targetArea.Right, minHeight: targetArea.Bottom);
-            this.PatchMap(targetAsset, source: source, patchMode: this.PatchMode, sourceArea: sourceArea, targetArea: targetArea);
+            targetAsset.PatchMap(source: source, sourceArea: sourceArea, targetArea: targetArea, patchMode: this.PatchMode);
 
             error = null;
             return true;
@@ -522,160 +521,6 @@ namespace ContentPatcher.Framework.Patches
                 this.Reflection.GetMethod(map, "UpdateDisplaySize").Invoke();
 
             return resized;
-        }
-
-        /// <summary>Copy layers, tiles, and tilesheets from another map onto the asset.</summary>
-        /// <param name="asset">The asset being edited.</param>
-        /// <param name="source">The map from which to copy.</param>
-        /// <param name="patchMode">Indicates how the map should be patched.</param>
-        /// <param name="sourceArea">The tile area within the source map to copy, or <c>null</c> for the entire source map size. This must be within the bounds of the <paramref name="source"/> map.</param>
-        /// <param name="targetArea">The tile area within the target map to overwrite, or <c>null</c> to patch the whole map. The original content within this area will be erased. This must be within the bounds of the existing map.</param>
-        /// <remarks>
-        /// This is temporarily duplicated from SMAPI's <see cref="IAssetDataForMap"/>, to add map overlay support before the feature is added to SMAPI.
-        /// </remarks>
-        public void PatchMap(IAssetDataForMap asset, Map source, PatchMapMode patchMode, Rectangle? sourceArea = null, Rectangle? targetArea = null)
-        {
-            Map target = asset.Data;
-
-            // get areas
-            {
-                Rectangle sourceBounds = this.GetMapArea(source);
-                Rectangle targetBounds = this.GetMapArea(target);
-                sourceArea ??= new Rectangle(0, 0, sourceBounds.Width, sourceBounds.Height);
-                targetArea ??= new Rectangle(0, 0, Math.Min(sourceArea.Value.Width, targetBounds.Width), Math.Min(sourceArea.Value.Height, targetBounds.Height));
-
-                // validate
-                if (sourceArea.Value.X < 0 || sourceArea.Value.Y < 0 || sourceArea.Value.Right > sourceBounds.Width || sourceArea.Value.Bottom > sourceBounds.Height)
-                    throw new ArgumentOutOfRangeException(nameof(sourceArea), $"The source area ({sourceArea}) is outside the bounds of the source map ({sourceBounds}).");
-                if (targetArea.Value.X < 0 || targetArea.Value.Y < 0 || targetArea.Value.Right > targetBounds.Width || targetArea.Value.Bottom > targetBounds.Height)
-                    throw new ArgumentOutOfRangeException(nameof(targetArea), $"The target area ({targetArea}) is outside the bounds of the target map ({targetBounds}).");
-                if (sourceArea.Value.Width != targetArea.Value.Width || sourceArea.Value.Height != targetArea.Value.Height)
-                    throw new InvalidOperationException($"The source area ({sourceArea}) and target area ({targetArea}) must be the same size.");
-            }
-
-            // apply tilesheets
-            IDictionary<TileSheet, TileSheet> tilesheetMap = new Dictionary<TileSheet, TileSheet>();
-            foreach (TileSheet sourceSheet in source.TileSheets)
-            {
-                // copy tilesheets
-                TileSheet targetSheet = target.GetTileSheet(sourceSheet.Id);
-                if (targetSheet == null || this.NormalizeTilesheetPathForComparison(targetSheet.ImageSource) != this.NormalizeTilesheetPathForComparison(sourceSheet.ImageSource))
-                {
-                    // change ID if needed so new tilesheets are added after vanilla ones (to avoid errors in hardcoded game logic)
-                    string id = sourceSheet.Id;
-                    if (!id.StartsWith("z_", StringComparison.OrdinalIgnoreCase))
-                        id = $"z_{id}";
-
-                    // change ID if it conflicts with an existing tilesheet
-                    if (target.GetTileSheet(id) != null)
-                    {
-                        int disambiguator = Enumerable.Range(2, int.MaxValue - 1).First(p => target.GetTileSheet($"{id}_{p}") == null);
-                        id = $"{id}_{disambiguator}";
-                    }
-
-                    // add tilesheet
-                    targetSheet = new TileSheet(id, target, sourceSheet.ImageSource, sourceSheet.SheetSize, sourceSheet.TileSize);
-                    for (int i = 0, tileCount = sourceSheet.TileCount; i < tileCount; ++i)
-                        targetSheet.TileIndexProperties[i].CopyFrom(sourceSheet.TileIndexProperties[i]);
-                    target.AddTileSheet(targetSheet);
-                }
-
-                tilesheetMap[sourceSheet] = targetSheet;
-            }
-
-            // get target layers
-            IDictionary<Layer, Layer> sourceToTargetLayers = source.Layers.ToDictionary(p => p, p => target.GetLayer(p.Id));
-            HashSet<Layer> orphanedTargetLayers = new HashSet<Layer>(target.Layers.Except(sourceToTargetLayers.Values));
-
-            // apply tiles
-            bool replaceAll = patchMode == PatchMapMode.Replace;
-            bool replaceByLayer = patchMode == PatchMapMode.ReplaceByLayer;
-            for (int x = 0; x < sourceArea.Value.Width; x++)
-            {
-                for (int y = 0; y < sourceArea.Value.Height; y++)
-                {
-                    // calculate tile positions
-                    Point sourcePos = new Point(sourceArea.Value.X + x, sourceArea.Value.Y + y);
-                    Point targetPos = new Point(targetArea.Value.X + x, targetArea.Value.Y + y);
-
-                    // replace tiles on target-only layers
-                    if (replaceAll)
-                    {
-                        foreach (Layer targetLayer in orphanedTargetLayers)
-                            targetLayer.Tiles[targetPos.X, targetPos.Y] = null;
-                    }
-
-                    // merge layers
-                    foreach (Layer sourceLayer in source.Layers)
-                    {
-                        // get layer
-                        Layer targetLayer = sourceToTargetLayers[sourceLayer];
-                        if (targetLayer == null)
-                        {
-                            target.AddLayer(targetLayer = new Layer(sourceLayer.Id, target, target.Layers[0].LayerSize, Layer.m_tileSize));
-                            sourceToTargetLayers[sourceLayer] = target.GetLayer(sourceLayer.Id);
-                        }
-
-                        // copy layer properties
-                        targetLayer.Properties.CopyFrom(sourceLayer.Properties);
-
-                        // create new tile
-                        Tile sourceTile = sourceLayer.Tiles[sourcePos.X, sourcePos.Y];
-                        Tile newTile = sourceTile != null
-                            ? this.CreateTile(sourceTile, targetLayer, tilesheetMap[sourceTile.TileSheet])
-                            : null;
-                        newTile?.Properties.CopyFrom(sourceTile.Properties);
-
-                        // replace tile
-                        if (newTile != null || replaceByLayer || replaceAll)
-                            targetLayer.Tiles[targetPos.X, targetPos.Y] = newTile;
-                    }
-                }
-            }
-        }
-
-        /// <summary>Create a new tile for the target map.</summary>
-        /// <param name="sourceTile">The source tile to copy.</param>
-        /// <param name="targetLayer">The target layer.</param>
-        /// <param name="targetSheet">The target tilesheet.</param>
-        private Tile CreateTile(Tile sourceTile, Layer targetLayer, TileSheet targetSheet)
-        {
-            switch (sourceTile)
-            {
-                case StaticTile _:
-                    return new StaticTile(targetLayer, targetSheet, sourceTile.BlendMode, sourceTile.TileIndex);
-
-                case AnimatedTile animatedTile:
-                    {
-                        StaticTile[] tileFrames = new StaticTile[animatedTile.TileFrames.Length];
-                        for (int frame = 0; frame < animatedTile.TileFrames.Length; ++frame)
-                        {
-                            StaticTile frameTile = animatedTile.TileFrames[frame];
-                            tileFrames[frame] = new StaticTile(targetLayer, targetSheet, frameTile.BlendMode, frameTile.TileIndex);
-                        }
-
-                        return new AnimatedTile(targetLayer, tileFrames, animatedTile.FrameInterval);
-                    }
-
-                default: // null or unhandled type
-                    return null;
-            }
-        }
-
-        /// <summary>Normalize a map tilesheet path for comparison. This value should *not* be used as the actual tilesheet path.</summary>
-        /// <param name="path">The path to normalize.</param>
-        private string NormalizeTilesheetPathForComparison(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path))
-                return string.Empty;
-
-            path = PathUtilities.NormalizeAssetName(path);
-            if (path.StartsWith($"Maps{PathUtilities.PreferredAssetSeparator}", StringComparison.OrdinalIgnoreCase))
-                path = path.Substring($"Maps{PathUtilities.PreferredAssetSeparator}".Length);
-            if (path.EndsWith(".png", StringComparison.OrdinalIgnoreCase))
-                path = path.Substring(0, path.Length - 4);
-
-            return path;
         }
     }
 }
