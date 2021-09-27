@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
 
@@ -9,8 +10,14 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>A lookup cache of configurations by location key.</summary>
+        private readonly IDictionary<string, PerLocationConfig> ConfigCache = new Dictionary<string, PerLocationConfig>();
+
         /// <summary>The underlying mod configuration.</summary>
         private readonly ModConfig Config;
+
+        /// <summary>Whether there's only one location config defined and it's for the <c>*</c> key.</summary>
+        private readonly bool OnlyHasGlobal;
 
 
         /*********
@@ -21,6 +28,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         public LocationConfigManager(ModConfig config)
         {
             this.Config = config;
+            this.OnlyHasGlobal = config.InLocations?.Count == 1 && config.InLocations.Keys.Single() == "*";
         }
 
         /// <summary>Whether any of the locations override tile tillability.</summary>
@@ -39,16 +47,26 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         /// <param name="location">The location.</param>
         public PerLocationConfig GetForLocation(GameLocation location)
         {
-            if (location?.Name is null || this.Config.InLocations is null)
+            // shortcut for common cases
+            if (this.Config.InLocations is null)
                 return null;
+            if (this.OnlyHasGlobal)
+                return this.Config.InLocations["*"];
 
-            return
-                (
-                    from entry in this.Config.InLocations
-                    where this.AppliesTo(entry.Key, location)
-                    select entry.Value
-                )
-                .LastOrDefault();
+            // get config with caching
+            string cacheKey = $"{location.NameOrUniqueName}|{location.IsOutdoors}|{location.GetHashCode()}";
+            if (!this.ConfigCache.TryGetValue(cacheKey, out PerLocationConfig config))
+            {
+                this.ConfigCache[cacheKey] = config =
+                    (
+                        from entry in this.Config.InLocations
+                        where this.AppliesTo(entry.Key, location)
+                        select entry.Value
+                    )
+                    .LastOrDefault();
+            }
+
+            return config;
         }
 
         /// <summary>Get the configuration that applies for a given location, if any.</summary>
