@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
@@ -18,7 +19,25 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
             }
         };
 
-        /// <summary>Whether to allow hoeing anywhere.</summary>
-        public ModConfigForceTillable ForceTillable { get; set; } = new ModConfigForceTillable();
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            this.InLocations ??= new Dictionary<string, PerLocationConfig>();
+
+            foreach (var entry in this.InLocations.Values)
+            {
+                entry.ForceTillable ??= new ModConfigForceTillable
+                {
+                    Dirt = true,
+                    Grass = true
+                };
+            }
+        }
     }
 }

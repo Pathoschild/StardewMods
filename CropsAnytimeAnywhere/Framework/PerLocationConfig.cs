@@ -1,5 +1,3 @@
-using StardewValley;
-
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
     /// <summary>Per-location mod configuration.</summary>
@@ -13,5 +11,8 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 
         /// <summary>Whether out-of-season crops grow here too.</summary>
         public bool GrowCropsOutOfSeason { get; set; }
+
+        /// <summary>Whether to allow hoeing anywhere.</summary>
+        public ModConfigForceTillable ForceTillable { get; set; }
     }
 }

@@ -144,7 +144,9 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         private static bool ShouldMakeTillable(GameLocation location, int xTile, int yTile)
         {
             // get tile config
-            var config = LocationPatcher.Config.GetForceTillableConfig();
+            var config = LocationPatcher.Config.TryGetForLocation(location, out PerLocationConfig locationConfig)
+                ? locationConfig.ForceTillable
+                : null;
             if (config?.IsAnyEnabled() != true)
                 return false;
 

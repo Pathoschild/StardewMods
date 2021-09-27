@@ -22,12 +22,12 @@ usual seasons.
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
-You can change these settings:
+You can change these settings per-location:
 
 setting                | default | what it affects
 :--------------------- | :------ | :------------------
-`GrowCrops`            | true    | Per-location, whether crops can grow here.
-`GrowCropsOutOfSeason` | true    | Per-location, whether out-of-season crops grow here too.
+`GrowCrops`            | true    | Whether crops can grow here.
+`GrowCropsOutOfSeason` | true    | Whether out-of-season crops grow here too.
 `ForceTillable`        | dirt, grass | The tile types to make tillable beyond those that would normally be. The available types are `dirt`, `grass`, `stone`, and `other`.
 
 The location keys can be one of `*` (all locations), `Indoors`, `Outdoors`, or an internal location

@@ -2,6 +2,8 @@
 
 # Release notes
 ## Upcoming release
+* You can now configure `ForceTillable` per-location.  
+  _If you previously edited the option, you'll need to reapply your changes for the `*` location._
 * Internal performance optimizations.
 
 ## 1.3.5

@@ -28,28 +28,21 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         public LocationConfigManager(ModConfig config)
         {
             this.Config = config;
-            this.OnlyHasGlobal = config.InLocations?.Count == 1 && config.InLocations.Keys.Single() == "*";
+            this.OnlyHasGlobal = config.InLocations.Count == 1 && config.InLocations.Keys.Single() == "*";
         }
 
         /// <summary>Whether any of the locations override tile tillability.</summary>
         public bool HasTillableOverrides()
         {
-            return this.Config.ForceTillable?.IsAnyEnabled() == true;
-        }
-
-        /// <summary>Get the tiles which should be forced tillable, if any.</summary>
-        public ModConfigForceTillable GetForceTillableConfig()
-        {
-            return this.Config.ForceTillable;
+            return this.Config.InLocations.Values
+                .Any(p => p.ForceTillable.IsAnyEnabled());
         }
 
         /// <summary>Get the location config that applies for a given location name.</summary>
         /// <param name="location">The location.</param>
         public PerLocationConfig GetForLocation(GameLocation location)
         {
-            // shortcut for common cases
-            if (this.Config.InLocations is null)
-                return null;
+            // shortcut for common case
             if (this.OnlyHasGlobal)
                 return this.Config.InLocations["*"];
 
