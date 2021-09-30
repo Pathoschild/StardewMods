@@ -8,7 +8,7 @@
     "generic.yesterday": "hier",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "inconnu",
 
     // generic field values
     "generic.percent": "{{percent}}%",
@@ -31,7 +31,7 @@
     // types
     "type.building": "Bâtiment",
     "type.bush": "arbuste",
-    "type.fruit-tree": "Arbre fruitié",
+    "type.fruit-tree": "Arbre fruitier",
     "type.map-tile": "Case de carte",
     "type.monster": "Monstre",
     "type.player": "Joueur",
@@ -49,7 +49,7 @@
     "friendship-status.friendly": "Ami",
     "friendship-status.dating": "Romance",
     "friendship-status.engaged": "Engagé",
-    "friendship-status.married": "Marrié",
+    "friendship-status.married": "Marié",
     "friendship-status.divorced": "Divorcé",
     "friendship-status.kicked-out": "Rejeté",
 
@@ -134,8 +134,8 @@
     "data.item.topaz-node.description": "A casser pour obtenir de la topaze.",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "Filon d'éclats de braise",
+    "data.item.cinder-shard-node.description": "A casser pour obtenir des éclats de braise.",
     "data.item.copper-node.name": "Filon de cuivre",
     "data.item.copper-node.description": "A casser pour obtenir du minerais de cuivre.",
     "data.item.gold-node.name": "Filon d'or",
@@ -154,7 +154,6 @@
     "data.item.mine-stone.description": "A casser pour obtenir de la pierre avec une chance de charbon.",
 
     // other stones
-    // TODO
     "data.item.clay-stone.name": "Veine d'argile",
     "data.item.clay-stone.description": "A casser pour obtenir de l'argile.",
     "data.item.fossil-stone.name": "Pierre fossile",
@@ -192,15 +191,15 @@
     "location.witchSwamp": "marais de la sorcière",
     "location.woods": "bois secret",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "Île Gingembre - Caldeira",
+    "location.islandEast": "Île Gingembre - Est",
+    "location.islandNorth": "Île Gingembre - Nord",
+    "location.islandSouth": "Île Gingembre - Sud",
+    "location.islandSouthEast": "Île Gingembre - Sud Ouest",
+    "location.islandSouthEastCave": "Île Gingembre - Sud Ouest - Cave",
+    "location.islandWest": "Île Gingembre - Ouest",
+    "location.islandWest.fish-area-1": "Île Gingembre - Est (océan)",
+    "location.islandWest.fish-area-2": "Île Gingembre - Est (étang)",
 
     "location.unknown-fish-area": "{{locationName}} (secteur de pêche {{id}})",
 
@@ -301,7 +300,7 @@
 
     // values
     "bush.growth.summary": "prêt le {{date}}",
-    "bush.schedule.berry": "20% de chance de baies de saumon du 15 au 18 printemps and mûres du 8 au 11 automne.",
+    "bush.schedule.berry": "20% de chance de baies de saumon du 15 au 18 printemps et de mûres du 8 au 11 automne.",
     "bush.schedule.tea": "Fais pousser des feuilles de thé à partie du 22 de chaque saison (sauf en hiver si hors de la serre).",
 
 
@@ -335,8 +334,8 @@
     // labels
     "crop.summary": "Culture",
     "crop.harvest": "Récolte",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "Fertilisé",
+    "crop.watered": "Arrosé",
 
     // values
     "crop.summary.dead": "Cette culture est morte.",
@@ -382,7 +381,7 @@
     "item.needed-for.full-collection": "succès collection complète (1 à donner au musée)",
     "item.needed-for.gourmet-chef": "succès chef gourmet (cuisiner {{recipes}})",
     "item.needed-for.craft-master": "succès maître artisant (fabriquer {{recipes}})",
-    "item.needed-for.quests": "current quests ({{quests}})", // TODO
+    "item.needed-for.quests": "quêtes en cours ({{quests}})",
     "item.sells-to.shipping-box": "bac d'expédition",
     "item.recipes-for-ingredient.entry": "{{name}} (nécessite {{count}})",
     "item.recipes-for-machine.multiple-items": "{{name}} x {{count}}",
@@ -526,7 +525,7 @@
     "npc.child.age.newborn": "nouveau né",
     "npc.child.age.baby": "bébé",
     "npc.child.age.crawler": "marmot",
-    "npc.child.age.toddler": "bambim",
+    "npc.child.age.toddler": "bambin",
 
 
     /*********
@@ -625,7 +624,7 @@
     *********/
     // labels
     "tile.description": "Une case sur la carte. Ceci est affiché car vous avez activé la recherche des cases dans les paramètres.",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "Zone",
     "tile.map-name": "Nom de la carte",
     "tile.tile": "Case",
     "tile.tile-index": "{{layerName}}: index de la case",
@@ -657,7 +656,7 @@
 
     // values
     "tree.name.big-mushroom": "Grand champignon",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "Acajou",
     "tree.name.maple": "Erable",
     "tree.name.oak": "Chêne",
     "tree.name.palm": "Palmier",
