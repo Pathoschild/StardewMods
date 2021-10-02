@@ -191,7 +191,8 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
         /// <param name="min">The minimum value.</param>
         /// <param name="max">The maximum value.</param>
         /// <param name="enable">Whether the field is enabled.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, float> get, Action<TConfig, float> set, float min, float max, bool enable = true)
+        /// <param name="interval">The interval for slider values.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddNumberField(string label, string description, Func<TConfig, float> get, Action<TConfig, float> set, float min, float max, bool enable = true, float interval = 0.1f)
         {
             this.AssertLoaded();
 
@@ -204,7 +205,8 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
                     optionGet: () => get(this.GetConfig()),
                     optionSet: val => set(this.GetConfig(), val),
                     min: min,
-                    max: max
+                    max: max,
+                    interval: interval
                 );
             }
 

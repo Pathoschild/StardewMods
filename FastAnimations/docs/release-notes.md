@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Slider options in [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) now have a smoother increment of 0.1.
+
 ## 1.9.6
 Released 27 March 2021 for SMAPI 3.9.5 or later.
 
