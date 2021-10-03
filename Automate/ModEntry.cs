@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework.Commands;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
@@ -95,7 +96,7 @@ namespace Pathoschild.Stardew.Automate
             helper.Events.World.TerrainFeatureListChanged += this.OnTerrainFeatureListChanged;
 
             // hook commands
-            helper.ConsoleCommands.Add("automate", "Run commands from the Automate mod. Enter 'automate help' for more info.", this.CommandHandler.HandleCommand);
+            this.CommandHandler.RegisterWith(helper.ConsoleCommands);
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");

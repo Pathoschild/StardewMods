@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Refactored console command handling.
+
 ## 1.14.6
 Released 18 September 2021 for SMAPI 3.12.5 or later.
 

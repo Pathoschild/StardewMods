@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Pathoschild.Stardew.Automate.Framework.Models;
+using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 
-namespace Pathoschild.Stardew.Automate.Framework
+namespace Pathoschild.Stardew.Automate.Framework.Commands
 {
-    /// <summary>Handles console commands from players.</summary>
-    internal class CommandHandler
+    /// <summary>A console command which prints a summary of automated machines.</summary>
+    internal class SummaryCommand : BaseCommand
     {
         /*********
         ** Fields
         *********/
-        /// <summary>Writes messages to the console.</summary>
-        private readonly IMonitor Monitor;
-
         /// <summary>The mod configuration.</summary>
         private readonly ModConfig Config;
 
@@ -27,45 +25,28 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="monitor">Writes messages to the console.</param>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="machineManager">Manages machine groups.</param>
-        public CommandHandler(IMonitor monitor, ModConfig config, MachineManager machineManager)
+        public SummaryCommand(IMonitor monitor, ModConfig config, MachineManager machineManager)
+            : base(monitor, "summary")
         {
-            this.Monitor = monitor;
             this.Config = config;
             this.MachineManager = machineManager;
         }
 
-        /// <summary>Handle a console command.</summary>
-        /// <param name="command">The command name entered by the player.</param>
-        /// <param name="args">The command arguments.</param>
-        public void HandleCommand(string command, string[] args)
+        /// <inheritdoc />
+        public override string GetDescription()
         {
-            switch (args.FirstOrDefault())
-            {
-                case "summary":
-                    this.HandleSummary();
-                    break;
-
-                default:
-                    this.HandleHelp();
-                    break;
-            }
+            return @"
+                automate summary
+                   Usage: automate summary
+                   Prints a summary of automated machines.
+            ";
         }
 
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Handle the 'automate help' command.</summary>
-        private void HandleHelp()
-        {
-            this.Monitor.Log("Supported commands:\n- 'automate summary': get a summary of current automated machines.", LogLevel.Info);
-        }
-
-        /// <summary>Handle the 'automate summary' command.</summary>
-        private void HandleSummary()
+        /// <inheritdoc />
+        public override void Handle(string[] args)
         {
             StringBuilder report = new StringBuilder();
             IMachineGroup[] machineGroups = this.MachineManager.GetActiveMachineGroups().ToArray();

@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Automate now rebuilds machine data at the start of each day, to fix edge cases like building upgrades.
+* Refactored console command handling.
 
 ## 1.23.2
 Released 24 July 2021 for SMAPI 3.9.5 or later.
