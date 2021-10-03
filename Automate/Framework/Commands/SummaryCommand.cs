@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Pathoschild.Stardew.Automate.Framework.Commands.Summary;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
@@ -48,8 +48,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         /// <inheritdoc />
         public override void Handle(string[] args)
         {
+            GlobalStats stats = new GlobalStats(this.MachineManager.GetActiveMachineGroups());
             StringBuilder report = new StringBuilder();
-            IMachineGroup[] machineGroups = this.MachineManager.GetActiveMachineGroups().ToArray();
 
             report.AppendLine("\n##########\n## Automate summary\n##########");
 
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
             {
                 // machine groups
                 report.AppendLine(Context.IsWorldReady
-                    ? $"   Found {machineGroups.Length} machine groups in {machineGroups.Length} locations, containing {machineGroups.Sum(p => p.Machines.Length)} automated machines connected to {machineGroups.Sum(p => p.Containers.Length)} containers."
+                    ? $"   Found {stats.MachineGroupCount} machine groups in {stats.Locations.Length} locations, containing {stats.MachineCount} automated machines connected to {stats.ContainerCount} containers."
                     : "   No save loaded."
                 );
 
@@ -105,34 +105,31 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
             if (Context.IsWorldReady)
             {
                 report.AppendLine("Automated machine groups:\n------------------------------");
-                if (machineGroups.Any())
+                if (stats.Locations.Any())
                 {
-                    IGrouping<string, IMachineGroup>[] groupsByLocation = machineGroups
-                        .GroupBy(p => p.LocationKey)
-                        .OrderByDescending(p => p.Key == null)
-                        .ThenBy(p => p.Key)
-                        .ToArray();
-
-                    foreach (var locationGroups in groupsByLocation)
+                    foreach (LocationStats location in stats.Locations)
                     {
-                        bool isJunimoGroup = locationGroups.Key == null;
-                        string label = locationGroups.Key ?? "Machines connected to a Junimo chest";
-
-                        report.AppendLine($"   {label}:");
-                        foreach (IMachineGroup group in locationGroups)
+                        report.AppendLine($"   {location.Name}:");
+                        foreach (GroupStats group in location.MachineGroups)
                         {
-                            var tile = group.Tiles[0];
+                            // show group name
+                            report.AppendLine($"      {group.Name}:");
 
-                            report.AppendLine(isJunimoGroup
-                                ? "      Distributed group:"
-                                : $"      Group at ({tile.X}, {tile.Y}):"
-                            );
+                            // list machines
+                            foreach (GroupMachineStats machineTypeGroup in group.Machines)
+                            {
+                                report.Append($"          {machineTypeGroup.Count} x {machineTypeGroup.Name} (");
+                                report.Append(machineTypeGroup.States.Count == 1
+                                    ? $"{machineTypeGroup.States.First().Key.ToString().ToLower()}" // (done)
+                                    : string.Join(" > ", machineTypeGroup.States.OrderBy(p => p.Key).Select(p => $"{p.Value} {p.Key.ToString().ToLower()}")) // (XX empty > XX processing > XX done)
+                                );
+                                report.AppendLine(")");
+                            }
 
-                            foreach (KeyValuePair<string, int> pair in group.Machines.GroupBy(p => p.MachineTypeID).ToDictionary(p => p.Key, p => p.Count()).OrderByDescending(p => p.Value))
-                                report.AppendLine($"          {pair.Value} x {pair.Key}");
+                            // list containers
+                            foreach (var containerGroup in group.Containers)
+                                report.AppendLine($"          {containerGroup.Count} x {containerGroup.Name} ({containerGroup.FilledSlots}/{containerGroup.TotalSlots} full)");
 
-                            foreach (KeyValuePair<string, int> pair in group.Containers.GroupBy(p => p.Name).ToDictionary(p => p.Key, p => p.Count()).OrderByDescending(p => p.Value))
-                                report.AppendLine($"          {pair.Value} x {pair.Key}");
                             report.AppendLine();
                         }
 
