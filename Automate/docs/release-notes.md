@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Automate now rebuilds machine data at the start of each day, to fix edge cases like building upgrades.
+* Added `GetFilled()` and `GetCapacity()` methods to `IContainer` interface. This affects mods which add custom container types.
 * Refactored console command handling.
 
 ## 1.23.2

@@ -33,5 +33,11 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stack">The item stack to store.</param>
         /// <remarks>If the storage can't hold the entire stack, it should reduce the tracked stack accordingly.</remarks>
         void Store(ITrackedStack stack);
+
+        /// <summary>Get the number of item stacks currently stored in the container.</summary>
+        int GetFilled();
+
+        /// <summary>Get the total number of item stacks that can be stored in the container.</summary>
+        int GetCapacity();
     }
 }
