@@ -97,6 +97,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
                 IAutomationFactory[] customFactories = this.MachineManager.Factory.GetFactories().Where(p => p.GetType() != typeof(AutomationFactory)).ToArray();
                 if (customFactories.Any())
                     report.AppendLine($"   Custom automation factories found: {string.Join(", ", customFactories.Select(p => p.GetType().FullName).OrderBy(p => p))}.");
+
+                // warnings
+                if (this.AnyMachineGroupsBlockedByFullChests(stats))
+                {
+                    report.AppendLine();
+                    report.AppendLine("NOTE: some machine groups have output ready but all their chests are full.");
+                    report.AppendLine("That may cause lag if many machines are blocked.");
+                }
             }
             report.AppendLine();
             report.AppendLine();
@@ -141,6 +149,24 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
             }
 
             this.Monitor.Log(report.ToString(), LogLevel.Info);
+        }
+
+        /// <summary>Get whether any machine groups may be blocked by a full chest.</summary>
+        /// <param name="stats">The global stats to check.</param>
+        private bool AnyMachineGroupsBlockedByFullChests(GlobalStats stats)
+        {
+            foreach (GroupStats group in stats.Locations.SelectMany(p => p.MachineGroups))
+            {
+                bool chestsFull = group.Containers.Sum(p => p.FilledSlots) >= group.Containers.Sum(p => p.TotalSlots);
+                if (!chestsFull)
+                    continue;
+
+                bool hasOutputReady = group.Machines.Any(p => p.States.ContainsKey(MachineState.Done));
+                if (hasOutputReady)
+                    return true;
+            }
+
+            return false;
         }
     }
 }
