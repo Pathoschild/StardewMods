@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 using StardewValley;
 

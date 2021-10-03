@@ -5,6 +5,7 @@ using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Commands.Commands

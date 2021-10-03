@@ -274,8 +274,7 @@ namespace ContentPatcher
                 getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
                 updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)
             );
-            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (_, args) => this.CommandHandler.Handle(args));
-
+            this.CommandHandler.RegisterWith(helper.ConsoleCommands);
 
             // register content packs with Generic Mod Config Menu
             foreach (LoadedContentPack contentPack in contentPacks)

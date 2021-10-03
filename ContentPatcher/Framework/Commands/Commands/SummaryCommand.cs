@@ -8,6 +8,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Locations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Commands;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;

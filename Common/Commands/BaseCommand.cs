@@ -1,6 +1,6 @@
 using StardewModdingAPI;
 
-namespace ContentPatcher.Framework.Commands.Commands
+namespace Pathoschild.Stardew.Common.Commands
 {
     /// <summary>The base implementation for a console command implemented by Content Patcher.</summary>
     internal abstract class BaseCommand : ICommand

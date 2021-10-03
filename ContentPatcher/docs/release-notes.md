@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Refactored console command handling.
+
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.
 
