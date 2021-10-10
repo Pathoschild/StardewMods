@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed error if a mod adds invalid tailoring recipes.
 * Improved translations. Thanks to Lumina (updated French)!
 
 ## 1.35.3
