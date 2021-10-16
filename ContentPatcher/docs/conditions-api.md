@@ -68,7 +68,7 @@ Now that you have access to the API, you can parse conditions.
    ```
 
 2. Call the API to parse the conditions into an `IManagedConditions` wrapper. The `formatVersion`
-   matches the [`Format` field described in the author guide](author-guide.md#common-fields) to
+   matches the [`Format` field described in the author guide](author-guide.md#overview) to
    enable forward compatibility with future versions of Content Patcher.
 
    **Note:** see [_caveats_](#caveats) before calling this API.
