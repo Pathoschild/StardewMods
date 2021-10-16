@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 switch (chest.SpecialChestType)
                 {
                     case Chest.SpecialChestTypes.None:
-                    case Chest.SpecialChestTypes.AutoLoader:
+                    case Chest.SpecialChestTypes.AutoLoader when !chest.modData.ContainsKey("spacechase0.SuperHopper"): // super hopper is used to transfer items between two chests without connecting them to the same group
                     case Chest.SpecialChestTypes.JunimoChest:
                         return new ChestContainer(chest, location, tile);
 

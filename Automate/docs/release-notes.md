@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
-* Automate now rebuilds machine data at the start of each day, to fix edge cases like building upgrades.
-* Added `GetFilled()` and `GetCapacity()` methods to `IContainer` interface. This affects mods which add custom container types.
+* Automate now rescans machines each day to fix edge cases like building upgrades in multiplayer.
+* [Super Hoppers](https://www.nexusmods.com/stardewvalley/mods/9418) are now ignored by Automate to avoid unintended connections.
+* Added `GetFilled()` and `GetCapacity()` methods to the `IContainer` interface. This affects mods which add custom container types.
 * Improved `automate summary` console command:
   * it now shows machine states and chest fullness;
   * it now shows a warning if it detects a common cause of lag.
