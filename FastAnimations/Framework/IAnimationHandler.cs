@@ -1,10 +1,21 @@
-﻿using StardewValley;
+using StardewModdingAPI.Events;
+using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>Takes care of skipping or accelerating an animation.</summary>
     internal interface IAnimationHandler
     {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>Whether the handler must be invoked via <see cref="ISpecializedEvents.UnvalidatedUpdateTicked"/>.</summary>
+        bool NeedsUnvalidatedUpdateTick { get; }
+
+
+        /*********
+        ** Methods
+        *********/
         /// <summary>Get whether the animation is currently active.</summary>
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         bool IsEnabled(int playerAnimationID);
