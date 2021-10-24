@@ -1163,6 +1163,7 @@ If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewval
 installed, they'll be able to configure the mod through an in-game options menu on the title
 screen or the in-game menu.
 
+### Set up configuration
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
 
@@ -1176,8 +1177,8 @@ Available fields for each field:
    `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
    `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
 
-For example: this `content.json` defines a `Material` config field and uses it to change which
-patch is applied. See below for more details.
+### Basic example
+This `content.json` defines a `Material` config field and uses it to change which patch is applied.
 
 ```js
 {
@@ -1219,6 +1220,59 @@ When you run the game, a `config.json` file will appear automatically with text 
 ```
 
 Players can edit it to configure your content pack.
+
+### Translations
+You can [add translation files](https://stardewvalleywiki.com/Modding:Translations) for
+your config field names & descriptions. If the player has [Generic Mod Config
+Menu](https://www.nexusmods.com/stardewvalley/mods/5098) (GMCM) installed, the fields will be shown
+with your translation text (if available).
+
+To do that, create an `i18n/default.json` for your default text. For each field, add any
+combination of these translation keys:
+
+key format                     | description
+:----------------------------- | :----------
+`config.<name>.name`           | The field name.
+`config.<name>.description`    | The field description (shown as a tooltip in GMCM).
+`config.<name>.values.<value>` | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
+
+All translation keys are optional, and they're not case-sensitive. 
+
+For example, let's say your content pack has these files:
+```js
+// content.json
+{
+   "Format": "1.23.0",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood"
+      }
+   }
+}
+
+// i18n/default.json
+{
+   "config.Material.name": "Material",
+   "config.Material.description": "The material style for the billboard background.",
+   "config.Material.values.Wood": "wood",
+   "config.Material.values.Metal": "metal"
+}
+
+// i18n/fr.json
+{
+   "config.Material.name": "Matériel",
+   "config.Material.description": "Le style du matériel pour l'arrière-plan du panneau d'affichage.",
+   "config.Material.values.Wood": "bois",
+   "config.Material.values.Metal": "métal"
+}
+```
+
+Here's how that would look in Generic Mod Config Menu for a French player:
+
+> <img src="screenshots/config-translations.png" width="500" />
+
+See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
 
 ## Randomization
 ### Overview

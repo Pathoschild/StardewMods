@@ -282,6 +282,7 @@ namespace ContentPatcher
                 if (contentPack.Config.Any())
                 {
                     GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(
+                        contentPack: contentPack.ContentPack,
                         modRegistry: this.Helper.ModRegistry,
                         monitor: this.Monitor,
                         manifest: contentPack.Manifest,
