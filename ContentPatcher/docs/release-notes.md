@@ -11,8 +11,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Mod authors can now [translate their config names & descriptions for Generic Mod Config Menu](author-tokens-guide.md#player-config).
-* Updated for Generic Mod Config Menu 1.5.0.
+* Further optimized updates for immutable patches and conditions.
 * Refactored console command handling.
+* Updated for Generic Mod Config Menu 1.5.0.
 * Fixed error when a mod parses conditions which need a token it added.
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.

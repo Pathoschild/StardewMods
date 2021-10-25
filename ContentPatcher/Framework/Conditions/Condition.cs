@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.Conditions
         private readonly ContextualState State = new();
 
         /// <summary>Whether the token represented by <see cref="Name"/> is mutable.</summary>
-        private bool IsTokenMutable;
+        private readonly bool IsTokenMutable;
 
 
         /*********
@@ -80,6 +80,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
+            // skip unneeded updates
+            if (!this.IsMutable && this.Contextuals.WasEverUpdated)
+                return false;
+
             // reset
             bool wasReady = this.IsReady;
             bool wasMatch = this.IsMatch;

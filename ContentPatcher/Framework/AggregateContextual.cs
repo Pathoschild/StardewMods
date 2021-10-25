@@ -27,6 +27,9 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public bool IsReady { get; private set; } = true;
 
+        /// <summary>Get whether the contextuals have ever been updated.</summary>
+        public bool WasEverUpdated { get; private set; }
+
 
         /*********
         ** Accessors
@@ -113,6 +116,7 @@ namespace ContentPatcher.Framework
                     this.IsReady = false;
             }
 
+            this.WasEverUpdated = true;
             return changed || this.IsReady != wasReady;
         }
 
