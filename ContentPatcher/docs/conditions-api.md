@@ -145,6 +145,8 @@ false if the conditions use `Season` and a save isn't loaded yet.
 
 Whether `IsReady` is true, and the conditions all match in the current context.
 
+If there are no conditions (i.e. you parsed an empty dictionary), this is always true.
+
 </td>
 </tr>
 <tr>
