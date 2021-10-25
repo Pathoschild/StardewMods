@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Updated for Generic Mod Config Menu 1.5.0.
 * Refactored console command handling.
 * Fixed error when a mod parses conditions which need a token it added.
+* Fixed error when a mod manifest has dependencies with no ID.
 
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.

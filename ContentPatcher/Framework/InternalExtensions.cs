@@ -165,7 +165,7 @@ namespace ContentPatcher.Framework
                 return true;
 
             // check dependencies
-            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
+            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID?.EqualsIgnoreCase(modID) == true);
             minVersion = dependency?.MinimumVersion;
             return
                 dependency != null
