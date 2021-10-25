@@ -33,10 +33,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current values from <see cref="Values"/>.</summary>
         public InvariantHashSet CurrentValues { get; private set; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.Contextuals.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
 
         /// <summary>Whether the condition matches the current context.</summary>
@@ -72,9 +72,7 @@ namespace ContentPatcher.Framework.Conditions
             return this.Name.EqualsIgnoreCase(type.ToString());
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             // reset
@@ -110,7 +108,7 @@ namespace ContentPatcher.Framework.Conditions
                 || wasMatch != this.IsMatch;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             yield return this.Name;
@@ -118,7 +116,7 @@ namespace ContentPatcher.Framework.Conditions
                 yield return token;
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()

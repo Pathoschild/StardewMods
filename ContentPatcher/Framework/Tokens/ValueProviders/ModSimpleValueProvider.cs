@@ -42,9 +42,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 : Enumerable.Empty<string>();
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
             return this.IsChanged(this.Values, () =>
