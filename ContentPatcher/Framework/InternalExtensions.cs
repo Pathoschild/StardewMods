@@ -156,6 +156,10 @@ namespace ContentPatcher.Framework
             if (manifest == null)
                 return false;
 
+            // self-reference (e.g. mod can use its own tokens)
+            if (manifest.UniqueID.EqualsIgnoreCase(modID))
+                return true;
+
             // check content pack for
             if (manifest.ContentPackFor?.UniqueID?.EqualsIgnoreCase(modID) == true)
                 return true;
