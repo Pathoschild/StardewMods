@@ -951,7 +951,7 @@ namespace ContentPatcher.Framework
                 return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
             // create condition
-            condition = new Condition(name: token.Name, input: keyInputStr, values: values);
+            condition = new Condition(name: token.Name, input: keyInputStr, values: values, isTokenMutable: token.IsMutable);
             if (!tokenParser.Migrator.TryMigrate(condition, out error))
                 return Fail(error, out error, out condition);
 
