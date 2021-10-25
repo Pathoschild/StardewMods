@@ -922,7 +922,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // parse condition key
-                if (lexTokens.Length != 1 || !(lexTokens[0] is LexTokenToken lexToken))
+                if (lexTokens.Length != 1 || lexTokens[0] is not LexTokenToken lexToken)
                     return Fail($"'{name}' isn't a valid token name", out error, out condition);
                 keyLexToken = lexToken;
             }

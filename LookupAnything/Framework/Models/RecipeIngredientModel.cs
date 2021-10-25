@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             // object fields
             if (this.PreservedParentSheetIndex != null || this.PreserveType != null)
             {
-                if (!(item is SObject obj))
+                if (item is not SObject obj)
                     return false;
                 if (this.PreservedParentSheetIndex != null && this.PreservedParentSheetIndex != obj.preservedParentSheetIndex.Value)
                     return false;

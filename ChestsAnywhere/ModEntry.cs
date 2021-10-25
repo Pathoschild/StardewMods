@@ -193,7 +193,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // - When the player changes the items in the chest view, it reopens itself but loses the constructor args (e.g. highlight function).
             if (this.Config.EnableShippingBin && chest.Container is ShippingBinContainer)
             {
-                if (menu is ItemGrabMenu chestMenu && (!chestMenu.showReceivingMenu || !(chestMenu.inventory.highlightMethod?.Target is ShippingBinContainer)))
+                if (menu is ItemGrabMenu chestMenu && (!chestMenu.showReceivingMenu || chestMenu.inventory.highlightMethod?.Target is not ShippingBinContainer))
                 {
                     menu = (ItemGrabMenu)chest.OpenMenu();
                     Game1.activeClickableMenu = this.ForMenuInstance.Value = menu;

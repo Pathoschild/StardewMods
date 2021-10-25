@@ -23,12 +23,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             return
                 Context.IsWorldReady
                 && Game1.player.Sprite.CurrentAnimation != null
-                && (
-                    playerAnimationID == FarmerSprite.milkDown
-                    || playerAnimationID == FarmerSprite.milkLeft
-                    || playerAnimationID == FarmerSprite.milkRight
-                    || playerAnimationID == FarmerSprite.milkUp
-                );
+                && playerAnimationID is FarmerSprite.milkDown or FarmerSprite.milkLeft or FarmerSprite.milkRight or FarmerSprite.milkUp;
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         // parse ID
                         string[] parts = entry.Split(' ');
-                        if (parts.Length < 1 || parts.Length > 3 || !int.TryParse(parts[0], out int id))
+                        if (parts.Length is < 1 or > 3 || !int.TryParse(parts[0], out int id))
                             return null;
 
                         // parse counts

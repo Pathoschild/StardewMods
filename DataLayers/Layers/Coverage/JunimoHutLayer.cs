@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            if (!(location is BuildableGameLocation buildableLocation))
+            if (location is not BuildableGameLocation buildableLocation)
                 return new TileGroup[0];
 
             // get Junimo huts

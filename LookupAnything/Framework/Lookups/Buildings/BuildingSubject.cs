@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 yield return new GenericField(I18n.Building_Animals(), I18n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
 
                 // feed trough
-                if ((building is Barn || building is Coop) && upgradeLevel >= 2)
+                if (building is Barn or Coop && upgradeLevel >= 2)
                     yield return new GenericField(I18n.Building_FeedTrough(), I18n.Building_FeedTrough_Automated());
                 else
                 {

@@ -28,12 +28,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             return
                 Context.IsWorldReady
                 && Game1.player.Sprite.CurrentAnimation != null
-                && (
-                    playerAnimationID == FarmerSprite.harvestItemDown
-                    || playerAnimationID == FarmerSprite.harvestItemLeft
-                    || playerAnimationID == FarmerSprite.harvestItemRight
-                    || playerAnimationID == FarmerSprite.harvestItemUp
-                )
+                && playerAnimationID is FarmerSprite.harvestItemDown or FarmerSprite.harvestItemLeft or FarmerSprite.harvestItemRight or FarmerSprite.harvestItemUp
                 && !this.IsRidingTractor();
         }
 

@@ -589,7 +589,7 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // boots or ring
-            if (item is Boots || item is Ring)
+            if (item is Boots or Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
                 return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));

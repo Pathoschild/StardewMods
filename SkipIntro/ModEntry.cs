@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.SkipIntro
 
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                if (config.SkipTo == Screen.HostCoop || config.SkipTo == Screen.JoinCoop)
+                if (config.SkipTo is Screen.HostCoop or Screen.JoinCoop)
                     config.SkipTo = Screen.Title; // no co-op on Android
             }
 
@@ -208,7 +208,7 @@ namespace Pathoschild.Stardew.SkipIntro
                 case Stage.WaitingForConnection:
                     {
                         // not applicable
-                        if (this.Config.SkipTo != Screen.HostCoop || !(TitleMenu.subMenu is CoopMenu submenu))
+                        if (this.Config.SkipTo != Screen.HostCoop || TitleMenu.subMenu is not CoopMenu submenu)
                             return Stage.None;
 
                         // not connected yet

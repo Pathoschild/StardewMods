@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (started)
             {
                 int eggID = this.Machine.heldObject.Value.ParentSheetIndex;
-                this.Machine.ParentSheetIndex = eggID == 180 || eggID == 182 || eggID == 305
+                this.Machine.ParentSheetIndex = eggID is 180 or 182 or 305
                     ? this.Machine.ParentSheetIndex + 2
                     : this.Machine.ParentSheetIndex + 1;
             }

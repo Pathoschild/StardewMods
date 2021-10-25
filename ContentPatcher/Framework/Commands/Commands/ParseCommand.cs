@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         public override void Handle(string[] args)
         {
             // get token string
-            if (args.Length < 1 || args.Length > 2)
+            if (args.Length is < 1 or > 2)
             {
                 this.Monitor.Log("The 'patch parse' command expects one to two arguments. See 'patch help parse' for more info.", LogLevel.Error);
                 return;

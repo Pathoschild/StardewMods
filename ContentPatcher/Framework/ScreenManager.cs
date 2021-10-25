@@ -79,7 +79,7 @@ namespace ContentPatcher.Framework
         public void OnLoadStageChanged(LoadStage oldStage, LoadStage newStage)
         {
             // add locations
-            if (newStage == LoadStage.CreatedInitialLocations || newStage == LoadStage.SaveAddedLocations)
+            if (newStage is LoadStage.CreatedInitialLocations or LoadStage.SaveAddedLocations)
                 this.CustomLocationManager.Apply(saveLocations: SaveGame.loaded?.locations, gameLocations: Game1.locations);
 
             // update context

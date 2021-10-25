@@ -254,7 +254,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 case Tree tree:
                     if (tree.hasSeed.Value && !tree.tapped.Value)
                     {
-                        bool shouldHarvest = (tree.treeType.Value == Tree.palmTree || tree.treeType.Value == Tree.palmTree2)
+                        bool shouldHarvest = tree.treeType.Value is Tree.palmTree or Tree.palmTree2
                             ? this.Config.HarvestFruitTrees
                             : this.Config.HarvestTreeSeeds;
 

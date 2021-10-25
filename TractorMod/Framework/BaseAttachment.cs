@@ -173,14 +173,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="obj">The world object.</param>
         protected bool IsTwig(SObject obj)
         {
-            return obj?.ParentSheetIndex == 294 || obj?.ParentSheetIndex == 295;
+            return obj?.ParentSheetIndex is 294 or 295;
         }
 
         /// <summary>Get whether a given object is a weed.</summary>
         /// <param name="obj">The world object.</param>
         protected bool IsWeed(SObject obj)
         {
-            return !(obj is Chest) && obj?.Name == "Weeds";
+            return obj is not Chest && obj?.Name == "Weeds";
         }
 
         /// <summary>Remove the specified items from the player inventory.</summary>
@@ -339,7 +339,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (tileObj is BreakableContainer)
                 return tileObj.performToolAction(tool, location);
 
-            if (tileObj?.GetItemType() == ItemType.Object && tileObj.Name == "SupplyCrate" && !(tileObj is Chest) && tileObj.performToolAction(tool, location))
+            if (tileObj?.GetItemType() == ItemType.Object && tileObj.Name == "SupplyCrate" && tileObj is not Chest && tileObj.performToolAction(tool, location))
             {
                 tileObj.performRemoveAction(tile, location);
                 Game1.currentLocation.Objects.Remove(tile);

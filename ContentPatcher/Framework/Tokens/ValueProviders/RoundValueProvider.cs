@@ -153,7 +153,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             // parse parts
             string[] args = input.PositionalArgs;
-            if (args.Length < 1 || args.Length > 3)
+            if (args.Length is < 1 or > 3)
             {
                 parseError = $"input '{input.TokenString}' must have 1-3 comma-separated arguments.";
                 return false;

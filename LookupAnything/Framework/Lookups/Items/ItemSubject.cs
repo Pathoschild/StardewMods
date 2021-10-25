@@ -725,7 +725,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield break;
 
             // avoid false positives
-            if (item.bigCraftable.Value || item is Cask || item is Fence || item is Furniture || item is IndoorPot || item is Sign || item is Torch || item is Wallpaper)
+            if (item.bigCraftable.Value || item is Cask or Fence or Furniture or IndoorPot or Sign or Torch or Wallpaper)
                 yield break; // avoid false positives
 
             // get community center
@@ -872,7 +872,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             return
                 this.Context == ObjectContext.World
                 && this.Target is SObject
-                && !(this.Target is Chest)
+                && this.Target is not Chest
                 && this.Name == "Stone";
         }
     }
