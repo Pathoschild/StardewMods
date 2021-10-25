@@ -32,6 +32,8 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
+            var defaultConfig = new ModConfig();
+
             // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)
@@ -41,129 +43,128 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
             const int minSpeed = 1;
             const int maxSpeed = 20;
             menu
-                .RegisterConfig(canConfigureInGame: true)
+                .Register()
 
-                // main options
-                .AddLabel("General Options")
+                .AddSectionTitle(I18n.Config_GeneralOptions)
                 .AddCheckbox(
-                    label: "Disable eat/drink prompt",
-                    description: "Whether to skip the confirmation prompt asking if you really want to eat/drink something.",
+                    name: I18n.Config_DisableEatPrompt_Name,
+                    tooltip: I18n.Config_DisableEatPrompt_Tooltip,
                     get: config => config.DisableEatAndDrinkConfirmation,
                     set: (config, value) => config.DisableEatAndDrinkConfirmation = value
                 )
 
-                .AddLabel("Player Animation Speeds")
+                .AddSectionTitle(I18n.Config_AnimationSpeeds)
                 .AddNumberField(
-                    label: "Eat/drink",
-                    description: "How fast you eat and drink. Default 10x.",
+                    name: I18n.Config_EatOrDrink_Name,
+                    tooltip: () => I18n.Config_EatOrDrink_Tooltip(defaultValue: defaultConfig.EatAndDrinkSpeed),
                     get: config => config.EatAndDrinkSpeed,
                     set: (config, value) => config.EatAndDrinkSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Fish",
-                    description: "How fast you cast and reel when fishing (doesn't affect the minigame). Default 1x, suggested 2x.",
+                    name: I18n.Config_Fish_Name,
+                    tooltip: () => I18n.Config_Fish_Tooltip(defaultValue: defaultConfig.FishingSpeed, suggestedValue: 2),
                     get: config => config.FishingSpeed,
                     set: (config, value) => config.FishingSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Harvest",
-                    description: "How fast you harvest crops and forage by hand. Default 3x.",
+                    name: I18n.Config_Harvest_Name,
+                    tooltip: () => I18n.Config_Harvest_Tooltip(defaultValue: defaultConfig.HarvestSpeed),
                     get: config => config.HarvestSpeed,
                     set: (config, value) => config.HarvestSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Milk",
-                    description: "How fast you use the milk pail. Default 5x.",
+                    name: I18n.Config_Milk_Name,
+                    tooltip: () => I18n.Config_Milk_Tooltip(defaultValue: defaultConfig.MilkSpeed),
                     get: config => config.MilkSpeed,
                     set: (config, value) => config.MilkSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Mount/dismount",
-                    description: "How fast you mount/dismount horses (including custom mounts like Tractor Mod). Default 2x.",
+                    name: I18n.Config_Mount_Name,
+                    tooltip: () => I18n.Config_Mount_Tooltip(defaultValue: defaultConfig.MountOrDismountSpeed),
                     get: config => config.MountOrDismountSpeed,
                     set: (config, value) => config.MountOrDismountSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Shear",
-                    description: "How fast you use the shears. Default 5x.",
+                    name: I18n.Config_Shear_Name,
+                    tooltip: () => I18n.Config_Shear_Tooltip(defaultValue: defaultConfig.ShearSpeed),
                     get: config => config.ShearSpeed,
                     set: (config, value) => config.ShearSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Swing tool",
-                    description: "How fast you swing your tools (except weapons & fishing rod). Default 1x, suggested 2x.",
+                    name: I18n.Config_Tool_Name,
+                    tooltip: () => I18n.Config_Tool_Tooltip(defaultValue: defaultConfig.ToolSwingSpeed, suggestedValue: 2),
                     get: config => config.ToolSwingSpeed,
                     set: (config, value) => config.ToolSwingSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Swing weapon",
-                    description: "How fast you swing your weapons. Default 1x, suggested 4x.",
+                    name: I18n.Config_Weapon_Name,
+                    tooltip: () => I18n.Config_Weapon_Tooltip(defaultValue: defaultConfig.WeaponSwingSpeed, suggestedValue: 4),
                     get: config => config.WeaponSwingSpeed,
                     set: (config, value) => config.WeaponSwingSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
 
-                .AddLabel("World Animation Speeds")
+                .AddSectionTitle(I18n.Config_WorldSpeeds)
                 .AddNumberField(
-                    label: "Break geodes",
-                    description: "How fast the blacksmith breaks geodes for you. Default 20x.",
+                    name: I18n.Config_BreakGeodes_Name,
+                    tooltip: () => I18n.Config_BreakGeodes_Tooltip(defaultValue: defaultConfig.BreakGeodeSpeed),
                     get: config => config.BreakGeodeSpeed,
                     set: (config, value) => config.BreakGeodeSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Casino slots",
-                    description: "How fast the casino slots turn. Default 8x.",
+                    name: I18n.Config_CasinoSlots_Name,
+                    tooltip: () => I18n.Config_CasinoSlots_Tooltip(defaultValue: defaultConfig.CasinoSlotsSpeed),
                     get: config => config.CasinoSlotsSpeed,
                     set: (config, value) => config.CasinoSlotsSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Pam's bus",
-                    description: "How fast Pam drives her bus to and from the desert. Default 6x.",
+                    name: I18n.Config_Bus_Name,
+                    tooltip: () => I18n.Config_Bus_Tooltip(defaultValue: defaultConfig.PamBusSpeed),
                     get: config => config.PamBusSpeed,
                     set: (config, value) => config.PamBusSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Tree falling",
-                    description: "How fast trees fall after you chop them down. Default 1x, suggested 3x.",
+                    name: I18n.Config_TreeFall_Name,
+                    tooltip: () => I18n.Config_TreeFall_Tooltip(defaultValue: defaultConfig.TreeFallSpeed, suggestedValue: 3),
                     get: config => config.TreeFallSpeed,
                     set: (config, value) => config.TreeFallSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
 
-                .AddLabel("UI Animation Speeds")
+                .AddSectionTitle(I18n.Config_AnimationSpeeds)
                 .AddNumberField(
-                    label: "Title menu transitions",
-                    description: "How fast the title menu transitions between screens. Default 10x.",
+                    name: I18n.Config_TitleMenu_Name,
+                    tooltip: () => I18n.Config_TitleMenu_Tooltip(defaultValue: defaultConfig.TitleMenuTransitionSpeed),
                     get: config => config.TitleMenuTransitionSpeed,
                     set: (config, value) => config.TitleMenuTransitionSpeed = value,
                     min: minSpeed,
                     max: maxSpeed
                 )
                 .AddNumberField(
-                    label: "Load game blink",
-                    description: "How fast the blinking-slot delay happens after you click a load-save slot. Default 2x.",
+                    name: I18n.Config_LoadGameBlink_Name,
+                    tooltip: () => I18n.Config_LoadGameBlink_Tooltip(defaultValue: defaultConfig.LoadGameBlinkSpeed),
                     get: config => config.LoadGameBlinkSpeed,
                     set: (config, value) => config.LoadGameBlinkSpeed = value,
                     min: minSpeed,

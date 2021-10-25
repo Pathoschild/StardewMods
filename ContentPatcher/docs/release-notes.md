@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Mod authors can now [translate their config names & descriptions for Generic Mod Config Menu](author-tokens-guide.md#player-config).
+* Updated for Generic Mod Config Menu 1.5.0.
 * Refactored console command handling.
 
 ## 1.23.5

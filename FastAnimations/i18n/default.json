@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "General Options",
+
+    "config.disable-eat-prompt.name": "Disable eat/drink prompt",
+    "config.disable-eat-prompt.tooltip": "Whether to skip the confirmation prompt asking if you really want to eat/drink something.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Player Animation Speeds",
+
+    "config.eat-or-drink.name": "Eat/drink",
+    "config.eat-or-drink.tooltip": "How fast you eat and drink. Default {{defaultValue}}x.",
+
+    "config.fish.name": "Fish",
+    "config.fish.tooltip": "How fast you cast and reel when fishing (doesn't affect the minigame). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+
+    "config.harvest.name": "Harvest",
+    "config.harvest.tooltip": "How fast you harvest crops and forage by hand. Default {{defaultValue}}x.",
+
+    "config.milk.name": "Milk",
+    "config.milk.tooltip": "How fast you use the milk pail. Default {{defaultValue}}x.",
+
+    "config.mount.name": "Mount/dismount",
+    "config.mount.tooltip": "How fast you mount/dismount horses (including custom mounts like Tractor Mod). Default {{defaultValue}}x.",
+
+    "config.shear.name": "Shear",
+    "config.shear.tooltip": "How fast you use the shears. Default {{defaultValue}}x.",
+
+    "config.tool.name": "Swing tool",
+    "config.tool.tooltip": "How fast you swing your tools (except weapons & fishing rod). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+
+    "config.weapon.name": "Swing weapon",
+    "config.weapon.tooltip": "How fast you swing your weapons. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "World Animation Speeds",
+
+    "config.break-geodes.name": "Break geodes",
+    "config.break-geodes.tooltip": "How fast the blacksmith breaks geodes for you. Default {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Casino slots",
+    "config.casino-slots.tooltip": "How fast the casino slots turn. Default {{defaultValue}}x.",
+
+    "config.bus.name": "Pam's bus",
+    "config.bus.tooltip": "How fast Pam drives her bus to and from the desert. Default {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Tree falling",
+    "config.tree-fall.tooltip": "How fast trees fall after you chop them down. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "UI Animation Speeds",
+
+    "config.title-menu.name": "Title menu transitions",
+    "config.title-menu.tooltip": "How fast the title menu transitions between screens. Default {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Load game blink",
+    "config.load-game-blink.tooltip": "How fast the blinking-slot delay happens after you click a load-save slot. Default {{defaultValue}}x."
+}

@@ -32,6 +32,8 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
+
             this.Config = this.LoadConfig();
 
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

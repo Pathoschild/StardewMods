@@ -3,7 +3,8 @@
 # Release notes
 ## Upcoming release
 * Improved integration with [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098):
-  * Farm types are now translatable.
+  * All config options are now translatable.
+  * Updated for Generic Mod Config Menu 1.5.0.
 
 ## 1.9.3
 Released 04 September 2021 for SMAPI 3.12.6 or later.

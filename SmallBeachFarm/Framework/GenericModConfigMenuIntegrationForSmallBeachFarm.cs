@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
 
         /// <summary>The IDs and display names for each farm type that can be replaced.</summary>
-        private readonly IDictionary<int, string> FarmChoices;
+        private readonly IDictionary<int, Func<string>> FarmChoices;
 
 
         /*********
@@ -47,39 +47,40 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 
             // register
             menu
-                .RegisterConfig(canConfigureInGame: false) // configuring in-game would have unintended effects like small beach farm logic being half-applied
+                .Register(titleScreenOnly: true) // configuring in-game would have unintended effects like small beach farm logic being half-applied
 
                 .AddCheckbox(
-                    label: "Add Campfire",
-                    description: "Whether to add a functional campfire in front of the farmhouse.",
+                    name: I18n.Config_Campfire_Name,
+                    tooltip: I18n.Config_Campfire_Tooltip,
                     get: config => config.AddCampfire,
                     set: (config, value) => config.AddCampfire = value
                 )
                 .AddCheckbox(
-                    label: "Add Islands",
-                    description: "Whether to add ocean islands with extra land area.",
+                    name: I18n.Config_Islands_Name,
+                    tooltip: I18n.Config_Islands_Tooltip,
                     get: config => config.EnableIslands,
                     set: (config, value) => config.EnableIslands = value
                 )
                 .AddCheckbox(
-                    label: "Play Beach Sounds",
-                    description: "Use the beach's background music (i.e. wave sounds) on the beach farm.",
+                    name: I18n.Config_BeachSounds_Name,
+                    tooltip: I18n.Config_BeachSounds_Tooltip,
                     get: config => config.UseBeachMusic,
                     set: (config, value) => config.UseBeachMusic = value
                 )
                 .AddDropdown(
-                    label: "Replace Farm Type",
-                    description: "The farm layout to replace.",
-                    get: config => this.GetFarmName(config.ReplaceFarmID),
-                    set: (config, value) => config.ReplaceFarmID = this.GetFarmID(value, defaultValue: new ModConfig().ReplaceFarmID),
-                    choices: this.FarmChoices.Values.OrderBy(p => p).ToArray()
+                    name: I18n.Config_FarmType_Name,
+                    tooltip: I18n.Config_FarmType_Tooltip,
+                    get: config => config.ReplaceFarmID.ToString(),
+                    set: (config, value) => config.ReplaceFarmID = int.Parse(value),
+                    allowedValues: this.FarmChoices.OrderBy(p => p.Value()).Select(p => p.Key.ToString()).ToArray(),
+                    formatAllowedValue: value => this.GetFarmName(int.Parse(value))
                 );
         }
 
         /// <summary>Get the IDs and display names for each farm type that can be replaced.</summary>
-        private IDictionary<int, string> GetFarmNamesById()
+        private IDictionary<int, Func<string>> GetFarmNamesById()
         {
-            Dictionary<int, string> farmNamesById = new();
+            Dictionary<int, Func<string>> farmNamesById = new();
 
             foreach (int id in new[] { Farm.default_layout, Farm.riverlands_layout, Farm.forest_layout, Farm.mountains_layout, Farm.combat_layout, Farm.fourCorners_layout, Farm.beach_layout })
             {
@@ -95,7 +96,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     _ => throw new InvalidOperationException($"Unexpected farm ID {id}.")
                 };
 
-                farmNamesById[id] = Game1.content.LoadString(@$"Strings\UI:{translationKey}").Split('_')[0];
+                farmNamesById[id] = () => Game1.content.LoadString(@$"Strings\UI:{translationKey}").Split('_')[0];
             }
             return farmNamesById;
         }
@@ -104,24 +105,10 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         /// <param name="id">The farm ID.</param>
         private string GetFarmName(int id)
         {
-            if (this.FarmChoices.TryGetValue(id, out string name))
-                return name;
+            if (this.FarmChoices.TryGetValue(id, out Func<string> getName))
+                return getName();
 
-            return null;
-        }
-
-        /// <summary>Get the ID for a farm type.</summary>
-        /// <param name="name">The farm name.</param>
-        /// <param name="defaultValue">The default ID to return if no match is found.</param>
-        private int GetFarmID(string name, int defaultValue = -1)
-        {
-            foreach (var pair in this.FarmChoices)
-            {
-                if (pair.Value == name)
-                    return pair.Key;
-            }
-
-            return defaultValue;
+            return id.ToString();
         }
     }
 }

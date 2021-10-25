@@ -51,6 +51,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
+
             // read data
             this.Data = this.Helper.Data.ReadJsonFile<ModData>("assets/data.json");
             {

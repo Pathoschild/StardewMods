@@ -38,6 +38,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
+            var defaultConfig = new ModConfig();
+
             // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)
@@ -45,394 +47,394 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             // register
             menu
-                .RegisterConfig(canConfigureInGame: true)
+                .Register()
 
                 // main options
-                .AddLabel("Main Options")
+                .AddSectionTitle(I18n.Config_MainOptions)
                 .AddNumberField(
-                    label: "Distance",
-                    description: "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default 1; a value of 15 covers most of the visible screen, and higher values may negatively impact game performance.",
+                    name: I18n.Config_Distance_Name,
+                    tooltip: () => I18n.Config_Distance_Tooltip(defaultValue: defaultConfig.Distance, maxRecommendedValue: 15),
                     get: config => config.Distance,
                     set: (config, value) => config.Distance = value,
                     min: 1,
                     max: 16
                 )
                 .AddNumberField(
-                    label: "Tractor Speed",
-                    description: "The speed modifier when riding a tractor. Default -2.",
+                    name: I18n.Config_Speed_Name,
+                    tooltip: () => I18n.Config_Speed_Tooltip(defaultValue: defaultConfig.TractorSpeed),
                     get: config => config.TractorSpeed,
                     set: (config, value) => config.TractorSpeed = value,
                     min: -5,
                     max: 10
                 )
                 .AddNumberField(
-                    label: "Magnetic Radius",
-                    description: "The item magnetism amount (higher values attract items from father away). Default 384.",
+                    name: I18n.Config_MagneticRadius_Name,
+                    tooltip: () => I18n.Config_MagneticRadius_Tooltip(defaultConfig.MagneticRadius),
                     get: config => config.MagneticRadius,
                     set: (config, value) => config.MagneticRadius = value,
                     min: 0,
                     max: 1000
                 )
                 .AddNumberField(
-                    label: "Build Price",
-                    description: "The gold price to buy a tractor garage. Default 150,000g.",
+                    name: I18n.Config_BuildPrice_Name,
+                    tooltip: () => I18n.Config_BuildPrice_Tooltip(defaultValue: defaultConfig.BuildPrice),
                     get: config => config.BuildPrice,
                     set: (config, value) => config.BuildPrice = value,
                     min: 0,
                     max: 1_000_000
                 )
                 .AddCheckbox(
-                    label: "Can Summon Without Garage",
-                    description: "Whether you can summon a temporary tractor without building a garage first. Default false.",
+                    name: I18n.Config_CanSummonWithoutGarage_Name,
+                    tooltip: I18n.Config_CanSummonWithoutGarage_Tooltip,
                     get: config => config.CanSummonWithoutGarage,
                     set: (config, value) => config.CanSummonWithoutGarage = value
                 )
                 .AddCheckbox(
-                    label: "Invincible on Tractor",
-                    description: "Whether you should be immune to damage from any source when riding the tractor. Default true.",
+                    name: I18n.Config_InvincibleOnTractor_Name,
+                    tooltip: I18n.Config_InvincibleOnTractor_Tooltip,
                     get: config => config.InvincibleOnTractor,
                     set: (config, value) => config.InvincibleOnTractor = value
                 )
                 .AddCheckbox(
-                    label: "Highlight Radius (Debug)",
-                    description: "Whether to highlight the tractor radius when riding one, to help visualize the distance option. Default false.",
+                    name: I18n.Config_HighlightRadius_Name,
+                    tooltip: I18n.Config_HighlightRadius_Tooltip,
                     get: config => config.HighlightRadius,
                     set: (config, value) => config.HighlightRadius = value
                 )
 
                 // controls
-                .AddLabel("Controls", "Configure the key bindings for the tractor.")
+                .AddSectionTitle(I18n.Config_Controls)
                 .AddKeyBinding(
-                    label: "Summon Tractor",
-                    description: "Warp an available tractor to your position. Default backspace.",
+                    name: I18n.Config_SummonKey_Name,
+                    tooltip: I18n.Config_SummonKey_Tooltip,
                     get: config => config.Controls.SummonTractor,
                     set: (config, value) => config.Controls.SummonTractor = value
                 )
                 .AddKeyBinding(
-                    label: "Dismiss Tractor",
-                    description: "Return the tractor you're riding to its home.",
+                    name: I18n.Config_DismissKey_Name,
+                    tooltip: I18n.Config_DismissKey_Tooltip,
                     get: config => config.Controls.DismissTractor,
                     set: (config, value) => config.Controls.DismissTractor = value
                 )
                 .AddKeyBinding(
-                    label: "Hold to Activate",
-                    description: "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+                    name: I18n.Config_HoldToActivateKey_Name,
+                    tooltip: I18n.Config_HoldToActivateKey_Tooltip,
                     get: config => config.Controls.HoldToActivate,
                     set: (config, value) => config.Controls.HoldToActivate = value
                 )
 
                 // axe
-                .AddLabel("Axe Features")
+                .AddSectionTitle(I18n.Config_Axe)
                 .AddCheckbox(
-                    label: "Chop Fruit Trees (Seeds)",
-                    description: "Whether the axe clears fruit tree seeds. Default false.",
+                    name: I18n.Config_ChopFruitTreesSeeds_Name,
+                    tooltip: I18n.Config_ChopFruitTreesSeeds_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearFruitTreeSeeds,
                     set: (config, value) => config.StandardAttachments.Axe.ClearFruitTreeSeeds = value
                 )
                 .AddCheckbox(
-                    label: "Chop Fruit Trees (Saplings)",
-                    description: "Whether the axe clears fruit trees which aren't fully grown. Default false.",
+                    name: I18n.Config_ChopFruitTreesSaplings_Name,
+                    tooltip: I18n.Config_ChopFruitTreesSaplings_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearFruitTreeSaplings,
                     set: (config, value) => config.StandardAttachments.Axe.ClearFruitTreeSaplings = value
                 )
                 .AddCheckbox(
-                    label: "Chop Fruit Trees (Grown)",
-                    description: "Whether the axe cuts fully-grown fruit trees. Default false.",
+                    name: I18n.Config_ChopFruitTreesGrown_Name,
+                    tooltip: I18n.Config_ChopFruitTreesGrown_Tooltip,
                     get: config => config.StandardAttachments.Axe.CutGrownFruitTrees,
                     set: (config, value) => config.StandardAttachments.Axe.CutGrownFruitTrees = value
                 )
                 .AddCheckbox(
-                    label: "Chop Trees (Seeds)",
-                    description: "Whether the axe clears non-fruit tree seeds. Default false.",
+                    name: I18n.Config_ChopTreesSeeds_Name,
+                    tooltip: I18n.Config_ChopTreesSeeds_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearTreeSeeds,
                     set: (config, value) => config.StandardAttachments.Axe.ClearTreeSeeds = value
                 )
                 .AddCheckbox(
-                    label: "Chop Trees (Saplings)",
-                    description: "Whether the axe clears non-fruit trees which aren't fully grown. Default false.",
+                    name: I18n.Config_ChopTreesSaplings_Name,
+                    tooltip: I18n.Config_ChopTreesSaplings_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearTreeSaplings,
                     set: (config, value) => config.StandardAttachments.Axe.ClearTreeSaplings = value
                 )
                 .AddCheckbox(
-                    label: "Chop Trees (Grown)",
-                    description: "Whether the axe clears fully-grown non-fruit trees. Default false.",
+                    name: I18n.Config_ChopTreesGrown_Name,
+                    tooltip: I18n.Config_ChopTreesGrown_Tooltip,
                     get: config => config.StandardAttachments.Axe.CutGrownTrees,
                     set: (config, value) => config.StandardAttachments.Axe.CutGrownTrees = value
                 )
                 .AddCheckbox(
-                    label: "Chop Bushes",
-                    description: "Whether the axe cuts choppable bushes. Default false.",
+                    name: I18n.Config_ChopBushes_Name,
+                    tooltip: I18n.Config_ChopBushes_Tooltip,
                     get: config => config.StandardAttachments.Axe.CutBushes,
                     set: (config, value) => config.StandardAttachments.Axe.CutBushes = value
                 )
                 .AddCheckbox(
-                    label: "Chop Crops (Dead)",
-                    description: "Whether the axe clears dead crops. Default true.",
+                    name: I18n.Config_ClearDeadCrops_Name,
+                    tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearDeadCrops,
                     set: (config, value) => config.StandardAttachments.Axe.ClearDeadCrops = value
                 )
                 .AddCheckbox(
-                    label: "Chop Crops (Live)",
-                    description: "Whether the axe clears live crops. Default false.",
+                    name: I18n.Config_ClearLiveCrops_Name,
+                    tooltip: I18n.Config_ClearLiveCrops_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearLiveCrops,
                     set: (config, value) => config.StandardAttachments.Axe.ClearLiveCrops = value
                 )
                 .AddCheckbox(
-                    label: "Chop Crops (Giant)",
-                    description: "Whether the axe cuts giant crops. Default true.",
+                    name: I18n.Config_HarvestGiantCrops_Name,
+                    tooltip: I18n.Config_HarvestGiantCrops_Tooltip,
                     get: config => config.StandardAttachments.Axe.CutGiantCrops,
                     set: (config, value) => config.StandardAttachments.Axe.CutGiantCrops = value
                 )
                 .AddCheckbox(
-                    label: "Chop Debris",
-                    description: "Whether the axe clears debris like weeds, twigs, giant stumps, and fallen logs. Default true.",
+                    name: I18n.Config_ClearDebris_Name,
+                    tooltip: I18n.Config_ClearDebris_Tooltip,
                     get: config => config.StandardAttachments.Axe.ClearDebris,
                     set: (config, value) => config.StandardAttachments.Axe.ClearDebris = value
                 )
 
                 // hoe
-                .AddLabel("Hoe Features")
+                .AddSectionTitle(I18n.Config_Hoe)
                 .AddCheckbox(
-                    label: "Till Dirt",
-                    description: "Whether the hoe tills empty dirt. Default true.",
+                    name: I18n.Config_TillDirt_Name,
+                    tooltip: I18n.Config_TillDirt_Tooltip,
                     get: config => config.StandardAttachments.Hoe.TillDirt,
                     set: (config, value) => config.StandardAttachments.Hoe.TillDirt = value
                 )
                 .AddCheckbox(
-                    label: "Clear Weeds",
-                    description: "Whether the hoe clears weeds. Default true.",
+                    name: I18n.Config_ClearWeeds_Name,
+                    tooltip: I18n.Config_ClearWeeds_Tooltip,
                     get: config => config.StandardAttachments.Hoe.ClearWeeds,
                     set: (config, value) => config.StandardAttachments.Hoe.ClearWeeds = value
                 )
                 .AddCheckbox(
-                    label: "Dig Artifact Spots",
-                    description: "Whether the hoe digs artifact spots. Default true.",
+                    name: I18n.Config_DigArtifactSpots_Name,
+                    tooltip: I18n.Config_DigArtifactSpots_Tooltip,
                     get: config => config.StandardAttachments.Hoe.DigArtifactSpots,
                     set: (config, value) => config.StandardAttachments.Hoe.DigArtifactSpots = value
                 )
 
                 // pickaxe
-                .AddLabel("Pickaxe Features")
+                .AddSectionTitle(I18n.Config_Pickaxe)
                 .AddCheckbox(
-                    label: "Clear Debris",
-                    description: "Whether the pickaxe clears debris. Default true.",
+                    name: I18n.Config_ClearDebris_Name,
+                    tooltip: I18n.Config_ClearDebris_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearDebris,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearDebris = value
                 )
                 .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether the pickaxe clears dead crops. Default true.",
+                    name: I18n.Config_ClearDeadCrops_Name,
+                    tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearDeadCrops,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearDeadCrops = value
                 )
                 .AddCheckbox(
-                    label: "Clear Tilled Dirt",
-                    description: "Whether the pickaxe clears tilled dirt. Default true.",
+                    name: I18n.Config_ClearTilledDirt_Name,
+                    tooltip: I18n.Config_ClearTilledDirt_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearDirt,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearDirt = value
                 )
                 .AddCheckbox(
-                    label: "Clear Weeds",
-                    description: "Whether the pickaxe clears weeds. Default true.",
+                    name: I18n.Config_ClearWeeds_Name,
+                    tooltip: I18n.Config_ClearWeeds_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearWeeds,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearWeeds = value
                 )
                 .AddCheckbox(
-                    label: "Break Flooring",
-                    description: "Whether the pickaxe breaks placed flooring. Default false.",
+                    name: I18n.Config_BreakFlooring_Name,
+                    tooltip: I18n.Config_BreakFlooring_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearFlooring,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearFlooring = value
                 )
                 .AddCheckbox(
-                    label: "Break Boulders and Meteorites",
-                    description: "Whether the pickaxe breaks boulders and meteorites. Default true.",
+                    name: I18n.Config_BreakBouldersAndMeteorites_Name,
+                    tooltip: I18n.Config_BreakBouldersAndMeteorites_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearBouldersAndMeteorites,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearBouldersAndMeteorites = value
                 )
                 .AddCheckbox(
-                    label: "Break Objects",
-                    description: "Whether the pickaxe breaks placed objects. Default false.",
+                    name: I18n.Config_BreakObjects_Name,
+                    tooltip: I18n.Config_BreakObjects_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.ClearObjects,
                     set: (config, value) => config.StandardAttachments.PickAxe.ClearObjects = value
                 )
                 .AddCheckbox(
-                    label: "Break Mine Containers",
-                    description: "Whether the pickaxe breaks containers in the mine. Default true.",
+                    name: I18n.Config_BreakMineContainers_Name,
+                    tooltip: I18n.Config_BreakMineContainers_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.BreakMineContainers,
                     set: (config, value) => config.StandardAttachments.PickAxe.BreakMineContainers = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Mine Spawns",
-                    description: "Whether the pickaxe harvests spawned mine items like quartz and frozen tears.",
+                    name: I18n.Config_HarvestMineSpawns_Name,
+                    tooltip: I18n.Config_HarvestMineSpawns_Tooltip,
                     get: config => config.StandardAttachments.PickAxe.HarvestMineSpawns,
                     set: (config, value) => config.StandardAttachments.PickAxe.HarvestMineSpawns = value
                 )
 
                 // scythe
-                .AddLabel("Scythe Features")
+                .AddSectionTitle(I18n.Config_Scythe)
                 .AddCheckbox(
-                    label: "Harvest Crops",
-                    description: "Whether the scythe harvests crops. Default true.",
+                    name: I18n.Config_HarvestCrops_Name,
+                    tooltip: I18n.Config_HarvestCrops_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestCrops,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestCrops = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Flowers",
-                    description: "Whether the scythe harvests flowers. Default true.",
+                    name: I18n.Config_HarvestFlowers_Name,
+                    tooltip: I18n.Config_HarvestFlowers_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestFlowers,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestFlowers = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Forage",
-                    description: "Whether the scythe harvests forage. Default true.",
+                    name: I18n.Config_HarvestForage_Name,
+                    tooltip: I18n.Config_HarvestForage_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestForage,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestForage = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Fruit Trees",
-                    description: "Whether the scythe harvests fruit trees. Default true.",
+                    name: I18n.Config_HarvestFruitTrees_Name,
+                    tooltip: I18n.Config_HarvestFruitTrees_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestFruitTrees,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestFruitTrees = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Machines",
-                    description: "Whether the scythe collects machine output. Default false.",
+                    name: I18n.Config_HarvestMachines_Name,
+                    tooltip: I18n.Config_HarvestMachines_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestMachines,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestMachines = value
                 )
                 .AddCheckbox(
-                    label: "Harvest Grass",
-                    description: "Whether the scythe cuts grass. If you have free silo space, this gives you hay as usual. Default true.",
+                    name: I18n.Config_HarvestGrass_Name,
+                    tooltip: I18n.Config_HarvestGrass_Tooltip,
                     get: config => config.StandardAttachments.Scythe.HarvestGrass,
                     set: (config, value) => config.StandardAttachments.Scythe.HarvestGrass = value
                 )
                 .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether the scythe clears dead crops. Default true.",
+                    name: I18n.Config_ClearDeadCrops_Name,
+                    tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                     get: config => config.StandardAttachments.Scythe.ClearDeadCrops,
                     set: (config, value) => config.StandardAttachments.Scythe.ClearDeadCrops = value
                 )
                 .AddCheckbox(
-                    label: "Clear Weeds",
-                    description: "Whether the scythe clears weeds. Default true.",
+                    name: I18n.Config_ClearWeeds_Name,
+                    tooltip: I18n.Config_ClearWeeds_Tooltip,
                     get: config => config.StandardAttachments.Scythe.ClearWeeds,
                     set: (config, value) => config.StandardAttachments.Scythe.ClearWeeds = value
                 )
 
                 // melee blunt weapons
-                .AddLabel("Melee Blunt Weapons Features")
+                .AddSectionTitle(I18n.Config_MeleeBlunt)
                 .AddCheckbox(
-                    label: "Attack Monsters",
-                    description: "Whether melee blunt weapons attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    name: I18n.Config_AttackMonsters_Name,
+                    tooltip: I18n.Config_AttackMonsters_Tooltip,
                     get: config => config.StandardAttachments.MeleeBlunt.AttackMonsters,
                     set: (config, value) => config.StandardAttachments.MeleeBlunt.AttackMonsters = value
                 )
                 .AddCheckbox(
-                    label: "Break Mine Containers",
-                    description: "Whether melee blunt weapons break containers in the mine. Default true.",
+                    name: I18n.Config_BreakMineContainers_Name,
+                    tooltip: I18n.Config_BreakMineContainers_Tooltip,
                     get: config => config.StandardAttachments.MeleeBlunt.BreakMineContainers,
                     set: (config, value) => config.StandardAttachments.MeleeBlunt.BreakMineContainers = value
                 )
 
                 // melee daggers
-                .AddLabel("Melee Dagger Features")
+                .AddSectionTitle(I18n.Config_MeleeDagger)
                 .AddCheckbox(
-                    label: "Attack Monsters",
-                    description: "Whether melee daggers attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    name: I18n.Config_AttackMonsters_Name,
+                    tooltip: I18n.Config_AttackMonsters_Tooltip,
                     get: config => config.StandardAttachments.MeleeDagger.AttackMonsters,
                     set: (config, value) => config.StandardAttachments.MeleeDagger.AttackMonsters = value
                 )
                 .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether melee daggers clear dead crops. Default true.",
+                    name: I18n.Config_ClearDeadCrops_Name,
+                    tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                     get: config => config.StandardAttachments.MeleeDagger.ClearDeadCrops,
                     set: (config, value) => config.StandardAttachments.MeleeDagger.ClearDeadCrops = value
                 )
                 .AddCheckbox(
-                    label: "Break Mine Containers",
-                    description: "Whether melee daggers break containers in the mine. Default true.",
+                    name: I18n.Config_BreakMineContainers_Name,
+                    tooltip: I18n.Config_BreakMineContainers_Tooltip,
                     get: config => config.StandardAttachments.MeleeDagger.BreakMineContainers,
                     set: (config, value) => config.StandardAttachments.MeleeDagger.BreakMineContainers = value
                 )
 
                 // melee sword
-                .AddLabel("Melee Sword Features")
+                .AddSectionTitle(I18n.Config_MeleeSword)
                 .AddCheckbox(
-                    label: "Attack Monsters",
-                    description: "Whether melee swords attack monsters. (This is massively overpowered due to the tractor tool speed.) Default false.",
+                    name: I18n.Config_AttackMonsters_Name,
+                    tooltip: I18n.Config_AttackMonsters_Tooltip,
                     get: config => config.StandardAttachments.MeleeSword.AttackMonsters,
                     set: (config, value) => config.StandardAttachments.MeleeSword.AttackMonsters = value
                 )
                 .AddCheckbox(
-                    label: "Clear Dead Crops",
-                    description: "Whether melee swords clear dead crops. Default true.",
+                    name: I18n.Config_ClearDeadCrops_Name,
+                    tooltip: I18n.Config_ClearDeadCrops_Tooltip,
                     get: config => config.StandardAttachments.MeleeSword.ClearDeadCrops,
                     set: (config, value) => config.StandardAttachments.MeleeSword.ClearDeadCrops = value
                 )
                 .AddCheckbox(
-                    label: "Break Mine Containers",
-                    description: "Whether melee swords break containers in the mine. Default true.",
+                    name: I18n.Config_BreakMineContainers_Name,
+                    tooltip: I18n.Config_BreakMineContainers_Tooltip,
                     get: config => config.StandardAttachments.MeleeSword.BreakMineContainers,
                     set: (config, value) => config.StandardAttachments.MeleeSword.BreakMineContainers = value
                 )
 
                 // other
-                .AddLabel("Other Tools")
+                .AddSectionTitle(I18n.Config_OtherTools)
                 .AddCheckbox(
-                    label: "Enable Milk Pail",
-                    description: "Whether to collect milk from farm animals using the milk pail. Default true.",
+                    name: I18n.Config_MilkPail_Name,
+                    tooltip: I18n.Config_MilkPail_Tooltip,
                     get: config => config.StandardAttachments.MilkPail.Enable,
                     set: (config, value) => config.StandardAttachments.MilkPail.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Shears",
-                    description: "Whether to collect wool from farm animals using the shears. Default true.",
+                    name: I18n.Config_Shears_Name,
+                    tooltip: I18n.Config_Shears_Tooltip,
                     get: config => config.StandardAttachments.Shears.Enable,
                     set: (config, value) => config.StandardAttachments.Shears.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Watering Can",
-                    description: "Whether to water nearby tiles. This doesn't consume water in the watering can. Default true.",
+                    name: I18n.Config_WateringCan_Name,
+                    tooltip: I18n.Config_WateringCan_Tooltip,
                     get: config => config.StandardAttachments.WateringCan.Enable,
                     set: (config, value) => config.StandardAttachments.WateringCan.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Fertilizer",
-                    description: "Whether to apply fertilizer to crops and tilled dirt. Default true.",
+                    name: I18n.Config_Fertilizer_Name,
+                    tooltip: I18n.Config_Fertilizer_Tooltip,
                     get: config => config.StandardAttachments.Fertilizer.Enable,
                     set: (config, value) => config.StandardAttachments.Fertilizer.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Grass Starters",
-                    description: "Whether to plant grass starters. Default true.",
+                    name: I18n.Config_GrassStarters_Name,
+                    tooltip: I18n.Config_GrassStarters_Tooltip,
                     get: config => config.StandardAttachments.GrassStarter.Enable,
                     set: (config, value) => config.StandardAttachments.GrassStarter.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Seeds",
-                    description: "Whether to plant seeds. Default true.",
+                    name: I18n.Config_Seeds_Name,
+                    tooltip: I18n.Config_Seeds_Tooltip,
                     get: config => config.StandardAttachments.Seeds.Enable,
                     set: (config, value) => config.StandardAttachments.Seeds.Enable = value
                 )
                 .AddCheckbox(
-                    label: "Enable Seed Bags",
-                    description: "Whether to plant seeds from the Seed Bag mod. Default true.",
+                    name: I18n.Config_SeedBags_Name,
+                    tooltip: I18n.Config_SeedBags_Tooltip,
                     get: config => config.StandardAttachments.SeedBagMod.Enable,
                     set: (config, value) => config.StandardAttachments.SeedBagMod.Enable = value,
                     enable: this.ModRegistry.IsLoaded(SeedBagAttachment.ModId)
                 )
                 .AddCheckbox(
-                    label: "Enable Slingshot",
-                    description: "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.) Default false.",
+                    name: I18n.Config_Slingshot_Name,
+                    tooltip: I18n.Config_Slingshot_Tooltip,
                     get: config => config.StandardAttachments.Slingshot.Enable,
                     set: (config, value) => config.StandardAttachments.Slingshot.Enable = value
                 )
 
                 // custom tools
-                .AddLabel("Custom Tools")
+                .AddSectionTitle(I18n.Config_CustomTools)
                 .AddTextbox(
-                    label: "Custom Tool Names",
-                    description: "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas.",
+                    name: I18n.Config_CustomToolNames_Name,
+                    tooltip: I18n.Config_CustomToolNames_Tooltip,
                     get: config => string.Join(", ", config.CustomAttachments),
                     set: (config, value) => config.CustomAttachments = value.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(p => p.Trim()).ToArray()
                 );

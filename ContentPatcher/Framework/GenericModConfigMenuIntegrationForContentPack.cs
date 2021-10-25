@@ -71,7 +71,7 @@ namespace ContentPatcher.Framework
             if (!this.ConfigMenu.IsLoaded || !this.Config.Any())
                 return;
 
-            this.ConfigMenu.RegisterConfig(canConfigureInGame: true);
+            this.ConfigMenu.Register();
             foreach (var pair in this.Config)
                 this.AddField(pair.Key, pair.Value);
         }
@@ -97,8 +97,8 @@ namespace ContentPatcher.Framework
             if (!field.AllowValues.Any())
             {
                 this.ConfigMenu.AddTextbox(
-                    label: GetName(),
-                    description: GetDescription(),
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => string.Join(", ", field.Value.ToArray()),
                     set: (_, newValue) =>
                     {
@@ -116,8 +116,8 @@ namespace ContentPatcher.Framework
                 foreach (string value in field.AllowValues)
                 {
                     this.ConfigMenu.AddCheckbox(
-                        label: $"{GetName()}: {GetValueText(value)}",
-                        description: GetDescription(),
+                        name: () => $"{GetName()}: {GetValueText(value)}",
+                        tooltip: GetDescription,
                         get: _ => field.Value.Contains(value),
                         set: (_, selected) =>
                         {
@@ -139,8 +139,8 @@ namespace ContentPatcher.Framework
             else if (!field.AllowBlank && field.IsBoolean())
             {
                 this.ConfigMenu.AddCheckbox(
-                    label: GetName(),
-                    description: GetDescription(),
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => field.Value.Contains(true.ToString()),
                     set: (_, selected) =>
                     {
@@ -158,8 +158,8 @@ namespace ContentPatcher.Framework
 
                 // number slider
                 this.ConfigMenu.AddNumberField(
-                    label: GetName(),
-                    description: GetDescription(),
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
                     set: (_, val) => field.Value = new InvariantHashSet(val.ToString(CultureInfo.InvariantCulture)),
                     min: min,
@@ -175,11 +175,12 @@ namespace ContentPatcher.Framework
                     choices.Insert(0, "");
 
                 this.ConfigMenu.AddDropdown(
-                    label: GetName(),
-                    description: GetDescription(),
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
                     set: (_, newValue) => field.Value = new InvariantHashSet(newValue),
-                    choices.ToArray()
+                    allowedValues: choices.ToArray(),
+                    formatAllowedValue: GetValueText
                 );
             }
         }

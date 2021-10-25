@@ -9,6 +9,16 @@
     <IgnoreModFilePatterns>assets[/\\]paths.png, assets[/\\]spring_(?:beach|island_tilesheet_1|outdoorsTileSheet|town).png</IgnoreModFilePatterns>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+    <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
+    <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />

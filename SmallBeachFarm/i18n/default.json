@@ -1,0 +1,16 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.campfire.name": "Add campfire",
+    "config.campfire.tooltip": "Add a functional campfire in front of the farmhouse.",
+
+    "config.islands.name": "Add islands",
+    "config.islands.tooltip": "Add ocean islands with extra land area.",
+
+    "config.beach-sounds.name": "Play beach sounds",
+    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm.",
+
+    "config.farm-type.name": "Replace farm type",
+    "config.farm-type.tooltip": "The farm layout to replace."
+}

@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Require Horse Flute",
+    "config.require-flute.description": "Whether you need the horse flute item in your inventory to summon a horse. Default false.",
+
+    "config.summon-horse-button.name": "Summon Horse Button",
+    "config.summon-horse-button.description": "The button to press which plays the flute and summons a horse. Default {{defaultValue}}."
+}
