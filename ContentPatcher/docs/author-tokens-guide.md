@@ -544,9 +544,6 @@ The player's heart level with a given NPC. You can specify the character name as
 }
 ```
 
-**Note:** this is only available once the save is fully loaded, so it may not reliably affect
-conditional map spawn logic.
-
 </td>
 <td><a href="#Hearts">#</a></td>
 </tr>
@@ -574,9 +571,6 @@ Dating   | The player gave them a bouquet.
 Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't happened yet.
 Married  | The player married them.
 Divorced | The player married and then divorced them.
-
-**Note:** this is only available once the save is fully loaded, so it may not reliably affect
-conditional map spawn logic.
 
 </td>
 <td><a href="#Relationship">#</a></td>

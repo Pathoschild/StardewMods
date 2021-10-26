@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -40,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.Values, () =>
             {
                 this.Values.Clear();
-                if (this.MarkReady(Context.IsWorldReady))
+                if (this.MarkReady(this.SaveReader.IsReady))
                 {
                     foreach (KeyValuePair<string, Friendship> pair in this.SaveReader.GetFriendships())
                     {
