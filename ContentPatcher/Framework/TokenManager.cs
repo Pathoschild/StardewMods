@@ -28,9 +28,6 @@ namespace ContentPatcher.Framework
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
 
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether the next context update is the first one.</summary>
         private bool IsFirstUpdate = true;
 
@@ -41,8 +38,11 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public int UpdateTick { get; private set; }
 
+        /// <summary>Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</summary>
+        public bool IsSaveParsed { get; set; }
+
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
-        public bool IsBasicInfoLoaded { get; set; }
+        public bool IsSaveBasicInfoLoaded { get; set; }
 
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, InvariantHashSet>[] TokensWithSpecialUpdateRates { get; } = {
@@ -58,12 +58,10 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens, IReflectionHelper reflection)
+        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
         {
             this.InstalledMods = installedMods;
             this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
-            this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
                 this.GlobalContext.Save(modToken);
@@ -171,21 +169,21 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
         {
-            bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
-            var save = new TokenSaveReader(this.Reflection, () => this.IsBasicInfoLoaded);
+            bool NeedsSave() => this.IsSaveParsed;
+            var save = new TokenSaveReader(isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
 
             // date and weather
-            yield return new ConditionTypeValueProvider(ConditionType.Day, () => save.GetDay().ToString(), NeedsBasicInfo, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
-            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, save.GetDayEvent, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => save.GetDayOfWeek().ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
-            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => save.GetDaysPlayed().ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.Season, save.GetSeason, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
-            yield return new ConditionTypeValueProvider(ConditionType.Year, () => save.GetYear().ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Day, () => save.GetDay().ToString(), NeedsSave, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
+            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, save.GetDayEvent, NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => save.GetDayOfWeek().ToString(), NeedsSave, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
+            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => save.GetDaysPlayed().ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.Season, save.GetSeason, NeedsSave, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
+            yield return new ConditionTypeValueProvider(ConditionType.Year, () => save.GetYear().ToString(), NeedsSave);
             yield return new WeatherValueProvider(save);
             yield return new TimeValueProvider(save);
 
             // player
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => player.DailyLuck.ToString(CultureInfo.InvariantCulture), save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => save.GetDailyLuck(player).ToString(CultureInfo.InvariantCulture), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save);
@@ -195,15 +193,15 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save);
-            yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
-            yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => save.GetCurrentLocation()?.IsOutdoors.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationContext, () => ((LocationContext?)save.GetCurrentLocation()?.GetLocationContext())?.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => save.GetCurrentLocation()?.Name, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationUniqueName, () => save.GetCurrentLocation()?.NameOrUniqueName, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (save.GetCurrentPlayer().IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => save.GetCurrentPlayer().Name, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsSave, allowedValues: Enum.GetNames(typeof(WalletItem)));
+            yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => save.GetCurrentLocation()?.IsOutdoors.ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.LocationContext, () => save.GetCurrentLocationContext()?.ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => save.GetCurrentLocation()?.Name, NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.LocationUniqueName, () => save.GetCurrentLocation()?.NameOrUniqueName, NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (save.GetCurrentPlayer().IsMale ? Gender.Male : Gender.Female).ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => save.GetCurrentPlayer().Name, NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsSave);
             yield return new SkillLevelValueProvider(save);
 
             // relationships
@@ -211,14 +209,14 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save);
             yield return new VillagerHeartsValueProvider(save);
             yield return new VillagerRelationshipValueProvider(save);
-            yield return new ConditionTypeValueProvider(ConditionType.Spouse, save.GetSpouse, NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.Spouse, save.GetSpouse, NeedsSave);
 
             // world
-            yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.FarmName, save.GetFarmName, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => save.GetFarmType().ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => save.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => save.GetIsJojaMartComplete().ToString(), NeedsBasicInfo);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmName, save.GetFarmName, NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => save.GetFarmType().ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => save.GetIsCommunityCenterComplete().ToString(), NeedsSave);
+            yield return new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => save.GetIsJojaMartComplete().ToString(), NeedsSave);
             yield return new HavingChildValueProvider(ConditionType.Pregnant, save);
             yield return new HavingChildValueProvider(ConditionType.HavingChild, save);
 

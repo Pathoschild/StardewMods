@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
                     // current location
-                    var newLocation = ((LocationContext?)this.SaveReader.GetCurrentLocation()?.GetLocationContext()) ?? LocationContext.Valley;
+                    var newLocation = this.SaveReader.GetCurrentLocationContext() ?? LocationContext.Valley;
                     changed |= newLocation != this.CurrentLocation;
                     this.CurrentLocation = newLocation;
 

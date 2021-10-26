@@ -5,44 +5,47 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 
 namespace ContentPatcher.Framework
 {
     /// <summary>Handles reading info from the current save.</summary>
+    /// <remarks>This allows reading data from the save immediately after it's parsed, before the save is loaded.</remarks>
     internal class TokenSaveReader
     {
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
+        /// <summary>Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</summary>
+        private readonly Func<bool> IsSaveParsed;
 
-        /// <summary>The backing field for <see cref="IsReady"/>.</summary>
-        private readonly Func<bool> IsReadyImpl;
+        /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
+        private readonly Func<bool> IsSaveBasicInfoLoadedImpl;
 
 
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether data can be read from the save file now.</summary>
+        public bool IsReady => this.IsSaveParsed();
+
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
-        public bool IsReady => this.IsReadyImpl();
+        public bool IsSaveBasicInfoLoaded => this.IsSaveBasicInfoLoadedImpl();
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="isReady">Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</param>
-        public TokenSaveReader(IReflectionHelper reflection, Func<bool> isReady)
+        /// <param name="isSaveParsed">Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</param>
+        /// <param name="isSaveBasicInfoLoaded">Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet</param>
+        public TokenSaveReader(Func<bool> isSaveParsed, Func<bool> isSaveBasicInfoLoaded)
         {
-            this.Reflection = reflection;
-            this.IsReadyImpl = isReady;
+            this.IsSaveParsed = isSaveParsed;
+            this.IsSaveBasicInfoLoadedImpl = isSaveBasicInfoLoaded;
         }
 
         /****
@@ -52,27 +55,61 @@ namespace ContentPatcher.Framework
         /// <param name="type">The player type.</param>
         public Farmer GetPlayer(PlayerType type)
         {
-            return type == PlayerType.HostPlayer
-                ? Game1.MasterPlayer
-                : Game1.player;
+            return this.GetForState(
+                loaded: () => type == PlayerType.HostPlayer
+                    ? Game1.MasterPlayer
+                    : Game1.player,
+
+                reading: save => save.player // current == host if they're loading the save file
+            );
         }
 
         /// <summary>Get the current player instance.</summary>
         public Farmer GetCurrentPlayer()
         {
-            return Game1.player;
+            return this.GetPlayer(PlayerType.CurrentPlayer);
         }
 
         /// <summary>Get all players in the game, even if they're offline.</summary>
         public IEnumerable<Farmer> GetAllPlayers()
         {
-            return Game1.getAllFarmers();
+            return this.GetForState(
+                loaded: Game1.getAllFarmers,
+
+                reading: save => Enumerable
+                    .Repeat(save.player, 1)
+                    .Concat(
+                        from building in (this.GetLocationFromName("Farm") as Farm)?.buildings ?? Enumerable.Empty<Building>()
+                        let farmer = (building.indoors.Value as Cabin)?.farmhand.Value
+                        where farmer != null
+                        select farmer
+                    )
+            );
         }
 
         /// <summary>Get the current player's location.</summary>
         public GameLocation GetCurrentLocation()
         {
-            return Game1.currentLocation;
+            return this.GetForState(
+                loaded: () => Game1.currentLocation,
+                reading: _ => this.GetLocationFromName(this.GetCurrentPlayer().lastSleepLocation.Value)
+            );
+        }
+
+        /// <summary>Get the current player's location context.</summary>
+        public LocationContext? GetCurrentLocationContext()
+        {
+            // Get the context from the game data if it's ready.
+            // This needs the location map to be loaded.
+            if (this.IsSaveBasicInfoLoaded)
+                return (LocationContext?)this.GetCurrentLocation()?.GetLocationContext();
+
+            // Else fake it based on the assumption that the player is sleeping in a vanilla
+            // location. If the player sleeps in a custom context, the token will only be incorrect
+            // for a short period early in the load process.
+            return this.GetCurrentLocation() is IslandLocation or IslandFarmHouse
+                ? LocationContext.Island
+                : LocationContext.Valley;
         }
 
         /****
@@ -81,7 +118,10 @@ namespace ContentPatcher.Framework
         /// <summary>Get the day of month.</summary>
         public int GetDay()
         {
-            return SDate.Now().Day;
+            return this.GetForState(
+                loaded: () => Game1.dayOfMonth,
+                reading: save => save.dayOfMonth
+            );
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival).</summary>
@@ -93,7 +133,7 @@ namespace ContentPatcher.Framework
 
             // festival
             IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
-            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
+            if (festivalDates.TryGetValue($"{this.GetSeason()}{this.GetDay()}", out string festivalName))
                 return festivalName;
 
             return null;
@@ -102,25 +142,43 @@ namespace ContentPatcher.Framework
         /// <summary>Get the day of week.</summary>
         public DayOfWeek GetDayOfWeek()
         {
-            return SDate.Now().DayOfWeek;
+            return this.GetDay() switch
+            {
+                1 => DayOfWeek.Monday,
+                2 => DayOfWeek.Tuesday,
+                3 => DayOfWeek.Wednesday,
+                4 => DayOfWeek.Thursday,
+                5 => DayOfWeek.Friday,
+                6 => DayOfWeek.Saturday,
+                _ => 0
+            };
         }
 
         /// <summary>Get the day of week.</summary>
         public uint GetDaysPlayed()
         {
-            return Game1.stats.DaysPlayed;
+            return this.GetForState(
+                loaded: () => Game1.stats.DaysPlayed,
+                reading: save => (save.player.stats ?? save.stats).DaysPlayed
+            );
         }
 
         /// <summary>Get the season.</summary>
         public string GetSeason()
         {
-            return SDate.Now().Season;
+            return this.GetForState(
+                loaded: () => Game1.currentSeason,
+                reading: save => save.currentSeason
+            );
         }
 
         /// <summary>Get the year number.</summary>
         public int GetYear()
         {
-            return SDate.Now().Year;
+            return this.GetForState(
+                loaded: () => Game1.year,
+                reading: save => save.year
+            );
         }
 
         /// <summary>Get the weather value for a location context.</summary>
@@ -130,32 +188,41 @@ namespace ContentPatcher.Framework
             // special case: day events override weather in the valley
             if (context == LocationContext.Valley)
             {
-                if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
+                if (Utility.isFestivalDay(this.GetDay(), this.GetSeason()) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
                     return Weather.Sun;
             }
 
-            // else get from game
-            var model = Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context);
-            if (model.isSnowing.Value)
-                return Weather.Snow;
-            if (model.isRaining.Value)
-                return model.isLightning.Value ? Weather.Storm : Weather.Rain;
-            if (model.isDebrisWeather.Value)
-                return Weather.Wind;
+            // get from weather data
+            LocationWeather model = this.GetForState(
+                loaded: () => Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context),
+                reading: save => save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather temp) ? temp : null
+            );
+            if (model != null)
+            {
+                if (model.isSnowing.Value)
+                    return Weather.Snow;
+                if (model.isRaining.Value)
+                    return model.isLightning.Value ? Weather.Storm : Weather.Rain;
+                if (model.isDebrisWeather.Value)
+                    return Weather.Wind;
+            }
             return Weather.Sun;
         }
 
         /// <summary>Get the time of day.</summary>
         public int GetTime()
         {
-            return Game1.timeOfDay;
+            return this.GetForState(
+                loaded: () => Game1.timeOfDay,
+                reading: _ => 0600
+            );
         }
 
         /****
         ** Player
         ****/
         /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
+        /// <param name="player">The player instance.</param>
         /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
         public IEnumerable<string> GetFlags(Farmer player)
         {
@@ -163,7 +230,13 @@ namespace ContentPatcher.Framework
                 .mailReceived
                 .Union(player.mailForTomorrow)
                 .Union(player.mailbox)
-                .Concat(Game1.worldStateIDs);
+                .Concat(
+                    this.GetForState(
+                        loaded: () => Game1.worldStateIDs,
+                        reading: save => save.worldStateIDs
+                    )
+                    ?? Enumerable.Empty<string>()
+                );
         }
 
         /// <summary>Get the wallet items for the current player.</summary>
@@ -197,18 +270,26 @@ namespace ContentPatcher.Framework
                 yield return WalletItem.SpringOnionMastery.ToString();
         }
 
+        /// <summary>Get a player's daily luck value.</summary>
+        /// <param name="player">The player instance.</param>
+        public double GetDailyLuck(Farmer player)
+        {
+            return this.GetForState(
+                loaded: () => player.DailyLuck,
+                reading: save => save.dailyLuck + (player.hasSpecialCharm ? 0.025000000372529 : 0.0)
+            );
+        }
+
         /****
         ** Relationships
         ****/
         /// <summary>Get values for a given player's children.</summary>
-        /// <param name="player">The player whose children to get.</param>
+        /// <param name="player">The player instance.</param>
         /// <param name="type">The token values to get.</param>
         public IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
         {
             // get home
-            FarmHouse home = Context.IsWorldReady
-                ? Game1.getLocationFromName(player.homeLocation.Value) as FarmHouse
-                : SaveGame.loaded?.locations.OfType<FarmHouse>().FirstOrDefault(p => p.Name == player.homeLocation.Value);
+            FarmHouse home = this.GetLocationFromName(player.homeLocation.Value) as FarmHouse;
             if (home == null)
                 yield break;
 
@@ -228,16 +309,15 @@ namespace ContentPatcher.Framework
         /// <returns>Returns a list of friendship models for met NPCs, and null for unmet NPCs.</returns>
         public IEnumerable<KeyValuePair<string, Friendship>> GetFriendships()
         {
-            var data = Game1.player.friendshipData;
-
             // met NPCs
-            foreach (KeyValuePair<string, Friendship> pair in data.Pairs)
+            var met = this.GetCurrentPlayer().friendshipData;
+            foreach (KeyValuePair<string, Friendship> pair in met.Pairs)
                 yield return pair;
 
             // unmet NPCs
             foreach (NPC npc in this.GetSocialVillagers())
             {
-                if (!data.ContainsKey(npc.Name))
+                if (!met.ContainsKey(npc.Name))
                     yield return new KeyValuePair<string, Friendship>(npc.Name, null);
             }
         }
@@ -251,17 +331,44 @@ namespace ContentPatcher.Framework
         /// <summary>Get the name and gender of the player's spouse, if they're married</summary>
         /// <param name="player">The player whose spouse to check.</param>
         /// <param name="name">The spouse name.</param>
+        /// <param name="friendship">The friendship data for the relationship.</param>
         /// <param name="gender">The spouse gender.</param>
         /// <param name="isPlayer">Whether the spouse is a player character.</param>
-        /// <returns>Returns true if the player's spouse info was successfully found.''</returns>
+        /// <returns>Returns true if the player's spouse info was successfully found.</returns>
         public bool TryGetSpouseInfo(Farmer player, out string name, out Friendship friendship, out Gender gender, out bool isPlayer)
         {
-            friendship = player.GetSpouseFriendship();
+            // get raw data
+            long? spousePlayerID = null;
+            friendship = this.GetForState(
+                loaded: () =>
+                {
+                    spousePlayerID = player.team.GetSpouse(player.UniqueMultiplayerID);
+                    return player.GetSpouseFriendship();
+                },
 
-            long? spousePlayerID = player.team.GetSpouse(player.UniqueMultiplayerID);
+                reading: save =>
+                {
+                    // player spouse
+                    foreach (var pair in save.farmerFriendships)
+                    {
+                        if (pair.Key.Contains(player.UniqueMultiplayerID) && (pair.Value.IsEngaged() || pair.Value.IsMarried()))
+                        {
+                            spousePlayerID = pair.Key.GetOther(player.UniqueMultiplayerID);
+                            return pair.Value;
+                        }
+                    }
+
+                    // NPC spouse
+                    return player.spouse is not (null or "") && player.friendshipData.TryGetValue(player.spouse, out Friendship value)
+                        ? value
+                        : null;
+                }
+            );
+
+            // parse spouse info
             if (spousePlayerID.HasValue)
             {
-                Farmer spouse = Game1.getFarmerMaybeOffline(spousePlayerID.Value);
+                Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
                 if (spouse != null)
                 {
                     name = spouse.Name;
@@ -272,7 +379,7 @@ namespace ContentPatcher.Framework
             }
             else
             {
-                NPC spouse = Game1.getCharacterFromName(player.spouse, mustBeVillager: true);
+                NPC spouse = this.GetAllCharacters().FirstOrDefault(p => p.Name == player.spouse && p.isVillager());
                 if (spouse != null)
                 {
                     name = spouse.Name;
@@ -306,11 +413,16 @@ namespace ContentPatcher.Framework
         /// <summary>Get the farm type.</summary>
         public FarmType GetFarmType()
         {
-            return this.GetEnum(Game1.whichFarm, FarmType.Custom);
+            int farm = this.GetForState(
+                loaded: () => Game1.whichFarm,
+                reading: save => save.whichFarm
+            );
+
+            return this.GetEnum(farm, FarmType.Custom);
         }
 
         /// <summary>Get whether the community center is complete.</summary>
-        /// <remarks>See game logic in <see cref="StardewValley.Locations.Town.resetLocalState"/>.</remarks>
+        /// <remarks>See game logic in <see cref="Town.resetLocalState"/>.</remarks>
         public bool GetIsCommunityCenterComplete()
         {
             Farmer host = this.GetPlayer(PlayerType.HostPlayer);
@@ -319,44 +431,49 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get whether the JojaMart is complete.</summary>
-        /// <remarks>See game logic in <see cref="GameLocation"/> for the 'C' precondition.</remarks>
+        /// <remarks>See game logic in <see cref="GameLocation.checkJojaCompletePrerequisite"/>.</remarks>
         public bool GetIsJojaMartComplete()
         {
             Farmer host = this.GetPlayer(PlayerType.HostPlayer);
 
-            if (!host.mailReceived.Contains("JojaMember"))
-                return false;
-
-            GameLocation town = this.GetLocationFromName("Town");
-            return this.Reflection.GetMethod(town, "checkJojaCompletePrerequisite").Invoke<bool>();
+            return
+                this.GetIsCommunityCenterComplete()
+                && host.mailReceived.Any(flag => flag is "jojaVault" or "jojaPantry" or "jojaBoilerRoom" or "jojaCraftsRoom" or "jojaFishTank" or "JojaMember");
         }
 
 
         /*********
         ** Private methods
         *********/
-        /// <summary>Get a constant for a given value.</summary>
-        /// <typeparam name="TEnum">The constant enum type.</typeparam>
-        /// <param name="value">The value to convert.</param>
-        /// <param name="defaultValue">The value to use if the value is invalid.</param>
-        private TEnum GetEnum<TEnum>(int value, TEnum defaultValue)
-        {
-            return Enum.IsDefined(typeof(TEnum), value)
-                ? (TEnum)(object)value
-                : defaultValue;
-        }
-
         /// <summary>Get a location from the save by its name.</summary>
         /// <param name="name">The location name.</param>
         private GameLocation GetLocationFromName(string name)
         {
-            return Game1.getLocationFromName(name);
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            return this.GetForState(
+                loaded: () => Game1.getLocationFromName(name),
+                reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name)
+            );
         }
 
         /// <summary>Get all locations in the game.</summary>
         private IEnumerable<GameLocation> GetLocations()
         {
-            return CommonHelper.GetLocations();
+            return this.GetForState(
+                loaded: () => CommonHelper.GetLocations(),
+
+                reading: save => save.locations
+                    .Concat(
+                        from location in save.locations.OfType<BuildableGameLocation>()
+                        from building in location.buildings
+                        where building.indoors.Value != null
+                        select building.indoors.Value
+                    ),
+
+                defaultValue: Enumerable.Empty<GameLocation>()
+            );
         }
 
         /// <summary>Get all social NPCs.</summary>
@@ -381,6 +498,33 @@ namespace ContentPatcher.Framework
                 .GetLocations()
                 .SelectMany(p => p.characters)
                 .Distinct(new ObjectReferenceComparer<NPC>());
+        }
+
+        /// <summary>Get a value from the save file depending on the load state.</summary>
+        /// <typeparam name="TValue">The value type.</typeparam>
+        /// <param name="loaded">Get the value if the save file is loaded into the base game data.</param>
+        /// <param name="reading">Get the value if the save file has been parsed, but not loaded yet.</param>
+        /// <param name="defaultValue">The default value if no save is parsed or loaded.</param>
+        private TValue GetForState<TValue>(Func<TValue> loaded, Func<SaveGame, TValue> reading, TValue defaultValue = default)
+        {
+            if (this.IsSaveBasicInfoLoaded)
+                return loaded();
+
+            if (this.IsSaveParsed())
+                return reading(SaveGame.loaded);
+
+            return defaultValue;
+        }
+
+        /// <summary>Get a constant for a given value.</summary>
+        /// <typeparam name="TEnum">The constant enum type.</typeparam>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="defaultValue">The value to use if the value is invalid.</param>
+        private TEnum GetEnum<TEnum>(int value, TEnum defaultValue)
+        {
+            return Enum.IsDefined(typeof(TEnum), value)
+                ? (TEnum)(object)value
+                : defaultValue;
         }
     }
 }
