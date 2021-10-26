@@ -1078,10 +1078,10 @@ You can specify multiple values, in which case it returns whether _any_ of them 
 The `valueAt` argument gets one value from a token at the given position (starting at zero for the
 first value). If the index is outside the list, this returns an empty list.
 
-This depends on the token's order, which you can check with the [`patch summary` console
-command](author-guide.md#patch-summary). Most built-in tokens use a 'human' sort order, which sorts
-by sequences of numeric and non-numeric characters (i.e. values are sorted like `John1` → `John9` →
-`John10`).
+This depends on the token's order, which you can check with the [`patch summary unsorted` console
+command](author-guide.md#patch-summary). Some tokens like `ChildNames` have a consistent order
+(which will be documented in the info for each token); most others like `HasFlag` are listed in the
+order they're defined in the game data, which may change from one save to the next.
 
 For example:
 

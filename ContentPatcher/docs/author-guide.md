@@ -1339,11 +1339,13 @@ Example Content Pack:
       TerrainFeatures/tree_palm | edited image
 ```
 
-You can also optionally specify one or more content pack IDs, in which case it'll only show data
-for those content packs:
-```
-> patch summary "LemonEx.HobbitHouse" "Another.Content.Pack"
-```
+You can specify these arguments in any order (e.g. `patch summary "LemonEx.HobbitHouse" "Another.Content.Pack" full`):
+
+argument            | effect
+:------------------ | :-----
+`"content pack ID"` | One or more content pack IDs for which to show data. If omitted, all content packs will be shown.
+`full`              | Don't truncate very long token values.
+`unsorted`          | Don't sort the values for display. This is mainly useful for checking the real order for `valueAt`.
 
 #### patch update
 `patch update` immediately updates Content Patcher's condition context and rechecks all patches.

@@ -267,7 +267,6 @@ namespace ContentPatcher.Framework
         private IEnumerable<string> GetCaughtFish(Farmer player)
         {
             return player.fishCaught.Keys
-                .OrderBy(p => p)
                 .Select(id => id.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -276,7 +275,6 @@ namespace ContentPatcher.Framework
         private IEnumerable<string> GetEventsSeen(Farmer player)
         {
             return player.eventsSeen
-                .OrderBy(p => p)
                 .Select(id => id.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -289,8 +287,7 @@ namespace ContentPatcher.Framework
                 .mailReceived
                 .Union(player.mailForTomorrow)
                 .Union(player.mailbox)
-                .Concat(Game1.worldStateIDs)
-                .OrderByHuman();
+                .Concat(Game1.worldStateIDs);
         }
 
         /// <summary>Get the professions for the player.</summary>
@@ -301,8 +298,7 @@ namespace ContentPatcher.Framework
                 .Select(id => Enum.IsDefined(typeof(Profession), id)
                     ? ((Profession)id).ToString()
                     : id.ToString()
-                )
-                .OrderByHuman();
+                );
         }
 
         /// <summary>Get the wallet items for the current player.</summary>
@@ -399,7 +395,6 @@ namespace ContentPatcher.Framework
         private IEnumerable<string> GetDialogueAnswers(Farmer player)
         {
             return player.dialogueQuestionsAnswered
-                .OrderBy(p => p)
                 .Select(p => p.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -408,7 +403,6 @@ namespace ContentPatcher.Framework
         private IEnumerable<string> GetActiveQuests(Farmer player)
         {
             return player.questLog
-                .OrderBy(quest => quest.id.Value)
                 .Select(quest => quest.id.Value.ToString(CultureInfo.InvariantCulture));
         }
     }

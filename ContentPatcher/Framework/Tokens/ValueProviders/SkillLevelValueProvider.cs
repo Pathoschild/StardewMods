@@ -79,8 +79,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             else
             {
                 return this.SkillLevels
-                    .Select(pair => $"{pair.Key}:{pair.Value}")
-                    .OrderByHuman();
+                    .Select(pair => $"{pair.Key}:{pair.Value}");
             }
         }
     }

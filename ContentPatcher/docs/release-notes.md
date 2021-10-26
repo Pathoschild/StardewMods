@@ -11,12 +11,20 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Mod authors can now [translate their config names & descriptions for Generic Mod Config Menu](author-tokens-guide.md#player-config).
-* Further optimized updates for immutable patches and conditions.
+* Further optimized context updates (especially for immutable patches and conditions).
+* Added `unsorted` argument for [`patch summary`](author-guide.md#patch-summary).
 * Refactored console command handling.
 * Updated for Generic Mod Config Menu 1.5.0.
 * Fixed error when a mod parses conditions which need a token it added.
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.
+
+**Note for content pack authors:**  
+* Content Patcher previously sorted some tokens unnecessarily; they now match the game order
+  instead. This should have no effect on content packs, unless they use `valueAt` with those tokens.
+
+  This affects `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`,
+  and `HasSeenEvent`.
 
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.
