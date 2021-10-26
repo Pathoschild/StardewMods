@@ -5,7 +5,6 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -15,8 +14,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Get whether the basic save info is loaded.</summary>
-        private readonly Func<bool> IsBasicInfoLoaded;
+        /// <summary>Handles reading info from the current save.</summary>
+        private readonly TokenSaveReader SaveReader;
 
         /// <summary>The values as of the last context update.</summary>
         private readonly IDictionary<LocationContext, Weather> Values = CommonHelper
@@ -34,11 +33,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="isBasicInfoLoaded">Get whether the basic save info is loaded.</param>
-        public WeatherValueProvider(Func<bool> isBasicInfoLoaded)
+        /// <param name="saveReader">Handles reading info from the current save.</param>
+        public WeatherValueProvider(TokenSaveReader saveReader)
             : base(ConditionType.Weather, mayReturnMultipleValuesForRoot: false)
         {
-            this.IsBasicInfoLoaded = isBasicInfoLoaded;
+            this.SaveReader = saveReader;
             this.EnableInputArguments(required: false, mayReturnMultipleValues: true, maxPositionalArgs: null);
         }
 
@@ -49,17 +48,17 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 bool changed = false;
 
-                if (this.MarkReady(this.IsBasicInfoLoaded()))
+                if (this.MarkReady(this.SaveReader.IsReady))
                 {
                     // current location
-                    var newLocation = ((LocationContext?)Game1.currentLocation?.GetLocationContext()) ?? LocationContext.Valley;
+                    var newLocation = ((LocationContext?)this.SaveReader.GetCurrentLocation()?.GetLocationContext()) ?? LocationContext.Valley;
                     changed |= newLocation != this.CurrentLocation;
                     this.CurrentLocation = newLocation;
 
                     // weather values
                     foreach (LocationContext location in CommonHelper.GetEnumValues<LocationContext>())
                     {
-                        Weather newWeather = this.GetWeather(location);
+                        Weather newWeather = this.SaveReader.GetWeather(location);
 
                         changed |= newWeather != this.Values[location];
                         this.Values[location] = newWeather;
@@ -116,37 +115,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 else if (Enum.TryParse(arg, ignoreCase: true, out LocationContext context))
                     yield return context;
             }
-        }
-
-        /// <summary>Get the weather value for a location context.</summary>
-        /// <param name="context">The location context.</param>
-        private Weather GetWeather(LocationContext context)
-        {
-            // special case: day events override weather in the valley
-            if (context == LocationContext.Valley)
-            {
-                if (Utility.isFestivalDay(Game1.dayOfMonth, Game1.currentSeason) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
-                    return Weather.Sun;
-            }
-
-            // else get from game
-            return this.GetWeather(
-                Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context)
-            );
-        }
-
-        /// <summary>Get the weather value for a per-location weather model.</summary>
-        /// <param name="model">The location weather model.</param>
-        private Weather GetWeather(LocationWeather model)
-        {
-            if (model.isSnowing.Value)
-                return Weather.Snow;
-            if (model.isRaining.Value)
-                return model.isLightning.Value ? Weather.Storm : Weather.Rain;
-            if (model.isDebrisWeather.Value)
-                return Weather.Wind;
-
-            return Weather.Sun;
         }
     }
 }

@@ -15,14 +15,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /*********
         ** Fields
         *********/
+        /// <summary>Handles reading info from the current save.</summary>
+        private readonly TokenSaveReader SaveReader;
+
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
         private readonly InvariantHashSet AllowedRootValues;
 
         /// <summary>Get the current values for a player.</summary>
         private readonly Func<Farmer, InvariantHashSet> FetchValues;
-
-        /// <summary>Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</summary>
-        private readonly Func<bool> IsPlayerLoaded;
 
         /// <summary>The values as of the last context update.</summary>
         private readonly IDictionary<PlayerType, InvariantHashSet> Values = new Dictionary<PlayerType, InvariantHashSet>
@@ -38,13 +38,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type.</param>
         /// <param name="values">Get the current values.</param>
-        /// <param name="isPlayerLoaded">Get whether the player is loaded and ready.</param>
+        /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, Func<bool> isPlayerLoaded, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
             : base(type, mayReturnMultipleValues)
         {
-            this.IsPlayerLoaded = isPlayerLoaded;
+            this.SaveReader = saveReader;
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = player => new InvariantHashSet(values(player));
             this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
@@ -53,11 +53,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type.</param>
         /// <param name="value">Get the current value.</param>
-        /// <param name="isPlayerLoaded">Get whether the player is loaded and ready.</param>
+        /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, string> value, Func<bool> isPlayerLoaded, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
-            : this(type, player => new[] { value(player) }, isPlayerLoaded, mayReturnMultipleValues, allowedValues) { }
+        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, string> value, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+            : this(type, player => new[] { value(player) }, saveReader, mayReturnMultipleValues, allowedValues) { }
 
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
@@ -74,11 +74,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 
                     values.Clear();
 
-                    if (this.MarkReady(this.IsPlayerLoaded()))
+                    if (this.MarkReady(this.SaveReader.IsReady))
                     {
-                        Farmer player = type == PlayerType.HostPlayer
-                            ? Game1.MasterPlayer
-                            : Game1.player;
+                        Farmer player = this.SaveReader.GetPlayer(type);
 
                         if (player != null)
                             values.AddMany(this.FetchValues(player));
