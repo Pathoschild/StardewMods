@@ -158,6 +158,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>A token which transforms its input text to lowercase.</summary>
         Lowercase,
 
+        /// <summary>Get part of a file/asset path.</summary>
+        PathPart,
+
         /// <summary>A random value selected from the given input.</summary>
         Random,
 

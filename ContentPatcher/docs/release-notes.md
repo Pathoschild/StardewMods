@@ -10,14 +10,16 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Improvements for mod authors:
-  * The [config UI text for Generic Mod Config Menu can now be translated](author-tokens-guide.md#player-config).
-  * Conditions parsed through the C# API can now use custom tokens added by the same mod.
-  * The `Hearts` and `Relationships` token are now available before the save is fully loaded (like the other built-in tokens).
-  * The built-in tokens are now available immediately after the save file is read, before the game starts loading data.
-* Further optimized context updates (especially for immutable patches and conditions).
+* Added new token:
+  * [`PathPart`](author-tokens-guide.md#PathPart): get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+* Improved context updates:
+  * The default tokens are now available immediately after the save file is read, before the game even starts loading it.
+  * The `Hearts` and `Relationships` tokens are now available before the save is fully loaded (like the other built-in tokens).
+  * Improved performance (especially for immutable patches and conditions).
 * Added `unsorted` argument for [`patch summary`](author-guide.md#patch-summary).
+* Added [translation support to Generic Mod Config Menu content pack UI](author-tokens-guide.md#player-config).
 * Updated for Generic Mod Config Menu 1.5.0.
+* Fixed conditions parsed through the C# API unable to use custom tokens added by the same mod.
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.
 

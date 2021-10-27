@@ -230,6 +230,7 @@ namespace ContentPatcher.Framework
             // string manipulation
             yield return new LetterCaseValueProvider(ConditionType.Lowercase);
             yield return new LetterCaseValueProvider(ConditionType.Uppercase);
+            yield return new PathPartValueProvider();
             yield return new RenderValueProvider();
 
             // metadata

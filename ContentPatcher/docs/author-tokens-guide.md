@@ -801,6 +801,56 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 <td><a href="#Lowercase">#</a></td>
 </tr>
 
+<tr valign="top" id="PathPart">
+<td>PathPart</td>
+<td>
+
+Get part of a file/asset path, in the form `{{PathPart: <path>, <part to get>}}`. For
+example:
+
+```js
+{
+   "Action": "Load",
+   "Target": "Portraits/Abigail",
+   "FromFile": "assets/{{PathPart: {{Target}}, Filename}}.png" // assets/Abigail.png
+}
+```
+
+Given the path `assets/portraits/Abigail.png`, you can specify...
+
+* A fragment type:
+
+  part value      | description | example
+  --------------- | ----------- | ------
+  `DirectoryPath` | The path without the file name. | `assets/portraits`
+  `FileName`      | The file name (including the extension, if any). | `Abigail.png`
+  `FileNameWithoutExtension` | The file name (excluding the extension). | `Abigail`
+
+* Or an index position from the left:
+
+  part value | example
+  ---------- | -------
+  `0`        | `assets`
+  `1`        | `portraits`
+  `2`        | `Abigail.png`
+  `3`        | _empty value_
+
+* Or a negative index to search from the right:
+
+  part value | example
+  ---------- | -------
+  `-1`       | `Abigail.png`
+  `-2`       | `portraits`
+  `-3`       | `assets`
+  `-4`       | _empty value_
+
+See also [`TargetPathOnly`](#TargetPathOnly) and [`TargetWithoutPath`](#TargetWithoutPath), which
+simplify a very common version of this.
+
+</td>
+<td><a href="#PathPart">#</a></td>
+</tr>
+
 <tr valign="top" id="Render">
 <td>Render</td>
 <td>
@@ -1011,6 +1061,8 @@ token               | part returned | example
 `Target`            | The full path. | `Characters/Dialogue/Abigail`
 `TargetPathOnly`    | The part before the last separator. | `Characters/Dialogue`
 `TargetWithoutPath` | The part after the last separator. | `Abigail`
+
+See also [`PathPart`](#PathPart) for more advanced scenarios.
 
 </td>
 <td><a href="#Target">#</a></td>
