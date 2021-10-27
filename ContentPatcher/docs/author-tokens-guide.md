@@ -1734,6 +1734,7 @@ value | meaning
 ----- | -------
 `currentPlayer` | The current player who has the mod installed.
 `hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
+_player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
 
 The player type can be specified as an [input argument](#input-arguments) for tokens that support it,
 defaulting to the current player. For example:

@@ -12,6 +12,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Added new token:
   * [`PathPart`](author-tokens-guide.md#PathPart): get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+* Improved tokens:
+  * The default tokens which take a `PlayerType` argument now accept a specific player ID too, like `{{PlayerName: 3864039824286870457}}`.
 * Improved context updates:
   * The default tokens are now available immediately after the save file is read, before the game even starts loading it.
   * The `Hearts` and `Relationships` tokens are now available before the save is fully loaded (like the other built-in tokens).

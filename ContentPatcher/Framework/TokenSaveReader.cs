@@ -80,9 +80,9 @@ namespace ContentPatcher.Framework
                     .Repeat(save.player, 1)
                     .Concat(
                         from building in (this.GetLocationFromName("Farm") as Farm)?.buildings ?? Enumerable.Empty<Building>()
-                        let farmer = (building.indoors.Value as Cabin)?.farmhand.Value
-                        where farmer != null
-                        select farmer
+                        let farmhand = (building.indoors.Value as Cabin)?.farmhand.Value
+                        where farmhand != null
+                        select farmhand
                     )
             );
         }
