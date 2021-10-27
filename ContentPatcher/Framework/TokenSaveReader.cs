@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
@@ -19,11 +20,20 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The number of context updates since the game was launched, including the current one if applicable.</summary>
+        private readonly Func<int> GetUpdateTick;
+
         /// <summary>Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</summary>
         private readonly Func<bool> IsSaveParsed;
 
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
         private readonly Func<bool> IsSaveBasicInfoLoadedImpl;
+
+        /// <summary>A cache of common values fetched during the current context updates.</summary>
+        private readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
+
+        /// <summary>The last context update for which cached values were updated.</summary>
+        private int LastCacheTick;
 
 
         /*********
@@ -40,10 +50,12 @@ namespace ContentPatcher.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="updateTick">The number of context updates since the game was launched, including the current one if applicable.</param>
         /// <param name="isSaveParsed">Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</param>
         /// <param name="isSaveBasicInfoLoaded">Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet</param>
-        public TokenSaveReader(Func<bool> isSaveParsed, Func<bool> isSaveBasicInfoLoaded)
+        public TokenSaveReader(Func<int> updateTick, Func<bool> isSaveParsed, Func<bool> isSaveBasicInfoLoaded)
         {
+            this.GetUpdateTick = updateTick;
             this.IsSaveParsed = isSaveParsed;
             this.IsSaveBasicInfoLoadedImpl = isSaveBasicInfoLoaded;
         }
@@ -73,17 +85,20 @@ namespace ContentPatcher.Framework
         /// <summary>Get all players in the game, even if they're offline.</summary>
         public IEnumerable<Farmer> GetAllPlayers()
         {
-            return this.GetForState(
-                loaded: Game1.getAllFarmers,
+            return this.GetCached(
+                nameof(this.GetAllPlayers),
+                () => this.GetForState(
+                    loaded: Game1.getAllFarmers,
 
-                reading: save => Enumerable
-                    .Repeat(save.player, 1)
-                    .Concat(
-                        from building in (this.GetLocationFromName("Farm") as Farm)?.buildings ?? Enumerable.Empty<Building>()
-                        let farmhand = (building.indoors.Value as Cabin)?.farmhand.Value
-                        where farmhand != null
-                        select farmhand
-                    )
+                    reading: save => Enumerable
+                        .Repeat(save.player, 1)
+                        .Concat(
+                            from building in (this.GetLocationFromName("Farm") as Farm)?.buildings ?? Enumerable.Empty<Building>()
+                            let farmhand = (building.indoors.Value as Cabin)?.farmhand.Value
+                            where farmhand != null
+                            select farmhand
+                        )
+                )
             );
         }
 
@@ -91,9 +106,12 @@ namespace ContentPatcher.Framework
         /// <param name="player">The player instance.</param>
         public GameLocation GetCurrentLocation(Farmer player)
         {
-            return this.GetForState(
-                loaded: () => player.currentLocation,
-                reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
+            return this.GetCached(
+                $"{nameof(this.GetCurrentLocation)}:{player.UniqueMultiplayerID}",
+                () => this.GetForState(
+                    loaded: () => player.currentLocation,
+                    reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
+                )
             );
         }
 
@@ -290,38 +308,42 @@ namespace ContentPatcher.Framework
         /// <param name="type">The token values to get.</param>
         public IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
         {
-            // get home
-            FarmHouse home = this.GetLocationFromName(player.homeLocation.Value) as FarmHouse;
-            if (home == null)
-                yield break;
-
             // get children
-            foreach (Child child in home.getChildren())
+            List<Child> children = this.GetCached(
+                $"{nameof(this.GetChildValues)}:{player.UniqueMultiplayerID}",
+                () => (this.GetLocationFromName(player.homeLocation.Value) as FarmHouse)?.getChildren()
+            );
+            if (children == null)
+                return Enumerable.Empty<string>();
+
+            // get values
+            Func<Child, string> filter = type switch
             {
-                yield return type switch
-                {
-                    ConditionType.ChildNames => child.Name,
-                    ConditionType.ChildGenders => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString(),
-                    _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
-                };
-            }
+                ConditionType.ChildNames => (child => child.Name),
+                ConditionType.ChildGenders => (child => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString()),
+                _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
+            };
+            return children.Select(filter);
         }
 
         /// <summary>Get the friendship data for the current player.</summary>
         /// <returns>Returns a list of friendship models for met NPCs, and null for unmet NPCs.</returns>
         public IEnumerable<KeyValuePair<string, Friendship>> GetFriendships()
         {
-            // met NPCs
-            var met = this.GetCurrentPlayer().friendshipData;
-            foreach (KeyValuePair<string, Friendship> pair in met.Pairs)
-                yield return pair;
-
-            // unmet NPCs
-            foreach (NPC npc in this.GetSocialVillagers())
-            {
-                if (!met.ContainsKey(npc.Name))
-                    yield return new KeyValuePair<string, Friendship>(npc.Name, null);
-            }
+            return this.GetCached(
+                nameof(this.GetFriendships),
+                () =>
+                {
+                    var met = this.GetCurrentPlayer().friendshipData;
+                    return
+                        met.Pairs
+                        .Concat(
+                            from npc in this.GetSocialVillagers()
+                            where !met.ContainsKey(npc.Name)
+                            select new KeyValuePair<string, Friendship>(npc.Name, null)
+                        );
+                }
+            );
         }
 
         /// <summary>Get the current player's spouse.</summary>
@@ -338,64 +360,79 @@ namespace ContentPatcher.Framework
         /// <param name="gender">The spouse gender.</param>
         /// <param name="isPlayer">Whether the spouse is a player character.</param>
         /// <returns>Returns true if the player's spouse info was successfully found.</returns>
+        [SuppressMessage("ReSharper", "VariableHidesOuterVariable", Justification = "This is deliberate.")]
         public bool TryGetSpouseInfo(Farmer player, out string name, out Friendship friendship, out Gender gender, out bool isPlayer)
         {
-            // get raw data
-            long? spousePlayerID = null;
-            friendship = this.GetForState(
-                loaded: () =>
+            var data = this.GetCached(
+                $"{nameof(this.TryGetSpouseInfo)}:{player.UniqueMultiplayerID}",
+                () =>
                 {
-                    spousePlayerID = player.team.GetSpouse(player.UniqueMultiplayerID);
-                    return player.GetSpouseFriendship();
-                },
-
-                reading: save =>
-                {
-                    // player spouse
-                    foreach (var pair in save.farmerFriendships)
-                    {
-                        if (pair.Key.Contains(player.UniqueMultiplayerID) && (pair.Value.IsEngaged() || pair.Value.IsMarried()))
+                    // get raw data
+                    long? spousePlayerID = null;
+                    Friendship friendship = this.GetForState(
+                        loaded: () =>
                         {
-                            spousePlayerID = pair.Key.GetOther(player.UniqueMultiplayerID);
-                            return pair.Value;
+                            spousePlayerID = player.team.GetSpouse(player.UniqueMultiplayerID);
+                            return player.GetSpouseFriendship();
+                        },
+
+                        reading: save =>
+                        {
+                            // player spouse
+                            foreach (var pair in save.farmerFriendships)
+                            {
+                                if (pair.Key.Contains(player.UniqueMultiplayerID) && (pair.Value.IsEngaged() || pair.Value.IsMarried()))
+                                {
+                                    spousePlayerID = pair.Key.GetOther(player.UniqueMultiplayerID);
+                                    return pair.Value;
+                                }
+                            }
+
+                            // NPC spouse
+                            return player.spouse is not (null or "") && player.friendshipData.TryGetValue(player.spouse, out Friendship value)
+                                ? value
+                                : null;
+                        }
+                    );
+
+                    // parse spouse info
+                    string name = null;
+                    Gender gender = Gender.Male;
+                    bool isPlayer = false;
+                    bool valid = false;
+                    if (spousePlayerID.HasValue)
+                    {
+                        Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
+                        if (spouse != null)
+                        {
+                            name = spouse.Name;
+                            gender = spouse.IsMale ? Gender.Male : Gender.Female;
+                            isPlayer = true;
+                            valid = true;
+                        }
+                    }
+                    else
+                    {
+                        NPC spouse = this.GetAllCharacters().FirstOrDefault(p => p.Name == player.spouse && p.isVillager());
+                        if (spouse != null)
+                        {
+                            name = spouse.Name;
+                            gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
+                            isPlayer = false;
+                            valid = true;
                         }
                     }
 
-                    // NPC spouse
-                    return player.spouse is not (null or "") && player.friendshipData.TryGetValue(player.spouse, out Friendship value)
-                        ? value
-                        : null;
+                    // create cache entry
+                    return Tuple.Create(name, friendship, gender, isPlayer, valid);
                 }
             );
 
-            // parse spouse info
-            if (spousePlayerID.HasValue)
-            {
-                Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
-                if (spouse != null)
-                {
-                    name = spouse.Name;
-                    gender = spouse.IsMale ? Gender.Male : Gender.Female;
-                    isPlayer = true;
-                    return true;
-                }
-            }
-            else
-            {
-                NPC spouse = this.GetAllCharacters().FirstOrDefault(p => p.Name == player.spouse && p.isVillager());
-                if (spouse != null)
-                {
-                    name = spouse.Name;
-                    gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
-                    isPlayer = false;
-                    return true;
-                }
-            }
-
-            name = null;
-            gender = Gender.Male;
-            isPlayer = false;
-            return false;
+            name = data.Item1;
+            friendship = data.Item2;
+            gender = data.Item3;
+            isPlayer = data.Item4;
+            return data.Item5;
         }
 
         /****
@@ -455,52 +492,61 @@ namespace ContentPatcher.Framework
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
-            return this.GetForState(
-                loaded: () => Game1.getLocationFromName(name),
-                reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name)
+            return this.GetCached(
+                $"{nameof(this.GetLocationFromName)}:{name}",
+                () => this.GetForState(
+                    loaded: () => Game1.getLocationFromName(name),
+                    reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name)
+                )
             );
         }
 
         /// <summary>Get all locations in the game.</summary>
         private IEnumerable<GameLocation> GetLocations()
         {
-            return this.GetForState(
-                loaded: () => CommonHelper.GetLocations(),
+            return this.GetCached(
+                nameof(this.GetLocations),
+                () => this.GetForState(
+                    loaded: () => CommonHelper.GetLocations(),
 
-                reading: save => save.locations
-                    .Concat(
-                        from location in save.locations.OfType<BuildableGameLocation>()
-                        from building in location.buildings
-                        where building.indoors.Value != null
-                        select building.indoors.Value
-                    ),
+                    reading: save => save.locations
+                        .Concat(
+                            from location in save.locations.OfType<BuildableGameLocation>()
+                            from building in location.buildings
+                            where building.indoors.Value != null
+                            select building.indoors.Value
+                        ),
 
-                defaultValue: Enumerable.Empty<GameLocation>()
+                    defaultValue: Enumerable.Empty<GameLocation>()
+                )
             );
         }
 
         /// <summary>Get all social NPCs.</summary>
         private IEnumerable<NPC> GetSocialVillagers()
         {
-            foreach (NPC npc in this.GetAllCharacters())
-            {
-                bool isSocial =
-                    npc.CanSocialize
-                    || (npc.Name == "Krobus" && !this.GetCurrentPlayer().friendshipData.ContainsKey(npc.Name)); // Krobus is marked non-social before he's met
-
-                if (isSocial)
-                    yield return npc;
-            }
+            return this.GetCached(
+                nameof(this.GetSocialVillagers),
+                () => this
+                    .GetAllCharacters()
+                    .Where(npc =>
+                        npc.CanSocialize
+                        || (npc.Name == "Krobus" && !this.GetCurrentPlayer().friendshipData.ContainsKey(npc.Name)) // Krobus is marked non-social before he's met
+                    )
+            );
         }
 
         /// <summary>Get all characters in reachable locations.</summary>
         /// <remarks>This is similar to <see cref="Utility.getAllCharacters()"/>, but doesn't sometimes crash when a farmhand warps and <see cref="Game1.currentLocation"/> isn't set yet.</remarks>
         private IEnumerable<NPC> GetAllCharacters()
         {
-            return this
-                .GetLocations()
-                .SelectMany(p => p.characters)
-                .Distinct(new ObjectReferenceComparer<NPC>());
+            return this.GetCached(
+                nameof(this.GetAllCharacters),
+                () => this
+                    .GetLocations()
+                    .SelectMany(p => p.characters)
+                    .Distinct(new ObjectReferenceComparer<NPC>())
+            );
         }
 
         /// <summary>Get a value from the save file depending on the load state.</summary>
@@ -528,6 +574,36 @@ namespace ContentPatcher.Framework
             return Enum.IsDefined(typeof(TEnum), value)
                 ? (TEnum)(object)value
                 : defaultValue;
+        }
+
+        /// <summary>Read data from the save file and cache it for the current context update tick.</summary>
+        /// <typeparam name="TValue">The data type to fetch and cache.</typeparam>
+        /// <param name="key">A unique key for the data.</param>
+        /// <param name="fetch">Fetch the latest value if needed.</param>
+        private TValue GetCached<TValue>(string key, Func<TValue> fetch)
+        {
+            // clear cache on update tick
+            if (this.LastCacheTick != this.GetUpdateTick())
+            {
+                this.Cache.Clear();
+                this.LastCacheTick = this.GetUpdateTick();
+            }
+
+            // get from cache
+            if (this.Cache.TryGetValue(key, out object cacheEntry))
+            {
+                return cacheEntry switch
+                {
+                    TValue cachedValue => cachedValue,
+                    null when default(TValue) is null => default,
+                    _ => throw new InvalidOperationException($"Can't fetch cached save data for the '{key}' cache key; requested a {typeof(TValue).FullName} value, but the cache contains {(cacheEntry == null ? "null" : $"'{cacheEntry.GetType().FullName}'")} instead.")
+                };
+            }
+
+            // fetch and cache
+            TValue value = fetch();
+            this.Cache[key] = value;
+            return value;
         }
     }
 }

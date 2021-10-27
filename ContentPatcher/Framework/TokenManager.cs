@@ -170,7 +170,7 @@ namespace ContentPatcher.Framework
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
-            var save = new TokenSaveReader(isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
+            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
 
             // date and weather
             yield return new ConditionTypeValueProvider(ConditionType.Day, () => save.GetDay().ToString(), NeedsSave, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
