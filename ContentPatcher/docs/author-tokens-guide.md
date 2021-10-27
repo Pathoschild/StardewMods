@@ -463,6 +463,31 @@ Notes:
 <td><a href="#LocationName">#</a></td>
 </tr>
 
+<tr valign="top" id="LocationOwnerId">
+<td>LocationOwnerId</td>
+<td>
+
+The [unique ID of the player](#target-player) who owns the [current or specified player](#target-player)'s
+location, if applicable.
+
+This works for these locations:
+
+location      | owner
+:------------ | :----
+farmhouse     | main player
+island house  | main player
+cabin         | linked farmhand
+cellar        | same as the cabin/farmhouse it's linked to
+farm building | player who constructed it
+
+This can be used to get other info for the owner, like `{{PlayerName: {{LocationOwnerId}}}}`.
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
+</td>
+<td><a href="#LocationOwnerId">#</a></td>
+</tr>
+
 <tr valign="top" id="PlayerGender">
 <td>PlayerGender</td>
 <td>

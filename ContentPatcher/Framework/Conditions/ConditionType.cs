@@ -74,6 +74,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The name of the player's current location.</summary>
         LocationName,
 
+        /// <summary>The unique ID of the player who owns the location, if applicable.</summary>
+        LocationOwnerId,
+
         /// <summary>The unique name of the player's current location. This differs from <see cref="LocationName"/> for constructed building interiors.</summary>
         LocationUniqueName,
 

@@ -198,6 +198,7 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationOwnerId, player => save.GetLocationOwnerId(save.GetCurrentLocation(player))?.ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save);

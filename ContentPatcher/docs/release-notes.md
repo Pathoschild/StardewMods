@@ -10,8 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
-* Added new token:
-  * [`PathPart`](author-tokens-guide.md#PathPart): get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+* Added new tokens:
+  * [`LocationOwnerId`](author-tokens-guide.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
+  * [`PathPart`](author-tokens-guide.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
 * Improved tokens:
   * Tokens with a player type argument now recognize player IDs too (like `{{PlayerName: 3864039824286870457}}`).
   * You can now specify an optional player type/ID with more tokens (specifically `IsMainPlayer`, `IsOutdoors`, `LocationContext`, `LocationName`, `LocationUniqueName`, `PlayerGender`, `PlayerName`, and `Spouse`).

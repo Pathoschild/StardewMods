@@ -22,6 +22,7 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 24, 0))
         {
             this.AddedTokens.AddMany(
+                ConditionType.LocationOwnerId.ToString(),
                 ConditionType.PathPart.ToString()
             );
         }

@@ -132,6 +132,62 @@ namespace ContentPatcher.Framework
                 : LocationContext.Valley;
         }
 
+        /// <summary>Get the player ID who owns the building containing the location.</summary>
+        /// <param name="location">The location to check.</param>
+        public long? GetLocationOwnerId(GameLocation location)
+        {
+            if (location is null)
+                return null;
+
+            long? id = this.GetCached<long?>(
+                $"{nameof(this.GetLocationOwnerId)}:{location.Name}",
+                () =>
+                {
+                    switch (location)
+                    {
+                        // home
+                        case FarmHouse farmhouse:
+                            return farmhouse.owner.UniqueMultiplayerID;
+                        case IslandFarmHouse:
+                            return this.GetPlayer(PlayerType.HostPlayer).UniqueMultiplayerID;
+
+                        // cellar
+                        case Cellar:
+                            {
+                                var cellarAssignments = this.GetForState<IDictionary<string, long>>(
+                                    loaded: () => Game1.player.team.cellarAssignments.FieldDict.ToDictionary(p => $"Cellar{p.Key}", p => p.Value.Value),
+                                    reading: save => save.cellarAssignments.ToDictionary(p => $"Cellar{p.Key}", p => p.Value)
+                                );
+
+                                string key = location.Name == "Cellar"
+                                    ? "Cellar1"
+                                    : location.Name;
+                                if (cellarAssignments.TryGetValue(key, out long owner))
+                                    return owner;
+
+                                return null;
+                            }
+
+                        // building/cellar interior
+                        default:
+                            if (!location.IsOutdoors)
+                            {
+                                IDictionary<GameLocation, long> locationOwners = this.GetBuildingInteriorOwners();
+                                if (locationOwners.TryGetValue(location, out long id))
+                                    return id;
+                            }
+
+                            return null;
+                    }
+                }
+            );
+
+            return id != 0
+                ? id
+                : null;
+        }
+
+
         /****
         ** Date & weather
         ****/
@@ -519,6 +575,32 @@ namespace ContentPatcher.Framework
 
                     defaultValue: Enumerable.Empty<GameLocation>()
                 )
+            );
+        }
+
+        /// <summary>Get all owners for all constructed buildings on the farm.</summary>
+        private IDictionary<GameLocation, long> GetBuildingInteriorOwners()
+        {
+            return this.GetCached<Dictionary<GameLocation, long>>(
+                nameof(this.GetBuildingInteriorOwners),
+                () =>
+                {
+                    var owners = new Dictionary<GameLocation, long>();
+
+                    if (this.GetLocationFromName("Farm") is Farm farm)
+                    {
+                        foreach (Building building in farm.buildings)
+                        {
+                            GameLocation interior = building.indoors.Value;
+                            long owner = building.owner.Value;
+
+                            if (interior is not null && owner != 0)
+                                owners[interior] = owner;
+                        }
+                    }
+
+                    return owners;
+                }
             );
         }
 
