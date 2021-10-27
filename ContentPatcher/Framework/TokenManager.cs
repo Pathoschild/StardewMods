@@ -194,13 +194,13 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save);
             yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsSave, allowedValues: Enum.GetNames(typeof(WalletItem)));
-            yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => save.GetCurrentLocation()?.IsOutdoors.ToString(), NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationContext, () => save.GetCurrentLocationContext()?.ToString(), NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => save.GetCurrentLocation()?.Name, NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationUniqueName, () => save.GetCurrentLocation()?.NameOrUniqueName, NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (save.GetCurrentPlayer().IsMale ? Gender.Male : Gender.Female).ToString(), NeedsSave);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => save.GetCurrentPlayer().Name, NeedsSave);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.IsMainPlayer, player => player.IsMainPlayer.ToString(), save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save);
             yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsSave);
             yield return new SkillLevelValueProvider(save);
 
@@ -209,7 +209,7 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save);
             yield return new VillagerHeartsValueProvider(save);
             yield return new VillagerRelationshipValueProvider(save);
-            yield return new ConditionTypeValueProvider(ConditionType.Spouse, save.GetSpouse, NeedsSave);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.Spouse, player => save.GetSpouse(player), save);
 
             // world
             yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave);

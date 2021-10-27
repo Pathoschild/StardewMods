@@ -33,15 +33,28 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // 1.24 changes input arguments for player tokens
-            if (lexToken is LexTokenToken token && Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type) && this.IsPlayerToken(type) && token.HasInputArgs())
+            if (lexToken is LexTokenToken token && Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type) && token.HasInputArgs())
             {
-                var input = new InputArguments(new LiteralString(token.InputArgs.ToString(), new LogPathBuilder()));
+                bool wasPlayerToken = this.IsOldPlayerToken(type);
+                bool isNewPlayerToken = !wasPlayerToken && this.IsNewPlayerToken(type);
 
-                // can't use player ID before 1.24
-                if (long.TryParse(input.PositionalArgs.FirstOrDefault(), out _))
+                if (wasPlayerToken || isNewPlayerToken)
                 {
-                    error = this.GetNounPhraseError($"using {type} token with a player ID");
-                    return false;
+                    var input = new InputArguments(new LiteralString(token.InputArgs.ToString(), new LogPathBuilder()));
+
+                    // can't use player ID before 1.24
+                    if (wasPlayerToken && long.TryParse(input.PositionalArgs.FirstOrDefault(), out _))
+                    {
+                        error = this.GetNounPhraseError($"using {type} token with a player ID");
+                        return false;
+                    }
+
+                    // didn't accept input before 1.24
+                    if (isNewPlayerToken && input.PositionalArgs.Any())
+                    {
+                        error = this.GetNounPhraseError($"using {type} token with input arguments");
+                        return false;
+                    }
                 }
             }
 
@@ -52,9 +65,9 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Private methods
         *********/
-        /// <summary>Get whether a token type takes a <see cref="PlayerType"/> input argument.</summary>
+        /// <summary>Get whether a token type accepted a <see cref="PlayerType"/> input argument before Content Patcher 1.24.</summary>
         /// <param name="type">The condition type.</param>
-        private bool IsPlayerToken(ConditionType type)
+        private bool IsOldPlayerToken(ConditionType type)
         {
             return type
                 is ConditionType.DailyLuck
@@ -69,6 +82,21 @@ namespace ContentPatcher.Framework.Migrations
                 or ConditionType.HasActiveQuest
                 or ConditionType.ChildNames
                 or ConditionType.ChildGenders;
+        }
+
+        /// <summary>Get whether Content Patcher 1.24 added support for specifying a player type for the token.</summary>
+        /// <param name="type">The condition type.</param>
+        private bool IsNewPlayerToken(ConditionType type)
+        {
+            return type
+                is ConditionType.IsMainPlayer
+                or ConditionType.IsOutdoors
+                or ConditionType.LocationContext
+                or ConditionType.LocationName
+                or ConditionType.LocationUniqueName
+                or ConditionType.PlayerGender
+                or ConditionType.PlayerName
+                or ConditionType.Spouse;
         }
     }
 }

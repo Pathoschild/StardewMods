@@ -87,27 +87,29 @@ namespace ContentPatcher.Framework
             );
         }
 
-        /// <summary>Get the current player's location.</summary>
-        public GameLocation GetCurrentLocation()
+        /// <summary>Get a player's location.</summary>
+        /// <param name="player">The player instance.</param>
+        public GameLocation GetCurrentLocation(Farmer player)
         {
             return this.GetForState(
-                loaded: () => Game1.currentLocation,
-                reading: _ => this.GetLocationFromName(this.GetCurrentPlayer().lastSleepLocation.Value)
+                loaded: () => player.currentLocation,
+                reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
             );
         }
 
         /// <summary>Get the current player's location context.</summary>
-        public LocationContext? GetCurrentLocationContext()
+        /// <param name="player">The player instance.</param>
+        public LocationContext? GetCurrentLocationContext(Farmer player)
         {
             // Get the context from the game data if it's ready.
             // This needs the location map to be loaded.
             if (this.IsSaveBasicInfoLoaded)
-                return (LocationContext?)this.GetCurrentLocation()?.GetLocationContext();
+                return (LocationContext?)this.GetCurrentLocation(player)?.GetLocationContext();
 
             // Else fake it based on the assumption that the player is sleeping in a vanilla
             // location. If the player sleeps in a custom context, the token will only be incorrect
             // for a short period early in the load process.
-            return this.GetCurrentLocation() is IslandLocation or IslandFarmHouse
+            return this.GetCurrentLocation(player) is IslandLocation or IslandFarmHouse
                 ? LocationContext.Island
                 : LocationContext.Valley;
         }
@@ -323,9 +325,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the current player's spouse.</summary>
-        public string GetSpouse()
+        /// <param name="player">The player whose spouse to get.</param>
+        public string GetSpouse(Farmer player)
         {
-            return this.GetCurrentPlayer().spouse;
+            return player.spouse;
         }
 
         /// <summary>Get the name and gender of the player's spouse, if they're married</summary>

@@ -29,7 +29,7 @@ This document lists the tokens available in Content Patcher packs.
   * [Dynamic tokens](#dynamic-tokens)
   * [Query expressions](#query-expressions)
   * [Mod-provided tokens](#mod-provided-tokens)
-* [Constants](#constants)
+* [Common values](#common-values)
 * [See also](#see-also)
 
 ## Introduction
@@ -202,7 +202,7 @@ This can also be used with range tokens:
 <td>
 
 The weather type in the current world area (or the area specified with a
-[`LocationContext`](#playertype) argument). Possible values:
+[`LocationContext`](#location-context) argument). Possible values:
 
 value   | meaning
 ------- | -------
@@ -242,8 +242,8 @@ The year number (like `1` or `2`).
 <td>DailyLuck</td>
 <td>
 
-The [daily luck](https://stardewvalleywiki.com/Luck) for the current player (or the player specified
-with a [`PlayerType`](#playertype) argument).
+The [daily luck](https://stardewvalleywiki.com/Luck) for the [current or specified
+player](#target-player).
 
 This is a decimal value usually between -0.1 and 0.1. This **cannot** be compared using the
 `{{Range}}` token, which produces a range of integer values. The value can only be safely compared
@@ -263,10 +263,9 @@ using [query expressions](#query-expressions). For example:
 <td>FarmhouseUpgrade</td>
 <td>
 
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the current
-player (or the player specified with a [`PlayerType`](#playertype) argument). The normal values are
-0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may
-add upgrade levels beyond that.
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the [current or
+specified player](#target-player). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2
+(add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
 
 </td>
 <td><a href="#FarmhouseUpgrade">#</a></td>
@@ -276,9 +275,9 @@ add upgrade levels beyond that.
 <td>HasActiveQuest</td>
 <td>
 
-The active quest IDs in the current player's quest list (or the player specified with a
-[`PlayerType`](#playertype) argument). See [Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data)
-on the wiki for valid quest IDs.
+The active quest IDs in the [current or specified player](#target-player)'s quest list. See
+[Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data) on the wiki for valid quest
+IDs.
 
 </td>
 <td><a href="#HasActiveQuest">#</a></td>
@@ -288,8 +287,8 @@ on the wiki for valid quest IDs.
 <td>HasCaughtFish</td>
 <td>
 
-The fish IDs caught by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
+The fish IDs caught by the [current or specified player](#target-player). See [object
+IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
 
 </td>
 <td><a href="#HasCaughtFish">#</a></td>
@@ -300,7 +299,7 @@ argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) o
 <td>
 
 The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
-for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
+for the [current or specified player](#target-player).
 
 </td>
 <td><a href="#HasConversationTopic">#</a></td>
@@ -311,8 +310,7 @@ for the current player (or the player specified with a [`PlayerType`](#playertyp
 <td>
 
 The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for answers to
-question dialogues by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument).
+question dialogues by the [current or specified player](#target-player).
 
 </td>
 <td><a href="#HasDialogueAnswer">#</a></td>
@@ -322,8 +320,7 @@ argument).
 <td>HasFlag</td>
 <td>
 
-The flags set for the current player (or the player specified with a [`PlayerType`](#playertype)
-argument). That includes...
+The flags set for the [current or specified player](#target-player). That includes...
 
 * letter IDs sent to the player (including letters they haven't read, or those added to the mailbox for tomorrow);
 * non-letter mail flags (used to track game info);
@@ -339,8 +336,8 @@ See [useful flags on the wiki](https://stardewvalleywiki.com/Modding:Mail_data#L
 <td>HasProfession</td>
 <td>
 
-The [professions](https://stardewvalleywiki.com/Skills) learned by the current player (or the
-player specified with a [`PlayerType`](#playertype) argument).
+The [professions](https://stardewvalleywiki.com/Skills) learned by the [current or specified
+player](#target-player).
 
 Possible values:
 
@@ -360,8 +357,8 @@ Custom professions added by a mod are represented by their integer profession ID
 <td>HasReadLetter</td>
 <td>
 
-The letter IDs opened by the current player (or the player specified with a
-[`PlayerType`](#playertype) argument). A letter is considered 'opened' if the letter UI was shown.
+The letter IDs opened by the [current or specified player](#target-player). A letter is considered
+'opened' if the letter UI was shown.
 
 </td>
 <td><a href="#HasReadLetter">#</a></td>
@@ -371,8 +368,8 @@ The letter IDs opened by the current player (or the player specified with a
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs seen by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument), matching IDs in the `Data/Events` files.
+The event IDs seen by the [current or specified player](#target-player), matching IDs in the
+`Data/Events` files.
 
 You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
 
@@ -410,7 +407,8 @@ flag                       | meaning
 <td>IsMainPlayer</td>
 <td>
 
-Whether the player is the main player. Possible values: `true`, `false`.
+Whether the [current or specified player](#target-player) is the main player. Possible values:
+`true`, `false`.
 
 </td>
 <td><a href="#IsMainPlayer">#</a></td>
@@ -420,7 +418,8 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`.
+Whether the [current or specified player](#target-player) is outdoors. Possible values: `true`,
+`false`.
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -432,8 +431,9 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 <td>LocationContext</td>
 <td>
 
-The general world area recognize by the game. Possible values: `Island` (locations on
-[Ginger Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
+The general world area recognized by the game containing the [current or specified
+player](#target-player). Possible values: `Island` (locations on [Ginger
+Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -445,9 +445,10 @@ The general world area recognize by the game. Possible values: `Island` (locatio
 <td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
-The internal name of the player's current location, like `FarmHouse` or `Town`. You can see the name
-for the current location using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or
-[`patch summary`](author-guide.md#patch-summary).
+The internal name of the [current or specified player](#target-player)'s current location, like
+`FarmHouse` or `Town`. You can see the name for the current location using
+[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or [`patch
+summary`](author-guide.md#patch-summary).
 
 Notes:
 * Temporary festival maps always have the location name "Temp".
@@ -466,7 +467,7 @@ Notes:
 <td>PlayerGender</td>
 <td>
 
-The player's gender. Possible values: `Female`, `Male`.
+The [current or specified player](#target-player)'s gender. Possible values: `Female`, `Male`.
 
 </td>
 <td><a href="#PlayerGender">#</a></td>
@@ -474,7 +475,11 @@ The player's gender. Possible values: `Female`, `Male`.
 
 <tr valign="top" id="PlayerName">
 <td>PlayerName</td>
-<td>The player's name.</td>
+<td>
+
+The [current or specified player](#target-player)'s name.
+
+</td>
 <td><a href="#PlayerName">#</a></td>
 </tr>
 
@@ -482,7 +487,7 @@ The player's gender. Possible values: `Female`, `Male`.
 <td>PreferredPet</td>
 <td>
 
-The player's preferred pet. Possible values: `Cat`, `Dog`.
+The current player's preferred pet. Possible values: `Cat`, `Dog`.
 
 </td>
 <td><a href="#PreferredPet">#</a></td>
@@ -492,7 +497,7 @@ The player's preferred pet. Possible values: `Cat`, `Dog`.
 <td>SkillLevel</td>
 <td>
 
-The player's skill levels. You can specify the skill level as an input argument like this:
+The current player's skill levels. You can specify the skill level as an input argument like this:
 
 ```js
 "When": {
@@ -520,8 +525,8 @@ and `Mining`.
 <td id="ChildGenders">ChildNames<br />ChildGenders</td>
 <td>
 
-The names and genders (`Female` or `Male`) for the current player's children (or those for the
-player specified with a [`PlayerType`](#playertype) argument).
+The names and genders (`Female` or `Male`) for the [current or specified player](#target-player)'s
+children.
 
 These are listed in order of birth for use with the [`valueAt` argument](#valueAt). For example,
 `{{ChildNames |valueAt=0}}` and `{{ChildGenders |valueAt=0}}` is the name and gender of the oldest
@@ -578,7 +583,12 @@ Divorced | The player married and then divorced them.
 
 <tr valign="top" id="Spouse">
 <td>Spouse</td>
-<td>The player's spouse name (using their English name regardless of translations).</td>
+<td>
+
+The [current or specified player](#target-player)'s spouse name (using their English name
+regardless of translations).
+
+</td>
 <td><a href="#Spouse">#</a></td>
 </tr>
 </table>
@@ -1711,17 +1721,12 @@ To use a mod-provided token, at least one of these must be true:
   }
   ```
 
-## Constants
-These are predefined values used in tokens.
+## Common values
+These are predefined values used in tokens, linked from the token documentation above as needed.
 
-### `LocationContext`
-value | meaning
------ | -------
-`Island` | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
-`Valley` | Any other location.
-
-The location context can be specified as an [input argument](#input-arguments) for tokens that
-support it, defaulting to the current location. For example:
+### Location context
+Some tokens let you choose which world area to get info for using an [input
+argument](#input-arguments) like this:
 
 example | meaning
 ------- | -------
@@ -1729,21 +1734,32 @@ example | meaning
 `{{Weather: island}}` | Get the weather on Ginger Island.
 `{{Weather: valley}}` | Get the weather in the valley.
 
-### `PlayerType`
+The possible contexts are:
+
+value     | meaning
+--------- | -------
+`current` | The context the current player is in. This is the default and doesn't need to be specified.
+`island`  | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
+`valley`  | Any other location.
+
+### Target player
+Some tokens let you choose which player's info to get using an [input argument](#input-arguments)
+like this:
+
+example                                  | meaning
+---------------------------------------- | -------
+`{{HasFlag}}`<br />`{{HasFlag: curentPlayer}}` | Get flags for the current player.
+`{{HasFlag: hostPlayer}}`                | Get flags for the host player.
+`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
+`{{HasFlag: 3864039824286870457}}`       | Get flags for the player with the unique multiplayer ID `3864039824286870457`.
+
+The possible player types are:
+
 value | meaning
 ----- | -------
 `currentPlayer` | The current player who has the mod installed.
 `hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
 _player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
-
-The player type can be specified as an [input argument](#input-arguments) for tokens that support it,
-defaulting to the current player. For example:
-
-example | meaning
-------- | -------
-`{{HasFlag}}` | Get flags for the current player.
-`{{HasFlag: hostPlayer}}` | Get flags for the host player.
-`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
 
 ## See also
 * [README](README.md) for other info
