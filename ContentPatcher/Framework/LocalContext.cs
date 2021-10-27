@@ -113,7 +113,7 @@ namespace ContentPatcher.Framework
             ManagedManualToken managed;
             {
                 if (!this.LocalTokens.TryGetValue(name, out managed))
-                    this.LocalTokens[name] = managed = new ManagedManualToken(name, this.Scope);
+                    this.LocalTokens[name] = managed = new ManagedManualToken(name, isBounded: false, this.Scope);
             }
 
             // update values

@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework
             // get (or create) token
             if (!this.DynamicTokens.TryGetValue(name, out ManagedManualToken managed))
             {
-                managed = new ManagedManualToken(name, this.Scope);
+                managed = new ManagedManualToken(name, isBounded: true, this.Scope);
                 this.DynamicTokens[name] = managed;
                 this.DynamicContext.Save(managed.Token);
             }

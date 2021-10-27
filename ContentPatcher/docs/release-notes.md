@@ -21,6 +21,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added `unsorted` argument for [`patch summary`](author-guide.md#patch-summary).
 * Added [translation support to Generic Mod Config Menu content pack UI](author-tokens-guide.md#player-config).
 * Updated for Generic Mod Config Menu 1.5.0.
+* Fixed error using `Target*` and `FromFile` tokens as a condition key.
 * Fixed conditions parsed through the C# API unable to use custom tokens added by the same mod.
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.
