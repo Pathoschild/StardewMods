@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Added new tokens:
+  * [`HasCookingRecipe`](author-tokens-guide.md#HasCookingRecipe) and [`HasCraftingRecipe`](author-tokens-guide.md#HasCraftingRecipe) to get the crafting/cooking recipes known by a player.
   * [`LocationOwnerId`](author-tokens-guide.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
   * [`PathPart`](author-tokens-guide.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
 * Improved tokens:

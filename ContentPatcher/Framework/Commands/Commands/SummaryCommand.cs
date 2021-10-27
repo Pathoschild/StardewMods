@@ -45,6 +45,8 @@ namespace ContentPatcher.Framework.Commands.Commands
         {
             ConditionType.HasActiveQuest,
             ConditionType.HasCaughtFish,
+            ConditionType.HasCookingRecipe,
+            ConditionType.HasCraftingRecipe,
             ConditionType.HasConversationTopic,
             ConditionType.HasDialogueAnswer,
             ConditionType.HasFlag,

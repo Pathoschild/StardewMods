@@ -38,6 +38,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The fish IDs caught by the player.</summary>
         HasCaughtFish,
 
+        /// <summary>The cooking recipes known by the player.</summary>
+        HasCookingRecipe,
+
+        /// <summary>The crafting recipes known by the player.</summary>
+        HasCraftingRecipe,
+
         /// <summary>A conversation topic ID set for the player.</summary>
         HasConversationTopic,
 

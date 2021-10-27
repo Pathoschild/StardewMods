@@ -187,6 +187,8 @@ namespace ContentPatcher.Framework
             yield return new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCookingRecipe, player => player.cookingRecipes.Keys, save);
+            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCraftingRecipe, player => player.craftingRecipes.Keys, save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered.Select(p => p.ToString()), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, player => save.GetFlags(player), save);
             yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, player => player.professions.Select(id => ((Profession)id).ToString()), save);

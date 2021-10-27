@@ -22,6 +22,8 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 24, 0))
         {
             this.AddedTokens.AddMany(
+                ConditionType.HasCookingRecipe.ToString(),
+                ConditionType.HasCraftingRecipe.ToString(),
                 ConditionType.LocationOwnerId.ToString(),
                 ConditionType.PathPart.ToString()
             );

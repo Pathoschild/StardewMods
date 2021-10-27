@@ -305,6 +305,28 @@ for the [current or specified player](#target-player).
 <td><a href="#HasConversationTopic">#</a></td>
 </tr>
 
+<tr valign="top" id="HasCookingRecipe">
+<td>HasCookingRecipe</td>
+<td>
+
+The [cooking recipes](https://stardewvalleywiki.com/Cooking) known by the [current or specified
+player](#target-player).
+
+</td>
+<td><a href="#HasCookingRecipe">#</a></td>
+</tr>
+
+<tr valign="top" id="HasCraftingRecipe">
+<td>HasCraftingRecipe</td>
+<td>
+
+The [crafting recipes](https://stardewvalleywiki.com/Crafting) known by the [current or specified
+player](#target-player).
+
+</td>
+<td><a href="#HasCraftingRecipe">#</a></td>
+</tr>
+
 <tr valign="top" id="HasDialogueAnswer">
 <td>HasDialogueAnswer</td>
 <td>
