@@ -4,12 +4,25 @@ You can optionally enable islands and beach sounds.
 
 > ![](screenshots/farm.png)
 
+## Contents
+* [Install](#install)
+* [Usage](#usage)
+  * [Basic usage](#basic-usage)
+  * [Change farm type](#change-farm-type)
+* [Configure](#configure)
+  * [In-game settings](#in-game-settings)
+  * [`config.json` file](#configjson-file)
+* [FAQs](#faqs)
+* [Compiling from source](#compiling-from-source)
+* [See also](#see-also)
+
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
 2. Install [this mod from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/3750).
 3. Run the game using SMAPI.
 
 ## Usage
+### Basic usage
 Just load a save with the beach farm, and you'll see the new map! You can change which farm is
 replaced in the [configuration](#configure).
 
@@ -36,6 +49,29 @@ Tips:
 * If you use [Automate](https://www.nexusmods.com/stardewvalley/mods/1063), you can connect chests
   to crab pots all along the beach:
   > ![](screenshots/automate-crabpots.png)
+
+### Change farm type
+If you have an existing save using a different farm type, you can convert into a Small Beach Farm
+like this:
+
+1. Load your save file.
+2. Enter this command in the SMAPI console window:
+   ```
+   small_beach_farm set_farm_type
+   ```
+3. If needed, use [Noclip Mode](https://www.nexusmods.com/stardewvalley/mods/3900) to clean up
+   anything that's now out of bounds, or [use SMAPI's `world_clear` command](https://stardewvalleywiki.com/Saves#Change_farm_type).
+
+You can also convert a Small Beach Farm back into a vanilla farm type:
+
+desired farm type | console command
+:---------------- | :---------------------------------
+Standard          | `small_beach_farm set_farm_type 0`
+Riverlands        | `small_beach_farm set_farm_type 1`
+Forest            | `small_beach_farm set_farm_type 2`
+Hilltop           | `small_beach_farm set_farm_type 3`
+Combat            | `small_beach_farm set_farm_type 4`
+Four Corners      | `small_beach_farm set_farm_type 5`
 
 ## Configure
 ### In-game settings
