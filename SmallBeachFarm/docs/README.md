@@ -132,8 +132,6 @@ Compatibility files can be added to the Small Beach Farm folder instead.
 3. If the player has multiple mods with a matching folder, only the first one alphabetically will be
    used.
 
-If you send me the files, I'll add official support for the recolor!
-
 ## Compiling from source
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
 compile the mod yourself, see the repository readme for the main instructions.
