@@ -24,14 +24,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <summary>The border color for the scarecrow under the cursor.</summary>
         private readonly Color SelectedColor = Color.Blue;
 
-        /// <summary>The maximum number of tiles from the center a normal scarecrow can protect.</summary>
-        private readonly int MaxDefaultRadius = 8;
-
-        /// <summary>The maximum number of tiles from the center a normal scarecrow can protect.</summary>
-        private readonly int MaxDeluxeRadius = 16;
-
-        /// <summary>Object IDs for custom mod scarecrows not covered by the default logic.</summary>
-        private readonly int[] ModObjectIds;
+        /// <summary>The maximum number of tiles from the center to search for scarecrows.</summary>
+        private readonly int MaxSearchRadius = 20;
 
 
         /*********
@@ -39,8 +33,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        /// <param name="mods">Handles access to the supported mod integrations.</param>
-        public ScarecrowLayer(LayerConfig config, ModIntegrations mods)
+        public ScarecrowLayer(LayerConfig config)
             : base(I18n.Scarecrows_Name(), config)
         {
             this.Legend = new[]
@@ -48,7 +41,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 this.Covered = new LegendEntry(I18n.Keys.Scarecrows_Protected, Color.Green),
                 this.Exposed = new LegendEntry(I18n.Keys.Scarecrows_Exposed, Color.Red)
             };
-            this.ModObjectIds = this.GetModScarecrowIDs(mods).ToArray();
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -59,13 +51,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             // get scarecrows
-            Vector2[] searchTiles = visibleArea.Expand(this.MaxDeluxeRadius).GetTiles().ToArray();
+            Vector2[] searchTiles = visibleArea.Expand(this.MaxSearchRadius).GetTiles().ToArray();
             SObject[] scarecrows =
                 (
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let scarecrow = location.objects[tile]
-                    where this.IsScarecrow(scarecrow)
+                    where scarecrow.IsScarecrow()
                     select scarecrow
                 )
                 .ToArray();
@@ -94,7 +86,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // yield scarecrow being placed
             SObject heldObj = Game1.player.ActiveObject;
-            if (this.IsScarecrow(heldObj))
+            if (heldObj?.IsScarecrow() == true)
             {
                 var tiles = this
                     .GetCoverage(heldObj, cursorTile)
@@ -109,33 +101,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /*********
         ** Private methods
         *********/
-        /// <summary>Get the object IDs for known mod scarecrows.</summary>
-        /// <param name="mods">Handles access to the supported mod integrations.</param>
-        private IEnumerable<int> GetModScarecrowIDs(ModIntegrations mods)
-        {
-            if (mods.PrismaticTools.IsLoaded && mods.PrismaticTools.ArePrismaticSprinklersScarecrows())
-                yield return mods.PrismaticTools.GetSprinklerID();
-        }
-
-        /// <summary>Get whether a map object is a scarecrow.</summary>
-        /// <param name="obj">The map object.</param>
-        /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
-        private bool IsScarecrow(SObject obj)
-        {
-            if (obj == null)
-                return false;
-
-            // vanilla sprinkler
-            if (obj.bigCraftable.Value && obj.Name.Contains("arecrow"))
-                return true;
-
-            // mod sprinkler
-            if (!obj.bigCraftable.Value && this.ModObjectIds.Contains(obj.ParentSheetIndex))
-                return true;
-
-            return false;
-        }
-
         /// <summary>Get whether a map terrain feature is a crop.</summary>
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
@@ -150,9 +115,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         private IEnumerable<Vector2> GetCoverage(Object scarecrow, Vector2? overrideOrigin = null)
         {
             Vector2 origin = overrideOrigin ?? scarecrow.TileLocation;
-            int radius = scarecrow.Name.Contains("Deluxe")
-                ? this.MaxDeluxeRadius
-                : this.MaxDefaultRadius;
+            int radius = scarecrow.GetRadiusForScarecrow();
 
             for (int x = (int)origin.X - radius; x <= origin.X + radius; x++)
             {

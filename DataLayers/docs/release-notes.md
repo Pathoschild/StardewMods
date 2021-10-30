@@ -1,6 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5.5, including...
+  * custom scarecrows using the new `obj.IsScarecrow()` and `obj.GetRadiusForScarecrow()` methods.
+
 ## 1.14.8
 Released 27 November 2021 for SMAPI 3.12.5 or later.
 
