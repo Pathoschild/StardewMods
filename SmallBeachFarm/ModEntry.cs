@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,6 +12,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
@@ -20,7 +22,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
     /// <summary>The mod entry class loaded by SMAPI.</summary>
-    public class ModEntry : Mod, IAssetLoader
+    public class ModEntry : Mod, IAssetEditor, IAssetLoader
     {
         /*********
         ** Fields
@@ -30,9 +32,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
         /// <summary>The relative path to the folder containing tilesheet variants.</summary>
         private readonly string TilesheetsPath = Path.Combine("assets", "tilesheets");
-
-        /// <summary>The asset name for the map to replace.</summary>
-        private string FarmMapAssetName;
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
@@ -47,8 +46,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Public methods
         *********/
-        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
-        /// <param name="helper">Provides simplified APIs for writing mods.</param>
+        /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
             I18n.Init(helper.Translation);
@@ -68,12 +66,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // read config
             this.Config = this.Helper.ReadConfig<ModConfig>();
-            this.FarmMapAssetName = $"Maps/{Farm.getMapNameFromTypeInt(this.Config.ReplaceFarmID)}";
-            if (this.FarmMapAssetName == null)
-            {
-                this.Monitor.Log("You have an invalid farm ID in the 'config.json' file. You can delete the file to reset it. This mod will be disabled.", LogLevel.Error);
-                return;
-            }
 
             // hook events
             helper.Events.GameLoop.DayEnding += this.DayEnding;
@@ -91,24 +83,50 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             );
         }
 
-        /// <summary>Get whether this instance can load the initial version of the given asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        /// <inheritdoc />
+        public bool CanEdit<T>(IAssetInfo asset)
+        {
+            return
+                asset.AssetNameEquals("Data/AdditionalFarms")
+                || asset.AssetNameEquals("Strings/UI");
+        }
+
+        /// <inheritdoc />
+        public void Edit<T>(IAssetData asset)
+        {
+            // add farm type
+            if (asset.AssetNameEquals("Data/AdditionalFarms"))
+            {
+                var data = (List<ModFarmType>)asset.Data;
+                data.Add(new()
+                {
+                    ID = this.ModManifest.UniqueID,
+                    TooltipStringPath = "Strings/UI:Pathoschild_BeachFarm_Description",
+                    MapName = "Pathoschild_SmallBeachFarm"
+                });
+            }
+
+            // add farm description
+            else if (asset.AssetNameEquals("Strings/UI"))
+            {
+                var data = asset.AsDictionary<string, string>().Data;
+                data["Pathoschild_BeachFarm_Description"] = $"{I18n.Farm_Name()}_{I18n.Farm_Description()}";
+            }
+        }
+
+        /// <inheritdoc />
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            if (this.FarmMapAssetName == null)
-                return false;
-
             return
-                asset.AssetNameEquals(this.FarmMapAssetName)
+                asset.AssetNameEquals("Maps/Pathoschild_SmallBeachFarm")
                 || asset.AssetName.StartsWith(this.FakeAssetPrefix);
         }
 
-        /// <summary>Load a matched asset.</summary>
-        /// <param name="asset">Basic metadata about the asset being loaded.</param>
+        /// <inheritdoc />
         public T Load<T>(IAssetInfo asset)
         {
             // load map
-            if (asset.AssetNameEquals(this.FarmMapAssetName))
+            if (asset.AssetNameEquals("Maps/Pathoschild_SmallBeachFarm"))
             {
                 // load map
                 Map map = this.Helper.Content.Load<Map>("assets/farm.tmx");
@@ -217,7 +235,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /// <param name="farm">The farm instance.</param>
         private bool IsSmallBeachFarm(GameLocation location, out Farm farm)
         {
-            if (Game1.whichFarm == this.Config.ReplaceFarmID && location is Farm { Name: "Farm" } farmInstance)
+            if (Game1.whichModFarm?.ID == this.ModManifest.UniqueID && location is Farm { Name: "Farm" } farmInstance)
             {
                 farm = farmInstance;
                 return true;

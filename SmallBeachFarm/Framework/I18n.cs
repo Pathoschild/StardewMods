@@ -28,6 +28,18 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
             I18n.Translations = translations;
         }
 
+        /// <summary>Get a translation equivalent to "Small Beach Farm".</summary>
+        public static string Farm_Name()
+        {
+            return I18n.GetByKey("farm.name");
+        }
+
+        /// <summary>Get a translation equivalent to "A small fertile pocket beach, where you can catch both river and ocean fish.".</summary>
+        public static string Farm_Description()
+        {
+            return I18n.GetByKey("farm.description");
+        }
+
         /// <summary>Get a translation equivalent to "Add campfire".</summary>
         public static string Config_Campfire_Name()
         {

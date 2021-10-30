@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using StardewModdingAPI;
-using StardewValley;
 
 namespace Pathoschild.Stardew.SmallBeachFarm.Framework
 {
@@ -16,9 +13,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         *********/
         /// <summary>The Generic Mod Config Menu integration.</summary>
         private readonly GenericModConfigMenuIntegration<ModConfig> ConfigMenu;
-
-        /// <summary>The IDs and display names for each farm type that can be replaced.</summary>
-        private readonly IDictionary<int, Func<string>> FarmChoices;
 
 
         /*********
@@ -34,7 +28,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
         public GenericModConfigMenuIntegrationForSmallBeachFarm(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<ModConfig> getConfig, Action reset, Action saveAndApply)
         {
             this.ConfigMenu = new GenericModConfigMenuIntegration<ModConfig>(modRegistry, monitor, manifest, getConfig, reset, saveAndApply);
-            this.FarmChoices = this.GetFarmNamesById();
         }
 
         /// <summary>Register the config menu if available.</summary>
@@ -66,49 +59,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     tooltip: I18n.Config_BeachSounds_Tooltip,
                     get: config => config.UseBeachMusic,
                     set: (config, value) => config.UseBeachMusic = value
-                )
-                .AddDropdown(
-                    name: I18n.Config_FarmType_Name,
-                    tooltip: I18n.Config_FarmType_Tooltip,
-                    get: config => config.ReplaceFarmID.ToString(),
-                    set: (config, value) => config.ReplaceFarmID = int.Parse(value),
-                    allowedValues: this.FarmChoices.OrderBy(p => p.Value()).Select(p => p.Key.ToString()).ToArray(),
-                    formatAllowedValue: value => this.GetFarmName(int.Parse(value))
                 );
-        }
-
-        /// <summary>Get the IDs and display names for each farm type that can be replaced.</summary>
-        private IDictionary<int, Func<string>> GetFarmNamesById()
-        {
-            Dictionary<int, Func<string>> farmNamesById = new();
-
-            foreach (int id in new[] { Farm.default_layout, Farm.riverlands_layout, Farm.forest_layout, Farm.mountains_layout, Farm.combat_layout, Farm.fourCorners_layout, Farm.beach_layout })
-            {
-                string translationKey = id switch
-                {
-                    Farm.default_layout => "Character_FarmStandard",
-                    Farm.riverlands_layout => "Character_FarmFishing",
-                    Farm.forest_layout => "Character_FarmForaging",
-                    Farm.mountains_layout => "Character_FarmMining",
-                    Farm.combat_layout => "Character_FarmCombat",
-                    Farm.fourCorners_layout => "Character_FarmFourCorners",
-                    Farm.beach_layout => "Character_FarmBeach",
-                    _ => throw new InvalidOperationException($"Unexpected farm ID {id}.")
-                };
-
-                farmNamesById[id] = () => Game1.content.LoadString(@$"Strings\UI:{translationKey}").Split('_')[0];
-            }
-            return farmNamesById;
-        }
-
-        /// <summary>Get the name of a farm type.</summary>
-        /// <param name="id">The farm ID.</param>
-        private string GetFarmName(int id)
-        {
-            if (this.FarmChoices.TryGetValue(id, out Func<string> getName))
-                return getName();
-
-            return id.ToString();
         }
     }
 }

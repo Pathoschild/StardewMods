@@ -25,30 +25,30 @@ You can optionally enable islands and beach sounds.
 ### Enable the farm type
 <dl>
 <dt>For a new save:</dt>
-<dd>On the character creation screen, choose the beach farm.</dd>
+<dd>
+
+1. On the character creation screen, click the arrow next to the farm type list:
+   > <img src="screenshots/create-save-1.png" width="500" />
+2. Choose Small Beach Farm in the list:
+   > <img src="screenshots/create-save-2.png" width="500" />
+
+</dd>
 
 <dt>For an existing save:</dt>
 <dd>
 
-If your existing farm isn't set to the beach farm, you can change the farm type in [Small Beach
-Farm's settings](#configure).
-
-If you have SMAPI 3.12.9 or later, you can also convert your save to the beach farm like this:
+You can convert your save to the small beach farm like this:
 
 1. Load your save.
 2. Enter this command in the SMAPI console window:
    ```
-   set_farm_type 6
+   set_farm_type Pathoschild.SmallBeachFarm
    ```
-   (If you edited `config.json`, adjust the farm ID accordingly.)
 
 </dd>
 </dl>
 
 ### Highlights
-Just load a save with the beach farm, and you'll see the new map! You can change which farm is
-replaced in the [configuration](#configure).
-
 A few highlights:
 
 * The beach is fertile, so you can plant crops in the grass and sand too:  
@@ -92,7 +92,6 @@ setting         | default | what it affects
 `AddCampfire`   | `true`  | Whether to add a functional campfire in front of the farmhouse.
 `EnableIslands` | `false` | Whether to add ocean islands with extra land area.
 `UseBeachMusic` | `false` | Use the beach's background music (i.e. wave sounds) on the beach farm.
-`ReplaceFarmID` | `6`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), `5` (four corners), and `6` (beach).
 
 ## FAQs
 ### Compatibility
