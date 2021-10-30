@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // read config
             this.Config = this.Helper.ReadConfig<ModConfig>();
-            this.FarmMapAssetName = Farm.getMapNameFromTypeInt(this.Config.ReplaceFarmID);
+            this.FarmMapAssetName = $"Maps/{Farm.getMapNameFromTypeInt(this.Config.ReplaceFarmID)}";
             if (this.FarmMapAssetName == null)
             {
                 this.Monitor.Log("You have an invalid farm ID in the 'config.json' file. You can delete the file to reset it. This mod will be disabled.", LogLevel.Error);
