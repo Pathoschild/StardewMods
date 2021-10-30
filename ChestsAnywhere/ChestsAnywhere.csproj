@@ -11,12 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
-    <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\Automate\Framework\AutomateContainerPreference.cs" Link="Framework\AutomateContainerPreference.cs" />
   </ItemGroup>
 
