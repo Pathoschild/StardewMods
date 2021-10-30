@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Fertilizzante",
     "crop-fertilizer.retaining-soil": "Terriccio rattenente",
     "crop-fertilizer.speed-gro": "Crescipresto",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Processo macchinario",

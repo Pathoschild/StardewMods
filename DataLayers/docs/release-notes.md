@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for MultiFertilizer.
 * Refactored console command handling.
 
 ## 1.14.6

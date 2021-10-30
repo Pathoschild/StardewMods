@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Trágya",
     "crop-fertilizer.retaining-soil": "Hidrogél",
     "crop-fertilizer.speed-gro": "Gyorsnövesztő",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Gépi feldolgozás",

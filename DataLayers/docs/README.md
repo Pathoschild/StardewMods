@@ -162,9 +162,11 @@ Automate          | Shows whether your machines are empty, processing, or ready 
 Better Junimos    | Shows custom Junimo hut coverage.
 Better Sprinklers | Shows custom sprinkler coverage.
 Line Sprinklers   | Shows line sprinkler coverage.
+MultiFertilizer   | Show crops covered with multi-fertilizers.
 Pelican Fiber     | Shows coverage when building a Junimo hut or sprinkler through Pelican Fiber's menu.
-Prismatic Tools   | Shows prismatic sprinkler coverage.
+Prismatic Tools   | Shows prismatic scarecrow coverage.
 Simple Sprinkler  | Shows custom sprinkler coverage.
+_custom sprinkers_ | Shows custom sprinkler coverage for any mod using the game's built-in sprinkler methods (including Prismatic Tools).
 
 
 ## Advanced

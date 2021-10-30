@@ -119,7 +119,7 @@ namespace Pathoschild.Stardew.DataLayers
             if (layers.CropPaddyWater.IsEnabled())
                 yield return new CropPaddyWaterLayer(layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(layers.CropFertilizer);
+                yield return new CropFertilizerLayer(layers.CropFertilizer, mods);
             if (layers.CropHarvest.IsEnabled())
                 yield return new CropHarvestLayer(layers.CropHarvest);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)

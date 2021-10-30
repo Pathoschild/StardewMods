@@ -2,6 +2,7 @@ using Pathoschild.Stardew.Common.Integrations.Automate;
 using Pathoschild.Stardew.Common.Integrations.BetterJunimos;
 using Pathoschild.Stardew.Common.Integrations.BetterSprinklers;
 using Pathoschild.Stardew.Common.Integrations.LineSprinklers;
+using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.PelicanFiber;
 using Pathoschild.Stardew.Common.Integrations.PrismaticTools;
 using Pathoschild.Stardew.Common.Integrations.SimpleSprinkler;
@@ -27,6 +28,9 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <summary>Handles access to the Line Sprinklers mod.</summary>
         public LineSprinklersIntegration LineSprinklers { get; }
 
+        /// <summary>Handles access to the MultiFertilizer mod.</summary>
+        public MultiFertilizerIntegration MultiFertilizer { get; }
+
         /// <summary>Handles access to the Pelican Fiber mod.</summary>
         public PelicanFiberIntegration PelicanFiber { get; }
 
@@ -34,7 +38,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         public PrismaticToolsIntegration PrismaticTools { get; }
 
         /// <summary>Handles access to the Simple Sprinkler mod.</summary>
-        public SimpleSprinklerIntegration SimpleSprinkler;
+        public SimpleSprinklerIntegration SimpleSprinkler { get; }
 
 
         /*********
@@ -50,6 +54,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             this.BetterJunimos = new BetterJunimosIntegration(modRegistry, monitor);
             this.BetterSprinklers = new BetterSprinklersIntegration(modRegistry, monitor);
             this.LineSprinklers = new LineSprinklersIntegration(modRegistry, monitor);
+            this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
             this.PelicanFiber = new PelicanFiberIntegration(modRegistry, reflection, monitor);
             this.PrismaticTools = new PrismaticToolsIntegration(modRegistry, monitor);
             this.SimpleSprinkler = new SimpleSprinklerIntegration(modRegistry, monitor);

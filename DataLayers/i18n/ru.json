@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Здесь применено удобрение ",
     "crop-fertilizer.retaining-soil": "Здесь влагосохраняющая почва",
     "crop-fertilizer.speed-gro": "Здесь применён \"СкороРост\"",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Статус механической обработки",

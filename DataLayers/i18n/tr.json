@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Gübre",
     "crop-fertilizer.retaining-soil": "Toprağın Toplanması",
     "crop-fertilizer.speed-gro": "Speed-Gro",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Makine İşleme",

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Added support for MultiFertilizer.
 * Fixed error if a mod adds invalid tailoring recipes.
 * Improved translations. Thanks to Lumina (updated French)!
 

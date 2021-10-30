@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Fertilizante",
     "crop-fertilizer.retaining-soil": "Retentor de água",
     "crop-fertilizer.speed-gro": "Acelerador de crescimento",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Processamento de Máquina",

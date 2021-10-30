@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "ปุ๋ยเพิ่มคุณภาพดิน",
     "crop-fertilizer.retaining-soil": "ปุ๋ยรักษาความชื้น",
     "crop-fertilizer.speed-gro": "ปุ๋ยเร่งโต",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "เครื่องจักรกำลังทำงานอยู่มั้ย",

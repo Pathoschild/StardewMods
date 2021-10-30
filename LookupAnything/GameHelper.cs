@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -65,24 +66,28 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         public Metadata Metadata { get; }
 
+        /// <summary>The MultiFertilizer integration.</summary>
+        public MultiFertilizerIntegration MultiFertilizer { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
-        /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <param name="monitor">Encapsulates logging to the console.</param>
+        /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to protected code.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata, IMonitor monitor, IReflectionHelper reflection)
+        public GameHelper(Metadata metadata, IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
             this.DataParser = new DataParser(this);
-            this.CustomFarmingRedux = customFarmingRedux;
-            this.ProducerFrameworkMod = producerFrameworkMod;
             this.Metadata = metadata;
             this.Monitor = monitor;
             this.WorldItemScanner = new WorldItemScanner(reflection);
+
+            this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, this.Monitor);
+            this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
+            this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
