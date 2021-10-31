@@ -84,6 +84,7 @@ Hungarian  | [↻](ChestsAnywhere/i18n/hu.json) | [↻](DataLayers/i18n/hu.json)
 Italian    | [↻](ChestsAnywhere/i18n/it.json) | [↻](DataLayers/i18n/it.json) | [✓](DebugMode/i18n/it.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/it.json) | [✓](NoclipMode/i18n/it.json) | ❑          | ❑                | [↻](TractorMod/i18n/it.json)
 Japanese   | [↻](ChestsAnywhere/i18n/ja.json) | [↻](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | ❑          | ❑                | [↻](TractorMod/i18n/ja.json)
 Korean     | [↻](ChestsAnywhere/i18n/ko.json) | [↻](DataLayers/i18n/ko.json) | [✓](DebugMode/i18n/ko.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ko.json) | [✓](NoclipMode/i18n/ko.json) | ❑          | ❑                | [↻](TractorMod/i18n/ko.json)
+Polish¹    | ❑                                | ❑                            | ❑                           | ❑               | ❑                    | [✓](LookupAnything/i18n/pl.json) | ❑                            | ❑          | ❑                | ❑
 Portuguese | [✓](ChestsAnywhere/i18n/pt.json) | [↻](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | ❑          | ❑                | [↻](TractorMod/i18n/pt.json)
 Russian    | [↻](ChestsAnywhere/i18n/ru.json) | [↻](DataLayers/i18n/ru.json) | [✓](DebugMode/i18n/ru.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | ❑          | ❑                | [↻](TractorMod/i18n/ru.json)
 Spanish    | [✓](ChestsAnywhere/i18n/es.json) | [↻](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | ❑          | ❑                | [↻](TractorMod/i18n/es.json)
@@ -93,7 +94,7 @@ Turkish    | [✓](ChestsAnywhere/i18n/tr.json) | [↻](DataLayers/i18n/tr.json)
 Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
 on the wiki for help contributing translations.
 
-¹ Requires [Stardew Valley - THAI](https://www.nexusmods.com/stardewvalley/mods/7052) or similar.
+¹ This is a custom language provided by a mod (see [Polish](https://www.nexusmods.com/stardewvalley/mods/3616) and [Thai](https://www.nexusmods.com/stardewvalley/mods/7052)).
 
 ## Compiling the mods
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to
