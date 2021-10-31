@@ -1,14 +1,19 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Automate now rescans machines each day to fix edge cases like building upgrades in multiplayer.
-* [Super Hoppers](https://www.nexusmods.com/stardewvalley/mods/9418) are now ignored by Automate to avoid unintended connections.
-* Added `GetFilled()` and `GetCapacity()` methods to the `IContainer` interface. This affects mods which add custom container types.
+## 1.23.3
+Released 31 October 2021 for SMAPI 3.12.5 or later.
+
+* [Super Hoppers](https://www.nexusmods.com/stardewvalley/mods/9418) are now ignored.
+* Machines are now rescanned each day to fix edge cases like building upgrades in multiplayer.
 * Improved `automate summary` console command:
-  * it now shows machine states and chest fullness;
-  * it now shows a warning if it detects a common cause of lag.
+  * added machine states and chest capacity;
+  * added a warning if common causes of lag are detected.
 * Refactored console command handling.
+
+**Update note for mod authors:**  
+The `IContainer` interface has two new methods: `GetFilled()` and `GetCapacity()`. This probably
+won't affect other mods, since only Automate is known to implement containers currently.
 
 ## 1.23.2
 Released 24 July 2021 for SMAPI 3.9.5 or later.

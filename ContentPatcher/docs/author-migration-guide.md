@@ -74,10 +74,12 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](release-notes.md) for a full list of changes.
 
 ## 1.24
-* The `Spouse` token no longer includes roommates. If you want to check for both roommate and
+Released 31 October 2021.
+
+* **The `Spouse` token no longer includes roommates.** If you want to check for both roommate and
   spouse, you can use `{{Merge: {{Roommate}}, {{Spouse}}}}` to match the previous behavior.
-* Some tokens were previously sorted unnecessarily; they now match the game order instead. This
-  should have no effect on most content packs, unless they use `valueAt` with any of these tokens:
+* **Some tokens return values in a different order** to match the game order. This should have no
+  effect on most content packs, unless they use `valueAt` with any of these tokens:
   `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`, and
   `HasSeenEvent`.
 

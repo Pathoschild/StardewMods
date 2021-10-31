@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Tractor Mod",
     "Author": "Pathoschild",
-    "Version": "4.14.4",
+    "Version": "4.14.5",
     "MinimumApiVersion": "3.12.5",
     "UniqueID": "Pathoschild.TractorMod",
     "Description": "Lets you buy a tractor to more efficiently work with crops, clear twigs and rocks, etc.",
