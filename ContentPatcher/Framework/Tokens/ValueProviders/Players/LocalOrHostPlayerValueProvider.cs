@@ -26,6 +26,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <summary>The values as of the last context update.</summary>
         private readonly IDictionary<long, InvariantHashSet> Values = new Dictionary<long, InvariantHashSet>();
 
+        /// <summary>The player IDs by type as of the last update.</summary>
         private readonly IDictionary<PlayerType, long> PlayerIdsByType = new Dictionary<PlayerType, long>();
 
 
@@ -45,6 +46,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = player => new InvariantHashSet(values(player));
             this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
+
+            // prepopulate player IDs for validation
+            foreach (PlayerType playerType in Enum.GetValues(typeof(PlayerType)))
+                this.PlayerIdsByType[playerType] = 0;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -109,9 +114,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidPositionalArgs()
+        public override bool TryValidateInput(IInputArguments input, out string error)
         {
-            return new InvariantHashSet(this.Values.Keys.Select(p => p.ToString()));
+            return
+                base.TryValidateInput(input, out error)
+                && (
+                    !input.HasPositionalArgs
+                    || this.TryParseInput(input, out _, out error, testOnly: true)
+                );
         }
 
         /// <inheritdoc />
@@ -139,23 +149,29 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <param name="input">The input arguments.</param>
         /// <param name="playerIds">The parsed player IDs.</param>
         /// <param name="error">The error indicating why the input is invalid, if applicable.</param>
+        /// <param name="testOnly">Whether we're only testing that the input is valid, so <paramref name="playerIds"/> doesn't need to be populated.</param>
         /// <returns>Returns whether the input is valid.</returns>
-        private bool TryParseInput(IInputArguments input, out ISet<long> playerIds, out string error)
+        private bool TryParseInput(IInputArguments input, out ISet<long> playerIds, out string error, bool testOnly = false)
         {
-            playerIds = new HashSet<long>();
+            playerIds = !testOnly
+                ? new HashSet<long>()
+                : null;
 
             foreach (string arg in input.PositionalArgs)
             {
-                if (Enum.TryParse(arg, ignoreCase: true, out PlayerType type))
+                if (long.TryParse(arg, out long playerId))
                 {
-                    if (this.PlayerIdsByType.TryGetValue(type, out long id))
-                        playerIds.Add(id);
+                    if (!testOnly)
+                        playerIds.Add(playerId);
                 }
-                else if (long.TryParse(arg, out long id))
-                    playerIds.Add(id);
+                else if (Enum.TryParse(arg, ignoreCase: true, out PlayerType type))
+                {
+                    if (!testOnly)
+                        playerIds.Add(this.PlayerIdsByType[type]);
+                }
                 else
                 {
-                    error = $"invalid input arguments ({input.TokenString}) for {this.Name} token, expected any combination of player IDs, {string.Join(", ", Enum.GetNames(typeof(PlayerType)))}.";
+                    error = $"invalid input arguments ({input.TokenString}) for {this.Name} token, expected any combination of '{string.Join("', '", Enum.GetNames(typeof(PlayerType)))}', or player IDs.";
                     return false;
                 }
             }
