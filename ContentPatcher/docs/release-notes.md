@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## 1.24.0
-Released 31 October 2021 for SMAPI 3.12.6 or later.
+Released 31 October 2021 for SMAPI 3.12.6 or later. See the [release highlights](https://www.patreon.com/posts/58121270).
 
 * Added new tokens:
   * [`HasCookingRecipe`](author-tokens-guide.md#HasCookingRecipe) and [`HasCraftingRecipe`](author-tokens-guide.md#HasCraftingRecipe) to get the crafting/cooking recipes known by a player.
