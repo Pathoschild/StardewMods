@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="80" height="75" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="23">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="80" height="75" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="59">
  <properties>
   <property name="AmbientLight" value="90 90 35"/>
   <property name="Arch" value="111 .01 113 .009"/>
@@ -12,6 +12,7 @@
   <property name="GreenhouseLocation" value="24 9"/>
   <property name="Outdoors" value="T"/>
   <property name="ShippingBinLocation" value="71 13"/>
+  <property name="SpawnBeachFarmForage" value="T"/>
   <property name="Spouse" value="3 22 2 11 11 2 4 5 0 1 12 2 17 11 2 23 3 2"/>
   <property name="SpouseAreaLocation" value="69 6"/>
   <property name="Warp" value="80 16 BusStop 0 23 80 17 BusStop 0 23 80 18 BusStop 0 23 80 20 Forest 69 0 80 21 Forest 68 0 39 -1 Backwoods 13 38 40 -1 Backwoods 14 39 41 -1 Backwoods 15 39 34 5 FarmCave 8 11"/>
@@ -3676,6 +3677,161 @@
    <properties>
     <property name="NPCBarrier" value="T"/>
     <property name="NoFurniture" value="t"/>
+   </properties>
+  </object>
+  <object id="27" name="TileData" x="144" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="28" name="TileData" x="160" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="29" name="TileData" x="160" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="30" name="TileData" x="144" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="31" name="TileData" x="160" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="32" name="TileData" x="160" y="432" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="33" name="TileData" x="144" y="432" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="34" name="TileData" x="128" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="35" name="TileData" x="336" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="36" name="TileData" x="352" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="37" name="TileData" x="352" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="38" name="TileData" x="336" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="39" name="TileData" x="336" y="432" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="40" name="TileData" x="368" y="448" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="41" name="TileData" x="368" y="464" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="42" name="TileData" x="720" y="416" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="43" name="TileData" x="736" y="416" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="44" name="TileData" x="736" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="45" name="TileData" x="720" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="46" name="TileData" x="752" y="384" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="47" name="TileData" x="736" y="384" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="48" name="TileData" x="976" y="368" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="49" name="TileData" x="992" y="368" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="50" name="TileData" x="1008" y="368" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="51" name="TileData" x="976" y="352" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="52" name="TileData" x="1152" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="53" name="TileData" x="1168" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="54" name="TileData" x="1184" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="55" name="TileData" x="512" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="56" name="TileData" x="528" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
+   </properties>
+  </object>
+  <object id="57" name="TileData" x="544" y="400" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="All"/>
    </properties>
   </object>
  </objectgroup>

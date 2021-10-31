@@ -4,6 +4,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
+using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -19,11 +20,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
         private static IMonitor Monitor;
 
-        /// <summary>Use the beach's background music (i.e. wave sounds) on the beach farm.</summary>
-        private static bool UseBeachMusic;
-
-        /// <summary>Whether to add the campfire to the farm map.</summary>
-        private static bool AddCampfire;
+        /// <summary>The mod configuration.</summary>
+        private static ModConfig Config;
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
         private static Func<GameLocation, bool> IsSmallBeachFarm;
@@ -40,15 +38,13 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         *********/
         /// <summary>Initialize the patcher.</summary>
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
-        /// <param name="addCampfire">Whether to add the campfire to the farm map.</param>
-        /// <param name="useBeachMusic">Use the beach's background music (i.e. wave sounds) on the beach farm.</param>
+        /// <param name="config">The mod configuration.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
         /// <param name="getFishType">Get the fish that should be available from the given tile.</param>
-        public FarmPatcher(IMonitor monitor, bool addCampfire, bool useBeachMusic, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
+        public FarmPatcher(IMonitor monitor, ModConfig config, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
         {
             FarmPatcher.Monitor = monitor;
-            FarmPatcher.AddCampfire = addCampfire;
-            FarmPatcher.UseBeachMusic = useBeachMusic;
+            FarmPatcher.Config = config;
             FarmPatcher.IsSmallBeachFarm = isSmallBeachFarm;
             FarmPatcher.GetFishType = getFishType;
         }
@@ -71,6 +67,10 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
             harmony.Patch(
                 original: this.RequireMethod<GameLocation>(nameof(GameLocation.cleanupBeforePlayerExit)),
                 prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_CleanupBeforePlayerExit))
+            );
+            harmony.Patch(
+                original: this.RequireMethod<GameLocation>(nameof(GameLocation.getRandomTile)),
+                prefix: this.GetHarmonyMethod(nameof(FarmPatcher.After_GetRandomTile))
             );
         }
 
@@ -146,7 +146,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 
             // toggle campfire (derived from StardewValley.Locations.Mountain:resetSharedState
             Vector2 campfireTile = new Vector2(64, 22);
-            if (FarmPatcher.AddCampfire)
+            if (FarmPatcher.Config.AddCampfire)
             {
                 if (!__instance.objects.ContainsKey(campfireTile))
                 {
@@ -174,10 +174,25 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
                 Game1.changeMusicTrack("none", music_context: Game1.MusicContext.SubLocation);
         }
 
+        /// <summary>A method called via Harmony after <see cref="GameLocation.getRandomTile"/>.</summary>
+        /// <param name="__instance">The farm instance.</param>
+        [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
+        private static void After_GetRandomTile(GameLocation __instance, ref Vector2 __result)
+        {
+            if (!FarmPatcher.IsSmallBeachFarm(__instance))
+                return;
+
+            // reduce chance of ocean tiles in random tile selection, which makes things like beach crates much less likely than vanilla
+            Farm farm = (Farm)__instance;
+            int maxTileY = FarmPatcher.Config.EnableIslands ? farm.Map.Layers[0].LayerHeight : 31;
+            for (int i = 0; FarmPatcher.GetFishType(farm, (int)__result.X, (int)__result.Y) == FishType.Ocean && i < 250; i++)
+                __result = new Vector2(Game1.random.Next(farm.Map.Layers[0].LayerWidth), Game1.random.Next(maxTileY));
+        }
+
         /// <summary>Get whether the Small Beach Farm's music should be overridden with the beach sounds.</summary>
         private static bool ShouldUseBeachMusic()
         {
-            return FarmPatcher.UseBeachMusic && !Game1.isRaining;
+            return FarmPatcher.Config.UseBeachMusic && !Game1.isRaining;
         }
     }
 }

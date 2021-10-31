@@ -61,6 +61,9 @@ A few highlights:
 * The beach has a functional campfire you can use (pairs well with
   [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking)):  
   > ![](screenshots/campfire.gif)
+* Forage and [supply crates](https://stardewvalleywiki.com/Supply_Crate) can occasionally spawn
+  along the shore:
+  > ![](screenshots/supply-crates.png)
 
 Tips:
 

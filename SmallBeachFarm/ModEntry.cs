@@ -75,8 +75,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             HarmonyPatcher.Apply(this,
                 new FarmPatcher(
                     this.Monitor,
-                    addCampfire: this.Config.AddCampfire,
-                    useBeachMusic: this.Config.UseBeachMusic,
+                    config: this.Config,
                     isSmallBeachFarm: location => this.IsSmallBeachFarm(location, out _),
                     getFishType: this.GetFishType
                 )
@@ -252,8 +251,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         private FishType GetFishType(Farm farm, int x, int y)
         {
             // not water
-            // This should never happen since it's only called when catching a fish, but just in
-            // case fallback to the default farm logic.
             if (farm.doesTileHaveProperty(x, y, "Water", "Back") == null)
                 return FishType.Default;
 

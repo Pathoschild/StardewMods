@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="56" height="49" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="20">
- <properties>
-  <property name="AmbientLight" value="90 90 35"/>
-  <property name="Arch" value="111 .01 113 .009"/>
-  <property name="Debris" value="8 .01 3"/>
-  <property name="Fish" value="142 .1 153 .25 166 .0005"/>
-  <property name="Outdoors" value="T"/>
-  <property name="Spouse" value="3 22 2 11 11 2 4 5 0 1 12 2 17 11 2 23 3 2"/>
-  <property name="Warp" value="80 16 BusStop 0 23 80 17 BusStop 0 23 80 18 BusStop 0 23 80 20 Forest 69 0 80 21 Forest 68 0 39 -1 Backwoods 13 38 40 -1 Backwoods 14 39 41 -1 Backwoods 15 39 34 5 FarmCave 8 11"/>
- </properties>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="56" height="49" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="50">
  <tileset firstgid="1" name="Paths" tilewidth="16" tileheight="16" tilecount="36" columns="4">
   <image source="paths.png" width="64" height="144"/>
   <tile id="0">
@@ -2597,7 +2588,83 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="2" name="Back"/>
+ <objectgroup id="2" name="Back">
+  <object id="20" x="144" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="21" name="TileData" x="144" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="37" name="TileData" x="160" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="38" name="TileData" x="160" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="39" name="TileData" x="144" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="40" name="TileData" x="160" y="16" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="41" name="TileData" x="144" y="16" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="42" name="TileData" x="128" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="43" name="TileData" x="336" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="44" name="TileData" x="336" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="45" name="TileData" x="336" y="16" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="46" name="TileData" x="352" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="47" name="TileData" x="368" y="32" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="48" name="TileData" x="368" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+  <object id="49" name="TileData" x="352" y="48" width="16" height="16">
+   <properties>
+    <property name="BeachSpawn" value="T"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup id="4" name="Buildings"/>
  <objectgroup id="6" name="Paths"/>
  <objectgroup id="8" name="Front"/>
