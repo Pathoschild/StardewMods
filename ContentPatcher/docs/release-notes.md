@@ -30,12 +30,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.
 
-**Note for content pack authors:**  
-* Content Patcher previously sorted some tokens unnecessarily; they now match the game order
-  instead. This should have no effect on content packs, unless they use `valueAt` with those tokens.
-
-  This affects `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`,
-  and `HasSeenEvent`.
+**Update note for mod authors:**  
+Some tokens may return values in a different order. See the [migration
+guide](author-migration-guide.md) for more info.
 
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.

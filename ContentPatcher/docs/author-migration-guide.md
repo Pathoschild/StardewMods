@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [1.24](#124)
   * [1.21](#121)
   * [1.20](#120)
   * [1.18](#118)
@@ -71,6 +72,13 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](release-notes.md) for a full list of changes.
+
+## 1.24
+* Content Patcher previously sorted some tokens unnecessarily; they now match the game order
+  instead. This should have no effect on content packs, unless they use `valueAt` with those tokens.
+
+  This affects `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`,
+  and `HasSeenEvent`.
 
 ## 1.21
 Released 07 March 2021.
