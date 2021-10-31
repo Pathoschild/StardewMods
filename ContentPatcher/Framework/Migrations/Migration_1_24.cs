@@ -25,6 +25,7 @@ namespace ContentPatcher.Framework.Migrations
                 ConditionType.HasCookingRecipe.ToString(),
                 ConditionType.HasCraftingRecipe.ToString(),
                 ConditionType.LocationOwnerId.ToString(),
+                ConditionType.Merge.ToString(),
                 ConditionType.PathPart.ToString()
             );
         }

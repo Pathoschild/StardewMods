@@ -858,6 +858,31 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 <td><a href="#Lowercase">#</a></td>
 </tr>
 
+<tr valign="top" id="Merge">
+<td>Merge</td>
+<td>
+
+Combine any number of input values into one token. This can be used to search multiple tokens in a
+`When` block:
+
+```js
+"When": {
+   "Merge: {{Roommate}}, {{Spouse}}": "Krobus"
+}
+```
+
+Or combined with [`valueAt`](#valueat) to get the first non-empty value from a list of tokens:
+
+```js
+"{{Merge: {{TokenA}}, {{TokenB}}, {{TokenC}} |valueAt=0 }}"
+```
+
+Note that you can also add literal values to the list, like `{{Merge: {{Roommate}}, Krobus, Abigail }}`.
+
+</td>
+<td><a href="#Merge">#</a></td>
+</tr>
+
 <tr valign="top" id="PathPart">
 <td>PathPart</td>
 <td>

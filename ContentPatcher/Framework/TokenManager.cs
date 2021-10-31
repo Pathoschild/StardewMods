@@ -235,6 +235,7 @@ namespace ContentPatcher.Framework
                 // string manipulation
                 new LetterCaseValueProvider(ConditionType.Lowercase),
                 new LetterCaseValueProvider(ConditionType.Uppercase),
+                new MergeValueProvider(),
                 new PathPartValueProvider(),
                 new RenderValueProvider(),
 
