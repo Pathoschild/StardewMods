@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // white/brown egg => normal mayonnaise
             new Recipe(
-                input: item => item.ParentSheetIndex == 176 || item.ParentSheetIndex == 180,
+                input: item => item.ParentSheetIndex is 176 or 180,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false),
                 minutes: _ => 180
@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             
             // dinosaur or large white/brown egg => gold-quality mayonnaise
             new Recipe(
-                input: item => item.ParentSheetIndex == 107 || item.ParentSheetIndex == 174 || item.ParentSheetIndex == 182,
+                input: item => item.ParentSheetIndex is 107 or 174 or 182,
                 inputCount: 1,
                 output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: _ => 180

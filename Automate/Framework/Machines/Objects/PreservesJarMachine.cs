@@ -59,7 +59,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 inputCount: 1,
                 output: input =>
                 {
-                    if (!(input is SObject inputObj))
+                    if (input is not SObject inputObj)
                         throw new InvalidOperationException($"Unexpected recipe input: expected {typeof(SObject).FullName} instance.");
 
                     // sturgeon roe => caviar

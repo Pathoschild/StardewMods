@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             foreach (Item item in this.Output.items.Where(p => p != null))
             {
                 // ignore gems which change Junimo colors (see JunimoHut:getGemColor)
-                if (!this.PullGemstonesFromJunimoHuts && (item.Category == SObject.GemCategory || item.Category == SObject.mineralsCategory))
+                if (!this.PullGemstonesFromJunimoHuts && item.Category is SObject.GemCategory or SObject.mineralsCategory)
                     continue;
 
                 // ignore items used by another mod

@@ -156,12 +156,16 @@ namespace ContentPatcher.Framework
             if (manifest == null)
                 return false;
 
+            // self-reference (e.g. mod can use its own tokens)
+            if (manifest.UniqueID.EqualsIgnoreCase(modID))
+                return true;
+
             // check content pack for
             if (manifest.ContentPackFor?.UniqueID?.EqualsIgnoreCase(modID) == true)
                 return true;
 
             // check dependencies
-            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
+            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID?.EqualsIgnoreCase(modID) == true);
             minVersion = dependency?.MinimumVersion;
             return
                 dependency != null

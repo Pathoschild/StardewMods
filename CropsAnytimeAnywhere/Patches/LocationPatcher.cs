@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         private static IMonitor Monitor;
 
         /// <summary>The mod configuration.</summary>
-        private static ModConfig Config;
+        private static LocationConfigManager Config;
 
         /// <summary>The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</summary>
         private static IDictionary<string, IDictionary<int, string>> FallbackTileTypes;
@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="monitor">Encapsulates logging for the Harmony patch.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="fallbackTileTypes">The tile types to use for tiles which don't have a type property and aren't marked diggable. Indexed by tilesheet image source (without path or season) and back tile ID.</param>
-        public LocationPatcher(IMonitor monitor, ModConfig config, IDictionary<string, IDictionary<int, string>> fallbackTileTypes)
+        public LocationPatcher(IMonitor monitor, LocationConfigManager config, IDictionary<string, IDictionary<int, string>> fallbackTileTypes)
         {
             LocationPatcher.Monitor = monitor;
             LocationPatcher.Config = config;
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
                 postfix: this.GetHarmonyMethod(nameof(LocationPatcher.After_SeedsIgnoreSeasonsHere))
             );
 
-            if (LocationPatcher.Config.ForceTillable.IsAnyEnabled())
+            if (LocationPatcher.Config.HasTillableOverrides())
             {
                 harmony.Patch(
                     original: this.RequireMethod<GameLocation>(nameof(GameLocation.doesTileHaveProperty)),
@@ -90,7 +90,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="__result">The return value to use for the method.</param>
         private static void After_CanPlantSeedsOrTreesHere(GameLocation __instance, ref bool __result)
         {
-            if (LocationPatcher.TryGetConfig(__instance, out PerLocationConfig config) && config.GrowCrops)
+            if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig config) && config.GrowCrops)
                 __result = true;
         }
 
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="__result">The return value to use for the method.</param>
         private static void After_SeedsIgnoreSeasonsHere(GameLocation __instance, ref bool __result)
         {
-            if (LocationPatcher.TryGetConfig(__instance, out PerLocationConfig config) && config.GrowCrops && config.GrowCropsOutOfSeason)
+            if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig config) && config.GrowCrops && config.GrowCropsOutOfSeason)
                 __result = true;
         }
 
@@ -143,7 +143,12 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="yTile">The y-coordinate of the map tile.</param>
         private static bool ShouldMakeTillable(GameLocation location, int xTile, int yTile)
         {
-            ModConfigForceTillable config = LocationPatcher.Config.ForceTillable;
+            // get tile config
+            var config = LocationPatcher.Config.TryGetForLocation(location, out PerLocationConfig locationConfig)
+                ? locationConfig.ForceTillable
+                : null;
+            if (config?.IsAnyEnabled() != true)
+                return false;
 
             // get tile
             Tile tile = location.Map.GetLayer("Back")?.Tiles[xTile, yTile];
@@ -205,15 +210,6 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
             return found
                 ? type
                 : null;
-        }
-
-        /// <summary>Get the configuration that applies for a given location, if any.</summary>
-        /// <param name="location">The location being patched.</param>
-        /// <param name="config">The config to apply, if any.</param>
-        private static bool TryGetConfig(GameLocation location, out PerLocationConfig config)
-        {
-            config = LocationPatcher.Config.GetLocationConfig(location);
-            return config != null;
         }
     }
 }

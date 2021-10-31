@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "肥料",
     "crop-fertilizer.retaining-soil": "保湿土壤",
     "crop-fertilizer.speed-gro": "生长激素",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "机器运转",

@@ -4,12 +4,48 @@ You can optionally enable islands and beach sounds.
 
 > ![](screenshots/farm.png)
 
+## Contents
+* [Install](#install)
+* [Usage](#usage)
+  * [Enable the farm type](#enable-the-farm-type)
+  * [Highlights](#highlights)
+* [Configure](#configure)
+  * [In-game settings](#in-game-settings)
+  * [`config.json` file](#configjson-file)
+* [FAQs](#faqs)
+* [Compiling from source](#compiling-from-source)
+* [See also](#see-also)
+
 ## Install
 1. [Install the latest version of SMAPI](https://smapi.io/).
 2. Install [this mod from Nexus Mods](http://www.nexusmods.com/stardewvalley/mods/3750).
 3. Run the game using SMAPI.
 
 ## Usage
+### Enable the farm type
+<dl>
+<dt>For a new save:</dt>
+<dd>On the character creation screen, choose the beach farm.</dd>
+
+<dt>For an existing save:</dt>
+<dd>
+
+If your existing farm isn't set to the beach farm, you can change the farm type in [Small Beach
+Farm's settings](#configure).
+
+If you have SMAPI 3.12.9 or later, you can also convert your save to the beach farm like this:
+
+1. Load your save.
+2. Enter this command in the SMAPI console window:
+   ```
+   set_farm_type 6
+   ```
+   (If you edited `config.json`, adjust the farm ID accordingly.)
+
+</dd>
+</dl>
+
+### Highlights
 Just load a save with the beach farm, and you'll see the new map! You can change which farm is
 replaced in the [configuration](#configure).
 
@@ -59,11 +95,6 @@ setting         | default | what it affects
 `ReplaceFarmID` | `6`     | Which farm to replace. The possible values are `0` (standard), `1` (riverland), `2` (forest), `3` (hilltop), `4` (wilderness), `5` (four corners), and `6` (beach).
 
 ## FAQs
-### Can I use this with an existing save?
-Yep! If you have things in the water due to the smaller map, see
-[Saves#Change farm type](https://stardewvalleywiki.com/Saves#Change_farm_type)
-for suggested fixes (skip the part about editing the save file).
-
 ### Compatibility
 This is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and
 multiplayer. It can't be combined with other mods that replace the same farm.
@@ -95,8 +126,6 @@ Compatibility files can be added to the Small Beach Farm folder instead.
 2. Add the modified `{season}_smallBeachFarm.png` files to the subfolder.
 3. If the player has multiple mods with a matching folder, only the first one alphabetically will be
    used.
-
-If you send me the files, I'll add official support for the recolor!
 
 ## Compiling from source
 Installing stable releases from Nexus Mods is recommended for most users. If you really want to

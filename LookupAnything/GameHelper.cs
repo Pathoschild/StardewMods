@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
+using Pathoschild.Stardew.Common.Integrations.MultiFertilizer;
 using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
@@ -34,12 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything
         /*********
         ** Fields
         *********/
-        /// <summary>The cached item data filtered to <see cref="ItemType.Object"/> items.</summary>
-        private Lazy<SearchableItem[]> Objects;
-
-        /// <summary>The cached recipes.</summary>
-        private Lazy<RecipeModel[]> Recipes;
-
         /// <summary>The Custom Farming Redux integration.</summary>
         private readonly CustomFarmingReduxIntegration CustomFarmingRedux;
 
@@ -55,6 +50,15 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides methods for searching and constructing items.</summary>
         private readonly ItemRepository ItemRepository = new();
 
+        /// <summary>Encapsulates logging to the console.</summary>
+        private readonly IMonitor Monitor;
+
+        /// <summary>The cached item data filtered to <see cref="ItemType.Object"/> items.</summary>
+        private Lazy<SearchableItem[]> Objects;
+
+        /// <summary>The cached recipes.</summary>
+        private Lazy<RecipeModel[]> Recipes;
+
 
         /*********
         ** Accessors
@@ -62,22 +66,28 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
         public Metadata Metadata { get; }
 
+        /// <summary>The MultiFertilizer integration.</summary>
+        public MultiFertilizerIntegration MultiFertilizer { get; }
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="customFarmingRedux">The Custom Farming Redux integration.</param>
-        /// <param name="producerFrameworkMod">The Producer Framework Mod integration.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
+        /// <param name="monitor">Encapsulates logging to the console.</param>
+        /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="reflection">Simplifies access to protected code.</param>
-        public GameHelper(CustomFarmingReduxIntegration customFarmingRedux, ProducerFrameworkModIntegration producerFrameworkMod, Metadata metadata, IReflectionHelper reflection)
+        public GameHelper(Metadata metadata, IMonitor monitor, IModRegistry modRegistry, IReflectionHelper reflection)
         {
             this.DataParser = new DataParser(this);
-            this.CustomFarmingRedux = customFarmingRedux;
-            this.ProducerFrameworkMod = producerFrameworkMod;
             this.Metadata = metadata;
+            this.Monitor = monitor;
             this.WorldItemScanner = new WorldItemScanner(reflection);
+
+            this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, this.Monitor);
+            this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
+            this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
@@ -584,7 +594,7 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // boots or ring
-            if (item is Boots || item is Ring)
+            if (item is Boots or Ring)
             {
                 int indexInTileSheet = (item as Boots)?.indexInTileSheet ?? ((Ring)item).indexInTileSheet;
                 return new SpriteInfo(Game1.objectSpriteSheet, Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, indexInTileSheet, SObject.spriteSheetTileSize, SObject.spriteSheetTileSize));
@@ -623,13 +633,6 @@ namespace Pathoschild.Stardew.LookupAnything
         public Vector2 DrawHoverBox(SpriteBatch spriteBatch, string label, Vector2 position, float wrapWidth)
         {
             return CommonHelper.DrawHoverBox(spriteBatch, label, position, wrapWidth);
-        }
-
-        /// <summary>Show an informational message to the player.</summary>
-        /// <param name="message">The message to show.</param>
-        public void ShowInfoMessage(string message)
-        {
-            CommonHelper.ShowInfoMessage(message);
         }
 
         /// <summary>Show an error message to the player.</summary>
@@ -799,8 +802,19 @@ namespace Pathoschild.Stardew.LookupAnything
                             if (!seenPermutation.Add($"{clothItem.ParentSheetIndex}|{spoolItem.ParentSheetIndex}"))
                                 continue;
 
+                            // get recipe output
+                            Item output;
+                            try
+                            {
+                                output = this.GetTailoredItem(outputId, tailor, spoolItem);
+                            }
+                            catch (Exception ex)
+                            {
+                                this.Monitor.LogOnce($"Failed to get output #{outputId} for tailoring recipe [{string.Join(", ", recipe.FirstItemTags ?? new())}] + [{string.Join(", ", recipe.SecondItemTags ?? new())}]. Technical details:\n{ex}", LogLevel.Warn);
+                                continue;
+                            }
+
                             // build recipe
-                            Lazy<Item> output = new(() => this.GetTailoredItem(outputId, tailor, spoolItem));
                             yield return new RecipeModel(
                                 key: null,
                                 type: RecipeType.TailorInput,
@@ -810,8 +824,8 @@ namespace Pathoschild.Stardew.LookupAnything
                                     new RecipeIngredientModel(clothItem.ParentSheetIndex, 1),
                                     new RecipeIngredientModel(spoolItem.ParentSheetIndex, 1)
                                 },
-                                item: _ => output.Value,
-                                isKnown: () => Game1.player.HasTailoredThisItem(output.Value),
+                                item: _ => output.getOne(),
+                                isKnown: () => Game1.player.HasTailoredThisItem(output),
                                 outputItemIndex: recipe.CraftedItemID,
                                 machineParentSheetIndex: null,
                                 isForMachine: _ => false
@@ -829,7 +843,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from <see cref="TailoringMenu.CraftItem"/>.</remarks>
         private Item GetTailoredItem(int craftedItemId, TailoringMenu tailor, Item spoolItem)
         {
-            Item obj = craftedItemId >= 0 ? (craftedItemId < 2000 || craftedItemId >= 3000 ? new Clothing(craftedItemId) : (Item)new Hat(craftedItemId - 2000)) : new SObject(-craftedItemId, 1);
+            Item obj = craftedItemId >= 0 ? (craftedItemId is < 2000 or >= 3000 ? new Clothing(craftedItemId) : new Hat(craftedItemId - 2000)) : new SObject(-craftedItemId, 1);
             if (obj is Clothing clothing)
                 tailor.DyeItems(clothing, spoolItem, 1);
             return obj;

@@ -42,6 +42,8 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
+
             // load config
             this.UpdateConfig();
 

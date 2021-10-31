@@ -9,10 +9,7 @@ using ContentPatcher.Framework.Tokens.ValueProviders;
 using ContentPatcher.Framework.Tokens.ValueProviders.Players;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 using StardewValley;
-using StardewValley.Characters;
-using StardewValley.Locations;
 
 namespace ContentPatcher.Framework
 {
@@ -31,9 +28,6 @@ namespace ContentPatcher.Framework
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
 
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>Whether the next context update is the first one.</summary>
         private bool IsFirstUpdate = true;
 
@@ -44,8 +38,11 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public int UpdateTick { get; private set; }
 
+        /// <summary>Whether the save file has been parsed into <see cref="SaveGame.loaded"/> (regardless of whether the game started loading it yet).</summary>
+        public bool IsSaveParsed { get; set; }
+
         /// <summary>Whether the basic save info is loaded (including the date, weather, and player info). The in-game locations and world may not exist yet.</summary>
-        public bool IsBasicInfoLoaded { get; set; }
+        public bool IsSaveBasicInfoLoaded { get; set; }
 
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
         public Tuple<UpdateRate, string, InvariantHashSet>[] TokensWithSpecialUpdateRates { get; } = {
@@ -61,12 +58,10 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        /// <param name="reflection">Simplifies access to private code.</param>
-        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens, IReflectionHelper reflection)
+        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
         {
             this.InstalledMods = installedMods;
             this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
-            this.Reflection = reflection;
 
             foreach (IToken modToken in modTokens)
                 this.GlobalContext.Save(modToken);
@@ -174,242 +169,94 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
         {
-            bool NeedsBasicInfo() => this.IsBasicInfoLoaded;
+            bool NeedsSave() => this.IsSaveParsed;
+            var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
 
-            // date and weather
-            yield return new ConditionTypeValueProvider(ConditionType.Day, () => SDate.Now().Day.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())); // day 0 = new-game intro
-            yield return new ConditionTypeValueProvider(ConditionType.DayEvent, this.GetDayEvent, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => SDate.Now().DayOfWeek.ToString(), NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(DayOfWeek)));
-            yield return new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => Game1.stats.DaysPlayed.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.Season, () => SDate.Now().Season, NeedsBasicInfo, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" });
-            yield return new ConditionTypeValueProvider(ConditionType.Year, () => SDate.Now().Year.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new WeatherValueProvider(NeedsBasicInfo);
-            yield return new TimeValueProvider(NeedsBasicInfo);
+            return new IValueProvider[]
+            {
+                // date and weather
+                new ConditionTypeValueProvider(ConditionType.Day, () => save.GetDay().ToString(), NeedsSave, allowedValues: Enumerable.Range(0, 29).Select(p => p.ToString())), // day 0 = new-game intro
+                new ConditionTypeValueProvider(ConditionType.DayEvent, save.GetDayEvent, NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.DayOfWeek, () => save.GetDayOfWeek().ToString(), NeedsSave, allowedValues: Enum.GetNames(typeof(DayOfWeek))),
+                new ConditionTypeValueProvider(ConditionType.DaysPlayed, () => save.GetDaysPlayed().ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.Season, save.GetSeason, NeedsSave, allowedValues: new[] { "Spring", "Summer", "Fall", "Winter" }),
+                new ConditionTypeValueProvider(ConditionType.Year, () => save.GetYear().ToString(), NeedsSave),
+                new WeatherValueProvider(save),
+                new TimeValueProvider(save),
 
-            // player
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => player.DailyLuck.ToString(CultureInfo.InvariantCulture), NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, this.GetCaughtFish, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, this.GetDialogueAnswers, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, this.GetFlags, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, this.GetProfessions, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, this.GetEventsSeen, NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, this.GetActiveQuests, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.HasWalletItem, this.GetWalletItems, NeedsBasicInfo, allowedValues: Enum.GetNames(typeof(WalletItem)));
-            yield return new ConditionTypeValueProvider(ConditionType.IsMainPlayer, () => Context.IsMainPlayer.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsOutdoors, () => Game1.currentLocation?.IsOutdoors.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationContext, () => ((LocationContext?)Game1.currentLocation?.GetLocationContext())?.ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationName, () => Game1.currentLocation?.Name, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.LocationUniqueName, () => Game1.currentLocation?.NameOrUniqueName, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerGender, () => (Game1.player.IsMale ? Gender.Male : Gender.Female).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PlayerName, () => Game1.player.Name, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (Game1.player.catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsBasicInfo);
-            yield return new SkillLevelValueProvider(NeedsBasicInfo);
+                // player
+                new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => save.GetDailyLuck(player).ToString(CultureInfo.InvariantCulture), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasCookingRecipe, player => player.cookingRecipes.Keys, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasCraftingRecipe, player => player.craftingRecipes.Keys, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered.Select(p => p.ToString()), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, player => save.GetFlags(player), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, player => player.professions.Select(id => ((Profession)id).ToString()), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save),
+                new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsSave, allowedValues: Enum.GetNames(typeof(WalletItem))),
+                new LocalOrHostPlayerValueProvider(ConditionType.IsMainPlayer, player => player.IsMainPlayer.ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.LocationOwnerId, player => save.GetLocationOwnerId(save.GetCurrentLocation(player))?.ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save),
+                new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsSave),
+                new SkillLevelValueProvider(save),
 
-            // relationships
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildNames, player => this.GetChildValues(player, ConditionType.ChildNames), NeedsBasicInfo);
-            yield return new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => this.GetChildValues(player, ConditionType.ChildGenders), NeedsBasicInfo);
-            yield return new VillagerHeartsValueProvider();
-            yield return new VillagerRelationshipValueProvider();
-            yield return new ConditionTypeValueProvider(ConditionType.Spouse, () => Game1.player?.spouse, NeedsBasicInfo);
+                // relationships
+                new LocalOrHostPlayerValueProvider(ConditionType.ChildNames, player => save.GetChildValues(player, ConditionType.ChildNames), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save),
+                new VillagerHeartsValueProvider(save),
+                new VillagerRelationshipValueProvider(save),
+                new LocalOrHostPlayerValueProvider(ConditionType.Roommate, player => player.hasRoommate() ? player.spouse : null, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.Spouse, player => !player.hasRoommate() ? player.spouse : null, save),
 
-            // world
-            yield return new ConditionTypeValueProvider(ConditionType.FarmCave, () => this.GetEnum(Game1.player.caveChoice.Value, FarmCaveType.None).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.FarmName, () => Game1.player.farmName.Value, NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.FarmType, () => this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => this.GetIsCommunityCenterComplete().ToString(), NeedsBasicInfo);
-            yield return new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => this.GetIsJojaMartComplete().ToString(), NeedsBasicInfo);
-            yield return new HavingChildValueProvider(ConditionType.Pregnant, NeedsBasicInfo);
-            yield return new HavingChildValueProvider(ConditionType.HavingChild, NeedsBasicInfo);
+                // world
+                new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.FarmName, save.GetFarmName, NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.FarmType, () => save.GetFarmType().ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.IsCommunityCenterComplete, () => save.GetIsCommunityCenterComplete().ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.IsJojaMartComplete, () => save.GetIsJojaMartComplete().ToString(), NeedsSave),
+                new HavingChildValueProvider(ConditionType.Pregnant, save),
+                new HavingChildValueProvider(ConditionType.HavingChild, save),
 
-            // number manipulation
-            yield return new CountValueProvider();
-            yield return new QueryValueProvider();
-            yield return new RandomValueProvider();
-            yield return new RangeValueProvider();
-            yield return new RoundValueProvider();
+                // number manipulation
+                new CountValueProvider(),
+                new QueryValueProvider(),
+                new RandomValueProvider(),
+                new RangeValueProvider(),
+                new RoundValueProvider(),
 
-            // string manipulation
-            yield return new LetterCaseValueProvider(ConditionType.Lowercase);
-            yield return new LetterCaseValueProvider(ConditionType.Uppercase);
-            yield return new RenderValueProvider();
+                // string manipulation
+                new LetterCaseValueProvider(ConditionType.Lowercase),
+                new LetterCaseValueProvider(ConditionType.Uppercase),
+                new MergeValueProvider(),
+                new PathPartValueProvider(),
+                new RenderValueProvider(),
 
-            // metadata
-            yield return new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true);
-            yield return new HasValueValueProvider();
-            yield return new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()));
+                // metadata
+                new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true),
+                new HasValueValueProvider(),
+                new ConditionTypeValueProvider(ConditionType.Language, () => contentHelper.CurrentLocaleConstant.ToString(), allowedValues: Enum.GetNames(typeof(LocalizedContentManager.LanguageCode)).Where(p => p != LocalizedContentManager.LanguageCode.th.ToString()))
+            };
         }
 
         /// <summary>Get the local value providers with which to initialize a local context.</summary>
         /// <param name="contentPack">The content pack for which to get tokens.</param>
         private IEnumerable<IValueProvider> GetLocalValueProviders(IContentPack contentPack)
         {
-            yield return new FirstValidFileValueProvider(contentPack.HasFile);
-            yield return new HasFileValueProvider(contentPack.HasFile);
-            yield return new TranslationValueProvider(contentPack.Translation);
-        }
-
-        /// <summary>Get a constant for a given value.</summary>
-        /// <typeparam name="TEnum">The constant enum type.</typeparam>
-        /// <param name="value">The value to convert.</param>
-        /// <param name="defaultValue">The value to use if the value is invalid.</param>
-        private TEnum GetEnum<TEnum>(int value, TEnum defaultValue)
-        {
-            return Enum.IsDefined(typeof(TEnum), value)
-                ? (TEnum)(object)value
-                : defaultValue;
-        }
-
-        /// <summary>Get the fish IDs caught by the the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        private IEnumerable<string> GetCaughtFish(Farmer player)
-        {
-            return player.fishCaught.Keys
-                .OrderBy(p => p)
-                .Select(id => id.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>Get the event IDs seen by the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        private IEnumerable<string> GetEventsSeen(Farmer player)
-        {
-            return player.eventsSeen
-                .OrderBy(p => p)
-                .Select(id => id.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>Get the letter IDs, mail flags, and world state IDs set for the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        /// <remarks>See mail logic in <see cref="Farmer.hasOrWillReceiveMail"/>.</remarks>
-        private IEnumerable<string> GetFlags(Farmer player)
-        {
-            return player
-                .mailReceived
-                .Union(player.mailForTomorrow)
-                .Union(player.mailbox)
-                .Concat(Game1.worldStateIDs)
-                .OrderByHuman();
-        }
-
-        /// <summary>Get the professions for the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        private IEnumerable<string> GetProfessions(Farmer player)
-        {
-            return player.professions
-                .Select(id => Enum.IsDefined(typeof(Profession), id)
-                    ? ((Profession)id).ToString()
-                    : id.ToString()
-                )
-                .OrderByHuman();
-        }
-
-        /// <summary>Get the wallet items for the current player.</summary>
-        private IEnumerable<string> GetWalletItems()
-        {
-            Farmer player = Game1.player;
-            if (player == null)
-                yield break;
-
-            if (player.eventsSeen.Contains(2120303))
-                yield return WalletItem.BearsKnowledge.ToString();
-            if (player.hasClubCard)
-                yield return WalletItem.ClubCard.ToString();
-            if (player.hasDarkTalisman)
-                yield return WalletItem.DarkTalisman.ToString();
-            if (player.canUnderstandDwarves)
-                yield return WalletItem.DwarvishTranslationGuide.ToString();
-            if (player.HasTownKey)
-                yield return WalletItem.KeyToTheTown.ToString();
-            if (player.hasMagicInk)
-                yield return WalletItem.MagicInk.ToString();
-            if (player.hasMagnifyingGlass)
-                yield return WalletItem.MagnifyingGlass.ToString();
-            if (player.hasRustyKey)
-                yield return WalletItem.RustyKey.ToString();
-            if (player.hasSkullKey)
-                yield return WalletItem.SkullKey.ToString();
-            if (player.hasSpecialCharm)
-                yield return WalletItem.SpecialCharm.ToString();
-            if (player.eventsSeen.Contains(3910979))
-                yield return WalletItem.SpringOnionMastery.ToString();
-        }
-
-        /// <summary>Get whether the community center is complete.</summary>
-        /// <remarks>See game logic in <see cref="StardewValley.Locations.Town.resetLocalState"/>.</remarks>
-        private bool GetIsCommunityCenterComplete()
-        {
-            return Game1.MasterPlayer.mailReceived.Contains("ccIsComplete") || Game1.MasterPlayer.hasCompletedCommunityCenter();
-        }
-
-        /// <summary>Get whether the JojaMart is complete.</summary>
-        /// <remarks>See game logic in <see cref="GameLocation"/> for the 'C' precondition.</remarks>
-        private bool GetIsJojaMartComplete()
-        {
-            if (!Game1.MasterPlayer.mailReceived.Contains("JojaMember"))
-                return false;
-
-            GameLocation town = Game1.getLocationFromName("Town");
-            return this.Reflection.GetMethod(town, "checkJojaCompletePrerequisite").Invoke<bool>();
-
-        }
-
-        /// <summary>Get values for a given player's children.</summary>
-        /// <param name="player">The player whose children to get.</param>
-        /// <param name="type">The token values to get.</param>
-        private IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
-        {
-            // get home
-            FarmHouse home = Context.IsWorldReady
-                ? Game1.getLocationFromName(player.homeLocation.Value) as FarmHouse
-                : SaveGame.loaded?.locations.OfType<FarmHouse>().FirstOrDefault(p => p.Name == player.homeLocation.Value);
-            if (home == null)
-                yield break;
-
-            // get children
-            foreach (Child child in home.getChildren())
+            return new IValueProvider[]
             {
-                yield return type switch
-                {
-                    ConditionType.ChildNames => child.Name,
-                    ConditionType.ChildGenders => (child.Gender == NPC.female ? Gender.Female : Gender.Male).ToString(),
-                    _ => throw new NotSupportedException($"Invalid child token type '{type}', must be one of '{nameof(ConditionType.ChildGenders)}' or '{nameof(ConditionType.ChildNames)}'.")
-                };
-            }
-        }
-
-        /// <summary>Get the name for today's day event (e.g. wedding or festival) from the game data.</summary>
-        private string GetDayEvent()
-        {
-            // marriage
-            if (SaveGame.loaded?.weddingToday ?? Game1.weddingToday)
-                return "wedding";
-
-            // festival
-            IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
-            if (festivalDates.TryGetValue($"{Game1.currentSeason}{Game1.dayOfMonth}", out string festivalName))
-                return festivalName;
-
-            return null;
-        }
-
-        /// <summary>Get the response IDs of dialogue answers given by the player.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        private IEnumerable<string> GetDialogueAnswers(Farmer player)
-        {
-            return player.dialogueQuestionsAnswered
-                .OrderBy(p => p)
-                .Select(p => p.ToString(CultureInfo.InvariantCulture));
-        }
-
-        /// <summary>Get the active quests in the player's quest log.</summary>
-        /// <param name="player">The player whose values to get.</param>
-        private IEnumerable<string> GetActiveQuests(Farmer player)
-        {
-            return player.questLog
-                .OrderBy(quest => quest.id.Value)
-                .Select(quest => quest.id.Value.ToString(CultureInfo.InvariantCulture));
+                new FirstValidFileValueProvider(contentPack.HasFile),
+                new HasFileValueProvider(contentPack.HasFile),
+                new TranslationValueProvider(contentPack.Translation)
+            };
         }
     }
 }

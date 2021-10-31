@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.4.0
+Released 31 October 2021 for SMAPI 3.12.5 or later.
+
+* You can now configure `ForceTillable` per-location.  
+  _If you previously edited the option, you'll need to reapply your changes for the `*` location._
+* Internal performance optimizations.
+
 ## 1.3.5
 Released 04 September 2021 for SMAPI 3.12.6 or later.
 

@@ -21,6 +21,9 @@ namespace ContentPatcher.Framework.Api
         /// <summary>A contextual manager for the underlying conditions.</summary>
         private readonly AggregateContextual Contextuals;
 
+        /// <summary>The context update tick when the conditions were last updated.</summary>
+        private int LastUpdateTick = -1;
+
 
         /*********
         ** Accessors
@@ -62,14 +65,20 @@ namespace ContentPatcher.Framework.Api
         /// <inheritdoc />
         public IEnumerable<int> UpdateContext()
         {
-            bool wasMatch = this.IsMatch;
+            // skip unneeded updates
+            if (!this.ShouldUpdate())
+                return Enumerable.Empty<int>();
+            this.LastUpdateTick = this.Context.UpdateTick;
 
+            // update context
+            bool wasMatch = this.IsMatch;
             if (this.IsValid)
             {
                 this.Contextuals.UpdateContext(this.Context);
                 this.IsMatch = this.IsReady && this.Conditions.All(p => p.IsMatch);
             }
 
+            // return screen ID if it changed
             return this.IsMatch != wasMatch
                 ? new[] { StardewModdingAPI.Context.ScreenId }
                 : Enumerable.Empty<int>();
@@ -83,6 +92,21 @@ namespace ContentPatcher.Framework.Api
 
             PatchBaseInfo patchInfo = new(this.Conditions, this.IsMatch, this.Contextuals.GetDiagnosticState());
             return patchInfo.GetReasonNotLoaded();
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether the conditions need to be updated for the current context.</summary>
+        private bool ShouldUpdate()
+        {
+            // update once if immutable
+            if (!this.IsMutable)
+                return !this.Contextuals.WasEverUpdated;
+
+            // else update if context changed
+            return this.LastUpdateTick < this.Context.UpdateTick;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Commands.Commands
@@ -36,25 +37,26 @@ namespace ContentPatcher.Framework.Commands.Commands
         {
             return @"
                 patch parse
-                   usage: patch parse ""value""
-                   Parses the given token string and shows the result. For example, `patch parse ""assets/{{Season}}.png"" will show a value like ""assets/Spring.png"".
+                   usage: patch parse ""value"" [compact]
+                   Parses the given token string and shows the result. For example, `patch parse ""assets/{{Season}}.png"" will show a value like ""assets/Spring.png"". If present, 'compact' returns less details.
 
-                patch parse ""value"" ""content -pack.id""
-                   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `patch parse ""assets/{{CustomToken}}.png"" ""Pathoschild.ExampleContentPack"".
+                patch parse ""value"" ""content -pack.id"" [compact]
+                   Parses the given token string and shows the result, using tokens available to the specified content pack (using the ID from the content pack's manifest.json). For example, `patch parse ""assets/{{CustomToken}}.png"" ""Pathoschild.ExampleContentPack"". If present, 'compact' returns less details.
             ";
         }
 
         /// <inheritdoc />
         public override void Handle(string[] args)
         {
-            // get token string
-            if (args.Length < 1 || args.Length > 2)
+            // parse arguments
+            if (args.Length is < 1 or > 3)
             {
-                this.Monitor.Log("The 'patch parse' command expects one to two arguments. See 'patch help parse' for more info.", LogLevel.Error);
+                this.Monitor.Log("The 'patch parse' command expects one to three arguments. See 'patch help parse' for more info.", LogLevel.Error);
                 return;
             }
             string raw = args[0];
-            string modID = args.Length >= 2 ? args[1] : null;
+            string modID = args.Length >= 2 && args[1] != "compact" ? args[1] : null;
+            bool compact = args.Skip(1).Contains("compact");
 
             // get context
             IContext context;
@@ -99,33 +101,36 @@ namespace ContentPatcher.Framework.Commands.Commands
             // show result
             StringBuilder output = new StringBuilder();
             output.AppendLine();
-            output.AppendLine("Metadata");
-            output.AppendLine("----------------");
-            output.AppendLine($"   raw value:   {raw}");
-            output.AppendLine($"   ready:       {tokenStr.IsReady}");
-            output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
-            output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
-            if (tokenStr.HasAnyTokens)
-                output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderByHuman())}");
-            output.AppendLine();
+            if (!compact)
+            {
+                output.AppendLine("Metadata");
+                output.AppendLine("----------------");
+                output.AppendLine($"   raw value:   {raw}");
+                output.AppendLine($"   ready:       {tokenStr.IsReady}");
+                output.AppendLine($"   mutable:     {tokenStr.IsMutable}");
+                output.AppendLine($"   has tokens:  {tokenStr.HasAnyTokens}");
+                if (tokenStr.HasAnyTokens)
+                    output.AppendLine($"   tokens used: {string.Join(", ", tokenStr.GetTokensUsed().Distinct().OrderByHuman())}");
+                output.AppendLine();
 
-            output.AppendLine("Diagnostic state");
-            output.AppendLine("----------------");
-            output.AppendLine($"   valid:    {state.IsValid}");
-            output.AppendLine($"   in scope: {state.IsValid}");
-            output.AppendLine($"   ready:    {state.IsReady}");
-            if (state.Errors.Any())
-                output.AppendLine($"   errors:         {string.Join(", ", state.Errors)}");
-            if (state.InvalidTokens.Any())
-                output.AppendLine($"   invalid tokens: {string.Join(", ", state.InvalidTokens)}");
-            if (state.UnreadyTokens.Any())
-                output.AppendLine($"   unready tokens: {string.Join(", ", state.UnreadyTokens)}");
-            if (state.UnavailableModTokens.Any())
-                output.AppendLine($"   unavailable mod tokens: {string.Join(", ", state.UnavailableModTokens)}");
-            output.AppendLine();
+                output.AppendLine("Diagnostic state");
+                output.AppendLine("----------------");
+                output.AppendLine($"   valid:    {state.IsValid}");
+                output.AppendLine($"   in scope: {state.IsValid}");
+                output.AppendLine($"   ready:    {state.IsReady}");
+                if (state.Errors.Any())
+                    output.AppendLine($"   errors:         {string.Join(", ", state.Errors)}");
+                if (state.InvalidTokens.Any())
+                    output.AppendLine($"   invalid tokens: {string.Join(", ", state.InvalidTokens)}");
+                if (state.UnreadyTokens.Any())
+                    output.AppendLine($"   unready tokens: {string.Join(", ", state.UnreadyTokens)}");
+                if (state.UnavailableModTokens.Any())
+                    output.AppendLine($"   unavailable mod tokens: {string.Join(", ", state.UnavailableModTokens)}");
+                output.AppendLine();
 
-            output.AppendLine("Result");
-            output.AppendLine("----------------");
+                output.AppendLine("Result");
+                output.AppendLine("----------------");
+            }
             output.AppendLine(!tokenStr.IsReady
                 ? "The token string is invalid or unready."
                 : $"   The token string is valid and ready. Parsed value: \"{tokenStr}\""

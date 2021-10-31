@@ -29,7 +29,7 @@ This document lists the tokens available in Content Patcher packs.
   * [Dynamic tokens](#dynamic-tokens)
   * [Query expressions](#query-expressions)
   * [Mod-provided tokens](#mod-provided-tokens)
-* [Constants](#constants)
+* [Common values](#common-values)
 * [See also](#see-also)
 
 ## Introduction
@@ -202,7 +202,7 @@ This can also be used with range tokens:
 <td>
 
 The weather type in the current world area (or the area specified with a
-[`LocationContext`](#playertype) argument). Possible values:
+[`LocationContext`](#location-context) argument). Possible values:
 
 value   | meaning
 ------- | -------
@@ -242,8 +242,8 @@ The year number (like `1` or `2`).
 <td>DailyLuck</td>
 <td>
 
-The [daily luck](https://stardewvalleywiki.com/Luck) for the current player (or the player specified
-with a [`PlayerType`](#playertype) argument).
+The [daily luck](https://stardewvalleywiki.com/Luck) for the [current or specified
+player](#target-player).
 
 This is a decimal value usually between -0.1 and 0.1. This **cannot** be compared using the
 `{{Range}}` token, which produces a range of integer values. The value can only be safely compared
@@ -263,10 +263,9 @@ using [query expressions](#query-expressions). For example:
 <td>FarmhouseUpgrade</td>
 <td>
 
-The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the current
-player (or the player specified with a [`PlayerType`](#playertype) argument). The normal values are
-0 (initial farmhouse), 1 (adds kitchen), 2 (add children's bedroom), and 3 (adds cellar). Mods may
-add upgrade levels beyond that.
+The [farmhouse upgrade level](https://stardewvalleywiki.com/Farmhouse#Upgrades) for the [current or
+specified player](#target-player). The normal values are 0 (initial farmhouse), 1 (adds kitchen), 2
+(add children's bedroom), and 3 (adds cellar). Mods may add upgrade levels beyond that.
 
 </td>
 <td><a href="#FarmhouseUpgrade">#</a></td>
@@ -276,9 +275,9 @@ add upgrade levels beyond that.
 <td>HasActiveQuest</td>
 <td>
 
-The active quest IDs in the current player's quest list (or the player specified with a
-[`PlayerType`](#playertype) argument). See [Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data)
-on the wiki for valid quest IDs.
+The active quest IDs in the [current or specified player](#target-player)'s quest list. See
+[Modding:Quest data](https://stardewvalleywiki.com/Modding:Quest_data) on the wiki for valid quest
+IDs.
 
 </td>
 <td><a href="#HasActiveQuest">#</a></td>
@@ -288,8 +287,8 @@ on the wiki for valid quest IDs.
 <td>HasCaughtFish</td>
 <td>
 
-The fish IDs caught by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
+The fish IDs caught by the [current or specified player](#target-player). See [object
+IDs](https://stardewvalleywiki.com/Modding:Object_data) on the wiki.
 
 </td>
 <td><a href="#HasCaughtFish">#</a></td>
@@ -300,10 +299,32 @@ argument). See [object IDs](https://stardewvalleywiki.com/Modding:Object_data) o
 <td>
 
 The active [conversation topics](https://stardewvalleywiki.com/Modding:Dialogue#Conversation_topics)
-for the current player (or the player specified with a [`PlayerType`](#playertype) argument).
+for the [current or specified player](#target-player).
 
 </td>
 <td><a href="#HasConversationTopic">#</a></td>
+</tr>
+
+<tr valign="top" id="HasCookingRecipe">
+<td>HasCookingRecipe</td>
+<td>
+
+The [cooking recipes](https://stardewvalleywiki.com/Cooking) known by the [current or specified
+player](#target-player).
+
+</td>
+<td><a href="#HasCookingRecipe">#</a></td>
+</tr>
+
+<tr valign="top" id="HasCraftingRecipe">
+<td>HasCraftingRecipe</td>
+<td>
+
+The [crafting recipes](https://stardewvalleywiki.com/Crafting) known by the [current or specified
+player](#target-player).
+
+</td>
+<td><a href="#HasCraftingRecipe">#</a></td>
 </tr>
 
 <tr valign="top" id="HasDialogueAnswer">
@@ -311,8 +332,7 @@ for the current player (or the player specified with a [`PlayerType`](#playertyp
 <td>
 
 The [response IDs](https://stardewvalleywiki.com/Modding:Dialogue#Response_IDs) for answers to
-question dialogues by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument).
+question dialogues by the [current or specified player](#target-player).
 
 </td>
 <td><a href="#HasDialogueAnswer">#</a></td>
@@ -322,8 +342,7 @@ argument).
 <td>HasFlag</td>
 <td>
 
-The flags set for the current player (or the player specified with a [`PlayerType`](#playertype)
-argument). That includes...
+The flags set for the [current or specified player](#target-player). That includes...
 
 * letter IDs sent to the player (including letters they haven't read, or those added to the mailbox for tomorrow);
 * non-letter mail flags (used to track game info);
@@ -339,8 +358,8 @@ See [useful flags on the wiki](https://stardewvalleywiki.com/Modding:Mail_data#L
 <td>HasProfession</td>
 <td>
 
-The [professions](https://stardewvalleywiki.com/Skills) learned by the current player (or the
-player specified with a [`PlayerType`](#playertype) argument).
+The [professions](https://stardewvalleywiki.com/Skills) learned by the [current or specified
+player](#target-player).
 
 Possible values:
 
@@ -360,8 +379,8 @@ Custom professions added by a mod are represented by their integer profession ID
 <td>HasReadLetter</td>
 <td>
 
-The letter IDs opened by the current player (or the player specified with a
-[`PlayerType`](#playertype) argument). A letter is considered 'opened' if the letter UI was shown.
+The letter IDs opened by the [current or specified player](#target-player). A letter is considered
+'opened' if the letter UI was shown.
 
 </td>
 <td><a href="#HasReadLetter">#</a></td>
@@ -371,8 +390,8 @@ The letter IDs opened by the current player (or the player specified with a
 <td>HasSeenEvent</td>
 <td>
 
-The event IDs seen by the current player (or the player specified with a [`PlayerType`](#playertype)
-argument), matching IDs in the `Data/Events` files.
+The event IDs seen by the [current or specified player](#target-player), matching IDs in the
+`Data/Events` files.
 
 You can use [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) to see event IDs in-game.
 
@@ -410,7 +429,8 @@ flag                       | meaning
 <td>IsMainPlayer</td>
 <td>
 
-Whether the player is the main player. Possible values: `true`, `false`.
+Whether the [current or specified player](#target-player) is the main player. Possible values:
+`true`, `false`.
 
 </td>
 <td><a href="#IsMainPlayer">#</a></td>
@@ -420,7 +440,8 @@ Whether the player is the main player. Possible values: `true`, `false`.
 <td>IsOutdoors</td>
 <td>
 
-Whether the player is outdoors. Possible values: `true`, `false`.
+Whether the [current or specified player](#target-player) is outdoors. Possible values: `true`,
+`false`.
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -432,8 +453,9 @@ Whether the player is outdoors. Possible values: `true`, `false`.
 <td>LocationContext</td>
 <td>
 
-The general world area recognize by the game. Possible values: `Island` (locations on
-[Ginger Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
+The general world area recognized by the game containing the [current or specified
+player](#target-player). Possible values: `Island` (locations on [Ginger
+Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
 
 ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
 
@@ -445,9 +467,10 @@ The general world area recognize by the game. Possible values: `Island` (locatio
 <td id="LocationUniqueName">LocationName<br />LocationUniqueName</td>
 <td>
 
-The internal name of the player's current location, like `FarmHouse` or `Town`. You can see the name
-for the current location using [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or
-[`patch summary`](author-guide.md#patch-summary).
+The internal name of the [current or specified player](#target-player)'s current location, like
+`FarmHouse` or `Town`. You can see the name for the current location using
+[Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or [`patch
+summary`](author-guide.md#patch-summary).
 
 Notes:
 * Temporary festival maps always have the location name "Temp".
@@ -462,11 +485,36 @@ Notes:
 <td><a href="#LocationName">#</a></td>
 </tr>
 
+<tr valign="top" id="LocationOwnerId">
+<td>LocationOwnerId</td>
+<td>
+
+The [unique ID of the player](#target-player) who owns the [current or specified player](#target-player)'s
+location, if applicable.
+
+This works for these locations:
+
+location      | owner
+:------------ | :----
+farmhouse     | main player
+island house  | main player
+cabin         | linked farmhand
+cellar        | same as the cabin/farmhouse it's linked to
+farm building | player who constructed it
+
+This can be used to get other info for the owner, like `{{PlayerName: {{LocationOwnerId}}}}`.
+
+ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+
+</td>
+<td><a href="#LocationOwnerId">#</a></td>
+</tr>
+
 <tr valign="top" id="PlayerGender">
 <td>PlayerGender</td>
 <td>
 
-The player's gender. Possible values: `Female`, `Male`.
+The [current or specified player](#target-player)'s gender. Possible values: `Female`, `Male`.
 
 </td>
 <td><a href="#PlayerGender">#</a></td>
@@ -474,7 +522,11 @@ The player's gender. Possible values: `Female`, `Male`.
 
 <tr valign="top" id="PlayerName">
 <td>PlayerName</td>
-<td>The player's name.</td>
+<td>
+
+The [current or specified player](#target-player)'s name.
+
+</td>
 <td><a href="#PlayerName">#</a></td>
 </tr>
 
@@ -482,7 +534,7 @@ The player's gender. Possible values: `Female`, `Male`.
 <td>PreferredPet</td>
 <td>
 
-The player's preferred pet. Possible values: `Cat`, `Dog`.
+The current player's preferred pet. Possible values: `Cat`, `Dog`.
 
 </td>
 <td><a href="#PreferredPet">#</a></td>
@@ -492,7 +544,7 @@ The player's preferred pet. Possible values: `Cat`, `Dog`.
 <td>SkillLevel</td>
 <td>
 
-The player's skill levels. You can specify the skill level as an input argument like this:
+The current player's skill levels. You can specify the skill level as an input argument like this:
 
 ```js
 "When": {
@@ -520,8 +572,8 @@ and `Mining`.
 <td id="ChildGenders">ChildNames<br />ChildGenders</td>
 <td>
 
-The names and genders (`Female` or `Male`) for the current player's children (or those for the
-player specified with a [`PlayerType`](#playertype) argument).
+The names and genders (`Female` or `Male`) for the [current or specified player](#target-player)'s
+children.
 
 These are listed in order of birth for use with the [`valueAt` argument](#valueAt). For example,
 `{{ChildNames |valueAt=0}}` and `{{ChildGenders |valueAt=0}}` is the name and gender of the oldest
@@ -543,9 +595,6 @@ The player's heart level with a given NPC. You can specify the character name as
    "Hearts:Abigail": "10, 11, 12, 13"
 }
 ```
-
-**Note:** this is only available once the save is fully loaded, so it may not reliably affect
-conditional map spawn logic.
 
 </td>
 <td><a href="#Hearts">#</a></td>
@@ -575,16 +624,30 @@ Engaged  | The player gave them a mermaid's pendant, but the marriage hasn't hap
 Married  | The player married them.
 Divorced | The player married and then divorced them.
 
-**Note:** this is only available once the save is fully loaded, so it may not reliably affect
-conditional map spawn logic.
-
 </td>
 <td><a href="#Relationship">#</a></td>
 </tr>
 
+<tr valign="top" id="Roommate">
+<td>Roommate</td>
+<td>
+
+The name of the [current or specified player](#target-player)'s NPC roommate (using their English
+name regardless of translations).
+
+</td>
+<td><a href="#Roommate">#</a></td>
+</tr>
+
+
 <tr valign="top" id="Spouse">
 <td>Spouse</td>
-<td>The player's spouse name (using their English name regardless of translations).</td>
+<td>
+
+The name of the [current or specified player](#target-player)'s NPC spouse (using their English
+name regardless of translations).
+
+</td>
 <td><a href="#Spouse">#</a></td>
 </tr>
 </table>
@@ -807,6 +870,81 @@ Change to all capital letters.<br />Example: `{{Uppercase:It's a warm {{Season}}
 <td><a href="#Lowercase">#</a></td>
 </tr>
 
+<tr valign="top" id="Merge">
+<td>Merge</td>
+<td>
+
+Combine any number of input values into one token. This can be used to search multiple tokens in a
+`When` block:
+
+```js
+"When": {
+   "Merge: {{Roommate}}, {{Spouse}}": "Krobus"
+}
+```
+
+Or combined with [`valueAt`](#valueat) to get the first non-empty value from a list of tokens:
+
+```js
+"{{Merge: {{TokenA}}, {{TokenB}}, {{TokenC}} |valueAt=0 }}"
+```
+
+Note that you can also add literal values to the list, like `{{Merge: {{Roommate}}, Krobus, Abigail }}`.
+
+</td>
+<td><a href="#Merge">#</a></td>
+</tr>
+
+<tr valign="top" id="PathPart">
+<td>PathPart</td>
+<td>
+
+Get part of a file/asset path, in the form `{{PathPart: <path>, <part to get>}}`. For
+example:
+
+```js
+{
+   "Action": "Load",
+   "Target": "Portraits/Abigail",
+   "FromFile": "assets/{{PathPart: {{Target}}, Filename}}.png" // assets/Abigail.png
+}
+```
+
+Given the path `assets/portraits/Abigail.png`, you can specify...
+
+* A fragment type:
+
+  part value      | description | example
+  --------------- | ----------- | ------
+  `DirectoryPath` | The path without the file name. | `assets/portraits`
+  `FileName`      | The file name (including the extension, if any). | `Abigail.png`
+  `FileNameWithoutExtension` | The file name (excluding the extension). | `Abigail`
+
+* Or an index position from the left:
+
+  part value | example
+  ---------- | -------
+  `0`        | `assets`
+  `1`        | `portraits`
+  `2`        | `Abigail.png`
+  `3`        | _empty value_
+
+* Or a negative index to search from the right:
+
+  part value | example
+  ---------- | -------
+  `-1`       | `Abigail.png`
+  `-2`       | `portraits`
+  `-3`       | `assets`
+  `-4`       | _empty value_
+
+See also [`TargetPathOnly`](#TargetPathOnly) and [`TargetWithoutPath`](#TargetWithoutPath), which
+simplify a very common version of this.
+
+</td>
+<td><a href="#PathPart">#</a></td>
+</tr>
+
 <tr valign="top" id="Render">
 <td>Render</td>
 <td>
@@ -1018,6 +1156,8 @@ token               | part returned | example
 `TargetPathOnly`    | The part before the last separator. | `Characters/Dialogue`
 `TargetWithoutPath` | The part after the last separator. | `Abigail`
 
+See also [`PathPart`](#PathPart) for more advanced scenarios.
+
 </td>
 <td><a href="#Target">#</a></td>
 </tr>
@@ -1078,10 +1218,10 @@ You can specify multiple values, in which case it returns whether _any_ of them 
 The `valueAt` argument gets one value from a token at the given position (starting at zero for the
 first value). If the index is outside the list, this returns an empty list.
 
-This depends on the token's order, which you can check with the [`patch summary` console
-command](author-guide.md#patch-summary). Most built-in tokens use a 'human' sort order, which sorts
-by sequences of numeric and non-numeric characters (i.e. values are sorted like `John1` → `John9` →
-`John10`).
+This depends on the token's order, which you can check with the [`patch summary unsorted` console
+command](author-guide.md#patch-summary). Some tokens like `ChildNames` have a consistent order
+(which will be documented in the info for each token); most others like `HasFlag` are listed in the
+order they're defined in the game data, which may change from one save to the next.
 
 For example:
 
@@ -1163,6 +1303,7 @@ If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewval
 installed, they'll be able to configure the mod through an in-game options menu on the title
 screen or the in-game menu.
 
+### Set up configuration
 To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
 them (see below for an example).
 
@@ -1176,12 +1317,12 @@ Available fields for each field:
    `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
    `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
 
-For example: this `content.json` defines a `Material` config field and uses it to change which
-patch is applied. See below for more details.
+### Basic example
+This `content.json` defines a `Material` config field and uses it to change which patch is applied.
 
 ```js
 {
-   "Format": "1.23.0",
+   "Format": "1.24.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",
@@ -1219,6 +1360,59 @@ When you run the game, a `config.json` file will appear automatically with text 
 ```
 
 Players can edit it to configure your content pack.
+
+### Translations
+You can [add translation files](https://stardewvalleywiki.com/Modding:Translations) for
+your config field names & descriptions. If the player has [Generic Mod Config
+Menu](https://www.nexusmods.com/stardewvalley/mods/5098) (GMCM) installed, the fields will be shown
+with your translation text (if available).
+
+To do that, create an `i18n/default.json` for your default text. For each field, add any
+combination of these translation keys:
+
+key format                     | description
+:----------------------------- | :----------
+`config.<name>.name`           | The field name.
+`config.<name>.description`    | The field description (shown as a tooltip in GMCM).
+`config.<name>.values.<value>` | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
+
+All translation keys are optional, and they're not case-sensitive. 
+
+For example, let's say your content pack has these files:
+```js
+// content.json
+{
+   "Format": "1.24.0",
+   "ConfigSchema": {
+      "Material": {
+         "AllowValues": "Wood, Metal",
+         "Default": "Wood"
+      }
+   }
+}
+
+// i18n/default.json
+{
+   "config.Material.name": "Material",
+   "config.Material.description": "The material style for the billboard background.",
+   "config.Material.values.Wood": "wood",
+   "config.Material.values.Metal": "metal"
+}
+
+// i18n/fr.json
+{
+   "config.Material.name": "Matériel",
+   "config.Material.description": "Le style du matériel pour l'arrière-plan du panneau d'affichage.",
+   "config.Material.values.Wood": "bois",
+   "config.Material.values.Metal": "métal"
+}
+```
+
+Here's how that would look in Generic Mod Config Menu for a French player:
+
+> <img src="screenshots/config-translations.png" width="500" />
+
+See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
 
 ## Randomization
 ### Overview
@@ -1417,7 +1611,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.23.0",
+   "Format": "1.24.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1450,7 +1644,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.23.0",
+   "Format": "1.24.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1575,7 +1769,7 @@ which work just like normal Content Patcher tokens. For example, this patch uses
 Assets:
 ```js
 {
-   "Format": "1.23.0",
+   "Format": "1.24.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1595,7 +1789,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.23.0",
+     "Format": "1.24.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1611,17 +1805,12 @@ To use a mod-provided token, at least one of these must be true:
   }
   ```
 
-## Constants
-These are predefined values used in tokens.
+## Common values
+These are predefined values used in tokens, linked from the token documentation above as needed.
 
-### `LocationContext`
-value | meaning
------ | -------
-`Island` | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
-`Valley` | Any other location.
-
-The location context can be specified as an [input argument](#input-arguments) for tokens that
-support it, defaulting to the current location. For example:
+### Location context
+Some tokens let you choose which world area to get info for using an [input
+argument](#input-arguments) like this:
 
 example | meaning
 ------- | -------
@@ -1629,20 +1818,32 @@ example | meaning
 `{{Weather: island}}` | Get the weather on Ginger Island.
 `{{Weather: valley}}` | Get the weather in the valley.
 
-### `PlayerType`
+The possible contexts are:
+
+value     | meaning
+--------- | -------
+`current` | The context the current player is in. This is the default and doesn't need to be specified.
+`island`  | Locations on the [Ginger Island](https://stardewvalleywiki.com/Ginger_Island).
+`valley`  | Any other location.
+
+### Target player
+Some tokens let you choose which player's info to get using an [input argument](#input-arguments)
+like this:
+
+example                                  | meaning
+---------------------------------------- | -------
+`{{HasFlag}}`<br />`{{HasFlag: curentPlayer}}` | Get flags for the current player.
+`{{HasFlag: hostPlayer}}`                | Get flags for the host player.
+`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
+`{{HasFlag: 3864039824286870457}}`       | Get flags for the player with the unique multiplayer ID `3864039824286870457`.
+
+The possible player types are:
+
 value | meaning
 ----- | -------
 `currentPlayer` | The current player who has the mod installed.
 `hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
-
-The player type can be specified as an [input argument](#input-arguments) for tokens that support it,
-defaulting to the current player. For example:
-
-example | meaning
-------- | -------
-`{{HasFlag}}` | Get flags for the current player.
-`{{HasFlag: hostPlayer}}` | Get flags for the host player.
-`{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
+_player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
 
 ## See also
 * [README](README.md) for other info

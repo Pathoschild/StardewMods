@@ -507,25 +507,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield return new GenericField(I18n.Crop_Watered(), this.Stringify(dirt.state.Value == HoeDirt.watered));
 
                 // fertilizer
-                yield return new GenericField(I18n.Crop_Fertilized(), dirt.fertilizer.Value switch
-                {
-                    HoeDirt.noFertilizer => this.Stringify(false),
+                string[] appliedFertilizers = this.GetAppliedFertilizers(dirt)
+                    .Select(GameI18n.GetObjectName)
+                    .Distinct()
+                    .DefaultIfEmpty(this.Stringify(false))
+                    .OrderBy(p => p)
+                    .ToArray();
 
-                    HoeDirt.speedGro => GameI18n.GetObjectName(465), // Speed-Gro
-                    HoeDirt.superSpeedGro => GameI18n.GetObjectName(466), // Deluxe Speed-Gro
-                    HoeDirt.hyperSpeedGro => GameI18n.GetObjectName(918), // Hyper Speed-Gro
-
-                    HoeDirt.fertilizerLowQuality => GameI18n.GetObjectName(368), // Basic Fertilizer
-                    HoeDirt.fertilizerHighQuality => GameI18n.GetObjectName(369), // Quality Fertilizer
-                    HoeDirt.fertilizerDeluxeQuality => GameI18n.GetObjectName(919), // Deluxe Fertilizer
-
-                    HoeDirt.waterRetentionSoil => GameI18n.GetObjectName(370), // Basic Retaining Soil
-                    HoeDirt.waterRetentionSoilQuality => GameI18n.GetObjectName(371), // Quality Retaining Soil
-                    HoeDirt.waterRetentionSoilDeluxe => GameI18n.GetObjectName(920), // Deluxe Retaining Soil
-
-                    _ => I18n.Generic_Unknown()
-                });
+                yield return new GenericField(I18n.Crop_Fertilized(), string.Join(", ", appliedFertilizers));
             }
+        }
+
+        /// <summary>Get the fertilizer item IDs applied to a dirt tile.</summary>
+        /// <param name="dirt">The dirt tile to check.</param>
+        private IEnumerable<int> GetAppliedFertilizers(HoeDirt dirt)
+        {
+            if (this.GameHelper.MultiFertilizer.IsLoaded)
+                return this.GameHelper.MultiFertilizer.GetAppliedFertilizers(dirt);
+
+            if (dirt.fertilizer.Value > 0)
+                return new[] { dirt.fertilizer.Value };
+
+            return Enumerable.Empty<int>();
         }
 
         /// <summary>Get the custom fields for machine output.</summary>
@@ -725,7 +728,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 yield break;
 
             // avoid false positives
-            if (item.bigCraftable.Value || item is Cask || item is Fence || item is Furniture || item is IndoorPot || item is Sign || item is Torch || item is Wallpaper)
+            if (item.bigCraftable.Value || item is Cask or Fence or Furniture or IndoorPot or Sign or Torch or Wallpaper)
                 yield break; // avoid false positives
 
             // get community center
@@ -872,7 +875,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             return
                 this.Context == ObjectContext.World
                 && this.Target is SObject
-                && !(this.Target is Chest)
+                && this.Target is not Chest
                 && this.Name == "Stone";
         }
     }

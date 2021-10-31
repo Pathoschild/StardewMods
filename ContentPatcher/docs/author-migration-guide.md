@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [1.24](#124)
   * [1.21](#121)
   * [1.20](#120)
   * [1.18](#118)
@@ -71,6 +72,16 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](release-notes.md) for a full list of changes.
+
+## 1.24
+Released 31 October 2021.
+
+* **The `Spouse` token no longer includes roommates.** If you want to check for both roommate and
+  spouse, you can use `{{Merge: {{Roommate}}, {{Spouse}}}}` to match the previous behavior.
+* **Some tokens return values in a different order** to match the game order. This should have no
+  effect on most content packs, unless they use `valueAt` with any of these tokens:
+  `HasActiveQuest`, `HasCaughtFish`, `HasDialogueAnswer`, `HasFlag`, `HasProfession`, and
+  `HasSeenEvent`.
 
 ## 1.21
 Released 07 March 2021.

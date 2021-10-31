@@ -1,19 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>TractorMod</AssemblyName>
-    <Version>4.14.4</Version>
+    <Version>4.14.5</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
-    <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

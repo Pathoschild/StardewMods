@@ -21,11 +21,14 @@ namespace ContentPatcher.Framework
         /// <summary>The tracked contextual values.</summary>
         public IEnumerable<IContextual> Values => this.ValuesImpl;
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable { get; private set; }
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady { get; private set; } = true;
+
+        /// <summary>Get whether the contextuals have ever been updated.</summary>
+        public bool WasEverUpdated { get; private set; }
 
 
         /*********
@@ -84,9 +87,7 @@ namespace ContentPatcher.Framework
             return this;
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         bool IContextual.UpdateContext(IContext context)
         {
             return this.UpdateContext(context, update: null, countChange: null);
@@ -115,16 +116,17 @@ namespace ContentPatcher.Framework
                     this.IsReady = false;
             }
 
+            this.WasEverUpdated = true;
             return changed || this.IsReady != wasReady;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return this.ValuesImpl.SelectMany(p => p.GetTokensUsed());
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             ContextualState state = new ContextualState();

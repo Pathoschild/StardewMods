@@ -21,11 +21,11 @@
     "label.automate-options": "Automatisation",
     "label.automate-store": "Mettre les objets dans ce coffre",
     "label.automate-store-first": "Mettre les objets dans ce coffre d'abord",
-    "label.automate-store-disabled": "Ne mettez jamais d'objets dans ce coffre",
+    "label.automate-store-disabled": "Ne jamais mettre d'objet dans ce coffre",
     "label.automate-take": "Obtenir les objets dans ce coffre",
     "label.automate-take-first": "Obtenir les objets dans ce coffre d'abord",
-    "label.automate-take-disabled": "Ne prenez jamais les objets de ce coffre",
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
+    "label.automate-take-disabled": "Ne jamais prendre d'objet dans ce coffre",
+    "label.automate-prevent-remove-stacks": "Eviter d'enlever le dernier objet d'une pile.",
 
     // button labels
     "button.edit-chest": "modifier coffre",

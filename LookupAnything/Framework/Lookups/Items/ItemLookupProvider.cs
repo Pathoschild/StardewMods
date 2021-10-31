@@ -94,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 ** Inventory
                 ****/
                 // chest
-                case MenuWithInventory inventoryMenu when !(menu is FieldOfficeMenu || menu is TailoringMenu):
+                case MenuWithInventory inventoryMenu when menu is not (FieldOfficeMenu or TailoringMenu):
                     {
                         Item item = Game1.player.CursorSlotItem ?? inventoryMenu.heldItem ?? inventoryMenu.hoveredItem;
                         if (item != null)
@@ -182,7 +182,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 case CollectionsPage collectionsTab:
                     {
                         int currentTab = collectionsTab.currentTab;
-                        if (currentTab == CollectionsPage.achievementsTab || currentTab == CollectionsPage.secretNotesTab || currentTab == CollectionsPage.lettersTab)
+                        if (currentTab is CollectionsPage.achievementsTab or CollectionsPage.secretNotesTab or CollectionsPage.lettersTab)
                             break;
 
                         int currentPage = collectionsTab.currentPage;

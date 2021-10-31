@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
+using Pathoschild.Stardew.Automate.Framework.Commands;
 using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
@@ -84,17 +85,18 @@ namespace Pathoschild.Stardew.Automate
 
             // hook events
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
+            helper.Events.GameLoop.DayStarted += this.OnDayStarted;
+            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
+            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+            helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.World.BuildingListChanged += this.OnBuildingListChanged;
             helper.Events.World.LocationListChanged += this.OnLocationListChanged;
             helper.Events.World.ObjectListChanged += this.OnObjectListChanged;
             helper.Events.World.TerrainFeatureListChanged += this.OnTerrainFeatureListChanged;
-            helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
-            helper.Events.Multiplayer.ModMessageReceived += this.OnModMessageReceived;
 
             // hook commands
-            helper.ConsoleCommands.Add("automate", "Run commands from the Automate mod. Enter 'automate help' for more info.", this.CommandHandler.HandleCommand);
+            this.CommandHandler.RegisterWith(helper.ConsoleCommands);
 
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
@@ -115,7 +117,7 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked when the player loads a save.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
@@ -127,12 +129,17 @@ namespace Pathoschild.Stardew.Automate
                     this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
                 else
                     this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
-                return;
             }
+        }
 
+        /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnDayStarted(object sender, DayStartedEventArgs e)
+        {
             // reset
             this.MachineManager.Reset();
-            this.AutomateCountdown = this.Config.AutomationInterval;
+            this.AutomateCountdown = 0;
             this.DisableOverlay();
         }
 
@@ -145,7 +152,7 @@ namespace Pathoschild.Stardew.Automate
                 this.ResetOverlayIfShown();
         }
 
-        /// <summary>The method invoked when a location is added or removed.</summary>
+        /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
@@ -168,7 +175,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method raised after buildings are added or removed in a location.</summary>
+        /// <inheritdoc cref="IWorldEvents.BuildingListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnBuildingListChanged(object sender, BuildingListChangedEventArgs e)
@@ -183,7 +190,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method invoked when an object is added or removed to a location.</summary>
+        /// <inheritdoc cref="IWorldEvents.ObjectListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnObjectListChanged(object sender, ObjectListChangedEventArgs e)
@@ -198,7 +205,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method invoked when a terrain feature is added or removed to a location.</summary>
+        /// <inheritdoc cref="IWorldEvents.TerrainFeatureListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnTerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
@@ -213,7 +220,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>The method invoked when the in-game clock time changes.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
@@ -243,7 +250,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -265,7 +272,7 @@ namespace Pathoschild.Stardew.Automate
             }
         }
 
-        /// <summary>Raised after a mod message is received over the network.</summary>
+        /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)

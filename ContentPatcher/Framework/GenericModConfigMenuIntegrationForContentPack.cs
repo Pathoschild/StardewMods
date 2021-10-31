@@ -15,6 +15,9 @@ namespace ContentPatcher.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The content pack whose config is being managed.</summary>
+        private readonly IContentPack ContentPack;
+
         /// <summary>The config model.</summary>
         private readonly InvariantDictionary<ConfigField> Config;
 
@@ -36,14 +39,16 @@ namespace ContentPatcher.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        /// <param name="contentPack">The content pack whose config is being managed.</param>
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="manifest">The mod manifest.</param>
         /// <param name="parseCommaDelimitedField">The Generic Mod Config Menu integration.</param>
         /// <param name="config">The config model.</param>
         /// <param name="saveAndApply">Save and apply the current config model.</param>
-        public GenericModConfigMenuIntegrationForContentPack(IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, InvariantHashSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
+        public GenericModConfigMenuIntegrationForContentPack(IContentPack contentPack, IModRegistry modRegistry, IMonitor monitor, IManifest manifest, Func<string, InvariantHashSet> parseCommaDelimitedField, InvariantDictionary<ConfigField> config, Action saveAndApply)
         {
+            this.ContentPack = contentPack;
             this.Config = config;
             this.ConfigMenu = new GenericModConfigMenuIntegration<InvariantDictionary<ConfigField>>(
                 modRegistry: modRegistry,
@@ -66,7 +71,7 @@ namespace ContentPatcher.Framework
             if (!this.ConfigMenu.IsLoaded || !this.Config.Any())
                 return;
 
-            this.ConfigMenu.RegisterConfig(canConfigureInGame: true);
+            this.ConfigMenu.Register();
             foreach (var pair in this.Config)
                 this.AddField(pair.Key, pair.Value);
         }
@@ -83,12 +88,17 @@ namespace ContentPatcher.Framework
             if (!this.ConfigMenu.IsLoaded)
                 return;
 
+            // get translation logic
+            string GetName() => this.ContentPack.Translation.Get($"config.{name}.name").Default(name);
+            string GetDescription() => this.ContentPack.Translation.Get($"config.{name}.description").Default(field.Description);
+            string GetValueText(string value) => this.ContentPack.Translation.Get($"config.{name}.values.{value}").Default(value);
+
             // textbox if any values allowed
             if (!field.AllowValues.Any())
             {
                 this.ConfigMenu.AddTextbox(
-                    label: name,
-                    description: field.Description,
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => string.Join(", ", field.Value.ToArray()),
                     set: (_, newValue) =>
                     {
@@ -106,8 +116,8 @@ namespace ContentPatcher.Framework
                 foreach (string value in field.AllowValues)
                 {
                     this.ConfigMenu.AddCheckbox(
-                        label: $"{name}.{value}",
-                        description: field.Description,
+                        name: () => $"{GetName()}: {GetValueText(value)}",
+                        tooltip: GetDescription,
                         get: _ => field.Value.Contains(value),
                         set: (_, selected) =>
                         {
@@ -129,8 +139,8 @@ namespace ContentPatcher.Framework
             else if (!field.AllowBlank && field.IsBoolean())
             {
                 this.ConfigMenu.AddCheckbox(
-                    label: name,
-                    description: field.Description,
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => field.Value.Contains(true.ToString()),
                     set: (_, selected) =>
                     {
@@ -148,8 +158,8 @@ namespace ContentPatcher.Framework
 
                 // number slider
                 this.ConfigMenu.AddNumberField(
-                    label: name,
-                    description: field.Description,
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
                     set: (_, val) => field.Value = new InvariantHashSet(val.ToString(CultureInfo.InvariantCulture)),
                     min: min,
@@ -165,11 +175,12 @@ namespace ContentPatcher.Framework
                     choices.Insert(0, "");
 
                 this.ConfigMenu.AddDropdown(
-                    label: name,
-                    description: field.Description,
+                    name: GetName,
+                    tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
                     set: (_, newValue) => field.Value = new InvariantHashSet(newValue),
-                    choices.ToArray()
+                    allowedValues: choices.ToArray(),
+                    formatAllowedValue: GetValueText
                 );
             }
         }

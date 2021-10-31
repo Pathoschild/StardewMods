@@ -13,8 +13,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Get whether the player data is available in the current context.</summary>
-        private readonly Func<bool> IsPlayerDataAvailable;
+        /// <summary>Handles reading info from the current save.</summary>
+        private readonly TokenSaveReader SaveReader;
 
         /// <summary>The names and genders of NPCs/players having children.</summary>
         private readonly SortedSet<string> PartnersHavingChild = new(HumanSortComparer.DefaultIgnoreCase);
@@ -28,14 +28,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="type">The condition type (must be <see cref="ConditionType.HavingChild"/> or <see cref="ConditionType.Pregnant"/>).</param>
-        /// <param name="isPlayerDataAvailable">Get whether the player data is available in the current context.</param>
-        public HavingChildValueProvider(ConditionType type, Func<bool> isPlayerDataAvailable)
+        /// <param name="saveReader">Handles reading info from the current save.</param>
+        public HavingChildValueProvider(ConditionType type, TokenSaveReader saveReader)
             : base(type, mayReturnMultipleValuesForRoot: true)
         {
             if (type != ConditionType.HavingChild && type != ConditionType.Pregnant)
                 throw new ArgumentException($"The condition type must be {ConditionType.HavingChild} or {ConditionType.Pregnant}.");
 
-            this.IsPlayerDataAvailable = isPlayerDataAvailable;
+            this.SaveReader = saveReader;
             this.PregnancyOnly = type == ConditionType.Pregnant;
         }
 
@@ -46,21 +46,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(this.PartnersHavingChild, () =>
             {
                 this.PartnersHavingChild.Clear();
-                if (this.MarkReady(this.IsPlayerDataAvailable()))
+                if (this.MarkReady(this.SaveReader.IsReady))
                 {
-                    foreach (Farmer player in Game1.getAllFarmers())
+                    foreach (Farmer player in this.SaveReader.GetAllPlayers())
                     {
-                        // get relationship
-                        Friendship relationship = player.GetSpouseFriendship();
-                        if (relationship == null)
+                        // get spouse info
+                        if (!this.SaveReader.TryGetSpouseInfo(player, out string spouseName, out Friendship relationship, out Gender spouseGender, out bool isPlayerSpouse))
                             continue;
 
                         // check for pregnancy
                         if (relationship.NextBirthingDate == null || relationship.NextBirthingDate <= Game1.Date)
-                            continue;
-
-                        // get spouse info
-                        if (!this.TryGetSpouseInfo(player, out string spouseName, out Gender spouseGender, out bool isPlayerSpouse))
                             continue;
 
                         // track pregnancy/adoption
@@ -91,48 +86,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.AssertInput(input);
 
             return this.PartnersHavingChild;
-        }
-
-
-        /*********
-        ** Private methods
-        *********/
-        /// <summary>Get the name and gender of the player's spouse, if they're married</summary>
-        /// <param name="player">The player whose spouse to check.</param>
-        /// <param name="name">The spouse name.</param>
-        /// <param name="gender">The spouse gender.</param>
-        /// <param name="isPlayer">Whether the spouse is a player character.</param>
-        /// <returns>Returns true if the player's spouse info was successfully found.''</returns>
-        private bool TryGetSpouseInfo(Farmer player, out string name, out Gender gender, out bool isPlayer)
-        {
-            long? spousePlayerID = Game1.player.team.GetSpouse(player.UniqueMultiplayerID);
-            if (spousePlayerID.HasValue)
-            {
-                Farmer spouse = Game1.getFarmerMaybeOffline(spousePlayerID.Value);
-                if (spouse != null)
-                {
-                    name = spouse.Name;
-                    gender = spouse.IsMale ? Gender.Male : Gender.Female;
-                    isPlayer = true;
-                    return true;
-                }
-            }
-            else
-            {
-                NPC spouse = Game1.getCharacterFromName(player.spouse, mustBeVillager: true);
-                if (spouse != null)
-                {
-                    name = spouse.Name;
-                    gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
-                    isPlayer = false;
-                    return true;
-                }
-            }
-
-            name = null;
-            gender = Gender.Male;
-            isPlayer = false;
-            return false;
         }
     }
 }

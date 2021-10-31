@@ -52,6 +52,7 @@
     "crop-fertilizer.fertilizer": "Engrais",
     "crop-fertilizer.retaining-soil": "Sol de rétention",
     "crop-fertilizer.speed-gro": "Croissance rapide",
+    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
 
     // machine processing
     "machines.name": "Traitement des Machines",

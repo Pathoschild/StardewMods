@@ -143,7 +143,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
             // check mine ladders/shafts
             const int ladderID = 173, shaftID = 174;
-            if (location is MineShaft && buildingTile != null && (buildingTile.TileIndex == ladderID || buildingTile.TileIndex == shaftID) && buildingTile.TileSheet.Id == "mine")
+            if (location is MineShaft && buildingTile != null && buildingTile.TileIndex is ladderID or shaftID && buildingTile.TileSheet.Id == "mine")
                 return true;
 
             return false;

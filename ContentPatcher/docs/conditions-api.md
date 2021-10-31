@@ -35,7 +35,7 @@ To access the API:
 1. Add Content Patcher as [a **required** dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "1.23.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "1.24.0" }
    ]
    ```
 2. Add a reference to the Content Patcher DLL in your mod's `.csproj` file. Make sure you set
@@ -68,7 +68,7 @@ Now that you have access to the API, you can parse conditions.
    ```
 
 2. Call the API to parse the conditions into an `IManagedConditions` wrapper. The `formatVersion`
-   matches the [`Format` field described in the author guide](author-guide.md#common-fields) to
+   matches the [`Format` field described in the author guide](author-guide.md#overview) to
    enable forward compatibility with future versions of Content Patcher.
 
    **Note:** see [_caveats_](#caveats) before calling this API.
@@ -144,6 +144,8 @@ false if the conditions use `Season` and a save isn't loaded yet.
 <td>
 
 Whether `IsReady` is true, and the conditions all match in the current context.
+
+If there are no conditions (i.e. you parsed an empty dictionary), this is always true.
 
 </td>
 </tr>

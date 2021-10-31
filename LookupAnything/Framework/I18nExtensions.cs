@@ -204,7 +204,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return $"([{warp.X}, {warp.Y}] to {warp.TargetName}[{warp.TargetX}, {warp.TargetY}])";
 
                 // enumerable
-                case IEnumerable array when !(value is string):
+                case IEnumerable array when value is not string:
                     {
                         string[] values = (from val in array.Cast<object>() select I18n.Stringify(val)).ToArray();
                         return "(" + string.Join(", ", values) + ")";

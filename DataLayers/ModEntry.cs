@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
+using Pathoschild.Stardew.DataLayers.Framework.Commands;
 using Pathoschild.Stardew.DataLayers.Layers;
 using Pathoschild.Stardew.DataLayers.Layers.Coverage;
 using Pathoschild.Stardew.DataLayers.Layers.Crops;
@@ -63,7 +64,7 @@ namespace Pathoschild.Stardew.DataLayers
 
             // hook up commands
             var commandHandler = new CommandHandler(this.Monitor, () => this.CurrentOverlay.Value?.CurrentLayer);
-            helper.ConsoleCommands.Add(commandHandler.CommandName, $"Starts a Data Layers command. Type '{commandHandler.CommandName} help' for details.", (_, args) => commandHandler.Handle(args));
+            commandHandler.RegisterWith(helper.ConsoleCommands);
         }
 
 
@@ -118,7 +119,7 @@ namespace Pathoschild.Stardew.DataLayers
             if (layers.CropPaddyWater.IsEnabled())
                 yield return new CropPaddyWaterLayer(layers.CropPaddyWater);
             if (layers.CropFertilizer.IsEnabled())
-                yield return new CropFertilizerLayer(layers.CropFertilizer);
+                yield return new CropFertilizerLayer(layers.CropFertilizer, mods);
             if (layers.CropHarvest.IsEnabled())
                 yield return new CropHarvestLayer(layers.CropHarvest);
             if (layers.Machines.IsEnabled() && mods.Automate.IsLoaded)

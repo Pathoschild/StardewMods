@@ -15,7 +15,10 @@ namespace ContentPatcher.Framework.Conditions
         private readonly AggregateContextual Contextuals;
 
         /// <summary>Diagnostic info about the instance.</summary>
-        private readonly ContextualState State = new ContextualState();
+        private readonly ContextualState State = new();
+
+        /// <summary>Whether the token represented by <see cref="Name"/> is mutable.</summary>
+        private readonly bool IsTokenMutable;
 
 
         /*********
@@ -33,10 +36,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current values from <see cref="Values"/>.</summary>
         public InvariantHashSet CurrentValues { get; private set; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
-        public bool IsMutable => this.Contextuals.IsMutable;
+        /// <inheritdoc />
+        public bool IsMutable => this.IsTokenMutable || this.Contextuals.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
 
         /// <summary>Whether the condition matches the current context.</summary>
@@ -50,12 +53,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="name">The token name in the context.</param>
         /// <param name="input">The token input arguments.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
-        public Condition(string name, IManagedTokenString input, IManagedTokenString values)
+        /// <param name="isTokenMutable">Whether the token represented by <paramref name="name"/> is mutable.</param>
+        public Condition(string name, IManagedTokenString input, IManagedTokenString values, bool isTokenMutable)
         {
             // save values
             this.Name = name;
             this.Input = new InputArguments(input);
             this.Values = values;
+            this.IsTokenMutable = isTokenMutable;
             this.Contextuals = new AggregateContextual()
                 .Add(input)
                 .Add(values);
@@ -72,11 +77,13 @@ namespace ContentPatcher.Framework.Conditions
             return this.Name.EqualsIgnoreCase(type.ToString());
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
+            // skip unneeded updates
+            if (!this.IsMutable && this.Contextuals.WasEverUpdated)
+                return false;
+
             // reset
             bool wasReady = this.IsReady;
             bool wasMatch = this.IsMatch;
@@ -110,7 +117,7 @@ namespace ContentPatcher.Framework.Conditions
                 || wasMatch != this.IsMatch;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             yield return this.Name;
@@ -118,7 +125,7 @@ namespace ContentPatcher.Framework.Conditions
                 yield return token;
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.State.Clone()

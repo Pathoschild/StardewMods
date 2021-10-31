@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -43,7 +44,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         public override void Handle(string[] args)
         {
             // get asset name
-            if (args.Length < 1 || args.Length > 2)
+            if (args.Length is < 1 or > 2)
             {
                 this.Monitor.Log("The 'patch export' command expects one argument containing the target asset name, and an optional second argument for the data type. See 'patch help' for more info.", LogLevel.Error);
                 return;

@@ -19,12 +19,14 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
+            Tool tool = Game1.player.CurrentTool;
+
             return
                 Game1.player.UsingTool
-                && Game1.player.CurrentTool is Tool tool
+                && tool != null
                 && (
                     (tool as MeleeWeapon)?.isScythe() == true
-                    || !(tool is FishingRod || tool is MeleeWeapon)
+                    || tool is not (FishingRod or MeleeWeapon)
                 );
         }
 

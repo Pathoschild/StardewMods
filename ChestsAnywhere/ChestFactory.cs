@@ -226,7 +226,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="tile">The tile to check.</param>
         public ManagedChest GetChestFromTile(Vector2 tile)
         {
-            if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || !(obj is Chest chest))
+            if (!Game1.currentLocation.Objects.TryGetValue(tile, out SObject obj) || obj is not Chest chest)
                 return null;
 
             return ChestFactory.GetBestMatch(

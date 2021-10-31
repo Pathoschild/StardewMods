@@ -9,6 +9,38 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.24.0
+Released 31 October 2021 for SMAPI 3.12.6 or later.
+
+* Added new tokens:
+  * [`HasCookingRecipe`](author-tokens-guide.md#HasCookingRecipe) and [`HasCraftingRecipe`](author-tokens-guide.md#HasCraftingRecipe) to get the crafting/cooking recipes known by a player.
+  * [`LocationOwnerId`](author-tokens-guide.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
+  * [`Merge`](author-tokens-guide.md#Merge) to combine tokens in `When` conditions or perform value fallback.
+  * [`PathPart`](author-tokens-guide.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+  * [`Roommate`](author-tokens-guide.md#Roommate) to get a player's roommate NPC (similar to `Spouse` for a married NPC).
+* Added support for [translating content pack config options in Generic Mod Config Menu](author-tokens-guide.md#player-config).
+* Improved tokens:
+  * Tokens which let you specify a player type now accept player IDs too (like `{{PlayerName: 3864039824286870457}}`).
+  * You can now get per-player values for more tokens (specifically `IsMainPlayer`, `IsOutdoors`, `LocationContext`, `LocationName`, `LocationUniqueName`, `PlayerGender`, `PlayerName`, and `Spouse`).
+* Improved context updates:
+  * Built-in tokens are now available immediately after the raw save file is read, before the game even starts loading it.
+  * The `Hearts` and `Relationships` tokens are now available before the save is fully loaded.
+  * Improved performance (especially for immutable patches and conditions).
+* Improved console commands:
+  * Added `unsorted` option for [`patch summary`](author-guide.md#patch-summary).
+  * Added `compact` option for [`patch parse`](author-guide.md#patch-parse).
+* Updated for Generic Mod Config Menu 1.5.0.
+* Fixed error using `Target*` and `FromFile` tokens as a condition key.
+* Fixed conditions parsed through the C# API unable to use custom tokens added by the same mod.
+* Fixed error when a mod manifest has dependencies with no ID.
+* Fixed patch conditions not updated in rare cases.
+
+**Update notes for mod authors:**
+* The `Spouse` token no longer includes roommates when the `Format` field is `1.24.0` or later.
+* Some tokens now return values in a different order.
+
+See the [migration guide](author-migration-guide.md) for more info.
+
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.
 

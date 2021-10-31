@@ -1,6 +1,15 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.7
+Released 31 October 2021 for SMAPI 3.12.5 or later.
+
+* Improved integration with [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098):
+  * All config options are now translatable.
+  * Slider options now have a smoother increment of 0.1.
+  * Fixed some tooltips showing wrong default value.
+  * Updated for Generic Mod Config Menu 1.5.0.
+
 ## 1.9.6
 Released 27 March 2021 for SMAPI 3.9.5 or later.
 

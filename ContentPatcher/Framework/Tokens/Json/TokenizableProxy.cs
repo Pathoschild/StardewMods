@@ -15,10 +15,10 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>Set the instance value.</summary>
         public Action<string> SetValue { get; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.TokenString.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.TokenString.IsReady;
 
 
@@ -35,9 +35,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             bool changed = this.TokenString.UpdateContext(context);
@@ -45,13 +43,13 @@ namespace ContentPatcher.Framework.Tokens.Json
             return changed;
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return this.TokenString.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.TokenString.GetDiagnosticState();

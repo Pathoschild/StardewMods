@@ -53,7 +53,8 @@ namespace ContentPatcher
             new Migration_1_20(),
             new Migration_1_21(),
             new Migration_1_22(),
-            new Migration_1_23()
+            new Migration_1_23(),
+            new Migration_1_24()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -274,8 +275,7 @@ namespace ContentPatcher
                 getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
                 updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)
             );
-            helper.ConsoleCommands.Add(this.CommandHandler.CommandName, $"Starts a Content Patcher command. Type '{this.CommandHandler.CommandName} help' for details.", (_, args) => this.CommandHandler.Handle(args));
-
+            this.CommandHandler.RegisterWith(helper.ConsoleCommands);
 
             // register content packs with Generic Mod Config Menu
             foreach (LoadedContentPack contentPack in contentPacks)
@@ -283,6 +283,7 @@ namespace ContentPatcher
                 if (contentPack.Config.Any())
                 {
                     GenericModConfigMenuIntegrationForContentPack configMenu = new GenericModConfigMenuIntegrationForContentPack(
+                        contentPack: contentPack.ContentPack,
                         modRegistry: this.Helper.ModRegistry,
                         monitor: this.Monitor,
                         manifest: contentPack.Manifest,

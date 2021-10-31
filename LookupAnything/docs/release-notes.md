@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.35.4
+Released 31 October 2021 for SMAPI 3.12.5 or later.
+
+* Added support for MultiFertilizer.
+* Fixed error if a mod adds invalid tailoring recipes.
+* Improved translations. Thanks to Lumina (updated French) and Zangorr (added Polish)!
+
 ## 1.35.3
 Released 18 September 2021 for SMAPI 3.12.5 or later.
 

@@ -1,4 +1,4 @@
-namespace ContentPatcher.Framework.Commands.Commands
+namespace Pathoschild.Stardew.Common.Commands
 {
     /// <summary>A console command implemented by Content Patcher.</summary>
     internal interface ICommand

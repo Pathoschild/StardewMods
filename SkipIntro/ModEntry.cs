@@ -32,6 +32,8 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
+
             this.Config = this.LoadConfig();
 
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -124,7 +126,7 @@ namespace Pathoschild.Stardew.SkipIntro
 
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                if (config.SkipTo == Screen.HostCoop || config.SkipTo == Screen.JoinCoop)
+                if (config.SkipTo is Screen.HostCoop or Screen.JoinCoop)
                     config.SkipTo = Screen.Title; // no co-op on Android
             }
 
@@ -206,7 +208,7 @@ namespace Pathoschild.Stardew.SkipIntro
                 case Stage.WaitingForConnection:
                     {
                         // not applicable
-                        if (this.Config.SkipTo != Screen.HostCoop || !(TitleMenu.subMenu is CoopMenu submenu))
+                        if (this.Config.SkipTo != Screen.HostCoop || TitleMenu.subMenu is not CoopMenu submenu)
                             return Stage.None;
 
                         // not connected yet

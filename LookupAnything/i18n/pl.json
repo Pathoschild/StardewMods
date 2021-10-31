@@ -1,0 +1,679 @@
+﻿{
+    /*********
+    ** Generic translations
+    *********/
+    // date names
+    "generic.now": "teraz",
+    "generic.tomorrow": "jutro",
+    "generic.yesterday": "wczoraj",
+
+    // generic values
+    "generic.unknown": "nieznane",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% szans na {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} na {{max}})",
+    "generic.ratio": "{{value}} na {{max}}",
+    "generic.range": "{{min}} do {{max}}",
+    "generic.yes": "tak",
+    "generic.no": "nie",
+    "generic.seconds": "{{count}} sekund",
+    "generic.minutes": "{{count}} minut",
+    "generic.hours": "{{count}} godzin",
+    "generic.days": "{{count}} dni",
+    "generic.in-x-days": "za {{count}} dni",
+    "generic.x-days-ago": "{{count}} dni temu",
+    "generic.price": "{{price}}zł",
+    "generic.price-for-quality": "{{price}}zł ({{quality}})",
+    "generic.price-for-stack": "{{price}}zł za {{count}}",
+
+    // types
+    "type.building": "Budowla",
+    "type.bush": "Krzak",
+    "type.fruit-tree": "Drzewo Owocowe",
+    "type.map-tile": "Kafelek Mapy",
+    "type.monster": "Potwór",
+    "type.player": "Gracz",
+    "type.tree": "Drzewo",
+    "type.villager": "Mieszkaniec",
+    "type.other": "Inne", // default type
+
+    // item qualities
+    "quality.normal": "normalne",
+    "quality.silver": "srebrne",
+    "quality.gold": "złote",
+    "quality.iridium": "irydowe",
+
+    // NPC friendship
+    "friendship-status.friendly": "Sympatia",
+    "friendship-status.dating": "Randkowanie",
+    "friendship-status.engaged": "Zaręczono",
+    "friendship-status.married": "Poślubiono",
+    "friendship-status.divorced": "Rozwiedziono",
+    "friendship-status.kicked-out": "Porzucono",
+
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Spiżarnia",
+    "bundle-area.crafts-room": "Pokój Rzemieślniczy",
+    "bundle-area.fish-tank": "Akwarium",
+    "bundle-area.boiler-room": "Kotłownia",
+    "bundle-area.vault": "Skarbiec",
+    "bundle-area.bulletin-board": "Tablica Ogłoszeń",
+    "bundle-area.abandoned-joja-mart": "Opuszczony JojaMarket",
+
+    // shop names
+    "shop.adventure-guild": "Gildia Poszukiwaczy Przygód",
+    "shop.clint": "Clint",
+    "shop.marnie": "Marnie",
+    "shop.pierre": "Pierre",
+    "shop.robin": "Robin",
+    "shop.volcano": "Sklep w Wulkanie",
+    "shop.willy": "Willy",
+
+    // recipe types
+    "recipe-type.cooking": "Gotowanie",
+    "recipe-type.crafting": "Rzemiosło",
+    "recipe-type.tailoring": "Krawiectwo",
+
+    // NPC descriptions
+    "data.npc.pet.description": "Twój lojalny zwierzak.",
+    "data.npc.horse.description": "Twój lojalny rumak.",
+    "data.npc.junimo.description": "Leśny duszek, pochodzący ze świata duchów. Niewiele o nich wiadomo.",
+    "data.npc.trash-bear.description": "Przyjazny duch, który sprząta śmieci.",
+
+    // item types
+    "data.type.debris": "Pozostałość",
+    "data.type.stone": "Skała",
+    "data.type.container": "Kontener",
+
+    // farm items
+    "data.item.egg-incubator.description": "Tutaj wykluwają się kury i kaczki.",
+    "data.item.broken-branch.name": "Złamana Gałąź",
+    "data.item.broken-branch.description": "Zwykła złamana gałąź. Uderz siekierą, aby uzyskać drewno.",
+    "data.item.stone.name": "Kamień",
+    "data.item.stone.description": "Zwykła szara skała. Rozbij, aby uzyskać kamień.",
+    "data.item.geode.name": "Złoże Geod",
+    "data.item.geode.description": "Rozbij, aby uzyskać geody.",
+    "data.item.frozen-geode.name": "Złoże Zamrożonych Geod",
+    "data.item.frozen-geode.description": "Rozbij, aby uzyskać zamrożone geody.",
+    "data.item.magma-geode.name": "Złoże Magmowych Geod",
+    "data.item.magma-geode.description": "Rozbij, aby uzyskać magmowe geody.",
+
+    // weeds & crystals
+    "data.item.weed.name": "Chwast",
+    "data.item.weed.description": "Zwykły chwast. Może zawierać włókna lub zmieszane nasiona.",
+    "data.item.fertile-weed.name": "Płodny Chwast",
+    "data.item.fertile-weed.description": "Gwarantuje wypadnięcie dzikich nasion.",
+    "data.item.ice-crystal.name": "Lodowy Kryształ",
+    "data.item.ice-crystal.description": "Zwykły lodowy kryształ. Bardzo mała szansa na wypadnięcie rafinowanego kwarcu.",
+
+    // mine gems
+    "data.item.amethyst-node.name": "Złoże Ametystów",
+    "data.item.amethyst-node.description": "Rozbij, aby uzyskać ametysty.",
+    "data.item.aquamarine-node.name": "Złoże Akwamarynów",
+    "data.item.aquamarine-node.description": "Rozbij, aby uzyskać akwamaryny.",
+    "data.item.diamond-node.name": "Złoże Diamentów",
+    "data.item.diamond-node.description": "Rozbij, aby uzyskać diamenty.",
+    "data.item.emerald-node.name": "Złoże Szmaragdów",
+    "data.item.emerald-node.description": "Rozbij, aby uzyskać szmaragdy.",
+    "data.item.gem-node.name": "Złoże Minerałów",
+    "data.item.gem-node.description": "Rozbij, aby uzyskać szmaragdy, akwamaryny, rubiny, ametysty, topazy, jadeity lub diamenty.",
+    "data.item.jade-node.name": "Złoże Jadeitów",
+    "data.item.jade-node.description": "Rozbij, aby uzyskać jadeity.",
+    "data.item.mystic-stone.name": "Mistyczny Kamień",
+    "data.item.mystic-stone.description": "Rozbij, aby uzyskać rzadkie minerały i rudy, w tym pryzmatyczne odłamki.",
+    "data.item.prismatic-node.name": "Pryzmatyczne Złoże",
+    "data.item.prismatic-node.description": "Rozbij, aby uzyskać pryzmatyczne odłamki.",
+    "data.item.ruby-node.name": "Złoże Rubinów",
+    "data.item.ruby-node.description": "Rozbij, aby uzyskać rubiny.",
+    "data.item.topaz-node.name": "Złoże Topazów",
+    "data.item.topaz-node.description": "Rozbij, aby uzyskać topazy.",
+
+    // mine ores
+    "data.item.cinder-shard-node.name": "Złoże Odłamków Popiołu",
+    "data.item.cinder-shard-node.description": "Rozbij, aby uzyskać odłamki popiołu.",
+    "data.item.copper-node.name": "Złoże Miedzi",
+    "data.item.copper-node.description": "Rozbij, aby uzyskać rudę miedzi.",
+    "data.item.gold-node.name": "Złoże Złota",
+    "data.item.gold-node.description": "Rozbij, aby uzyskać rudę złota.",
+    "data.item.iridium-node.name": "Złoże Irydu",
+    "data.item.iridium-node.description": "Rozbij, aby uzyskać rudę irydu.",
+    "data.item.iron-node.name": "Złoże Żelaza",
+    "data.item.iron-node.description": "Rozbij, aby uzyskać rudę żelaza.",
+    "data.item.omni-geode-node.name": "Złoże Geody Omni",
+    "data.item.omni-geode-node.description": "Rozbij, aby uzyskać geodę omni.",
+
+    // mine stones
+    "data.item.colored-stone.name": "Kolorowy Kamień",
+    "data.item.colored-stone.description": "Zwykła skała. Może zawierać kamień, rudy lub geody.",
+    "data.item.mine-stone.name": "Kamień",
+    "data.item.mine-stone.description": "Rozbij, aby uzyskać kamień z szansą na węgiel.",
+
+    // other stones
+    "data.item.clay-stone.name": "Skamieniała Glina",
+    "data.item.clay-stone.description": "Rozbij, aby uzyskać glinę.",
+    "data.item.fossil-stone.name": "Skamielina",
+    "data.item.fossil-stone.description": "Rozbij, aby uzyskać skamieliny i kości.",
+
+    // mine containers
+    "data.item.barrel.name": "Beczka",
+    "data.item.barrel.description": "Zniszcz, aby uzyskać rozmaite przedmioty.",
+    "data.item.box.name": "Skrzynka",
+    "data.item.box.description": "Zniszcz, aby uzyskać rozmaite przedmioty.",
+
+    // location names
+    "location.backwoods": "ostępy",
+    "location.beach": "plaża",
+    "location.beach.east-pier": "plaża (wschodnie molo)",
+    "location.bugLand": "legowisko zmutowanych robaków",
+    "location.busStop": "przystanek autobusowy",
+    "location.desert": "pustynia",
+    "location.farm": "farma",
+    "location.farmCave": "jaskinia na farmie",
+    "location.farmHouse": "dom na farmie",
+    "location.forest": "las",
+    "location.forest.fish-area-0": "leśna rzeka",
+    "location.forest.fish-area-1": "leśny staw",
+    "location.forest.island-tip": "leśna rzeka (południowy kraniec dużej wyspy)",
+    "location.mountain": "góra",
+    "location.railroad": "stacja kolejowa",
+    "location.sewer": "ścieki",
+    "location.submarine": "łódź podwodna Nocnego Rynku",
+    "location.town": "miasto",
+    "location.town.northmost-bridge": "miasto (północny most)",
+    "location.tunnel": "tunel drogowy",
+    "location.undergroundMine": "kopalnia",
+    "location.undergroundMine.level": "{{level}} poziom kopalni",
+    "location.witchSwamp": "bagno wiedźmy",
+    "location.woods": "tajemniczy las",
+
+    "location.caldera": "Imbirowa Wyspa - kaldera",
+    "location.islandEast": "Imbirowa Wyspa - wschód",
+    "location.islandNorth": "Imbirowa Wyspa - północ",
+    "location.islandSouth": "Imbirowa Wyspa - południe",
+    "location.islandSouthEast": "Imbirowa Wyspa - płd. wsch.",
+    "location.islandSouthEastCave": "Imbirowa Wyspa - płd. wsch. jaskinia",
+    "location.islandWest": "Imbirowa Wyspa - zachód",
+    "location.islandWest.fish-area-1": "Imbirowa Wyspa - zachód (ocean)",
+    "location.islandWest.fish-area-2": "Imbirowa Wyspa - zachód (staw)",
+
+    "location.unknown-fish-area": "{{locationName}} (strefa połowów {{id}})",
+
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Miłość",
+    "animal.happiness": "Szczęście",
+    "animal.mood": "Dzisiejszy nastrój",
+    "animal.complaints": "Problemy",
+    "animal.produce-ready": "Gotowe do produkcji",
+    "animal.growth": "Wiek",
+    "animal.sells-for": "Sprzedaż za",
+
+    // values
+    "animal.complaints.hungry": "nie było wczoraj karmione",
+    "animal.complaints.left-out": "zeszłej nocy zostawione na zewnątrz",
+    "animal.complaints.new-home": "przeniesione do nowego domu",
+    "animal.complaints.no-heater": "brak ogrzewania zimą",
+    "animal.complaints.not-petted": "nie zostało dzisiaj pogłaskane",
+    "animal.complaints.wild-animal-attack": "zaatakowane przez dzikie zwierzęta w nocy",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Zwierzęta",
+    "building.construction": "Budowa",
+    "building.feed-trough": "Koryta na paszę",
+    "building.horse": "Koń",
+    "building.horse-location": "Lokacja konia",
+    "building.owner": "Właściciel",
+    "building.slimes": "Szlamy",
+    "building.stored-hay": "Przechowywane siano",
+    "building.upgrades": "Ulepszenia",
+    "building.water-trough": "Koryta na wodę",
+
+    // values
+    "building.animals.summary": "{{count}} na maks. {{max}} zwierząt",
+    "building.construction.summary": "gotowe na {{date}}",
+    "building.feed-trough.automated": "automatyczne",
+    "building.feed-trough.summary": "wypełniono {{filled}} z {{max}} miejsc",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Zbieranie włączone",
+    "building.owner.none": "brak właściciela",
+    "building.output-processing": "Wytwarzanie w trakcie",
+    "building.output-ready": "Wytwarzanie ukończone",
+    "building.slimes.summary": "{{count}} na maks. {{max}} szlamów",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} siana (maks. pojemność: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} siana w {{siloCount}} silosach (maks. pojemność: {{maxHay}})",
+    "building.upgrades.barn.0": "do 4 zwierząt, dodaje krowy",
+    "building.upgrades.barn.1": "do 8 zwierząt, dodaje rozmnażanie i kozy",
+    "building.upgrades.barn.2": "do 12 zwierząt, dodaje autokarmienie, świnie i owce",
+    "building.upgrades.cabin.0": "początkowa kabina",
+    "building.upgrades.cabin.1": "dodaje kuchnię, umożliwia małżeństwo",
+    "building.upgrades.cabin.2": "umożliwia posiadanie dzieci",
+    "building.upgrades.coop.0": "do 4 zwierząt; dodaje kury",
+    "building.upgrades.coop.1": "do 8 zwierząt; dodaje inkubator, dinozaury i kaczki",
+    "building.upgrades.coop.2": "do 12 zwierząt; dodaje autokarmienie i króliki",
+    "building.water-trough.summary": "wypełniono {{filled}} z {{max}} miejsc",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Populacja",
+    "building.fish-pond.drops": "Można uzyskać",
+    "building.fish-pond.quests": "Zadania",
+
+    // values
+    "building.fish-pond.population.empty": "Dodaj rybę, aby staw zaczął funkcjonować",
+    "building.fish-pond.population.next-spawn": "Nowa ryba pojawi się {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% szans każdego dnia na wyprodukowanie przedmiotu:",
+    "building.fish-pond.drops.min-fish": "Z {{count}} rybami:",
+    "building.fish-pond.quests.done": "{{count}} ryb",
+    "building.fish-pond.quests.incomplete-one": "{{count}} ryb: potrzeba {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} ryb: potrzeba jednego z {{itemList}}",
+    "building.fish-pond.quests.available": "dostępne {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Krzew Jagodowy",
+    "bush.name.plain": "Zwykły Krzew",
+    "bush.name.tea": "Krzew Herbaciany",
+    "bush.description.berry": "Krzew, na którym rosną maliny i jeżyny.",
+    "bush.description.plain": "Zwyczajny krzew, na którym nic nie rośnie.",
+    "bush.description.Tea": "Krzew, na którym rosną liście herbaty.",
+    "bush.date-planted": "Data posadzenia",
+    "bush.growth": "Wzrost",
+    "bush.next-harvest": "Następne zbiory",
+
+    // values
+    "bush.growth.summary": "dojrzeje na {{date}}",
+    "bush.schedule.berry": "20% szans na maliny wiosną w dniach 15-18 i jeżyny jesienią w dniach 8-11.",
+    "bush.schedule.tea": "Wytwarza liście herbaty od 22 dnia każdego sezonu (oprócz zimy, jeśli nie w szklarni).",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Problemy",
+    "fruit-tree.name": "Drzewo {{fruitName}}",
+    "fruit-tree.growth": "Wzrost",
+    "fruit-tree.next-fruit": "Następne owoce",
+    "fruit-tree.season": "Sezon",
+    "fruit-tree.quality": "Jakość",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "nie może rosnąć, ponieważ posiada zbyt mało przestrzeni",
+    "fruit-tree.growth.summary": "dojrzeje na {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "nie wyda więcej owoców, dopóki nie zbierzesz tych, które ma",
+    "fruit-tree.next-fruit.out-of-season": "poza sezonem",
+    "fruit-tree.next-fruit.struck-by-lightning": "porażone piorunem! Wyzdrowieje za {{count}} dni.",
+    "fruit-tree.next-fruit.too-young": "zbyt młode, aby wydać owoce",
+    "fruit-tree.quality.now": "obecnie {{quality}}",
+    "fruit-tree.quality.on-date": "{{quality}} na {{date}}",
+    "fruit-tree.quality.on-date-next-year": "{{quality}} na {{date}} następnego roku",
+    "fruit-tree.season.summary": "{{season}} (lub kiedykolwiek, jeśli w szklarni)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Uprawa",
+    "crop.harvest": "Do zebrania",
+    "crop.fertilized": "Użyźniono",
+    "crop.watered": "Podlano",
+
+    // values
+    "crop.summary.dead": "Ta uprawa jest martwa.",
+    "crop.summary.drops-X": "można zebrać {{count}}",
+    "crop.summary.drops-X-to-Y": "można zebrać od {{min}} do {{max}} ({{percent}}% szans na dodatkowe plony)",
+    "crop.summary.harvest-once": "zbiory po {{daysToFirstHarvest}} dniach",
+    "crop.summary.harvest-multi": "zbiory po {{daysToFirstHarvest}} dniach, następnie co {{daysToNextHarvests}} dni",
+    "crop.summary.seasons": "rośnie w {{seasons}}",
+    "crop.summary.sells-for": "sprzedaż za {{price}}",
+    "crop.harvest.too-late": "za późno w sezonie na następne zbiory (byłyby na {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "Zawartość",
+    "item.loves-this": "Kocha to",
+    "item.likes-this": "Lubi to",
+    "item.neutral-about-this": "Neutralnie o tym",
+    "item.dislikes-this": "Nie lubi tego",
+    "item.hates-this": "Nienawidzi tego",
+    "item.needed-for": "Potrzebne do",
+    "item.number-owned": "Posiadane",
+    "item.number-cooked": "Przyrządzone",
+    "item.number-crafted": "Wytworzone",
+    "item.recipes": "Przepisy",
+    "item.see-also": "Zobacz również",
+    "item.sells-for": "Sprzedaż za",
+    "item.sells-to": "Sprzedaż do",
+    "item.can-be-dyed": "Można farbować",
+    "item.produces-dye": "Tworzy barwnik",
+
+    // values
+    "item.contents.placed": "umieszczono {{name}}",
+    "item.contents.ready": "ukończono {{name}}",
+    "item.contents.partial": "{{name}} za {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} nieokreślonych mieszkańców",
+    "item.undiscovered-gift-taste-appended": ", oraz {{count}} nieokreślonych mieszkańców",
+    "item.needed-for.community-center": "centrum społeczności ({{bundles}})",
+    "item.needed-for.full-shipment": "osiągnięcie szybka wysyłka (sprzedaj jeden)",
+    "item.needed-for.polyculture": "osiągnięcie polikultura (sprzedaj {{count}} więcej)",
+    "item.needed-for.full-collection": "osiągnięcie skończona kolekcja (podaruj jeden do muzeum)",
+    "item.needed-for.gourmet-chef": "osiągnięcie smakosz (przyrządź {{recipes}})",
+    "item.needed-for.craft-master": "osiągnięcie mistrz rzemieślników (wytwórz {{recipes}})",
+    "item.needed-for.quests": "aktualne zadania ({{quests}})",
+    "item.sells-to.shipping-box": "skrzynka sprzedaży",
+    "item.recipes-for-ingredient.entry": "{{name}} (potrzeba {{count}})",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "masz takich {{count}}",
+    "item.number-crafted.summary": "zrobiono takich {{count}}",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Zawartość",
+    "item.cask-schedule": "Dojrzewanie",
+
+    // values
+    "item.cask-schedule.now": "obecnie gotowe {{quality}}",
+    "item.cask-schedule.now-partial": "obecnie {{quality}} (użyj kilofa, aby zatrzymać dojrzewanie)",
+    "item.cask-schedule.tomorrow": "{{quality}} jutro",
+    "item.cask-schedule.in-x-days": "{{quality}} za {{count}} dni ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Przynęta",
+    "item.crabpot-bait-needed": "Potrzeba przynęty!",
+    "item.crabpot-bait-not-needed": "Niepotrzebne ze względu na profesję Mistrza Przynęt.",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Wytrzymałość",
+
+    // values
+    "item.fence-health.gold-clock": "brak podupadania dzięki Złotemu Zegarowi",
+    "item.fence-health.summary": "{{percent}}% (pozostało około {{count}} dni)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Produkcja w stawie",
+    "item.fish-spawn-rules": "Pojawia się",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "min. poziom wędkarstwa: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "jeszcze nie złowiono (można złowić raz)",
+    "item.fish-spawn-rules.locations": "lokacje: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "lokacje:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "każdy sezon",
+    "item.fish-spawn-rules.season-list": "sezony: {{seasons}}",
+    "item.fish-spawn-rules.time": "pora dnia: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "pogoda: słonecznie",
+    "item.fish-spawn-rules.weather-rainy": "pogoda: deszczowo",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Preferencja",
+    "item.movie-ticket.movie-this-week": "Film w tym tygodniu",
+    "item.movie-ticket.loves-movie": "Kocha film",
+    "item.movie-ticket.likes-movie": "Lubi film",
+    "item.movie-ticket.dislikes-movie": "Nie lubi filmu",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} kocha to",
+    "item.movie-snack-preference.like": "{{name}} lubi to",
+    "item.movie-snack-preference.dislike": "{{name}} nie lubi tego",
+    "item.movie-ticket.movie-this-week.none": "Brak filmu w tym tygodniu",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Ton",
+    "item.music-block.drum-type": "Bęben",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Niepokonano",
+    "monster.health": "Zdrowie",
+    "monster.drops": "Może wypaść",
+    "monster.experience": "XP",
+    "monster.defense": "Obrona",
+    "monster.attack": "Atak",
+    "monster.adventure-guild": "Gildia Poszukiwaczy",
+
+    // values
+    "monster.drops.nothing": "nic",
+    "monster.adventure-guild.eradication-goal": "cel eliminacji: {{name}} (zabito {{count}} z {{requiredCount}})",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "Urodziny",
+    "npc.can-romance": "Możliwość romansu",
+    "npc.friendship": "Przyjaźń",
+    "npc.talked-today": "Rozmawiano dzisiaj",
+    "npc.gifted-today": "Wręczono dzisiaj",
+    "npc.gifted-this-week": "Wręczono w tym tygodniu",
+    "npc.kissed-today": "Pocałowano dzisiaj",
+    "npc.hugged-today": "Przytulono dzisiaj",
+    "npc.loves-gifts": "Kocha",
+    "npc.likes-gifts": "Lubi",
+    "npc.neutral-gifts": "Neutralnie",
+    "npc.dislikes-gifts": "Nie lubi",
+    "npc.hates-gifts": "Nienawidzi",
+
+    // values
+    "npc.can-romance.married": "Jesteście małżeństwem! <", // < turns into a heart
+    "npc.can-romance.housemate": "Jesteście współlokatorami!",
+    "npc.friendship.not-met": "Jeszcze się nie poznaliście.",
+    "npc.friendship.need-bouquet": "potrzeba bukietu na następne",
+    "npc.friendship.need-points": "następne za {{count}} pkt",
+    "npc.undiscovered-gift-taste": "{{count}} nieokreślonych przedmiotów",
+    "npc.undiscovered-gift-taste-appended": ", oraz {{count}} nieokreślonych przedmiotów",
+
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Wiek",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} ({{count}} dni do {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "noworodek",
+    "npc.child.age.baby": "dziecko",
+    "npc.child.age.crawler": "brzdąc",
+    "npc.child.age.toddler": "niemowlak",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Miłość",
+    "pet.petted-today": "Pogłaskano dzisiaj",
+    "pet.last-petted": "Ostatnio pogłaskano",
+    "pet.water-bowl": "Miska na wodę",
+
+    // values
+    "pet.last-petted.yes": "tak (+12 miłości)",
+    "pet.last-petted.days-ago": "{{days}} dni temu",
+    "pet.last-petted.never": "nigdy",
+    "pet.water-bowl.empty": "pusta",
+    "pet.water-bowl.filled": "napełniona (+6 miłości)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Nazwa farmy",
+    "player.farm-map": "Teren farmy",
+    "player.favorite-thing": "Ulubiona rzecz",
+    "player.gender": "Płeć",
+    "player.housemate": "Współlokator",
+    "player.spouse": "Współmałżonek",
+    "player.watched-movie-this-week": "Obejrzano film w tym tygodniu",
+    "player.combat-skill": "Walka",
+    "player.farming-skill": "Rolnictwo",
+    "player.fishing-skill": "Wędkarstwo",
+    "player.foraging-skill": "Zbieractwo",
+    "player.mining-skill": "Górnictwo",
+    "player.luck": "Szczęście",
+    "player.save-format": "Format zapisu",
+
+    // values
+    "player.farm-map.custom": "Niestandardowy",
+    "player.gender.male": "mężczyzna",
+    "player.gender.female": "kobieta",
+    "player.luck.summary": "{{percent}}% do wielu losowych rzeczy",
+    "player.skill.progress": "poziom {{level}} ({{expNeeded}} XP do następnego)",
+    "player.skill.progress-last": "poziom {{level}}",
+
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Rozwiązanie",
+
+    // values
+    "puzzle.solution.solved": "Zagadka rozwiązana!",
+    "puzzle.solution.hidden": "Rozwiązania zagadek są ukryte w trybie progresji.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Zagadka Kryształowej Jaskini",
+    "puzzle.island-crystal-cave.crystal-id": "ID kryształu",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Aktywuj posąg, aby rozpocząć zagadkę.",
+    "puzzle.island-crystal-cave.solution.waiting": "Czekanie, aż gra wygeneruje sekwencję...",
+    "puzzle.island-crystal-cave.solution.activated": "Powtórz wzór aktywowanych kryształów:",
+
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Zagadka Wyspiarskiej Syreny",
+    "puzzle.island-mermaid.solution.intro": "Użyj bloków fletu, aby odtworzyć piosenkę syreny z Nocnego Rynku. Wysokości tonu (możesz sprawdzić blok fletu, aby zobaczyć jego ton):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Zagadka Sanktuarium na Wyspie",
+
+    // values
+    "puzzle.island-shrine.solution": "Na każdym piedestale umieść klejnot, który upuszczają ptaki w odpowiadającym miejscu na wyspie, gdy pada deszcz. Klejnoty są losowe dla każdego zapisu.",
+    "puzzle.island-shrine.solution.east": "Wschód: {{item}}",
+    "puzzle.island-shrine.solution.north": "Północ: {{item}}",
+    "puzzle.island-shrine.solution.south": "Południe: {{item}}",
+    "puzzle.island-shrine.solution.west": "Zachód: {{item}}",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
+    "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w ustawieniach włączono podgląd kafelków.",
+    "tile.game-location": "Lokacja",
+    "tile.map-name": "Nazwa mapy",
+    "tile.tile": "Kafelek",
+    "tile.tile-index": "{{layerName}}: indeks kafelka",
+    "tile.tilesheet": "{{layerName}}: arkusz kafelka",
+    "tile.blend-mode": "{{layerName}}: rodzaj łączenia",
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+
+    // values
+    "tile.tile.none-here": "brak tutaj kafelka",
+
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Porządany przedmiot",
+    "trash-bear-or-gourmand.quest-progress": "Postęp zadania",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Etap wzrostu",
+    "tree.next-growth": "Następny wzrost",
+    "tree.has-seed": "Posiada nasiono",
+    "tree.is-fertilized": "Użyźniono",
+
+    // values
+    "tree.name.big-mushroom": "Wielki Grzyb",
+    "tree.name.mahogany": "Mahoniowiec",
+    "tree.name.maple": "Klon",
+    "tree.name.oak": "Dąb",
+    "tree.name.palm": "Palma",
+    "tree.name.pine": "Sosna",
+    "tree.name.unknown": "Nieznane Drzewo",
+    "tree.stage.done": "w pełni wyrośnięte",
+    "tree.stage.partial": "{{stageName}} ({{step}} z {{max}})",
+    "tree.next-growth.winter": "nie może rosnąć zimą poza szklarnią, chyba że użyźniono",
+    "tree.next-growth.adjacent-trees": "nie może rosnąć, ponieważ inne drzewa są zbyt blisko",
+    "tree.next-growth.chance": "{{chance}}% szans, że jutro wyrośnie {{stage}}",
+
+    // growth stages
+    "tree.stages.seed": "nasiono",
+    "tree.stages.sprout": "kiełek",
+    "tree.stages.sapling": "sadzonka",
+    "tree.stages.bush": "krzew",
+    "tree.stages.smallTree": "małe drzewo",
+    "tree.stages.tree": "drzewo"
+}

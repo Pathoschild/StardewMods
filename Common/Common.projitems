@@ -9,6 +9,11 @@
     <Import_RootNamespace>Common</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\BaseCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\GenericCommandHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Integrations\MultiFertilizer\MultiFertilizerIntegration.cs" />
+    <Compile Include="..\Common\Commands\GenericHelpCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Commands\ICommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)CommonHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Enums\TreeType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DataParsers\CropDataParser.cs" />

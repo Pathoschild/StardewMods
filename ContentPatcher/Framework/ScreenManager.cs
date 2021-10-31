@@ -65,7 +65,7 @@ namespace ContentPatcher.Framework
         {
             this.Helper = helper;
             this.Monitor = monitor;
-            this.TokenManager = new TokenManager(helper.Content, installedMods, modTokens, helper.Reflection);
+            this.TokenManager = new TokenManager(helper.Content, installedMods, modTokens);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
             this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, helper.Reflection, installedMods, helper.Content.NormalizeAssetName);
             this.CustomLocationManager = new CustomLocationManager(this.Monitor);
@@ -79,17 +79,20 @@ namespace ContentPatcher.Framework
         public void OnLoadStageChanged(LoadStage oldStage, LoadStage newStage)
         {
             // add locations
-            if (newStage == LoadStage.CreatedInitialLocations || newStage == LoadStage.SaveAddedLocations)
+            if (newStage is LoadStage.CreatedInitialLocations or LoadStage.SaveAddedLocations)
                 this.CustomLocationManager.Apply(saveLocations: SaveGame.loaded?.locations, gameLocations: Game1.locations);
 
             // update context
             switch (newStage)
             {
-                case LoadStage.CreatedBasicInfo:
-                case LoadStage.SaveLoadedBasicInfo:
+                case LoadStage.SaveParsed:
+                case LoadStage.SaveLoadedBasicInfo or LoadStage.CreatedBasicInfo:
                 case LoadStage.Loaded when Game1.dayOfMonth == 0: // handled by OnDayStarted if we're not creating a new save
                     this.Monitor.VerboseLog($"Updating context: load stage changed to {newStage}.");
-                    this.TokenManager.IsBasicInfoLoaded = true;
+
+                    this.TokenManager.IsSaveParsed = true;
+                    this.TokenManager.IsSaveBasicInfoLoaded = newStage != LoadStage.SaveParsed;
+
                     this.UpdateContext(ContextUpdateType.All);
                     break;
             }
@@ -99,7 +102,10 @@ namespace ContentPatcher.Framework
         public void OnDayStarted()
         {
             this.Monitor.VerboseLog("Updating context: new day started.");
-            this.TokenManager.IsBasicInfoLoaded = true;
+
+            this.TokenManager.IsSaveParsed = true;
+            this.TokenManager.IsSaveBasicInfoLoaded = true;
+
             this.UpdateContext(ContextUpdateType.All);
         }
 
@@ -121,7 +127,10 @@ namespace ContentPatcher.Framework
         public void OnReturnedToTitle()
         {
             this.Monitor.VerboseLog("Updating context: returned to title.");
-            this.TokenManager.IsBasicInfoLoaded = false;
+
+            this.TokenManager.IsSaveParsed = false;
+            this.TokenManager.IsSaveBasicInfoLoaded = false;
+
             this.UpdateContext(ContextUpdateType.All);
         }
 

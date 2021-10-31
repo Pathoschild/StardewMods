@@ -96,6 +96,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         }
 
         /// <inheritdoc />
+        public int GetFilled()
+        {
+            return this.GetInventory().Count(p => p != null);
+        }
+
+        /// <inheritdoc />
+        public int GetCapacity()
+        {
+            return this.Chest.GetActualCapacity();
+        }
+
+        /// <inheritdoc />
         public ITrackedStack Get(Func<Item, bool> predicate, int count)
         {
             ITrackedStack[] stacks = this.GetImpl(predicate, count).ToArray();

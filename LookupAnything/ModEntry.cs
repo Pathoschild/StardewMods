@@ -116,9 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything
             JsonAssetsIntegration jsonAssets = new JsonAssetsIntegration(this.Helper.ModRegistry, this.Monitor);
 
             // initialize functionality
-            var customFarming = new CustomFarmingReduxIntegration(this.Helper.ModRegistry, this.Monitor);
-            var producerFramework = new ProducerFrameworkModIntegration(this.Helper.ModRegistry, this.Monitor);
-            this.GameHelper = new GameHelper(customFarming, producerFramework, this.Metadata, this.Helper.Reflection);
+            this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
             this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, this.Config, jsonAssets, () => this.Config.EnableTileLookups);
             this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor));
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -22,21 +23,36 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>The legend entry for speed-gro.</summary>
         private readonly LegendEntry SpeedGro;
 
+        /// <summary>The legend for crops with multiple fertilizers applied, if MultiFertilizer is installed.</summary>
+        private readonly LegendEntry Multiple;
+
+        /// <summary>Handles access to the supported mod integrations.</summary>
+        private readonly ModIntegrations Mods;
+
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="config">The data layer settings.</param>
-        public CropFertilizerLayer(LayerConfig config)
+        /// <param name="mods">Handles access to the supported mod integrations.</param>
+        public CropFertilizerLayer(LayerConfig config, ModIntegrations mods)
             : base(I18n.CropFertilizer_Name(), config)
         {
-            this.Legend = new[]
-            {
-                this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, Color.Green),
-                this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
-                this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, Color.Magenta)
-            };
+            this.Legend =
+                new[]
+                {
+                    this.Fertilizer = new LegendEntry(I18n.Keys.CropFertilizer_Fertilizer, Color.Green),
+                    this.RetainingSoil = new LegendEntry(I18n.Keys.CropFertilizer_RetainingSoil, Color.Blue),
+                    this.SpeedGro = new LegendEntry(I18n.Keys.CropFertilizer_SpeedGro, Color.Magenta),
+                    this.Multiple = mods.MultiFertilizer.IsLoaded
+                        ? new LegendEntry(I18n.Keys.CropFertilizer_Multiple, Color.Red)
+                        : null
+                }
+                .Where(p => p != null)
+                .ToArray();
+
+            this.Mods = mods;
         }
 
         /// <summary>Get the updated data layer tiles.</summary>
@@ -46,12 +62,23 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <param name="cursorTile">The tile position under the cursor.</param>
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
-            return new[]
-            {
-                this.GetGroup(location, visibleTiles, this.Fertilizer, HoeDirt.fertilizerLowQuality, HoeDirt.fertilizerHighQuality, HoeDirt.fertilizerDeluxeQuality),
-                this.GetGroup(location, visibleTiles, this.SpeedGro, HoeDirt.speedGro, HoeDirt.superSpeedGro, HoeDirt.hyperSpeedGro),
-                this.GetGroup(location, visibleTiles, this.RetainingSoil, HoeDirt.waterRetentionSoil, HoeDirt.waterRetentionSoilQuality, HoeDirt.waterRetentionSoilDeluxe)
-            };
+            FertilizedTile[] fertilizedTiles = this.GetFertilizedTiles(location, visibleTiles).ToArray();
+
+            bool hasMultiFertilizer = this.Mods.MultiFertilizer.IsLoaded;
+            return
+                new[]
+                {
+                    this.GetGroup(fertilizedTiles, this.Fertilizer, tile => tile.HasFertilizer && (!hasMultiFertilizer || !tile.HasMultiFertilizer)),
+                    this.GetGroup(fertilizedTiles, this.SpeedGro, tile => tile.HasSpeedGro && (!hasMultiFertilizer || !tile.HasMultiFertilizer)),
+                    this.GetGroup(fertilizedTiles, this.RetainingSoil, tile => tile.HasRetainingSoil && (!hasMultiFertilizer || !tile.HasMultiFertilizer)),
+
+                    // if MultiFertilizer is installed, show crops with multiple fertilizer types in their own group
+                    hasMultiFertilizer
+                        ? this.GetGroup(fertilizedTiles, this.Multiple, tile => tile.HasMultiFertilizer)
+                        : null
+                }
+                .Where(p => p != null)
+                .ToArray();
         }
 
 
@@ -59,30 +86,101 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         ** Private methods
         *********/
         /// <summary>Get a tile group.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
+        /// <param name="tiles">The tiles to check.</param>
         /// <param name="type">The legend entry for the group.</param>
-        /// <param name="states">The fertilizer states to match.</param>
-        private TileGroup GetGroup(GameLocation location, Vector2[] visibleTiles, LegendEntry type, params int[] states)
+        /// <param name="match">Matches the fertilized tiles to include in the group.</param>
+        private TileGroup GetGroup(IEnumerable<FertilizedTile> tiles, LegendEntry type, Func<FertilizedTile, bool> match)
         {
-            var crops = this
-                .GetSoilByState(location, visibleTiles, states)
-                .Select(pos => new TileData(pos, type));
+            IEnumerable<TileData> matched = (
+                from tile in tiles
+                where match(tile)
+                select new TileData(tile.Tile, type)
+            );
 
-            return new TileGroup(crops, outerBorderColor: type.Color);
+            return new TileGroup(matched, outerBorderColor: type.Color);
         }
 
-        /// <summary>Get tiles with the given fertilizer states.</summary>
+        /// <summary>Get fertilized tiles.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
-        /// <param name="states">The fertilizer states to match.</param>
-        private IEnumerable<Vector2> GetSoilByState(GameLocation location, IEnumerable<Vector2> visibleTiles, int[] states)
+        private IEnumerable<FertilizedTile> GetFertilizedTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
-            foreach (Vector2 tile in visibleTiles)
+            return (
+                from tilePos in visibleTiles
+                let tile = this.TryGetFertilizedSoil(location, tilePos)
+                where tile != null
+                select tile.Value
+            );
+        }
+
+        /// <summary>Get the fertilizer info for a given dirt tile, if any.</summary>
+        /// <param name="location">The current location.</param>
+        /// <param name="tile">The tile position.</param>
+        /// <returns>Returns whether the tile has any fertilizer applied.</returns>
+        private FertilizedTile? TryGetFertilizedSoil(GameLocation location, Vector2 tile)
+        {
+            // get dirt tile
+            HoeDirt dirt = this.GetDirt(location, tile);
+
+            // get applied fertilizer item IDs
+            HashSet<int> applied = null;
+            if (dirt is not null && !this.IsDeadCrop(dirt))
             {
-                HoeDirt dirt = this.GetDirt(location, tile);
-                if (dirt != null && !this.IsDeadCrop(dirt) && states.Contains(dirt.fertilizer.Value))
-                    yield return tile;
+                if (this.Mods.MultiFertilizer.IsLoaded)
+                    applied = new HashSet<int>(this.Mods.MultiFertilizer.GetAppliedFertilizers(dirt));
+                else if (dirt.fertilizer.Value > 0)
+                    applied = new HashSet<int> { dirt.fertilizer.Value };
+            }
+
+            // get fertilizer info
+            if (applied == null)
+                return null;
+            return new FertilizedTile(
+                tile: tile,
+                hasFertilizer: applied.Contains(HoeDirt.fertilizerLowQuality) || applied.Contains(HoeDirt.fertilizerHighQuality) || applied.Contains(HoeDirt.fertilizerDeluxeQuality),
+                hasRetainingSoil: applied.Contains(HoeDirt.waterRetentionSoil) || applied.Contains(HoeDirt.waterRetentionSoilQuality) || applied.Contains(HoeDirt.waterRetentionSoilDeluxe),
+                hasSpeedGro: applied.Contains(HoeDirt.speedGro) || applied.Contains(HoeDirt.superSpeedGro) || applied.Contains(HoeDirt.hyperSpeedGro)
+            );
+        }
+
+        /// <summary>A fertilized dirt tile.</summary>
+        private readonly struct FertilizedTile
+        {
+            /*********
+            ** Accessors
+            *********/
+            /// <summary>The tile position.</summary>
+            public Vector2 Tile { get; }
+
+            /// <summary>Whether the dirt has fertilizer applied.</summary>
+            public bool HasFertilizer { get; }
+
+            /// <summary>Whether the dirt has water retaining soil applied.</summary>
+            public bool HasRetainingSoil { get; }
+
+            /// <summary>Whether the dirt has Speed-Gro applied.</summary>
+            public bool HasSpeedGro { get; }
+
+            /// <summary>Whether the tile has multiple fertilizer types applied.</summary>
+            public bool HasMultiFertilizer { get; }
+
+
+            /*********
+            ** Public methods
+            *********/
+            /// <summary>Construct an instance.</summary>
+            /// <param name="tile">The tile position.</param>
+            /// <param name="hasFertilizer">Whether the dirt has fertilizer applied.</param>
+            /// <param name="hasRetainingSoil">Whether the dirt has water retaining soil applied.</param>
+            /// <param name="hasSpeedGro">Whether the dirt has Speed-Gro applied.</param>
+            public FertilizedTile(Vector2 tile, bool hasFertilizer, bool hasRetainingSoil, bool hasSpeedGro)
+            {
+                this.Tile = tile;
+                this.HasFertilizer = hasFertilizer;
+                this.HasRetainingSoil = hasRetainingSoil;
+                this.HasSpeedGro = hasSpeedGro;
+
+                this.HasMultiFertilizer = ((hasFertilizer ? 1 : 0) + (hasRetainingSoil ? 1 : 0) + (hasSpeedGro ? 1 : 0)) > 1;
             }
         }
     }

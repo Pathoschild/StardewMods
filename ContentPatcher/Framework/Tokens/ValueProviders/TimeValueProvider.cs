@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -13,8 +10,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Whether the basic save info is loaded.</summary>
-        private readonly Func<bool> IsBasicInfoLoaded;
+        /// <summary>Handles reading info from the current save.</summary>
+        private readonly TokenSaveReader SaveReader;
 
         /// <summary>The clock time as of the last context update.</summary>
         private string TimeOfDay;
@@ -24,11 +21,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="isBasicInfoLoaded">Whether the basic save info is loaded.</param>
-        public TimeValueProvider(Func<bool> isBasicInfoLoaded)
+        /// <param name="saveReader">Handles reading info from the current save.</param>
+        public TimeValueProvider(TokenSaveReader saveReader)
             : base(ConditionType.Time, mayReturnMultipleValuesForRoot: false)
         {
-            this.IsBasicInfoLoaded = isBasicInfoLoaded;
+            this.SaveReader = saveReader;
         }
 
         /// <inheritdoc />
@@ -37,8 +34,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return this.IsChanged(() =>
             {
                 string oldTime = this.TimeOfDay;
-                this.TimeOfDay = this.MarkReady(this.IsBasicInfoLoaded())
-                    ? this.NormalizeValue(Game1.timeOfDay)
+                this.TimeOfDay = this.MarkReady(this.SaveReader.IsReady)
+                    ? this.NormalizeValue(this.SaveReader.GetTime())
                     : null;
                 return oldTime != this.TimeOfDay;
             });

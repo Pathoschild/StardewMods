@@ -94,6 +94,10 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public virtual bool UpdateContext(IContext context)
         {
+            // skip unneeded updates
+            if (!this.IsMutable && this.Contextuals.WasEverUpdated)
+                return false;
+
             // reset
             bool wasReady = this.IsReady;
             this.State.Reset();

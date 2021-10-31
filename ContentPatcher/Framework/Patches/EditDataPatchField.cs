@@ -26,10 +26,10 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>The entry value to set.</summary>
         public TokenizableJToken Value { get; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.Contextuals.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Contextuals.IsReady;
 
 
@@ -52,21 +52,19 @@ namespace ContentPatcher.Framework.Patches
                 .Add(value);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             return this.Contextuals.UpdateContext(context);
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.Contextuals.GetDiagnosticState();

@@ -10,25 +10,25 @@ namespace ContentPatcher.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>Whether the instance is valid in general (ignoring the context).</summary>
+        /// <inheritdoc />
         public bool IsValid => !this.InvalidTokens.Any() && !this.UnavailableModTokens.Any();
 
-        /// <summary>Whether <see cref="IsValid"/> and the instance is applicable in the current context.</summary>
+        /// <inheritdoc />
         public bool IsInScope => this.IsValid && !this.UnreadyTokens.Any();
 
-        /// <summary>Whether <see cref="IsInScope"/> and there are no issues preventing the contextual from being used.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.IsInScope && !this.Errors.Any();
 
-        /// <summary>The unknown tokens required by the instance, if any.</summary>
+        /// <inheritdoc />
         public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
 
-        /// <summary>The valid tokens required by the instance which aren't ready in the current context, if any.</summary>
+        /// <inheritdoc />
         public InvariantHashSet UnreadyTokens { get; } = new InvariantHashSet();
 
-        /// <summary>The tokens which are provided by a mod which isn't installed, if any.</summary>
+        /// <inheritdoc />
         public InvariantHashSet UnavailableModTokens { get; } = new InvariantHashSet();
 
-        /// <summary>Error phrases indicating why the instance is not ready to use, if any.</summary>
+        /// <inheritdoc />
         public InvariantHashSet Errors { get; } = new InvariantHashSet();
 
 

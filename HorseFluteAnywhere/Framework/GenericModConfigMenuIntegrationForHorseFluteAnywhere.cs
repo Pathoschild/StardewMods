@@ -32,6 +32,8 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
+            var defaultConfig = new ModConfig();
+
             // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)
@@ -39,16 +41,16 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Framework
 
             // register
             menu
-                .RegisterConfig(canConfigureInGame: true)
+                .Register()
                 .AddCheckbox(
-                    label: "Require Horse Flute",
-                    description: "Whether you need the horse flute item in your inventory to summon a horse. Default false.",
+                    name: I18n.Config_RequireFlute_Name,
+                    tooltip: I18n.Config_RequireFlute_Description,
                     get: config => config.RequireHorseFlute,
                     set: (config, value) => config.RequireHorseFlute = value
                 )
                 .AddKeyBinding(
-                    label: "Summon Horse Button",
-                    description: "The button to press which plays the flute and summons a horse. Default H.",
+                    name: I18n.Config_SummonHorseButton_Name,
+                    tooltip: () => I18n.Config_SummonHorseButton_Description(defaultValue: defaultConfig.SummonHorseKey.ToString()),
                     get: config => config.SummonHorseKey,
                     set: (config, value) => config.SummonHorseKey = value
                 );

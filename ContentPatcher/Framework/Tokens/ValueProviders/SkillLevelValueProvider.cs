@@ -4,7 +4,6 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
-using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -14,8 +13,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Get whether the player data is available in the current context.</summary>
-        private readonly Func<bool> IsPlayerDataAvailable;
+        /// <summary>Handles reading info from the current save.</summary>
+        private readonly TokenSaveReader SaveReader;
 
         /// <summary>The player's current skill levels.</summary>
         private readonly IDictionary<Skill, int> SkillLevels = new Dictionary<Skill, int>();
@@ -25,10 +24,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public SkillLevelValueProvider(Func<bool> isPlayerDataAvailable)
+        /// <param name="saveReader">Handles reading info from the current save.</param>
+        public SkillLevelValueProvider(TokenSaveReader saveReader)
             : base(ConditionType.SkillLevel, mayReturnMultipleValuesForRoot: true)
         {
-            this.IsPlayerDataAvailable = isPlayerDataAvailable;
+            this.SaveReader = saveReader;
             this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: 1);
         }
 
@@ -40,14 +40,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 IDictionary<Skill, int> oldSkillLevels = new Dictionary<Skill, int>(this.SkillLevels);
 
                 this.SkillLevels.Clear();
-                if (this.MarkReady(this.IsPlayerDataAvailable()))
+                if (this.MarkReady(this.SaveReader.IsReady))
                 {
-                    this.SkillLevels[Skill.Combat] = Game1.player.CombatLevel;
-                    this.SkillLevels[Skill.Farming] = Game1.player.FarmingLevel;
-                    this.SkillLevels[Skill.Fishing] = Game1.player.FishingLevel;
-                    this.SkillLevels[Skill.Foraging] = Game1.player.ForagingLevel;
-                    this.SkillLevels[Skill.Luck] = Game1.player.LuckLevel;
-                    this.SkillLevels[Skill.Mining] = Game1.player.MiningLevel;
+                    var player = this.SaveReader.GetCurrentPlayer();
+
+                    this.SkillLevels[Skill.Combat] = player.CombatLevel;
+                    this.SkillLevels[Skill.Farming] = player.FarmingLevel;
+                    this.SkillLevels[Skill.Fishing] = player.FishingLevel;
+                    this.SkillLevels[Skill.Foraging] = player.ForagingLevel;
+                    this.SkillLevels[Skill.Luck] = player.LuckLevel;
+                    this.SkillLevels[Skill.Mining] = player.MiningLevel;
 
                     return
                         this.SkillLevels.Count != oldSkillLevels.Count
@@ -79,8 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             else
             {
                 return this.SkillLevels
-                    .Select(pair => $"{pair.Key}:{pair.Value}")
-                    .OrderByHuman();
+                    .Select(pair => $"{pair.Key}:{pair.Value}");
             }
         }
     }

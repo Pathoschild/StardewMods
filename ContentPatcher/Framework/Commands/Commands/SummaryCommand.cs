@@ -8,6 +8,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Locations;
 using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Commands;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -38,6 +39,23 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>A regex pattern matching asset names which incorrectly include the locale code.</summary>
         private readonly Regex AssetNameWithLocalePattern = new(@"^\.(?:de-DE|es-ES|ja-JP|pt-BR|ru-RU|zh-CN)(?:\.xnb)?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
+        /// <summary>The tokens to sort manually for display.</summary>
+        /// <remarks>This avoids the performance impact of sorting the actual token each time the context is updated. Note that we shouldn't sort all tokens here, since some have a natural order that affects the <see cref="InputArguments.ValueAtKey"/> input argument.</remarks>
+        private readonly HashSet<ConditionType> SortTokens = new()
+        {
+            ConditionType.HasActiveQuest,
+            ConditionType.HasCaughtFish,
+            ConditionType.HasCookingRecipe,
+            ConditionType.HasCraftingRecipe,
+            ConditionType.HasConversationTopic,
+            ConditionType.HasDialogueAnswer,
+            ConditionType.HasFlag,
+            ConditionType.HasProfession,
+            ConditionType.HasReadLetter,
+            ConditionType.HasSeenEvent,
+            ConditionType.SkillLevel
+        };
+
 
         /*********
         ** Public methods
@@ -65,6 +83,10 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                    Usage: patch summary ""<content pack ID>""
                    Show a summary of the current conditions, and loaded patches for the given content pack.
+
+                   You can also specify any number of optional flags (e.g. `patch summary full unsorted`):
+                      - full: don't truncate very long token values.
+                      - unsorted: don't sort the values for display. This is mainly useful for checking the real order for `valueAt`.
             ";
         }
 
@@ -79,14 +101,20 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // parse arguments
             bool showFull = false;
+            bool sort = true;
             var forModIds = new InvariantHashSet();
             foreach (string arg in args)
             {
                 // flags
-                if (arg.Equals("full", StringComparison.OrdinalIgnoreCase))
+                switch (arg.ToLower())
                 {
-                    showFull = true;
-                    continue;
+                    case "full":
+                        showFull = true;
+                        continue;
+
+                    case "unsorted":
+                        sort = false;
+                        continue;
                 }
 
                 // for mod ID
@@ -116,11 +144,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                     (
                         from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
-                        let rootValues = !token.RequiresInput ? token.GetValues(InputArguments.Empty).ToArray() : new string[0]
+                        let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : new string[0]
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && token.GetValues(new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input")))).Count() > 1)
+                            || (inputArgs.Length == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input"))), sort).Count() > 1)
                         let mod = (token as ModProvidedToken)?.Mod
                         orderby isMultiValue // single-value tokens first, then alphabetically
                         select new { Mod = mod, Token = token }
@@ -167,14 +195,14 @@ namespace ContentPatcher.Framework.Commands.Commands
                                     else
                                         output.Append($"      {"".PadRight(labelWidth, ' ')} |     ");
 
-                                    output.AppendLine($":{input}: {GetTruncatedTokenValues(token.GetValues(new InputArguments(new LiteralString(input, path.With(token.Name, "input")))))}");
+                                    output.AppendLine($":{input}: {GetTruncatedTokenValues(this.GetValues(token, new InputArguments(new LiteralString(input, path.With(token.Name, "input"))), sort))}");
                                 }
                             }
                             else
                                 output.AppendLine("[X] (token returns a dynamic value)");
                         }
                         else
-                            output.AppendLine("[X] " + GetTruncatedTokenValues(token.GetValues(InputArguments.Empty)));
+                            output.AppendLine("[X] " + GetTruncatedTokenValues(this.GetValues(token, InputArguments.Empty, sort)));
                     }
 
                     output.AppendLine();
@@ -263,7 +291,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 let result = new
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                    Values = token.IsReady ? token.GetValues(new InputArguments(input)).ToArray() : new string[0],
+                                    Values = token.IsReady ? this.GetValues(token, new InputArguments(input), sort).ToArray() : new string[0],
                                     IsReady = token.IsReady
                                 }
                                 orderby result.Name
@@ -430,12 +458,26 @@ namespace ContentPatcher.Framework.Commands.Commands
         *********/
         /// <summary>Get basic info about all patches, including those which couldn't be loaded.</summary>
         /// <param name="patchManager">Manages loaded patches.</param>
-        public IEnumerable<PatchInfo> GetAllPatches(PatchManager patchManager)
+        private IEnumerable<PatchInfo> GetAllPatches(PatchManager patchManager)
         {
             foreach (IPatch patch in patchManager.GetPatches())
                 yield return new PatchInfo(patch);
             foreach (DisabledPatch patch in patchManager.GetPermanentlyDisabledPatches())
                 yield return new PatchInfo(patch);
+        }
+
+        /// <summary>Get the values for a token in display order.</summary>
+        /// <param name="token">The token whose values to get.</param>
+        /// <param name="input">The input arguments for the token.</param>
+        /// <param name="sort">Whether to sort the values for display.</param>
+        private IEnumerable<string> GetValues(IToken token, IInputArguments input, bool sort)
+        {
+            IEnumerable<string> values = token.GetValues(input);
+
+            if (sort && Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type) && this.SortTokens.Contains(type))
+                values = values.OrderByHuman();
+
+            return values;
         }
     }
 }

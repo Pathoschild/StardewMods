@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.14.7
+Released 31 October 2021 for SMAPI 3.12.5 or later.
+
+* Added support for MultiFertilizer in fertilizer layer.
+* Refactored console command handling.
+
 ## 1.14.6
 Released 18 September 2021 for SMAPI 3.12.5 or later.
 

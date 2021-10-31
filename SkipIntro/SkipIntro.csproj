@@ -1,10 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SkipIntro</AssemblyName>
-    <Version>1.9.2</Version>
+    <Version>1.9.3</Version>
     <RootNamespace>Pathoschild.Stardew.SkipIntro</RootNamespace>
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
+  </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />

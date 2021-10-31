@@ -19,10 +19,10 @@ namespace ContentPatcher.Framework.Tokens.Json
         /// <summary>The underlying JSON structure.</summary>
         public JToken Value { get; }
 
-        /// <summary>Whether the instance may change depending on the context.</summary>
+        /// <inheritdoc />
         public bool IsMutable => this.Contextuals.IsMutable;
 
-        /// <summary>Whether the instance is valid for the current context.</summary>
+        /// <inheritdoc />
         public bool IsReady => this.Contextuals.IsReady;
 
         /// <summary>Whether the tokenizable token represents a string value, instead of an object or array.</summary>
@@ -41,21 +41,19 @@ namespace ContentPatcher.Framework.Tokens.Json
             this.Contextuals.Add(proxyFields);
         }
 
-        /// <summary>Update the instance when the context changes.</summary>
-        /// <param name="context">Provides access to contextual tokens.</param>
-        /// <returns>Returns whether the instance changed.</returns>
+        /// <inheritdoc />
         public bool UpdateContext(IContext context)
         {
             return this.Contextuals.UpdateContext(context);
         }
 
-        /// <summary>Get the token names used by this patch in its fields.</summary>
+        /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
             return this.Contextuals.GetTokensUsed();
         }
 
-        /// <summary>Get diagnostic info about the contextual instance.</summary>
+        /// <inheritdoc />
         public IContextualState GetDiagnosticState()
         {
             return this.Contextuals.GetDiagnosticState();

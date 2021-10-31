@@ -38,6 +38,12 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The fish IDs caught by the player.</summary>
         HasCaughtFish,
 
+        /// <summary>The cooking recipes known by the player.</summary>
+        HasCookingRecipe,
+
+        /// <summary>The crafting recipes known by the player.</summary>
+        HasCraftingRecipe,
+
         /// <summary>A conversation topic ID set for the player.</summary>
         HasConversationTopic,
 
@@ -74,6 +80,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The name of the player's current location.</summary>
         LocationName,
 
+        /// <summary>The unique ID of the player who owns the location, if applicable.</summary>
+        LocationOwnerId,
+
         /// <summary>The unique name of the player's current location. This differs from <see cref="LocationName"/> for constructed building interiors.</summary>
         LocationUniqueName,
 
@@ -103,6 +112,9 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
         Relationship,
+
+        /// <summary>The current player's internal roommate name (if any).</summary>
+        Roommate,
 
         /// <summary>The current player's internal spouse name (if any).</summary>
         Spouse,
@@ -157,6 +169,12 @@ namespace ContentPatcher.Framework.Conditions
         ****/
         /// <summary>A token which transforms its input text to lowercase.</summary>
         Lowercase,
+
+        /// <summary>Combine any number of input tokens and values into one.</summary>
+        Merge,
+
+        /// <summary>Get part of a file/asset path.</summary>
+        PathPart,
 
         /// <summary>A random value selected from the given input.</summary>
         Random,
