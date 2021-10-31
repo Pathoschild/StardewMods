@@ -15,6 +15,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
   * [`LocationOwnerId`](author-tokens-guide.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
   * [`Merge`](author-tokens-guide.md#Merge) to combine tokens in `When` conditions or perform value fallback.
   * [`PathPart`](author-tokens-guide.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+  * [`Roommate`](author-tokens-guide.md#Roommate) to get a player's roommate NPC (similar to `Spouse` for a married NPC).
 * Improved tokens:
   * Tokens with a player type argument now recognize player IDs too (like `{{PlayerName: 3864039824286870457}}`).
   * You can now specify an optional player type/ID with more tokens (specifically `IsMainPlayer`, `IsOutdoors`, `LocationContext`, `LocationName`, `LocationUniqueName`, `PlayerGender`, `PlayerName`, and `Spouse`).
@@ -30,9 +31,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed error when a mod manifest has dependencies with no ID.
 * Fixed patch conditions not updated in rare cases.
 
-**Update note for mod authors:**  
-Some tokens may return values in a different order. See the [migration
-guide](author-migration-guide.md) for more info.
+**Update notes for mod authors:**
+* Some tokens may return values in a different order.
+* The `Spouse` token no longer returns a roommate when the `Format` field is `1.24.0` or later.
+
+See the [migration guide](author-migration-guide.md) for more info.
 
 ## 1.23.5
 Released 18 September 2021 for SMAPI 3.12.6 or later.

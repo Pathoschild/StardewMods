@@ -26,6 +26,7 @@ namespace ContentPatcher.Framework.Migrations
                 ConditionType.HasCraftingRecipe.ToString(),
                 ConditionType.LocationOwnerId.ToString(),
                 ConditionType.Merge.ToString(),
+                ConditionType.Roommate.ToString(),
                 ConditionType.PathPart.ToString()
             );
         }
@@ -36,8 +37,12 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;
 
+            // ignore non-tokens
+            if (lexToken is not LexTokenToken token || !Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type))
+                return true;
+
             // 1.24 changes input arguments for player tokens
-            if (lexToken is LexTokenToken token && Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type) && token.HasInputArgs())
+            if (token.HasInputArgs())
             {
                 bool wasPlayerToken = this.IsOldPlayerToken(type);
                 bool isNewPlayerToken = !wasPlayerToken && this.IsNewPlayerToken(type);
@@ -60,6 +65,21 @@ namespace ContentPatcher.Framework.Migrations
                         return false;
                     }
                 }
+            }
+
+            // 1.24 splits {{Roommate}} token out of {{Spouse}}
+            if (type == ConditionType.Spouse)
+            {
+                lexToken = new LexTokenToken(
+                    name: ConditionType.Merge.ToString(),
+                    inputArgs: new LexTokenInput(new ILexToken[]
+                    {
+                        new LexTokenToken(ConditionType.Roommate.ToString(), null, impliedBraces: false),
+                        new LexTokenLiteral(","),
+                        new LexTokenToken(ConditionType.Spouse.ToString(), token.InputArgs, impliedBraces: false)
+                    }),
+                    impliedBraces: token.ImpliedBraces
+                );
             }
 
             return true;

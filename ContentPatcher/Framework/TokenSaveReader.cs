@@ -402,13 +402,6 @@ namespace ContentPatcher.Framework
             );
         }
 
-        /// <summary>Get the current player's spouse.</summary>
-        /// <param name="player">The player whose spouse to get.</param>
-        public string GetSpouse(Farmer player)
-        {
-            return player.spouse;
-        }
-
         /// <summary>Get the name and gender of the player's spouse, if they're married</summary>
         /// <param name="player">The player whose spouse to check.</param>
         /// <param name="name">The spouse name.</param>

@@ -628,12 +628,24 @@ Divorced | The player married and then divorced them.
 <td><a href="#Relationship">#</a></td>
 </tr>
 
+<tr valign="top" id="Roommate">
+<td>Roommate</td>
+<td>
+
+The name of the [current or specified player](#target-player)'s NPC roommate (using their English
+name regardless of translations).
+
+</td>
+<td><a href="#Roommate">#</a></td>
+</tr>
+
+
 <tr valign="top" id="Spouse">
 <td>Spouse</td>
 <td>
 
-The [current or specified player](#target-player)'s spouse name (using their English name
-regardless of translations).
+The name of the [current or specified player](#target-player)'s NPC spouse (using their English
+name regardless of translations).
 
 </td>
 <td><a href="#Spouse">#</a></td>

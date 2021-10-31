@@ -113,6 +113,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>The current player's relationship status with the character (matching <see cref="StardewValley.FriendshipStatus"/>)</summary>
         Relationship,
 
+        /// <summary>The current player's internal roommate name (if any).</summary>
+        Roommate,
+
         /// <summary>The current player's internal spouse name (if any).</summary>
         Spouse,
 

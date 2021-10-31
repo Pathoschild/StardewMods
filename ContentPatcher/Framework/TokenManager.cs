@@ -214,7 +214,8 @@ namespace ContentPatcher.Framework
                 new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save),
                 new VillagerHeartsValueProvider(save),
                 new VillagerRelationshipValueProvider(save),
-                new LocalOrHostPlayerValueProvider(ConditionType.Spouse, player => save.GetSpouse(player), save),
+                new LocalOrHostPlayerValueProvider(ConditionType.Roommate, player => player.hasRoommate() ? player.spouse : null, save),
+                new LocalOrHostPlayerValueProvider(ConditionType.Spouse, player => !player.hasRoommate() ? player.spouse : null, save),
 
                 // world
                 new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave),
