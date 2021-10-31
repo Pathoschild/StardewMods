@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.SmallBeachFarm.Framework;
-using Pathoschild.Stardew.SmallBeachFarm.Framework.Commands;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
 using Pathoschild.Stardew.SmallBeachFarm.Patches;
 using StardewModdingAPI;
@@ -90,10 +89,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                     getFishType: this.GetFishType
                 )
             );
-
-            // register commands
-            var commandHandler = new CommandHandler(this.Monitor, this.Config);
-            commandHandler.RegisterWith(this.Helper.ConsoleCommands);
         }
 
         /// <summary>Get whether this instance can load the initial version of the given asset.</summary>

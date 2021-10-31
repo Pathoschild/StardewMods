@@ -2,7 +2,6 @@
 
 # Release notes
 ## Upcoming release
-* Added [console command to change the current farm type](README.md#change-farm-type).
 * Improved integration with [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098):
   * All config options are now translatable.
   * Updated for Generic Mod Config Menu 1.5.0.
