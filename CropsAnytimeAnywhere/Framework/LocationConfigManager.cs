@@ -28,13 +28,13 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         public LocationConfigManager(ModConfig config)
         {
             this.Config = config;
-            this.OnlyHasGlobal = config.InLocations.Count == 1 && config.InLocations.Keys.Single() == "*";
+            this.OnlyHasGlobal = config.Locations.Count == 1 && config.Locations.Keys.Single() == "*";
         }
 
         /// <summary>Whether any of the locations override tile tillability.</summary>
         public bool HasTillableOverrides()
         {
-            return this.Config.InLocations.Values
+            return this.Config.Locations.Values
                 .Any(p => p.ForceTillable.IsAnyEnabled());
         }
 
@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         {
             // shortcut for common case
             if (this.OnlyHasGlobal)
-                return this.Config.InLocations["*"];
+                return this.Config.Locations["*"];
 
             // get config with caching
             string cacheKey = $"{location.NameOrUniqueName}|{location.IsOutdoors}|{location.GetHashCode()}";
@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
             {
                 this.ConfigCache[cacheKey] = config =
                     (
-                        from entry in this.Config.InLocations
+                        from entry in this.Config.Locations
                         where this.AppliesTo(entry.Key, location)
                         select entry.Value
                     )

@@ -186,7 +186,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         {
             // default to current player
             if (!playerIds.Any())
-                playerIds.Add(Game1.player.UniqueMultiplayerID);
+            {
+                if (this.PlayerIdsByType.TryGetValue(PlayerType.CurrentPlayer, out long id))
+                    playerIds.Add(id);
+            }
 
             // get single value (avoids copying the collection in most cases)
             if (playerIds.Count == 1)
