@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public MergeValueProvider()
             : base(ConditionType.Merge, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: true, mayReturnMultipleValues: true, maxPositionalArgs: null);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: true, maxPositionalArgs: null);
         }
 
         /// <inheritdoc />
