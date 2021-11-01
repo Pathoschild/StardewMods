@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Fixed player tokens not defaulting to the current player while save is loading.
 * Fixed 'no translation' tooltips shown for config fields with no description.
 
 ## 1.24.1
