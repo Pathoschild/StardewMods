@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.24.2
+Released 01 November 2021 for SMAPI 3.12.6 or later.
+
 * Fixed player tokens not defaulting to the current player while save is loading.
 * Fixed 'no translation' tooltips shown for config fields with no description.
 

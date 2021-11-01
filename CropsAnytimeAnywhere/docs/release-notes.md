@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.4.1
+Released 01 November 2021 for SMAPI 3.12.5 or later.
+
 * Fixed error when the `config.json` file has null values.
 * Fixed some `config.json` files not migrated correctly in 1.4.0.
 
