@@ -89,9 +89,9 @@ namespace ContentPatcher.Framework
                 return;
 
             // get translation logic
-            string GetName() => this.ContentPack.Translation.Get($"config.{name}.name").Default(name);
-            string GetDescription() => this.ContentPack.Translation.Get($"config.{name}.description").Default(field.Description);
-            string GetValueText(string value) => this.ContentPack.Translation.Get($"config.{name}.values.{value}").Default(value);
+            string GetName() => this.TryTranslate($"config.{name}.name", name);
+            string GetDescription() => this.TryTranslate($"config.{name}.description", field.Description);
+            string GetValueText(string value) => this.TryTranslate($"config.{name}.values.{value}", value);
 
             // textbox if any values allowed
             if (!field.AllowValues.Any())
@@ -190,6 +190,18 @@ namespace ContentPatcher.Framework
         {
             foreach (ConfigField configField in this.Config.Values)
                 configField.Value = new InvariantHashSet(configField.DefaultValues);
+        }
+
+        /// <summary>Get a translation if it exists, else get the fallback text.</summary>
+        /// <param name="key">The translation key to find.</param>
+        /// <param name="fallback">The fallback text.</param>
+        private string TryTranslate(string key, string fallback)
+        {
+            string translation = this.ContentPack.Translation.Get(key).UsePlaceholder(false);
+
+            return string.IsNullOrWhiteSpace(translation)
+                ? (fallback ?? "")
+                : translation;
         }
     }
 }
