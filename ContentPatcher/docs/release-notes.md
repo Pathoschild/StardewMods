@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed `DayOfWeek` token set incorrectly on some days after 1.24.0.
+
 ## 1.24.2
 Released 01 November 2021 for SMAPI 3.12.6 or later.
 

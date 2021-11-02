@@ -218,7 +218,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get the day of week.</summary>
         public DayOfWeek GetDayOfWeek()
         {
-            return this.GetDay() switch
+            return (this.GetDay() % 7) switch
             {
                 1 => DayOfWeek.Monday,
                 2 => DayOfWeek.Tuesday,
