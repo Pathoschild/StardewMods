@@ -271,7 +271,7 @@ namespace ContentPatcher.Framework
             // get from weather data
             LocationWeather model = this.GetForState(
                 loaded: () => Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context),
-                reading: save => save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather temp) ? temp : null
+                reading: save => save.locationWeather != null && save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather weather) ? weather : null
             );
             if (model != null)
             {
