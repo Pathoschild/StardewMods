@@ -87,9 +87,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return new InvariantHashSet(
-                this.GetContextsFor(input).Select(p => this.Values[p].ToString())
-            );
+            var values = this
+                .GetContextsFor(input)
+                .Select(context => this.Values.TryGetValue(context, out Weather weather)
+                    ? weather.ToString()
+                    : Weather.Sun.ToString() // the game treats an invalid context (e.g. MAX) as always sunny
+                );
+
+            return new InvariantHashSet(values);
         }
 
 
