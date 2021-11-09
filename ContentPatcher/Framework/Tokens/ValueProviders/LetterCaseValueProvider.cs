@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 throw new ArgumentException($"The {nameof(type)} must be one of {ConditionType.Lowercase} or {ConditionType.Uppercase}.", nameof(type));
 
             this.Type = type;
-            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
         /// <inheritdoc />
