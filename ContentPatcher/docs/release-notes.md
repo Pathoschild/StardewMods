@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Fixed error loading older saves in some cases.
 * Fixed error getting weather for a non-standard location context.
 * Fixed error using `Count`, `Lowercase`/`Uppercase`, or `Render` with empty tokens as input.
+* Fixed tokens parsed incorrectly in edge case when nesting unready tokens which have named arguments.
 
 ## 1.24.2
 Released 01 November 2021 for SMAPI 3.12.6 or later.

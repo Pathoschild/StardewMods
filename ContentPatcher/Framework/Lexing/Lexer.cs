@@ -73,14 +73,20 @@ namespace ContentPatcher.Framework.Lexing
             return this.ParseBitQueue(new Queue<LexBit>(bits), impliedBraces, trim: trim);
         }
 
-        /// <summary>Split a raw comma-delimited string, using only commas at the top lexical level (i.e. <c>{{Random: a, b, c}}, d</c> gets split into two values).</summary>
+        /// <summary>Split a raw comma-delimited string, using only delimiters at the top lexical level (i.e. <c>{{Random: a, b, c}}, d</c> gets split into two values).</summary>
         /// <param name="str">The string to split.</param>
-        public IEnumerable<string> SplitLexically(string str)
+        /// <param name="delimiter">The delimiter on which to split.</param>
+        /// <param name="ignoreEmpty">Whether to ignore segments that only contain whitespace.</param>
+        /// <param name="trim">Whether to trim returned values.</param>
+        public IEnumerable<string> SplitLexically(string str, string delimiter = ",", bool ignoreEmpty = true, bool trim = true)
         {
-            static IEnumerable<string> RawSplit(Lexer lexer, string str)
+            if (str == null)
+                return Enumerable.Empty<string>();
+
+            static IEnumerable<string> RawSplit(Lexer lexer, string str, string delimiter)
             {
                 // shortcut if no split needed
-                if (str == null || !str.Contains(","))
+                if (!str.Contains(delimiter))
                 {
                     yield return str;
                     yield break;
@@ -89,7 +95,7 @@ namespace ContentPatcher.Framework.Lexing
                 // shortcut if no lexical parsing needed
                 if (!lexer.MightContainTokens(str))
                 {
-                    foreach (string substr in str.SplitValuesNonUnique())
+                    foreach (string substr in str.Split(new[] { delimiter }, StringSplitOptions.None))
                         yield return substr;
                     yield break;
                 }
@@ -99,9 +105,9 @@ namespace ContentPatcher.Framework.Lexing
                 foreach (ILexToken bit in lexer.ParseBits(str, impliedBraces: false))
                 {
                     // handle split character(s)
-                    if (bit is LexTokenLiteral literal && literal.Text.Contains(","))
+                    if (bit is LexTokenLiteral literal && literal.Text.Contains(delimiter))
                     {
-                        string[] parts = literal.Text.Split(',');
+                        string[] parts = literal.Text.Split(new[] { delimiter }, StringSplitOptions.None);
 
                         // yield up to comma
                         cur.Append(parts[0]);
@@ -123,9 +129,9 @@ namespace ContentPatcher.Framework.Lexing
                 yield return cur.ToString();
             }
 
-            return RawSplit(this, str)
-                .Select(p => p?.Trim())
-                .Where(p => !string.IsNullOrEmpty(p));
+            return RawSplit(this, str, delimiter)
+                .Select(p => trim ? p.Trim() : p)
+                .Where(p => !ignoreEmpty || !string.IsNullOrEmpty(p));
         }
 
         /// <summary>Perform a quick check to see if the string might contain tokens. This is only a preliminary check for optimizations and may have false positives.</summary>
