@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed lookup for Stardew Valley Expanded's Marlon not showing social info when looking him up through the calendar.
+
 ## 1.35.4
 Released 31 October 2021 for SMAPI 3.12.5 or later.
 
