@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.24.3
+Released 12 November 2021 for SMAPI 3.12.6 or later.
+
 * Fixed `DayOfWeek` token set incorrectly on some days after 1.24.0.
 * Fixed error loading older saves in some cases.
 * Fixed error getting weather for a non-standard location context.
