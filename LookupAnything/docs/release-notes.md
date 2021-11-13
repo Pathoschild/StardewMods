@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Improved translations. Thanks to TwelveYO (updated Japanese)!
+
 ## 1.35.5
 Released 12 November 2021 for SMAPI 3.12.6 or later.
 
