@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed some untranslated text (building names in recipes, farm animal and horse types).
 * Improved translations. Thanks to TwelveYO (updated Japanese)!
 
 ## 1.35.5

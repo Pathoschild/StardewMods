@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="animal">The lookup target.</param>
         /// <remarks>Reverse engineered from <see cref="FarmAnimal"/>.</remarks>
         public FarmAnimalSubject(ISubjectRegistry codex, GameHelper gameHelper, FarmAnimal animal)
-            : base(gameHelper, animal.displayName, null, animal.type.Value)
+            : base(gameHelper, animal.displayName, null, animal.displayType)
         {
             this.Codex = codex;
             this.Target = animal;
