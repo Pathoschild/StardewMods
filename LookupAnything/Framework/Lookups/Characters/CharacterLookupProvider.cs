@@ -143,7 +143,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             return null;
 
                         // get villager with a birthday on that date
-                        NPC target = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay);
+                        NPC target = this.GameHelper
+                            .GetAllCharacters()
+                            .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
+                            .OrderByDescending(p => p.CanSocialize) // SVE duplicates the Marlon NPC, but only one of them is marked social
+                            .FirstOrDefault();
                         if (target != null)
                             return this.BuildSubject(target);
                     }

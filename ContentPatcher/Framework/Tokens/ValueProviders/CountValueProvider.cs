@@ -14,7 +14,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public CountValueProvider()
             : base(ConditionType.Count, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
         /// <inheritdoc />

@@ -1,5 +1,205 @@
 ﻿{
+    /*********
+    ** Tractor
+    *********/
     "buff.name": "트랙터 동력",
     "garage.name": "트랙터 차고",
-    "garage.description": "당신의 트랙터를 주차하기 위한 차고입니다. 트랙터도 함께 드려요!"
+    "garage.description": "당신의 트랙터를 주차하기 위한 차고입니다. 트랙터도 함께 드려요!",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Section titles
+    ****/
+    "config.main-options": "주요 설정",
+    "config.controls": "단축키 설정",
+    "config.axe": "도끼 기능",
+    "config.hoe": "호미 기능",
+    "config.pickaxe": "곡괭이 기능",
+    "config.scythe": "낫 기능",
+    "config.melee-blunt": "근접 둔기 기능",
+    "config.melee-dagger": "근접 단검 기능",
+    "config.melee-sword": "근접 검 기능",
+    "config.other-tools": "다른 기능",
+    "config.custom-tools": "사용자 지정 도구",
+
+
+    /****
+    ** Main options
+    ****/
+    "config.distance.name": "트랙터 범위",
+    "config.distance.tooltip": "트랙터 주변의 각 방향 타일 수.\n기본값 {{defaultValue}} (ex: 1= 3X3, 2= 5X5)",
+
+    "config.speed.name": "트렉터 속도",
+    "config.speed.tooltip": "트랙터를 탈 때 속도 조절. (기본값 {{defaultValue}})",
+
+    "config.magnetic-radius.name": "자력 범위",
+    "config.magnetic-radius.tooltip": "아이템을 수집 할 수 있는 반경 설정. (기본 {{defaultValue}})",
+
+    "config.build-price.name": "트렉터 건설 가격",
+    "config.build-price.tooltip": "트랙터 차고를 건설하기 위한 가격. (기본 {{defaultValue}}골드)",
+
+    "config.can-summon-without-garage.name": "차고 없이 소환 가능",
+    "config.can-summon-without-garage.tooltip": "차고를 먼저 짓지 않고 임시 트랙터를 소환 할 수 있습니다.",
+
+    "config.invincible-on-tractor.name": "트렉터 무적",
+    "config.invincible-on-tractor.tooltip": "트랙터를 탈 때 모든 원인으로부터의 손상에 면역이 되어야 하는지 여부.",
+
+    "config.highlight-radius.name": "하이라이트 반경 표시",
+    "config.highlight-radius.tooltip": "거리 옵션을 시각화하는 데 도움이 되도록 트랙터를 탈 때 트랙터 반경을 표시 할 수 있습니다.",
+
+
+    /****
+    ** Keybind options
+    ****/
+    "config.summon-key.name": "트렉터 소환",
+    "config.summon-key.tooltip": "사용 가능한 트랙터를 농부 근처로 소환. (기본값 backspace)",
+
+    "config.dismiss-key.name": "트랙터 해제",
+    "config.dismiss-key.tooltip": "타고 있는 트랙터를 차고로 돌려 보낼 수 있습니다.",
+
+    "config.hold-to-activate-key.name": "길게 눌러 사용",
+    "config.hold-to-activate-key.tooltip": "지정하면 트랙터는 이 버튼을 누르고 있는 동안에만 작업을 수행합니다. \n아무 것도 지정하지 않으면 트랙터를 타는 동안 트랙터가 자동으로 작동합니다.",
+
+
+    /****
+    ** Trees & bushes
+    ****/
+    "config.chop-fruit-trees-seeds.name": "과일 나무 - 씨앗",
+    "config.chop-fruit-trees-seeds.tooltip": "도끼로 과일 나무의 씨앗을 제거 할 수 있습니다.",
+
+    "config.chop-fruit-trees-saplings.name": "과일 나무 - 묘목",
+    "config.chop-fruit-trees-saplings.tooltip": "도끼로 완전히 자라지 않은 어린 과일 나무를 제거 할 수 있습니다.",
+
+    "config.chop-fruit-trees-grown.name": "과일 나무",
+    "config.chop-fruit-trees-grown.tooltip": "도끼로 다 자란 과일 나무를 제거 할 수 있습니다.",
+
+    "config.chop-trees-seeds.name": "나무 - 씨앗",
+    "config.chop-trees-seeds.tooltip": "도끼로 일반 나무의 씨앗을 제거 할 수 있습니다.",
+
+    "config.chop-trees-saplings.name": "나무 - 묘목",
+    "config.chop-trees-saplings.tooltip": "도끼로 완전히 자라지 않은 어린 나무를 제거 할 수 있습니다.",
+
+    "config.chop-trees-grown.name": "나무",
+    "config.chop-trees-grown.tooltip": "도끼로 다 자란 나무를 제거 할 수 있습니다.",
+
+    "config.chop-bushes.name": "덤불 제거",
+    "config.chop-bushes.tooltip": "도끼로 자르기 가능한 덤불을 제거 할 수 있습니다.",
+
+    "config.harvest-fruit-trees.name": "과일 수확",
+    "config.harvest-fruit-trees.tooltip": "낫으로 과일을 수확 할 수 있습니다.",
+
+
+    /****
+    ** Crops/forage/grass
+    ****/
+    "config.clear-dead-crops.name": "죽은 작물 제거",
+    "config.clear-dead-crops.tooltip": "죽은 작물을 제거 할 수 있습니다.",
+
+    "config.clear-live-crops.name": "살아 있는 작물 제거",
+    "config.clear-live-crops.tooltip": "도끼로 살아 있는 작물을 제거 할 수 있습니다.",
+
+    "config.harvest-giant-crops.name": "거대 작물 제거",
+    "config.harvest-giant-crops.tooltip": "도끼로 거대 작물을 제거 할 수 있습니다.",
+
+    "config.harvest-crops.name": "작물 수확",
+    "config.Harvest Crops.tooltip": "낫으로 작물을 수확 할 수 있습니다.",
+
+    "config.harvest-flowers.name": "꽃 수확",
+    "config.harvest-flowers.tooltip": "낫으로 꽃을 수확 할 수 있습니다.",
+
+    "config.harvest-forage.name": "건초 수확",
+    "config.harvest-forage.tooltip": "낫으로 건초를 수확 할 수 있습니다.",
+
+    "config.harvest-grass.name": "잔디 제거",
+    "config.harvest-grass.tooltip": "낫으로 잔디를 제거 할 수 있습니다.",
+
+
+    /****
+    ** Debris
+    ****/
+    "config.clear-debris.name": "잔해 제거",
+    "config.clear-debris.tooltip": "잡초, 잔가지, 거대한 그루터기, 쓰러진 통나무와 같은 잔해를 제거 할 수 있습니다.",
+
+    "config.clear-weeds.name": "잡초 제거",
+    "config.clear-weeds.tooltip": "잡초를 제거 할 수 있습니다.",
+
+
+    /****
+    ** Dirt
+    ****/
+    "config.till-dirt.name": "땅 갈기",
+    "config.till-dirt.tooltip": "호미로 땅을 경작 할 수 있습니다.",
+
+    "config.dig-artifact-spots.name": "유물 발굴",
+    "config.dig-artifact-spots.tooltip": "유물 발견시 호미로 팔 수 있습니다.",
+
+    "config.clear-tilled-dirt.name": "경작 된 땅 제거",
+    "config.clear-tilled-dirt.tooltip": "곡괭이로 경작된 땅을 제거 할 수 있습니다.",
+
+
+    /****
+    ** Mining
+    ****/
+    "config.break-boulders-and-meteorites.name": "바위와 운석 제거",
+    "config.break-boulders-and-meteorites.tooltip": "곡괭이로 바위와 운석을 제거 할 수 있습니다.",
+
+    "config.harvest-mine-spawns.name": "광산 작물 수확",
+    "config.harvest-mine-spawns.tooltip": "곡괭이로 석영, 얼어붙은 눈물 같은 광산 아이템을 수확 할 수 있습니다.",
+
+
+    /****
+    ** Placed items
+    ****/
+    "config.break-flooring.name": "바닥 제거",
+    "config.break-flooring.tooltip": "곡괭이로 배치된 바닥을 제거 할 수 있습니다.",
+
+    "config.break-objects.name": "개체 제거",
+    "config.break-objects.tooltip": "곡괭이로 배치된 개체(물건, 기계)를 제거 할 수 있습니다.",
+
+    "config.break-mine-containers.name": "광산 상자 제거",
+    "config.break-mine-containers.tooltip": "광산의 상자를 제거 할 수 있습니다.",
+
+    "config.harvest-machines.name": "기계 완성품 수거",
+    "config.harvest-machines.tooltip": "낫으로 기계에서 완성품을 회수 할 수 있습니다.",
+
+
+    /****
+    ** Melee
+    ****/
+    "config.Attack-monsters.name": "공격 몬스터",
+    "config.Attack-monsters.tooltip": "몬스터를 공격 할 수 있습니다.\n(트랙터의 도구 속도로 인해 엄청난 힘을 발휘합니다.)",
+
+
+    /****
+    ** Other
+    ****/
+    "config.milk-pail.name": "우유통 사용",
+    "config.milk-pail.tooltip": "우유통을 사용하여 농장 동물의 우유를 수집 할 수 있습니다.",
+
+    "config.shears.name": "가위 사용",
+    "config.shears.tooltip": "가위를 사용하여 농장 동물의 양털을 수집 할 수 있습니다.",
+
+    "config.watering-can.name": "물뿌리개 사용",
+    "config.watering-can.tooltip": "주변 타일에 물을 줄 수 있습니다.\n물뿌리개의 물을 사용하지 않습니다.",
+
+    "config.fertilizer.name": "비료 사용",
+    "config.fertilizer.tooltip": "농작물과 경작된 흙에 비료를 사용 할 수 있습니다.",
+
+    "config.grass-starters.name": "번식용 잔디 사용",
+    "config.grass-starters.tooltip": "번식용 잔디를 심을 수 있습니다.",
+
+    "config.seeds.name": "씨앗 사용",
+    "config.seeds.tooltip": "씨앗을 심을 수 있습니다.",
+
+    "config.seed-bags.name": "씨앗 가방 사용",
+    "config.seed-bags.tooltip": "Seed Bag 모드의 씨앗을 심을 수 있습니다.",
+
+    "config.slingshot.name": "새총 사용",
+    "config.slingshot.tooltip": "새총을 사용 할 수 있습니다.\n(엄청난 힘을 발휘하며 트랙터 도구 속도 때문에 탄약을 엄청나게 소비하게 됩니다.)",
+
+    "config.custom-tool-names.name": "사용자 지정 도구",
+    "config.custom-tool-names.tooltip": "트랙터를 타는 동안 사용할 수 있는 사용자 정의 항목/도구.\n도구는 각 주변 타일에 사용되는 동안 항목이 내려집니다.\n이미 지원되는 항목(예: 도끼)을 지정하면 사용에 대한 모든 제한 사항이 무시됩니다.\n'Axe' 또는 'Mega Bomb'과 같이 정확한 내부 이름(번역된 이름이 아닌 영어)을 지정해야 합니다.\n여러 값을 쉼표로 구분합니다."
 }

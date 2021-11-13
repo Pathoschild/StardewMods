@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public RenderValueProvider()
             : base(ConditionType.Render, mayReturnMultipleValuesForRoot: false)
         {
-            this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
+            this.EnableInputArguments(required: false, mayReturnMultipleValues: false, maxPositionalArgs: null);
         }
 
         /// <inheritdoc />

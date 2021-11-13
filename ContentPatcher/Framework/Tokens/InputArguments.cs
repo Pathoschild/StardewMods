@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.Lexing;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
@@ -155,20 +155,21 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="reservedArgsList">An ordered list of the <paramref name="reservedArgs"/>, including duplicate args.</param>
         private static void Parse(ITokenString input, out string positionalSegment, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs, out IDictionary<string, IInputArgumentValue> reservedArgs, out IList<KeyValuePair<string, IInputArgumentValue>> reservedArgsList)
         {
-            InputArguments.GetRawArguments(input, out positionalSegment, out InvariantDictionary<string> rawNamedArgs);
+            Lexer lexer = new Lexer();
+            InputArguments.GetRawArguments(input, lexer, out positionalSegment, out InvariantDictionary<string> rawNamedArgs);
 
             // get value separator
             if (!rawNamedArgs.TryGetValue(InputArguments.InputSeparatorKey, out string inputSeparator) || string.IsNullOrWhiteSpace(inputSeparator))
                 inputSeparator = ",";
 
             // parse args
-            positionalArgs = positionalSegment.SplitValuesNonUnique(separator: inputSeparator).ToArray();
+            positionalArgs = lexer.SplitLexically(positionalSegment, delimiter: inputSeparator).ToArray();
             namedArgs = new InvariantDictionary<IInputArgumentValue>();
             reservedArgs = new InvariantDictionary<IInputArgumentValue>();
             reservedArgsList = new List<KeyValuePair<string, IInputArgumentValue>>();
             foreach (var arg in rawNamedArgs)
             {
-                var values = new InputArgumentValue(arg.Value, arg.Value.SplitValuesNonUnique(separator: inputSeparator).ToArray());
+                var values = new InputArgumentValue(arg.Value, lexer.SplitLexically(arg.Value, delimiter: inputSeparator).ToArray());
 
                 if (InputArguments.ReservedArgKeys.Contains(arg.Key))
                 {
@@ -182,9 +183,10 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Get the raw positional and named argument strings.</summary>
         /// <param name="input">The tokenized string to parse.</param>
+        /// <param name="lexer">The lexer with which to tokenize the string.</param>
         /// <param name="rawPositional">The positional arguments string.</param>
         /// <param name="rawNamed">The named argument string.</param>
-        private static void GetRawArguments(ITokenString input, out string rawPositional, out InvariantDictionary<string> rawNamed)
+        private static void GetRawArguments(ITokenString input, Lexer lexer, out string rawPositional, out InvariantDictionary<string> rawNamed)
         {
             // get token text
             string raw = input?.IsReady == true
@@ -194,35 +196,26 @@ namespace ContentPatcher.Framework.Tokens
 
             // split into positional and named segments
             string positionalSegment;
-            string namedSegment;
+            string[] namedSegments;
             {
-                int splitIndex = raw.IndexOf("|", StringComparison.Ordinal);
-                if (splitIndex == -1)
-                {
-                    positionalSegment = raw;
-                    namedSegment = string.Empty;
-                }
-                else
-                {
-                    string[] parts = raw.Split(new[] { '|' }, 2);
-                    positionalSegment = parts[0].Trim();
-                    namedSegment = parts[1].Trim();
-                }
+                string[] parts = lexer.SplitLexically(raw, delimiter: "|", ignoreEmpty: false, trim: false).ToArray();
+                positionalSegment = parts[0].Trim();
+                namedSegments = parts.Skip(1).Select(p => p.Trim()).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray();
             }
 
             // extract raw arguments
             rawPositional = positionalSegment;
             rawNamed = new InvariantDictionary<string>();
-            foreach (string arg in namedSegment.SplitValuesNonUnique(separator: "|"))
+            foreach (string arg in namedSegments)
             {
-                string[] parts = arg.Split(new[] { '=' }, 2);
+                string[] parts = lexer.SplitLexically(arg, delimiter: "=", ignoreEmpty: true, trim: false).ToArray();
 
                 if (parts.Length == 1)
                     rawNamed[arg] = string.Empty;
                 else
                 {
                     string key = parts[0].Trim();
-                    string value = parts[1].Trim();
+                    string value = string.Join("=", parts.Skip(1)).Trim();
                     rawNamed[key] = value;
                 }
             }
