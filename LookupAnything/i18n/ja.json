@@ -84,7 +84,7 @@
     "data.npc.pet.description": "あなたの忠実なペット.",
     "data.npc.horse.description": "あなたの忠実な馬",
     "data.npc.junimo.description": "妖精界から来た森の精。 彼らについてほとんど分かっていない。",
-    "data.npc.trashbear.description": "ゴミ拾いをする優しい心の持ち主。",
+    "data.npc.trash-bear.description": "ゴミ拾いをする優しい心の持ち主。",
 
     // item types
     "data.type.debris": "破片",
@@ -202,7 +202,7 @@
     "location.islandWest.fish-area-1": "ジンジャー島-西部(海)",
     "location.islandWest.fish-area-2": "ジンジャー島-西部(池)",
 
-    "location.unknown-fish-area": "{{locationName}} (エリア{{id}})",
+    "location.unknown-fish-area": "{{locationName}}(エリア{{id}})",
 
     // location names (Stardew Valley Expanded)
     "location.Custom_BlueMoonVineyard.fish-area-0": "ブルームーンブドウ園(海側)",
@@ -231,8 +231,8 @@
     "animal.complaints.hungry": "昨日何も食べなかった",
     "animal.complaints.left-out": "昨夜外に出っぱなしだった",
     "animal.complaints.new-home": "新しい家に移動した",
-    "animal.complaints.no-heater": "冬にヒーターがなかった",
-    "animal.complaints.not-petted": "昨日なでなかった",
+    "animal.complaints.no-heater": "冬なのにヒーターがない",
+    "animal.complaints.not-petted": "まだなでられていない",
     "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
 
@@ -443,7 +443,7 @@
 
     // values
     "item.fish-spawn-rules.min-fishing-level": "必要釣りレベル：{{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "既に釣った (釣れるのは一度だけです)",
+    "item.fish-spawn-rules.not-caught-yet": "まだ釣った事がない (釣れるのは一度だけです)",
     "item.fish-spawn-rules.locations": "場所：{{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "場所：",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
