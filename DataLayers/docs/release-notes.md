@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* The _Crops: ready for harvest_ layer now highlights dead crops.
+
 ## 1.14.7
 Released 31 October 2021 for SMAPI 3.12.5 or later.
 

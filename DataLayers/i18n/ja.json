@@ -35,7 +35,7 @@
     "crop-harvest.name": "作物: 収穫可能",
     "crop-harvest.ready": "収穫可能",
     "crop-harvest.not-ready": "収穫不可能",
-    "crop-harvest.not-enough-time": "月末に間に合わない",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "作物: 水やり",

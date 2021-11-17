@@ -35,7 +35,7 @@
     "crop-harvest.name": "Raccolti: Pronti per essere estratti",
     "crop-harvest.ready": "Pronto",
     "crop-harvest.not-ready": "Non Pronto",
-    "crop-harvest.not-enough-time": "Non crescerà in tempo",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Raccolti: Bagnati",

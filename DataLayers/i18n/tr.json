@@ -35,7 +35,7 @@
     "crop-harvest.name": "Mahsuller: Hasat için Hazır",
     "crop-harvest.ready": "Hazır",
     "crop-harvest.not-ready": "Hazır Değil",
-    "crop-harvest.not-enough-time": "Yeterli Zaman Yok",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Mahsuller: Sulanan",

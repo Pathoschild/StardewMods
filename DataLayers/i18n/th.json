@@ -35,7 +35,7 @@
     "crop-harvest.name": "พืชผล: พร้อมเก็บเกี่ยวรึยัง",
     "crop-harvest.ready": "เก็บไปโลด",
     "crop-harvest.not-ready": "ยังก่อนพี่บ่าว",
-    "crop-harvest.not-enough-time": "หมดฤดูก่อนที่จะเก็บเกี่ยวได้",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "พืชผล: ชุ่มฉ่ำรึยัง",

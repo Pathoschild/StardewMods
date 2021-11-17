@@ -35,7 +35,7 @@
     "crop-harvest.name": "작물: 수확 준비 완료",
     "crop-harvest.ready": "준비됨",
     "crop-harvest.not-ready": "준비되지 않음",
-    "crop-harvest.not-enough-time": "남은 시간 부족",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "작물: 물주기 여부",
