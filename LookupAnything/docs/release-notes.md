@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.35.6
+Released 27 November 2021 for SMAPI 3.12.5 or later.
+
 * Fixed some untranslated text (building names in recipes, farm animal and horse types).
 * Improved translations. Thanks to TwelveYO (updated Japanese)!
 

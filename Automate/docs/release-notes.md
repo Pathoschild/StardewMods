@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.24.0
+Released 27 November 2021 for SMAPI 3.12.5 or later.
+
 * Added support for farmhouse/cabin fridges as automateable containers.
 * Fixed tea bushes in indoor pots sometimes not automated correctly.
 * Fixed unable to use indoor pots as custom connectors.

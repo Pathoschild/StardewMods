@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming version
+## 1.24.4
+Released 27 November 2021 for SMAPI 3.12.6 or later.
+
 * Fixed "failed in the Specialized.LoadStageChanged event" error in some cases when loading a save.
 
 ## 1.24.3
