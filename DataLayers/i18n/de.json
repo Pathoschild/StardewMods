@@ -35,7 +35,7 @@
     "crop-harvest.name": "Saat: Bereit zum Ernten",
     "crop-harvest.ready": "Fertig",
     "crop-harvest.not-ready": "Nicht fertig",
-    "crop-harvest.not-enough-time": "Nicht genug Zeit",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Bewässerung",

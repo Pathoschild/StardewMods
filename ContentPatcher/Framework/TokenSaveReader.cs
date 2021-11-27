@@ -457,7 +457,6 @@ namespace ContentPatcher.Framework
                             name = spouse.Name;
                             gender = spouse.IsMale ? Gender.Male : Gender.Female;
                             isPlayer = true;
-                            valid = true;
                         }
                     }
                     else
@@ -468,9 +467,9 @@ namespace ContentPatcher.Framework
                             name = spouse.Name;
                             gender = spouse.Gender == NPC.male ? Gender.Male : Gender.Female;
                             isPlayer = false;
-                            valid = true;
                         }
                     }
+                    valid = name != null && friendship != null;
 
                     // create cache entry
                     return Tuple.Create(name, friendship, gender, isPlayer, valid);

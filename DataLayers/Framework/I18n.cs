@@ -94,8 +94,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             /// <summary>The unique key for a translation equivalent to "Not Ready".</summary>
             public const string CropHarvest_NotReady = "crop-harvest.not-ready";
 
-            /// <summary>The unique key for a translation equivalent to "Not Enough Time".</summary>
-            public const string CropHarvest_NotEnoughTime = "crop-harvest.not-enough-time";
+            /// <summary>The unique key for a translation equivalent to "Not Enough Time (or Dead)".</summary>
+            public const string CropHarvest_NotEnoughTimeOrDead = "crop-harvest.not-enough-time-or-dead";
 
             /// <summary>The unique key for a translation equivalent to "Crops: Watered".</summary>
             public const string CropWater_Name = "crop-water.name";
@@ -127,7 +127,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             /// <summary>The unique key for a translation equivalent to "Speed-Gro".</summary>
             public const string CropFertilizer_SpeedGro = "crop-fertilizer.speed-gro";
 
-            /// <summary>The unique key for a translation equivalent to "Multiple fertilizer types".</summary>
+            /// <summary>The unique key for a translation equivalent to "Multiple Fertilizer Types".</summary>
             public const string CropFertilizer_Multiple = "crop-fertilizer.multiple";
 
             /// <summary>The unique key for a translation equivalent to "Machine Processing".</summary>
@@ -310,10 +310,10 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return I18n.GetByKey(Keys.CropHarvest_NotReady);
         }
 
-        /// <summary>Get a translation equivalent to "Not Enough Time".</summary>
-        public static string CropHarvest_NotEnoughTime()
+        /// <summary>Get a translation equivalent to "Not Enough Time (or Dead)".</summary>
+        public static string CropHarvest_NotEnoughTimeOrDead()
         {
-            return I18n.GetByKey(Keys.CropHarvest_NotEnoughTime);
+            return I18n.GetByKey(Keys.CropHarvest_NotEnoughTimeOrDead);
         }
 
         /// <summary>Get a translation equivalent to "Crops: Watered".</summary>
@@ -376,7 +376,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             return I18n.GetByKey(Keys.CropFertilizer_SpeedGro);
         }
 
-        /// <summary>Get a translation equivalent to "Multiple fertilizer types".</summary>
+        /// <summary>Get a translation equivalent to "Multiple Fertilizer Types".</summary>
         public static string CropFertilizer_Multiple()
         {
             return I18n.GetByKey(Keys.CropFertilizer_Multiple);

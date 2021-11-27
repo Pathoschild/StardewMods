@@ -35,7 +35,7 @@
     "crop-harvest.name": "Состояние готовности урожая к сбору",
     "crop-harvest.ready": "Культура готова к сбору урожая",
     "crop-harvest.not-ready": "Культура ещё не готова к сбору урожая",
-    "crop-harvest.not-enough-time": "Вы не успели собрать урожай",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Состояние влажности почвы для культур",

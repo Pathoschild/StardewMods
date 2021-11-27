@@ -8,11 +8,11 @@
     "generic.yesterday": "昨日",
 
     // generic values
-    "generic.unknown": "unknown", // TODO
+    "generic.unknown": "不明",
 
     // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% のチャンス: {{label}}",
+    "generic.percent-chance-of": "{{percent}}%のチャンス: {{label}}",
     "generic.percent-ratio": "{{percent}}% ({{value}} / {{max}})",
     "generic.ratio": "{{value}} / {{max}}",
     "generic.range": "{{min}} から {{max}}",
@@ -51,7 +51,7 @@
     "friendship-status.engaged": "婚約済",
     "friendship-status.married": "結婚済",
     "friendship-status.divorced": "離婚済",
-    "friendship-status.kicked-out": "Kicked out", // TODO
+    "friendship-status.kicked-out": "追い出した",
 
 
     /*********
@@ -64,7 +64,7 @@
     "bundle-area.boiler-room": "ボイラー室",
     "bundle-area.vault": "金庫",
     "bundle-area.bulletin-board": "掲示板",
-    "bundle-area.abandoned-joja-mart": "Abandoned Joja Mart", // TODO
+    "bundle-area.abandoned-joja-mart": "放棄されたJojaマート",
 
     // shop names
     "shop.adventure-guild": "冒険者ギルド",
@@ -72,7 +72,7 @@
     "shop.marnie": "マーニー",
     "shop.pierre": "ピエール",
     "shop.robin": "ロビン",
-    "shop.volcano": "volcano shop", // TODO
+    "shop.volcano": "火山ショップ",
     "shop.willy": "ウィリー",
 
     // recipe types
@@ -84,7 +84,7 @@
     "data.npc.pet.description": "あなたの忠実なペット.",
     "data.npc.horse.description": "あなたの忠実な馬",
     "data.npc.junimo.description": "妖精界から来た森の精。 彼らについてほとんど分かっていない。",
-    "data.npc.trashbear.description": "A friendly spirit who cleans up trash.", // TODO
+    "data.npc.trash-bear.description": "ゴミ拾いをする優しい心の持ち主。",
 
     // item types
     "data.type.debris": "破片",
@@ -135,8 +135,8 @@
     "data.item.topaz-node.description": "壊すとトパーズが手に入る",
 
     // mine ores
-    "data.item.cinder-shard-node.name": "Cinder Shard Node", // TODO
-    "data.item.cinder-shard-node.description": "Break apart to obtain cinder shards.", // TODO
+    "data.item.cinder-shard-node.name": "噴石の鉱脈",
+    "data.item.cinder-shard-node.description": "壊すと噴石のかけらが手に入る",
     "data.item.copper-node.name": "銅鉱脈",
     "data.item.copper-node.description": "壊すと銅鉱石が手に入る",
     "data.item.gold-node.name": "金鉱脈",
@@ -145,21 +145,20 @@
     "data.item.iridium-node.description": "壊すとイリジウム鉱石が手に入る",
     "data.item.iron-node.name": "鉄鉱脈",
     "data.item.iron-node.description": "壊すと鉄鉱石が手に入る",
-    "data.item.omni-geode-node.name": "Omni Geode Node", // TODO
-    "data.item.omni-geode-node.description": "Break apart to obtain an omni geode.", // TODO
+    "data.item.omni-geode-node.name": "オムニジオード鉱脈",
+    "data.item.omni-geode-node.description": "壊すとオムニジオードが手に入る",
 
     // mine stones
     "data.item.colored-stone.name": "色付きの石",
     "data.item.colored-stone.description": "変哲もない石。 石材,鉱石,ジオードを含んでいるかもしれない",
     "data.item.mine-stone.name": "石",
-    "data.item.mine-stone.description": "Break apart to obtain stone with a chance of coal.", // TODO
+    "data.item.mine-stone.description": "壊すと石材と確率で石炭が手に入る",
 
     // other stones
-    // TODO
-    "data.item.clay-stone.name": "Clay Stone",
-    "data.item.clay-stone.description": "Break apart to obtain clay.",
-    "data.item.fossil-stone.name": "Fossil Stone",
-    "data.item.fossil-stone.description": "Break apart to obtain fossils and bones.",
+    "data.item.clay-stone.name": "粘土石",
+    "data.item.clay-stone.description": "壊すと粘土が手に入る",
+    "data.item.fossil-stone.name": "化石の石",
+    "data.item.fossil-stone.description": "壊すと化石などが手に入る",
 
     // mine containers
     "data.item.barrel.name": "タル",
@@ -168,44 +167,53 @@
     "data.item.box.description": "壊すと色々なアイテムが手に入る",
 
     // location names
-    // TODO
-    "location.backwoods": "backwoods",
-    "location.beach": "beach",
-    "location.beach.east-pier": "beach (eastern pier)",
-    "location.bugLand": "mutant bug lair",
-    "location.busStop": "bus stop",
-    "location.desert": "desert",
-    "location.farm": "farm",
-    "location.farmCave": "farm cave",
-    "location.farmHouse": "farmhouse",
-    "location.forest": "forest",
-    "location.forest.fish-area-0": "forest river",
-    "location.forest.fish-area-1": "forest pond",
-    "location.forest.island-tip": "forest river (south tip of large island)",
-    "location.mountain": "mountain",
-    "location.railroad": "railroad",
-    "location.sewer": "sewers",
-    "location.submarine": "Night Market submarine",
-    "location.town": "town",
-    "location.town.northmost-bridge": "town (northmost bridge)",
-    "location.tunnel": "bus tunnel",
-    "location.undergroundMine": "mines",
-    "location.undergroundMine.level": "mine level {{level}}",
-    "location.witchSwamp": "witch's swamp",
-    "location.woods": "secret woods",
+    "location.backwoods": "裏の森",
+    "location.beach": "ビーチ",
+    "location.beach.east-pier": "ビーチ (東の桟橋)",
+    "location.bugLand": "ミュータントバグのすみか",
+    "location.busStop": "バス停",
+    "location.desert": "カリコ砂漠",
+    "location.farm": "農場",
+    "location.farmCave": "農場の洞窟",
+    "location.farmHouse": "自宅",
+    "location.forest": "シンダーサップの森",
+    "location.forest.fish-area-0": "森の川",
+    "location.forest.fish-area-1": "森の池",
+    "location.forest.island-tip": "森の川 (南の小島の南端)",
+    "location.mountain": "山の湖",
+    "location.railroad": "線路",
+    "location.sewer": "下水道",
+    "location.submarine": "夜の市 潜水艦",
+    "location.town": "ペリカンタウン",
+    "location.town.northmost-bridge": "ペリカンタウン (北端の橋)",
+    "location.tunnel": "トンネル",
+    "location.undergroundMine": "鉱山",
+    "location.undergroundMine.level": "鉱山{{level}}階",
+    "location.witchSwamp": "魔女の沼",
+    "location.woods": "秘密の森",
 
-    "location.caldera": "Ginger Island caldera", // TODO
-    "location.islandEast": "Ginger Island east", // TODO
-    "location.islandNorth": "Ginger Island north", // TODO
-    "location.islandSouth": "Ginger Island south", // TODO
-    "location.islandSouthEast": "Ginger Island southeast", // TODO
-    "location.islandSouthEastCave": "Ginger Island southeast cave", // TODO
-    "location.islandWest": "Ginger Island west", // TODO
-    "location.islandWest.fish-area-1": "Ginger Island west (ocean)", // TODO
-    "location.islandWest.fish-area-2": "Ginger Island west (pond)", // TODO
+    "location.caldera": "火山のカルデラ",
+    "location.islandEast": "ジンジャー島-東部",
+    "location.islandNorth": "ジンジャー島-北部",
+    "location.islandSouth": "ジンジャー島-南部",
+    "location.islandSouthEast": "ジンジャー島-南東部",
+    "location.islandSouthEastCave": "海賊の入り江",
+    "location.islandWest": "ジンジャー島-西部",
+    "location.islandWest.fish-area-1": "ジンジャー島-西部(海)",
+    "location.islandWest.fish-area-2": "ジンジャー島-西部(池)",
 
-    "location.unknown-fish-area": "{{locationName}} (fishing area {{id}})",
+    "location.unknown-fish-area": "{{locationName}}(エリア{{id}})",
 
+    // location names (Stardew Valley Expanded)
+    "location.Custom_BlueMoonVineyard.fish-area-0": "ブルームーンブドウ園(海側)",
+    "location.Custom_BlueMoonVineyard.fish-area-1": "ブルームーンブドウ園(川側)",
+    "location.Custom_ForestWest": "西の森",
+    "location.Custom_ShearwaterBridge": "ミズナギドリ橋",
+    "location.Custom_AdventurerSummit": "アドベンチャーサミット",
+    "location.Custom_JunimoWoods": "ジュニモの森",
+    "location.Custom_DeepCave": "農場の洞窟の奥",
+    "location.Custom_CrimsonBadlands": "クリムゾンバッドランド",
+    "location.ExteriorMuseum": "水族館ビーチ",
 
     /*********
     ** Animal lookups
@@ -223,8 +231,8 @@
     "animal.complaints.hungry": "昨日何も食べなかった",
     "animal.complaints.left-out": "昨夜外に出っぱなしだった",
     "animal.complaints.new-home": "新しい家に移動した",
-    "animal.complaints.no-heater": "冬にヒーターがなかった",
-    "animal.complaints.not-petted": "昨日なでなかった",
+    "animal.complaints.no-heater": "冬なのにヒーターがない",
+    "animal.complaints.not-petted": "まだなでられていない",
     "animal.complaints.wild-animal-attack": "夜に野生動物に襲われた",
 
 
@@ -249,7 +257,7 @@
     "building.feed-trough.automated": "自動化されている",
     "building.feed-trough.summary": "最大{{max}}中{{filled}}の餌枠が充たされている",
     "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
-    "building.junimo-harvesting-enabled": "収穫可能",
+    "building.junimo-harvesting-enabled": "を回収可能",
     "building.owner.none": "オーナーなし",
     "building.output-processing": "処理中",
     "building.output-ready": "準備完了",
@@ -272,19 +280,19 @@
     ** Building > fish pond lookups
     *********/
     // labels
-    "building.fish-pond.population": "Population",
-    "building.fish-pond.drops": "Drops",
-    "building.fish-pond.quests": "Quests",
+    "building.fish-pond.population": "魚の数",
+    "building.fish-pond.drops": "生産物",
+    "building.fish-pond.quests": "要求アイテム",
 
     // values
-    "building.fish-pond.population.empty": "Add a fish to start this pond",
-    "building.fish-pond.population.next-spawn": "New fish spawns {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% chance each day of producing the first matched item:", // TODO
-    "building.fish-pond.drops.min-fish": "With {{count}} fish:", // TODO
-    "building.fish-pond.quests.done": "{{count}} fish",
-    "building.fish-pond.quests.incomplete-one": "{{count}} fish: will need {{itemName}}",
-    "building.fish-pond.quests.incomplete-random": "{{count}} fish: will need one of {{itemList}}",
-    "building.fish-pond.quests.available": "available {{relativeDate}}",
+    "building.fish-pond.population.empty": "魚を投入してください",
+    "building.fish-pond.population.next-spawn": "{{relativeDate}}に魚が産まれる",
+    "building.fish-pond.drops.preface": "毎日{{chance}}%の確率で最初に抽選されたアイテムを生産: ",
+    "building.fish-pond.drops.min-fish": "{{count}}匹以上:",
+    "building.fish-pond.quests.done": "{{count}}匹",
+    "building.fish-pond.quests.incomplete-one": "{{count}}匹：{{itemName}}を要求",
+    "building.fish-pond.quests.incomplete-random": "{{count}}匹：{{itemList}}の内いずれかを要求",
+    "building.fish-pond.quests.available": "{{relativeDate}}発生",
 
 
     /*********
@@ -293,18 +301,18 @@
     // labels
     "bush.name.berry": "ベリーの茂み",
     "bush.name.plain": "ただの茂み",
-    "bush.name.tea": "Tea Bush", // TODO
+    "bush.name.tea": "茶の木",
     "bush.description.berry": "サーモンベリーとブラックベリーが実る茂み",
     "bush.description.plain": "何も実らないただの茂み",
-    "bush.description.Tea": "A bush that grows tea leaves.", // TODO
-    "bush.date-planted": "Date planted", // TODO
-    "bush.growth": "Growth", // TODO
+    "bush.description.Tea": "大きくなると茶葉が育つ",
+    "bush.date-planted": "植えた日",
+    "bush.growth": "育つまで",
     "bush.next-harvest": "次の収穫",
 
     // values
-    "bush.growth.summary": "{{date}}に成熟", // TODO
+    "bush.growth.summary": "{{date}}に成熟",
     "bush.schedule.berry": "20%の確率で春15日-18日にサーモンベリーが, 秋8日-11日にブラックベリーが実る",
-    "bush.schedule.tea": "Grows tea leaves from the 22nd of each season (except winter if not in the greenhouse).", // TODO
+    "bush.schedule.tea": "各季節の22日目から茶葉が育つ (温室ではいつでも)",
 
 
     /*********
@@ -337,8 +345,8 @@
     // labels
     "crop.summary": "作物",
     "crop.harvest": "収穫",
-    "crop.fertilized": "Fertilized", // TODO
-    "crop.watered": "Watered", // TODO
+    "crop.fertilized": "肥料",
+    "crop.watered": "水まき",
 
     // values
     "crop.summary.dead": "この作物は枯れている",
@@ -358,9 +366,9 @@
     "item.contents": "内容",
     "item.loves-this": "これが大好きな人",
     "item.likes-this": "これが好きな人",
-    "item.neutral-about-this": "Neutral about this", // TODO
-    "item.dislikes-this": "Dislikes this", // TODO
-    "item.hates-this": "Hates this", // TODO
+    "item.neutral-about-this": "好きでも嫌いでもない",
+    "item.dislikes-this": "これが嫌いな人",
+    "item.hates-this": "これが大嫌いな人",
     "item.needed-for": "要求されるもの",
     "item.number-owned": "所有数",
     "item.number-cooked": "調理数",
@@ -369,22 +377,22 @@
     "item.see-also": "これも見て",
     "item.sells-for": "売値",
     "item.sells-to": "売却先",
-    "item.can-be-dyed": "Can be dyed", // TODO
-    "item.produces-dye": "Produces dye", // TODO
+    "item.can-be-dyed": "染色可能",
+    "item.produces-dye": "染色",
 
     // values
     "item.contents.placed": "設置した {{name}}",
-    "item.contents.ready": "{{name}} ready",
+    "item.contents.ready": "{{name}}が回収可能",
     "item.contents.partial": "{{time}}で{{name}}",
-    "item.undiscovered-gift-taste": "{{count}} unrevealed villagers", // TODO
-    "item.undiscovered-gift-taste-appended": ", and {{count}} unrevealed villagers", // TODO
+    "item.undiscovered-gift-taste": "{{count}}人に贈っていない",
+    "item.undiscovered-gift-taste-appended": ", 他{{count}}人に贈っていない",
     "item.needed-for.community-center": "コミュニティーセンター({{bundles}})",
     "item.needed-for.full-shipment": "実績:満タンの出荷箱 (一つ出荷)",
     "item.needed-for.polyculture": "実績:混作農業 ({{count}}個出荷)",
     "item.needed-for.full-collection": "実績:コンプリートコレクション (博物館に一つ寄付)",
     "item.needed-for.gourmet-chef": "実績:グルメマスター ({{recipes}}を調理する)",
     "item.needed-for.craft-master": "実績:クラフトマスター ({{recipes}}を作成する)",
-    "item.needed-for.quests": "current quests ({{quests}})", // TODO
+    "item.needed-for.quests": "進行中の依頼({{quests}})",
     "item.sells-to.shipping-box": "出荷箱",
     "item.recipes-for-ingredient.entry": "{{name}} ({{count}}個必要)",
     "item.recipes-for-machine.multiple-items": "{{name}}が{{count}}個",
@@ -430,50 +438,45 @@
     ** Item > fish lookups
     *********/
     // labels
-    // TODO
-    "item.fish-pond-drops": "Fish pond drops",
-    "item.fish-spawn-rules": "Spawn rules",
+    "item.fish-pond-drops": "いけす産物",
+    "item.fish-spawn-rules": "釣り",
 
     // values
-    // TODO
-    "item.fish-spawn-rules.min-fishing-level": "min fishing level: {{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "not caught yet (can only be caught once)",
-    "item.fish-spawn-rules.locations": "locations: {{locations}}",
-    "item.fish-spawn-rules.locations-by-season.label": "locations:",
+    "item.fish-spawn-rules.min-fishing-level": "必要釣りレベル：{{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "まだ釣った事がない (釣れるのは一度だけです)",
+    "item.fish-spawn-rules.locations": "場所：{{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "場所：",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
-    "item.fish-spawn-rules.season-any": "any season",
-    "item.fish-spawn-rules.season-list": "seasons: {{seasons}}",
-    "item.fish-spawn-rules.time": "time of day: {{times}}",
-    "item.fish-spawn-rules.weather-sunny": "weather: sunny",
-    "item.fish-spawn-rules.weather-rainy": "weather: raining",
+    "item.fish-spawn-rules.season-any": "全季節",
+    "item.fish-spawn-rules.season-list": "季節：{{seasons}}",
+    "item.fish-spawn-rules.time": "釣れる時間：{{times}}",
+    "item.fish-spawn-rules.weather-sunny": "天気：晴れ",
+    "item.fish-spawn-rules.weather-rainy": "天気：雨",
 
 
     /*********
     ** Item > movie lookups
     *********/
     // labels
-    // TODO
-    "item.movie-snack-preference": "Preference",
-    "item.movie-ticket.movie-this-week": "Movie this week",
-    "item.movie-ticket.loves-movie": "Loves movie",
-    "item.movie-ticket.likes-movie": "Likes movie",
-    "item.movie-ticket.dislikes-movie": "Dislikes movie",
+    "item.movie-snack-preference": "好み",
+    "item.movie-ticket.movie-this-week": "今週の映画",
+    "item.movie-ticket.loves-movie": "大好きな映画",
+    "item.movie-ticket.likes-movie": "好きな映画",
+    "item.movie-ticket.dislikes-movie": "嫌いな映画",
 
     // values
-    // TODO
-    "item.movie-snack-preference.love": "{{name}} loves this",
-    "item.movie-snack-preference.like": "{{name}} likes this",
-    "item.movie-snack-preference.dislike": "{{name}} dislikes this",
-    "item.movie-ticket.movie-this-week.none": "No movie this week",
+    "item.movie-snack-preference.love": "{{name}}が大好き",
+    "item.movie-snack-preference.like": "{{name}}が好き",
+    "item.movie-snack-preference.dislike": "{{name}}が嫌い",
+    "item.movie-ticket.movie-this-week.none": "今週は映画がありません",
 
 
     /*********
     ** Item > music block lookups
     *********/
     // labels
-    // TODO
-    "item.music-block.pitch": "Pitch",
-    "item.music-block.drum-type": "Drum type",
+    "item.music-block.pitch": "ピッチ",
+    "item.music-block.drum-type": "ドラムタイプ",
 
 
     /*********
@@ -504,21 +507,21 @@
     "npc.gifted-today": "今日贈り物をした",
     "npc.gifted-this-week": "今週贈り物をした",
     "npc.kissed-today": "今日キスをした",
-    "npc.hugged-today": "Hugged today", // TODO
+    "npc.hugged-today": "今日ハグをした",
     "npc.loves-gifts": "大好きな贈り物",
     "npc.likes-gifts": "好きな贈り物",
     "npc.neutral-gifts": "普通の贈り物",
-    "npc.dislikes-gifts": "Dislikes gifts", // TODO
-    "npc.hates-gifts": "Hates gifts", // TODO
+    "npc.dislikes-gifts": "嫌いな贈り物",
+    "npc.hates-gifts": "大嫌いな贈り物",
 
     // values
     "npc.can-romance.married": "あなたと結婚しました♡", // < turns into a heart
-    "npc.can-romance.housemate": "You're housemates!", // TODO
+    "npc.can-romance.housemate": "あなたと同居人になりました！",
     "npc.friendship.not-met": "まだ会っていません",
     "npc.friendship.need-bouquet": "進むには花束が必要",
-    "npc.friendship.need-points": "{{count}}pts必要",
-    "npc.undiscovered-gift-taste": "{{count}} unrevealed items", // TODO
-    "npc.undiscovered-gift-taste-appended": ", and {{count}} unrevealed items", // TODO
+    "npc.friendship.need-points": "{{count}}ポイント必要",
+    "npc.undiscovered-gift-taste": "{{count}}個の贈った事のないアイテム",
+    "npc.undiscovered-gift-taste-appended": ", 他{{count}}個の贈った事のないアイテム",
 
 
     /*********
@@ -542,16 +545,15 @@
     // labels
     "pet.love": "親愛度",
     "pet.petted-today": "今日なでた",
-    "pet.last-petted": "Last petted", // TODO
-    "pet.water-bowl": "Water bowl", // TODO
+    "pet.last-petted": "最後になでた日",
+    "pet.water-bowl": "水の器",
 
     // values
-    // TODO
-    "pet.last-petted.yes": "yes (+12 love)",
-    "pet.last-petted.days-ago": "{{days}} days ago",
-    "pet.last-petted.never": "never",
-    "pet.water-bowl.empty": "Empty",
-    "pet.water-bowl.filled": "Filled (+6 love)",
+    "pet.last-petted.yes": "はい (+12 親密度)",
+    "pet.last-petted.days-ago": "{{days}}日前",
+    "pet.last-petted.never": "ずっと前",
+    "pet.water-bowl.empty": "空っぽ",
+    "pet.water-bowl.filled": "入れた (+6 親密度)",
 
 
     /*********
@@ -562,16 +564,16 @@
     "player.farm-map": "牧場マップ",
     "player.favorite-thing": "好きなもの",
     "player.gender": "性別",
-    "player.housemate": "Housemate", // TODO
+    "player.housemate": "同居人",
     "player.spouse": "配偶者",
-    "player.watched-movie-this-week": "Watched movie this week", // TODO
+    "player.watched-movie-this-week": "今週見た映画",
     "player.combat-skill": "戦闘",
     "player.farming-skill": "農業",
     "player.fishing-skill": "釣り",
     "player.foraging-skill": "採集",
     "player.mining-skill": "採掘",
     "player.luck": "運勢",
-    "player.save-format": "Save format", // TODO
+    "player.save-format": "セーブフォーマット",
 
     // values
     "player.farm-map.custom": "カスタム",
@@ -586,53 +588,46 @@
     ** Puzzles
     *********/
     // labels
-    // TODO
-    "puzzle.solution": "Solution",
+    "puzzle.solution": "解決方法",
 
     // values
-    // TODO
-    "puzzle.solution.solved": "Puzzle solved!",
-    "puzzle.solution.hidden": "Puzzle solutions are hidden in progression mode.",
+    "puzzle.solution.solved": "パズルが解けました！",
+    "puzzle.solution.hidden": "パズルの解答はプログレッションモードで隠されています。",
 
 
     /*********
     ** Puzzles > Fern Islands crystal cave
     *********/
     // labels
-    // TODO
-    "puzzle.island-crystal-cave.title": "Crystal Cave Puzzle",
-    "puzzle.island-crystal-cave.crystal-id": "Crystal ID",
+    "puzzle.island-crystal-cave.title": "カラークリスタルのパズル",
+    "puzzle.island-crystal-cave.crystal-id": "クリスタル ID",
 
     // values
-    // TODO
-    "puzzle.island-crystal-cave.solution.not-activated": "Activate the statue to start the puzzle.",
-    "puzzle.island-crystal-cave.solution.waiting": "Waiting for game to generate sequence...",
-    "puzzle.island-crystal-cave.solution.activated": "Repeat the pattern of activated crystals:",
+    "puzzle.island-crystal-cave.solution.not-activated": "奥の像に触れるとパズルが始まります。",
+    "puzzle.island-crystal-cave.solution.waiting": "パズルが開始するのを待ってください…",
+    "puzzle.island-crystal-cave.solution.activated": "点滅したクリスタルのパターンを再現する:",
 
 
     /*********
     ** Puzzles > Fern Islands mermaid puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-mermaid.title": "Island Mermaid Puzzle",
-    "puzzle.island-mermaid.solution.intro": "Use flute blocks to play the Night Market mermaid song. Pitch values (you can lookup a flute block to see its pitch):",
+    "puzzle.island-mermaid.title": "人魚のパズル",
+    "puzzle.island-mermaid.solution.intro": "フルートブロックを置いて夜の市の人魚の歌を演奏しましょう。ピッチの値(フルートブロックのピッチを調べられます):",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    // TODO
-    "puzzle.island-shrine.title": "Island Shrine Puzzle",
+    "puzzle.island-shrine.title": "宝石鳥のパズル",
 
     // values
-    // TODO
-    "puzzle.island-shrine.solution": "For each pedestal, place the item dropped by gem birds in the corresponding island location when it rains. The items are randomized for each save.",
-    "puzzle.island-shrine.solution.east": "East: {{item}}",
-    "puzzle.island-shrine.solution.north": "North: {{item}}",
-    "puzzle.island-shrine.solution.south": "South: {{item}}",
-    "puzzle.island-shrine.solution.west": "West: {{item}}",
+    "puzzle.island-shrine.solution": "雨の日に宝石鳥が落としたアイテムを、島の場所の方角と対応している台座の位置に置きます。アイテムはセーブデータごとにランダムです。",
+    "puzzle.island-shrine.solution.east": "東: {{item}}",
+    "puzzle.island-shrine.solution.north": "北: {{item}}",
+    "puzzle.island-shrine.solution.south": "南: {{item}}",
+    "puzzle.island-shrine.solution.west": "西: {{item}}",
 
 
     /*********
@@ -640,7 +635,7 @@
     *********/
     // labels
     "tile.description": "マップでのタイル位置です 設定で有効化されたので表示しています",
-    "tile.game-location": "Location", // TODO
+    "tile.game-location": "場所",
     "tile.map-name": "マップ名",
     "tile.tile": "タイル",
     "tile.tile-index": "{{layerName}}: タイルインデックス",
@@ -657,9 +652,8 @@
     ** Trash Bear or Gourmand lookups
     *********/
     // labels
-    // TODO
-    "trash-bear-or-gourmand.item-wanted": "Item wanted",
-    "trash-bear-or-gourmand.quest-progress": "Quest progress",
+    "trash-bear-or-gourmand.item-wanted": "要求アイテム",
+    "trash-bear-or-gourmand.quest-progress": "進行状況",
 
 
     /*********
@@ -669,11 +663,11 @@
     "tree.stage": "成長段階",
     "tree.next-growth": "次の成長",
     "tree.has-seed": "種をつけている",
-    "tree.is-fertilized": "Is fertilized", // TODO
+    "tree.is-fertilized": "肥料",
 
     // values
     "tree.name.big-mushroom": "大きなキノコ",
-    "tree.name.mahogany": "Mahogany Tree", // TODO
+    "tree.name.mahogany": "マホガニーの木",
     "tree.name.maple": "カエデの木",
     "tree.name.oak": "カシの木",
     "tree.name.palm": "ヤシの木",
@@ -681,7 +675,7 @@
     "tree.name.unknown": "未知の木",
     "tree.stage.done": "成長完了",
     "tree.stage.partial": "{{stageName}} ({{step}} / {{max}})",
-    "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized", // TODO
+    "tree.next-growth.winter": "肥料を与えないと温室の外では冬に育たない",
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
     "tree.next-growth.chance": "{{chance}}%の確率で明日{{stage}}に成長する",
 

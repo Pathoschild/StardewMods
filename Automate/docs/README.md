@@ -34,7 +34,7 @@ Place a chest next to a crafting machine (in any direction including diagonal) t
 Machines connected to a chest will push their output into it, and pull ingredients to process out
 of it.
 
-This can be used to automate...
+By default, Automate supports these machines:
 
 * [auto-grabbers](https://stardewvalleywiki.com/Auto-Grabber);
 * [bee houses](https://stardewvalleywiki.com/Bee_House);
@@ -48,15 +48,13 @@ This can be used to automate...
 * [crystalariums](https://stardewvalleywiki.com/Crystalarium) (once started with the gem/mineral you want);
 * [deconstructors](https://stardewvalleywiki.com/Deconstructor);
 * [fish ponds](https://stardewvalleywiki.com/Fish_Pond) (for output only);
-* [trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [fruit trees](https://stardewvalleywiki.com/Fruit_Trees);
 * [furnaces](https://stardewvalleywiki.com/Furnace) (don't forget they also need coal);
 * [garbage cans](https://stardewvalleywiki.com/Garbage_Can);
 * [geode crushers](https://stardewvalleywiki.com/Geode_Crusher)  (don't forget they also need coal);
 * [hay hoppers](https://stardewvalleywiki.com/Hay_Hopper);
-* [hoppers](https://stardewvalleywiki.com/Hopper) (these act just like chests, except they're output-only);
-* [Junimo huts](https://stardewvalleywiki.com/Junimo_Hut);
 * [incubators (for eggs)](https://stardewvalleywiki.com/Incubator);
+* [Junimo huts](https://stardewvalleywiki.com/Junimo_Hut);
 * [kegs](https://stardewvalleywiki.com/Keg);
 * [lightning rods](https://stardewvalleywiki.com/Lightning_Rod);
 * [looms](https://stardewvalleywiki.com/Loom);
@@ -78,8 +76,18 @@ This can be used to automate...
 * [statues of perfection](https://stardewvalleywiki.com/Statue_of_Perfection);
 * [statues of true perfection](https://stardewvalleywiki.com/Statue_Of_True_Perfection);
 * [tappers](https://stardewvalleywiki.com/Tapper);
+* [trees](https://stardewvalleywiki.com/Trees);
 * [wood chippers](https://stardewvalleywiki.com/Wood_Chipper);
 * and [worm bins](https://stardewvalleywiki.com/Worm_Bin).
+
+And these containers:
+
+* [chests](https://stardewvalleywiki.com/Chest) and [stone chests](https://stardewvalleywiki.com/Stone_Chest);
+* farmhouse/cabin fridges;
+* [hoppers](https://stardewvalleywiki.com/Hopper) (these act just like chests, except they're output-only);
+* [Junimo chests](https://stardewvalleywiki.com/Junimo_Chest);
+* [mini-fridges](https://stardewvalleywiki.com/Mini-Fridge);
+* and [mini-shipping bins](https://stardewvalleywiki.com/Mini-Shipping_Bin).
 
 Automated machines will give you the same XP, achievements, and items you'd get for using them
 directly. If multiple chests are part of a group, they'll all be used in the automation. Input

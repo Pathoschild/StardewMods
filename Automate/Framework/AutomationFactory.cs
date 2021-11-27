@@ -87,12 +87,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // indoor pot
-            if (obj is IndoorPot indoorPot)
-            {
-                return BushMachine.CanAutomate(indoorPot.bush.Value)
-                    ? new BushMachine(indoorPot.bush.Value, location)
-                    : null;
-            }
+            if (obj is IndoorPot indoorPot && BushMachine.CanAutomate(indoorPot.bush.Value))
+                return new BushMachine(indoorPot.bush.Value, location, tile);
 
             // machine by type
             switch (obj)
@@ -297,6 +293,16 @@ namespace Pathoschild.Stardew.Automate.Framework
                 string action = town.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Action", "Buildings");
                 if (!string.IsNullOrWhiteSpace(action) && action.StartsWith("Garbage ") && int.TryParse(action.Split(' ')[1], out int trashCanIndex))
                     return new TrashCanMachine(town, tile, trashCanIndex, this.Reflection);
+            }
+
+            // fridge
+            switch (location)
+            {
+                case FarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
+                    return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
+
+                case IslandFarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
+                    return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
             }
 
             return null;

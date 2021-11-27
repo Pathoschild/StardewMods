@@ -35,7 +35,7 @@
     "crop-harvest.name": "Termések: Aratásra kész",
     "crop-harvest.ready": "Kész",
     "crop-harvest.not-ready": "Nincs kész",
-    "crop-harvest.not-enough-time": "Nincs elég idő",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Öntözés",

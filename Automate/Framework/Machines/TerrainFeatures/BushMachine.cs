@@ -24,7 +24,21 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="bush">The underlying bush.</param>
         /// <param name="location">The machine's in-game location.</param>
         public BushMachine(Bush bush, GameLocation location)
-            : base(bush, location, GetTileAreaFor(bush))
+            : this(bush, location, GetTileAreaFor(bush)) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="bush">The underlying bush.</param>
+        /// <param name="location">The machine's in-game location.</param>
+        /// <param name="indoorPotTile">The tile coordinate of the indoor pot containing this bush.</param>
+        public BushMachine(Bush bush, GameLocation location, Vector2 indoorPotTile)
+            : this(bush, location, GetTileAreaFor(indoorPotTile)) { }
+
+        /// <summary>Construct an instance.</summary>
+        /// <param name="bush">The underlying bush.</param>
+        /// <param name="location">The machine's in-game location.</param>
+        /// <param name="tileArea">The tile area covered by the machine.</param>
+        public BushMachine(Bush bush, GameLocation location, Rectangle tileArea)
+            : base(bush, location, tileArea)
         {
             this.IsInSeason = new Cached<bool>(
                 getCacheKey: () => $"{Game1.GetSeasonForLocation(bush.currentLocation)},{Game1.dayOfMonth},{bush.overrideSeason.Value}",

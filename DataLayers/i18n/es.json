@@ -35,7 +35,7 @@
     "crop-harvest.name": "Cultivos: Listo para Cosechar",
     "crop-harvest.ready": "Listo",
     "crop-harvest.not-ready": "No Listo",
-    "crop-harvest.not-enough-time": "Sin Tiempo Suficiente",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "Cultivos: Regado",

@@ -19,8 +19,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         /// <summary>The legend entry for crops which are not ready.</summary>
         private readonly LegendEntry NotReady;
 
-        /// <summary>The legend entry for crops which won't be ready to harvest before the season change.</summary>
-        private readonly LegendEntry NotEnoughTime;
+        /// <summary>The legend entry for crops which won't be ready to harvest before the season change (or are dead).</summary>
+        private readonly LegendEntry NotEnoughTimeOrDead;
 
 
         /*********
@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             {
                 this.Ready = new LegendEntry(I18n.Keys.CropHarvest_Ready, Color.Green),
                 this.NotReady = new LegendEntry(I18n.Keys.CropHarvest_NotReady, Color.Black),
-                this.NotEnoughTime = new LegendEntry(I18n.Keys.CropHarvest_NotEnoughTime, Color.Red)
+                this.NotEnoughTimeOrDead = new LegendEntry(I18n.Keys.CropHarvest_NotEnoughTimeOrDead, Color.Red)
             };
         }
 
@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             {
                 new TileGroup(tiles.Where(p => p.Type.Id == this.Ready.Id), outerBorderColor: this.Ready.Color),
                 new TileGroup(tiles.Where(p => p.Type.Id == this.NotReady.Id)),
-                new TileGroup(tiles.Where(p => p.Type.Id == this.NotEnoughTime.Id), outerBorderColor: this.NotEnoughTime.Color)
+                new TileGroup(tiles.Where(p => p.Type.Id == this.NotEnoughTimeOrDead.Id), outerBorderColor: this.NotEnoughTimeOrDead.Color)
             };
         }
 
@@ -69,15 +69,22 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             {
                 // get crop
                 Crop crop = this.GetDirt(location, tile)?.crop;
-                if (crop == null || crop.dead.Value)
+                if (crop == null)
                     continue;
-                CropDataParser data = new CropDataParser(crop, isPlanted: true);
+
+                // special case: crop is dead
+                if (crop.dead.Value)
+                {
+                    yield return new TileData(tile, this.NotEnoughTimeOrDead);
+                    yield break;
+                }
 
                 // yield tile
+                CropDataParser data = new CropDataParser(crop, isPlanted: true);
                 if (data.CanHarvestNow)
                     yield return new TileData(tile, this.Ready);
                 else if (!location.SeedsIgnoreSeasonsHere() && !data.Seasons.Contains(data.GetNextHarvest().Season))
-                    yield return new TileData(tile, this.NotEnoughTime);
+                    yield return new TileData(tile, this.NotEnoughTimeOrDead);
                 else
                     yield return new TileData(tile, this.NotReady);
             }

@@ -410,6 +410,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case SubjectType.Villager:
                     return I18n.Type_Villager();
 
+                case SubjectType.Horse:
+                    return GameI18n.GetString("Strings\\StringsFromCSFiles:StrengthGame.cs.11665");
+
                 case SubjectType.Monster:
                     return I18n.Type_Monster();
 

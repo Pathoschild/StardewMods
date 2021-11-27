@@ -35,7 +35,7 @@
     "crop-harvest.name": "Plantações: Colheita",
     "crop-harvest.ready": "Pode colher",
     "crop-harvest.not-ready": "Ainda não cresceu totalmente",
-    "crop-harvest.not-enough-time": "Plantação morta/não cresce à tempo",
+    "crop-harvest.not-enough-time": "Não cresce à tempo / plantação morta",
 
     // crops: watered
     "crop-water.name": "Plantações: Irrigação",

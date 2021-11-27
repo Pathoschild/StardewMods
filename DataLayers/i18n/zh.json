@@ -35,7 +35,7 @@
     "crop-harvest.name": "作物：收获",
     "crop-harvest.ready": "可收获",
     "crop-harvest.not-ready": "不可收获",
-    "crop-harvest.not-enough-time": "时间不足",
+    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
 
     // crops: watered
     "crop-water.name": "作物：浇水",

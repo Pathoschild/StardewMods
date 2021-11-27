@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         /// <param name="combineOverlappingBorders">When two groups of the same color overlap, draw one border around their edges instead of their individual borders.</param>
         /// <param name="showGrid">Whether to show a tile grid when a layer is open.</param>
         public DataLayerOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, ILayer[] layers, Func<bool> drawOverlay, bool combineOverlappingBorders, bool showGrid)
-            : base(events, inputHelper, reflection)
+            : base(events, inputHelper, reflection, assumeUiMode: true)
         {
             if (!layers.Any())
                 throw new InvalidOperationException("Can't initialize the data layers overlay with no data layers.");
