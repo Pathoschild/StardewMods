@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for farmhouse/cabin fridges as automateable containers.
+
 ## 1.23.3
 Released 31 October 2021 for SMAPI 3.12.5 or later.
 

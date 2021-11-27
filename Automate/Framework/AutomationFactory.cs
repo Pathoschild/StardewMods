@@ -299,6 +299,16 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new TrashCanMachine(town, tile, trashCanIndex, this.Reflection);
             }
 
+            // fridge
+            switch (location)
+            {
+                case FarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
+                    return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
+
+                case IslandFarmHouse house when (house.fridgePosition != Point.Zero && house.fridgePosition.X == (int)tile.X && house.fridgePosition.Y == (int)tile.Y):
+                    return new ChestContainer(house.fridge.Value, location, tile, migrateLegacyOptions: false);
+            }
+
             return null;
         }
 
