@@ -87,12 +87,8 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // indoor pot
-            if (obj is IndoorPot indoorPot)
-            {
-                return BushMachine.CanAutomate(indoorPot.bush.Value)
-                    ? new BushMachine(indoorPot.bush.Value, location)
-                    : null;
-            }
+            if (obj is IndoorPot indoorPot && BushMachine.CanAutomate(indoorPot.bush.Value))
+                return new BushMachine(indoorPot.bush.Value, location, tile);
 
             // machine by type
             switch (obj)
