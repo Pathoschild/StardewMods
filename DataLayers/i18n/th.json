@@ -35,7 +35,7 @@
     "crop-harvest.name": "พืชผล: พร้อมเก็บเกี่ยวรึยัง",
     "crop-harvest.ready": "เก็บไปโลด",
     "crop-harvest.not-ready": "ยังก่อนพี่บ่าว",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "มีระยะเวลาเจริญเติบโตไม่เพียงพอ หรือตายก่อน",
 
     // crops: watered
     "crop-water.name": "พืชผล: ชุ่มฉ่ำรึยัง",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "ปุ๋ยเพิ่มคุณภาพดิน",
     "crop-fertilizer.retaining-soil": "ปุ๋ยรักษาความชื้น",
     "crop-fertilizer.speed-gro": "ปุ๋ยเร่งโต",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "มีปุ๋ยรวมกันหลายชนิด",
 
     // machine processing
     "machines.name": "เครื่องจักรกำลังทำงานอยู่มั้ย",
