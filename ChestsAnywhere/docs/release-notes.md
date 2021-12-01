@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.20.18
+Released 30 November 2021 for SMAPI 3.13.0 or later.
+
+* Updated for Stardew Valley 1.5.5 and SMAPI 3.13.0.
+
 ## 1.20.17
 Released 31 October 2021 for SMAPI 3.12.5 or later.
 
