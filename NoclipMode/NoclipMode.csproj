@@ -3,7 +3,7 @@
     <AssemblyName>NoclipMode</AssemblyName>
     <Version>1.2.7</Version>
     <RootNamespace>Pathoschild.Stardew.NoclipMode</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

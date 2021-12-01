@@ -3,7 +3,7 @@
     <AssemblyName>FastAnimations</AssemblyName>
     <Version>1.9.7</Version>
     <RootNamespace>Pathoschild.Stardew.FastAnimations</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>

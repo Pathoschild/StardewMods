@@ -499,14 +499,17 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get the farm type.</summary>
-        public FarmType GetFarmType()
+        public string GetFarmType()
         {
-            int farm = this.GetForState(
-                loaded: () => Game1.whichFarm,
-                reading: save => save.whichFarm
-            );
+            return this.GetForState(
+                loaded: () => Game1.whichFarm == Farm.mod_layout
+                    ? Game1.whichModFarm?.ID ?? FarmType.Custom.ToString()
+                    : this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(),
 
-            return this.GetEnum(farm, FarmType.Custom);
+                reading: save => int.TryParse(save.whichFarm, out _) && Enum.TryParse(save.whichFarm, out FarmType farmType)
+                    ? farmType.ToString()
+                    : save.whichFarm
+            );
         }
 
         /// <summary>Get whether the community center is complete.</summary>

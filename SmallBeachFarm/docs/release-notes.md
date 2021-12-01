@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Updated for Stardew Valley 1.5.5.
+* **Small Beach Farm is now a custom farm type**, it no longer replaces a vanilla farm type. See update note below.
+* Added chance for [beach crates](https://stardewvalleywiki.com/Supply_Crate) and beach forage to spawn along the shore.
+
+**Update note for players:**  
+Existing saves will revert to a vanilla farm type when you update. To convert a save to the new
+farm type, load your save and enter this command in the SMAPI console window:
+`set_farm_type Pathoschild.SmallBeachFarm` .
+
 ## 1.9.4
 Released 31 October 2021 for SMAPI 3.12.6 or later.
 

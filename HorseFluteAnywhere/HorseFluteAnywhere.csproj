@@ -3,7 +3,7 @@
     <AssemblyName>HorseFluteAnywhere</AssemblyName>
     <Version>1.1.9</Version>
     <RootNamespace>Pathoschild.Stardew.HorseFluteAnywhere</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
 
     <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>

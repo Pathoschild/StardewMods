@@ -13,10 +13,13 @@
 
   <!-- mod build package -->
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="3.3.0" />
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.0.0" />
   </ItemGroup>
 
   <!--generated translation class if present-->
+  <PropertyGroup Condition="Exists('Framework\I18n.tt')">
+    <BundleExtraAssemblies>ThirdParty</BundleExtraAssemblies>
+  </PropertyGroup>
   <ItemGroup Condition="Exists('Framework\I18n.tt')">
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />

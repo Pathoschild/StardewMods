@@ -3,7 +3,7 @@
     <AssemblyName>DebugMode</AssemblyName>
     <Version>1.12.8</Version>
     <RootNamespace>Pathoschild.Stardew.DebugMode</RootNamespace>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
