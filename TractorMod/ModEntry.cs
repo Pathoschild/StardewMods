@@ -308,7 +308,7 @@ namespace Pathoschild.Stardew.TractorMod
             // fix: warping onto a magic warp while mounted causes an infinite warp loop
             Vector2 tile = CommonHelper.GetPlayerTile(Game1.player);
             string touchAction = Game1.player.currentLocation.doesTileHaveProperty((int)tile.X, (int)tile.Y, "TouchAction", "Back");
-            if (this.TractorManager.IsCurrentPlayerRiding && touchAction != null && touchAction.StartsWith("MagicWarp "))
+            if (this.TractorManager.IsCurrentPlayerRiding && touchAction?.Split(' ', 2).First() is "MagicWarp" or "Warp")
                 Game1.currentLocation.lastTouchActionLocation = tile;
 
             // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
 using HarmonyLib;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Patching;
@@ -40,7 +38,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
             // disable indoor warp restriction
             harmony.Patch(
                 original: this.RequireMethod<Utility>(nameof(Utility.GetHorseWarpRestrictionsForFarmer)),
-                transpiler: this.GetHarmonyMethod(nameof(UtilityPatcher.Transpile_GetHorseWarpRestrictionsForFarmer))
+                postfix: this.GetHarmonyMethod(nameof(UtilityPatcher.After_GetHorseWarpRestrictionsForFarmer))
             );
 
             // let game find horses indoors
@@ -61,47 +59,13 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         /****
         ** Patches
         ****/
-        /// <summary>A method called via Harmony to modify <see cref="Utility.GetHorseWarpRestrictionsForFarmer"/>.</summary>
-        /// <param name="oldInstructions">The method instructions to transpile.</param>
+        /// <summary>A method called via Harmony after <see cref="Utility.GetHorseWarpRestrictionsForFarmer"/>.</summary>
+        /// <param name="values">The values returned by the method.</param>
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = "deliberately get original instructions if method fails")]
-        public static IEnumerable<CodeInstruction> Transpile_GetHorseWarpRestrictionsForFarmer(IEnumerable<CodeInstruction> oldInstructions)
+        public static IEnumerable<int> After_GetHorseWarpRestrictionsForFarmer(IEnumerable<int> values)
         {
-            try
-            {
-                CodeInstruction[] instructions = oldInstructions.ToArray();
-
-                // skip location restriction check
-                for (int i = 0; i < instructions.Length; i++)
-                {
-                    // relevant CIL code:
-                    //    if (location.IsOutdoors):
-                    //       IL_0016: ldloc.0
-                    //       IL_0017: callvirt instance bool StardewValley.GameLocation::get_IsOutdoors()
-                    //       IL_001c: brtrue.s IL_0020
-                    //    return 2:
-                    //       IL_001e: ldc.i4.2
-                    //       IL_001f: ret
-                    bool isLocationCheck =
-                        instructions[i].opcode == OpCodes.Callvirt
-                        && instructions[i].operand is MethodInfo { Name: "get_IsOutdoors" }
-                        && instructions.Length > i + 2
-                        && instructions[i + 3].opcode == OpCodes.Ret;
-
-                    if (isLocationCheck)
-                    {
-                        instructions[i + 2] = new CodeInstruction(OpCodes.Nop);
-                        instructions[i + 3] = new CodeInstruction(OpCodes.Nop);
-                        break;
-                    }
-                }
-
-                return instructions;
-            }
-            catch (Exception ex)
-            {
-                UtilityPatcher.Monitor.Log($"Failed to patch {nameof(Utility)}.{nameof(Utility.GetHorseWarpRestrictionsForFarmer)}.\nTechnical details: {ex}", LogLevel.Error);
-                return oldInstructions;
-            }
+            return values
+                .Where(restriction => restriction != 2); // 2: not outdoors
         }
 
         /// <summary>A method called via Harmony after <see cref="Utility.findHorse"/>.</summary>

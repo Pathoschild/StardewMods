@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.0
+Released 30 November 2021 for SMAPI 3.13.0 or later.
+
+* Updated for Stardew Valley 1.5.5 and SMAPI 3.13.0, including...
+  * custom scarecrows using the new `obj.IsScarecrow()` and `obj.GetRadiusForScarecrow()` methods;
+  * new `TouchAction Warp` tile property.
+
 ## 1.14.8
 Released 27 November 2021 for SMAPI 3.12.5 or later.
 

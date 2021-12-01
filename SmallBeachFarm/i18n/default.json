@@ -1,5 +1,12 @@
 ﻿{
     /*********
+    ** Farm info
+    *********/
+    "farm.name": "Small Beach Farm",
+    "farm.description": "A small fertile pocket beach, where you can catch both river and ocean fish.",
+
+
+    /*********
     ** Generic Mod Config Menu UI
     *********/
     "config.campfire.name": "Add campfire",
@@ -9,8 +16,5 @@
     "config.islands.tooltip": "Add ocean islands with extra land area.",
 
     "config.beach-sounds.name": "Play beach sounds",
-    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm.",
-
-    "config.farm-type.name": "Replace farm type",
-    "config.farm-type.tooltip": "The farm layout to replace."
+    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm."
 }

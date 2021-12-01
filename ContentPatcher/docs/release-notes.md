@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.24.5
+Released 30 November 2021 for SMAPI 3.13.0 or later.
+
+* Updated for Stardew Valley 1.5.5 and SMAPI 3.13.0 (including new game features like custom languages and farm types).
+
 ## 1.24.4
 Released 27 November 2021 for SMAPI 3.12.6 or later.
 
