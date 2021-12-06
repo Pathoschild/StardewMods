@@ -492,10 +492,10 @@
     // labels
     "npc.birthday": "Urodziny",
     "npc.can-romance": "Możliwość romansu",
-    "npc.friendship": "Przyjaźń",
+    "npc.friendship": "Relacja",
     "npc.talked-today": "Rozmawiano dzisiaj",
-    "npc.gifted-today": "Wręczono dzisiaj",
-    "npc.gifted-this-week": "Wręczono w tym tygodniu",
+    "npc.gifted-today": "Sprezentowano dzisiaj",
+    "npc.gifted-this-week": "Sprezentowano w tym tygodniu",
     "npc.kissed-today": "Pocałowano dzisiaj",
     "npc.hugged-today": "Przytulono dzisiaj",
     "npc.loves-gifts": "Kocha",
@@ -524,9 +524,9 @@
     "npc.child.age.description-partial": "{{label}} ({{count}} dni do {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "noworodek",
-    "npc.child.age.baby": "dziecko",
+    "npc.child.age.baby": "niemowlę",
     "npc.child.age.crawler": "brzdąc",
-    "npc.child.age.toddler": "niemowlak",
+    "npc.child.age.toddler": "dziecko",
 
 
     /*********
