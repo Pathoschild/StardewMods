@@ -24,7 +24,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
 
         /// <summary>Get the subject for an in-game entity, if available.</summary>
         /// <param name="entity">The entity instance.</param>
-        public ISubject GetSubjectFor(object entity);
+        /// <param name="location">The location containing the entity, if applicable.</param>
+        public ISubject GetSubjectFor(object entity, GameLocation location);
 
         /// <summary>Get all known subjects for the search UI.</summary>
         public IEnumerable<ISubject> GetSearchSubjects();

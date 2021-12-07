@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
             if (item != null)
             {
-                this.LinkSubject = codex?.GetByEntity(item);
+                this.LinkSubject = codex?.GetByEntity(item, null);
 
                 text = !string.IsNullOrWhiteSpace(text) ? text : item.DisplayName;
                 Color? color = this.LinkSubject != null ? Color.Blue : null;

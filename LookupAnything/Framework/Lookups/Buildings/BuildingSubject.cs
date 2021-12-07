@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             // owner
             Farmer owner = this.GetOwner();
             if (owner != null)
-                yield return new LinkField(I18n.Building_Owner(), owner.Name, () => this.Codex.GetByEntity(owner));
+                yield return new LinkField(I18n.Building_Owner(), owner.Name, () => this.Codex.GetByEntity(owner, owner.currentLocation));
             else if (building.indoors.Value is Cabin)
                 yield return new GenericField(I18n.Building_Owner(), I18n.Building_Owner_None());
 
@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 Horse horse = Utility.findHorse(stable.HorseId);
                 if (horse != null)
                 {
-                    yield return new LinkField(I18n.Building_Horse(), horse.Name, () => this.Codex.GetByEntity(horse));
+                    yield return new LinkField(I18n.Building_Horse(), horse.Name, () => this.Codex.GetByEntity(horse, horse.currentLocation));
                     yield return new GenericField(I18n.Building_HorseLocation(), I18n.Building_HorseLocation_Summary(location: horse.currentLocation.Name, x: horse.getTileX(), y: horse.getTileY()));
                 }
             }

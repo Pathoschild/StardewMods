@@ -142,10 +142,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get the subject for an in-game entity.</summary>
         /// <param name="entity">The entity instance.</param>
-        public ISubject GetByEntity(object entity)
+        /// <param name="location">The location containing the entity, if applicable.</param>
+        public ISubject GetByEntity(object entity, GameLocation location)
         {
             return this.LookupProviders
-                .Select(p => p.GetSubjectFor(entity))
+                .Select(p => p.GetSubjectFor(entity, location))
                 .FirstOrDefault(p => p != null);
         }
 

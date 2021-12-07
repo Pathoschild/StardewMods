@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         }
 
         /// <inheritdoc />
-        public virtual ISubject GetSubjectFor(object entity)
+        public virtual ISubject GetSubjectFor(object entity, GameLocation location)
         {
             return null;
         }

@@ -51,6 +51,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</summary>
         private readonly bool KnownQuality;
 
+        /// <summary>The location containing the item, if applicable.</summary>
+        private readonly GameLocation Location;
+
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
 
@@ -75,10 +78,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="item">The underlying target.</param>
         /// <param name="context">The context of the object being looked up.</param>
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
+        /// <param name="location">The location containing the item, if applicable.</param>
         /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
         /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, Item item, ObjectContext context, bool knownQuality, Func<Crop, ObjectContext, HoeDirt, ISubject> getCropSubject, Crop fromCrop = null, HoeDirt fromDirt = null)
+        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, Item item, ObjectContext context, bool knownQuality, GameLocation location, Func<Crop, ObjectContext, HoeDirt, ISubject> getCropSubject, Crop fromCrop = null, HoeDirt fromDirt = null)
             : base(gameHelper)
         {
             this.Codex = codex;
@@ -89,6 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             this.FromCrop = fromCrop ?? fromDirt?.crop;
             this.FromDirt = fromDirt;
             this.Context = context;
+            this.Location = location;
             this.KnownQuality = knownQuality;
             this.GetCropSubject = getCropSubject;
 
@@ -148,7 +153,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 if (potBush != null)
                 {
-                    ISubject subject = this.Codex.GetByEntity(potBush);
+                    ISubject subject = this.Codex.GetByEntity(potBush, this.Location ?? potBush.currentLocation);
                     if (subject != null)
                         yield return new LinkField(I18n.Item_Contents(), subject.Name, () => subject);
                 }

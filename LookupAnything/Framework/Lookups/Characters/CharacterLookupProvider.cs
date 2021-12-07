@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     if (profileMenu.hoveredItem == null)
                     {
                         if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetByEntity(npc);
+                            return this.Codex.GetByEntity(npc, npc.currentLocation);
                     }
                     break;
 
@@ -173,7 +173,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         }
 
         /// <inheritdoc />
-        public override ISubject GetSubjectFor(object entity)
+        public override ISubject GetSubjectFor(object entity, GameLocation location)
         {
             return entity switch
             {
