@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added workaround for macOS compatibility issue.
+
 ## 1.1.10
 Released 30 November 2021 for SMAPI 3.13.0 or later.
 

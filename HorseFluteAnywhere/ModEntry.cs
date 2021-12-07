@@ -98,8 +98,17 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         {
             if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
             {
+                int[] warpRestrictions = Utility.GetHorseWarpRestrictionsForFarmer(Game1.player).ToArray();
+
+                if (warpRestrictions.Length == 1 && warpRestrictions[0] == 2 && this.TryFallbackSummonHorse())
+                {
+                    // GetHorseWarpRestrictionsForFarmer patch failed (usually on macOS), but we
+                    // were able to fallback to summoning the horse manually.
+                }
+                else
+                    this.HorseFlute.Value.performUseAction(Game1.currentLocation);
+
                 this.Helper.Input.SuppressActiveKeybinds(this.SummonKey);
-                this.HorseFlute.Value.performUseAction(Game1.currentLocation);
             }
         }
 
@@ -136,6 +145,83 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             // fix: warping into an event may break the event (e.g. Mr Qi's event on mine level event for the 'Cryptic Note' quest)
             if (Game1.CurrentEvent != null)
                 Game1.player.mount.dismount();
+        }
+
+        /// <summary>Summon the horse manually if the <see cref="UtilityPatcher.After_GetHorseWarpRestrictionsForFarmer"/> patch isn't working for some reason.</summary>
+        /// <remarks>On macOS, patches on <see cref="Utility.GetHorseWarpRestrictionsForFarmer"/> are never called for some unknown reason. Derived from <see cref="SObject.performUseAction"/> and <see cref="FarmerTeam.OnRequestHorseWarp"/>.</remarks>
+        private bool TryFallbackSummonHorse()
+        {
+            // find horse
+            Horse horse = Utility.findHorseForPlayer(Game1.player.UniqueMultiplayerID);
+            if (horse == null)
+                return false;
+
+            // play flute
+            this.Monitor.Log("Falling back to custom summon...");
+            Game1.player.faceDirection(Game1.down);
+            Game1.soundBank.PlayCue("horse_flute");
+            Game1.player.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[]
+            {
+                new FarmerSprite.AnimationFrame(98, 400, true, false),
+                new FarmerSprite.AnimationFrame(99, 200, true, false),
+                new FarmerSprite.AnimationFrame(100, 200, true, false),
+                new FarmerSprite.AnimationFrame(99, 200, true, false),
+                new FarmerSprite.AnimationFrame(98, 400, true, false),
+                new FarmerSprite.AnimationFrame(99, 200, true, false),
+            });
+            Game1.player.freezePause = 1500;
+
+            // summon horse
+            DelayedAction.functionAfterDelay(() =>
+            {
+                horse.mutex.RequestLock(() =>
+                {
+                    horse.mutex.ReleaseLock();
+
+                    Multiplayer multiplayer = this.Helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
+                    GameLocation location = horse.currentLocation;
+                    Vector2 tile_location = horse.getTileLocation();
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile_location.X + Utility.RandomFloat(-1, 1), tile_location.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        {
+                            layerDepth = 1f,
+                            motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
+                        });
+                    }
+
+                    location.playSoundAt("wand", horse.getTileLocation());
+
+                    location = Game1.player.currentLocation;
+                    tile_location = Game1.player.getTileLocation();
+
+                    location.playSoundAt("wand", tile_location);
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile_location.X + Utility.RandomFloat(-1, 1), tile_location.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        {
+                            layerDepth = 1f,
+                            motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
+                        });
+                    }
+
+                    Game1.warpCharacter(horse, Game1.player.currentLocation, tile_location);
+                    int j = 0;
+                    for (int x = (int)tile_location.X + 3; x >= (int)tile_location.X - 3; x--)
+                    {
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tile_location.Y) * Game1.tileSize, Color.White, 8, false, 50f)
+                        {
+                            layerDepth = 1f,
+                            delayBeforeAnimationStart = j * 25,
+                            motion = new Vector2(-.25f, 0)
+                        });
+                        j++;
+                    }
+                });
+            }, 1500);
+            return true;
         }
 
         /// <summary>Reset all horse names and ownership, and log details to the SMAPI console.</summary>
