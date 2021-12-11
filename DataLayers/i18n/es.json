@@ -35,7 +35,7 @@
     "crop-harvest.name": "Cultivos: Listo para Cosechar",
     "crop-harvest.ready": "Listo",
     "crop-harvest.not-ready": "No Listo",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "No tiene tiempo suficiente (o está muerto)",
 
     // crops: watered
     "crop-water.name": "Cultivos: Regado",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "Fertilizado",
     "crop-fertilizer.retaining-soil": "Reteniendo Suelo",
     "crop-fertilizer.speed-gro": "Creciendo con Velocidad",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "Múltiples Tipos de Fertilizantes",
 
     // machine processing
     "machines.name": "Máquinas de Procesamiento",
