@@ -4,7 +4,7 @@
     "accessible.clear": "Despejado",
     "accessible.occupied": "Ocupado",
     "accessible.impassable": "Intransitable",
-    "accessible.warp": "Warp", // TODO
+    "accessible.warp": "Transición",
 
     // buildable
     "buildable.name": "Edificable",
