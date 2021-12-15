@@ -5,65 +5,65 @@
     /****
     ** 'General Options' section
     ****/
-    "config.general-options": "General Options",
+    "config.general-options": "Opciones Generales",
 
-    "config.disable-eat-prompt.name": "Disable eat/drink prompt",
-    "config.disable-eat-prompt.tooltip": "Whether to skip the confirmation prompt asking if you really want to eat/drink something.",
+    "config.disable-eat-prompt.name": "Desactivar aviso de comer/beber",
+    "config.disable-eat-prompt.tooltip": "Si desea omitir el aviso de confirmación que le pregunta si quiere comer/beber algo.",
 
     /****
     ** 'Player Animation Speeds' section
     ****/
-    "config.animation-speeds": "Player Animation Speeds",
+    "config.animation-speeds": "Velocidades de animación de los jugadores",
 
-    "config.eat-or-drink.name": "Eat/drink",
-    "config.eat-or-drink.tooltip": "How fast you eat and drink. Default {{defaultValue}}x.",
+    "config.eat-or-drink.name": "Comer/beber",
+    "config.eat-or-drink.tooltip": "La rapidez con la que comes y bebes. Por defecto {{defaultValue}}x.",
 
-    "config.fish.name": "Fish",
-    "config.fish.tooltip": "How fast you cast and reel when fishing (doesn't affect the minigame). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+    "config.fish.name": "Pescar",
+    "config.fish.tooltip": "La velocidad con la que lanzas y carreteas cuando pescas (no afecta al minijuego). Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
 
-    "config.harvest.name": "Harvest",
-    "config.harvest.tooltip": "How fast you harvest crops and forage by hand. Default {{defaultValue}}x.",
+    "config.harvest.name": "Cosechar",
+    "config.harvest.tooltip": "La rapidez con la que se recogen los cultivos y el forraje a mano. Por defecto {{defaultValue}}x.",
 
-    "config.milk.name": "Milk",
-    "config.milk.tooltip": "How fast you use the milk pail. Default {{defaultValue}}x.",
+    "config.milk.name": "Ordeñar",
+    "config.milk.tooltip": "La rapidez con la que se utiliza la cubeta lechera. Por defecto {{defaultValue}}x.",
 
-    "config.mount.name": "Mount/dismount",
-    "config.mount.tooltip": "How fast you mount/dismount horses (including custom mounts like Tractor Mod). Default {{defaultValue}}x.",
+    "config.mount.name": "Montar/Desmontar",
+    "config.mount.tooltip": "La rapidez con la que se montan/desmontan los caballos (incluidas las monturas personalizadas como el Tractor Mod). Por defecto {{defaultValue}}x.",
 
-    "config.shear.name": "Shear",
-    "config.shear.tooltip": "How fast you use the shears. Default {{defaultValue}}x.",
+    "config.shear.name": "Esquilar",
+    "config.shear.tooltip": "La rapidez con la que se utilizan las tijeras de esquilar. Por defecto {{defaultValue}}x.",
 
-    "config.tool.name": "Swing tool",
-    "config.tool.tooltip": "How fast you swing your tools (except weapons & fishing rod). Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+    "config.tool.name": "Girar herramientas",
+    "config.tool.tooltip": "La rapidez con la que se giran las herramientas (excepto las armas y la caña de pescar). Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
 
-    "config.weapon.name": "Swing weapon",
-    "config.weapon.tooltip": "How fast you swing your weapons. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+    "config.weapon.name": "Girar armas",
+    "config.weapon.tooltip": "La rapidez con la que se mueven las armas. Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
 
     /****
     ** 'World Animation Speeds' section
     ****/
-    "config.world-speeds": "World Animation Speeds",
+    "config.world-speeds": "Velocidad de animación del mundo",
 
-    "config.break-geodes.name": "Break geodes",
-    "config.break-geodes.tooltip": "How fast the blacksmith breaks geodes for you. Default {{defaultValue}}x.",
+    "config.break-geodes.name": "Romper geodas",
+    "config.break-geodes.tooltip": "La rapidez con la que el herrero rompe las geodas para ti. Por defecto {{defaultValue}}x.",
 
-    "config.casino-slots.name": "Casino slots",
-    "config.casino-slots.tooltip": "How fast the casino slots turn. Default {{defaultValue}}x.",
+    "config.casino-slots.name": "Tragamonedas del casino",
+    "config.casino-slots.tooltip": "La rapidez con la que giran las tragamonedas del casino. Por defecto {{defaultValue}}x.",
 
-    "config.bus.name": "Pam's bus",
-    "config.bus.tooltip": "How fast Pam drives her bus to and from the desert. Default {{defaultValue}}x.",
+    "config.bus.name": "Bus de Pam",
+    "config.bus.tooltip": "Lo rápido que Pam conduce su autobús hacia y desde el desierto. Por defecto {{defaultValue}}x.",
 
-    "config.tree-fall.name": "Tree falling",
-    "config.tree-fall.tooltip": "How fast trees fall after you chop them down. Default {{defaultValue}}x, suggested {{suggestedValue}}x.",
+    "config.tree-fall.name": "Caída de árboles",
+    "config.tree-fall.tooltip": "La rapidez con la que caen los árboles después de cortarlos. Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
 
     /****
     ** 'UI Animation Speeds' section
     ****/
-    "config.ui-speeds": "UI Animation Speeds",
+    "config.ui-speeds": "Velocidad de animación de la interfaz de usuario",
 
-    "config.title-menu.name": "Title menu transitions",
-    "config.title-menu.tooltip": "How fast the title menu transitions between screens. Default {{defaultValue}}x.",
+    "config.title-menu.name": "Transiciones del menú de título",
+    "config.title-menu.tooltip": "La rapidez con la que el menú de títulos pasa de una pantalla a otra. Por defecto {{defaultValue}}x.",
 
-    "config.load-game-blink.name": "Load game blink",
-    "config.load-game-blink.tooltip": "How fast the blinking-slot delay happens after you click a load-save slot. Default {{defaultValue}}x."
+    "config.load-game-blink.name": "Parpadeo al cargar juego",
+    "config.load-game-blink.tooltip": "La rapidez con la que se produce el retraso del parpadeo de la ranura después de hacer clic en una ranura de carga-guardado. Por defecto {{defaultValue}}x."
 }
