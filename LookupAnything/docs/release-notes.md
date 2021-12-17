@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-Fix error getting harvest dates for potted tea bushes.
+* Added option to show all gift tastes in item/NPC lookups.
+* Fixed error getting harvest dates for potted tea bushes.
 
 ## 1.35.7
 Released 30 November 2021 for SMAPI 3.13.0 or later.

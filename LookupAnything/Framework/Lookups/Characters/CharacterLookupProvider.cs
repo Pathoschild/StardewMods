@@ -256,6 +256,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 reflectionHelper: this.Reflection,
                 progressionMode: this.Config.ProgressionMode,
                 highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
+                showAllGiftTastes: this.Config.ShowAllGiftTastes,
                 enableTargetRedirection: this.Config.EnableTargetRedirection
             );
         }

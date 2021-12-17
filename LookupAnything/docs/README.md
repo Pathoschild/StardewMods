@@ -86,6 +86,16 @@ disliked/hated gifts.
 </tr>
 
 <tr>
+  <td><code>ShowAllGiftTastes</code></td>
+  <td>
+
+Default `false`. Whether to show all gift tastes for NPC and item lookups; when disabled, only the
+most relevant tastes (e.g. loved or liked gifts) are shown.
+
+  </td>
+</tr>
+
+<tr>
   <td><code>HideOnKeyUp</code></td>
   <td>
 

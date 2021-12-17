@@ -39,5 +39,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
+
+        /// <summary>Whether to show all NPC gift tastes.</summary>
+        public bool ShowAllGiftTastes { get; set; }
     }
 }
