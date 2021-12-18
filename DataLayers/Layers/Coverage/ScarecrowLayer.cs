@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 for (int y = (int)origin.Y - radius; y <= origin.Y + radius; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    if (Vector2.Distance(tile, origin) < radius + 1)
+                    if (Vector2.Distance(tile, origin) < radius)
                         yield return tile;
                 }
             }

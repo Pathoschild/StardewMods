@@ -32,6 +32,15 @@ NPC on their profile page, etc.
 You can also press `left shift` + `F1` to search for something by name.
 
 ## Configure
+### In-game settings
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
+the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
+section.
+
+![](screenshots/generic-config-menu.png)
+
+### `config.json` file
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 
@@ -81,6 +90,16 @@ discovered it in-game.
 Default `false`. Whether to highlight item gift tastes which haven't been revealed in the NPC
 profile. When enabled, unrevealed gift tastes will be bold and lookups will also show
 disliked/hated gifts.
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>ShowAllGiftTastes</code></td>
+  <td>
+
+Default `false`. Whether to show all gift tastes for NPC and item lookups; when disabled, only the
+most relevant tastes (e.g. loved or liked gifts) are shown.
 
   </td>
 </tr>

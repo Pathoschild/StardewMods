@@ -1,0 +1,33 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Main options",
+    "config.junimo-huts-output-gems.name": "Junimo huts output gems",
+    "config.junimo-huts-output-gems.desc": "Whether to pull gems out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.",
+    "config.automation-interval.name": "Automation interval",
+    "config.automation-interval.desc": "The number of ticks between each automation process (60 for once per second, 120 for every two seconds, etc).",
+    "config.toggle-overlay-key.name": "Toggle overlay key",
+    "config.toggle-overlay-key.desc": "The keys which toggle the automation overlay.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Mod compatibility",
+    "config.better-junimos.name": "Better Junimos",
+    "config.better-junimos.desc": "Enable compatibility with Better Junimos. If it's installed, Junimo huts won't output fertilizer or seeds.",
+    "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod",
+    "config.warn-for-missing-bridge-mod.desc": "Whether to log a warning on startup if you installed a custom-machine mod that requires a separate compatibility patch which isn't installed.",
+
+    // connectors
+    "config.title.connectors": "Enabled connectors",
+    "config.connector.desc": "Whether {{itemName}} links machines and chests together.",
+    "config.custom-connectors.name": "Custom connectors",
+    "config.custom-connectors.desc": "The exact English names for items which connect adjacent machines together. You can list multiple items with commas.", // note: connector names must be English even when playing in other languages
+
+    // machine overrides
+    "config.title.machine-overrides": "Machine overrides",
+    "config.override.ShippingBin-name": "Shipping Bin",
+    "config.override.MiniShippingBin-name": "Mini-Shipping Bin",
+    "config.override.desc": "Whether to enable {{machineName}} automation.",
+    "config.custom-overrides-note": "For custom overrides, see https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure for help editing the config.json file directly."
+}

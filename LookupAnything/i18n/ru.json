@@ -675,5 +675,53 @@
     "tree.stages.sapling": "саженец",
     "tree.stages.bush": "куст",
     "tree.stages.smallTree": "малое дерево",
-    "tree.stages.tree": "дерево"
+    "tree.stages.tree": "дерево",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    // TODO
+    "config.title.main-options": "Main options",
+    "config.progression-mode.name": "Progression mode",
+    "config.progression-mode.desc": "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.",
+    "config.highlight-unrevealed-gift-tastes.name": "Highlight unrevealed gift tastes",
+    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
+    "config.show-all-gift-tastes.name": "Show all gift tastes",
+    "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
+
+    // advanced options
+    // TODO
+    "config.title.advanced-options": "Advanced options",
+    "config.tile-lookups.name": "Tile lookups",
+    "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
+    "config.data-mining-fields.name": "Show data mining fields",
+    "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
+    "config.force-full-screen.name": "Force full screen",
+    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
+    "config.target-redirection.name": "Target redirection",
+    "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
+    "config.scroll-amount.name": "Scroll amount",
+    "config.scroll-amount.desc": "The number of pixels to shift content on each up/down scroll.",
+
+    // controls section
+    // TODO
+    "config.title.controls": "Controls",
+    "config.hide-on-key-up.name": "Hide on key up",
+    "config.hide-on-key-up.desc": "Whether to hide the lookup UI when you release the lookup key.",
+    "config.toggle-lookup.name": "Toggle lookup",
+    "config.toggle-lookup.desc": "The keys which toggle the lookup UI for something under the cursor.",
+    "config.toggle-search.name": "Toggle search",
+    "config.toggle-search.desc": "The keys which toggle the search UI.",
+    "config.scroll-up.name": "Scroll up",
+    "config.scroll-up.desc": "The keys which scroll up long content by a few lines.",
+    "config.scroll-down.name": "Scroll down",
+    "config.scroll-down.desc": "The keys which scroll down long content by a few lines.",
+    "config.page-up.name": "Page up",
+    "config.page-up.desc": "The keys which scroll up long content by a full page.",
+    "config.page-down.name": "Page down",
+    "config.page-down.desc": "The keys which scroll down long content by a full page.",
+    "config.toggle-debug.name": "Toggle debug",
+    "config.toggle-debug.desc": "The keys which toggle the display of debug information."
 }

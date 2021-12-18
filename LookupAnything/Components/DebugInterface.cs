@@ -26,8 +26,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The warning text to display when debug mode is enabled.</summary>
-        private readonly string WarningText;
+        /// <summary>The mod configuration.</summary>
+        private readonly Func<ModConfig> Config;
 
 
         /*********
@@ -45,15 +45,12 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="targetFactory">Finds and analyzes lookup targets in the world.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public DebugInterface(GameHelper gameHelper, TargetFactory targetFactory, ModConfig config, IMonitor monitor)
+        public DebugInterface(GameHelper gameHelper, TargetFactory targetFactory, Func<ModConfig> config, IMonitor monitor)
         {
-            // save fields
             this.GameHelper = gameHelper;
             this.TargetFactory = targetFactory;
+            this.Config = config;
             this.Monitor = monitor;
-
-            // generate warning text
-            this.WarningText = $"Debug info enabled; press {string.Join(" or ", config.Controls.ToggleDebug)} to disable.";
         }
 
         /// <summary>Draw debug metadata to the screen.</summary>
@@ -65,6 +62,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
             this.Monitor.InterceptErrors("drawing debug info", () =>
             {
+                var config = this.Config();
+
                 // get location info
                 GameLocation currentLocation = Game1.currentLocation;
                 Vector2 cursorTile = Game1.currentCursorTile;
@@ -72,7 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show 'debug enabled' warning + cursor position
                 {
-                    string metadata = $"{this.WarningText} Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
+                    string metadata = $"Debug info enabled; press {string.Join(" or ", config.Controls.ToggleDebug)} to disable. Cursor tile ({cursorTile.X}, {cursorTile.Y}), position ({cursorPosition.X}, {cursorPosition.Y}).";
                     this.GameHelper.DrawHoverBox(spriteBatch, metadata, Vector2.Zero, Game1.uiViewport.Width);
                 }
 

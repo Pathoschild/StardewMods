@@ -2785,6 +2785,216 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             return I18n.GetByKey("tree.stages.tree");
         }
 
+        /// <summary>Get a translation equivalent to "Main options".</summary>
+        public static string Config_Title_MainOptions()
+        {
+            return I18n.GetByKey("config.title.main-options");
+        }
+
+        /// <summary>Get a translation equivalent to "Progression mode".</summary>
+        public static string Config_ProgressionMode_Name()
+        {
+            return I18n.GetByKey("config.progression-mode.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.".</summary>
+        public static string Config_ProgressionMode_Desc()
+        {
+            return I18n.GetByKey("config.progression-mode.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Highlight unrevealed gift tastes".</summary>
+        public static string Config_HighlightUnrevealedGiftTastes_Name()
+        {
+            return I18n.GetByKey("config.highlight-unrevealed-gift-tastes.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.".</summary>
+        public static string Config_HighlightUnrevealedGiftTastes_Desc()
+        {
+            return I18n.GetByKey("config.highlight-unrevealed-gift-tastes.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Show all gift tastes".</summary>
+        public static string Config_ShowAllGiftTastes_Name()
+        {
+            return I18n.GetByKey("config.show-all-gift-tastes.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.".</summary>
+        public static string Config_ShowAllGiftTastes_Desc()
+        {
+            return I18n.GetByKey("config.show-all-gift-tastes.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Advanced options".</summary>
+        public static string Config_Title_AdvancedOptions()
+        {
+            return I18n.GetByKey("config.title.advanced-options");
+        }
+
+        /// <summary>Get a translation equivalent to "Tile lookups".</summary>
+        public static string Config_TileLookups_Name()
+        {
+            return I18n.GetByKey("config.tile-lookups.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to include map tiles as lookup targets.".</summary>
+        public static string Config_TileLookups_Desc()
+        {
+            return I18n.GetByKey("config.tile-lookups.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Show data mining fields".</summary>
+        public static string Config_DataMiningFields_Name()
+        {
+            return I18n.GetByKey("config.data-mining-fields.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.".</summary>
+        public static string Config_DataMiningFields_Desc()
+        {
+            return I18n.GetByKey("config.data-mining-fields.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Force full screen".</summary>
+        public static string Config_ForceFullScreen_Name()
+        {
+            return I18n.GetByKey("config.force-full-screen.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.".</summary>
+        public static string Config_ForceFullScreen_Desc()
+        {
+            return I18n.GetByKey("config.force-full-screen.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Target redirection".</summary>
+        public static string Config_TargetRedirection_Name()
+        {
+            return I18n.GetByKey("config.target-redirection.name");
+        }
+
+        /// <summary>Get a translation equivalent to "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.".</summary>
+        public static string Config_TargetRedirection_Desc()
+        {
+            return I18n.GetByKey("config.target-redirection.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Scroll amount".</summary>
+        public static string Config_ScrollAmount_Name()
+        {
+            return I18n.GetByKey("config.scroll-amount.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The number of pixels to shift content on each up/down scroll.".</summary>
+        public static string Config_ScrollAmount_Desc()
+        {
+            return I18n.GetByKey("config.scroll-amount.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Controls".</summary>
+        public static string Config_Title_Controls()
+        {
+            return I18n.GetByKey("config.title.controls");
+        }
+
+        /// <summary>Get a translation equivalent to "Hide on key up".</summary>
+        public static string Config_HideOnKeyUp_Name()
+        {
+            return I18n.GetByKey("config.hide-on-key-up.name");
+        }
+
+        /// <summary>Get a translation equivalent to "Whether to hide the lookup UI when you release the lookup key.".</summary>
+        public static string Config_HideOnKeyUp_Desc()
+        {
+            return I18n.GetByKey("config.hide-on-key-up.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Toggle lookup".</summary>
+        public static string Config_ToggleLookup_Name()
+        {
+            return I18n.GetByKey("config.toggle-lookup.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which toggle the lookup UI for something under the cursor.".</summary>
+        public static string Config_ToggleLookup_Desc()
+        {
+            return I18n.GetByKey("config.toggle-lookup.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Toggle search".</summary>
+        public static string Config_ToggleSearch_Name()
+        {
+            return I18n.GetByKey("config.toggle-search.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which toggle the search UI.".</summary>
+        public static string Config_ToggleSearch_Desc()
+        {
+            return I18n.GetByKey("config.toggle-search.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Scroll up".</summary>
+        public static string Config_ScrollUp_Name()
+        {
+            return I18n.GetByKey("config.scroll-up.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which scroll up long content by a few lines.".</summary>
+        public static string Config_ScrollUp_Desc()
+        {
+            return I18n.GetByKey("config.scroll-up.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Scroll down".</summary>
+        public static string Config_ScrollDown_Name()
+        {
+            return I18n.GetByKey("config.scroll-down.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which scroll down long content by a few lines.".</summary>
+        public static string Config_ScrollDown_Desc()
+        {
+            return I18n.GetByKey("config.scroll-down.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Page up".</summary>
+        public static string Config_PageUp_Name()
+        {
+            return I18n.GetByKey("config.page-up.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which scroll up long content by a full page.".</summary>
+        public static string Config_PageUp_Desc()
+        {
+            return I18n.GetByKey("config.page-up.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Page down".</summary>
+        public static string Config_PageDown_Name()
+        {
+            return I18n.GetByKey("config.page-down.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which scroll down long content by a full page.".</summary>
+        public static string Config_PageDown_Desc()
+        {
+            return I18n.GetByKey("config.page-down.desc");
+        }
+
+        /// <summary>Get a translation equivalent to "Toggle debug".</summary>
+        public static string Config_ToggleDebug_Name()
+        {
+            return I18n.GetByKey("config.toggle-debug.name");
+        }
+
+        /// <summary>Get a translation equivalent to "The keys which toggle the display of debug information.".</summary>
+        public static string Config_ToggleDebug_Desc()
+        {
+            return I18n.GetByKey("config.toggle-debug.desc");
+        }
+
         /// <summary>Get a translation by its key.</summary>
         /// <param name="key">The translation key.</param>
         /// <param name="tokens">An object containing token key/value pairs. This can be an anonymous object (like <c>new { value = 42, name = "Cranberries" }</c>), a dictionary, or a class instance.</param>
