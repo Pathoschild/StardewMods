@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -18,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         ** Fields methods
         *********/
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        private readonly Func<ModConfig> Config;
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
@@ -32,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="codex">Provides subject entries.</param>
-        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex)
+        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Config = config;
@@ -247,6 +248,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The entity to look up.</param>
         private ISubject BuildSubject(NPC npc)
         {
+            ModConfig config = this.Config();
+
             return new CharacterSubject(
                 codex: this.Codex,
                 gameHelper: this.GameHelper,
@@ -254,10 +257,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 type: this.GetSubjectType(npc),
                 metadata: this.GameHelper.Metadata,
                 reflectionHelper: this.Reflection,
-                progressionMode: this.Config.ProgressionMode,
-                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
-                showAllGiftTastes: this.Config.ShowAllGiftTastes,
-                enableTargetRedirection: this.Config.EnableTargetRedirection
+                progressionMode: config.ProgressionMode,
+                highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
+                showAllGiftTastes: config.ShowAllGiftTastes,
+                enableTargetRedirection: config.EnableTargetRedirection
             );
         }
 

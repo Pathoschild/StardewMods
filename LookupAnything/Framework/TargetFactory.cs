@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="config">The mod configuration.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
         {
             this.GameHelper = gameHelper;
 

@@ -73,26 +73,26 @@ Inactive mods:
 The mods can be translated into any language supported by the game, and SMAPI will automatically
 use the right translations.
 
+Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
+on the wiki for help contributing translations.
+
 (❑ = untranslated, ↻ = partly translated, ✓ = fully translated)
 
 &nbsp;     | Chests Anywhere                  | Data Layers                  | Debug Mode                  | Fast Animations | Horse Flute Anywhere | Lookup Anything                  | Noclip Mode                  | Skip Intro | Small Beach Farm | Tractor Mod
 ---------- | :------------------------------- | :--------------------------- | :-------------------------- | :-------------- | :------------------- | :------------------------------- | :--------------------------- | :--------- | :--------------- | :---------------------------
-Chinese    | [✓](ChestsAnywhere/i18n/zh.json) | [↻](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/zh.json) | [✓](NoclipMode/i18n/zh.json) | ❑          | ❑                | [↻](TractorMod/i18n/zh.json)
-French     | [✓](ChestsAnywhere/i18n/fr.json) | [↻](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/fr.json) | [✓](NoclipMode/i18n/fr.json) | ❑          | ❑                | [↻](TractorMod/i18n/fr.json)
-German     | [✓](ChestsAnywhere/i18n/de.json) | [↻](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/de.json) | [✓](NoclipMode/i18n/de.json) | ❑          | ❑                | [↻](TractorMod/i18n/de.json)
+Chinese    | [✓](ChestsAnywhere/i18n/zh.json) | [↻](DataLayers/i18n/zh.json) | [✓](DebugMode/i18n/zh.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/zh.json) | [✓](NoclipMode/i18n/zh.json) | ❑          | ❑                | [↻](TractorMod/i18n/zh.json)
+French     | [✓](ChestsAnywhere/i18n/fr.json) | [↻](DataLayers/i18n/fr.json) | [✓](DebugMode/i18n/fr.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/fr.json) | [✓](NoclipMode/i18n/fr.json) | ❑          | ❑                | [↻](TractorMod/i18n/fr.json)
+German     | [✓](ChestsAnywhere/i18n/de.json) | [↻](DataLayers/i18n/de.json) | [✓](DebugMode/i18n/de.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/de.json) | [✓](NoclipMode/i18n/de.json) | ❑          | ❑                | [↻](TractorMod/i18n/de.json)
 Hungarian  | [↻](ChestsAnywhere/i18n/hu.json) | [↻](DataLayers/i18n/hu.json) | [✓](DebugMode/i18n/hu.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/hu.json) | [✓](NoclipMode/i18n/hu.json) | ❑          | ❑                | [↻](TractorMod/i18n/hu.json)
 Italian    | [↻](ChestsAnywhere/i18n/it.json) | [↻](DataLayers/i18n/it.json) | [✓](DebugMode/i18n/it.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/it.json) | [✓](NoclipMode/i18n/it.json) | ❑          | ❑                | [↻](TractorMod/i18n/it.json)
-Japanese   | [↻](ChestsAnywhere/i18n/ja.json) | [↻](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | ❑          | ❑                | [↻](TractorMod/i18n/ja.json)
+Japanese   | [↻](ChestsAnywhere/i18n/ja.json) | [↻](DataLayers/i18n/ja.json) | [✓](DebugMode/i18n/ja.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ja.json) | [✓](NoclipMode/i18n/ja.json) | ❑          | ❑                | [↻](TractorMod/i18n/ja.json)
 Korean     | [↻](ChestsAnywhere/i18n/ko.json) | [↻](DataLayers/i18n/ko.json) | [✓](DebugMode/i18n/ko.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ko.json) | [✓](NoclipMode/i18n/ko.json) | ❑          | ❑                | [✓](TractorMod/i18n/ko.json)
-Polish¹    | ❑                                | ❑                            | ❑                           | ❑               | ❑                    | [✓](LookupAnything/i18n/pl.json) | ❑                            | ❑          | ❑                | ❑
-Portuguese | [✓](ChestsAnywhere/i18n/pt.json) | [↻](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | ❑          | ❑                | [↻](TractorMod/i18n/pt.json)
+Polish¹    | ❑                                | ❑                            | ❑                           | ❑               | ❑                    | [↻](LookupAnything/i18n/pl.json) | ❑                            | ❑          | ❑                | ❑
+Portuguese | [✓](ChestsAnywhere/i18n/pt.json) | [↻](DataLayers/i18n/pt.json) | [✓](DebugMode/i18n/pt.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/pt.json) | [✓](NoclipMode/i18n/pt.json) | ❑          | ❑                | [↻](TractorMod/i18n/pt.json)
 Russian    | [↻](ChestsAnywhere/i18n/ru.json) | [↻](DataLayers/i18n/ru.json) | [✓](DebugMode/i18n/ru.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/ru.json) | [✓](NoclipMode/i18n/ru.json) | ❑          | ❑                | [↻](TractorMod/i18n/ru.json)
-Spanish    | [✓](ChestsAnywhere/i18n/es.json) | [↻](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | ❑          | ❑                | [↻](TractorMod/i18n/es.json)
-Thai¹      | [✓](ChestsAnywhere/i18n/th.json) | [↻](DataLayers/i18n/th.json) | [✓](DebugMode/i18n/th.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/th.json) | [✓](NoclipMode/i18n/th.json) | ❑          | ❑                | [↻](TractorMod/i18n/th.json)
-Turkish    | [✓](ChestsAnywhere/i18n/tr.json) | [↻](DataLayers/i18n/tr.json) | [✓](DebugMode/i18n/tr.json) | ❑               | ❑                    | [✓](LookupAnything/i18n/tr.json) | [✓](NoclipMode/i18n/tr.json) | ❑          | ❑                | [↻](TractorMod/i18n/tr.json)
-
-Contributions are welcome! See [Modding:Translations](https://stardewvalleywiki.com/Modding:Translations)
-on the wiki for help contributing translations.
+Spanish    | [✓](ChestsAnywhere/i18n/es.json) | [↻](DataLayers/i18n/es.json) | [✓](DebugMode/i18n/es.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/es.json) | [✓](NoclipMode/i18n/es.json) | ❑          | ❑                | [↻](TractorMod/i18n/es.json)
+Thai¹      | [✓](ChestsAnywhere/i18n/th.json) | [↻](DataLayers/i18n/th.json) | [✓](DebugMode/i18n/th.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/th.json) | [✓](NoclipMode/i18n/th.json) | ❑          | ❑                | [↻](TractorMod/i18n/th.json)
+Turkish    | [✓](ChestsAnywhere/i18n/tr.json) | [↻](DataLayers/i18n/tr.json) | [✓](DebugMode/i18n/tr.json) | ❑               | ❑                    | [↻](LookupAnything/i18n/tr.json) | [✓](NoclipMode/i18n/tr.json) | ❑          | ❑                | [↻](TractorMod/i18n/tr.json)
 
 ¹ This is a custom language provided by a mod (see [Polish](https://www.nexusmods.com/stardewvalley/mods/3616) and [Thai](https://www.nexusmods.com/stardewvalley/mods/7052)).
 

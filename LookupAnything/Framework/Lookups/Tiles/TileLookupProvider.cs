@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        private readonly Func<ModConfig> Config;
 
         /// <summary>Whether to show raw tile info like tilesheets and tile indexes.</summary>
         private readonly Func<bool> ShowRawTileInfo;
@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-        public TileLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, Func<bool> showRawTileInfo)
+        public TileLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, Func<bool> showRawTileInfo)
             : base(reflection, gameHelper)
         {
             this.Config = config;
@@ -56,15 +56,16 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         private ISubject BuildSubject(GameLocation location, Vector2 tile)
         {
             bool showRaw = this.ShowRawTileInfo();
+            ModConfig config = this.Config();
 
             if (this.IsCrystalCavePuzzle(location, tile, out int? crystalId))
-                return new CrystalCavePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode, crystalId);
+                return new CrystalCavePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ProgressionMode, crystalId);
 
             if (this.GetIsIslandMermaidPuzzle(location, tile))
-                return new IslandMermaidPuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode);
+                return new IslandMermaidPuzzleSubject(this.GameHelper, location, tile, showRaw, config.ProgressionMode);
 
             if (this.IsIslandShrinePuzzle(location, tile))
-                return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, this.Config.ProgressionMode);
+                return new IslandShrinePuzzleSubject(this.GameHelper, location, tile, showRaw, config.ProgressionMode);
 
             if (showRaw)
                 return new TileSubject(this.GameHelper, location, tile, true);

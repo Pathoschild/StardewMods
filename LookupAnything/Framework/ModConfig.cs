@@ -18,7 +18,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Whether to highlight item gift tastes which haven't been revealed in the NPC profile.</summary>
         public bool HighlightUnrevealedGiftTastes { get; set; }
 
-        /// <summary>Whether to close the lookup UI when the lookup key is release.</summary>
+        /// <summary>Whether to show all NPC gift tastes.</summary>
+        public bool ShowAllGiftTastes { get; set; }
+
+        /// <summary>Whether to close the lookup UI when the lookup key is released.</summary>
         public bool HideOnKeyUp { get; set; }
 
         /****
@@ -39,8 +42,5 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Whether to show advanced data mining fields.</summary>
         public bool ShowDataMiningFields { get; set; }
-
-        /// <summary>Whether to show all NPC gift tastes.</summary>
-        public bool ShowAllGiftTastes { get; set; }
     }
 }

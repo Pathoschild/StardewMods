@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private readonly JsonAssetsIntegration JsonAssets;
 
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        private readonly Func<ModConfig> Config;
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="config">The mod configuration.</param>
         /// <param name="codex">Provides subject entries.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
-        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
+        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
             : base(reflection, gameHelper)
         {
             this.Config = config;
@@ -339,12 +339,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="knownQuality">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         private ISubject BuildSubject(Item target, ObjectContext context, GameLocation location, bool knownQuality = true)
         {
+            var config = this.Config();
             return new ItemSubject(
                 codex: this.Codex,
                 gameHelper: this.GameHelper,
-                progressionMode: this.Config.ProgressionMode,
-                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
-                showAllGiftTastes: this.Config.ShowAllGiftTastes,
+                progressionMode: config.ProgressionMode,
+                highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
+                showAllGiftTastes: config.ShowAllGiftTastes,
                 item: target,
                 context: context,
                 knownQuality: knownQuality,
@@ -370,12 +371,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 };
             }
 
+            ModConfig config = this.Config();
             return new ItemSubject(
                 codex: this.Codex,
                 gameHelper: this.GameHelper,
-                progressionMode: this.Config.ProgressionMode,
-                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
-                showAllGiftTastes: this.Config.ShowAllGiftTastes,
+                progressionMode: config.ProgressionMode,
+                highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
+                showAllGiftTastes: config.ShowAllGiftTastes,
                 item: this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest),
                 context: context,
                 location: dirt.currentLocation,

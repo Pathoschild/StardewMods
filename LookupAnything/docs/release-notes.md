@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added option to show all gift tastes in item/NPC lookups.
+* Added in-game config UI through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 * Fixed error getting harvest dates for potted tea bushes.
 
 ## 1.35.7
