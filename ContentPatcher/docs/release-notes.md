@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Fixed location tokens unready during part of the save loading process.
+* Fixed minimum supported Generic Mod Config Menu version.
 
 ## 1.24.5
 Released 30 November 2021 for SMAPI 3.13.0 or later.
