@@ -78,6 +78,17 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
             return this;
         }
 
+        /// <summary>Add a paragraph of text at the current position in the form.</summary>
+        /// <param name="text">The paragraph text to display.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddParagraph(Func<string> text)
+        {
+            this.AssertLoaded();
+
+            this.ModApi.AddParagraph(this.ConsumerManifest, text);
+
+            return this;
+        }
+
         /// <summary>Add a checkbox to the form.</summary>
         /// <param name="name">The label text to show in the form.</param>
         /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field.</param>

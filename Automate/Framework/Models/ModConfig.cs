@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -18,12 +21,33 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The in-game object names through which machines can connect.</summary>
-        public string[] ConnectorNames { get; set; } = { "Workbench" };
+        public HashSet<string> ConnectorNames { get; set; } = new() { "Workbench" };
 
         /// <summary>Options affecting compatibility with other mods.</summary>
         public ModCompatibilityConfig ModCompatibility { get; set; } = new();
 
         /// <summary>The configuration for specific machines by ID.</summary>
-        public IDictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
+        public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Normalize the model after it's deserialized.</summary>
+        /// <param name="context">The deserialization context.</param>
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            // normalize
+            this.Controls ??= new();
+            this.ConnectorNames = this.ConnectorNames.ToNonNullCaseInsensitive();
+            this.ModCompatibility ??= new();
+            this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
+
+            // remove null values
+            this.ConnectorNames.Remove(null);
+            foreach (string key in this.MachineOverrides.Where(p => p.Value == null).Select(p => p.Key).ToArray())
+                this.MachineOverrides.Remove(key);
+        }
     }
 }
