@@ -6,10 +6,6 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
-  </ItemGroup>
-
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
 </Project>

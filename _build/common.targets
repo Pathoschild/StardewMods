@@ -17,12 +17,20 @@
   </ItemGroup>
 
   <!--generated translation class if present-->
-  <PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\Framework\I18n.tt')">
-    <BundleExtraAssemblies>ThirdParty</BundleExtraAssemblies>
-  </PropertyGroup>
-  <ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\Framework\I18n.tt')">
-    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-    <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
-    <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="Exists('$(MSBuildProjectDirectory)\Framework\I18n.tt')">
+      <PropertyGroup>
+        <BundleExtraAssemblies>ThirdParty</BundleExtraAssemblies>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
+
+        <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+
+        <None Update="Framework\I18n.tt" Generator="TextTemplatingFileGenerator" LastGenOutput="I18n.cs" />
+        <Compile Update="Framework\I18n.cs" DesignTime="True" AutoGen="True" DependentUpon="I18n.tt" />
+      </ItemGroup>
+    </When>
+  </Choose>
 </Project>
