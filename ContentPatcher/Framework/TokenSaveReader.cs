@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -109,7 +110,9 @@ namespace ContentPatcher.Framework
             return this.GetCached(
                 $"{nameof(this.GetCurrentLocation)}:{player.UniqueMultiplayerID}",
                 () => this.GetForState(
-                    loaded: () => player.currentLocation,
+                    loaded: () => Context.IsWorldReady
+                        ? player.currentLocation
+                        : player.currentLocation ?? this.GetLocationFromName(player.lastSleepLocation.Value), // currentLocation is set later in the save loading process
                     reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
                 )
             );
