@@ -123,11 +123,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     }
                     break;
 
-
                 /****
-                ** Other menus
+                ** Calendar
                 ****/
-                // calendar
                 case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
@@ -154,7 +152,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     }
                     break;
 
-                // load menu
+                /****
+                ** Load menu
+                ****/
                 case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
                         ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
@@ -165,6 +165,35 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
                             if (slot?.Farmer != null)
                                 return new FarmerSubject(this.GameHelper, slot.Farmer, isLoadMenu: true);
+                        }
+                    }
+                    break;
+
+                /****
+                ** mod: Animal Social Menu
+                ****/
+                case IClickableMenu _ when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
+                    {
+                        int slotOffset = this.Reflection.GetField<int>(targetMenu, "SlotPosition").GetValue();
+                        List<ClickableTextureComponent> slots = this.Reflection.GetField<List<ClickableTextureComponent>>(targetMenu, "Sprites").GetValue();
+                        List<object> animalIds = this.Reflection.GetField<List<object>>(targetMenu, "Names").GetValue();
+
+                        for (int i = slotOffset; i < slots.Count; i++)
+                        {
+                            if (slots[i].containsPoint(cursorX, cursorY))
+                            {
+                                if (animalIds.TryGetIndex(i, out object rawId) && rawId is long id)
+                                {
+                                    FarmAnimal animal = Game1
+                                        .getFarm()
+                                        .getAllFarmAnimals()
+                                        .FirstOrDefault(p => p.myID.Value == id);
+
+                                    if (animal != null)
+                                        return this.BuildSubject(animal);
+                                }
+                                break;
+                            }
                         }
                     }
                     break;
