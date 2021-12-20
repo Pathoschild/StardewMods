@@ -8,6 +8,10 @@
     <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />
