@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "ต้องการขลุ่ยเรียกม้า",
+    "config.require-flute.description": "ไม่ว่าคุณจะต้องการไอเทมขลุ่ยเรียกม้า ในกระเป๋าของคุณเพื่อเรียกม้าหรือไม่ แต่ค่าเริ่มต้นคือไม่ต้องการ",
+
+    "config.summon-horse-button.name": "ปุ่มเรียกม้า",
+    "config.summon-horse-button.description": "ปุ่มสำหรับกดเป่าขลุ่ยและเรียกม้า ค่าเริ่มต้นคือ {{defaultValue}}"
+}
