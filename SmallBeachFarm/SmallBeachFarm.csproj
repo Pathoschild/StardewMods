@@ -9,6 +9,10 @@
     <IgnoreModFilePaths>assets/paths.png, assets/spring_beach.png, assets/spring_island_tilesheet_1.png, assets/spring_outdoorsTileSheet.png, assets/spring_town.png</IgnoreModFilePaths>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
+  </ItemGroup>
+
   <Import Project="..\Common\Common.projitems" Label="Shared" />
   <Import Project="..\Common.Patching\Common.Patching.projitems" Label="Shared" />
   <Import Project="..\_build\common.targets" />

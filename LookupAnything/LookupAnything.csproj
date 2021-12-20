@@ -4,10 +4,15 @@
     <Version>1.35.7</Version>
     <RootNamespace>Pathoschild.Stardew.LookupAnything</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
+
+    <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
+    <TranslationClassBuilder_ClassModifiers>internal static partial</TranslationClassBuilder_ClassModifiers>
+    <TranslationClassBuilder_Namespace>Pathoschild.Stardew.LookupAnything.Framework</TranslationClassBuilder_Namespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />
