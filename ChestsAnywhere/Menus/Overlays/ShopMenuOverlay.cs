@@ -59,8 +59,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
             else
             {
-                this.Menu.canPurchaseCheck = item => false;
-                this.Menu.inventory.highlightMethod = item => false;
+                this.Menu.canPurchaseCheck = _ => false;
+                this.Menu.inventory.highlightMethod = _ => false;
             }
         }
     }

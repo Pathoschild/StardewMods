@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ** GameMenu
                 ****/
                 // skills tab
-                case SkillsPage _:
+                case SkillsPage:
                     return this.BuildSubject(Game1.player);
 
                 // profile tab
@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** Load menu
                 ****/
-                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
+                case TitleMenu when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
                         ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
@@ -172,7 +172,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** mod: Animal Social Menu
                 ****/
-                case IClickableMenu _ when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
+                case IClickableMenu when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
                     {
                         int slotOffset = this.Reflection.GetField<int>(targetMenu, "SlotPosition").GetValue();
                         List<ClickableTextureComponent> slots = this.Reflection.GetField<List<ClickableTextureComponent>>(targetMenu, "Sprites").GetValue();
@@ -299,10 +299,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             return npc switch
             {
-                Horse _ => SubjectType.Horse,
-                Junimo _ => SubjectType.Junimo,
-                Pet _ => SubjectType.Pet,
-                Monster _ => SubjectType.Monster,
+                Horse => SubjectType.Horse,
+                Junimo => SubjectType.Junimo,
+                Pet => SubjectType.Pet,
+                Monster => SubjectType.Monster,
                 _ => SubjectType.Villager
             };
         }

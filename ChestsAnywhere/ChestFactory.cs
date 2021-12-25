@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 IDictionary<string, int> defaultCategories = locations
                     .GroupBy(p => p.Category)
                     .Where(p => p.Count() > 1)
-                    .ToDictionary(p => p.Key, p => 0);
+                    .ToDictionary(p => p.Key, _ => 0);
 
                 // find chests
                 foreach (var entry in locations)
@@ -376,9 +376,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     return this.GetChestInventory(mill.output.Value);
 
                 // shipping bin
-                case Farm _:
-                case IslandWest _:
-                case ShippingBin _:
+                case Farm:
+                case IslandWest:
+                case ShippingBin:
                     return Game1.getFarm().getShippingBin(Game1.player);
 
                 // dresser

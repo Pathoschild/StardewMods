@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <inheritdoc />
         public bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe)
         {
-            IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, req => new StackAccumulator());
+            IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, _ => new StackAccumulator());
 
             foreach (ITrackedStack input in this.GetItems())
             {

@@ -327,7 +327,7 @@ namespace ContentPatcher.Framework.Patches
             this.ApplyCollection<string, TValue>(
                 asset,
                 hasEntry: key => GetByKey(key) != null,
-                getEntry: key => GetByKey(key),
+                getEntry: GetByKey,
                 setEntry: (key, value) =>
                 {
                     TValue match = GetByKey(key);

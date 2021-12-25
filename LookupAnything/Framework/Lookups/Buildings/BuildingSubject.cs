@@ -186,7 +186,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                         break;
 
                     // silo
-                    case Building _ when building.buildingType.Value == "Silo":
+                    case Building when building.buildingType.Value == "Silo":
                         {
                             // hay summary
                             Farm farm = Game1.getFarm();

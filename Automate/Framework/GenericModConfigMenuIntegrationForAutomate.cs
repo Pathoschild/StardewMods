@@ -41,8 +41,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Register the config menu if available.</summary>
         public void Register()
         {
-            var defaultConfig = new ModConfig();
-
             // get config menu
             var menu = this.ConfigMenu;
             if (!menu.IsLoaded)

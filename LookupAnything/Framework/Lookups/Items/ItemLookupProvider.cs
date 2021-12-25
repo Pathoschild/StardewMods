@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     return this.GetSubject(tailoringMenu.inventory, cursorX, cursorY);
 
                 // toolbar
-                case Toolbar _:
+                case Toolbar:
                     {
                         // find hovered slot
                         List<ClickableComponent> slots = this.Reflection.GetField<List<ClickableComponent>>(menu, "buttons").GetValue();

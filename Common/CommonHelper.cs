@@ -93,26 +93,26 @@ namespace Pathoschild.Stardew.Common
         {
             switch (item)
             {
-                case Boots _:
+                case Boots:
                     return ItemType.Boots;
 
-                case Clothing _:
+                case Clothing:
                     return ItemType.Clothing;
 
-                case Furniture _:
+                case Furniture:
                     return ItemType.Furniture;
 
-                case Hat _:
+                case Hat:
                     return ItemType.Hat;
 
-                case MeleeWeapon _:
-                case Slingshot _:
+                case MeleeWeapon:
+                case Slingshot:
                     return ItemType.Weapon;
 
-                case Ring _:
+                case Ring:
                     return ItemType.Ring;
 
-                case Tool _:
+                case Tool:
                     return ItemType.Tool;
 
                 case Wallpaper wallpaper:

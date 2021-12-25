@@ -122,11 +122,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
                 ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
-                item: item => recipe.createItem(),
+                item: _ => recipe.createItem(),
                 isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
                 machineParentSheetIndex: null,
-                isForMachine: obj => false
+                isForMachine: _ => false
             )
         {
             this.OutputItemIndex = recipe.itemToProduce[0];

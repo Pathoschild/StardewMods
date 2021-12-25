@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.UpdateLayout();
             this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
-            this.SearchTextbox.OnChanged += (sender, text) => this.ReceiveSearchTextboxChanged(text);
+            this.SearchTextbox.OnChanged += (_, text) => this.ReceiveSearchTextboxChanged(text);
         }
 
         /****

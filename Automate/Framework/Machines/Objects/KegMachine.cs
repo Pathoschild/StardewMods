@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 340,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 459, "Mead", false, true, false, false) { name = "Mead" },
+                output: _ => new SObject(Vector2.Zero, 459, "Mead", false, true, false, false) { name = "Mead" },
                 minutes: 600
             ),
 
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 433,
                 inputCount: 5,
-                output: input => new SObject(Vector2.Zero, 395, "Coffee", false, true, false, false) { name = "Coffee" },
+                output: _ => new SObject(Vector2.Zero, 395, "Coffee", false, true, false, false) { name = "Coffee" },
                 minutes: 120
             ),
 
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 815,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
+                output: _ => new SObject(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
                 minutes: 180
             ),
 
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 262,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 346, "Beer", false, true, false, false) { name = "Beer" },
+                output: _ => new SObject(Vector2.Zero, 346, "Beer", false, true, false, false) { name = "Beer" },
                 minutes: 1750
             ),
 
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 304,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 303, "Pale Ale", false, true, false, false) { name = "Pale Ale" },
+                output: _ => new SObject(Vector2.Zero, 303, "Pale Ale", false, true, false, false) { name = "Pale Ale" },
                 minutes: 2250
             ),
 

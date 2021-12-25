@@ -209,7 +209,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Config = config;
             this.Keys = keys;
             this.Attachments = attachments.Where(p => p != null).ToArray();
-            this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, p => 0);
+            this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, _ => 0);
 
             // clear buff so it's reapplied with new values
             Game1.buffsDisplay?.otherBuffs?.RemoveAll(p => p.which == this.BuffUniqueID);
