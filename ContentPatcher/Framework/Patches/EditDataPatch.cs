@@ -103,7 +103,7 @@ namespace ContentPatcher.Framework.Patches
             this.Records = records?.ToArray();
             this.Fields = fields?.ToArray();
             this.MoveRecords = moveRecords?.ToArray();
-            this.TextOperations = textOperations?.ToArray() ?? new TextOperation[0];
+            this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
             this.Monitor = monitor;
             this.Reflection = reflection;
             this.TryParseFields = tryParseFields;
@@ -136,9 +136,9 @@ namespace ContentPatcher.Framework.Patches
             base.UpdateContext(context);
 
             // reload data
-            this.Records = new EditDataPatchRecord[0];
-            this.Fields = new EditDataPatchField[0];
-            this.MoveRecords = new EditDataPatchMoveRecord[0];
+            this.Records = Array.Empty<EditDataPatchRecord>();
+            this.Fields = Array.Empty<EditDataPatchField>();
+            this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
             if (this.IsReady)
             {
                 if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
@@ -161,7 +161,7 @@ namespace ContentPatcher.Framework.Patches
                 .UpdateContext(context);
             this.IsReady = this.IsReady && this.Contextuals.IsReady;
 
-            return true;
+            return this.MarkUpdated();
         }
 
         /// <inheritdoc />
@@ -327,7 +327,7 @@ namespace ContentPatcher.Framework.Patches
             this.ApplyCollection<string, TValue>(
                 asset,
                 hasEntry: key => GetByKey(key) != null,
-                getEntry: key => GetByKey(key),
+                getEntry: GetByKey,
                 setEntry: (key, value) =>
                 {
                     TValue match = GetByKey(key);

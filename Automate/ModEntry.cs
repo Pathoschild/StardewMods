@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
@@ -20,6 +19,9 @@ namespace Pathoschild.Stardew.Automate
         /*********
         ** Fields
         *********/
+        /// <summary>The internal mod data.</summary>
+        private DataModel Data;
+
         /// <summary>The mod configuration.</summary>
         private ModConfig Config;
 
@@ -49,41 +51,46 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
         public override void Entry(IModHelper helper)
         {
+            I18n.Init(helper.Translation);
+
             // read data file
             const string dataPath = "assets/data.json";
-            DataModel data = null;
             try
             {
-                data = this.Helper.Data.ReadJsonFile<DataModel>(dataPath);
-                if (data?.FloorNames == null)
+                this.Data = this.Helper.Data.ReadJsonFile<DataModel>(dataPath);
+                if (this.Data == null)
+                {
+                    this.Data = new();
                     this.Monitor.Log($"The {dataPath} file seems to be missing or invalid. Floor connectors will be disabled.", LogLevel.Error);
+                }
             }
             catch (Exception ex)
             {
+                this.Data = new();
                 this.Monitor.Log($"The {dataPath} file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
             }
 
             // read config
-            this.Config = this.LoadConfig();
+            this.Config = this.Helper.ReadConfig<ModConfig>();
 
             // init
             this.MachineManager = new MachineManager(
-                config: this.Config,
-                data: data,
+                config: () => this.Config,
+                data: this.Data,
                 defaultFactory: new AutomationFactory(
-                    connectors: this.Config.ConnectorNames,
+                    config: () => this.Config,
                     monitor: this.Monitor,
                     reflection: helper.Reflection,
-                    data: data,
-                    betterJunimosCompat: this.Config.ModCompatibility.BetterJunimos && helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos"),
-                    pullGemstonesFromJunimoHuts: this.Config.PullGemstonesFromJunimoHuts
+                    data: this.Data,
+                    isBetterJunimosLoaded: helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos")
                 ),
                 monitor: this.Monitor
             );
 
-            this.CommandHandler = new CommandHandler(this.Monitor, this.Config, this.MachineManager);
+            this.CommandHandler = new CommandHandler(this.Monitor, () => this.Config, this.MachineManager);
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -101,7 +108,7 @@ namespace Pathoschild.Stardew.Automate
             // log info
             this.Monitor.VerboseLog($"Initialized with automation every {this.Config.AutomationInterval} ticks.");
             if (this.Config.ModCompatibility.WarnForMissingBridgeMod)
-                this.ReportMissingBridgeMods(data?.SuggestedIntegrations);
+                this.ReportMissingBridgeMods(this.Data.SuggestedIntegrations);
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry" />.</summary>
@@ -117,6 +124,27 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Event handlers
         ****/
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForAutomate(
+                data: this.Data,
+                getConfig: () => this.Config,
+                reset: () => this.Config = new ModConfig(),
+                saveAndApply: () =>
+                {
+                    this.Helper.WriteConfig(this.Config);
+                    this.ReloadConfig();
+                },
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
@@ -301,35 +329,19 @@ namespace Pathoschild.Stardew.Automate
         /****
         ** Methods
         ****/
-        /// <summary>Read the config file, migrating legacy settings if applicable.</summary>
-        private ModConfig LoadConfig()
+        /// <summary>Update when the configuration changes.</summary>
+        public void ReloadConfig()
         {
-            // read raw config
-            var config = this.Helper.ReadConfig<ModConfig>();
-            bool changed = false;
+            this.AutomateCountdown = Math.Min(this.AutomateCountdown, this.Config.AutomationInterval);
 
-            // normalize machine settings
-            config.MachineOverrides = new Dictionary<string, ModConfigMachine>(config.MachineOverrides ?? new Dictionary<string, ModConfigMachine>(), StringComparer.OrdinalIgnoreCase);
-            foreach (string key in config.MachineOverrides.Where(p => p.Value == null).Select(p => p.Key).ToArray())
-            {
-                config.MachineOverrides.Remove(key);
-                changed = true;
-            }
-
-            // resave changes
-            if (changed)
-                this.Helper.WriteConfig(config);
-
-            return config;
+            this.MachineManager.Reset();
+            this.ResetOverlayIfShown();
         }
 
         /// <summary>Log warnings if custom-machine frameworks are installed without their automation component.</summary>
         /// <param name="integrations">Mods which add custom machine recipes and require a separate automation component.</param>
         private void ReportMissingBridgeMods(DataModelIntegration[] integrations)
         {
-            if (integrations?.Any() != true)
-                return;
-
             var registry = this.Helper.ModRegistry;
             foreach (var integration in integrations)
             {

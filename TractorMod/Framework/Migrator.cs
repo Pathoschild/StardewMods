@@ -126,8 +126,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         Stable garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.tileX.Value == (int)garageData.Tile.X && p.tileY.Value == (int)garageData.Tile.Y);
                         if (garage == null)
                         {
-                            garage = new Stable(garageData.TractorID, getBlueprint(), garageData.Tile);
-                            garage.daysOfConstructionLeft.Value = 0;
+                            garage = new Stable(garageData.TractorID, getBlueprint(), garageData.Tile)
+                            {
+                                daysOfConstructionLeft = { Value = 0 }
+                            };
                             location.buildings.Add(garage);
                         }
                         garage.maxOccupants.Value = Migrator.LegacyMaxOccupantsID;

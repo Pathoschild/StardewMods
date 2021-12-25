@@ -79,7 +79,7 @@ namespace ContentPatcher.Framework.Conditions
             // get lexical tokens
             this.Parts =
                 (
-                    from token in (lexTokens ?? new ILexToken[0])
+                    from token in (lexTokens ?? Array.Empty<ILexToken>())
                     let input = token is LexTokenToken lexToken && lexToken.HasInputArgs()
                         ? new TokenString(lexToken.InputArgs.Parts, context, path.With(lexToken.Name))
                         : null

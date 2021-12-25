@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>SmallBeachFarm</AssemblyName>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <RootNamespace>Pathoschild.Stardew.SmallBeachFarm</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
 
@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
   </ItemGroup>
 
   <Import Project="..\Common\Common.projitems" Label="Shared" />

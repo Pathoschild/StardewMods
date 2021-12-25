@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
@@ -128,17 +129,17 @@ namespace ContentPatcher.Framework.ConfigModels
             this.When ??= new InvariantDictionary<string>();
 
             // multiple actions
-            this.TextOperations ??= new TextOperationConfig[0];
+            this.TextOperations ??= Array.Empty<TextOperationConfig>();
 
             // EditData
             this.Entries ??= new InvariantDictionary<JToken>();
             this.Fields ??= new InvariantDictionary<InvariantDictionary<JToken>>();
-            this.MoveEntries ??= new PatchMoveEntryConfig[0];
+            this.MoveEntries ??= Array.Empty<PatchMoveEntryConfig>();
 
             // EditMap
             this.MapProperties ??= new InvariantDictionary<string>();
-            this.AddWarps ??= new string[0];
-            this.MapTiles ??= new PatchMapTileConfig[0];
+            this.AddWarps ??= Array.Empty<string>();
+            this.MapTiles ??= Array.Empty<PatchMapTileConfig>();
         }
     }
 }

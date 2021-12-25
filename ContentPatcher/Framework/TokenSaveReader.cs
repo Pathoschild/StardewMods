@@ -6,6 +6,7 @@ using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -109,7 +110,9 @@ namespace ContentPatcher.Framework
             return this.GetCached(
                 $"{nameof(this.GetCurrentLocation)}:{player.UniqueMultiplayerID}",
                 () => this.GetForState(
-                    loaded: () => player.currentLocation,
+                    loaded: () => Context.IsWorldReady
+                        ? player.currentLocation
+                        : player.currentLocation ?? this.GetLocationFromName(player.lastSleepLocation.Value), // currentLocation is set later in the save loading process
                     reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
                 )
             );
@@ -448,7 +451,6 @@ namespace ContentPatcher.Framework
                     string name = null;
                     Gender gender = Gender.Male;
                     bool isPlayer = false;
-                    bool valid = false;
                     if (spousePlayerID.HasValue)
                     {
                         Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
@@ -469,7 +471,7 @@ namespace ContentPatcher.Framework
                             isPlayer = false;
                         }
                     }
-                    valid = name != null && friendship != null;
+                    bool valid = name != null && friendship != null;
 
                     // create cache entry
                     return Tuple.Create(name, friendship, gender, isPlayer, valid);
@@ -576,7 +578,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>
         private IDictionary<GameLocation, long> GetBuildingInteriorOwners()
         {
-            return this.GetCached<Dictionary<GameLocation, long>>(
+            return this.GetCached(
                 nameof(this.GetBuildingInteriorOwners),
                 () =>
                 {

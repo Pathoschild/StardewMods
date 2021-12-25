@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="config">The mod configuration.</param>
         /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
         {
             this.GameHelper = gameHelper;
 
@@ -142,10 +142,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get the subject for an in-game entity.</summary>
         /// <param name="entity">The entity instance.</param>
-        public ISubject GetByEntity(object entity)
+        /// <param name="location">The location containing the entity, if applicable.</param>
+        public ISubject GetByEntity(object entity, GameLocation location)
         {
             return this.LookupProviders
-                .Select(p => p.GetSubjectFor(entity))
+                .Select(p => p.GetSubjectFor(entity, location))
                 .FirstOrDefault(p => p != null);
         }
 

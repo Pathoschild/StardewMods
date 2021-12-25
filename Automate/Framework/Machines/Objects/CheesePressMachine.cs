@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 436,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 426, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 426, null, false, true, false, false),
                 minutes: 200
             ),
 
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 438,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 426, null, false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => new SObject(Vector2.Zero, 426, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 200
             ),
 
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 184,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 424, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 424, null, false, true, false, false),
                 minutes: 200
             ),
 
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 186,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 424, "Cheese (=)", false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => new SObject(Vector2.Zero, 424, "Cheese (=)", false, true, false, false) { Quality = SObject.highQuality },
                 minutes: 200
             )
         };

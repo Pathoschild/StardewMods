@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         private readonly IProducerFrameworkModApi ModApi;
 
         /// <summary>Whether the integration has already logged a warning caused by an invalid recipe.</summary>
-        private bool LoggedInvalidRecipeError = false;
+        private bool LoggedInvalidRecipeError;
 
 
         /*********
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         {
             int? id = int.TryParse(raw["ID"]?.ToString(), out int parsedId)
                 ? parsedId
-                : null as int?;
+                : null;
             int count = raw.TryGetValue("Count", out object rawCount)
                 ? (int)rawCount
                 : 1;

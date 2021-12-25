@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.1
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed scarecrow radius being one tile too wide in Stardew Valley 1.5.5.
+* Internal optimizations.
+
 ## 1.15.0
 Released 30 November 2021 for SMAPI 3.13.0 or later.
 

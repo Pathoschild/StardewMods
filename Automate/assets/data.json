@@ -3,19 +3,58 @@
      * The floor IDs and names that can be used in the ConnectorNames field in config.json.
      */
     "FloorNames": {
-        "0": "Wood Floor",
-        "1": "Stone Floor",
-        "2": "Weathered Floor",
-        "3": "Crystal Floor",
-        "4": "Straw Floor",
-        "5": "Gravel Path",
-        "6": "Wood Path",
-        "7": "Crystal Path",
-        "8": "Cobblestone Path",
-        "9": "Stepping Stone Path",
-        "10": "Brick Floor",
-        "11": "Rustic Plank Floor",
-        "12": "Stone Walkway Floor"
+        "0": {
+            "Name": "Wood Floor",
+            "ItemId": 328
+        },
+        "1": {
+            "Name": "Stone Floor",
+            "ItemId": 329
+        },
+        "2": {
+            "Name": "Weathered Floor",
+            "ItemId": 331
+        },
+        "3": {
+            "Name": "Crystal Floor",
+            "ItemId": 333
+        },
+        "4": {
+            "Name": "Straw Floor",
+            "ItemId": 401
+        },
+        "5": {
+            "Name": "Gravel Path",
+            "ItemId": 407
+        },
+        "6": {
+            "Name": "Wood Path",
+            "ItemId": 405
+        },
+        "7": {
+            "Name": "Crystal Path",
+            "ItemId": 409
+        },
+        "8": {
+            "Name": "Cobblestone Path",
+            "ItemId": 411
+        },
+        "9": {
+            "Name": "Stepping Stone Path",
+            "ItemId": 415
+        },
+        "10": {
+            "Name": "Brick Floor",
+            "ItemId": 293
+        },
+        "11": {
+            "Name": "Rustic Plank Floor",
+            "ItemId": 840
+        },
+        "12": {
+            "Name": "Stone Walkway Floor",
+            "ItemId": 841
+        }
     },
 
     /**

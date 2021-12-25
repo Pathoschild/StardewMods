@@ -32,7 +32,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private readonly IReflectionHelper Reflection;
 
         /// <summary>Whether to support access to the shipping bin.</summary>
-        private readonly bool EnableShippingBin;
+        private readonly Func<bool> EnableShippingBin;
 
 
         /*********
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="multiplayer">Provides multiplayer utilities.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="enableShippingBin">Whether to support access to the shipping bin.</param>
-        public ChestFactory(IMultiplayerHelper multiplayer, IReflectionHelper reflection, bool enableShippingBin)
+        public ChestFactory(IMultiplayerHelper multiplayer, IReflectionHelper reflection, Func<bool> enableShippingBin)
         {
             this.Multiplayer = multiplayer;
             this.Reflection = reflection;
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 IDictionary<string, int> defaultCategories = locations
                     .GroupBy(p => p.Category)
                     .Where(p => p.Count() > 1)
-                    .ToDictionary(p => p.Key, p => 0);
+                    .ToDictionary(p => p.Key, _ => 0);
 
                 // find chests
                 foreach (var entry in locations)
@@ -376,9 +376,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     return this.GetChestInventory(mill.output.Value);
 
                 // shipping bin
-                case Farm _:
-                case IslandWest _:
-                case ShippingBin _:
+                case Farm:
+                case IslandWest:
+                case ShippingBin:
                     return Game1.getFarm().getShippingBin(Game1.player);
 
                 // dresser
@@ -439,7 +439,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="location">The location to check.</param>
         private bool HasShippingBin(GameLocation location)
         {
-            if (!this.EnableShippingBin)
+            if (!this.EnableShippingBin())
                 return false;
 
             return location switch

@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>ChestsAnywhere</AssemblyName>
-    <Version>1.20.18</Version>
+    <Version>1.21.0</Version>
     <RootNamespace>Pathoschild.Stardew.ChestsAnywhere</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
+
+    <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="1.0.1" />
+    <PackageReference Include="Pathoschild.Stardew.ModTranslationClassBuilder" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>

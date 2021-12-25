@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        private readonly Func<ModConfig> Config;
 
         /// <summary>Manages machine groups.</summary>
         private readonly MachineManager MachineManager;
@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="machineManager">Manages machine groups.</param>
-        public SummaryCommand(IMonitor monitor, ModConfig config, MachineManager machineManager)
+        public SummaryCommand(IMonitor monitor, Func<ModConfig> config, MachineManager machineManager)
             : base(monitor, "summary")
         {
             this.Config = config;
@@ -50,29 +50,30 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands
         {
             GlobalStats stats = new GlobalStats(this.MachineManager.GetActiveMachineGroups());
             StringBuilder report = new StringBuilder();
+            ModConfig config = this.Config();
 
             report.AppendLine("\n##########\n## Automate summary\n##########");
 
             // settings
             report.AppendLine("Settings:\n------------------------------");
-            report.AppendLine($"   Automation interval: {this.Config.AutomationInterval}");
-            if (this.Config.ConnectorNames.Any())
-                report.AppendLine($"   Connectors: {string.Join(", ", from name in this.Config.ConnectorNames orderby name select $"'{name}'")}");
+            report.AppendLine($"   Automation interval: {config.AutomationInterval}");
+            if (config.ConnectorNames.Any())
+                report.AppendLine($"   Connectors: {string.Join(", ", from name in config.ConnectorNames orderby name select $"'{name}'")}");
 
             // per-machine settings
             {
                 StringBuilder perMachineReport = new StringBuilder();
 
-                foreach (var config in this.MachineManager.GetMachineOverrides().OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
+                foreach (var machineConfig in this.MachineManager.GetMachineOverrides().OrderBy(p => p.Key, StringComparer.OrdinalIgnoreCase))
                 {
-                    string[] customSettings = config.Value
+                    string[] customSettings = machineConfig.Value
                         .GetCustomSettings()
                         .OrderBy(p => p.Key)
                         .Select(p => $"{p.Key}={p.Value}")
                         .ToArray();
 
                     if (customSettings.Any())
-                        perMachineReport.AppendLine($"      {config.Key}: {string.Join(", ", customSettings)}");
+                        perMachineReport.AppendLine($"      {machineConfig.Key}: {string.Join(", ", customSettings)}");
                 }
 
                 if (perMachineReport.Length > 0)

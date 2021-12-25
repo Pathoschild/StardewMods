@@ -105,7 +105,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
         {
-            return terrain is HoeDirt dirt && dirt.crop != null;
+            return terrain is HoeDirt { crop: not null };
         }
 
         /// <summary>Get a scarecrow tile radius.</summary>
@@ -122,7 +122,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 for (int y = (int)origin.Y - radius; y <= origin.Y + radius; y++)
                 {
                     Vector2 tile = new Vector2(x, y);
-                    if (Vector2.Distance(tile, origin) < radius + 1)
+                    if (Vector2.Distance(tile, origin) < radius)
                         yield return tile;
                 }
             }

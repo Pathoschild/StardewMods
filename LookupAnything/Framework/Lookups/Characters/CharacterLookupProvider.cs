@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -18,7 +19,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         ** Fields methods
         *********/
         /// <summary>The mod configuration.</summary>
-        private readonly ModConfig Config;
+        private readonly Func<ModConfig> Config;
 
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
@@ -32,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="codex">Provides subject entries.</param>
-        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ModConfig config, ISubjectRegistry codex)
+        public CharacterLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Config = config;
@@ -43,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
             // Gourmand NPC
-            if (location is IslandFarmCave islandFarmCave && islandFarmCave.gourmand != null)
+            if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
                 yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
@@ -84,7 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ** GameMenu
                 ****/
                 // skills tab
-                case SkillsPage _:
+                case SkillsPage:
                     return this.BuildSubject(Game1.player);
 
                 // profile tab
@@ -92,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     if (profileMenu.hoveredItem == null)
                     {
                         if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetByEntity(npc);
+                            return this.Codex.GetByEntity(npc, npc.currentLocation);
                     }
                     break;
 
@@ -122,12 +123,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     }
                     break;
 
-
                 /****
-                ** Other menus
+                ** Calendar
                 ****/
-                // calendar
-                case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
+                case Billboard { calendarDays: not null } billboard: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
                         int selectedDay = -1;
@@ -153,8 +152,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     }
                     break;
 
-                // load menu
-                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
+                /****
+                ** Load menu
+                ****/
+                case TitleMenu when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
                         ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
@@ -167,13 +168,42 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         }
                     }
                     break;
+
+                /****
+                ** mod: Animal Social Menu
+                ****/
+                case IClickableMenu when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
+                    {
+                        int slotOffset = this.Reflection.GetField<int>(targetMenu, "SlotPosition").GetValue();
+                        List<ClickableTextureComponent> slots = this.Reflection.GetField<List<ClickableTextureComponent>>(targetMenu, "Sprites").GetValue();
+                        List<object> animalIds = this.Reflection.GetField<List<object>>(targetMenu, "Names").GetValue();
+
+                        for (int i = slotOffset; i < slots.Count; i++)
+                        {
+                            if (slots[i].containsPoint(cursorX, cursorY))
+                            {
+                                if (animalIds.TryGetIndex(i, out object rawId) && rawId is long id)
+                                {
+                                    FarmAnimal animal = Game1
+                                        .getFarm()
+                                        .getAllFarmAnimals()
+                                        .FirstOrDefault(p => p.myID.Value == id);
+
+                                    if (animal != null)
+                                        return this.BuildSubject(animal);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
             }
 
             return null;
         }
 
         /// <inheritdoc />
-        public override ISubject GetSubjectFor(object entity)
+        public override ISubject GetSubjectFor(object entity, GameLocation location)
         {
             return entity switch
             {
@@ -247,6 +277,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="npc">The entity to look up.</param>
         private ISubject BuildSubject(NPC npc)
         {
+            ModConfig config = this.Config();
+
             return new CharacterSubject(
                 codex: this.Codex,
                 gameHelper: this.GameHelper,
@@ -254,9 +286,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 type: this.GetSubjectType(npc),
                 metadata: this.GameHelper.Metadata,
                 reflectionHelper: this.Reflection,
-                progressionMode: this.Config.ProgressionMode,
-                highlightUnrevealedGiftTastes: this.Config.HighlightUnrevealedGiftTastes,
-                enableTargetRedirection: this.Config.EnableTargetRedirection
+                progressionMode: config.ProgressionMode,
+                highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
+                showAllGiftTastes: config.ShowAllGiftTastes,
+                enableTargetRedirection: config.EnableTargetRedirection
             );
         }
 
@@ -266,10 +299,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             return npc switch
             {
-                Horse _ => SubjectType.Horse,
-                Junimo _ => SubjectType.Junimo,
-                Pet _ => SubjectType.Pet,
-                Monster _ => SubjectType.Monster,
+                Horse => SubjectType.Horse,
+                Junimo => SubjectType.Junimo,
+                Pet => SubjectType.Pet,
+                Monster => SubjectType.Monster,
                 _ => SubjectType.Villager
             };
         }

@@ -221,5 +221,5 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>The path portion of the current patch's target value, without the filename.</summary>
         TargetPathOnly
-    };
+    }
 }

@@ -88,7 +88,7 @@ namespace ContentPatcher.Framework.Patches
                     {
                         if (this.IsReady)
                             this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
-                        return true;
+                        return this.MarkUpdated();
                     }
 
                     // prevent circular reference
@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework.Patches
                                     loopPaths.Add(this.FromAsset);
 
                                     this.Monitor.Log($"{errorPrefix}: patch skipped because it would cause an infinite loop ({string.Join(" > ", loopPaths)}).", LogLevel.Warn);
-                                    return true;
+                                    return this.MarkUpdated();
                                 }
                             }
                         }
@@ -116,7 +116,7 @@ namespace ContentPatcher.Framework.Patches
                     if (!content.Changes.Any())
                     {
                         this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?", LogLevel.Warn);
-                        return true;
+                        return this.MarkUpdated();
                     }
 
                     // validate fields
@@ -124,7 +124,7 @@ namespace ContentPatcher.Framework.Patches
                     if (invalidFields.Any())
                     {
                         this.Monitor.Log($"{errorPrefix}: file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).", LogLevel.Warn);
-                        return true;
+                        return this.MarkUpdated();
                     }
 
                     // load patches
@@ -141,11 +141,11 @@ namespace ContentPatcher.Framework.Patches
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"{errorPrefix}. Technical details:\n{ex}", LogLevel.Error);
-                    return true;
+                    return this.MarkUpdated();
                 }
             }
 
-            return true;
+            return this.MarkUpdated();
         }
 
         /// <inheritdoc />

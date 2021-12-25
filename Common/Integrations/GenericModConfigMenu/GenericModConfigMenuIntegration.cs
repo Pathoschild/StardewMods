@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
         /// <param name="reset">Reset the mod's config to its default values.</param>
         /// <param name="saveAndApply">Save the mod's current config to the <c>config.json</c> file.</param>
         public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor, IManifest consumerManifest, Func<TConfig> getConfig, Action reset, Action saveAndApply)
-            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.5.1", modRegistry, monitor)
+            : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.6.0", modRegistry, monitor)
         {
             // init
             this.ConsumerManifest = consumerManifest;
@@ -74,6 +74,17 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
             this.AssertLoaded();
 
             this.ModApi.AddSectionTitle(this.ConsumerManifest, text, tooltip);
+
+            return this;
+        }
+
+        /// <summary>Add a paragraph of text at the current position in the form.</summary>
+        /// <param name="text">The paragraph text to display.</param>
+        public GenericModConfigMenuIntegration<TConfig> AddParagraph(Func<string> text)
+        {
+            this.AssertLoaded();
+
+            this.ModApi.AddParagraph(this.ConsumerManifest, text);
 
             return this;
         }

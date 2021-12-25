@@ -465,17 +465,15 @@ namespace Pathoschild.Stardew.TractorMod
             if (e.Type == this.RequestTractorMessageID && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
             {
                 Farmer player = Game1.getFarmer(e.FromPlayerID);
-                if (player != null && !player.IsMainPlayer)
+                if (player is { IsMainPlayer: false })
                 {
-                    this.Monitor.Log(
-                        this.SummonLocalTractorTo(player)
-                            ? $"Summon tractor for {player.Name} ({e.FromPlayerID})."
-                            : $"Received tractor request for {player.Name} ({e.FromPlayerID}), but no tractor is available.",
-                        LogLevel.Trace
+                    this.Monitor.Log(this.SummonLocalTractorTo(player)
+                        ? $"Summon tractor for {player.Name} ({e.FromPlayerID})."
+                        : $"Received tractor request for {player.Name} ({e.FromPlayerID}), but no tractor is available."
                     );
                 }
                 else
-                    this.Monitor.Log($"Received tractor request for {e.FromPlayerID}, but no such player was found.", LogLevel.Trace);
+                    this.Monitor.Log($"Received tractor request for {e.FromPlayerID}, but no such player was found.");
             }
         }
 
@@ -524,7 +522,7 @@ namespace Pathoschild.Stardew.TractorMod
             bool summoned = this.SummonLocalTractorTo(Game1.player);
             if (!summoned && !Context.IsMainPlayer)
             {
-                this.Monitor.Log("Sending tractor request to host player.", LogLevel.Trace);
+                this.Monitor.Log("Sending tractor request to host player.");
                 this.Helper.Multiplayer.SendMessage(
                     message: true,
                     messageType: this.RequestTractorMessageID,

@@ -73,8 +73,11 @@ bindings with plus signs (like `"LeftShift + H"`), and disable it with `"None"`.
 </table>
 
 ## Compatibility
-Horse Flute Anywhere is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both
+Horse Flute Anywhere is compatible with Stardew Valley 1.5.5+ on Linux/macOS/Windows, both
 single-player and multiplayer.
+
+Due to limitations on macOS, playing the flute directly might not summon the horse indoors. You can
+use the hotkey (`H` by default) instead in that case.
 
 ## Troubleshooting
 ### "You do not own a horse"

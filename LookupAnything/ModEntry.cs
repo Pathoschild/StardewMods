@@ -6,9 +6,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
-using Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod;
 using Pathoschild.Stardew.LookupAnything.Components;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
@@ -117,8 +115,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // initialize functionality
             this.GameHelper = new GameHelper(this.Metadata, this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
-            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, this.Config, jsonAssets, () => this.Config.EnableTileLookups);
-            this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, this.Config, this.Monitor));
+            this.TargetFactory = new TargetFactory(this.Helper.Reflection, this.GameHelper, () => this.Config, jsonAssets, () => this.Config.EnableTileLookups);
+            this.DebugInterface = new PerScreen<DebugInterface>(() => new DebugInterface(this.GameHelper, this.TargetFactory, () => this.Config, this.Monitor));
+
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForLookupAnything(
+                getConfig: () => this.Config,
+                reset: () => this.Config = new ModConfig(),
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
         }
 
         /// <summary>The method invoked when a new day starts.</summary>

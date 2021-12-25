@@ -342,7 +342,7 @@ namespace ContentPatcher
                     TokenParser tokenParser = new(context, manifest, migrator, assumeModIdsLookup);
 
                     bool isValid = screen.PatchLoader.TryParseConditions(rawConditions, tokenParser, new LogPathBuilder(), out IList<Condition> conditions, out _, out string error);
-                    var managed = new ApiManagedConditionsForSingleScreen(conditions?.ToArray() ?? new Condition[0], context, isValid: isValid, validationError: error);
+                    var managed = new ApiManagedConditionsForSingleScreen(conditions?.ToArray() ?? Array.Empty<Condition>(), context, isValid: isValid, validationError: error);
                     managed.UpdateContext();
 
                     return managed;

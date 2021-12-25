@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Machines.Objects;
@@ -25,43 +24,38 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Fields
         *********/
+        /// <summary>The mod configuration.</summary>
+        private readonly Func<ModConfig> Config;
+
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
-        /// <summary>The object names through which machines can connect, but which have no other automation properties.</summary>
-        private readonly HashSet<string> Connectors;
-
         /// <summary>The internal Automate data that can't be derived automatically.</summary>
         private readonly DataModel Data;
 
-        /// <summary>Whether to enable compatibility with the Better Junimos mod.</summary>
-        private readonly bool BetterJunimosCompat;
-
-        /// <summary>Whether to pull gemstones out of Junimo huts.</summary>
-        public bool PullGemstonesFromJunimoHuts { get; set; }
+        /// <summary>Whether the Better Junimos mod is installed.</summary>
+        private readonly bool IsBetterJunimosLoaded;
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="connectors">The objects through which machines can connect, but which have no other automation properties.</param>
+        /// <param name="config">The mod configuration.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="data">The internal Automate data that can't be derived automatically.</param>
-        /// <param name="betterJunimosCompat">Whether to enable compatibility with the Better Junimos mod.</param>
-        /// <param name="pullGemstonesFromJunimoHuts">Whether to pull gemstones out of Junimo huts.</param>
-        public AutomationFactory(string[] connectors, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool betterJunimosCompat, bool pullGemstonesFromJunimoHuts)
+        /// <param name="isBetterJunimosLoaded">Whether the Better Junimos mod is installed.</param>
+        public AutomationFactory(Func<ModConfig> config, IMonitor monitor, IReflectionHelper reflection, DataModel data, bool isBetterJunimosLoaded)
         {
-            this.Connectors = new HashSet<string>(connectors, StringComparer.OrdinalIgnoreCase);
+            this.Config = config;
             this.Monitor = monitor;
             this.Reflection = reflection;
             this.Data = data;
-            this.BetterJunimosCompat = betterJunimosCompat;
-            this.PullGemstonesFromJunimoHuts = pullGemstonesFromJunimoHuts;
+            this.IsBetterJunimosLoaded = isBetterJunimosLoaded;
         }
 
         /// <summary>Get a machine, container, or connector instance for a given object.</summary>
@@ -260,7 +254,11 @@ namespace Pathoschild.Stardew.Automate.Framework
                     return new FishPondMachine(pond, location);
 
                 case JunimoHut hut:
-                    return new JunimoHutMachine(hut, location, ignoreSeedOutput: this.BetterJunimosCompat, ignoreFertilizerOutput: this.BetterJunimosCompat, pullGemstonesFromJunimoHuts: this.PullGemstonesFromJunimoHuts);
+                    {
+                        var config = this.Config();
+                        bool betterJunimosCompat = config.ModCompatibility.BetterJunimos && this.IsBetterJunimosLoaded;
+                        return new JunimoHutMachine(hut, location, ignoreSeedOutput: betterJunimosCompat, ignoreFertilizerOutput: betterJunimosCompat, pullGemstonesFromJunimoHuts: config.PullGemstonesFromJunimoHuts);
+                    }
 
                 case Mill mill:
                     return new MillMachine(mill, location);
@@ -316,16 +314,17 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="entity">The in-game entity.</param>
         private bool IsConnector(object entity)
         {
+            var config = this.Config();
+
             switch (entity)
             {
                 case Item item:
-                    return this.Connectors.Contains(item.Name);
+                    return config.ConnectorNames.Contains(item.Name);
 
                 case Flooring floor:
                     return
-                        this.Data?.FloorNames != null
-                        && this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out string name)
-                        && this.Connectors.Contains(name);
+                        this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out DataModelFloor entry)
+                        && config.ConnectorNames.Contains(entry.Name);
 
                 default:
                     return false;
