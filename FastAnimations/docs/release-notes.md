@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.9
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
 * Fixed minimum supported Generic Mod Config Menu version.
 * Internal optimizations.
 
