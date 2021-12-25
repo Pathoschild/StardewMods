@@ -211,7 +211,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             switch (location)
             {
-                case Forest forest when forest.log != null:
+                case Forest { log: not null } forest:
                     clumps = clumps.Concat(new[] { forest.log });
                     break;
 
@@ -359,8 +359,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool TryClearDeadCrop(GameLocation location, Vector2 tile, TerrainFeature tileFeature, Farmer player)
         {
             return
-                tileFeature is HoeDirt dirt
-                && dirt.crop != null
+                tileFeature is HoeDirt { crop: not null } dirt
                 && dirt.crop.dead.Value
                 && this.UseToolOnTile(this.FakePickaxe.Value, tile, player, location);
         }

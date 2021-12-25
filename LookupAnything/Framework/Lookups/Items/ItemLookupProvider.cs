@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 Vector2 entityTile = pair.Key;
                 TerrainFeature feature = pair.Value;
 
-                if (feature is HoeDirt dirt && dirt.crop != null && this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                if (feature is HoeDirt { crop: not null } dirt && this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
                     yield return new CropTarget(this.GameHelper, dirt, entityTile, this.Reflection, this.JsonAssets, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
             }
         }

@@ -111,7 +111,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.OutputItemType = outputItemType;
             this.MinOutput = minOutput.Value;
             this.MaxOutput = maxOutput.Value;
-            this.OutputChance = outputChance > 0 && outputChance < 100 ? outputChance.Value : 100;
+            this.OutputChance = outputChance is > 0 and < 100 ? outputChance.Value : 100;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -208,7 +208,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             if (recipe.bigCraftable)
                 return ItemType.BigCraftable;
 
-            if (itemID >= Ring.ringLowerIndexRange && itemID <= Ring.ringUpperIndexRange || itemID == 801)
+            if (itemID is >= Ring.ringLowerIndexRange and <= Ring.ringUpperIndexRange || itemID == 801)
                 return ItemType.Ring;
 
             return ItemType.Object;

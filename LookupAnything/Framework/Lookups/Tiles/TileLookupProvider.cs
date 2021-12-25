@@ -115,8 +115,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
             return
                 location is IslandSouthEast island
                 && island.MermaidIsHere()
-                && tile.X >= 32 && tile.X <= 33
-                && tile.Y >= 31 && tile.Y <= 33;
+                && tile.X is >= 32 and <= 33
+                && tile.Y is >= 31 and <= 33;
         }
 
         /// <summary>Get whether the tile is part of the <see cref="IslandShrine"/> puzzle.</summary>
@@ -129,8 +129,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
                 && (
                     // shrine
                     (
-                        tile.X >= 23 && tile.X <= 25
-                        && tile.Y >= 20 && tile.Y <= 22
+                        tile.X is >= 23 and <= 25
+                        && tile.Y is >= 20 and <= 22
                     )
 
                     // pedestal

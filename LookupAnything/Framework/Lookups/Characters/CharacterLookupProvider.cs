@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
             // Gourmand NPC
-            if (location is IslandFarmCave islandFarmCave && islandFarmCave.gourmand != null)
+            if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
                 yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** Calendar
                 ****/
-                case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
+                case Billboard { calendarDays: not null } billboard: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
                         int selectedDay = -1;

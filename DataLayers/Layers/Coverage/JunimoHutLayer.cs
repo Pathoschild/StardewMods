@@ -121,7 +121,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
         {
-            return terrain is HoeDirt dirt && dirt.crop != null;
+            return terrain is HoeDirt { crop: not null };
         }
 
         /// <summary>Get whether the build menu is open with a Junimo hut selected.</summary>
