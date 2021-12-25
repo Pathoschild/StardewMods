@@ -25,10 +25,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     SObject jelly = new SObject(Vector2.Zero, 344, input.Name + " Jelly", false, true, false, false)
                     {
                         Price = 50 + ((SObject) input).Price * 2,
-                        name = input.Name + " Jelly"
+                        name = input.Name + " Jelly",
+                        preserve = { Value = SObject.PreserveType.Jelly },
+                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
-                    jelly.preserve.Value = SObject.PreserveType.Jelly;
-                    jelly.preservedParentSheetIndex.Value = input.ParentSheetIndex;
                     return jelly;
                 },
                 minutes: 4000
@@ -43,10 +43,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     SObject item = new SObject(Vector2.Zero, 342, "Pickled " + input.Name, false, true, false, false)
                     {
                         Price = 50 + ((SObject) input).Price * 2,
-                        name = "Pickled " + input.Name
+                        name = "Pickled " + input.Name,
+                        preserve = { Value = SObject.PreserveType.Pickle },
+                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
-                    item.preserve.Value = SObject.PreserveType.Pickle;
-                    item.preservedParentSheetIndex.Value = input.ParentSheetIndex;
                     return item;
 
                 },

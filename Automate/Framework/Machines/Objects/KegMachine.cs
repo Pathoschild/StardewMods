@@ -63,10 +63,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     SObject wine = new SObject(Vector2.Zero, 348, input.Name + " Wine", false, true, false, false)
                     {
                         name = input.Name + " Wine",
-                        Price = ((SObject)input).Price * 3
+                        Price = ((SObject)input).Price * 3,
+                        preserve = { Value = SObject.PreserveType.Wine },
+                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
-                    wine.preserve.Value = SObject.PreserveType.Wine;
-                    wine.preservedParentSheetIndex.Value = input.ParentSheetIndex;
                     return wine;
                 },
                 minutes: 10000
@@ -79,10 +79,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     SObject juice = new SObject(Vector2.Zero, 350, input.Name + " Juice", false, true, false, false)
                     {
                         name = input.Name + " Juice",
-                        Price = (int)(((SObject)input).Price * 2.25)
+                        Price = (int)(((SObject)input).Price * 2.25),
+                        preserve = { Value = SObject.PreserveType.Juice },
+                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
                     };
-                    juice.preserve.Value = SObject.PreserveType.Juice;
-                    juice.preservedParentSheetIndex.Value = input.ParentSheetIndex;
                     return juice;
                 },
                 minutes: 6000
