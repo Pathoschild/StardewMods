@@ -133,7 +133,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Connectors
         ****/
         /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="DataModel.FloorNames"/>.</summary>
-        /// <param name="config">The mod configuration to check.</param>
         /// <param name="name">The item name.</param>
         private bool IsCustomConnector(string name)
         {

@@ -54,9 +54,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
-            this.ChestFactory = new ChestFactory(helper.Multiplayer, helper.Reflection, this.Config.EnableShippingBin);
+            this.ChestFactory = new ChestFactory(helper.Multiplayer, helper.Reflection, () => this.Config.EnableShippingBin);
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             helper.Events.GameLoop.UpdateTicking += this.OnUpdateTicking;
@@ -72,7 +73,23 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForChestsAnywhere(
+                getConfig: () => this.Config,
+                reset: () => this.Config = new ModConfig(),
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
@@ -94,7 +111,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 Migrator.MigrateLegacyData(this.ChestFactory, this.Helper.Data);
         }
 
-        /// <summary>The method invoked when the interface has finished rendering.</summary>
+        /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnRenderedHud(object sender, RenderedHudEventArgs e)
@@ -111,7 +128,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
         }
 
-        /// <summary>Raised before the game state is updated (≈60 times per second).</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicking"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
@@ -119,7 +136,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.ChangeOverlayIfNeeded();
         }
 
-        /// <summary>Raised after the game state is updated (≈60 times per second).</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
@@ -127,7 +144,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             this.ChangeOverlayIfNeeded();
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
