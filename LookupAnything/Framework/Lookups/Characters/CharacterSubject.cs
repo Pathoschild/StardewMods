@@ -480,7 +480,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
             if (this.IsHauntedSkull)
                 possibleDrops ??= this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
-            possibleDrops ??= new ItemDropData[0];
+            possibleDrops ??= Array.Empty<ItemDropData>();
 
             // get actual drops
             IDictionary<int, List<ItemDropData>> dropsLeft = monster

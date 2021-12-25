@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.Ingredients = ingredients.ToArray();
             this.MachineParentSheetIndex = machineParentSheetIndex;
             this.IsForMachine = isForMachine;
-            this.ExceptIngredients = exceptIngredients?.ToArray() ?? new RecipeIngredientModel[0];
+            this.ExceptIngredients = exceptIngredients?.ToArray() ?? Array.Empty<RecipeIngredientModel>();
             this.Item = item;
             this.IsKnown = isKnown;
             this.OutputItemIndex = outputItemIndex;

@@ -6,6 +6,7 @@
 * Added in-game config UI through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
 * Added support for animal lookups from [Animal Social Menu](https://www.nexusmods.com/stardewvalley/mods/3283).
 * Fixed error getting harvest dates for potted tea bushes.
+* Internal optimizations.
 
 ## 1.35.7
 Released 30 November 2021 for SMAPI 3.13.0 or later.

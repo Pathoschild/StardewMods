@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
@@ -14,7 +15,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public Dictionary<int, DataModelFloor> FloorNames { get; set; } = new();
 
         /// <summary>Mods which add custom machine recipes and require a separate automation component.</summary>
-        public DataModelIntegration[] SuggestedIntegrations { get; set; } = new DataModelIntegration[0];
+        public DataModelIntegration[] SuggestedIntegrations { get; set; } = Array.Empty<DataModelIntegration>();
 
         /// <summary>The configuration for specific machines by ID.</summary>
         public Dictionary<string, ModConfigMachine> DefaultMachineOverrides { get; set; } = new();
@@ -29,7 +30,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public void OnDeserialized(StreamingContext context)
         {
             this.FloorNames ??= new();
-            this.SuggestedIntegrations ??= new DataModelIntegration[0];
+            this.SuggestedIntegrations ??= Array.Empty<DataModelIntegration>();
             this.DefaultMachineOverrides = this.DefaultMachineOverrides.ToNonNullCaseInsensitive();
         }
     }

@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed minimum supported Generic Mod Config Menu version.
+* Internal optimizations.
 
 ## 4.14.7
 Released 30 November 2021 for SMAPI 3.13.0 or later.

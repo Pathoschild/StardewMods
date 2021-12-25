@@ -144,7 +144,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                     (
                         from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
                         let inputArgs = token.GetAllowedInputArguments().ToArray()
-                        let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : new string[0]
+                        let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : Array.Empty<string>()
                         let isMultiValue =
                             inputArgs.Length > 1
                             || rootValues.Length > 1
@@ -291,7 +291,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 let result = new
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                    Values = token.IsReady ? this.GetValues(token, new InputArguments(input), sort).ToArray() : new string[0],
+                                    Values = token.IsReady ? this.GetValues(token, new InputArguments(input), sort).ToArray() : Array.Empty<string>(),
                                     IsReady = token.IsReady
                                 }
                                 orderby result.Name

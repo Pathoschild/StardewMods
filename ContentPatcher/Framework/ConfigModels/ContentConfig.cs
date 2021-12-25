@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -34,9 +35,9 @@ namespace ContentPatcher.Framework.ConfigModels
         [OnDeserialized]
         public void OnDeserialized(StreamingContext context)
         {
-            this.DynamicTokens ??= new DynamicTokenConfig[0];
-            this.CustomLocations ??= new CustomLocationConfig[0];
-            this.Changes ??= new PatchConfig[0];
+            this.DynamicTokens ??= Array.Empty<DynamicTokenConfig>();
+            this.CustomLocations ??= Array.Empty<CustomLocationConfig>();
+            this.Changes ??= Array.Empty<PatchConfig>();
             this.ConfigSchema ??= new InvariantDictionary<ConfigSchemaFieldConfig>();
         }
     }
