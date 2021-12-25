@@ -292,7 +292,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
                                     Values = token.IsReady ? this.GetValues(token, new InputArguments(input), sort).ToArray() : Array.Empty<string>(),
-                                    IsReady = token.IsReady
+                                    token.IsReady
                                 }
                                 orderby result.Name
                                 select result

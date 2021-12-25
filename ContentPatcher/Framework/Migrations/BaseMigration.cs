@@ -125,7 +125,7 @@ namespace ContentPatcher.Framework.Migrations
         {
             return Enum.TryParse(raw, ignoreCase: true, out TEnum parsed)
                 ? parsed
-                : null as TEnum?;
+                : null;
         }
     }
 }

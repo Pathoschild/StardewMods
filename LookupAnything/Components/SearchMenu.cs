@@ -151,7 +151,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // outside the clipping area.)
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
-                backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
+                backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
                 backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
                 backgroundBatch.End();
             }

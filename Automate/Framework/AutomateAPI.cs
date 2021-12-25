@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="factory">An automation factory which construct machines, containers, and connectors.</param>
         public void AddFactory(IAutomationFactory factory)
         {
-            this.Monitor.Log($"Adding automation factory: {factory.GetType().AssemblyQualifiedName}", LogLevel.Trace);
+            this.Monitor.Log($"Adding automation factory: {factory.GetType().AssemblyQualifiedName}");
             this.MachineManager.Factory.Add(factory);
         }
 

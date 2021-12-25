@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 815,
                 inputCount: 1,
-                output: input => new Object(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
+                output: input => new SObject(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
                 minutes: 180
             ),
 

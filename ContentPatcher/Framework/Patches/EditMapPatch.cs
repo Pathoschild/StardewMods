@@ -9,11 +9,11 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using xTile;
+using xTile.Dimensions;
 using xTile.Layers;
 using xTile.ObjectModel;
 using xTile.Tiles;
-using Location = xTile.Dimensions.Location;
-using Size = xTile.Dimensions.Size;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace ContentPatcher.Framework.Patches
 {

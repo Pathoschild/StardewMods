@@ -202,8 +202,8 @@ namespace Pathoschild.Stardew.DebugMode
                 // calculate scroll position
                 int width = (int)(textSize.X + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.X * 2));
                 int height = (int)(textSize.Y + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.Y * 2));
-                int x = (int)MathHelper.Clamp(mouseX - width, 0, viewport.Width - width);
-                int y = (int)MathHelper.Clamp(mouseY, 0, viewport.Height - height);
+                int x = MathHelper.Clamp(mouseX - width, 0, viewport.Width - width);
+                int y = MathHelper.Clamp(mouseY, 0, viewport.Height - height);
 
                 // draw
                 CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);

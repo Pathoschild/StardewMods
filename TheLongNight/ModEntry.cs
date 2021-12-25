@@ -82,7 +82,7 @@ namespace Pathoschild.Stardew.TheLongNight
             if (clockWillChangeNextTick)
             {
                 Game1.player.freezePause = Game1.currentGameTime.ElapsedGameTime.Milliseconds + 1;
-                this.Monitor.Log($"Adding freeze for {this.GetNextTime(Game1.timeOfDay)} next tick ({Game1.player.freezePause}ms).", LogLevel.Trace);
+                this.Monitor.Log($"Adding freeze for {this.GetNextTime(Game1.timeOfDay)} next tick ({Game1.player.freezePause}ms).");
             }
 
             // 2. Right before the game updates the clock to 2600/2800, change it to the upcoming time. The game will then
@@ -91,13 +91,13 @@ namespace Pathoschild.Stardew.TheLongNight
             if (clockWillChangeNextTick && (Game1.timeOfDay == 2550 || Game1.timeOfDay == 2750))
             {
                 Game1.timeOfDay += 50;
-                this.Monitor.Log($"Skipping {Game1.timeOfDay} next tick.", LogLevel.Trace);
+                this.Monitor.Log($"Skipping {Game1.timeOfDay} next tick.");
                 this.JustSkipped = true;
             }
             else if (this.JustSkipped)
             {
                 Game1.timeOfDay -= 10;
-                this.Monitor.Log($"Skip done, reset time to {Game1.timeOfDay}.", LogLevel.Trace);
+                this.Monitor.Log($"Skip done, reset time to {Game1.timeOfDay}.");
                 this.JustSkipped = false;
             }
 
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.TheLongNight
             var animation = sprite.CurrentAnimation;
             if (animation != null && animation.Any(frame => frame.frameBehavior == SFarmer.passOutFromTired))
             {
-                this.Monitor.Log("Cancelling player collapse.", LogLevel.Trace);
+                this.Monitor.Log("Cancelling player collapse.");
                 Game1.player.freezePause = 0;
                 Game1.player.canMove = true;
                 sprite.PauseForSingleAnimation = false;

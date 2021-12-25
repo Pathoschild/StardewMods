@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             else if (npc is Bat)
                 yOrigin = boundingBox.Center.Y;
             else if (npc is Bug)
-                yOrigin = boundingBox.Top - sprite.SpriteHeight * Game1.pixelZoom + (float)(System.Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * System.Math.PI)) * 10.0);
+                yOrigin = boundingBox.Top - sprite.SpriteHeight * Game1.pixelZoom + (float)(Math.Sin(Game1.currentGameTime.TotalGameTime.Milliseconds / 1000.0 * (2.0 * Math.PI)) * 10.0);
             else if (npc is SquidKid squidKid)
             {
                 int yOffset = this.Reflection.GetField<int>(squidKid, "yOffset").GetValue();

@@ -160,7 +160,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
             this.Monitor.Log("Falling back to custom summon...");
             Game1.player.faceDirection(Game1.down);
             Game1.soundBank.PlayCue("horse_flute");
-            Game1.player.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[]
+            Game1.player.FarmerSprite.animateOnce(new[]
             {
                 new FarmerSprite.AnimationFrame(98, 400, true, false),
                 new FarmerSprite.AnimationFrame(99, 200, true, false),

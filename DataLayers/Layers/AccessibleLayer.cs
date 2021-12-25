@@ -153,7 +153,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="tilePixels">The tile area in pixels.</param>
-        /// <remarks>Derived from <see cref="Farmer.MovePosition"/>, <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/>, <see cref="GameLocation.isTilePassable(Location,xTile.Dimensions.Rectangle)"/>, and <see cref="Fence"/>.</remarks>
+        /// <remarks>Derived from <see cref="Farmer.MovePosition"/>, <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/>, <see cref="GameLocation.isTilePassable(xTile.Dimensions.Location,xTile.Dimensions.Rectangle)"/>, and <see cref="Fence"/>.</remarks>
         private bool IsPassable(GameLocation location, Vector2 tile, Rectangle tilePixels)
         {
             // check layer properties

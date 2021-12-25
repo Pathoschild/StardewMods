@@ -579,7 +579,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>
         private IDictionary<GameLocation, long> GetBuildingInteriorOwners()
         {
-            return this.GetCached<Dictionary<GameLocation, long>>(
+            return this.GetCached(
                 nameof(this.GetBuildingInteriorOwners),
                 () =>
                 {

@@ -306,7 +306,6 @@ namespace ContentPatcher.Framework
                 catch (Exception ex)
                 {
                     this.Monitor.Log($"Error loading content pack '{current.Manifest.Name}'. Technical details:\n{ex}", LogLevel.Error);
-                    continue;
                 }
             }
 

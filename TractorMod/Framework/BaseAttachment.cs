@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.Common.Utilities;
@@ -256,7 +257,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 {
                     if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
                     {
-                        ResourceClump clump = this.Reflection.GetField<Netcode.NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
+                        ResourceClump clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool => feature.performToolAction(tool, 0, tile, location);
                         return clump;
                     }
