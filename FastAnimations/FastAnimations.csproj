@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>FastAnimations</AssemblyName>
-    <Version>1.9.9</Version>
+    <Version>1.9.10</Version>
     <RootNamespace>Pathoschild.Stardew.FastAnimations</RootNamespace>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
