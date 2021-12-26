@@ -9,6 +9,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.24.7
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed load error in the previous update.
+
 ## 1.24.6
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 

@@ -1,6 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.15.2
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed load error in the previous update.
+
 ## 1.15.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 
