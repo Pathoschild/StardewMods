@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed bushes in garden pots sometimes producing a second harvest when you enter the location.
+
 ## 1.25.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 
