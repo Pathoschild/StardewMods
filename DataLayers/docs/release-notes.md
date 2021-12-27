@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Fixed _Coverage: Sprinklers_ layer not showing coverage for a held sprinkler.
+
 ## 1.15.2
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 
