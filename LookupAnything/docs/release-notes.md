@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed error clicking 'see also' crop link from a seed lookup.
+* Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.
 
 ## 1.36.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.
