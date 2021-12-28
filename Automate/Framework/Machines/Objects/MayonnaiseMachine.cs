@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 305,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 308, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 308, null, false, true, false, false),
                 minutes: 180
             ),
 
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 442,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 307, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 307, null, false, true, false, false),
                 minutes: 180
             ),
 
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 107,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 807, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 807, null, false, true, false, false),
                 minutes: 180
             ),
 
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: item => item.ParentSheetIndex is 176 or 180,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false),
                 minutes: _ => 180
             ),
             
@@ -58,7 +58,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: item => item.ParentSheetIndex is 107 or 174 or 182,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
                 minutes: _ => 180
             ),
 
@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 928,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 3, Quality = SObject.highQuality },
+                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 3, Quality = SObject.highQuality },
                 minutes: 180
             ),
         };

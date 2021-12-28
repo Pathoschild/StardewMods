@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public DataMiningField(string label, IEnumerable<IDebugField> fields)
             : base(label)
         {
-            IDebugField[] fieldArray = fields?.ToArray() ?? new IDebugField[0];
+            IDebugField[] fieldArray = fields?.ToArray() ?? Array.Empty<IDebugField>();
             this.HasValue = fieldArray.Any();
             if (this.HasValue)
                 this.Value = this.GetFormattedText(fieldArray).ToArray();

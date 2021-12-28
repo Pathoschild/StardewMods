@@ -1,4 +1,7 @@
 ﻿{
+    /*********
+    ** Debug info
+    *********/
     // labels shown on the debug screen (디버그 화면에 나타나는 라벨들)
     "label.tile": "타일 좌표",
     "label.map": "지도",
@@ -8,5 +11,23 @@
     "label.festival-name": "축제",
     "label.event-id": "이벤트 ID",
     "label.event-script": "이벤트 스크립트",
-    "label.song": "음악"
+    "label.song": "음악",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // general options
+    // TODO
+    "config.title.general-options": "General options",
+    "config.enable-game-debug.name": "Enable game debug hotkeys",
+    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
+    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
+    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+
+    // controls
+    // TODO
+    "config.title.controls": "Controls",
+    "config.toggle-debug-key.name": "Toggle debug info",
+    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
 }

@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
-using StardewValley;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
@@ -43,7 +44,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public ModConfigKeys Controls { get; set; } = new();
 
         /// <summary>The custom tools or items to allow. These must match the exact internal tool/item names (not the display names).</summary>
-        public string[] CustomAttachments { get; set; } = new string[0];
+        public string[] CustomAttachments { get; set; } = Array.Empty<string>();
 
         /// <summary>Whether the player should be invincible while they're on the tractor.</summary>
         public bool InvincibleOnTractor { get; set; } = true;

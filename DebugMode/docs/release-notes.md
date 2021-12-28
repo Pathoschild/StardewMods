@@ -1,6 +1,16 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.13.1
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed load error in the previous update.
+
+## 1.13.0
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Added in-game config UI through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
+
 ## 1.12.9
 Released 30 November 2021 for SMAPI 3.13.0 or later.
 

@@ -451,7 +451,6 @@ namespace ContentPatcher.Framework
                     string name = null;
                     Gender gender = Gender.Male;
                     bool isPlayer = false;
-                    bool valid = false;
                     if (spousePlayerID.HasValue)
                     {
                         Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
@@ -472,7 +471,7 @@ namespace ContentPatcher.Framework
                             isPlayer = false;
                         }
                     }
-                    valid = name != null && friendship != null;
+                    bool valid = name != null && friendship != null;
 
                     // create cache entry
                     return Tuple.Create(name, friendship, gender, isPlayer, valid);
@@ -579,7 +578,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>
         private IDictionary<GameLocation, long> GetBuildingInteriorOwners()
         {
-            return this.GetCached<Dictionary<GameLocation, long>>(
+            return this.GetCached(
                 nameof(this.GetBuildingInteriorOwners),
                 () =>
                 {

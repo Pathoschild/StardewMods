@@ -88,7 +88,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? new string[0];
+            return token?.GetValues(input) ?? Array.Empty<string>();
         }
 
 

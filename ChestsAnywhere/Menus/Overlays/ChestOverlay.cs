@@ -160,8 +160,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
             else
             {
-                this.Menu.inventory.highlightMethod = item => false;
-                this.MenuInventoryMenu.highlightMethod = item => false;
+                this.Menu.inventory.highlightMethod = _ => false;
+                this.MenuInventoryMenu.highlightMethod = _ => false;
             }
         }
     }

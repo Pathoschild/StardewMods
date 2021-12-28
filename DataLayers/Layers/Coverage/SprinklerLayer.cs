@@ -65,7 +65,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             // get coverage
-            IDictionary<int, Vector2[]> coverageBySprinklerID = this.GetCustomSprinklerTiles();
+            IDictionary<int, Vector2[]> customCoverageBySprinklerId = this.GetCustomSprinklerTiles();
 
             // get sprinklers
             Vector2[] searchTiles = visibleArea.Expand(this.SearchRadius).GetTiles().ToArray();
@@ -74,9 +74,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     from Vector2 tile in searchTiles
                     where location.objects.ContainsKey(tile)
                     let sprinkler = location.objects[tile]
-                    where
-                        sprinkler.IsSprinkler()
-                        || (sprinkler.bigCraftable.Value && coverageBySprinklerID.ContainsKey(sprinkler.ParentSheetIndex)) // older custom sprinklers
+                    where this.IsSprinkler(sprinkler, customCoverageBySprinklerId)
                     select sprinkler
                 )
                 .ToArray();
@@ -87,7 +85,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             foreach (SObject sprinkler in sprinklers)
             {
                 TileData[] tiles = this
-                    .GetCoverage(sprinkler, sprinkler.TileLocation, coverageBySprinklerID)
+                    .GetCoverage(sprinkler, sprinkler.TileLocation, customCoverageBySprinklerId, isHeld: false)
                     .Select(pos => new TileData(pos, this.Wet))
                     .ToArray();
 
@@ -105,10 +103,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
 
             // yield sprinkler being placed
             SObject heldObj = Game1.player.ActiveObject;
-            if (heldObj != null && coverageBySprinklerID.ContainsKey(heldObj.ParentSheetIndex))
+            if (this.IsSprinkler(heldObj, customCoverageBySprinklerId))
             {
                 var tiles = this
-                    .GetCoverage(heldObj, cursorTile, coverageBySprinklerID)
+                    .GetCoverage(heldObj, cursorTile, customCoverageBySprinklerId, isHeld: true)
                     .Select(pos => new TileData(pos, this.Wet, this.Wet.Color * 0.75f));
                 groups.Add(new TileGroup(tiles, outerBorderColor: this.SelectedColor, shouldExport: false));
             }
@@ -124,7 +122,20 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
         {
-            return terrain is HoeDirt dirt && dirt.crop != null;
+            return terrain is HoeDirt { crop: not null };
+        }
+
+        /// <summary>Get whether an object is a sprinkler.</summary>
+        /// <param name="sprinkler">The object to check.</param>
+        /// <param name="customCoverageBySprinklerId">The current relative sprinkler coverage, including any dynamic mod changes.</param>
+        private bool IsSprinkler(SObject sprinkler, IDictionary<int, Vector2[]> customCoverageBySprinklerId)
+        {
+            return
+                sprinkler != null
+                && (
+                    sprinkler.IsSprinkler()
+                    || (sprinkler.bigCraftable.Value && customCoverageBySprinklerId.ContainsKey(sprinkler.ParentSheetIndex)) // older custom sprinklers
+                );
         }
 
         /// <summary>Get the current relative sprinkler coverage, including any dynamic mod changes.</summary>
@@ -160,11 +171,16 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="sprinkler">The sprinkler whose radius to get.</param>
         /// <param name="origin">The sprinkler's tile.</param>
         /// <param name="customSprinklerRanges">The custom sprinkler ranges centered on (0, 0) indexed by sprinkler ID.</param>
+        /// <param name="isHeld">Whether the player is holding the sprinkler.</param>
         /// <remarks>Derived from <see cref="SObject.DayUpdate"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, IDictionary<int, Vector2[]> customSprinklerRanges)
+        private IEnumerable<Vector2> GetCoverage(SObject sprinkler, Vector2 origin, IDictionary<int, Vector2[]> customSprinklerRanges, bool isHeld)
         {
+            // get vanilla tiles
             IEnumerable<Vector2> tiles = sprinkler.GetSprinklerTiles();
+            if (isHeld)
+                tiles = tiles.Select(tile => tile + origin); // when the sprinkler is held, the vanilla coverage is relative to (0, 0)
 
+            // add custom tiles
             if (customSprinklerRanges.TryGetValue(sprinkler.ParentSheetIndex, out Vector2[] customTiles))
                 tiles = new HashSet<Vector2>(tiles.Concat(customTiles.Select(tile => tile + origin)));
 

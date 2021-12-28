@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                     // The fish length stats don't affect anything, so it's not worth notifying the
                     // user; just log one trace message per affected fish for troubleshooting.
                     if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.ParentSheetIndex))
-                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}", LogLevel.Trace);
+                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}");
                 }
 
                 owner.caughtFish(item.ParentSheetIndex, size);

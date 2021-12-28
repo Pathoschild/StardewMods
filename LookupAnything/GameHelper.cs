@@ -250,7 +250,7 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<GiftTasteModel> GetGiftTastes(NPC npc)
         {
             if (!this.IsSocialVillager(npc))
-                return new GiftTasteModel[0];
+                return Array.Empty<GiftTasteModel>();
 
             return
                 (
@@ -756,7 +756,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 {
                     return contextLookupCache.TryGetValue(contextTags[0], out Item[] items)
                         ? items
-                        : new Item[0];
+                        : Array.Empty<Item>();
                 }
 
                 // complex lookup

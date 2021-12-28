@@ -242,7 +242,7 @@ namespace Pathoschild.Stardew.Common.UI
             bool handled;
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                float nativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static).GetValue(null);
+                float nativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", BindingFlags.Public | BindingFlags.Static).GetValue(null);
                 handled = this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / nativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / nativeZoomLevel));
             }
             else

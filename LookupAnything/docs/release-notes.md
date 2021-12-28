@@ -2,10 +2,22 @@
 
 # Release notes
 ## Upcoming release
+* Fixed error clicking 'see also' crop link from a seed lookup.
+* Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.
+
+## 1.36.1
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed load error in the previous update.
+
+## 1.36.0
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
 * Added option to show all gift tastes in item/NPC lookups.
 * Added in-game config UI through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
-* Added support for animal lookups from [Animal Social Menu](https://www.nexusmods.com/stardewvalley/mods/3283).
+* Added support for animal lookups from [Animal Social Menu](https://www.nexusmods.com/stardewvalley/mods/3283)'s UI.
 * Fixed error getting harvest dates for potted tea bushes.
+* Internal optimizations.
 
 ## 1.35.7
 Released 30 November 2021 for SMAPI 3.13.0 or later.

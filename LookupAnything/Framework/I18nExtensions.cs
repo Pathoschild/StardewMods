@@ -184,7 +184,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return $"(textureName: {sprite.textureName.Value}, currentFrame:{sprite.currentFrame}, loop:{sprite.loop}, sourceRect:{I18n.Stringify(sprite.sourceRect)})";
                 case MarriageDialogueReference dialogue:
                     return $"(file: {dialogue.DialogueFile}, key: {dialogue.DialogueKey}, gendered: {dialogue.IsGendered}, substitutions: {I18n.Stringify(dialogue.Substitutions)})";
-                case ModDataDictionary data when data?.Any() == true:
+                case ModDataDictionary data when data.Any():
                     {
                         StringBuilder str = new StringBuilder();
                         str.AppendLine();

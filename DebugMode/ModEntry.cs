@@ -60,8 +60,7 @@ namespace Pathoschild.Stardew.DebugMode
         /*********
         ** Public methods
         *********/
-        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
-        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
             // init
@@ -70,10 +69,10 @@ namespace Pathoschild.Stardew.DebugMode
             this.Config.AllowDangerousCommands = this.Config.AllowGameDebug && this.Config.AllowDangerousCommands; // normalize for convenience
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
             helper.Events.Display.Rendered += this.OnRendered;
-            if (this.Config.AllowGameDebug)
-                helper.Events.Player.Warped += this.OnWarped;
+            helper.Events.Player.Warped += this.OnWarped;
 
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
@@ -87,7 +86,23 @@ namespace Pathoschild.Stardew.DebugMode
         /****
         ** Event handlers
         ****/
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForDebugMode(
+                getConfig: () => this.Config,
+                reset: () => this.Config = new ModConfig(),
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -111,7 +126,7 @@ namespace Pathoschild.Stardew.DebugMode
             }
         }
 
-        /// <summary>The method invoked when the player warps into a new location.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
@@ -120,7 +135,7 @@ namespace Pathoschild.Stardew.DebugMode
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
         }
 
-        /// <summary>The event called by SMAPI when rendering to the screen.</summary>
+        /// <inheritdoc cref="IDisplayEvents.Rendered"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         public void OnRendered(object sender, RenderedEventArgs e)
@@ -202,8 +217,8 @@ namespace Pathoschild.Stardew.DebugMode
                 // calculate scroll position
                 int width = (int)(textSize.X + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.X * 2));
                 int height = (int)(textSize.Y + (scrollPadding * 2) + (CommonHelper.ScrollEdgeSize.Y * 2));
-                int x = (int)MathHelper.Clamp(mouseX - width, 0, viewport.Width - width);
-                int y = (int)MathHelper.Clamp(mouseY, 0, viewport.Height - height);
+                int x = MathHelper.Clamp(mouseX - width, 0, viewport.Width - width);
+                int y = MathHelper.Clamp(mouseY, 0, viewport.Height - height);
 
                 // draw
                 CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);

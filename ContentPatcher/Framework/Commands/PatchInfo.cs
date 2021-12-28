@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -59,7 +60,7 @@ namespace ContentPatcher.Framework.Commands
                 path: patch.Path,
                 rawType: patch.RawType,
                 parsedType: patch.ParsedType,
-                conditions: new Condition[0],
+                conditions: Array.Empty<Condition>(),
                 matchesContext: false,
                 state: new ContextualState().AddErrors(patch.ReasonDisabled)
             )

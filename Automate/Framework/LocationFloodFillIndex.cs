@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -14,9 +15,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>A cached empty object list.</summary>
-        private readonly object[] EmptyObjects = new object[0];
-
         /// <summary>The indexed entities.</summary>
         private readonly IDictionary<Vector2, object[]> Entities;
 
@@ -42,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         {
             return this.Entities.TryGetValue(tile, out object[] entities)
                 ? entities
-                : this.EmptyObjects;
+                : Array.Empty<object>();
         }
 
 

@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             return new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, this.Furniture.GetShopMenuContext())
             {
                 source = this.Furniture,
-                behaviorBeforeCleanup = menu => this.Furniture.mutex.ReleaseLock()
+                behaviorBeforeCleanup = _ => this.Furniture.mutex.ReleaseLock()
             };
         }
 

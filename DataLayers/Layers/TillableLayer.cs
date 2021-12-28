@@ -73,7 +73,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="visibleTiles">The tiles currently visible on the screen.</param>
         private IDictionary<LegendEntry, List<TileData>> GetTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
-            IDictionary<LegendEntry, List<TileData>> tiles = new[] { this.Tillable, this.Tilled, this.Occupied, this.NonTillable }.ToDictionary(p => p, p => new List<TileData>());
+            IDictionary<LegendEntry, List<TileData>> tiles = new[] { this.Tillable, this.Tilled, this.Occupied, this.NonTillable }.ToDictionary(p => p, _ => new List<TileData>());
 
             foreach (Vector2 tile in visibleTiles)
             {

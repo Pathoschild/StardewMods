@@ -44,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
             // Gourmand NPC
-            if (location is IslandFarmCave islandFarmCave && islandFarmCave.gourmand != null)
+            if (location is IslandFarmCave { gourmand: not null } islandFarmCave)
             {
                 NPC gourmand = islandFarmCave.gourmand;
                 yield return new CharacterTarget(this.GameHelper, this.GetSubjectType(gourmand), gourmand, gourmand.getTileLocation(), this.Reflection, () => this.BuildSubject(gourmand));
@@ -85,7 +85,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ** GameMenu
                 ****/
                 // skills tab
-                case SkillsPage _:
+                case SkillsPage:
                     return this.BuildSubject(Game1.player);
 
                 // profile tab
@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** Calendar
                 ****/
-                case Billboard billboard when billboard.calendarDays != null: // Billboard used for both calendar and 'help wanted'
+                case Billboard { calendarDays: not null } billboard: // Billboard used for both calendar and 'help wanted'
                     {
                         // get target day
                         int selectedDay = -1;
@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** Load menu
                 ****/
-                case TitleMenu _ when TitleMenu.subMenu is LoadGameMenu loadMenu:
+                case TitleMenu when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
                         ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
@@ -172,7 +172,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** mod: Animal Social Menu
                 ****/
-                case IClickableMenu _ when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
+                case IClickableMenu when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
                     {
                         int slotOffset = this.Reflection.GetField<int>(targetMenu, "SlotPosition").GetValue();
                         List<ClickableTextureComponent> slots = this.Reflection.GetField<List<ClickableTextureComponent>>(targetMenu, "Sprites").GetValue();
@@ -299,10 +299,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         {
             return npc switch
             {
-                Horse _ => SubjectType.Horse,
-                Junimo _ => SubjectType.Junimo,
-                Pet _ => SubjectType.Pet,
-                Monster _ => SubjectType.Monster,
+                Horse => SubjectType.Horse,
+                Junimo => SubjectType.Junimo,
+                Pet => SubjectType.Pet,
+                Monster => SubjectType.Monster,
                 _ => SubjectType.Villager
             };
         }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using xTile.Dimensions;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -49,18 +50,18 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="position">The parsed value, if valid.</param>
         /// <param name="error">An error phrase indicating why the value can't be constructed.</param>
         /// <returns>Returns whether the value was successfully created.</returns>
-        public bool TryGetLocation(out xTile.Dimensions.Location position, out string error)
+        public bool TryGetLocation(out Location position, out string error)
         {
             if (
                 !this.TryGetNumber(this.X, nameof(this.X), out int x, out error)
                 || !this.TryGetNumber(this.Y, nameof(this.Y), out int y, out error)
             )
             {
-                position = xTile.Dimensions.Location.Origin;
+                position = Location.Origin;
                 return false;
             }
 
-            position = new xTile.Dimensions.Location(x, y);
+            position = new Location(x, y);
             return true;
         }
 
