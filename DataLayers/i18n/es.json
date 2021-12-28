@@ -1,72 +1,72 @@
 ﻿{
     // accessible
     "accessible.name": "Accesible",
-    "accessible.clear": "Despejado",
+    "accessible.clear": "Libre",
     "accessible.occupied": "Ocupado",
     "accessible.impassable": "Intransitable",
-    "accessible.warp": "Warp",
+    "accessible.warp": "Transición",
 
     // buildable
     "buildable.name": "Edificable",
-    "buildable.buildable": "Puede Construir aquí",
+    "buildable.buildable": "Se puede construir",
     "buildable.occupied": "Ocupado",
-    "buildable.not-buildable": "No puede Construir aquí",
+    "buildable.not-buildable": "No se puede construir",
 
     // coverage: bee houses
-    "bee-houses.name": "Cobertura: Casas de Abejas",
-    "bee-houses.range": "Rango de la Flor",
+    "bee-houses.name": "Colmenas",
+    "bee-houses.range": "Rango de las flores",
 
     // coverage: Junimo huts
-    "junimo-huts.name": "Cobertura: Chozas Junimo",
+    "junimo-huts.name": "Cabañas junimo",
     "junimo-huts.can-harvest": "Pueden cosechar",
     "junimo-huts.cannot-harvest": "No pueden cosechar",
 
     // coverage: scarecrows
-    "scarecrows.name": "Cobertura: Espantapájaros",
+    "scarecrows.name": "Espantapájaros",
     "scarecrows.protected": "Protegido",
     "scarecrows.exposed": "Expuesto",
 
     // coverage: sprinklers
-    "sprinklers.name": "Cobertura: Aspersores",
+    "sprinklers.name": "Aspersores",
     "sprinklers.covered": "Cubierto",
-    "sprinklers.dry-crops": "Cultivos Secos",
+    "sprinklers.dry-crops": "No cubierto",
 
     // crops: harvest
-    "crop-harvest.name": "Cultivos: Listo para Cosechar",
-    "crop-harvest.ready": "Listo",
-    "crop-harvest.not-ready": "No Listo",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.name": "Cosechas",
+    "crop-harvest.ready": "Listo para cosechar",
+    "crop-harvest.not-ready": "Creciendo",
+    "crop-harvest.not-enough-time-or-dead": "No da tiempo (o se muere)",
 
     // crops: watered
-    "crop-water.name": "Cultivos: Regado",
-    "crop-water.watered": "Cultivo Regado",
-    "crop-water.dry": "Cultivos Seco",
+    "crop-water.name": "Riego",
+    "crop-water.watered": "Regado",
+    "crop-water.dry": "No regado",
 
     // crops: water for paddy crops
-    "crop-paddy-water.name": "Cultivos: Agua para Cultivos de Arroz",
-    "crop-paddy-water.in-range": "Cerca del Agua",
-    "crop-paddy-water.not-in-range": "Tierra Seca",
+    "crop-paddy-water.name": "Cultivos de arroz",
+    "crop-paddy-water.in-range": "Cerca del agua",
+    "crop-paddy-water.not-in-range": "En tierra seca",
 
     // crops: fertilized
-    "crop-fertilizer.name": "Cultivos: Fertilizados",
+    "crop-fertilizer.name": "Fertilizantes",
     "crop-fertilizer.fertilizer": "Fertilizado",
-    "crop-fertilizer.retaining-soil": "Reteniendo Suelo",
-    "crop-fertilizer.speed-gro": "Creciendo con Velocidad",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.retaining-soil": "Hidrogel",
+    "crop-fertilizer.speed-gro": "Acelerador",
+    "crop-fertilizer.multiple": "Varios fertilizantes aplicados",
 
     // machine processing
-    "machines.name": "Máquinas de Procesamiento",
-    "machines.empty": "Vacío",
+    "machines.name": "Máquinas de procesamiento",
+    "machines.empty": "Vacía",
     "machines.processing": "Procesando",
     "machines.finished": "Finalizado",
 
     // tile grid
-    "grid.name": "Cuadrícula de Baldosas",
+    "grid.name": "Cuadrícula",
 
     // tillable
-    "tillable.name": "Cultivable",
-    "tillable.tillable": "Cultivable",
-    "tillable.tilled": "Cultivado",
+    "tillable.name": "Labrar",
+    "tillable.tillable": "Se puede labrar",
+    "tillable.tilled": "Labrado",
     "tillable.occupied": "Ocupado",
-    "tillable.not-tillable": "No Cultivable"
+    "tillable.not-tillable": "No arable"
 }
