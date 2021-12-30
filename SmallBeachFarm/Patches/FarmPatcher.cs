@@ -157,7 +157,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
                     });
                 }
             }
-            else if (__instance.objects.TryGetValue(campfireTile, out SObject obj) && obj is Torch torch && torch.ParentSheetIndex == 146)
+            else if (__instance.objects.TryGetValue(campfireTile, out SObject obj) && obj is Torch { ParentSheetIndex: 146 })
                 __instance.objects.Remove(campfireTile);
         }
 

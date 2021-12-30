@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             this.UpdateLayout();
             this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
-            this.SearchTextbox.OnChanged += (sender, text) => this.ReceiveSearchTextboxChanged(text);
+            this.SearchTextbox.OnChanged += (_, text) => this.ReceiveSearchTextboxChanged(text);
         }
 
         /****
@@ -151,7 +151,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
             // outside the clipping area.)
             using (SpriteBatch backgroundBatch = new SpriteBatch(Game1.graphics.GraphicsDevice))
             {
-                backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null);
+                backgroundBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp);
                 backgroundBatch.DrawSprite(Sprites.Letter.Sheet, Sprites.Letter.Sprite, x, y, scale: this.width / (float)Sprites.Letter.Sprite.Width);
                 backgroundBatch.End();
             }

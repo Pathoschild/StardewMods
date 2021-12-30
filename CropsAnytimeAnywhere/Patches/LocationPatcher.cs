@@ -172,9 +172,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <remarks>Derived from <see cref="GameLocation.doesTileHaveProperty(int, int, string, string)"/> with optimizations.</remarks>
         private static string GetProperty(Tile tile, string name)
         {
-            PropertyValue property = null;
-
-            if (tile.TileIndexProperties?.TryGetValue(name, out property) == true)
+            if (tile.TileIndexProperties?.TryGetValue(name, out PropertyValue property) == true)
             {
                 string value = property?.ToString();
                 if (value != null)

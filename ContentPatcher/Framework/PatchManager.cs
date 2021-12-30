@@ -437,7 +437,7 @@ namespace ContentPatcher.Framework
         {
             if (this.PatchesByCurrentTarget.TryGetValue(assetName, out SortedSet<IPatch> patches))
                 return patches;
-            return new IPatch[0];
+            return Array.Empty<IPatch>();
         }
 
         /// <summary>Get all valid patches grouped by their current target value.</summary>
@@ -468,7 +468,7 @@ namespace ContentPatcher.Framework
         {
             PatchType? patchType = this.GetEditType(asset.DataType);
             if (patchType == null)
-                return new IPatch[0];
+                return Array.Empty<IPatch>();
 
             return this
                 .GetPatches(asset.AssetName)

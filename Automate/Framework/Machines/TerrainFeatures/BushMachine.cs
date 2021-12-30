@@ -1,6 +1,9 @@
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -27,11 +30,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             : this(bush, location, GetTileAreaFor(bush)) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="bush">The underlying bush.</param>
-        /// <param name="location">The machine's in-game location.</param>
+        /// <param name="indoorPot">The indoor pot containing the bush.</param>
         /// <param name="indoorPotTile">The tile coordinate of the indoor pot containing this bush.</param>
-        public BushMachine(Bush bush, GameLocation location, Vector2 indoorPotTile)
-            : this(bush, location, GetTileAreaFor(indoorPotTile)) { }
+        /// <param name="location">The machine's in-game location.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
+        public BushMachine(IndoorPot indoorPot, Vector2 indoorPotTile, GameLocation location, IReflectionHelper reflection)
+            : this(indoorPot.bush.Value, location, GetTileAreaFor(indoorPotTile))
+        {
+            this.UpdateIndoorPotOnLoad(indoorPot, reflection);
+        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="bush">The underlying bush.</param>
@@ -138,6 +145,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             finally
             {
                 bush.tileSheetOffset.Value = prevOffset;
+            }
+        }
+
+        /// <summary>Update the indoor pot state on load for automation.</summary>
+        /// <param name="indoorPot">The indoor pot to update.</param>
+        /// <param name="reflection">Simplifies access to private code.</param>
+        /// <remarks>Derived from <see cref="IndoorPot.updateWhenCurrentLocation"/>. When an indoor pot is loaded from the save file, the bush it contains isn't updated immediately. Instead it's marked dirty and will call <see cref="Bush.loadSprite"/> when the player first enters the location. For Automate, that means a bush that's already harvested may reset and produce a new harvest for the day.</remarks>
+        private void UpdateIndoorPotOnLoad(IndoorPot indoorPot, IReflectionHelper reflection)
+        {
+            NetBool bushLoadDirty = reflection.GetField<NetBool>(indoorPot, "bushLoadDirty").GetValue();
+            if (bushLoadDirty.Value)
+            {
+                indoorPot.bush.Value.loadSprite();
+                bushLoadDirty.Value = false;
             }
         }
     }

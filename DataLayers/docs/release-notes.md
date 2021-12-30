@@ -2,7 +2,18 @@
 
 # Release notes
 ## Upcoming release
-* Fixed scarecrow radius one tile too big in Stardew Valley 1.5.5.
+* Fixed _Coverage: Sprinklers_ layer not showing coverage for a held sprinkler.
+
+## 1.15.2
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed load error in the previous update.
+
+## 1.15.1
+Released 25 December 2021 for SMAPI 3.13.0 or later.
+
+* Fixed scarecrow radius being one tile too wide in Stardew Valley 1.5.5.
+* Internal optimizations.
 
 ## 1.15.0
 Released 30 November 2021 for SMAPI 3.13.0 or later.

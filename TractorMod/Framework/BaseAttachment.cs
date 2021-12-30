@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.Common.Utilities;
@@ -210,7 +211,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
             switch (location)
             {
-                case Forest forest when forest.log != null:
+                case Forest { log: not null } forest:
                     clumps = clumps.Concat(new[] { forest.log });
                     break;
 
@@ -256,7 +257,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 {
                     if (feature.GetType().FullName == "FarmTypeManager.LargeResourceClump" && feature.getBoundingBox(feature.tilePosition.Value).Intersects(tileArea))
                     {
-                        ResourceClump clump = this.Reflection.GetField<Netcode.NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
+                        ResourceClump clump = this.Reflection.GetField<NetRef<ResourceClump>>(feature, "Clump").GetValue().Value;
                         applyTool = tool => feature.performToolAction(tool, 0, tile, location);
                         return clump;
                     }
@@ -358,8 +359,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected bool TryClearDeadCrop(GameLocation location, Vector2 tile, TerrainFeature tileFeature, Farmer player)
         {
             return
-                tileFeature is HoeDirt dirt
-                && dirt.crop != null
+                tileFeature is HoeDirt { crop: not null } dirt
                 && dirt.crop.dead.Value
                 && this.UseToolOnTile(this.FakePickaxe.Value, tile, player, location);
         }

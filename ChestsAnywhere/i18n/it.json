@@ -1,4 +1,7 @@
 ﻿{
+    /**********
+    ** Chest UI
+    **********/
     // default chest names
     "default-name.fridge": "Frigo",
     "default-name.other": "{{name}} n.{{number}}",
@@ -33,9 +36,66 @@
     "button.save": "salva",
     "button.reset": "ripristina",
 
-    // errors
+
+    /**********
+    ** Errors
+    **********/
     "errors.disabled-from-here": "Non puoi accedere al baule da qui.",
     "errors.no-chests": "Non hai ancora nessun baule.",
     "errors.no-chests-in-location": "Non hai nessun baule in quest'area.",
-    "errors.no-chests-in-range": "Non hai nessun baule vicino a te."
+    "errors.no-chests-in-range": "Non hai nessun baule vicino a te.",
+
+
+    /**********
+    ** Generic Mod Config Menu UI
+    **********/
+    // general options
+    // TODO
+    "config.title.general-options": "General options",
+    "config.show-hover-tooltips.name": "Show hover tooltips",
+    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
+    "config.enable-shipping-bin.name": "Enable shipping bin",
+    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
+    "config.add-organize-player-items.name": "Add organize player items button",
+    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
+    "config.range.name": "Range",
+    "config.range.desc": "The range at which chests are accessible through the menu.",
+    "config.range.unlimited": "All chests",
+    "config.range.currentWorldArea": "Chests within the current world area",
+    "config.range.currentLocation": "Chests within the current location",
+    "config.range.none": "None (can't access chests remotely)",
+
+    // general controls
+    // TODO
+    "config.title.general-controls": "General controls",
+    "config.toggle-ui-key.name": "Toggle UI",
+    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+
+    // controls when chest UI is open
+    // TODO
+    "config.title.menu-controls": "Controls when chest UI is open",
+    "config.edit-chest.name": "Edit chest",
+    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
+    "config.sort-items.name": "Sort items",
+    "config.sort-items.desc": "The keys which sort items in the current chest.",
+    "config.navigate-prev-chest.name": "Navigate: previous chest",
+    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
+    "config.navigate-next-chest.name": "Navigate: next chest",
+    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
+    "config.navigate-prev-category.name": "Navigate: previous category",
+    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
+    "config.navigate-next-category.name": "Navigate: next category",
+    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
+    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
+    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
+    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
+    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+
+    // disable in locations
+    // TODO
+    "config.title.disable-in-locations": "Disable in locations",
+    "config.disable-mines.name": "Mines and Skull Cavern",
+    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
+    "config.disable-custom-names.name": "Custom location names",
+    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
 }

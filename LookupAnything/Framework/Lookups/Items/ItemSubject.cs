@@ -334,7 +334,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             bool seeAlsoCrop =
                 isSeed
                 && item.ParentSheetIndex != this.SeedForCrop.indexOfHarvest.Value // skip seeds which produce themselves (e.g. coffee beans)
-                && !(item.ParentSheetIndex >= 495 && item.ParentSheetIndex <= 497) // skip random seasonal seeds
+                && item.ParentSheetIndex is not (495 or 496 or 497) // skip random seasonal seeds
                 && item.ParentSheetIndex != 770; // skip mixed seeds
             if (seeAlsoCrop)
             {
@@ -884,8 +884,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             return
                 this.Context == ObjectContext.World
-                && this.Target is SObject
-                && this.Target is not Chest
+                && this.Target is (SObject and not Chest)
                 && this.Name == "Stone";
         }
     }

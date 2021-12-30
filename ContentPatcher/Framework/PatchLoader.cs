@@ -863,7 +863,7 @@ namespace ContentPatcher.Framework
                     LogPathBuilder localPath = path.With(nameof(entry.MoveEntries), i++.ToString());
 
                     // validate
-                    string[] targets = new[] { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                    string[] targets = { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
                     if (string.IsNullOrWhiteSpace(moveEntry.ID))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
                     if (targets.All(string.IsNullOrWhiteSpace))

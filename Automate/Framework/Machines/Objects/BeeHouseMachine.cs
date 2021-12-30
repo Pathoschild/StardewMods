@@ -52,9 +52,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject result = new SObject(output.ParentSheetIndex, output.Stack)
             {
                 name = $"{flowerName ?? "Wild"} Honey",
-                Price = output.Price + addedPrice
+                Price = output.Price + addedPrice,
+                preservedParentSheetIndex = { Value = flowerId }
             };
-            result.preservedParentSheetIndex.Value = flowerId;
             return new TrackedItem(result, onEmpty: this.Reset);
         }
 

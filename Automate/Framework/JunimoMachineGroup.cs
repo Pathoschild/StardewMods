@@ -34,9 +34,9 @@ namespace Pathoschild.Stardew.Automate.Framework
         public JunimoMachineGroup(Func<IEnumerable<IMachine>, IEnumerable<IMachine>> sortMachines, Func<IContainer[], StorageManager> buildStorage)
             : base(
                 locationKey: null,
-                machines: new IMachine[0],
-                containers: new IContainer[0],
-                tiles: new Vector2[0],
+                machines: Array.Empty<IMachine>(),
+                containers: Array.Empty<IContainer>(),
+                tiles: Array.Empty<Vector2>(),
                 buildStorage: buildStorage
             )
         {

@@ -40,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 new Recipe(
                     input: 107,
                     inputCount: 1,
-                    output: item => new SObject(107, 1),
+                    output: _ => new SObject(107, 1),
                     minutes: minutesUntilReady
                 )
             };

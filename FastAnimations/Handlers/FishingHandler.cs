@@ -24,9 +24,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             return
                 Context.IsWorldReady
                 && Game1.player.UsingTool
-                && Game1.player.CurrentTool is FishingRod rod
-                && !rod.isTimingCast
-                && !rod.isFishing;
+                && Game1.player.CurrentTool is FishingRod { isTimingCast: false, isFishing: false };
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

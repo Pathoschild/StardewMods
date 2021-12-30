@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
@@ -11,7 +12,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         ** Fields
         *********/
         /// <summary>A cached empty tile group list.</summary>
-        private readonly TileGroup[] NoGroups = new TileGroup[0];
+        private readonly TileGroup[] NoGroups = Array.Empty<TileGroup>();
 
 
         /*********
@@ -22,7 +23,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         public GridLayer(LayerConfig config)
             : base(I18n.Grid_Name(), config)
         {
-            this.Legend = new LegendEntry[0];
+            this.Legend = Array.Empty<LegendEntry>();
             this.AlwaysShowGrid = true;
         }
 

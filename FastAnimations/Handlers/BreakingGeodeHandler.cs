@@ -20,7 +20,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /// <param name="playerAnimationID">The player's current animation ID.</param>
         public override bool IsEnabled(int playerAnimationID)
         {
-            return Game1.activeClickableMenu is GeodeMenu menu && menu.geodeAnimationTimer > 0;
+            return Game1.activeClickableMenu is GeodeMenu { geodeAnimationTimer: > 0 };
         }
 
         /// <summary>Perform any logic needed on update while the animation is active.</summary>

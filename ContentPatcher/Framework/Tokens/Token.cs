@@ -224,7 +224,7 @@ namespace ContentPatcher.Framework.Tokens
             if (!int.TryParse(argValue.Raw, out int index))
                 throw new FormatException($"Invalid '{InputArguments.ValueAtKey}' index '{argValue.Raw}', must be a numeric index."); // should never happen since it's validated before this point
             if (Math.Abs(index) >= values.Length)
-                return new string[0];
+                return Array.Empty<string>();
 
             // get value at index (negative index = from end)
             return index >= 0

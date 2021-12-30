@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 430,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 432, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 432, null, false, true, false, false),
                 minutes: 360
             ),
 
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 431,
                 inputCount: 1,
-                output: input => new SObject(247, 1),
+                output: _ => new SObject(247, 1),
                 minutes: 3200
             ),
 
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 270,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 247, null, false, true, false, false),
                 minutes: 1000
             ), 
 
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: 421,
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                output: _ => new SObject(Vector2.Zero, 247, null, false, true, false, false),
                 minutes: 60
             )
         };

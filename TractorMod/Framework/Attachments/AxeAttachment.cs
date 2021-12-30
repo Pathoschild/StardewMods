@@ -81,7 +81,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                     return this.ShouldCut(bush) && this.UseToolOnTile(tool, tile, player, location);
 
                 // clear crops
-                case HoeDirt dirt when dirt.crop != null:
+                case HoeDirt { crop: not null } dirt:
                     if (this.Config.ClearDeadCrops && dirt.crop.dead.Value)
                         return this.UseToolOnTile(tool, tile, player, location);
                     if (this.Config.ClearLiveCrops && !dirt.crop.dead.Value)

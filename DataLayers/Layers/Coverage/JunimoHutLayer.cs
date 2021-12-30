@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -64,7 +65,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         public override TileGroup[] Update(GameLocation location, in Rectangle visibleArea, in Vector2[] visibleTiles, in Vector2 cursorTile)
         {
             if (location is not BuildableGameLocation buildableLocation)
-                return new TileGroup[0];
+                return Array.Empty<TileGroup>();
 
             // get Junimo huts
             Rectangle searchArea = visibleArea.Expand(this.MaxRadius);
@@ -120,7 +121,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="terrain">The map terrain feature.</param>
         private bool IsCrop(TerrainFeature terrain)
         {
-            return terrain is HoeDirt dirt && dirt.crop != null;
+            return terrain is HoeDirt { crop: not null };
         }
 
         /// <summary>Get whether the build menu is open with a Junimo hut selected.</summary>

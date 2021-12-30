@@ -104,14 +104,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.Ingredients = ingredients.ToArray();
             this.MachineParentSheetIndex = machineParentSheetIndex;
             this.IsForMachine = isForMachine;
-            this.ExceptIngredients = exceptIngredients?.ToArray() ?? new RecipeIngredientModel[0];
+            this.ExceptIngredients = exceptIngredients?.ToArray() ?? Array.Empty<RecipeIngredientModel>();
             this.Item = item;
             this.IsKnown = isKnown;
             this.OutputItemIndex = outputItemIndex;
             this.OutputItemType = outputItemType;
             this.MinOutput = minOutput.Value;
             this.MaxOutput = maxOutput.Value;
-            this.OutputChance = outputChance > 0 && outputChance < 100 ? outputChance.Value : 100;
+            this.OutputChance = outputChance is > 0 and < 100 ? outputChance.Value : 100;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -122,11 +122,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 type: recipe.isCookingRecipe ? RecipeType.Cooking : RecipeType.Crafting,
                 displayType: recipe.isCookingRecipe ? I18n.RecipeType_Cooking() : I18n.RecipeType_Crafting(),
                 ingredients: recipe.recipeList.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
-                item: item => recipe.createItem(),
+                item: _ => recipe.createItem(),
                 isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
                 machineParentSheetIndex: null,
-                isForMachine: obj => false
+                isForMachine: _ => false
             )
         {
             this.OutputItemIndex = recipe.itemToProduce[0];
@@ -208,7 +208,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             if (recipe.bigCraftable)
                 return ItemType.BigCraftable;
 
-            if (itemID >= Ring.ringLowerIndexRange && itemID <= Ring.ringUpperIndexRange || itemID == 801)
+            if (itemID is >= Ring.ringLowerIndexRange and <= Ring.ringUpperIndexRange || itemID == 801)
                 return ItemType.Ring;
 
             return ItemType.Object;
