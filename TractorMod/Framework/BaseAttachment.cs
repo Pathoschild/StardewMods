@@ -275,18 +275,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
         protected FarmAnimal GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
         {
-            // get animals in the location
-            IEnumerable<FarmAnimal> animals = location switch
-            {
-                Farm farm => farm.animals.Values,
-                AnimalHouse house => house.animals.Values,
-                _ => location.characters.OfType<FarmAnimal>()
-            };
+            // ignore if location can't have animals
+            if (location is not IAnimalLocation animalLocation)
+                return null;
 
             // get best harvestable animal
             Vector2 useAt = this.GetToolPixelPosition(tile);
             FarmAnimal animal = Utility.GetBestHarvestableFarmAnimal(
-                animals: animals,
+                animals: animalLocation.Animals.Values,
                 tool: tool,
                 toolRect: new Rectangle((int)useAt.X, (int)useAt.Y, Game1.tileSize, Game1.tileSize)
             );

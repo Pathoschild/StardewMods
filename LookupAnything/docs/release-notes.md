@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed support for custom locations with farm animals.
 * Fixed error clicking 'see also' crop link from a seed lookup.
 * Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.
 
