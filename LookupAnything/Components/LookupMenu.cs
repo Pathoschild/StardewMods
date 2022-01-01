@@ -54,6 +54,18 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The spacing around the scroll buttons.</summary>
         private readonly int ScrollButtonGutter = 15;
 
+        /// <summary>The blend state to use when rendering the content sprite batch.</summary>
+        private readonly BlendState ContentBlendState = new()
+        {
+            AlphaBlendFunction = BlendFunction.Add,
+            AlphaSourceBlend = Blend.Zero,
+            AlphaDestinationBlend = Blend.One,
+
+            ColorBlendFunction = BlendFunction.Add,
+            ColorSourceBlend = Blend.SourceAlpha,
+            ColorDestinationBlend = Blend.InverseSourceAlpha
+        };
+
         /// <summary>The maximum pixels to scroll.</summary>
         private int MaxScroll;
 
@@ -327,7 +339,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     {
                         // begin draw
                         device.ScissorRectangle = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
-                        contentBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
+                        contentBatch.Begin(SpriteSortMode.Deferred, this.ContentBlendState, SamplerState.PointClamp, null, new RasterizerState { ScissorTestEnable = true });
 
                         // scroll view
                         this.CurrentScroll = Math.Max(0, this.CurrentScroll); // don't scroll past top
@@ -431,6 +443,8 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>Clean up after the menu when it's disposed.</summary>
         public void Dispose()
         {
+            this.ContentBlendState.Dispose();
+
             this.CleanupImpl();
         }
 
