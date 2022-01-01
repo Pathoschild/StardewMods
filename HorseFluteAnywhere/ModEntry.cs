@@ -20,7 +20,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
     internal class ModEntry : Mod
     {
         /*********
-        ** Private methods
+        ** Fields
         *********/
         /// <summary>The unique item ID for a horse flute.</summary>
         private const int HorseFluteId = 911;
@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
 
         /*********
-        ** Public methods
+        ** Private methods
         *********/
         /// <summary>The event called after the first game update, once all mods are loaded.</summary>
         /// <param name="sender">The event sender.</param>
