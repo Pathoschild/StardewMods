@@ -1,0 +1,20 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "ฟาร์มชายหาดขนาดเล็ก",
+    "farm.description": "ชายหาดขนาดเล็ก ที่อุดมสมบูรณ์ซึ่งคุณสามารถ จับปลาแม่น้ำและปลาทะเลได้",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.campfire.name": "เพิ่มแคมป์ไฟ",
+    "config.campfire.tooltip": "เพิ่มแคมป์ไฟที่ใช้งานได้ด้านหน้าบ้านไร่",
+
+    "config.islands.name": "เพิ่มเกาะ",
+    "config.islands.tooltip": "เพิ่มเกาะในมหาสมุทรพร้อมพื้นที่พิเศษ",
+
+    "config.beach-sounds.name": "เล่นเสียงชายหาด",
+    "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด"
+}

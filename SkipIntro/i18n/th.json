@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "ข้ามไปที่",
+    "config.skip-to.tooltip": "หน้าจอไหนที่จะข้ามไป? ค่าเริ่มต้นคือหน้าเริ่มเกม",
+    "config.skip-to.values.title-menu": "หน้าเริ่มเกม",
+    "config.skip-to.values.load-menu": "หน้าโหลดเซฟ",
+    "config.skip-to.values.join-coop": "เข้าร่วม co-op",
+    "config.skip-to.values.host-coop": "โฮสต์ co-op"
+}
