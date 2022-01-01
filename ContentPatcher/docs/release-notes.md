@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed `Random` values in multiplayer not in sync in Stardew Valley 1.5.5+.
+
 ## 1.24.7
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 
