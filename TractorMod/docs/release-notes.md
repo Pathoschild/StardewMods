@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed support for custom locations with farm animals.
+* Improved translations. Thanks to Evexyron + Yllelder (updated Spanish)!
 
 ## 4.14.9
 Released 25 December 2021 for SMAPI 3.13.0 or later.
