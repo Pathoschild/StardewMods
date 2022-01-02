@@ -9,6 +9,7 @@ using Pathoschild.Stardew.Common.UI;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
@@ -26,6 +27,15 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>The aspect ratio of the page background.</summary>
         private readonly Vector2 AspectRatio = new(Sprites.Letter.Sprite.Width, Sprites.Letter.Sprite.Height);
+
+        /// <summary>The clickable 'scroll up' icon.</summary>
+        private readonly ClickableTextureComponent ScrollUpButton;
+
+        /// <summary>The clickable 'scroll down' icon.</summary>
+        private readonly ClickableTextureComponent ScrollDownButton;
+
+        /// <summary>The amount to scroll long content on each up/down scroll.</summary>
+        private readonly int ScrollAmount;
 
         /// <summary>The maximum pixels to scroll.</summary>
         private int MaxScroll;
@@ -48,6 +58,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <summary>The spacing around the search result area.</summary>
         private readonly int SearchResultGutter = 15;
 
+        /// <summary>The spacing around the scroll buttons.</summary>
+        private readonly int ScrollButtonGutter = 15;
+
 
         /*********
         ** Public methods
@@ -56,16 +69,22 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="searchSubjects">The subjects available to search.</param>
         /// <param name="showLookup">Show a lookup menu.</param>
         /// <param name="monitor">Encapsulates logging and monitoring.</param>
-        public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor)
+        /// <param name="scroll">The amount to scroll long content on each up/down scroll.</param>
+        public SearchMenu(IEnumerable<ISubject> searchSubjects, Action<ISubject> showLookup, IMonitor monitor, int scroll)
         {
             // save data
             this.ShowLookup = showLookup;
             this.Monitor = monitor;
             this.SearchLookup = searchSubjects.ToLookup(p => p.Name, StringComparer.OrdinalIgnoreCase);
+            this.ScrollAmount = scroll;
+
+            // create components
+            this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
+            this.ScrollUpButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, 1);
+            this.ScrollDownButton = new ClickableTextureComponent(Rectangle.Empty, CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, 1);
 
             // initialise
             this.UpdateLayout();
-            this.SearchTextbox = new SearchTextBox(Game1.smallFont, Color.Black);
             this.SearchTextbox.Select();
             this.SearchTextbox.OnChanged += (_, text) => this.ReceiveSearchTextboxChanged(text);
         }
@@ -81,13 +100,16 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         {
             // search box
             if (this.SearchTextbox.Bounds.Contains(x, y))
-            {
                 this.SearchTextbox.Select();
-                return;
-            }
+
+            // scroll up or down
+            else if (this.ScrollUpButton.containsPoint(x, y))
+                this.ScrollUp();
+            else if (this.ScrollDownButton.containsPoint(x, y))
+                this.ScrollDown();
 
             // search matches
-            if (this.SearchResultArea.Contains(x, y))
+            else if (this.SearchResultArea.Contains(x, y))
             {
                 foreach (SearchResultComponent match in this.GetResultsPossiblyOnScreen())
                 {
@@ -114,7 +136,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /// <param name="direction">The scroll direction.</param>
         public override void receiveScrollWheelAction(int direction)
         {
-            this.CurrentScroll -= direction; // down direction == increased scroll
+            if (direction > 0)    // positive number scrolls content up
+                this.ScrollUp();
+            else
+                this.ScrollDown();
         }
 
         /// <summary>The method called when the game window changes size.</summary>
@@ -188,7 +213,10 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                         int mouseY = Game1.getMouseY();
                         bool reachedViewport = false;
                         bool reachedBottomOfViewport = false;
-                        bool isCursorInSearchArea = this.SearchResultArea.Contains(mouseX, mouseY);
+                        bool isCursorInSearchArea =
+                            this.SearchResultArea.Contains(mouseX, mouseY)
+                            && !this.ScrollUpButton.containsPoint(mouseX, mouseY)
+                            && !this.ScrollDownButton.containsPoint(mouseX, mouseY);
                         foreach (SearchResultComponent result in this.SearchResults)
                         {
                             if (!reachedViewport || !reachedBottomOfViewport)
@@ -215,9 +243,9 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                     // draw scroll icons
                     if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                        contentBatch.DrawSprite(CommonSprites.Icons.Sheet, CommonSprites.Icons.UpArrow, x + gutter, y + contentHeight - CommonSprites.Icons.DownArrow.Height - gutter - CommonSprites.Icons.UpArrow.Height);
+                        this.ScrollUpButton.draw(spriteBatch);
                     if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
-                        contentBatch.DrawSprite(CommonSprites.Icons.Sheet, CommonSprites.Icons.DownArrow, x + gutter, y + contentHeight - CommonSprites.Icons.DownArrow.Height);
+                        this.ScrollDownButton.draw(spriteBatch);
 
                     // end draw
                     contentBatch.End();
@@ -249,6 +277,20 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /*********
         ** Private methods
         *********/
+        /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
+        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        public void ScrollUp(int? amount = null)
+        {
+            this.CurrentScroll -= amount ?? this.ScrollAmount;
+        }
+
+        /// <summary>Scroll down the menu content by the specified amount (if possible).</summary>
+        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        public void ScrollDown(int? amount = null)
+        {
+            this.CurrentScroll += amount ?? this.ScrollAmount;
+        }
+
         /// <summary>Get the search results that may be on screen.</summary>
         private IEnumerable<SearchResultComponent> GetResultsPossiblyOnScreen()
         {
@@ -314,16 +356,19 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
             // update position
             Vector2 origin = Utility.getTopLeftPositionForCenteringOnScreen(this.width, this.height);
-            this.xPositionOnScreen = (int)origin.X;
-            this.yPositionOnScreen = (int)origin.Y;
+            int x = this.xPositionOnScreen = (int)origin.X;
+            int y = this.yPositionOnScreen = (int)origin.Y;
+            int searchGutter = this.SearchResultGutter;
+            float contentWidth = this.width - searchGutter * 2;
+            float contentHeight = this.height - searchGutter * 2;
 
             // update scissor rectangle for search result area
-            int x = this.xPositionOnScreen;
-            int y = this.yPositionOnScreen;
-            int gutter = this.SearchResultGutter;
-            float contentWidth = this.width - gutter * 2;
-            float contentHeight = this.height - gutter * 2;
-            this.SearchResultArea = new Rectangle(x + gutter, y + gutter, (int)contentWidth, (int)contentHeight);
+            this.SearchResultArea = new Rectangle(x + searchGutter, y + searchGutter, (int)contentWidth, (int)contentHeight);
+
+            // update up/down buttons
+            int scrollGutter = this.ScrollButtonGutter;
+            this.ScrollUpButton.bounds = new Rectangle(x + scrollGutter, (int)(y + contentHeight - CommonSprites.Icons.UpArrow.Height - scrollGutter - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.UpArrow.Height, CommonSprites.Icons.UpArrow.Width);
+            this.ScrollDownButton.bounds = new Rectangle(x + scrollGutter, (int)(y + contentHeight - CommonSprites.Icons.DownArrow.Height), CommonSprites.Icons.DownArrow.Height, CommonSprites.Icons.DownArrow.Width);
         }
     }
 }

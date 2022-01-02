@@ -415,7 +415,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                         // draw scroll icons
                         if (this.MaxScroll > 0 && this.CurrentScroll > 0)
-                            this.ScrollUpButton.draw(contentBatch);
+                            this.ScrollUpButton.draw(spriteBatch);
                         if (this.MaxScroll > 0 && this.CurrentScroll < this.MaxScroll)
                             this.ScrollDownButton.draw(spriteBatch);
 

@@ -2,8 +2,9 @@
 
 # Release notes
 ## Upcoming release
-* Fixed support for custom locations with farm animals.
+* Added support for clicking the search UI's scroll up/down icons.
 * Fixed error clicking 'see also' crop link from a seed lookup.
+* Fixed support for custom locations with farm animals.
 * Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.
 * Fixed transparency issue with faded icons in the lookup menu (thanks to TehPers!).
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (updated Spanish), mezen (updated German), and Zangorr (updated Polish)!

@@ -293,7 +293,7 @@ namespace Pathoschild.Stardew.LookupAnything
         private void ShowSearch()
         {
             this.PushMenu(
-                new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor)
+                new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount)
             );
         }
 
