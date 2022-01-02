@@ -1,0 +1,31 @@
+﻿{
+    /*********
+    ** Debug info
+    *********/
+    // labels shown on the debug screen
+    "label.tile": "Клітина",
+    "label.map": "Мапа",
+    "label.menu": "Меню",
+    "label.submenu": "Підменю",
+    "label.minigame": "Міні-гра",
+    "label.festival-name": "Фестиваль",
+    "label.event-id": "ID події",
+    "label.event-script": "Сценарій події",
+    "label.song": "Музика",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // general options
+    "config.title.general-options": "Основні налаштування",
+    "config.enable-game-debug.name": "Увімкнути гарячі клавіші налагодження гри",
+    "config.enable-game-debug.desc": "Відображення інформації про налагодження також вмикає гарячі клавіші налагодження в грі, як-от натискання 5, щоб перейти до пляжу.",
+    "config.enable-dangerous-hotkeys.name": "Дозволити небезпечні гарячі клавіші",
+    "config.enable-dangerous-hotkeys.desc": "Якщо ввімкнено гарячі клавіші налагодження гри, увімкніть також небезпечні гарячі клавіші, які можуть негайно завершити поточний день, рандомізувати декорації гравця чи ферми або завершити гру.",
+
+    // controls
+    "config.title.controls": "Елементи керування",
+    "config.toggle-debug-key.name": "Увімкнути інформацію про налагодження",
+    "config.toggle-debug-key.desc": "Клавіші, які перемикають інформацію про налагодження."
+}

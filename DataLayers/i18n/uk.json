@@ -1,0 +1,72 @@
+﻿{
+    // accessible
+    "accessible.name": "Стан клітин світу",
+    "accessible.clear": "Безсумнівно проходиме місце",
+    "accessible.occupied": "Проходимість недоступна : присутня перешкода",
+    "accessible.impassable": "Неможливо пройти тут",
+    "accessible.warp": "Місце переходу до іншої локації",
+
+    // buildable
+    "buildable.name": "Будівництво",
+    "buildable.buildable": "Будівництво тут можливе",
+    "buildable.occupied": "Будівництво недоступне : присутня перешкода",
+    "buildable.not-buildable": "Неможливо будувати тут",
+
+    // coverage: bee houses
+    "bee-houses.name": "Стан та радіус дії: Вулики",
+    "bee-houses.range": "Радіус дії квітки",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Стан та радіус дії: Джунімо",
+    "junimo-huts.can-harvest": "Можуть збирати врожай",
+    "junimo-huts.cannot-harvest": "Не можуть збирати врожай",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Стан та радіус дії: Опудала",
+    "scarecrows.protected": "Захищено від шкідників",
+    "scarecrows.exposed": "Вразливе до шкідників",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Стан та радіус дії: Спринклери",
+    "sprinklers.covered": "Поливається за допомогою спринклера",
+    "sprinklers.dry-crops": "Спринклер не дістає до необхідної зони",
+
+    // crops: harvest
+    "crop-harvest.name": "Готовність врожая до збору",
+    "crop-harvest.ready": "Готове до збору",
+    "crop-harvest.not-ready": "Ще не готове до збору",
+    "crop-harvest.not-enough-time-or-dead": "Ви не встигли зібрати врожай",
+
+    // crops: watered
+    "crop-water.name": "Вологість ґрунту культур",
+    "crop-water.watered": "Культури успішно политі водою",
+    "crop-water.dry": "Культури не политі водою",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Зрошення культур",
+    "crop-paddy-water.in-range": "Зрошення діє : ґрунт насичений водою",
+    "crop-paddy-water.not-in-range": "Зрошення недоступне : ґрунт сухий",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Вдобрення культур",
+    "crop-fertilizer.fertilizer": "Тут застосовано добриво",
+    "crop-fertilizer.retaining-soil": "Тут вологозберігаючий ґрунт",
+    "crop-fertilizer.speed-gro": "Тут застосовано \"ШвидкоРост\".",
+    "crop-fertilizer.multiple": "Тут застосовно декілька добрив",
+
+    // machine processing
+    "machines.name": "Машинна обробка",
+    "machines.empty": "Порожньо",
+    "machines.processing": "У процесі",
+    "machines.finished": "Готово",
+
+    // tile grid
+    "grid.name": "Сітка клітин світу",
+
+    // tillable
+    "tillable.name": "Зорення ґрунту",
+    "tillable.tillable": "Ґрунт доступний до оброблення",
+    "tillable.tilled": "Ґрунт вже оброблено",
+    "tillable.occupied": "Обробка недоступна : присутня перешкода",
+    "tillable.not-tillable": "Неможливо обробити ґрунт"
+}

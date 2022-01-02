@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to Evexyron (updated Spanish) and mezen (updated German)!
+* Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (updated Spanish), and mezen (updated German)!
 
 ## 1.21.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.
