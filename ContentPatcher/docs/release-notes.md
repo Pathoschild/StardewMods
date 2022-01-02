@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Fixed patches added through `Action: Include` not applied immediately in some cases.
 * Fixed `Random` values in multiplayer not in sync in Stardew Valley 1.5.5+.
 
 ## 1.24.7

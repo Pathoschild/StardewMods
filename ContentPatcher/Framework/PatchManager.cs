@@ -221,9 +221,9 @@ namespace ContentPatcher.Framework
             }
 
             // get changes to apply
-            HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
+            Queue<IPatch> patchQueue = new Queue<IPatch>(this.GetPatchesToUpdate(globalChangedTokens, updateType));
             InvariantHashSet reloadAssetNames = new InvariantHashSet(this.AssetsWithRemovedPatches);
-            if (!patches.Any() && !reloadAssetNames.Any())
+            if (!patchQueue.Any() && !reloadAssetNames.Any())
                 return;
 
             // reset queued patches
@@ -239,8 +239,11 @@ namespace ContentPatcher.Framework
 
             // update patches
             string prevAssetName = null;
-            foreach (IPatch patch in patches)
+            HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
+            while (patchQueue.Any())
             {
+                IPatch patch = patchQueue.Dequeue();
+
                 // log asset name
                 if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
                 {
@@ -284,6 +287,18 @@ namespace ContentPatcher.Framework
                         }
                         break;
 
+                    case PatchType.Include:
+                        // queue new patches
+                        if (patch is IncludePatch { PatchesJustLoaded: not null } include)
+                        {
+                            foreach (IPatch includedPatch in include.PatchesJustLoaded)
+                            {
+                                newPatches.Add(includedPatch);
+                                patchQueue.Enqueue(includedPatch);
+                            }
+                        }
+                        break;
+
                     case PatchType.Load:
                         // warn for invalid load patch
                         // Other patch types show an error when they're applied instead, but that's
@@ -292,6 +307,9 @@ namespace ContentPatcher.Framework
                             this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
                         break;
                 }
+
+                // if the patch was just added via Include, it implicitly changed too
+                changed = changed || newPatches.Contains(patch);
 
                 // track patches to reload
                 bool reloadAsset = isReady != wasReady || (isReady && changed);

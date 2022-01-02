@@ -71,7 +71,8 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the patches from the root content file.</param>
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
-        public void LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch parentPatch)
+        /// <returns>Returns the patches that were loaded.</returns>
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch parentPatch)
         {
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
@@ -99,17 +100,22 @@ namespace ContentPatcher.Framework
 
             // load patches
             int index = -1;
+            IList<IPatch> loadedPatches = new List<IPatch>(patches.Length);
             foreach (PatchConfig patch in patches)
             {
                 index++;
                 var localPath = path.With(patch.LogName);
                 this.Monitor.VerboseLog($"   loading {localPath}...");
-                this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                IPatch loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                if (loaded != null)
+                    loadedPatches.Add(loaded);
             }
 
             // rebuild indexes
             if (reindex)
                 this.PatchManager.Reindex(patchListChanged: true);
+
+            return loadedPatches;
         }
 
         /// <summary>Unload patches loaded (directly or indirectly) by the given patch.</summary>
@@ -320,18 +326,19 @@ namespace ContentPatcher.Framework
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
-        private bool LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
+        /// <returns>The patch that was loaded, or <c>null</c> if it failed to load.</returns>
+        private IPatch LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
         {
             var pack = rawContentPack.ContentPack;
             PatchType? action = null;
 
-            bool TrackSkip(string reason, bool warn = true)
+            IPatch TrackSkip(string reason, bool warn = true)
             {
                 reason = reason.TrimEnd('.', ' ');
                 this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, action, entry.Target, pack, parentPatch, reason));
                 if (warn)
                     logSkip(reason + '.');
-                return false;
+                return null;
             }
 
             try
@@ -719,7 +726,7 @@ namespace ContentPatcher.Framework
 
                 // save patch
                 this.PatchManager.Add(patch, reindex);
-                return true;
+                return patch;
             }
             catch (Exception ex)
             {
