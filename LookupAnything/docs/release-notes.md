@@ -2,7 +2,8 @@
 
 # Release notes
 ## Upcoming release
-* Added support for clicking the search UI's scroll up/down icons.
+* Fixed scroll up/down arrows in the search UI not clickable.
+* Fixed scroll up/down keybinds not working for the search UI.
 * Fixed error clicking 'see also' crop link from a seed lookup.
 * Fixed support for custom locations with farm animals.
 * Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.

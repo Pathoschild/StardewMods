@@ -14,7 +14,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A UI which lets the player search for subjects.</summary>
-    internal class SearchMenu : BaseMenu, IDisposable
+    internal class SearchMenu : BaseMenu, IScrollableMenu, IDisposable
     {
         /*********
         ** Properties
@@ -277,15 +277,13 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         /*********
         ** Private methods
         *********/
-        /// <summary>Scroll up the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        /// <inheritdoc />
         public void ScrollUp(int? amount = null)
         {
             this.CurrentScroll -= amount ?? this.ScrollAmount;
         }
 
-        /// <summary>Scroll down the menu content by the specified amount (if possible).</summary>
-        /// <param name="amount">The amount to scroll, or <c>null</c> to scroll by <see cref="ScrollAmount"/>.</param>
+        /// <inheritdoc />
         public void ScrollDown(int? amount = null)
         {
             this.CurrentScroll += amount ?? this.ScrollAmount;
