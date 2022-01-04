@@ -28,7 +28,7 @@
     "config.milk.tooltip": "Як швидко ви використовуєте відро для молока. За замовчуванням: {{defaultValue}}x.",
 
     "config.mount.name": "Залізти/злісти",
-    "config.mount.tooltip": "Як швидко ви залазите/злазите з коня (включно з користувацьким транспортом, як Tractor Mod). За замовленням: {{defaultValue}}x.",
+    "config.mount.tooltip": "Як швидко ви залазите/злазите з коня (включно з користувацьким транспортом, як от Tractor Mod). За замовчуванням: {{defaultValue}}x.",
 
     "config.shear.name": "Ножиці",
     "config.shear.tooltip": "Як швидко ви використовуєте ножиці. За замовчуванням: {{defaultValue}}x.",
@@ -65,5 +65,5 @@
     "config.title-menu.tooltip": "Як швидко головне меню перемикається між екранами. За замовчуванням: {{defaultValue}}x.",
 
     "config.load-game-blink.name": "Мерехтіння завантаження гри",
-    "config.load-game-blink.tooltip": "Як швидко йде затримка після того як ви натиснули на кнопку кнопку \"Грати далі\". За замовчуванням: {{defaultValue}}x."
+    "config.load-game-blink.tooltip": "Як довго триває затримка після того як ви натиснули на кнопку кнопку \"Грати далі\". За замовчуванням: {{defaultValue}}x."
 }
