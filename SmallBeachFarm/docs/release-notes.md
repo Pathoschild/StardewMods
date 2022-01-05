@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed empty farmhouse when creating a new save in Stardew Valley 1.5.5+.
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), ellipszist (added Thai), and Evexyron (added Spanish)!
 
 ## 2.0.2

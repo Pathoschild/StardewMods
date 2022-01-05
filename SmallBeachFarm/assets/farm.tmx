@@ -7,6 +7,10 @@
   <property name="BusStopEntry" value="78 17"/>
   <property name="Debris" value="8 .01 3"/>
   <property name="FarmCaveEntry" value="34 8"/>
+  <property name="FarmHouseFlooring" value="0"/>
+  <property name="FarmHouseFurniture" value="1680 3 4 0 2421 3 1 0 1614 10 1 0 1294 10 4 0 1283 1 4 0 207 7 4 0 9 2 6 1 9 5 7 3 1128 3 6 0 1381 3 6 0 1618 2 9 0"/>
+  <property name="FarmHouseStarterSeedsPosition" value="8 6"/>
+  <property name="FarmHouseWallpaper" value="11"/>
   <property name="Fish" value="142 .1 153 .25 166 .0005"/>
   <property name="ForestEntry" value="78 21"/>
   <property name="GreenhouseLocation" value="24 9"/>
