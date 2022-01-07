@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed [enrichers](https://stardewvalleywiki.com/Enricher) not affecting seeds planted with the tractor.
 * Fixed support for custom locations with farm animals.
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron + Yllelder (updated Spanish), and Zangorr (added Polish)!
 

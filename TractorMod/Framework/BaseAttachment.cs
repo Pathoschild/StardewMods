@@ -191,8 +191,31 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         protected void ConsumeItem(Farmer player, Item item, int count = 1)
         {
             item.Stack -= 1;
+
             if (item.Stack <= 0)
                 player.removeItemFromInventory(item);
+        }
+
+        /// <summary>Remove the specified items from the chest inventory.</summary>
+        /// <param name="chest">The chest whose inventory to edit.</param>
+        /// <param name="item">The item instance to deduct.</param>
+        /// <param name="count">The number to deduct.</param>
+        protected void ConsumeItem(Chest chest, Item item, int count = 1)
+        {
+            item.Stack -= 1;
+
+            if (item.Stack <= 0)
+            {
+                for (int i = 0; i < chest.items.Count; i++)
+                {
+                    Item slot = chest.items[i];
+                    if (slot != null && object.ReferenceEquals(item, slot))
+                    {
+                        chest.items[i] = null;
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>Get a rectangle representing the tile area in absolute pixels from the map origin.</summary>
