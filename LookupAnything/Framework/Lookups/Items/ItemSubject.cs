@@ -695,7 +695,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 var recipes =
                     (
                         from recipe in this.GameHelper.GetRecipesForIngredient(this.DisplayItem)
-                        let item = recipe.CreateItem(this.DisplayItem)
+                        let item = recipe.TryCreateItem(this.DisplayItem)
                         where item != null
                         orderby item.DisplayName
                         select new { recipe.Type, item.DisplayName, TimesCrafted = recipe.GetTimesCrafted(Game1.player) }
