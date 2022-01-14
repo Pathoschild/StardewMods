@@ -1,4 +1,4 @@
-{
+﻿{
     /*********
     ** Debug info
     *********/
@@ -18,7 +18,6 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
     "config.title.general-options": "Allgemeine Optionen",
     "config.enable-game-debug.name": "Aktiviere die Hotkeys zum Debuggen vom Spiel",
     "config.enable-game-debug.desc": "Ob die Anzeige der Debug-Informationen auch die Debug-Hotkeys des Spiels aktiviert, z. B. das Drücken von 5, um zum Strand zu warpen.",
@@ -26,7 +25,6 @@
     "config.enable-dangerous-hotkeys.desc": "Wenn Hotkeys zum Debuggen des Spiels aktiviert sind, können auch zerstörerische Hotkeys aktiviert werden, die den aktuellen Tag sofort beenden, die Spieler- oder Farmhausdekorationen zufällig verändern oder das Spiel zum Absturz bringen können.",
 
     // controls
-    // TODO
     "config.title.controls": "Steuerung",
     "config.toggle-debug-key.name": "Debug-Informationen einschalten",
     "config.toggle-debug-key.desc": "Die Tasten, mit denen die Debug-Informationen ein-/ausgeschaltet werden."
