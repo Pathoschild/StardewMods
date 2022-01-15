@@ -1,9 +1,10 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
-* Fixed scroll up/down arrows in the search UI not clickable.
-* Fixed scroll up/down keybinds not working for the search UI.
+## 1.36.2
+Released 14 January 2021 for SMAPI 3.13.0 or later.
+
+* Fixed scroll up/down arrows and keybinds not working in the search UI.
 * Fixed error clicking 'see also' crop link from a seed lookup.
 * Fixed support for custom locations with farm animals.
 * Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.

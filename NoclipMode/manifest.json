@@ -1,7 +1,7 @@
 ﻿{
     "Name": "Noclip Mode",
     "Author": "Pathoschild",
-    "Version": "1.2.10",
+    "Version": "1.2.11",
     "MinimumApiVersion": "3.13.0",
     "Description": "Press a key to enable noclip mode (which lets you walk through anything).",
     "UniqueID": "Pathoschild.NoclipMode",
