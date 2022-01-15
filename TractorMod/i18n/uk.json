@@ -1,0 +1,206 @@
+﻿{
+    /*********
+    ** Tractor
+    *********/
+    "buff.name": "Потужність трактора",
+    "garage.name": "Гараж для трактора",
+    "garage.description": "Гараж для зберігання вашого трактора. Трактор в комплекті!",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Section titles
+    ****/
+    "config.main-options": "Головні налаштування",
+    "config.controls": "Елементи керування",
+    "config.axe": "Особливості сокири",
+    "config.hoe": "Особливості мотики",
+    "config.pickaxe": "Особливості кайла",
+    "config.scythe": "Особливості коси",
+    "config.melee-blunt": "Особливості тупої зброї ближнього бою",
+    "config.melee-dagger": "Особливості кинджала ближнього бою",
+    "config.melee-sword": "Особливості меча ближнього бою",
+    "config.other-tools": "Інші інструменти",
+    "config.custom-tools": "Користувацькі інструменти",
+
+
+    /****
+    ** Main options
+    ****/
+    "config.distance.name": "Радіус дії",
+    "config.distance.tooltip": "Кількість клітин в усіх напрямках навколо трактора, на які потрібно застосовувати інструменти (на додаток до клітини під ним). За замовчуванням: {{defaultValue}}; Значення {{maxRecommendedValue}} охоплює більшу частину видимої площі, а більші значення можуть негативно вплинути на продуктивність гри.",
+
+    "config.speed.name": "Швидкість трактора",
+    "config.speed.tooltip": "Регулювання швидкості руху трактора під час їзди. За замовчуванням: {{defaultValue}}.",
+
+    "config.magnetic-radius.name": "Радіус Магнетизму",
+    "config.magnetic-radius.tooltip": "Величина магнетизму предмета (При більших значеннях предмети притягуються з більшої відстані). За замовчуванням: {{defaultValue}}.",
+
+    "config.build-price.name": "Ціна побудови",
+    "config.build-price.tooltip": "Золота ціна купівлі гаража трактора. За замовчуванням: {{defaultValue}} з.",
+
+    "config.can-summon-without-garage.name": "Можна викликати без гаража",
+    "config.can-summon-without-garage.tooltip": "Можливість викликати тимчасовий трактор, не будуючи спочатку гараж.",
+
+    "config.invincible-on-tractor.name": "Невразливість на тракторі",
+    "config.invincible-on-tractor.tooltip": "Можливість бути невразливим до атак під час їзди на тракторі",
+
+    "config.highlight-radius.name": "Радіус виділення (налагодження)",
+    "config.highlight-radius.tooltip": "Можливість виділення радіусу дії трактора під час їзди, щоб допомогти візуалізувати параметр відстані.",
+
+
+    /****
+    ** Keybind options
+    ****/
+    "config.summon-key.name": "Викликати трактор",
+    "config.summon-key.tooltip": "Виклик доступного трактора до вашого місцезнаходження. За замовчуванням: Пробіл.",
+
+    "config.dismiss-key.name": "Позбутися трактору",
+    "config.dismiss-key.tooltip": "Повернення трактора, на якому ви їдете, додому.",
+
+    "config.hold-to-activate-key.name": "Утримувати, щоб активувати",
+    "config.hold-to-activate-key.tooltip": "Якщо вказано, трактор буде робити щось лише тоді, коли ви утримуєте цю кнопку. Якщо нічого не вказано, трактор працюватиме автоматично, поки ви на ньому їздите.",
+
+
+    /****
+    ** Trees & bushes
+    ****/
+    "config.chop-fruit-trees-seeds.name": "Знищення фруктових дерев (насіння)",
+    "config.chop-fruit-trees-seeds.tooltip": "Знищення насіння плодових дерев.",
+
+    "config.chop-fruit-trees-saplings.name": "Рубати фруктові дерева (саджанці)",
+    "config.chop-fruit-trees-saplings.tooltip": "Рубка плодових дерев, які не повністю виросли.",
+
+    "config.chop-fruit-trees-grown.name": "Рубати фруктові дерева (вирощені)",
+    "config.chop-fruit-trees-grown.tooltip": "Рубка плодових дерев, що повністю виросли.",
+
+    "config.chop-trees-seeds.name": "Рубати дерева (насіння)",
+    "config.chop-trees-seeds.tooltip": "Рубка неплодових дерев, що повністю виросли.",
+
+    "config.chop-trees-saplings.name": "Рубати дерева (саджанці)",
+    "config.chop-trees-saplings.tooltip": "Рубка неплодових дерев, які не повністю виросли.",
+
+    "config.chop-trees-grown.name": "Рубати дерева (вирощені)",
+    "config.chop-trees-grown.tooltip": "Рубка неплодових дерев, що повністю виросли.",
+
+    "config.chop-bushes.name": "Рубати кущі",
+    "config.chop-bushes.tooltip": "Рубка плодових кущів.",
+
+    "config.harvest-fruit-trees.name": "Збирати плоди фруктових дерев",
+    "config.harvest-fruit-trees.tooltip": "Збір плодів з фруткових дерев.",
+
+
+    /****
+    ** Crops/forage/grass
+    ****/
+    "config.clear-dead-crops.name": "Нищити мертві культури",
+    "config.clear-dead-crops.tooltip": "Нищення відмерлих культур.",
+
+    "config.clear-live-crops.name": "Нищити живі культури",
+    "config.clear-live-crops.tooltip": "Нищення живих культур.",
+
+    "config.harvest-giant-crops.name": "Збирати гігантські культури",
+    "config.harvest-giant-crops.tooltip": "Збір врожаю культур гігантського розміру.",
+
+    "config.harvest-crops.name": "Збирати врожай",
+    "config.Harvest Crops.tooltip": "Збір врожаю культури.",
+
+    "config.harvest-flowers.name": "Збирати квіти",
+    "config.harvest-flowers.tooltip": "Збір квіток.",
+
+    "config.harvest-forage.name": "Збирати корми",
+    "config.harvest-forage.tooltip": "Збір кормів.",
+
+    "config.harvest-grass.name": "Косити траву",
+    "config.harvest-grass.tooltip": "Косіння трави. Якщо у вас є вільне місце в силосній вежі, ви збираєте сіно, як і в звичайній грі.",
+
+
+    /****
+    ** Debris
+    ****/
+    "config.clear-debris.name": "Нищити сміття",
+    "config.clear-debris.tooltip": "Нищення сміття, такого як бур'яни, гілки, гігантські пні та впалі колоди.",
+
+    "config.clear-weeds.name": "Нищити бур'яни",
+    "config.clear-weeds.tooltip": "Нищення бур'янів.",
+
+
+    /****
+    ** Dirt
+    ****/
+    "config.till-dirt.name": "Обробляти ґрунт",
+    "config.till-dirt.tooltip": "Зрошення порожнього ґрунту.",
+
+    "config.dig-artifact-spots.name": "Викопувати артефакти",
+    "config.dig-artifact-spots.tooltip": "Викопування артефактів.",
+
+    "config.clear-tilled-dirt.name": "Перекопати оброблений ґрунт",
+    "config.clear-tilled-dirt.tooltip": "Переконування обробленого ґрунту.",
+
+
+    /****
+    ** Mining
+    ****/
+    "config.break-boulders-and-meteorites.name": "Розбивати валуни та метеорити",
+    "config.break-boulders-and-meteorites.tooltip": "Розбиття валунів та метеоритів.",
+
+    "config.harvest-mine-spawns.name": "Збирати дари шахти",
+    "config.harvest-mine-spawns.tooltip": "Збір предметів, що породжуються шахтами, як-от кварц та замерша сльоза.",
+
+
+
+    /****
+    ** Placed items
+    ****/
+    "config.break-flooring.name": "Розбивати покриття",
+    "config.break-flooring.tooltip": "Розбивання встановленого покриття.",
+
+    "config.break-objects.name": "Розбивати об'єкти",
+    "config.break-objects.tooltip": "Розбиття встановлених об'єктів.",
+
+    "config.break-mine-containers.name": "Розбивати ящики в шахті",
+    "config.break-mine-containers.tooltip": "Розбиття ящиків в шахті.",
+
+    "config.harvest-machines.name": "Збирати виготовлені предмети з машин",
+    "config.harvest-machines.tooltip": "Збір предметів з машин.",
+
+
+    /****
+    ** Melee
+    ****/
+    "config.Attack-monsters.name": "Атакувати монстрів",
+    "config.Attack-monsters.tooltip": "Атака монстрів. (Цей процес відбувається значно швидше через швидкість трактора.)",
+
+
+    /****
+    ** Other
+    ****/
+    "config.milk-pail.name": "Увімкнути відро для молока",
+    "config.milk-pail.tooltip": "Збір молока від сільськогосподарських тварин за допомогою відра.",
+
+    "config.shears.name": "Увімкнути ножиці",
+    "config.shears.tooltip": "Збір вовни з сільськогосподарських тварин за допомогою ножиць.",
+
+    "config.watering-can.name": "Увімкнути лійку",
+    "config.watering-can.tooltip": "Полив сусідніх клітин за допомогою лійки. При цьому не витрачається вода в лійці.",
+
+    "config.fertilizer.name": "Увімкнути добриво",
+    "config.fertilizer.tooltip": "Застосування добрива на культури та оброблений ґрунт.",
+
+    "config.grass-starters.name": "Увімкнути клаптики трави",
+    "config.grass-starters.tooltip": "Посадка клаптиків трави.",
+
+    "config.seeds.name": "Увімкнути насіння",
+    "config.seeds.tooltip": "Сіяння насіння.",
+
+    "config.seed-bags.name": "Увімкнути сумісність з модом Seed Bags Mod",
+    "config.seed-bags.tooltip": "Сіяння насіння з моду Seed Bag Mod.",
+
+    "config.slingshot.name": "Увімкнути рогатку",
+    "config.slingshot.tooltip": "Стрілянина з рогатки за допомогою курсору. (Це дуже сильно навантажує та споживає купу боєприпасів через швидкість трактора.)",
+
+    "config.custom-tool-names.name": "Користувацькі назви предметів",
+    "config.custom-tool-names.tooltip": "Користувацкі предмети/інструменти, які можна вмикати під час їзди на тракторі. Інструменти будуть використані на кожній навколишній клітині, а предмети будуть відкладені. Якщо ви вкажете предмет, що вже підтримується (наприклад, сокира), це зніме всі обмеження щодо його використання. Ви повинні вказати точну ігрову назву (не перекладену назву), наприклад \"Axe\" або \"Mega Bomb\". Розділіть кілька значень комами."
+}

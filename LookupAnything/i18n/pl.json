@@ -83,7 +83,7 @@
     // NPC descriptions
     "data.npc.pet.description": "Twój lojalny zwierzak.",
     "data.npc.horse.description": "Twój lojalny rumak.",
-    "data.npc.junimo.description": "Leśny duszek, pochodzący ze świata duchów. Niewiele o nich wiadomo.",
+    "data.npc.junimo.description": "Leśny duszek pochodzący ze świata duchów. Niewiele o nich wiadomo.",
     "data.npc.trash-bear.description": "Przyjazny duch, który sprząta śmieci.",
 
     // item types
@@ -92,15 +92,15 @@
     "data.type.container": "Kontener",
 
     // farm items
-    "data.item.egg-incubator.description": "Tutaj wykluwają się kury i kaczki.",
+    "data.item.egg-incubator.description": "Tutaj z jaj wylęgają się młode kury i kaczki.",
     "data.item.broken-branch.name": "Złamana Gałąź",
     "data.item.broken-branch.description": "Zwykła złamana gałąź. Uderz siekierą, aby uzyskać drewno.",
     "data.item.stone.name": "Kamień",
     "data.item.stone.description": "Zwykła szara skała. Rozbij, aby uzyskać kamień.",
     "data.item.geode.name": "Złoże Geod",
     "data.item.geode.description": "Rozbij, aby uzyskać geody.",
-    "data.item.frozen-geode.name": "Złoże Zamrożonych Geod",
-    "data.item.frozen-geode.description": "Rozbij, aby uzyskać zamrożone geody.",
+    "data.item.frozen-geode.name": "Złoże Lodowych Geod",
+    "data.item.frozen-geode.description": "Rozbij, aby uzyskać lodowe geody.",
     "data.item.magma-geode.name": "Złoże Magmowych Geod",
     "data.item.magma-geode.description": "Rozbij, aby uzyskać magmowe geody.",
 
@@ -121,12 +121,12 @@
     "data.item.diamond-node.description": "Rozbij, aby uzyskać diamenty.",
     "data.item.emerald-node.name": "Złoże Szmaragdów",
     "data.item.emerald-node.description": "Rozbij, aby uzyskać szmaragdy.",
-    "data.item.gem-node.name": "Złoże Minerałów",
+    "data.item.gem-node.name": "Złoże Klejnotów",
     "data.item.gem-node.description": "Rozbij, aby uzyskać szmaragdy, akwamaryny, rubiny, ametysty, topazy, jadeity lub diamenty.",
     "data.item.jade-node.name": "Złoże Jadeitów",
     "data.item.jade-node.description": "Rozbij, aby uzyskać jadeity.",
     "data.item.mystic-stone.name": "Mistyczny Kamień",
-    "data.item.mystic-stone.description": "Rozbij, aby uzyskać rzadkie minerały i rudy, w tym pryzmatyczne odłamki.",
+    "data.item.mystic-stone.description": "Rozbij, aby uzyskać rzadkie klejnoty i rudy, w tym pryzmatyczne odłamki.",
     "data.item.prismatic-node.name": "Pryzmatyczne Złoże",
     "data.item.prismatic-node.description": "Rozbij, aby uzyskać pryzmatyczne odłamki.",
     "data.item.ruby-node.name": "Złoże Rubinów",
@@ -152,7 +152,7 @@
     "data.item.colored-stone.name": "Kolorowy Kamień",
     "data.item.colored-stone.description": "Zwykła skała. Może zawierać kamień, rudy lub geody.",
     "data.item.mine-stone.name": "Kamień",
-    "data.item.mine-stone.description": "Rozbij, aby uzyskać kamień z szansą na węgiel.",
+    "data.item.mine-stone.description": "Rozbij, aby uzyskać kamień z szansą na wypadnięcie węgla.",
 
     // other stones
     "data.item.clay-stone.name": "Skamieniała Glina",
@@ -185,24 +185,24 @@
     "location.sewer": "ścieki",
     "location.submarine": "łódź podwodna Nocnego Rynku",
     "location.town": "miasto",
-    "location.town.northmost-bridge": "miasto (północny most)",
+    "location.town.northmost-bridge": "miasto (kładka na północy)",
     "location.tunnel": "tunel drogowy",
     "location.undergroundMine": "kopalnia",
     "location.undergroundMine.level": "{{level}} poziom kopalni",
     "location.witchSwamp": "bagno wiedźmy",
     "location.woods": "tajemniczy las",
 
-    "location.caldera": "Imbirowa Wyspa - kaldera",
-    "location.islandEast": "Imbirowa Wyspa - wschód",
-    "location.islandNorth": "Imbirowa Wyspa - północ",
-    "location.islandSouth": "Imbirowa Wyspa - południe",
-    "location.islandSouthEast": "Imbirowa Wyspa - płd. wsch.",
-    "location.islandSouthEastCave": "Imbirowa Wyspa - płd. wsch. jaskinia",
-    "location.islandWest": "Imbirowa Wyspa - zachód",
-    "location.islandWest.fish-area-1": "Imbirowa Wyspa - zachód (ocean)",
-    "location.islandWest.fish-area-2": "Imbirowa Wyspa - zachód (staw)",
+    "location.caldera": "Imbirowa Wyspa kaldera",
+    "location.islandEast": "Imbirowa Wyspa wschód",
+    "location.islandNorth": "Imbirowa Wyspa północ",
+    "location.islandSouth": "Imbirowa Wyspa południe",
+    "location.islandSouthEast": "Imbirowa Wyspa płd. wsch.",
+    "location.islandSouthEastCave": "Imbirowa Wyspa płd. wsch. (jaskinia)",
+    "location.islandWest": "Imbirowa Wyspa zachód",
+    "location.islandWest.fish-area-1": "Imbirowa Wyspa zachód (ocean)",
+    "location.islandWest.fish-area-2": "Imbirowa Wyspa zachód (staw)",
 
-    "location.unknown-fish-area": "{{locationName}} (strefa połowów {{id}})",
+    "location.unknown-fish-area": "{{locationName}} (obszar połowowy {{id}})",
 
 
     /*********
@@ -213,14 +213,14 @@
     "animal.happiness": "Szczęście",
     "animal.mood": "Dzisiejszy nastrój",
     "animal.complaints": "Problemy",
-    "animal.produce-ready": "Gotowe do produkcji",
+    "animal.produce-ready": "Produkt gotowy",
     "animal.growth": "Wiek",
     "animal.sells-for": "Sprzedaż za",
 
     // values
     "animal.complaints.hungry": "nie było wczoraj karmione",
     "animal.complaints.left-out": "zeszłej nocy zostawione na zewnątrz",
-    "animal.complaints.new-home": "przeniesione do nowego domu",
+    "animal.complaints.new-home": "przywyka do nowego domu",
     "animal.complaints.no-heater": "brak ogrzewania zimą",
     "animal.complaints.not-petted": "nie zostało dzisiaj pogłaskane",
     "animal.complaints.wild-animal-attack": "zaatakowane przez dzikie zwierzęta w nocy",
@@ -254,11 +254,11 @@
     "building.slimes.summary": "{{count}} na maks. {{max}} szlamów",
     "building.stored-hay.summary-one-silo": "{{hayCount}} siana (maks. pojemność: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{hayCount}} siana w {{siloCount}} silosach (maks. pojemność: {{maxHay}})",
-    "building.upgrades.barn.0": "do 4 zwierząt, dodaje krowy",
-    "building.upgrades.barn.1": "do 8 zwierząt, dodaje rozmnażanie i kozy",
-    "building.upgrades.barn.2": "do 12 zwierząt, dodaje autokarmienie, świnie i owce",
+    "building.upgrades.barn.0": "do 4 zwierząt; dodaje krowy",
+    "building.upgrades.barn.1": "do 8 zwierząt; dodaje rozmnażanie i kozy",
+    "building.upgrades.barn.2": "do 12 zwierząt; dodaje autokarmienie, świnie i owce",
     "building.upgrades.cabin.0": "początkowa kabina",
-    "building.upgrades.cabin.1": "dodaje kuchnię, umożliwia małżeństwo",
+    "building.upgrades.cabin.1": "dodaje kuchnię, umożliwia zawarcie małżeństwa",
     "building.upgrades.cabin.2": "umożliwia posiadanie dzieci",
     "building.upgrades.coop.0": "do 4 zwierząt; dodaje kury",
     "building.upgrades.coop.1": "do 8 zwierząt; dodaje inkubator, dinozaury i kaczki",
@@ -277,7 +277,7 @@
     // values
     "building.fish-pond.population.empty": "Dodaj rybę, aby staw zaczął funkcjonować",
     "building.fish-pond.population.next-spawn": "Nowa ryba pojawi się {{relativeDate}}",
-    "building.fish-pond.drops.preface": "{{chance}}% szans każdego dnia na wyprodukowanie przedmiotu:",
+    "building.fish-pond.drops.preface": "{{chance}}% szans każdego dnia na wyprodukowanie pierwszego zaznaczonego przedmiotu:",
     "building.fish-pond.drops.min-fish": "Z {{count}} rybami:",
     "building.fish-pond.quests.done": "{{count}} ryb",
     "building.fish-pond.quests.incomplete-one": "{{count}} ryb: potrzeba {{itemName}}",
@@ -302,7 +302,7 @@
     // values
     "bush.growth.summary": "dojrzeje na {{date}}",
     "bush.schedule.berry": "20% szans na maliny wiosną w dniach 15-18 i jeżyny jesienią w dniach 8-11.",
-    "bush.schedule.tea": "Wytwarza liście herbaty od 22 dnia każdego sezonu (oprócz zimy, jeśli nie w szklarni).",
+    "bush.schedule.tea": "Wytwarza liście herbaty od 22 dnia każdego sezonu (oprócz zimy, jeśli nie znajduje się w szklarni).",
 
 
     /*********
@@ -326,7 +326,7 @@
     "fruit-tree.quality.now": "obecnie {{quality}}",
     "fruit-tree.quality.on-date": "{{quality}} na {{date}}",
     "fruit-tree.quality.on-date-next-year": "{{quality}} na {{date}} następnego roku",
-    "fruit-tree.season.summary": "{{season}} (lub kiedykolwiek, jeśli w szklarni)",
+    "fruit-tree.season.summary": "{{season}} (lub kiedykolwiek, jeśli znajduje się w szklarni)",
 
 
     /*********
@@ -334,8 +334,8 @@
     *********/
     // labels
     "crop.summary": "Uprawa",
-    "crop.harvest": "Do zebrania",
-    "crop.fertilized": "Użyźniono",
+    "crop.harvest": "Zbiory",
+    "crop.fertilized": "Nawieziono",
     "crop.watered": "Podlano",
 
     // values
@@ -363,7 +363,7 @@
     "item.number-owned": "Posiadane",
     "item.number-cooked": "Przyrządzone",
     "item.number-crafted": "Wytworzone",
-    "item.recipes": "Przepisy",
+    "item.recipes": "Receptury",
     "item.see-also": "Zobacz również",
     "item.sells-for": "Sprzedaż za",
     "item.sells-to": "Sprzedaż do",
@@ -371,8 +371,8 @@
     "item.produces-dye": "Tworzy barwnik",
 
     // values
-    "item.contents.placed": "umieszczono {{name}}",
-    "item.contents.ready": "ukończono {{name}}",
+    "item.contents.placed": "{{name}} umieszczono",
+    "item.contents.ready": "{{name}} ukończono",
     "item.contents.partial": "{{name}} za {{time}}",
     "item.undiscovered-gift-taste": "{{count}} nieokreślonych mieszkańców",
     "item.undiscovered-gift-taste-appended": ", oraz {{count}} nieokreślonych mieszkańców",
@@ -410,7 +410,7 @@
     // labels
     "item.crabpot-bait": "Przynęta",
     "item.crabpot-bait-needed": "Potrzeba przynęty!",
-    "item.crabpot-bait-not-needed": "Niepotrzebne ze względu na profesję Mistrza Przynęt.",
+    "item.crabpot-bait-not-needed": "Niepotrzebna ze względu na profesję Mistrza Przynęty.",
 
 
     /*********
@@ -433,7 +433,7 @@
 
     // values
     "item.fish-spawn-rules.min-fishing-level": "min. poziom wędkarstwa: {{level}}",
-    "item.fish-spawn-rules.not-caught-yet": "jeszcze nie złowiono (można złowić raz)",
+    "item.fish-spawn-rules.not-caught-yet": "jeszcze nie złowiono (można złapać tylko raz na grę)",
     "item.fish-spawn-rules.locations": "lokacje: {{locations}}",
     "item.fish-spawn-rules.locations-by-season.label": "lokacje:",
     "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
@@ -450,9 +450,9 @@
     // labels
     "item.movie-snack-preference": "Preferencja",
     "item.movie-ticket.movie-this-week": "Film w tym tygodniu",
-    "item.movie-ticket.loves-movie": "Kocha film",
-    "item.movie-ticket.likes-movie": "Lubi film",
-    "item.movie-ticket.dislikes-movie": "Nie lubi filmu",
+    "item.movie-ticket.loves-movie": "Kocha ten film",
+    "item.movie-ticket.likes-movie": "Lubi ten film",
+    "item.movie-ticket.dislikes-movie": "Nie lubi tego filmu",
 
     // values
     "item.movie-snack-preference.love": "{{name}} kocha to",
@@ -473,7 +473,7 @@
     ** Monster lookups
     *********/
     // labels
-    "monster.invincible": "Niepokonano",
+    "monster.invincible": "Niezniszczalny",
     "monster.health": "Zdrowie",
     "monster.drops": "Może wypaść",
     "monster.experience": "XP",
@@ -483,7 +483,7 @@
 
     // values
     "monster.drops.nothing": "nic",
-    "monster.adventure-guild.eradication-goal": "cel eliminacji: {{name}} (zabito {{count}} z {{requiredCount}})",
+    "monster.adventure-guild.eradication-goal": "cel likwidacji: {{name}} (zabito {{count}} z {{requiredCount}})",
 
 
     /*********
@@ -492,17 +492,17 @@
     // labels
     "npc.birthday": "Urodziny",
     "npc.can-romance": "Możliwość romansu",
-    "npc.friendship": "Przyjaźń",
+    "npc.friendship": "Relacja",
     "npc.talked-today": "Rozmawiano dzisiaj",
-    "npc.gifted-today": "Wręczono dzisiaj",
-    "npc.gifted-this-week": "Wręczono w tym tygodniu",
+    "npc.gifted-today": "Sprezentowano dzisiaj",
+    "npc.gifted-this-week": "Prezenty w tym tygodniu",
     "npc.kissed-today": "Pocałowano dzisiaj",
     "npc.hugged-today": "Przytulono dzisiaj",
-    "npc.loves-gifts": "Kocha",
-    "npc.likes-gifts": "Lubi",
-    "npc.neutral-gifts": "Neutralnie",
-    "npc.dislikes-gifts": "Nie lubi",
-    "npc.hates-gifts": "Nienawidzi",
+    "npc.loves-gifts": "Ukochane prezenty",
+    "npc.likes-gifts": "Lubiane prezenty",
+    "npc.neutral-gifts": "Neutralne prezenty",
+    "npc.dislikes-gifts": "Nielubiane prezenty",
+    "npc.hates-gifts": "Znienawidzone prezenty",
 
     // values
     "npc.can-romance.married": "Jesteście małżeństwem! <", // < turns into a heart
@@ -510,8 +510,8 @@
     "npc.friendship.not-met": "Jeszcze się nie poznaliście.",
     "npc.friendship.need-bouquet": "potrzeba bukietu na następne",
     "npc.friendship.need-points": "następne za {{count}} pkt",
-    "npc.undiscovered-gift-taste": "{{count}} nieokreślonych przedmiotów",
-    "npc.undiscovered-gift-taste-appended": ", oraz {{count}} nieokreślonych przedmiotów",
+    "npc.undiscovered-gift-taste": "{{count}} nieodkrytych przedmiotów",
+    "npc.undiscovered-gift-taste-appended": ", oraz {{count}} nieodkrytych przedmiotów",
 
 
     /*********
@@ -524,9 +524,9 @@
     "npc.child.age.description-partial": "{{label}} ({{count}} dni do {{nextLabel}})",
     "npc.child.age.description-grown": "{{label}}",
     "npc.child.age.newborn": "noworodek",
-    "npc.child.age.baby": "dziecko",
+    "npc.child.age.baby": "niemowlę",
     "npc.child.age.crawler": "brzdąc",
-    "npc.child.age.toddler": "niemowlak",
+    "npc.child.age.toddler": "dziecko",
 
 
     /*********
@@ -539,11 +539,11 @@
     "pet.water-bowl": "Miska na wodę",
 
     // values
-    "pet.last-petted.yes": "tak (+12 miłości)",
+    "pet.last-petted.yes": "tak (+12 pkt do miłości)",
     "pet.last-petted.days-ago": "{{days}} dni temu",
     "pet.last-petted.never": "nigdy",
     "pet.water-bowl.empty": "pusta",
-    "pet.water-bowl.filled": "napełniona (+6 miłości)",
+    "pet.water-bowl.filled": "napełniona (+6 pkt do miłości)",
 
 
     /*********
@@ -603,14 +603,14 @@
     *********/
     // labels
     "puzzle.island-mermaid.title": "Zagadka Wyspiarskiej Syreny",
-    "puzzle.island-mermaid.solution.intro": "Użyj bloków fletu, aby odtworzyć piosenkę syreny z Nocnego Rynku. Wysokości tonu (możesz sprawdzić blok fletu, aby zobaczyć jego ton):",
+    "puzzle.island-mermaid.solution.intro": "Użyj bloków fletu, aby odtworzyć piosenkę syreny z Nocnego Rynku. Wysokości tonu (możesz sprawdzić podglądem blok fletu, żeby zobaczyć jego ton):",
 
 
     /*********
     ** Puzzles > Fern Islands shrine puzzle
     *********/
     // labels
-    "puzzle.island-shrine.title": "Zagadka Sanktuarium na Wyspie",
+    "puzzle.island-shrine.title": "Zagadka Kapliczki na Wyspie",
 
     // values
     "puzzle.island-shrine.solution": "Na każdym piedestale umieść klejnot, który upuszczają ptaki w odpowiadającym miejscu na wyspie, gdy pada deszcz. Klejnoty są losowe dla każdego zapisu.",
@@ -624,7 +624,7 @@
     ** Tile lookups
     *********/
     // labels
-    "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w ustawieniach włączono podgląd kafelków.",
+    "tile.description": "Położenie kafelka na mapie. Jest to wyświetlane, ponieważ w konfiguracji włączono podgląd kafelków.",
     "tile.game-location": "Lokacja",
     "tile.map-name": "Nazwa mapy",
     "tile.tile": "Kafelek",
@@ -653,7 +653,7 @@
     "tree.stage": "Etap wzrostu",
     "tree.next-growth": "Następny wzrost",
     "tree.has-seed": "Posiada nasiono",
-    "tree.is-fertilized": "Użyźniono",
+    "tree.is-fertilized": "Nawieziono",
 
     // values
     "tree.name.big-mushroom": "Wielki Grzyb",
@@ -665,7 +665,7 @@
     "tree.name.unknown": "Nieznane Drzewo",
     "tree.stage.done": "w pełni wyrośnięte",
     "tree.stage.partial": "{{stageName}} ({{step}} z {{max}})",
-    "tree.next-growth.winter": "nie może rosnąć zimą poza szklarnią, chyba że użyźniono",
+    "tree.next-growth.winter": "nie może rosnąć zimą poza szklarnią, chyba że nawieziono",
     "tree.next-growth.adjacent-trees": "nie może rosnąć, ponieważ inne drzewa są zbyt blisko",
     "tree.next-growth.chance": "{{chance}}% szans, że jutro wyrośnie {{stage}}",
 
@@ -682,46 +682,43 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    // TODO
-    "config.title.main-options": "Main options",
-    "config.progression-mode.name": "Progression mode",
-    "config.progression-mode.desc": "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.",
-    "config.highlight-unrevealed-gift-tastes.name": "Highlight unrevealed gift tastes",
-    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
-    "config.show-all-gift-tastes.name": "Show all gift tastes",
-    "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
+    "config.title.main-options": "Opcje główne",
+    "config.progression-mode.name": "Tryb progresji",
+    "config.progression-mode.desc": "Czy ukryć niektóre treści (np. upodobania prezentowe i rozwiązania zagadek), dopóki nie odkryjesz ich w grze.",
+    "config.highlight-unrevealed-gift-tastes.name": "Wyróżnij nieodkryte upodobania",
+    "config.highlight-unrevealed-gift-tastes.desc": "Czy wyróżniać przedmioty w upodobaniach prezentowych, które nie zostały odkryte w profilu NPC. Gdy ta opcja jest włączona, nieodkryte upodobania prezentowe będą pogrubione, a w podglądach pojawią się również nielubiane/znienawidzone prezenty.",
+    "config.show-all-gift-tastes.name": "Pokaż wszystkie upodobania",
+    "config.show-all-gift-tastes.desc": "Czy pokazywać wszystkie upodobania prezentowe dla podglądów NPC i przedmiotów. Gdy ta opcja jest wyłączona, pokazywane są tylko najistotniejsze upodobania (np. ukochane lub lubiane prezenty).",
 
     // advanced options
-    // TODO
-    "config.title.advanced-options": "Advanced options",
-    "config.tile-lookups.name": "Tile lookups",
-    "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
-    "config.data-mining-fields.name": "Show data mining fields",
-    "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
-    "config.force-full-screen.name": "Force full screen",
-    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
-    "config.target-redirection.name": "Target redirection",
-    "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
-    "config.scroll-amount.name": "Scroll amount",
-    "config.scroll-amount.desc": "The number of pixels to shift content on each up/down scroll.",
+    "config.title.advanced-options": "Opcje zaawansowane",
+    "config.tile-lookups.name": "Podgląd kafelków",
+    "config.tile-lookups.desc": "Czy uwzględnić kafelki mapy jako możliwe cele podglądu.",
+    "config.data-mining-fields.name": "Pokaż pola data miningu",
+    "config.data-mining-fields.desc": "Czy pokazywać surowe dane przydatne dla data minerów (jako oddzielne pola na dole wyników podglądu). Jest to zaawansowana funkcja, która nie jest przeznaczona dla większości graczy.",
+    "config.force-full-screen.name": "Wymuś pełny ekran",
+    "config.force-full-screen.desc": "Czy interfejs podglądu powinien być zawsze pełnoekranowy, a nie wyśrodkowany w oknie. Jest to przydatne głównie podczas przeglądania pól data miningu.",
+    "config.target-redirection.name": "Przekieruj docelowo",
+    "config.target-redirection.desc": "W niektórych przypadkach gra tworzy tymczasową postać, która reprezentuje inną. Na przykład, Abigail w kopalni jest w rzeczywistości tymczasowym NPC o nazwie 'AbigailMine', więc jej podgląd tam nie pokaże prawdziwych informacji o Abigail. Gdy ta opcja jest włączona, Lookup Anything wyszuka zamiast tego oryginalną Abigail.",
+    "config.scroll-amount.name": "Szybkość przewijania",
+    "config.scroll-amount.desc": "Liczba pikseli, o jaką ma zostać przesunięta treść podglądu przy każdym przewijaniu w górę/w dół.",
 
     // controls section
-    // TODO
-    "config.title.controls": "Controls",
-    "config.hide-on-key-up.name": "Hide on key up",
-    "config.hide-on-key-up.desc": "Whether to hide the lookup UI when you release the lookup key.",
-    "config.toggle-lookup.name": "Toggle lookup",
-    "config.toggle-lookup.desc": "The keys which toggle the lookup UI for something under the cursor.",
-    "config.toggle-search.name": "Toggle search",
-    "config.toggle-search.desc": "The keys which toggle the search UI.",
-    "config.scroll-up.name": "Scroll up",
-    "config.scroll-up.desc": "The keys which scroll up long content by a few lines.",
-    "config.scroll-down.name": "Scroll down",
-    "config.scroll-down.desc": "The keys which scroll down long content by a few lines.",
-    "config.page-up.name": "Page up",
-    "config.page-up.desc": "The keys which scroll up long content by a full page.",
-    "config.page-down.name": "Page down",
-    "config.page-down.desc": "The keys which scroll down long content by a full page.",
-    "config.toggle-debug.name": "Toggle debug",
-    "config.toggle-debug.desc": "The keys which toggle the display of debug information."
+    "config.title.controls": "Sterowanie",
+    "config.hide-on-key-up.name": "Chowaj po puszczeniu klawisza",
+    "config.hide-on-key-up.desc": "Czy chować interfejs podglądu po puszczeniu klawisza podglądu.",
+    "config.toggle-lookup.name": "Przełącz podgląd",
+    "config.toggle-lookup.desc": "Skrót klawiszowy, który włącza i wyłącza interfejs podglądu dla danej rzeczy pod kursorem.",
+    "config.toggle-search.name": "Przełącz wyszukiwanie",
+    "config.toggle-search.desc": "Skrót klawiszowy, który włącza i wyłącza interfejs wyszukiwania.",
+    "config.scroll-up.name": "Przesuń w górę",
+    "config.scroll-up.desc": "Skrót klawiszowy, który przesuwa długą treść podglądu o kilka linijek w górę.",
+    "config.scroll-down.name": "Przesuń w dół",
+    "config.scroll-down.desc": "Skrót klawiszowy, który przesuwa długą treść podglądu o kilka linijek w dół.",
+    "config.page-up.name": "Strona w górę",
+    "config.page-up.desc": "Skrót klawiszowy, który przesuwa długą treść podglądu o całą stronę w górę.",
+    "config.page-down.name": "Strona w dół",
+    "config.page-down.desc": "Skrót klawiszowy, który przesuwa długą treść podglądu o całą stronę w dół.",
+    "config.toggle-debug.name": "Przełącz debugowanie",
+    "config.toggle-debug.desc": "Skrót klawiszowy, który włącza i wyłącza wyświetlanie informacji debugowania."
 }

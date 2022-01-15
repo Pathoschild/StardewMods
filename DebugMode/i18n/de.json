@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "Allgemeine Optionen",
+    "config.enable-game-debug.name": "Aktiviere die Hotkeys zum Debuggen vom Spiel",
+    "config.enable-game-debug.desc": "Ob die Anzeige der Debug-Informationen auch die Debug-Hotkeys des Spiels aktiviert, z. B. das Drücken von 5, um zum Strand zu warpen.",
+    "config.enable-dangerous-hotkeys.name": "Gefährliche Hotkeys zulassen",
+    "config.enable-dangerous-hotkeys.desc": "Wenn Hotkeys zum Debuggen des Spiels aktiviert sind, können auch zerstörerische Hotkeys aktiviert werden, die den aktuellen Tag sofort beenden, die Spieler- oder Farmhausdekorationen zufällig verändern oder das Spiel zum Absturz bringen können.",
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "Steuerung",
+    "config.toggle-debug-key.name": "Debug-Informationen einschalten",
+    "config.toggle-debug-key.desc": "Die Tasten, mit denen die Debug-Informationen ein-/ausgeschaltet werden."
 }

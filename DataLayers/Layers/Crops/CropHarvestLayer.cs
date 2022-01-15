@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
                 if (crop.dead.Value)
                 {
                     yield return new TileData(tile, this.NotEnoughTimeOrDead);
-                    yield break;
+                    continue;
                 }
 
                 // yield tile

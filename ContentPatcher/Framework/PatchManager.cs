@@ -200,10 +200,10 @@ namespace ContentPatcher.Framework
             {
                 // all token updates apply at day start
                 globalChangedTokens = new InvariantHashSet(globalChangedTokens);
-                foreach (var queue in this.QueuedTokenChanges.Values)
+                foreach (var tokenQueue in this.QueuedTokenChanges.Values)
                 {
-                    globalChangedTokens.AddMany(queue);
-                    queue.Clear();
+                    globalChangedTokens.AddMany(tokenQueue);
+                    tokenQueue.Clear();
                 }
             }
             else
@@ -221,9 +221,9 @@ namespace ContentPatcher.Framework
             }
 
             // get changes to apply
-            HashSet<IPatch> patches = this.GetPatchesToUpdate(globalChangedTokens, updateType);
+            Queue<IPatch> patchQueue = new Queue<IPatch>(this.GetPatchesToUpdate(globalChangedTokens, updateType));
             InvariantHashSet reloadAssetNames = new InvariantHashSet(this.AssetsWithRemovedPatches);
-            if (!patches.Any() && !reloadAssetNames.Any())
+            if (!patchQueue.Any() && !reloadAssetNames.Any())
                 return;
 
             // reset queued patches
@@ -239,8 +239,11 @@ namespace ContentPatcher.Framework
 
             // update patches
             string prevAssetName = null;
-            foreach (IPatch patch in patches)
+            HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
+            while (patchQueue.Any())
             {
+                IPatch patch = patchQueue.Dequeue();
+
                 // log asset name
                 if (this.Monitor.IsVerbose && prevAssetName != patch.TargetAsset)
                 {
@@ -268,16 +271,45 @@ namespace ContentPatcher.Framework
                 }
                 bool isReady = patch.IsReady;
 
-                // force reindex
-                // This is only needed for EditData patches which use FromFile, since the loaded
-                // file may include tokens which couldn't be analyzed when the patch was added.
-                // This scenario was deprecated in Content Patcher 1.16, when Include patches were
-                // added.
-                if (patch.Type == PatchType.EditData && patch.FromAsset != wasFromAsset)
+                // handle specific patch types
+                switch (patch.Type)
                 {
-                    this.RemovePatchFromIndexes(patch);
-                    this.IndexPatch(patch, indexByToken: true);
+                    case PatchType.EditData:
+                        // force reindex
+                        // This is only needed for EditData patches which use FromFile, since the
+                        // loaded file may include tokens which couldn't be analyzed when the patch
+                        // was added. This scenario was deprecated in Content Patcher 1.16, when
+                        // Include patches were added.
+                        if (patch.FromAsset != wasFromAsset)
+                        {
+                            this.RemovePatchFromIndexes(patch);
+                            this.IndexPatch(patch, indexByToken: true);
+                        }
+                        break;
+
+                    case PatchType.Include:
+                        // queue new patches
+                        if (patch is IncludePatch { PatchesJustLoaded: not null } include)
+                        {
+                            foreach (IPatch includedPatch in include.PatchesJustLoaded)
+                            {
+                                newPatches.Add(includedPatch);
+                                patchQueue.Enqueue(includedPatch);
+                            }
+                        }
+                        break;
+
+                    case PatchType.Load:
+                        // warn for invalid load patch
+                        // Other patch types show an error when they're applied instead, but that's
+                        // not possible for a load patch since we can't cleanly abort a load.
+                        if (patch is LoadPatch loadPatch && patch.IsReady && !patch.FromAssetExists())
+                            this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
+                        break;
                 }
+
+                // if the patch was just added via Include, it implicitly changed too
+                changed = changed || newPatches.Contains(patch);
 
                 // track patches to reload
                 bool reloadAsset = isReady != wasReady || (isReady && changed);
@@ -290,10 +322,8 @@ namespace ContentPatcher.Framework
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
-                // track for logging
-                verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
-
                 // log change
+                verbosePatchesReloaded?.Add(new PatchAuditChange(patch, wasReady, wasFromAsset, wasTargetAsset, reloadAsset));
                 if (this.Monitor.IsVerbose)
                 {
                     IList<string> changes = new List<string>();
@@ -305,11 +335,6 @@ namespace ContentPatcher.Framework
 
                     this.Monitor.VerboseLog($"      [{(isReady ? "X" : " ")}] {patch.Path}: {(changes.Any() ? changesStr : "OK")}");
                 }
-
-                // warn for invalid load patch
-                // (Other patch types show an error when applied, but that's not possible for a load patch since we can't cleanly abort a load.)
-                if (patch is LoadPatch loadPatch && patch.IsReady && !patch.FromAssetExists())
-                    this.Monitor.Log($"Patch error: {patch.Path} has a {nameof(PatchConfig.FromFile)} which matches non-existent file '{loadPatch.FromAsset}'.", LogLevel.Error);
             }
 
             // reset indexes

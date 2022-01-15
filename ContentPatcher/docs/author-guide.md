@@ -259,6 +259,36 @@ start of the current day.
 
 You can optionally use the [`Update` field](#common-fields) to update more often.
 
+<details>
+  <summary>Expand for technical explanation</summary>
+
+Under the hood, there are three update streams:
+
+1. All tokens update immediately when Content Patcher performs a context update. Tokens are
+   realtime within the Content Patcher update cycle.
+2. Patches update depending on their `Update` rate. Each patch is frozen at the token values that
+   existed when it was updated, regardless of whether the tokens (or the assets it's applied to)
+   change later.
+3. Patches are applied when the asset is loaded or reloaded.
+
+For example, let's say you have this patch:
+```js
+{
+    "Action": "EditMap",
+    "Target": "Maps/Town",
+    "SetProperties": {
+        "CurrentTime": "{{Time}}"
+    },
+    "Update": "OnDayStart" // default update rate
+}
+```
+
+When the day starts, Content Patcher updates the patch so it contains `"CurrentTime": "600"`. It
+doesn't matter if you reload the map(s) it's applied to, the patch still contains
+`"CurrentTime": "600"` until it's updated.
+
+</details>
+
 ## Actions
 ### `Load`
 `"Action": "Load"` replaces the entire file with your version. This is useful for mods which

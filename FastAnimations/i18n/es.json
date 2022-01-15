@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Opciones Generales",
+
+    "config.disable-eat-prompt.name": "Desactivar aviso de comer/beber",
+    "config.disable-eat-prompt.tooltip": "Si desea omitir el aviso de confirmación que le pregunta si quiere comer/beber algo.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Velocidades de animación de los jugadores",
+
+    "config.eat-or-drink.name": "Comer/beber",
+    "config.eat-or-drink.tooltip": "La rapidez con la que comes y bebes. Por defecto {{defaultValue}}x.",
+
+    "config.fish.name": "Pescar",
+    "config.fish.tooltip": "La velocidad con la que lanzas y carreteas cuando pescas (no afecta al minijuego). Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
+
+    "config.harvest.name": "Cosechar",
+    "config.harvest.tooltip": "La rapidez con la que se recogen los cultivos y el forraje a mano. Por defecto {{defaultValue}}x.",
+
+    "config.milk.name": "Ordeñar",
+    "config.milk.tooltip": "La rapidez con la que se utiliza la cubeta lechera. Por defecto {{defaultValue}}x.",
+
+    "config.mount.name": "Montar/Desmontar",
+    "config.mount.tooltip": "La rapidez con la que se montan/desmontan los caballos (incluidas las monturas personalizadas como el Tractor Mod). Por defecto {{defaultValue}}x.",
+
+    "config.shear.name": "Esquilar",
+    "config.shear.tooltip": "La rapidez con la que se utilizan las tijeras de esquilar. Por defecto {{defaultValue}}x.",
+
+    "config.tool.name": "Girar herramientas",
+    "config.tool.tooltip": "La rapidez con la que se giran las herramientas (excepto las armas y la caña de pescar). Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
+
+    "config.weapon.name": "Girar armas",
+    "config.weapon.tooltip": "La rapidez con la que se mueven las armas. Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Velocidad de animación del mundo",
+
+    "config.break-geodes.name": "Romper geodas",
+    "config.break-geodes.tooltip": "La rapidez con la que el herrero rompe las geodas para ti. Por defecto {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Tragamonedas del casino",
+    "config.casino-slots.tooltip": "La rapidez con la que giran las tragamonedas del casino. Por defecto {{defaultValue}}x.",
+
+    "config.bus.name": "Bus de Pam",
+    "config.bus.tooltip": "Lo rápido que Pam conduce su autobús hacia y desde el desierto. Por defecto {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Caída de árboles",
+    "config.tree-fall.tooltip": "La rapidez con la que caen los árboles después de cortarlos. Por defecto {{defaultValue}}x, sugerencia {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Velocidad de animación de la interfaz de usuario",
+
+    "config.title-menu.name": "Transiciones del menú de título",
+    "config.title-menu.tooltip": "La rapidez con la que el menú de títulos pasa de una pantalla a otra. Por defecto {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Parpadeo al cargar juego",
+    "config.load-game-blink.tooltip": "La rapidez con la que se produce el retraso del parpadeo de la ranura después de hacer clic en una ranura de carga-guardado. Por defecto {{defaultValue}}x."
+}

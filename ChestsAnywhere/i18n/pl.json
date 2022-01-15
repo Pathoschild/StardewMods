@@ -1,0 +1,101 @@
+﻿{
+    /**********
+    ** Chest UI
+    **********/
+    // default chest names
+    "default-name.fridge": "Lodówka",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "sprzedaj przedmioty",
+    "default-name.shipping-bin.take": "odzyskaj przedmioty",
+
+    // default category names
+    "default-category.owned-cabin": "Kabina ({{owner}})",
+    "default-category.unowned-cabin": "Kabina (wolna)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Lokacja",
+    "label.location.tile": "kafelek {{x}}, {{y}}",
+    "label.name": "Nazwa",
+    "label.category": "Kategoria",
+    "label.order": "Kolejność",
+    "label.hide-chest": "Ukryj tę skrzynię z listy",
+    "label.hide-chest-hidden": "Ukryj tę skrzynię z listy (musisz ją potem znaleźć, by to cofnąć!)",
+    "label.automate-options": "Automatyzacja",
+    "label.automate-store": "Wkładaj przedmioty do tej skrzyni",
+    "label.automate-store-first": "Wkładaj przedmioty do tej skrzyni w pierwszej kolejności",
+    "label.automate-store-disabled": "Nigdy nie wkładaj przedmiotów do tej skrzyni",
+    "label.automate-take": "Wyjmuj przedmioty z tej skrzyni",
+    "label.automate-take-first": "Wyjmuj przedmioty z tej skrzyni w pierwszej kolejności",
+    "label.automate-take-disabled": "Nigdy nie wyjmuj przedmiotów z tej skrzyni",
+    "label.automate-prevent-remove-stacks": "Unikaj usuwania ostatniego przedmiotu w stercie",
+
+    // button labels
+    "button.edit-chest": "edytuj skrzynię",
+    "button.sort-inventory": "sortuj ekwipunek",
+    "button.save": "zapisz",
+    "button.reset": "zresetuj",
+
+
+    /**********
+    ** Errors
+    **********/
+    "errors.disabled-from-here": "Nie masz stąd dostępu do skrzyń.",
+    "errors.no-chests": "Nie masz jeszcze żadnych skrzyń.",
+    "errors.no-chests-in-location": "Nie masz żadnych skrzyń w tym obszarze.",
+    "errors.no-chests-in-range": "Nie masz żadnych skrzyń w pobliżu.",
+
+
+    /**********
+    ** Generic Mod Config Menu UI
+    **********/
+    // general options
+    // TODO
+    "config.title.general-options": "General options",
+    "config.show-hover-tooltips.name": "Show hover tooltips",
+    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
+    "config.enable-shipping-bin.name": "Enable shipping bin",
+    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
+    "config.add-organize-player-items.name": "Add organize player items button",
+    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
+    "config.range.name": "Range",
+    "config.range.desc": "The range at which chests are accessible through the menu.",
+    "config.range.unlimited": "All chests",
+    "config.range.currentWorldArea": "Chests within the current world area",
+    "config.range.currentLocation": "Chests within the current location",
+    "config.range.none": "None (can't access chests remotely)",
+
+    // general controls
+    // TODO
+    "config.title.general-controls": "General controls",
+    "config.toggle-ui-key.name": "Toggle UI",
+    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+
+    // controls when chest UI is open
+    // TODO
+    "config.title.menu-controls": "Controls when chest UI is open",
+    "config.edit-chest.name": "Edit chest",
+    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
+    "config.sort-items.name": "Sort items",
+    "config.sort-items.desc": "The keys which sort items in the current chest.",
+    "config.navigate-prev-chest.name": "Navigate: previous chest",
+    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
+    "config.navigate-next-chest.name": "Navigate: next chest",
+    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
+    "config.navigate-prev-category.name": "Navigate: previous category",
+    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
+    "config.navigate-next-category.name": "Navigate: next category",
+    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
+    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
+    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
+    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
+    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+
+    // disable in locations
+    // TODO
+    "config.title.disable-in-locations": "Disable in locations",
+    "config.disable-mines.name": "Mines and Skull Cavern",
+    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
+    "config.disable-custom-names.name": "Custom location names",
+    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+}

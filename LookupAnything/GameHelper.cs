@@ -382,7 +382,7 @@ namespace Pathoschild.Stardew.LookupAnything
         {
             return this
                 .GetRecipes()
-                .Where(recipe => this.AreEquivalent(item, recipe.CreateItem(item)));
+                .Where(recipe => this.AreEquivalent(item, recipe.TryCreateItem(item)));
         }
 
         /// <summary>Get the recipes for a given machine.</summary>

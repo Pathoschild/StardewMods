@@ -1,0 +1,724 @@
+﻿{
+    /*********
+    ** Generic translations
+    *********/
+    // date names
+    "generic.now": "зараз",
+    "generic.tomorrow": "завтра",
+    "generic.yesterday": "вчора",
+
+    // generic values
+    "generic.unknown": "невідомо",
+
+    // generic field values
+    "generic.percent": "{{percent}}%",
+    "generic.percent-chance-of": "{{percent}}% шанс для {{label}}",
+    "generic.percent-ratio": "{{percent}}% ({{value}} з {{max}})",
+    "generic.ratio": "{{value}} з {{max}}",
+    "generic.range": "З {{min}} до {{max}}",
+    "generic.yes": "так",
+    "generic.no": "ні",
+    "generic.seconds": "{{count}} сек.",
+    "generic.minutes": "{{count}} хв.",
+    "generic.hours": "{{count}} год.",
+    "generic.days": "{{count}} дн.",
+    "generic.in-x-days": "за {{count}} дн.",
+    "generic.x-days-ago": "{{count}} дн. тому",
+    "generic.price": "{{price}} з",
+    "generic.price-for-quality": "{{price}} з. ({{quality}})",
+    "generic.price-for-stack": "{{price}} з. за набір з {{count}} од.",
+
+    // types
+    "type.building": "Побудова",
+    "type.bush": "Кущ",
+    "type.fruit-tree": "Фруктове дерево",
+    "type.map-tile": "Об'єкт",
+    "type.monster": "Монстр",
+    "type.player": "Гравець",
+    "type.tree": "Дерево",
+    "type.villager": "Містянин",
+    "type.other": "Інше", // default type
+
+    // item qualities
+    "quality.normal": "звичайна",
+    "quality.silver": "срібна",
+    "quality.gold": "золота",
+    "quality.iridium": "іридієва",
+
+    // NPC friendship
+    "friendship-status.friendly": "Дружній",
+    "friendship-status.dating": "Пара",
+    "friendship-status.engaged": "Зарученні",
+    "friendship-status.married": "У шлюбі",
+    "friendship-status.divorced": "Розійшлися",
+    "friendship-status.kicked-out": "Вигнано",
+
+
+    /*********
+    ** Data translations
+    *********/
+    // Community Center bundle areas
+    "bundle-area.pantry": "Комора",
+    "bundle-area.crafts-room": "Кімната ремісника",
+    "bundle-area.fish-tank": "Акваріум",
+    "bundle-area.boiler-room": "Котельня",
+    "bundle-area.vault": "Сейф",
+    "bundle-area.bulletin-board": "Дошка оголошень",
+    "bundle-area.abandoned-joja-mart": "Покинутий JojaМаркет",
+
+    // shop names
+    "shop.adventure-guild": "Гільдія Шукачів Пригод",
+    "shop.clint": "Клінт",
+    "shop.marnie": "Марні",
+    "shop.pierre": "П'єр",
+    "shop.robin": "Робін",
+    "shop.volcano": "Дварфівська крамниця",
+    "shop.willy": "Віллі",
+
+    // recipe types
+    "recipe-type.cooking": "Готування",
+    "recipe-type.crafting": "Створення",
+    "recipe-type.tailoring": "Шиття",
+
+    // NPC descriptions
+    "data.npc.pet.description": "Ваш відданий вихованець.",
+    "data.npc.horse.description": "Ваш відданий кінь.",
+    "data.npc.junimo.description": "Дух лісу зі світу духів. Про них мало що відомо.",
+    "data.npc.trash-bear.description": "Дружній дух, що прибирає сміття.",
+
+    // item types
+    "data.type.debris": "Сміття",
+    "data.type.stone": "Каміння",
+    "data.type.container": "Контейнер",
+
+    // farm items
+    "data.item.egg-incubator.description": "Висиджує яйця курчат та каченят.",
+    "data.item.broken-branch.name": "Зламана гілка",
+    "data.item.broken-branch.description": "Зламана гілка. Розрубіть сокирою, щоб отримати деревину.",
+    "data.item.stone.name": "Камінь",
+    "data.item.stone.description": "Невиразний сірий камінь. Розбийте, щоб отримати каміння.",
+    "data.item.geode.name": "Жеодова жила",
+    "data.item.geode.description": "Розбийте, щоб отримати жеоди.",
+    "data.item.frozen-geode.name": "Морозна жеодна жила",
+    "data.item.frozen-geode.description": "Розбийте, щоб отримати морозну жеоду.",
+    "data.item.magma-geode.name": "Магма-жеодова жила",
+    "data.item.magma-geode.description": "Розбийте, щоб отримати магма-жеоди.",
+
+    // weeds & crystals
+    "data.item.weed.name": "Бур'ян",
+    "data.item.weed.description": "Невиразний бур'ян. Може містити волокно чи змішане насіння.",
+    "data.item.fertile-weed.name": "Плодючий бур'ян",
+    "data.item.fertile-weed.description": "Гарантовано випадає змішане насіння.",
+    "data.item.ice-crystal.name": "Льодяний кристал",
+    "data.item.ice-crystal.description": "Невиразний льодяний кристал. Дуже маленький шанс випадіння очищеного кварцу.",
+
+    // mine gems
+    "data.item.amethyst-node.name": "Аметистова жила",
+    "data.item.amethyst-node.description": "Розбийте, щоб отримати аметисти.",
+    "data.item.aquamarine-node.name": "Аквамаринова жила",
+    "data.item.aquamarine-node.description": "Розбийте, щоб отримати аквамарини.",
+    "data.item.diamond-node.name": "Діамантова жила",
+    "data.item.diamond-node.description": "Розбийте, щоб отримати діаманти.",
+    "data.item.emerald-node.name": "Смарагдова жила",
+    "data.item.emerald-node.description": "Розбийте, щоб отримати смарагди.",
+    "data.item.gem-node.name": "Коштовна жила",
+    "data.item.gem-node.description": "Розбийте, щоб отримати смарагди, аквамарини, рубіни, аметисти, топаз, нефрит або діамант.",
+    "data.item.jade-node.name": "Нефритова жила",
+    "data.item.jade-node.description": "Розбийте, щоб отримати нефрит.",
+    "data.item.mystic-stone.name": "Містичний камінь",
+    "data.item.mystic-stone.description": "Розбийте, щоб отримати рідкісні самоцвіти та руди, включаючи веселковий уламок.",
+    "data.item.prismatic-node.name": "Веселкова жила",
+    "data.item.prismatic-node.description": "Розбийте, щоб отримати веселковий уламок.",
+    "data.item.ruby-node.name": "Рубінова жила",
+    "data.item.ruby-node.description": "Розбийте, щоб отримати рубіни.",
+    "data.item.topaz-node.name": "Топазна жила",
+    "data.item.topaz-node.description": "Розбийте, щоб отримати топаз.",
+
+    // mine ores
+    "data.item.cinder-shard-node.name": "Жила уламку попелу",
+    "data.item.cinder-shard-node.description": "Розбийте, щоб отримати уламок попелу.",
+    "data.item.copper-node.name": "Мідна жила",
+    "data.item.copper-node.description": "Розбийте, щоб отримати мідну руду.",
+    "data.item.gold-node.name": "Золота жила",
+    "data.item.gold-node.description": "Розбийте, щоб отримати золоту руду.",
+    "data.item.iridium-node.name": "Іридієва жила",
+    "data.item.iridium-node.description": "Розбийте, щоб отримати іридієву руду.",
+    "data.item.iron-node.name": "Залізна жила",
+    "data.item.iron-node.description": "Розбийте, щоб отримати залізну руду.",
+    "data.item.omni-geode-node.name": "Омніжеодна жила",
+    "data.item.omni-geode-node.description": "Розбийте, шоб отримати омніжеоду.",
+
+    // mine stones
+    "data.item.colored-stone.name": "Кольоровий камінь",
+    "data.item.colored-stone.description": "Невиразний камінь. Може містити каміння, руду або жеоди.",
+    "data.item.mine-stone.name": "Камінь",
+    "data.item.mine-stone.description": "Розбийте, щоб отримати каміння.",
+
+    // other stones
+    "data.item.clay-stone.name": "Глиняний камінь",
+    "data.item.clay-stone.description": "Розбийте, що отримати глину.",
+    "data.item.fossil-stone.name": "Камень скам'янілостей",
+    "data.item.fossil-stone.description": "Розбийте, щоб отримати скам'янілості або кістки.",
+
+    // mine containers
+    "data.item.barrel.name": "Діжка",
+    "data.item.barrel.description": "Розбийте, щоб отримати різні речі.",
+    "data.item.box.name": "Ящик",
+    "data.item.box.description": "Розбийте, щоб отримати різні речі.",
+
+    // location names
+    "location.backwoods": "задні ліси",
+    "location.beach": "пляж",
+    "location.beach.east-pier": "пляж (східний пірс)",
+    "location.bugLand": "лігво жуків-мутантів",
+    "location.busStop": "автобусна зупинка",
+    "location.desert": "пустеля",
+    "location.farm": "ферма",
+    "location.farmCave": "печера ферми",
+    "location.farmHouse": "будинок ферми",
+    "location.forest": "ліс",
+    "location.forest.fish-area-0": "лісова річка",
+    "location.forest.fish-area-1": "лісове озеро",
+    "location.forest.island-tip": "лісова річка (південна частина великого острова)",
+    "location.mountain": "гори",
+    "location.railroad": "залізниця",
+    "location.sewer": "каналізація",
+    "location.submarine": "Підводний човен Нічного ринку",
+    "location.town": "місто",
+    "location.town.northmost-bridge": "місто (найпівнічніший міст)",
+    "location.tunnel": "Автобусний тунель",
+    "location.undergroundMine": "шахта",
+    "location.undergroundMine.level": "{{level}} рівень шахти",
+    "location.witchSwamp": "болото відьми",
+    "location.woods": "таємний ліс",
+
+    "location.caldera": "Жерло вулкана Імбирного острова",
+    "location.islandEast": "Східна частина Імбирного острова",
+    "location.islandNorth": "Північна частина Імбирного острова",
+    "location.islandSouth": "Південна частина Імбирного острова",
+    "location.islandSouthEast": "Південно-східна частина Імбирного острова",
+    "location.islandSouthEastCave": "Печера південно-східної частини Імбирного острова",
+    "location.islandWest": "Західна частина Імбирного острова",
+    "location.islandWest.fish-area-1": "Західна частина Імбирного острова (океан)",
+    "location.islandWest.fish-area-2": "Західна частина Імбирного острова (ставок)",
+
+    "location.unknown-fish-area": "{{locationName}} (риболовна місцина {{id}})",
+
+
+    /*********
+    ** Animal lookups
+    *********/
+    // labels
+    "animal.love": "Прихильність",
+    "animal.happiness": "Щастя",
+    "animal.mood": "Сьогодні в доброму гуморі",
+    "animal.complaints": "Скарги",
+    "animal.produce-ready": "Продукція готова",
+    "animal.growth": "Ріст",
+    "animal.sells-for": "Продається за",
+
+    // values
+    "animal.complaints.hungry": "Вчора без їжі",
+    "animal.complaints.left-out": "На вулиці минулої ночі",
+    "animal.complaints.new-home": "Переїжджає у новий дім",
+    "animal.complaints.no-heater": "Без обігріву взимку",
+    "animal.complaints.not-petted": "Не пестили сьогодні",
+    "animal.complaints.wild-animal-attack": "Атакували дикі тварини цієї ночі",
+
+
+    /*********
+    ** Building > generic lookups
+    *********/
+    // labels
+    "building.animals": "Тварини",
+    "building.construction": "Будівництво",
+    "building.feed-trough": "Кормо-роздавач",
+    "building.horse": "Кінь",
+    "building.horse-location": "Місцезнаходження коня",
+    "building.owner": "Власник",
+    "building.slimes": "Слайми",
+    "building.stored-hay": "Сіно у силосній вежі",
+    "building.upgrades": "Оновлення",
+    "building.water-trough": "Корито",
+
+    // values
+    "building.animals.summary": "{{count}} з {{max}} тварин всередині",
+    "building.construction.summary": "буде готово {{date}}",
+    "building.feed-trough.automated": "автоматизовано",
+    "building.feed-trough.summary": "{{filled}} з {{max}} заповнено місця",
+    "building.horse-location.summary": "{{location}} ({{x}}, {{y}})",
+    "building.junimo-harvesting-enabled": "Збір врожаю увімкнено",
+    "building.owner.none": "без власника",
+    "building.output-processing": "У черзі",
+    "building.output-ready": "Готово",
+    "building.slimes.summary": "{{count}} з {{max}} слаймів",
+    "building.stored-hay.summary-one-silo": "{{hayCount}} сіна (максимум: {{maxHay}})",
+    "building.stored-hay.summary-multiple-silos": "{{hayCount}} сіна у {{siloCount}} силосних вежах (максимум: {{maxHay}})",
+    "building.upgrades.barn.0": "до 4-ох тварин, розблоковує : корови",
+    "building.upgrades.barn.1": "до 8-ох тварин, розблоковує : кози та вагітність тварин",
+    "building.upgrades.barn.2": "до 12-ох тварин, розблоковує : автоматичне подавання корму, свині та вівці",
+    "building.upgrades.cabin.0": "Початковий дім",
+    "building.upgrades.cabin.1": "розблоковує : кухня, можливість шлюбу",
+    "building.upgrades.cabin.2": "розблоковує : можливість мати дітей",
+    "building.upgrades.coop.0": "до 4-ох тварин, розблоковує : курки",
+    "building.upgrades.coop.1": "до 8-ох тварин, розблоковує : інкубатор, динозаври та качки",
+    "building.upgrades.coop.2": "до 12-ох тварин, розблоковує : автоматичне подавання корму та кролики",
+    "building.water-trough.summary": "{{filled}} з {{max}} корит заповнено",
+
+
+    /*********
+    ** Building > fish pond lookups
+    *********/
+    // labels
+    "building.fish-pond.population": "Популяція",
+    "building.fish-pond.drops": "Дроп",
+    "building.fish-pond.quests": "Завдання",
+
+    // values
+    "building.fish-pond.population.empty": "Додайте рибу, щоб почати роботу ставку",
+    "building.fish-pond.population.next-spawn": "Нова риба з'явиться {{relativeDate}}",
+    "building.fish-pond.drops.preface": "{{chance}}% шанс кожного дня на виробництво першого такого предмету:",
+    "building.fish-pond.drops.min-fish": "З {{count}} рибою:",
+    "building.fish-pond.quests.done": "{{count}} рибин",
+    "building.fish-pond.quests.incomplete-one": "{{count}} рибин: потрібно {{itemName}}",
+    "building.fish-pond.quests.incomplete-random": "{{count}} рибин: потрібно 1 од. - {{itemList}}",
+    "building.fish-pond.quests.available": "доступно {{relativeDate}}",
+
+
+    /*********
+    ** Bush lookups
+    *********/
+    // labels
+    "bush.name.berry": "Ягідний кущ",
+    "bush.name.plain": "Звичайний кущ",
+    "bush.name.tea": "Чайний кущ",
+    "bush.description.berry": "Кущ, на якому росте малина чи ожина.",
+    "bush.description.plain": "Кущ, на якому нічого не росте.",
+    "bush.description.Tea": "Кущ, який дає чайне листя.",
+    "bush.date-planted": "Дата садження",
+    "bush.growth": "Ріст",
+    "bush.next-harvest": "Наступний збір",
+
+    // values
+    "bush.growth.summary": "виросте {{date}}",
+    "bush.schedule.berry": "20% шанс на збір малини, з 15-го до 18-го числа весни, а також на збір ожини з 8-го до 11-го числа осені.",
+    "bush.schedule.tea": "Дає чайне листя з 22-го числа кожного сезону (окрім зими, якщо не росте у теплиці).",
+
+
+    /*********
+    ** Fruit tree lookups
+    *********/
+    // labels
+    "fruit-tree.complaints": "Скарги",
+    "fruit-tree.name": "Дерево : {{fruitName}}",
+    "fruit-tree.growth": "Ріст",
+    "fruit-tree.next-fruit": "Наступний врожай",
+    "fruit-tree.season": "Сезон",
+    "fruit-tree.quality": "Якість",
+
+    // values
+    "fruit-tree.complaints.adjacent-objects": "не може рости через сусідні об'єкти",
+    "fruit-tree.growth.summary": "дозріє за {{date}}",
+    "fruit-tree.next-fruit.max-fruit": "більше нема місця, зберіть те, що вже є",
+    "fruit-tree.next-fruit.out-of-season": "Поза сезоном",
+    "fruit-tree.next-fruit.struck-by-lightning": "Уражено блискавкою! Відновиться за {{count}} дн.",
+    "fruit-tree.next-fruit.too-young": "занадто молоде для збору",
+    "fruit-tree.quality.now": "якість зараз : {{quality}}",
+    "fruit-tree.quality.on-date": "якість {{quality}} на {{date}}",
+    "fruit-tree.quality.on-date-next-year": "якість {{quality}} на {{date}} наступ. року",
+    "fruit-tree.season.summary": "{{season}} (або в будь-який час у теплиці)",
+
+
+    /*********
+    ** Crop lookups
+    *********/
+    // labels
+    "crop.summary": "Рослина",
+    "crop.harvest": "Врожай",
+    "crop.fertilized": "З добривом",
+    "crop.watered": "Полито",
+
+    // values
+    "crop.summary.dead": "Ця рослина зів'яла.",
+    "crop.summary.drops-X": "збір {{count}}",
+    "crop.summary.drops-X-to-Y": "збір з {{min}} до {{max}} ({{percent}}% на додатковий збір)",
+    "crop.summary.harvest-once": "врожай через {{daysToFirstHarvest}} дн.",
+    "crop.summary.harvest-multi": "врожай через {{daysToFirstHarvest}} дн., потім кожні {{daysToNextHarvests}} дн.",
+    "crop.summary.seasons": "сезон росту : {{seasons}}",
+    "crop.summary.sells-for": "продається за {{price}}",
+    "crop.harvest.too-late": "занадто пізно цього сезону для наступного збору (врожай {{date}})",
+
+
+    /*********
+    ** Item > generic lookups
+    *********/
+    // labels
+    "item.contents": "Містить",
+    "item.loves-this": "Любить",
+    "item.likes-this": "Подобається",
+    "item.neutral-about-this": "Байдуже",
+    "item.dislikes-this": "Не подобається",
+    "item.hates-this": "Ненавидить",
+    "item.needed-for": "Необхідно для",
+    "item.number-owned": "Наявність",
+    "item.number-cooked": "Приготовано",
+    "item.number-crafted": "Створено",
+    "item.recipes": "Рецепти",
+    "item.see-also": "Також подивіться",
+    "item.sells-for": "Продається за",
+    "item.sells-to": "Місце продажу",
+    "item.can-be-dyed": "Можно пофарбувати",
+    "item.produces-dye": "Продукує барвник",
+
+    // values
+    "item.contents.placed": "містить {{name}}",
+    "item.contents.ready": "{{name}} готово",
+    "item.contents.partial": "{{name}} за {{time}}",
+    "item.undiscovered-gift-taste": "{{count}} невідомих містян",
+    "item.undiscovered-gift-taste-appended": ", та {{count}} невідомих містян",
+    "item.needed-for.community-center": "громадський клуб ({{bundles}})",
+    "item.needed-for.full-shipment": "досягнення \"Майстер-вантаж\" (надішліть на продаж 1 од.)",
+    "item.needed-for.polyculture": "досягнення \"Сівозміна\" (надішліть на продаж {{count}} од. або більше)",
+    "item.needed-for.full-collection": "досягнення \"Повна колекція\" (віддайте музею артефакт чи мінерал)",
+    "item.needed-for.gourmet-chef": "досягнення \"Шеф-кухар\" (притогуйте рецепт : {{recipes}})",
+    "item.needed-for.craft-master": "досягнення \"Найкращий з ремісників\" (створіть предмет : {{recipes}})",
+    "item.needed-for.quests": "Завдання наразі ({{quests}})",
+    "item.sells-to.shipping-box": "Ящик для продажу",
+    "item.recipes-for-ingredient.entry": "{{name}} ({{count}} од.)",
+    "item.recipes-for-machine.multiple-items": "{{name}} x{{count}}",
+    "item.number-owned.summary": "Ви маєте {{count}} од.",
+    "item.number-crafted.summary": "Ви створили {{count}} од.",
+
+
+    /*********
+    ** Item > cask lookups
+    *********/
+    // labels
+    "item.cask-contents": "Містить",
+    "item.cask-schedule": "Зношується",
+
+    // values
+    "item.cask-schedule.now": "{{quality}} тепер готово",
+    "item.cask-schedule.now-partial": "{{quality}} зараз (використайте кайло для зупинення старіння)",
+    "item.cask-schedule.tomorrow": "{{quality}} завтра",
+    "item.cask-schedule.in-x-days": "{{quality}} за {{count}} дн. ({{date}})",
+
+
+    /*********
+    ** Item > crab pot lookups
+    *********/
+    // labels
+    "item.crabpot-bait": "Наживка",
+    "item.crabpot-bait-needed": "Потрібна наживка!",
+    "item.crabpot-bait-not-needed": "Непотрібно, бо обрана професія \"Майстер з наживки\".",
+
+
+    /*********
+    ** Item > fence lookups
+    *********/
+    // labels
+    "item.fence-health": "Здоров'я",
+
+    // values
+    "item.fence-health.gold-clock": "не руйнується, бо встановлено Золотий Годинник",
+    "item.fence-health.summary": "{{percent}}% (зламається за {{count}} дн.)",
+
+
+    /*********
+    ** Item > fish lookups
+    *********/
+    // labels
+    "item.fish-pond-drops": "Рибний ставок дає",
+    "item.fish-spawn-rules": "Умови появи",
+
+    // values
+    "item.fish-spawn-rules.min-fishing-level": "мінімальний рівень рибальства: {{level}}",
+    "item.fish-spawn-rules.not-caught-yet": "поки-що не зловлено (можна зловити лише один раз)",
+    "item.fish-spawn-rules.locations": "місцезнаходження: {{locations}}",
+    "item.fish-spawn-rules.locations-by-season.label": "місцезнаходження:",
+    "item.fish-spawn-rules.locations-by-season.season-locations": "{{season}}: {{locations}}",
+    "item.fish-spawn-rules.season-any": "Будь-яка пора-року",
+    "item.fish-spawn-rules.season-list": "пора року: {{seasons}}",
+    "item.fish-spawn-rules.time": "час: {{times}}",
+    "item.fish-spawn-rules.weather-sunny": "погода: сонячно",
+    "item.fish-spawn-rules.weather-rainy": "погода: дощ",
+
+
+    /*********
+    ** Item > movie lookups
+    *********/
+    // labels
+    "item.movie-snack-preference": "Перевага",
+    "item.movie-ticket.movie-this-week": "Фільм цього тижня",
+    "item.movie-ticket.loves-movie": "Любить фільм",
+    "item.movie-ticket.likes-movie": "Подобається фільм",
+    "item.movie-ticket.dislikes-movie": "Не подобається фільм",
+
+    // values
+    "item.movie-snack-preference.love": "{{name}} любить це",
+    "item.movie-snack-preference.like": "{{name}} подобається це",
+    "item.movie-snack-preference.dislike": "{{name}} не подобається це",
+    "item.movie-ticket.movie-this-week.none": "Цього тижня фільму нема",
+
+
+    /*********
+    ** Item > music block lookups
+    *********/
+    // labels
+    "item.music-block.pitch": "Поле",
+    "item.music-block.drum-type": "Тип звучання",
+
+
+    /*********
+    ** Monster lookups
+    *********/
+    // labels
+    "monster.invincible": "Невразливість",
+    "monster.health": "Здоров'я",
+    "monster.drops": "Лут",
+    "monster.experience": "ДСВ",
+    "monster.defense": "Захист",
+    "monster.attack": "Атака",
+    "monster.adventure-guild": "Гільдія Шукачів Пригод",
+
+    // values
+    "monster.drops.nothing": "нічого",
+    "monster.adventure-guild.eradication-goal": "Цілі винищення монстрів: {{name}} (вбито {{count}} з {{requiredCount}})",
+
+
+    /*********
+    ** NPC > generic lookups
+    *********/
+    // labels
+    "npc.birthday": "День народження",
+    "npc.can-romance": "Можливі стосунки",
+    "npc.friendship": "Дружба",
+    "npc.talked-today": "Сьогодні була розмова",
+    "npc.gifted-today": "Сьогодні був подарунок",
+    "npc.gifted-this-week": "Подарунки за цей тиждень",
+    "npc.kissed-today": "Сьогодні був поцілунок",
+    "npc.hugged-today": "Сьогодні були обійми",
+    "npc.loves-gifts": "Любить подарунки :",
+    "npc.likes-gifts": "Подобаються подарунки :",
+    "npc.neutral-gifts": "Байдуже ставиться до :",
+    "npc.dislikes-gifts": "Не любить подарунки",
+    "npc.hates-gifts": "Ненавидить подарунки",
+
+    // values
+    "npc.can-romance.married": "Ви одружені! <", // < turns into a heart
+    "npc.can-romance.housemate": "Ви співмешканці!",
+    "npc.friendship.not-met": "Ви ще не зустрічалися.",
+    "npc.friendship.need-bouquet": "потрібен букет для наступн.",
+    "npc.friendship.need-points": "наступн. за {{count}}",
+    "npc.undiscovered-gift-taste": "{{count}} невідкритих предметів",
+    "npc.undiscovered-gift-taste-appended": "та {{count}} невідкритих предметів",
+
+
+    /*********
+    ** NPC > child lookups
+    *********/
+    // labels
+    "npc.child.age": "Вік",
+
+    // values
+    "npc.child.age.description-partial": "{{label}} ({{count}} дн. до {{nextLabel}})",
+    "npc.child.age.description-grown": "{{label}}",
+    "npc.child.age.newborn": "новонароджене",
+    "npc.child.age.baby": "немовля",
+    "npc.child.age.crawler": "повзун",
+    "npc.child.age.toddler": "ходун",
+
+
+    /*********
+    ** Pet lookups
+    *********/
+    // labels
+    "pet.love": "Прихильність",
+    "pet.petted-today": "Сьогодні у настрої",
+    "pet.last-petted": "Останній раз ласкали",
+    "pet.water-bowl": "Миска для води",
+
+    // values
+    "pet.last-petted.yes": "Так (+12 од. прихильності)",
+    "pet.last-petted.days-ago": "{{days}} днів потому",
+    "pet.last-petted.never": "ніколи",
+    "pet.water-bowl.empty": "Порожньо",
+    "pet.water-bowl.filled": "Наповнена (+6 од. прихильності)",
+
+
+    /*********
+    ** Player lookups
+    *********/
+    // labels
+    "player.farm-name": "Назва ферми",
+    "player.farm-map": "Мапа ферми",
+    "player.favorite-thing": "Улюблена річ",
+    "player.gender": "Стать",
+    "player.housemate": "Співмешканець",
+    "player.spouse": "Половинка",
+    "player.watched-movie-this-week": "Було оглянуто фільм цього тижня",
+    "player.combat-skill": "Бойові навички",
+    "player.farming-skill": "Фермерство",
+    "player.fishing-skill": "Рибальство",
+    "player.foraging-skill": "Збирацтво",
+    "player.mining-skill": "Шахтарство",
+    "player.luck": "Удача",
+    "player.save-format": "Зберегти формат",
+
+    // values
+    "player.farm-map.custom": "Користувацька",
+    "player.gender.male": "чоловіча",
+    "player.gender.female": "жіноча",
+    "player.luck.summary": "{{percent}}% до спільного показника вдачі",
+    "player.skill.progress": "рів. {{level}} ({{expNeeded}} XP до наступн.)",
+    "player.skill.progress-last": "рів. {{level}}",
+
+
+    /*********
+    ** Puzzles
+    *********/
+    // labels
+    "puzzle.solution": "Розв'язок",
+
+    // values
+    "puzzle.solution.solved": "Пазл розв'язано!",
+    "puzzle.solution.hidden": "Розв'яки пазлів приховані в режимі прогресу.",
+
+
+    /*********
+    ** Puzzles > Fern Islands crystal cave
+    *********/
+    // labels
+    "puzzle.island-crystal-cave.title": "Пазл Кришталевої печери",
+    "puzzle.island-crystal-cave.crystal-id": "ID Кристалу",
+
+    // values
+    "puzzle.island-crystal-cave.solution.not-activated": "Активуйте статую, щоб почати розв'язувати пазл.",
+    "puzzle.island-crystal-cave.solution.waiting": "Зачекайте, поки гра не згенерує послідовність...",
+    "puzzle.island-crystal-cave.solution.activated": "Повторіть шаблон активованих кристалів:",
+
+
+    /*********
+    ** Puzzles > Fern Islands mermaid puzzle
+    *********/
+    // labels
+    "puzzle.island-mermaid.title": "Острівний Русалчин пазл",
+    "puzzle.island-mermaid.solution.intro": "Використайте флейта-блоки, щоб відтворити пісню русалки з Нічного ринку. Значення висоти тону (ви можете шукати флейта-блоки, щоб побачити його висоту):",
+
+
+    /*********
+    ** Puzzles > Fern Islands shrine puzzle
+    *********/
+    // labels
+    "puzzle.island-shrine.title": "Острівний Святинний пазл",
+
+    // values
+    "puzzle.island-shrine.solution": "Для кожного п'єдесталу помістіть предмет, що впав коштовностями, у відповідне місце на острові під час дощу. Предмети рандомізовані для кожного збереження.",
+    "puzzle.island-shrine.solution.east": "Схід: {{item}}",
+    "puzzle.island-shrine.solution.north": "Північ: {{item}}",
+    "puzzle.island-shrine.solution.south": "Південь: {{item}}",
+    "puzzle.island-shrine.solution.west": "Захід: {{item}}",
+
+
+    /*********
+    ** Tile lookups
+    *********/
+    // labels
+    "tile.description": "Позиція клітини на мапі. Це відображається, бо ви ввімкнули перегляд клітин у config файлі моду.",
+    "tile.game-location": "Назва локації",
+    "tile.map-name": "Назва мапи",
+    "tile.tile": "Клітина",
+    "tile.tile-index": "{{layerName}}: індекс клітини",
+    "tile.tilesheet": "{{layerName}}: таблиця клітини",
+    "tile.blend-mode": "{{layerName}}: режим перекриття",
+    "tile.index-property": "{{layerName}}: їx властивості : {{propertyName}}",
+    "tile.tile-property": "{{layerName}}: властивості : {{propertyName}}",
+
+    // values
+    "tile.tile.none-here": "тут немає клітини",
+
+
+    /*********
+    ** Trash Bear or Gourmand lookups
+    *********/
+    // labels
+    "trash-bear-or-gourmand.item-wanted": "Потрібен предмет",
+    "trash-bear-or-gourmand.quest-progress": "Прогресс завдання",
+
+
+    /*********
+    ** Wild tree lookups
+    *********/
+    // labels
+    "tree.stage": "Стадія росту",
+    "tree.next-growth": "Наступна стадія",
+    "tree.has-seed": "Містить насінини",
+    "tree.is-fertilized": "Використано добриво",
+
+    // values
+    "tree.name.big-mushroom": "Великий гриб",
+    "tree.name.mahogany": "Червоне дерево",
+    "tree.name.maple": "Клен",
+    "tree.name.oak": "Дуб",
+    "tree.name.palm": "Пальма",
+    "tree.name.pine": "Сосна",
+    "tree.name.unknown": "Невідоме дерево",
+    "tree.stage.done": "Повністю виросло",
+    "tree.stage.partial": "{{stageName}} ({{step}} з {{max}})",
+    "tree.next-growth.winter": "не може рости взимку поза теплицею",
+    "tree.next-growth.adjacent-trees": "не може рости, бо поряд займано місце",
+    "tree.next-growth.chance": "{{chance}}% шанс, що завтра виросте у {{stage}}",
+
+    // growth stages
+    "tree.stages.seed": "насінина",
+    "tree.stages.sprout": "паросток",
+    "tree.stages.sapling": "саджанець",
+    "tree.stages.bush": "кущ",
+    "tree.stages.smallTree": "маленьке дерево",
+    "tree.stages.tree": "дерево",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Основні налаштування",
+    "config.progression-mode.name": "Режим прогресу",
+    "config.progression-mode.desc": "Приховування деякого вмісту (наприклад, улюблені подарунки і рішення головоломок), доки ви не виявите їх в грі.",
+    "config.highlight-unrevealed-gift-tastes.name": "Підкреслити невиявлені улюблені подарунків",
+    "config.highlight-unrevealed-gift-tastes.desc": "Виділення улюблених подарунків, які не були виявлені в профілі НП. Якщо ввімкнено, не виявлені улюблені подарунки будуть жирними, а пошук також показуватиме подарунки, які не сподобалися/жахливі.",
+    "config.show-all-gift-tastes.name": "Показувати усі улюблені подарунки",
+    "config.show-all-gift-tastes.desc": "Показ усіх улюблених подарунків для НП та пошуку предметів; якщо вимкнено, відображаються лише найбільш релевантні подарунки (наприклад, улюблені або ті, що сподобалися).",
+
+    // advanced options
+    "config.title.advanced-options": "Розширені опції",
+    "config.tile-lookups.name": "Пізнати клітини",
+    "config.tile-lookups.desc": "Включення фрагменту світу як ціль пошуку.",
+    "config.data-mining-fields.name": "Показати поле аналізу даних",
+    "config.data-mining-fields.desc": "Показ необроблених данних, корисних для шукачів даних (як окремі поля внизу результатів пошуку). Це розширена функція, яка не призначена для більшості гравців.",
+    "config.force-full-screen.name": "Примусово на весь екран",
+    "config.force-full-screen.desc": "Меню завжди буде повноекранним, а не центрованим у вікні. Це в основному корисно під час перегляду даних.",
+    "config.target-redirection.name": "Цільове переспрямування",
+    "config.target-redirection.desc": "У деяких випадках гра породжує тимчасову сутність, яка представляє іншу. Наприклад, Абігейл в шахтах насправді є тимчасовим НП на ім'я \"AbigailMine\", тому пошук її не покаже справжню інформацію про Абігейл. Якщо цей параметр увімкнено, Lookup Anything шукатиме оригінальну Абігейл.",
+    "config.scroll-amount.name": "Число прокрутки",
+    "config.scroll-amount.desc": "Кількість пікселів для зміщення вмісту під час кожного прокручування вгору/вниз.",
+
+    // controls section
+    "config.title.controls": "Елементи керування",
+    "config.hide-on-key-up.name": "Клавіша приховування",
+    "config.hide-on-key-up.desc": "Приховування інтерфейсу пошуку, коли ви відпускаєте клавішу пошуку.",
+    "config.toggle-lookup.name": "Увімкнути пошук",
+    "config.toggle-lookup.desc": "Клавіші, які перемикають інтерфейс користувача для пошуку чогось курсором.",
+    "config.toggle-search.name": "Увімкнути пошук",
+    "config.toggle-search.desc": "Клавіші, які перемикають інтерфейс пошуку.",
+    "config.scroll-up.name": "Прокрутка вгору",
+    "config.scroll-up.desc": "Клавіші, які прокручують довгий вміст на кілька рядків вгору.",
+    "config.scroll-down.name": "Прокрутка вниз",
+    "config.scroll-down.desc": "Клавіші, які прокручують довгий вміст на кілька рядків вниз.",
+    "config.page-up.name": "Прокрутка сторінки вгору",
+    "config.page-up.desc": "Клавіші, які прокручують довгий вміст на всю сторінку вгору.",
+    "config.page-down.name": "Прокрутка сторінки вниз",
+    "config.page-down.desc": "Клавіші, які прокручують довгий вміст на всю сторінку вниз.",
+    "config.toggle-debug.name": "Увімкнути налагодження",
+    "config.toggle-debug.desc": "Клавіші, які перемикають відображення інформації налагодження."
+}

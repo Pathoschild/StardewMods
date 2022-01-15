@@ -31,6 +31,13 @@ namespace ContentPatcher.Framework.Patches
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>The patches that were loaded by the latest update, if any. This is cleared on the next update if no new patches were loaded.</summary>
+        public IEnumerable<IPatch> PatchesJustLoaded { get; private set; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -67,6 +74,8 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
+            this.PatchesJustLoaded = null;
+
             // update context
             if (!this.UpdateContext(context, out string previousFilePath))
                 return false;
@@ -128,7 +137,7 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     // load patches
-                    this.PatchLoader.LoadPatches(
+                    this.PatchesJustLoaded = this.PatchLoader.LoadPatches(
                         contentPack: this.RawContentPack,
                         rawPatches: content.Changes,
                         rootIndexPath: this.IndexPath,

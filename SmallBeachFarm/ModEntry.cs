@@ -13,6 +13,7 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.GameData;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
@@ -68,6 +69,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             this.Config = this.Helper.ReadConfig<ModConfig>();
 
             // hook events
+            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
@@ -185,7 +187,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
         /*********
         ** Private methods
         *********/
-        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -205,7 +207,27 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             ).Register();
         }
 
-        /// <summary>Raised before the game ends the current day.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        {
+            // when the player first loads the save, fix the broken TV if needed
+            if (Context.IsMainPlayer && Game1.currentLocation is FarmHouse farmhouse && Game1.dayOfMonth == 1 && Game1.currentSeason == "spring" && Game1.year == 1)
+            {
+                var brokenTvs = farmhouse.furniture
+                    .Where(furniture => furniture.ParentSheetIndex == 1680 && furniture is not TV)
+                    .ToArray();
+                foreach (var tv in brokenTvs)
+                {
+                    farmhouse.furniture.Remove(tv);
+                    farmhouse.furniture.Add(new TV(1680, tv.TileLocation));
+                }
+
+            }
+        }
+
+        /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void DayEnding(object sender, DayEndingEventArgs e)

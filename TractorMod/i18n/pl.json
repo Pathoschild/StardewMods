@@ -1,0 +1,216 @@
+﻿{
+    /*********
+    ** Tractor
+    *********/
+    "buff.name": "Moc Traktora",
+    "garage.name": "Garaż Na Traktor",
+    "garage.description": "Niewielki garaż do przechowywania twojego traktora. Traktor w zestawie!",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Section titles
+    ****/
+    // TODO
+    "config.main-options": "Main Options",
+    "config.controls": "Controls",
+    "config.axe": "Axe Features",
+    "config.hoe": "Hoe Features",
+    "config.pickaxe": "Pickaxe Features",
+    "config.scythe": "Scythe Features",
+    "config.melee-blunt": "Melee Blunt Weapons Features",
+    "config.melee-dagger": "Melee Dagger Features",
+    "config.melee-sword": "Melee Sword Features",
+    "config.other-tools": "Other Tools",
+    "config.custom-tools": "Custom Tools",
+
+
+    /****
+    ** Main options
+    ****/
+    // TODO
+    "config.distance.name": "Distance",
+    "config.distance.tooltip": "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default {{defaultValue}}; a value of {{maxRecommendedValue}} covers most of the visible screen, and higher values may negatively impact game performance.",
+
+    "config.speed.name": "Tractor Speed",
+    "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
+
+    "config.magnetic-radius.name": "Magnetic Radius",
+    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+
+    "config.build-price.name": "Build Price",
+    "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
+
+    "config.can-summon-without-garage.name": "Can Summon Without Garage",
+    "config.can-summon-without-garage.tooltip": "Whether you can summon a temporary tractor without building a garage first.",
+
+    "config.invincible-on-tractor.name": "Invincible on Tractor",
+    "config.invincible-on-tractor.tooltip": "Whether you should be immune to damage from any source when riding the tractor.",
+
+    "config.highlight-radius.name": "Highlight Radius (Debug)",
+    "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+
+
+    /****
+    ** Keybind options
+    ****/
+    // TODO
+    "config.summon-key.name": "Summon Tractor",
+    "config.summon-key.tooltip": "Warp an available tractor to your position. Default backspace.",
+
+    "config.dismiss-key.name": "Dismiss Tractor",
+    "config.dismiss-key.tooltip": "Return the tractor you're riding to its home.",
+
+    "config.hold-to-activate-key.name": "Hold to Activate",
+    "config.hold-to-activate-key.tooltip": "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+
+
+    /****
+    ** Trees & bushes
+    ****/
+    // TODO
+    "config.chop-fruit-trees-seeds.name": "Chop Fruit Trees (Seeds)",
+    "config.chop-fruit-trees-seeds.tooltip": "Whether to clear fruit tree seeds.",
+
+    "config.chop-fruit-trees-saplings.name": "Chop Fruit Trees (Saplings)",
+    "config.chop-fruit-trees-saplings.tooltip": "Whether to clear fruit trees which aren't fully grown.",
+
+    "config.chop-fruit-trees-grown.name": "Chop Fruit Trees (Grown)",
+    "config.chop-fruit-trees-grown.tooltip": "Whether to cut fully-grown fruit trees.",
+
+    "config.chop-trees-seeds.name": "Chop Trees (Seeds)",
+    "config.chop-trees-seeds.tooltip": "Whether to clear non-fruit tree seeds.",
+
+    "config.chop-trees-saplings.name": "Chop Trees (Saplings)",
+    "config.chop-trees-saplings.tooltip": "Whether to clear non-fruit trees which aren't fully grown.",
+
+    "config.chop-trees-grown.name": "Chop Trees (Grown)",
+    "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
+
+    "config.chop-bushes.name": "Chop Bushes",
+    "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
+
+    "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
+    "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
+
+
+    /****
+    ** Crops/forage/grass
+    ****/
+    // TODO
+    "config.clear-dead-crops.name": "Clear Dead Crops",
+    "config.clear-dead-crops.tooltip": "Whether to destroy dead crops.",
+
+    "config.clear-live-crops.name": "Clear Live Crops",
+    "config.clear-live-crops.tooltip": "Whether to destroy live crops.",
+
+    "config.harvest-giant-crops.name": "Harvest Giant Crops",
+    "config.harvest-giant-crops.tooltip": "Whether to cut giant crops.",
+
+    "config.harvest-crops.name": "Harvest Crops",
+    "config.Harvest Crops.tooltip": "Whether to harvest crops.",
+
+    "config.harvest-flowers.name": "Harvest Flowers",
+    "config.harvest-flowers.tooltip": "Whether to harvest flowers.",
+
+    "config.harvest-forage.name": "Harvest Forage",
+    "config.harvest-forage.tooltip": "Whether to harvest forage.",
+
+    "config.harvest-grass.name": "Harvest Grass",
+    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+
+
+    /****
+    ** Debris
+    ****/
+    // TODO
+    "config.clear-debris.name": "Clear Debris",
+    "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
+
+    "config.clear-weeds.name": "Clear Weeds",
+    "config.clear-weeds.tooltip": "Whether to destroy weeds.",
+
+
+    /****
+    ** Dirt
+    ****/
+    // TODO
+    "config.till-dirt.name": "Till Dirt",
+    "config.till-dirt.tooltip": "Whether to till empty dirt.",
+
+    "config.dig-artifact-spots.name": "Dig Artifact Spots",
+    "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+
+    "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
+    "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
+
+
+    /****
+    ** Mining
+    ****/
+    // TODO
+    "config.break-boulders-and-meteorites.name": "Break Boulders and Meteorites",
+    "config.break-boulders-and-meteorites.tooltip": "Whether to break boulders and meteorites.",
+
+    "config.harvest-mine-spawns.name": "Harvest Mine Spawns",
+    "config.harvest-mine-spawns.tooltip": "Whether to harvest spawned mine items like quartz and frozen tears.",
+
+
+    /****
+    ** Placed items
+    ****/
+    // TODO
+    "config.break-flooring.name": "Break Flooring",
+    "config.break-flooring.tooltip": "Whether to break placed flooring.",
+
+    "config.break-objects.name": "Break Objects",
+    "config.break-objects.tooltip": "Whether to break placed objects.",
+
+    "config.break-mine-containers.name": "Break Mine Containers",
+    "config.break-mine-containers.tooltip": "Whether to break containers in the mine.",
+
+    "config.harvest-machines.name": "Harvest Machines",
+    "config.harvest-machines.tooltip": "Whether to collect machine output.",
+
+
+    /****
+    ** Melee
+    ****/
+    // TODO
+    "config.Attack-monsters.name": "Attack Monsters",
+    "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
+
+
+    /****
+    ** Other
+    ****/
+    // TODO
+    "config.milk-pail.name": "Enable Milk Pail",
+    "config.milk-pail.tooltip": "Whether to collect milk from farm animals using the milk pail.",
+
+    "config.shears.name": "Enable Shears",
+    "config.shears.tooltip": "Whether to collect wool from farm animals using the shears.",
+
+    "config.watering-can.name": "Enable Watering Can",
+    "config.watering-can.tooltip": "Whether to water nearby tiles using the watering can. This doesn't consume water in the watering can.",
+
+    "config.fertilizer.name": "Enable Fertilizer",
+    "config.fertilizer.tooltip": "Whether to apply fertilizer to crops and tilled dirt.",
+
+    "config.grass-starters.name": "Enable Grass Starters",
+    "config.grass-starters.tooltip": "Whether to plant grass starters.",
+
+    "config.seeds.name": "Enable Seeds",
+    "config.seeds.tooltip": "Whether to plant seeds.",
+
+    "config.seed-bags.name": "Enable Seed Bags",
+    "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
+
+    "config.slingshot.name": "Enable Slingshot",
+    "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
+
+    "config.custom-tool-names.name": "Custom Tool Names",
+    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+}

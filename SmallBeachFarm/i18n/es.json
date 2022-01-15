@@ -1,0 +1,20 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Granja pequeña playera",
+    "farm.description": "Una pequeña y fértil playa de bolsillo, donde se puede pescar tanto en el río como en el mar.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.campfire.name": "Añadir una hoguera",
+    "config.campfire.tooltip": "Añade una hoguera funcional delante de la casa de campo.",
+
+    "config.islands.name": "Añadir islas",
+    "config.islands.tooltip": "Añade islas oceánicas con superficie extra.",
+
+    "config.beach-sounds.name": "Reproducir sonidos de la playa",
+    "config.beach-sounds.tooltip": "Reproduce la música de fondo de la playa (por ejemplo, sonidos de las olas) en la granja de la playa."
+}

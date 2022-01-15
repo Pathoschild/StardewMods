@@ -1,0 +1,4 @@
+﻿{
+    "enabled-message": "Włączono tryb noclip; naciśnij ponownie {{button}}, aby go dezaktywować.",
+    "disabled-message": "Wyłączono tryb noclip; naciśnij ponownie {{button}}, aby go aktywować."
+}

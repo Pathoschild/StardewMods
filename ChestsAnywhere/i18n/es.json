@@ -45,57 +45,53 @@
     "errors.no-chests-in-location": "No tienes ningún cofre en este área.",
     "errors.no-chests-in-range": "No tienes ningún cofre a tu alcance.",
 
-    
+
     /**********
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.show-hover-tooltips.name": "Show hover tooltips",
-    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
-    "config.enable-shipping-bin.name": "Enable shipping bin",
-    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
-    "config.add-organize-player-items.name": "Add organize player items button",
-    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
-    "config.range.name": "Range",
-    "config.range.desc": "The range at which chests are accessible through the menu.",
-    "config.range.unlimited": "All chests",
-    "config.range.currentWorldArea": "Chests within the current world area",
-    "config.range.currentLocation": "Chests within the current location",
-    "config.range.none": "None (can't access chests remotely)",
+    "config.title.general-options": "Opciones generales",
+    "config.show-hover-tooltips.name": "Mostrar información sobre las herramientas al pasar el ratón",
+    "config.show-hover-tooltips.desc": "Si se muestra el nombre del cofre en un tooltip cuando se señala un cofre.",
+    "config.enable-shipping-bin.name": "Habilitar el contenedor de envíos",
+    "config.enable-shipping-bin.desc": "Si se permite el acceso a el contenedor de envíos.",
+    "config.add-organize-player-items.name": "Añadir el botón de organizar los elementos de los jugadores",
+    "config.add-organize-player-items.desc": "Si se añade un botón de 'organizar' en las interfaces de los cofres para el inventario del jugador.",
+    "config.range.name": "Rango",
+    "config.range.desc": "El rango en el que los cofres son accesibles a través del menú.",
+    "config.range.unlimited": "Todos los cofres",
+    "config.range.currentWorldArea": "Cofres dentro de la zona del mundo actual",
+    "config.range.currentLocation": "Cofres dentro de la ubicación actual",
+    "config.range.none": "Ninguno (no se puede acceder a los cofres a distancia)",
 
     // general controls
-    // TODO
-    "config.title.general-controls": "General controls",
-    "config.toggle-ui-key.name": "Toggle UI",
-    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+    "config.title.general-controls": "Controles generales",
+    "config.toggle-ui-key.name": "Activar la interfaz de usuario",
+    "config.toggle-ui-key.desc": "Las teclas que muestran u ocultan la interfaz de usuario del cofre.",
 
     // controls when chest UI is open
-    // TODO
-    "config.title.menu-controls": "Controls when chest UI is open",
-    "config.edit-chest.name": "Edit chest",
-    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
-    "config.sort-items.name": "Sort items",
-    "config.sort-items.desc": "The keys which sort items in the current chest.",
-    "config.navigate-prev-chest.name": "Navigate: previous chest",
-    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
-    "config.navigate-next-chest.name": "Navigate: next chest",
-    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
-    "config.navigate-prev-category.name": "Navigate: previous category",
-    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
-    "config.navigate-next-category.name": "Navigate: next category",
-    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
-    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
-    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
-    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+    "config.title.menu-controls": "Controles cuando la interfaz de usuario del cofre está abierta",
+    "config.edit-chest.name": "Editar el cofre",
+    "config.edit-chest.desc": "Las teclas que editan las opciones del cofre actual.",
+    "config.sort-items.name": "Clasificar artículos",
+    "config.sort-items.desc": "Las claves que ordenan los artículos en el cofre actual.",
+    "config.navigate-prev-chest.name": "Navegar: cofre anterior",
+    "config.navigate-prev-chest.desc": "Las teclas que navegan al cofre anterior mientras el menú está abierto.",
+    "config.navigate-next-chest.name": "Navegar: siguiente cofre",
+    "config.navigate-next-chest.desc": "Las teclas que navegan al siguiente cofre mientras el menú está abierto.",
+    "config.navigate-prev-category.name": "Navegar: categoría anterior",
+    "config.navigate-prev-category.desc": "Las teclas que navegan a la categoría anterior mientras el menú está abierto.",
+    "config.navigate-next-category.name": "Navegar: siguiente categoría",
+    "config.navigate-next-category.desc": "Las teclas que navegan a la siguiente categoría mientras el menú está abierto.",
+    "config.hold-to-scroll-categories.name": "Mantenger pulsado para desplazarse por las categorías",
+    "config.hold-to-scroll-categories.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de categorías con la rueda de desplazamiento del ratón.",
+    "config.hold-to-scroll-chests.name": "Mantener para desplazar cofres",
+    "config.hold-to-scroll-chests.desc": "Las teclas que, al mantenerlas pulsadas, permiten desplazar el desplegable de los cofres con la rueda de desplazamiento del ratón.",
 
     // disable in locations
-    // TODO
-    "config.title.disable-in-locations": "Disable in locations",
-    "config.disable-mines.name": "Mines and Skull Cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
-    "config.disable-custom-names.name": "Custom location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+    "config.title.disable-in-locations": "Desactivar en lugares",
+    "config.disable-mines.name": "Minas y Caverna Calavera",
+    "config.disable-mines.desc": "Si se desactiva el acceso a los cofres mientras se está en las minas o en la Caverna Calavera.",
+    "config.disable-custom-names.name": "Nombres de lugares personalizados",
+    "config.disable-custom-names.desc": "Los nombres internos (tal y como los muestra el mod del Modo Depuración (Debug Mode Mod)) de las ubicaciones desde las que se desactiva el acceso a los cofres. Puedes listar varios con comas."
 }

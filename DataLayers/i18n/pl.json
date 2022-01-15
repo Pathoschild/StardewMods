@@ -1,0 +1,72 @@
+﻿{
+    // accessible
+    "accessible.name": "Dostępność",
+    "accessible.clear": "Wolne",
+    "accessible.occupied": "Zajęte",
+    "accessible.impassable": "Nieprzekraczalne",
+    "accessible.warp": "Przejście",
+
+    // buildable
+    "buildable.name": "Możliwość Budowania",
+    "buildable.buildable": "Można Tutaj Budować",
+    "buildable.occupied": "Zajęte",
+    "buildable.not-buildable": "Nie Można Tutaj Budować",
+
+    // coverage: bee houses
+    "bee-houses.name": "Zasięg: Ule",
+    "bee-houses.range": "Zasięg Kwiatowy",
+
+    // coverage: Junimo huts
+    "junimo-huts.name": "Zasięg: Chaty Junimo",
+    "junimo-huts.can-harvest": "Mogą Zbierać",
+    "junimo-huts.cannot-harvest": "Nie Mogą Zbierać",
+
+    // coverage: scarecrows
+    "scarecrows.name": "Zasięg: Strachy na Wróble",
+    "scarecrows.protected": "Chronione",
+    "scarecrows.exposed": "Narażone",
+
+    // coverage: sprinklers
+    "sprinklers.name": "Zasięg: Zraszacze",
+    "sprinklers.covered": "Pokryto",
+    "sprinklers.dry-crops": "Suche Uprawy",
+
+    // crops: harvest
+    "crop-harvest.name": "Uprawy: Gotowość do Zbioru",
+    "crop-harvest.ready": "Gotowe",
+    "crop-harvest.not-ready": "Niegotowe",
+    "crop-harvest.not-enough-time-or-dead": "Za Mało Czasu (lub Martwe)",
+
+    // crops: watered
+    "crop-water.name": "Uprawy: Nawadnianie",
+    "crop-water.watered": "Podlana Uprawa",
+    "crop-water.dry": "Sucha Uprawa",
+
+    // crops: water for paddy crops
+    "crop-paddy-water.name": "Uprawy: Woda do Upraw Ryżu",
+    "crop-paddy-water.in-range": "Blisko Wody",
+    "crop-paddy-water.not-in-range": "Suchy Teren",
+
+    // crops: fertilized
+    "crop-fertilizer.name": "Uprawy: Nawożenie",
+    "crop-fertilizer.fertilizer": "Nawóz",
+    "crop-fertilizer.retaining-soil": "Użyźniacz",
+    "crop-fertilizer.speed-gro": "Speed-Gro",
+    "crop-fertilizer.multiple": "Wiele Rodzajów Nawozów",
+
+    // machine processing
+    "machines.name": "Produkcja Maszynowa",
+    "machines.empty": "Pusto",
+    "machines.processing": "Wytwarzanie",
+    "machines.finished": "Ukończono",
+
+    // tile grid
+    "grid.name": "Siatka Kafelków",
+
+    // tillable
+    "tillable.name": "Możliwość Uprawiania",
+    "tillable.tillable": "Uprawianie Możliwe",
+    "tillable.tilled": "Już Uprawiane",
+    "tillable.occupied": "Zajęte",
+    "tillable.not-tillable": "Brak Możliwości Uprawiania"
+}

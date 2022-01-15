@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Пропустити",
+    "config.skip-to.tooltip": "Який екран пропустити. За замовчуванням - головне меню.",
+    "config.skip-to.values.title-menu": "Головне меню",
+    "config.skip-to.values.load-menu": "Меню завантаження",
+    "config.skip-to.values.join-coop": "Приєднання до спільної гри",
+    "config.skip-to.values.host-coop": "Хост спільної гри"
+}

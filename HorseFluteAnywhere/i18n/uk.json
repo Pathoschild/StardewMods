@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Потрібна флейта коня",
+    "config.require-flute.description": "Вам потрібно мати в інвентарі флейту коня, щоб викликати свого коня. За замовчуванням: false(вимкнено).",
+
+    "config.summon-horse-button.name": "Кнопка виклику коня",
+    "config.summon-horse-button.description": "Кнопка, при натисканні якої грає флейта та викликається кінь. За замовчуванням: {{defaultValue}}."
+}

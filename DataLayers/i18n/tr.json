@@ -7,7 +7,7 @@
     "accessible.warp": "Çözgü",
 
     // buildable
-    "buildable.name": "Buildable",
+    "buildable.name": "Inşa Edilebilir",
     "buildable.buildable": "Burada Yapılabilir",
     "buildable.occupied": "İşgal Altında",
     "buildable.not-buildable": "Burada Yapılamaz",
@@ -19,7 +19,7 @@
     // coverage: Junimo huts
     "junimo-huts.name": "Kapsam: Junimo Huts",
     "junimo-huts.can-harvest": "Hasat Edebilir",
-    "junimo-huts.cannot-harvest": "Can not Hasat",
+    "junimo-huts.cannot-harvest": "Hasat Edilemez",
 
     // coverage: scarecrows
     "scarecrows.name": "Kapsam: Korkuluklar",
@@ -35,7 +35,7 @@
     "crop-harvest.name": "Mahsuller: Hasat için Hazır",
     "crop-harvest.ready": "Hazır",
     "crop-harvest.not-ready": "Hazır Değil",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "Yeterli zaman yok (yada Ölü)",
 
     // crops: watered
     "crop-water.name": "Mahsuller: Sulanan",
@@ -50,23 +50,23 @@
     // crops: fertilized
     "crop-fertilizer.name": "Mahsuller: Döllenmiş",
     "crop-fertilizer.fertilizer": "Gübre",
-    "crop-fertilizer.retaining-soil": "Toprağın Toplanması",
-    "crop-fertilizer.speed-gro": "Speed-Gro",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.retaining-soil": "Tutucu Toprak",
+    "crop-fertilizer.speed-gro": "Hızlı-Ek",
+    "crop-fertilizer.multiple": "Birden Fazla Gübre Çeşidi",
 
     // machine processing
     "machines.name": "Makine İşleme",
     "machines.empty": "Boş",
-    "machines.processing": "İşleme",
+    "machines.processing": "İşleniyor",
     "machines.finished": "Bitti",
 
     // tile grid
     "grid.name": "Döşeme Izgarası",
 
     // tillable
-    "tillable.name": "sürülebilir",
-    "tillable.tillable": "sürülebilir",
-    "tillable.tilled": "tilled",
-    "tillable.occupied": "İşgal Edildi",
-    "tillable.not-tillable": "Değil sürülebilir "
+    "tillable.name": "Sürülebilir",
+    "tillable.tillable": "Sürülebilir",
+    "tillable.tilled": "Sürülmüş",
+    "tillable.occupied": "Dolu",
+    "tillable.not-tillable": "Sürülebilir Değil"
 }

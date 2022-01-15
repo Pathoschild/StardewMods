@@ -175,11 +175,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             )
         { }
 
-        /// <summary>Create the item crafted by this recipe.</summary>
+        /// <summary>Create the item crafted by this recipe if it's valid.</summary>
         /// <param name="ingredient">The optional ingredient for which to create an item.</param>
-        public Item CreateItem(Item ingredient)
+        public Item TryCreateItem(Item ingredient)
         {
-            return this.Item(ingredient);
+            try
+            {
+                return this.Item(ingredient);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>Get the number of times this player has crafted the recipe.</summary>

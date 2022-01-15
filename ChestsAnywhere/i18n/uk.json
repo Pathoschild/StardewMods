@@ -1,0 +1,97 @@
+﻿{
+    /**********
+    ** Chest UI
+    **********/
+    // default chest names
+    "default-name.fridge": "Холодильник",
+    "default-name.other": "{{name}} #{{number}}",
+    "default-name.shipping-bin.store": "надіслані предмети",
+    "default-name.shipping-bin.take": "прийняті предмети",
+
+    // default category names
+    "default-category.owned-cabin": "Будиночок гравця {{owner}}",
+    "default-category.unowned-cabin": "Будиночок (порожній)",
+    "default-category.duplicate": "{{locationName}} #{{number}}",
+
+    // edit-chest labels
+    "label.location": "Локація",
+    "label.location.tile": "Клітина: {{x}}, {{y}}",
+    "label.name": "Назва",
+    "label.category": "Категорія",
+    "label.order": "Порядок",
+    "label.hide-chest": "Приховати цю скриню",
+    "label.hide-chest-hidden": "Приховати цю скриню (вам потрібно знайти скриню, щоб скасувати це!)",
+    "label.automate-options": "Automate",
+    "label.automate-store": "Класти предмети у цю скриню",
+    "label.automate-store-first": "Спочатку класти предмети у цю скриню",
+    "label.automate-store-disabled": "Ніколи не класти предмети у цю скриню",
+    "label.automate-take": "Брати предмети з цієї скрині",
+    "label.automate-take-first": "Спочатку брати предмети з цієї скрині",
+    "label.automate-take-disabled": "Ніколи не брати предмети з цієї скрині",
+    "label.automate-prevent-remove-stacks": "Уникати видалення останнього предмета у стаці",
+
+    // button labels
+    "button.edit-chest": "редагувати скриню",
+    "button.sort-inventory": "сортувати інвентар",
+    "button.save": "зберегти",
+    "button.reset": "скинути",
+
+
+    /**********
+    ** Errors
+    **********/
+    "errors.disabled-from-here": "не можете отримати доступ до скринь звідси.",
+    "errors.no-chests": "У вас немає скринь.",
+    "errors.no-chests-in-location": "У вас немає скринь у цій локації.",
+    "errors.no-chests-in-range": "У вас немає скринь у радіусі дії.",
+
+
+    /**********
+    ** Generic Mod Config Menu UI
+    **********/
+    // general options
+    "config.title.general-options": "Основні налаштування",
+    "config.show-hover-tooltips.name": "Показати підказки при наведенні курсора",
+    "config.show-hover-tooltips.desc": "Показувати назву скрині у підказці, коли ви вказуєте на скриню.",
+    "config.enable-shipping-bin.name": "Увімкнути ящик для продажу",
+    "config.enable-shipping-bin.desc": "Увімкнення доступу до ящика для продажу.",
+    "config.add-organize-player-items.name": "Додати кнопку сортування предметів гравця.",
+    "config.add-organize-player-items.desc": "Додавання кнопки \"Сортувати\" в інтерфейсах скриньки для інвентарю гравця.",
+    "config.range.name": "Діапазон дії",
+    "config.range.desc": "Діапазон, на якому скрині доступні через меню.",
+    "config.range.unlimited": "Усі скрині",
+    "config.range.currentWorldArea": "Скрині в межах поточного світу",
+    "config.range.currentLocation": "Скрині в поточної локації",
+    "config.range.none": "Немає (не можна отримати доступ до скринь віддалено)",
+
+    // general controls
+    "config.title.general-controls": "Основне керування",
+    "config.toggle-ui-key.name": "Увімкнути інтерфейс користувача",
+    "config.toggle-ui-key.desc": "Клавіші, які показують або приховують інтерфейс скрині.",
+
+    // controls when chest UI is open
+    "config.title.menu-controls": "Елементи керування, коли відкритий інтерфейс скрині",
+    "config.edit-chest.name": "Редагувати скриню",
+    "config.edit-chest.desc": "Клавіші, які редагують налаштування для поточної скрині.",
+    "config.sort-items.name": "Сортувати предмети",
+    "config.sort-items.desc": "Клавіші, які сортують предмети в поточній скрині.",
+    "config.navigate-prev-chest.name": "Навігація: попередня скриня",
+    "config.navigate-prev-chest.desc": "Клавіші, які переходять до попередньої скрині, коли відкрите меню.",
+    "config.navigate-next-chest.name": "Навігація: наступна скриня",
+    "config.navigate-next-chest.desc": "Клавіші, які переходять до наступної скрині, коли відкрите меню.",
+    "config.navigate-prev-category.name": "Навігація: попередня категорія",
+    "config.navigate-prev-category.desc": "Клавіші для переходу до попередньої категорії, коли меню відкрите.",
+    "config.navigate-next-category.name": "Навігація: наступна категорія",
+    "config.navigate-next-category.desc": "Клавіші для переходу до наступної категорії, коли меню відкрите.",
+    "config.hold-to-scroll-categories.name": "Утримувати, щоб прокрутити категорії",
+    "config.hold-to-scroll-categories.desc": "Клавіші, які при утриманні дозволяють прокручувати спадний список категорії за допомогою колеса прокрутки миші.",
+    "config.hold-to-scroll-chests.name": "Утримувати, щоб прокрутити скрині",
+    "config.hold-to-scroll-chests.desc": "Клавіші, які при утриманні дозволяють прокручувати спадний список скринь за допомогою колеса прокрутки миші.",
+
+    // disable in locations
+    "config.title.disable-in-locations": "Вимкнути в локаціях",
+    "config.disable-mines.name": "Шахта та Печера Черепа",
+    "config.disable-mines.desc": "Заборона доступу до скринь під час перебування в шахтв чи Печері Черепа.",
+    "config.disable-custom-names.name": "Користувацькі назви локацій",
+    "config.disable-custom-names.desc": "Внутрішні назви (як показано в моді Debug Mode) для локацій, з яких можна вимкнути доступ до скринь. Ви можете перерахувати кілька комами."
+}

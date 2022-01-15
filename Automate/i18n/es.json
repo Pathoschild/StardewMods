@@ -1,0 +1,33 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Opciones principales",
+    "config.junimo-huts-output-gems.name": "Cabañas de Junimos sacan gemas",
+    "config.junimo-huts-output-gems.desc": "Si se sacan gemas de las cabañas de Junimo. Si es cierto, no podrás cambiar los colores de Junimo colocando gemas en su cabaña.",
+    "config.automation-interval.name": "Intervalo de automatización",
+    "config.automation-interval.desc": "El número de ticks entre cada proceso de automatización (60 para una vez por segundo, 120 para cada dos segundos, etc.).",
+    "config.toggle-overlay-key.name": "Tecla de activación de superposición",
+    "config.toggle-overlay-key.desc": "Las teclas que activan la superposición de la automatización.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Compatibilidad con los mods",
+    "config.better-junimos.name": "Better Junimos",
+    "config.better-junimos.desc": "Habilitar compatibilidad con Better Junimos. Si se instala, las cabañas de Junimo no producirán abono ni semillas.",
+    "config.warn-for-missing-bridge-mod.name": "Warn for missing bridge mod",
+    "config.warn-for-missing-bridge-mod.desc": "Si se registra una advertencia al inicio si se ha instalado un mod de máquina personalizada que requiere un parche de compatibilidad separado que no está instalado.",
+
+    // connectors
+    "config.title.connectors": "Conectores habilitados",
+    "config.connector.desc": "Si {{itemName}} vincula máquinas y cofres.",
+    "config.custom-connectors.name": "Conectores personalizados",
+    "config.custom-connectors.desc": "Los nombres exactos en inglés de los elementos que conectan máquinas adyacentes entre sí. Puede enumerar varios elementos con comas.", // note: connector names must be English even when playing in other languages
+
+    // machine overrides
+    "config.title.machine-overrides": "Anulación de máquinas",
+    "config.override.ShippingBin-name": "Caja de envio",
+    "config.override.MiniShippingBin-name": "Mini-caja de envio",
+    "config.override.desc": "Si se activa la automatización de {{machineName}}.",
+    "config.custom-overrides-note": "Para las anulaciones personalizadas, consulte https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure para obtener ayuda para editar el archivo config.json directamente."
+}

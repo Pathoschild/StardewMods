@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Allgemeine Optionen",
+
+    "config.disable-eat-prompt.name": "Aufforderung zum Essen/Trinken deaktivieren",
+    "config.disable-eat-prompt.tooltip": "Ob Sie die Bestätigungsaufforderung überspringen möchten, ob Sie wirklich etwas essen/trinken möchten.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Geschwindigkeiten der Spieleranimation",
+
+    "config.eat-or-drink.name": "Essen/Trinken",
+    "config.eat-or-drink.tooltip": "Wie schnell Sie essen und trinken. Standardwert {{defaultValue}}x.",
+
+    "config.fish.name": "Fischen",
+    "config.fish.tooltip": "Wie schnell Sie beim Angeln werfen und spulen (hat keinen Einfluss auf das Minispiel). Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+
+    "config.harvest.name": "Ernten",
+    "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
+
+    "config.milk.name": "Melken",
+    "config.milk.tooltip": "Wie schnell Sie den Milcheimer verwenden. Standardwert {{defaultValue}}x.",
+
+    "config.mount.name": "Auf-/Absteigen",
+    "config.mount.tooltip": "Wie schnell Sie Pferde besteigen/absteigen (einschließlich benutzerdefinierter Reittiere wie die Traktor Mod). Standardwert {{defaultValue}}x.",
+
+    "config.shear.name": "Scheren",
+    "config.shear.tooltip": "Wie schnell Sie die Schere verwenden. Standardwert {{defaultValue}}x.",
+
+    "config.tool.name": "Werkzeug schwingen",
+    "config.tool.tooltip": "Wie schnell Sie Ihre Werkzeuge schwingen (außer Waffen und Angelrute). Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+
+    "config.weapon.name": "Waffen schwingen",
+    "config.weapon.tooltip": "Wie schnell Sie Ihre Waffen schwingen. Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Weltanimationsgeschwindigkeiten",
+
+    "config.break-geodes.name": "Geoden brechen",
+    "config.break-geodes.tooltip": "Wie schnell der Schmied Geoden für Sie bricht. Standardwert {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Casino-Slots",
+    "config.casino-slots.tooltip": "Wie schnell sich die Casino-Slots drehen. Standardwert {{defaultValue}}x.",
+
+    "config.bus.name": "Pam's Bus",
+    "config.bus.tooltip": "Wie schnell Pam ihren Bus in die und aus der Wüste fährt. Standardwert {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Baum fällt",
+    "config.tree-fall.tooltip": "Wie schnell Bäume fallen, nachdem Sie sie gefällt haben. Standard {{defaultValue}}x, vorgeschlagen {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "UI-Animationsgeschwindigkeiten",
+
+    "config.title-menu.name": "Übergänge im Titelmenü",
+    "config.title-menu.tooltip": "Wie schnell das Titelmenü zwischen den Bildschirmen wechselt. Standardwert {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Spiel laden blinken",
+    "config.load-game-blink.tooltip": "Wie schnell die Verzögerung des blinkenden Slots auftritt, nachdem Sie auf einen Load-Save-Slot geklickt haben. Standardwert {{defaultValue}}x."
+}

@@ -59,11 +59,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // animals
-            foreach (FarmAnimal animal in (location as Farm)?.animals.Values ?? (location as AnimalHouse)?.animals.Values ?? Enumerable.Empty<FarmAnimal>())
+            if (location is IAnimalLocation animalLocation)
             {
-                Vector2 entityTile = animal.getTileLocation();
-                if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
+                foreach (FarmAnimal animal in animalLocation.Animals.Values)
+                {
+                    Vector2 entityTile = animal.getTileLocation();
+                    if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                        yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
+                }
             }
 
             // players
@@ -226,17 +229,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     yield return this.BuildSubject(npc);
 
                 // animals
-                foreach (var location in CommonHelper.GetLocations())
+                foreach (var location in CommonHelper.GetLocations().OfType<IAnimalLocation>())
                 {
-                    IEnumerable<FarmAnimal> animals =
-                        (location as Farm)?.animals.Values
-                        ?? (location as AnimalHouse)?.animals.Values;
-
-                    if (animals != null)
-                    {
-                        foreach (var animal in animals)
-                            yield return this.BuildSubject(animal);
-                    }
+                    foreach (FarmAnimal animal in location.Animals.Values)
+                        yield return this.BuildSubject(animal);
                 }
 
                 // players

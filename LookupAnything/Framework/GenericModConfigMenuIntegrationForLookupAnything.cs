@@ -68,8 +68,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 .AddCheckbox(
                     name: I18n.Config_TileLookups_Name,
                     tooltip: I18n.Config_TileLookups_Desc,
-                    get: config => config.EnableTargetRedirection,
-                    set: (config, value) => config.EnableTargetRedirection = value
+                    get: config => config.EnableTileLookups,
+                    set: (config, value) => config.EnableTileLookups = value
                 )
                 .AddCheckbox(
                     name: I18n.Config_DataMiningFields_Name,

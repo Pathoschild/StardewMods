@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "Benötigt Pferde-Flöte",
+    "config.require-flute.description": "Ob Sie die Pferde-Flöte in Ihrem Inventar benötigen, um ein Pferd zu beschwören. Standardwert negativ.",
+
+    "config.summon-horse-button.name": "Rufe Pferd Taste",
+    "config.summon-horse-button.description": "Die zu drückende Taste, die die Flöte spielt und ein Pferd beschwört. Standardtaste {{defaultValue}}."
+}

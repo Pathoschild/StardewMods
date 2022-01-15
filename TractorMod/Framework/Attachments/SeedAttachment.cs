@@ -1,7 +1,9 @@
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
 
@@ -50,7 +52,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="location">The current location.</param>
         public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
         {
-            if (item == null || item.Stack <= 0)
+            if (item is not { Stack: > 0 })
                 return false;
 
             // get dirt
@@ -64,8 +66,56 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // sow seeds
             bool sowed = dirt.plant(item.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, false, location);
             if (sowed)
+            {
                 this.ConsumeItem(player, item);
+
+                if (this.TryGetEnricher(location, tile, out Chest enricher, out Item fertilizer) && dirt.plant(fertilizer.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, true, location))
+                    this.ConsumeItem(enricher, fertilizer);
+            }
             return sowed;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get the enricher and fertilizer in range of the given tile, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to which to apply fertilizer.</param>
+        /// <param name="enricher">The enricher found.</param>
+        /// <param name="fertilizer">The fertilizer item within the enricher.</param>
+        /// <returns>Returns whether an enricher with fertilizer was found.</returns>
+        private bool TryGetEnricher(GameLocation location, Vector2 tile, out Chest enricher, out Item fertilizer)
+        {
+            var entry = this.GetEnricher(location, tile);
+
+            fertilizer = entry?.fertilizer;
+            enricher = entry?.enricher;
+            return entry != null;
+        }
+
+        /// <summary>Get the enricher and fertilizer in range of the given tile, if any.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to which to apply fertilizer.</param>
+        /// <remarks>Derived from <see cref="SObject.placementAction"/>.</remarks>
+        private (Chest enricher, Item fertilizer)? GetEnricher(GameLocation location, Vector2 tile)
+        {
+            foreach (SObject sprinkler in location.Objects.Values)
+            {
+                if (
+                    sprinkler.IsSprinkler()
+                    && sprinkler.heldObject.Value is { ParentSheetIndex: 913 } enricherObj
+                    && enricherObj.heldObject.Value is Chest enricher
+                    && sprinkler.IsInSprinklerRangeBroadphase(tile)
+                    && sprinkler.GetSprinklerTiles().Contains(tile)
+                    && enricher.items.FirstOrDefault() is { Category: SObject.fertilizerCategory } fertilizer
+                )
+                {
+                    return (enricher, fertilizer);
+                }
+            }
+
+            return null;
         }
     }
 }

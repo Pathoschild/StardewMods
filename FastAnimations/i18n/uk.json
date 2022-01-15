@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Основні налаштування",
+
+    "config.disable-eat-prompt.name": "Вимкнути попередження з'їсти/випити",
+    "config.disable-eat-prompt.tooltip": "Пропускання підтвердження дії, якщо ви справді хочете з'їсти/випити щось.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Швидкість анімацій гравця",
+
+    "config.eat-or-drink.name": "З'їсти/Випити",
+    "config.eat-or-drink.tooltip": "Як швидко ви їсте чи пите. За замовчуванням: {{defaultValue}}x.",
+
+    "config.fish.name": "Риба",
+    "config.fish.tooltip": "Як швидко ви ловите на тягнете волосінь під час риболовлі (не впливає на мінігру). За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
+
+    "config.harvest.name": "Збір",
+    "config.harvest.tooltip": "Як швидко ви можете збирати культури та косити рукою. За замовчуванням: {{defaultValue}}x.",
+
+    "config.milk.name": "Молоко",
+    "config.milk.tooltip": "Як швидко ви використовуєте відро для молока. За замовчуванням: {{defaultValue}}x.",
+
+    "config.mount.name": "Залізти/злісти",
+    "config.mount.tooltip": "Як швидко ви залазите/злазите з коня (включно з користувацьким транспортом, як от Tractor Mod). За замовчуванням: {{defaultValue}}x.",
+
+    "config.shear.name": "Ножиці",
+    "config.shear.tooltip": "Як швидко ви використовуєте ножиці. За замовчуванням: {{defaultValue}}x.",
+
+    "config.tool.name": "Розмахування інструментом",
+    "config.tool.tooltip": "Як швидко ви розмахуєте своїми інструментами (За винятком зброї та вудки). За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
+
+    "config.weapon.name": "Розмахування зброєю",
+    "config.weapon.tooltip": "Як швидко ви розмахуєте зброєю. За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Швидкість інших анімацій",
+
+    "config.break-geodes.name": "Розбиття жеод",
+    "config.break-geodes.tooltip": "Як швидко коваль розбиває жеоди для вас. За замовчуванням: {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Слоти казино",
+    "config.casino-slots.tooltip": "Як швидко слоти казино обертаються. За замовчуванням: {{defaultValue}}x.",
+
+    "config.bus.name": "Автобус Пем",
+    "config.bus.tooltip": "Як швидко Пем керує автобусом до та з пустелі. За замовчуванням: {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Падіння дерев",
+    "config.tree-fall.tooltip": "Як швидко падають дерева після їх рубки. За замовчуванням: {{defaultValue}}x. Рекомендується: {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Швидкість анімацій інтерфейсу",
+
+    "config.title-menu.name": "Перемикання головного меню",
+    "config.title-menu.tooltip": "Як швидко головне меню перемикається між екранами. За замовчуванням: {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Мерехтіння завантаження гри",
+    "config.load-game-blink.tooltip": "Як довго триває затримка після того як ви натиснули на кнопку кнопку \"Грати далі\". За замовчуванням: {{defaultValue}}x."
+}

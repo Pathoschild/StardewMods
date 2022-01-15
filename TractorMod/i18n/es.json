@@ -1,5 +1,205 @@
 ﻿{
+    /*********
+    ** Tractor
+    *********/
     "buff.name": "Energía del tractor",
     "garage.name": "Garaje del tractor",
-    "garage.description": "Un garaje donde guardar tu tractor. ¡Con tractor incluido!"
+    "garage.description": "Un garaje donde guardar tu tractor. ¡Con tractor incluido!",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** Section titles
+    ****/
+    "config.main-options": "Opciones principales",
+    "config.controls": "Controles",
+    "config.axe": "Características del hacha",
+    "config.hoe": "Características de la azada",
+    "config.pickaxe": "Características del pico",
+    "config.scythe": "Características de la guadaña",
+    "config.melee-blunt": "Características melee de las armas contundentes",
+    "config.melee-dagger": "Características melee de la daga",
+    "config.melee-sword": "Características melee de la espada",
+    "config.other-tools": "Otras herramientas",
+    "config.custom-tools": "Herramientas personalizadas",
+
+
+    /****
+    ** Main options
+    ****/
+    "config.distance.name": "Distancia",
+    "config.distance.tooltip": "El número de baldosas en cada dirección alrededor del tractor a afectar (además de la baldosa debajo de él). Por defecto {{defaultValue}}; un valor de {{maxRecommendedValue}} cubre la mayor parte de la pantalla visible, y los valores más altos pueden afectar negativamente al rendimiento del juego.",
+
+    "config.speed.name": "Velocidad del tractor",
+    "config.speed.tooltip": "El modificador de velocidad al conducir un tractor. Por defecto {{defaultValue}}.",
+
+    "config.magnetic-radius.name": "Radio magnético",
+    "config.magnetic-radius.tooltip": "La cantidad de magnetismo del objeto (los valores más altos atraen a los objetos desde más lejos). Por defecto {{defaultValue}}.",
+
+    "config.build-price.name": "Precio de compra",
+    "config.build-price.tooltip": "El precio del oro para comprar un garaje de tractores. Por defecto {{defaultValue}}g.",
+
+    "config.can-summon-without-garage.name": "Se puede invocar sin garaje",
+    "config.can-summon-without-garage.tooltip": "Si se puede invocar un tractor temporal sin construir primero un garaje.",
+
+    "config.invincible-on-tractor.name": "Invencible en el tractor",
+    "config.invincible-on-tractor.tooltip": "Si debe ser inmune a qualquier fuente de daño cuando se conduce el tractor.",
+
+    "config.highlight-radius.name": "Mostrar radio (Debug)",
+    "config.highlight-radius.tooltip": "Si se resalta el radio del tractor cuando se monta uno, para ayudar a visualizar la opción de distancia.",
+
+
+    /****
+    ** Keybind options
+    ****/
+    "config.summon-key.name": "Invocar un tractor",
+    "config.summon-key.tooltip": "Transfiere un tractor disponible a tu posición. Tecla de retroceder por defecto.",
+
+    "config.dismiss-key.name": "Despedir al tractor",
+    "config.dismiss-key.tooltip": "Devuelve el tractor que estás montando a su casa.",
+
+    "config.hold-to-activate-key.name": "Mantener para activar",
+    "config.hold-to-activate-key.tooltip": "Si se especifica, el tractor sólo hará algo mientras se mantiene este botón. Si no se especifica nada, el tractor funcionará automáticamente mientras lo estés conduciendo.",
+
+
+    /****
+    ** Trees & bushes
+    ****/
+    "config.chop-fruit-trees-seeds.name": "Cortar árboles frutales (semillas)",
+    "config.chop-fruit-trees-seeds.tooltip": "Si se cortan las semillas de los árboles frutales.",
+
+    "config.chop-fruit-trees-saplings.name": "Cortar árboles frutales (plantones)",
+    "config.chop-fruit-trees-saplings.tooltip": "Si se desbrozan los árboles frutales que no han crecido del todo.",
+
+    "config.chop-fruit-trees-grown.name": "Cortar árboles frutales (cultivados)",
+    "config.chop-fruit-trees-grown.tooltip": "Si se cortan los árboles frutales ya crecidos.",
+
+    "config.chop-trees-seeds.name": "Cortar árboles (semillas)",
+    "config.chop-trees-seeds.tooltip": "Si se eliminan las semillas de los árboles no frutales.",
+
+    "config.chop-trees-saplings.name": "Cortar árboles (plantones)",
+    "config.chop-trees-saplings.tooltip": "Si se eliminan los árboles no frutales que no están completamente desarrollados.",
+
+    "config.chop-trees-grown.name": "Cortar árboles (cultivados)",
+    "config.chop-trees-grown.tooltip": "Si se desbrozan árboles no frutales completamente crecidos.",
+
+    "config.chop-bushes.name": "Cortar arbustos",
+    "config.chop-bushes.tooltip": "Si se cortan los arbustos que se pueden cortar.",
+
+    "config.harvest-fruit-trees.name": "Cosechar árboles frutales",
+    "config.harvest-fruit-trees.tooltip": "Si se cosechan árboles frutales.",
+
+
+    /****
+    ** Crops/forage/grass
+    ****/
+    "config.clear-dead-crops.name": "Limpiar los cultivos muertos",
+    "config.clear-dead-crops.tooltip": "Si se destruyen los cultivos muertos.",
+
+    "config.clear-live-crops.name": "Limpiar los cultivos vivos",
+    "config.clear-live-crops.tooltip": "Si se destruyen los cultivos vivos.",
+
+    "config.harvest-giant-crops.name": "Cosechar cultivos gigantes",
+    "config.harvest-giant-crops.tooltip": "Si se cortan los cultivos gigantes.",
+
+    "config.harvest-crops.name": "Cosechar cultivos",
+    "config.Harvest Crops.tooltip": "Si se cosechan los cultivos.",
+
+    "config.harvest-flowers.name": "Cosechar flores",
+    "config.harvest-flowers.tooltip": "Si se cosechan flores.",
+
+    "config.harvest-forage.name": "Cosechar forraje",
+    "config.harvest-forage.tooltip": "Si se cosechan los forrajes.",
+
+    "config.harvest-grass.name": "Cosechar hierba",
+    "config.harvest-grass.tooltip": "Si se corta la hierba. Si tiene espacio libre en el silo, esto le da heno como de costumbre.",
+
+
+    /****
+    ** Debris
+    ****/
+    "config.clear-debris.name": "Despejar escombros",
+    "config.clear-debris.tooltip": "Si se destruyen restos como maleza, ramitas, tocones gigantes y troncos caídos.",
+
+    "config.clear-weeds.name": "Despejar maleza",
+    "config.clear-weeds.tooltip": "Si se destruye la maleza.",
+
+
+    /****
+    ** Dirt
+    ****/
+    "config.till-dirt.name": "Labrar tierra",
+    "config.till-dirt.tooltip": "Si se labra la tierra vacía.",
+
+    "config.dig-artifact-spots.name": "Excavar puntos de artefactos",
+    "config.dig-artifact-spots.tooltip": "Si se excavan puntos de artefactos.",
+
+    "config.clear-tilled-dirt.name": "Limpiar tierra labrada",
+    "config.clear-tilled-dirt.tooltip": "Si se limpia la tierra labrada.",
+
+
+    /****
+    ** Mining
+    ****/
+    "config.break-boulders-and-meteorites.name": "Romper rocas y meteoritos",
+    "config.break-boulders-and-meteorites.tooltip": "Si se rompen las rocas y meteoritos.",
+
+    "config.harvest-mine-spawns.name": "Cosechar objectos de las minas",
+    "config.harvest-mine-spawns.tooltip": "Si se cosechan objetos mineros como el cuarzo y las lágrimas congeladas.",
+
+
+    /****
+    ** Placed items
+    ****/
+    "config.break-flooring.name": "Romper suelo colocado",
+    "config.break-flooring.tooltip": "Si se rompe el suelo colocado.",
+
+    "config.break-objects.name": "Romper objectos colocados",
+    "config.break-objects.tooltip": "Si se rompen los objetos colocados.",
+
+    "config.break-mine-containers.name": "Romper contenedores de la mina",
+    "config.break-mine-containers.tooltip": "Si se rompen los contenedores en la mina.",
+
+    "config.harvest-machines.name": "Cosechar maquinas",
+    "config.harvest-machines.tooltip": "Si se recoge los productos de las máquinas",
+
+
+    /****
+    ** Melee
+    ****/
+    "config.Attack-monsters.name": "Atacar mónstruos",
+    "config.Attack-monsters.tooltip": "Si se atacan a los monstruos. (Esto es masivamente sobrepoderoso debido a la velocidad de la herramienta del tractor).",
+
+
+    /****
+    ** Other
+    ****/
+    "config.milk-pail.name": "Habilitar la cubeta lechera",
+    "config.milk-pail.tooltip": "Si se recoge la leche de los animales de la granja utilizando el cubo de la leche.",
+
+    "config.shears.name": "Habilitar las cizallas",
+    "config.shears.tooltip": "Si se recoge la lana de los animales de granja utilizando las tijeras.",
+
+    "config.watering-can.name": "Habilitar la regadera",
+    "config.watering-can.tooltip": "Si se riegan las baldosas cercanas utilizando la regadera. Esto no consume agua en la regadera.",
+
+    "config.fertilizer.name": "Habilitar fertilizantes",
+    "config.fertilizer.tooltip": "Si se aplica el fertilizante a los cultivos y a la tierra labrada.",
+
+    "config.grass-starters.name": "Habilitar parches de hierba",
+    "config.grass-starters.tooltip": "Si se plantan parches de hierba.",
+
+    "config.seeds.name": "Habilitar semillas",
+    "config.seeds.tooltip": "Si se plantan semillas.",
+
+    "config.seed-bags.name": "Habilitar bolsas de semillas",
+    "config.seed-bags.tooltip": "Si se plantan las semillas del mod de la Bolsa de Semillas (Seed Bag Mod).",
+
+    "config.slingshot.name": "Habilitar el tirachinas",
+    "config.slingshot.tooltip": "Si se dispara el tirachinas hacia el cursor. (Esto es masivamente sobrepoderoso y consumirá munición vorazmente debido a la velocidad de la herramienta del tractor).",
+
+    "config.custom-tool-names.name": "Nombres de herramientas personalizados",
+    "config.custom-tool-names.tooltip": "Los objetos/herramientas personalizados para habilitar mientras se conduce el tractor. Las herramientas se usarán en cada baldosa circundante, mientras que los objetos se pondrán en el suelo. Si especificas algo que ya está soportado (como el hacha), esto anula todas las limitaciones de su uso. Debes especificar el nombre interno exacto (no el nombre que se muestra), como 'Hacha' o 'Megabomba'. Separe los valores múltiples con comas."
 }

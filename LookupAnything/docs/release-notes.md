@@ -1,6 +1,17 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.36.2
+Released 14 January 2021 for SMAPI 3.13.0 or later.
+
+* Fixed scroll up/down arrows and keybinds not working in the search UI.
+* Fixed error clicking 'see also' crop link from a seed lookup.
+* Fixed support for custom locations with farm animals.
+* Fixed 'tile lookup' option in Generic Mod Config Menu UI not working correctly.
+* Fixed lookup error if another mod added invalid recipe data.
+* Fixed transparency issue with faded icons in the lookup menu (thanks to TehPers!).
+* Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (updated Spanish), mezen (updated German), and Zangorr (updated Polish)!
+
 ## 1.36.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.
 
