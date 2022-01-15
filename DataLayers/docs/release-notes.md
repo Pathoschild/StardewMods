@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed _Coverage: Sprinklers_ layer not showing coverage for a held sprinkler.
+* Fixed _Crops: Ready to Harvest_ layer stopping to mourn if it finds a dead crop.
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), ellipszist (updated Thai), Evexyron + Yllelder (updated Spanish), ruzgar01 (updated Turkish), and Zangorr (added Polish)!
 
 ## 1.15.2
