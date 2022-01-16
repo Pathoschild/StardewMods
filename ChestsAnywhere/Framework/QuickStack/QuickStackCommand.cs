@@ -24,18 +24,42 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         }
         public QuickStackCommandResult Execute()
         {
-            var stackableGroupsToChestsItemsCanBeMovedTo = this.GetPlayerItemToChestItemMapping();
+            var playerItems = this.Player.Items;
+            var stackableGroupsToChestsItemsCanBeMovedTo = this.GetPlayerItemToChestMapping(playerItems);
+            return this.MoveItemsToChests(stackableGroupsToChestsItemsCanBeMovedTo, playerItems);
+        }
 
+        private QuickStackCommandResult MoveItemsToChests(Dictionary<List<int>, List<ManagedChest>> itemGroupsToChestMapping, IList<Item> playerItems)
+        {
+            // Only select those item groups that can be moved to chests
+            var itemGroupsThatCanBeMovedToChests = itemGroupsToChestMapping.Where(x => x.Value.Count > 0);
+            // begin with those items that have only one chest they can be moved to
+            var orderedPairs = itemGroupsThatCanBeMovedToChests.OrderBy(x => x.Value.Count);
+            
+            foreach (var pair in orderedPairs)
+            {
+                var possibleChestsToBeMovedTo = pair.Value;
+                var stackableGroup = pair.Key;
+
+                // begin with rightmost item of group
+                var orderedStackableGroup = stackableGroup.OrderByDescending(i => i);
+                // begin with chest that already has most of the given Item
+                //var orderedPossibleChestsToBeMovedTo = possibleChestsToBeMovedTo.OrderBy(x => x.Container.)
+
+                foreach (int inventoryItemIndex in orderedStackableGroup)
+                {
+                    var inventoryItem = playerItems[inventoryItemIndex];
+                }
+            }
             return null;
         }
 
         /// <summary>
         /// Determines which item groups (stackable items) in inventory can be put into which chests
         /// </summary>
-        private Dictionary<List<int>, List<ManagedChest>> GetPlayerItemToChestItemMapping()
+        private Dictionary<List<int>, List<ManagedChest>> GetPlayerItemToChestMapping(IList<Item> playerItems)
         {
             Dictionary<List<int>, List<ManagedChest>> stackablgeGroupsToChests = new();
-            var playerItems = this.Player.Items;
             var stackableGroupsInInventory = GetStackableGroupsWithinItemList(playerItems);
 
             // check for every group if a chest is relevant
@@ -88,18 +112,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                 var item = itemList[i];
                 if (item != null)
                 {
+                    bool stackableGroupForItemAlreadyExists = false;
                     foreach (var group in stackableGroups)
                     {
                         var firstItemOfGroup = itemList[group[0]];
                         if (item.canStackWith(firstItemOfGroup))
                         {
                             group.Add(i);
+                            stackableGroupForItemAlreadyExists = true;
                             break;
                         }
-                        else
-                        {
-                            stackableGroups.Add(new List<int> { i });
-                        }
+                    }
+                    if (!stackableGroupForItemAlreadyExists)
+                    {
+                        stackableGroups.Add(new List<int> { i });
                     }
                 }
             }

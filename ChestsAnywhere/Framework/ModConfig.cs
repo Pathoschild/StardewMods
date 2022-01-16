@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
