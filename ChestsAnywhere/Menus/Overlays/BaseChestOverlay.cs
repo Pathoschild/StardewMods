@@ -97,6 +97,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The edit button.</summary>
         protected ClickableTextureComponent EditButton;
 
+        /// <summary>The quickstack button.</summary>
+        protected ClickableTextureComponent QuickStackButton;
+
         /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
         private readonly int TopOffset;
 
@@ -226,6 +229,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // edit button
                 this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+
+                // quickstack button
+                this.QuickStackButton.draw(batch, Color.White * navOpacity, 1f);
             }
 
             // edit mode
@@ -535,6 +541,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
+                    else if (this.QuickStackButton.containsPoint(x, y) && canNavigate)
+                        this.InvokeQuickStackAction();
                     else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
                     {
                         this.ChestDropdown.IsExpanded = true;
@@ -620,6 +628,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
+            }
+
+            // edit quick stack button overlay (based on chest dropdown position)
+            {
+                Rectangle sprite = CommonSprites.Icons.UpArrow;
+                float zoom = Game1.pixelZoom / 2f;
+                Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y - 100, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
+                this.QuickStackButton = new ClickableTextureComponent("quickstack-button", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
             }
 
             // edit form
@@ -813,6 +829,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
 
             this.ActiveElement = Element.EditForm;
+        }
+
+        /// <summary>Do quick stack logic.</summary>
+        private void InvokeQuickStackAction()
+        {
+            throw new ArgumentException("breakpoint");
         }
 
         /// <summary>Get the chests in a given category.</summary>
