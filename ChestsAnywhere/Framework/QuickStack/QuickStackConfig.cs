@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pathoschild.Stardew.ChestsAnywhere.Framework
+namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 {
     internal class QuickStackConfig
     {
@@ -12,8 +12,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         public bool ConsiderShippingBin { get; set; } = false;
 
-        public bool ConsiderFurnitureContainer { get; set; } = false;
-
         public bool ConsiderAutoGrabber { get; set; } = false;
+
+        public bool MoveItemsToHiddenChests { get; set; } = false;
     }
 }

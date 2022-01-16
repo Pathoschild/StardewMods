@@ -231,7 +231,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.EditButton.draw(batch, Color.White * navOpacity, 1f);
 
                 // quickstack button
-                this.QuickStackButton.draw(batch, Color.White * navOpacity, 1f);
+                if (this.Config.EnableStackToAllAvailableChests)
+                {
+                    this.QuickStackButton.draw(batch, Color.White * navOpacity, 1f);
+                }
             }
 
             // edit mode
@@ -541,7 +544,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.QuickStackButton.containsPoint(x, y) && canNavigate)
+                    else if (this.Config.EnableStackToAllAvailableChests && this.QuickStackButton.containsPoint(x, y) && canNavigate)
                         this.InvokeQuickStackAction();
                     else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
                     {
@@ -630,7 +633,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
             }
 
-            // edit quick stack button overlay (based on chest dropdown position)
+            // edit quick stack button overlay
+            if (this.Config.EnableStackToAllAvailableChests)
             {
                 Rectangle sprite = CommonSprites.Icons.UpArrow;
                 float zoom = Game1.pixelZoom / 2f;
@@ -834,7 +838,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Do quick stack logic.</summary>
         private void InvokeQuickStackAction()
         {
-            throw new ArgumentException("breakpoint");
+            QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player);
+            quickStackCommand.Execute();
         }
 
         /// <summary>Get the chests in a given category.</summary>
