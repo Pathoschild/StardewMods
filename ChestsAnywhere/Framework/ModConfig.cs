@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>The key bindings.</summary>
         public ModConfigKeys Controls { get; set; } = new();
 
-        public bool EnableStackToAllAvailableChests { get; set; } = true;
+        public bool EnableQuickstackToAllAvailableChests { get; set; } = true;
 
         /// <summary>Options for quickstack functionality.</summary>
         public QuickStackConfig QuickStackOptions { get; set;} = new();

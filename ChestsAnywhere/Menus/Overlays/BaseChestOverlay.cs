@@ -235,7 +235,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 this.EditButton.draw(batch, Color.White * navOpacity, 1f);
 
                 // quickstack button
-                if (this.Config.EnableStackToAllAvailableChests)
+                if (this.Config.EnableQuickstackToAllAvailableChests)
                 {
                     this.QuickStackButton.draw(batch, Color.White * navOpacity, 1f);
                 }
@@ -548,7 +548,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
-                    else if (this.Config.EnableStackToAllAvailableChests && this.QuickStackButton.containsPoint(x, y) && canNavigate)
+                    else if (this.Config.EnableQuickstackToAllAvailableChests && this.QuickStackButton.containsPoint(x, y) && canNavigate)
                         this.InvokeQuickStackAction();
                     else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
                     {
@@ -638,7 +638,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             // edit quick stack button overlay
-            if (this.Config.EnableStackToAllAvailableChests)
+            if (this.Config.EnableQuickstackToAllAvailableChests)
             {
                 Rectangle sprite = BaseChestOverlay.QuickStackIcon.Bounds;
                 var buttonBounds = new Rectangle(bounds.Left - (int)(Game1.tileSize * 1.3), bounds.Y + bounds.Height / 3, Game1.tileSize, Game1.tileSize);
@@ -841,7 +841,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>Do quick stack logic.</summary>
         private void InvokeQuickStackAction()
         {
-            QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player);
+            QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player, this.Menu);
             var result = quickStackCommand.Execute();
             Game1.playSound("Ship");
         }

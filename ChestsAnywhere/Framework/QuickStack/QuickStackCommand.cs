@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewValley;
+using StardewValley.Menus;
 using static StardewValley.Objects.Chest;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 {
 
+    /// <summary>
+    /// Data class to hold information about a chest that already contains certain item
+    /// </summary>
     internal class ChestItemInformation
     {
         /// <summary>
@@ -18,17 +22,17 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         public readonly ManagedChest Chest;
 
         /// <summary>
-        /// List of index of items in chest that can stack with a given item and is not at max stack size yet
+        /// List of index of items in chest that can stack with item and is not at max stack size yet
         /// </summary>
         public List<int> InventoryIndexesOfStackableItemInChestNotFull;
 
         /// <summary>
-        /// How many stacks of this item are already in the chest
+        /// How many stacks of item are already in the chest
         /// </summary>
         public int TotalStackNumberInChest;
 
         /// <summary>
-        /// If chest is full and can't hold any of the item
+        /// If chest is full and can't hold any more of the item
         /// </summary>
         public bool IsFull;
 
@@ -40,6 +44,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             this.IsFull = chestFull;
         }
     }
+
+    /// <summary>
+    /// Class to hold logic about quick stack
+    /// </summary>
     internal class QuickStackCommand
     {
         private readonly QuickStackConfig Config;
@@ -48,11 +56,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 
         private readonly Farmer Player;
 
-        public QuickStackCommand(QuickStackConfig config, List<ManagedChest> availableChests, Farmer player)
+        private readonly InventoryMenu OpenChestInventory;
+
+        private readonly InventoryMenu OwnInventoryPage;
+
+        private readonly HashSet<int> ItemIndexHasMoved = new();
+
+        public QuickStackCommand(QuickStackConfig config, List<ManagedChest> availableChests, Farmer player, IClickableMenu menu)
         {
             this.Config = config ?? throw new ArgumentNullException(nameof(config));
             this.AvailableChests = availableChests ?? throw new ArgumentNullException(nameof(availableChests));
             this.Player = player = player ?? throw new ArgumentNullException(nameof(player));
+            if(menu is ItemGrabMenu itemGrabmenu)
+            {
+                this.OpenChestInventory = itemGrabmenu.ItemsToGrabMenu;
+                this.OwnInventoryPage = itemGrabmenu.inventory;
+            }else if(menu is MenuWithInventory menuWithInventory)
+            {
+                this.OwnInventoryPage = menuWithInventory.inventory;
+            }
         }
 
         /// <summary>
@@ -73,7 +95,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             // prioritize those items that have the fewest chests they can be moved to
             var orderedPairs = itemGroupsThatCanBeMovedToChests.OrderBy(x => x.Value.Count);
 
-            var movedItemIndexes = new HashSet<int>();
             foreach (var pair in orderedPairs)
             {
                 var possibleChestsToBeMovedTo = pair.Value;
@@ -84,9 +105,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                 // begin with chest that already has most of the given Item
                 var orderedChests = possibleChestsToBeMovedTo.OrderByDescending(x => x.TotalStackNumberInChest).ToList();
 
-                movedItemIndexes.UnionWith(this.PushItemGroupFromInventoryToChests(orderedStackableGroup, orderedChests, playerItems));
+                this.PushItemGroupFromInventoryToChests(orderedStackableGroup, orderedChests, playerItems);
             }
-            return new QuickStackCommandResult(movedItemIndexes);
+            return new QuickStackCommandResult(this.ItemIndexHasMoved);
         }
 
         /// <summary>
@@ -96,33 +117,28 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         /// <param name="orderedItemsInInventory"></param>
         /// <param name="orderedChests"></param>
         /// <param name="playerItems"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private ISet<int> PushItemGroupFromInventoryToChests(List<int> orderedItemsInInventory, List<ChestItemInformation> orderedChests, IList<Item> playerItems)
+        private void PushItemGroupFromInventoryToChests(List<int> orderedItemsInInventory, List<ChestItemInformation> orderedChests, IList<Item> playerItems)
         {
-            var movedItemIndexes = new HashSet<int>();
             // Push to chests as long as there are items in inventory and there is space in chests
             while (orderedItemsInInventory.Count > 0 && orderedChests.Where(x => !x.IsFull).ToList().Count > 0)
             {
                 var currentChest = orderedChests.Where(x => !x.IsFull).ToList().First();
-                movedItemIndexes.UnionWith(this.PushItemGroupFromInventoryToChest(orderedItemsInInventory, currentChest, playerItems));
+                this.PushItemGroupFromInventoryToChest(orderedItemsInInventory, currentChest, playerItems);
             }
-            return movedItemIndexes;
         }
 
         /// <summary>
         /// Pushes the given items from the inventory to the given chest
         /// </summary>
-        /// <param name="orderedStackableGroup"></param>
+        /// <param name="itemIndexesInInventory"></param>
         /// <param name="chestInfo"></param>
         /// <param name="playerItems"></param>
-        /// <returns></returns>
-        private ISet<int> PushItemGroupFromInventoryToChest(List<int> itemIndexesInInventory, ChestItemInformation chestInfo, IList<Item> playerItems)
+        private void PushItemGroupFromInventoryToChest(List<int> itemIndexesInInventory, ChestItemInformation chestInfo, IList<Item> playerItems)
         {
-            var movedItemIndexes = new HashSet<int>();
-            // continue as long as there are items in inventory and the chest still has space
             int currentInventoryItemIndex;
             var chestInventory = chestInfo.Chest.Container.Inventory;
-            while(itemIndexesInInventory.Count > 0 && !chestInfo.IsFull)
+            // continue as long as there are items in inventory and the chest still has space
+            while (itemIndexesInInventory.Count > 0 && !chestInfo.IsFull)
             {
                 currentInventoryItemIndex = itemIndexesInInventory[0];
                 var rightMostInventoryItem = playerItems[currentInventoryItemIndex];
@@ -134,9 +150,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestItemIndex = chestInfo.InventoryIndexesOfStackableItemInChestNotFull[0];
                     chestItem = chestInventory[chestItemIndex];
                     rightMostInventoryItem.Stack = chestItem.addToStack(rightMostInventoryItem);
-                    movedItemIndexes.Add(currentInventoryItemIndex);
+                    this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
+                    this.InventoryItemAtIndexHasBeenMoved(currentInventoryItemIndex);
                     // if item stack in chest is at maximum ignore it from now on
-                    if (chestItem.Stack == chestItem.maximumStackSize())
+                    if (chestItem.Stack >= chestItem.maximumStackSize())
                     {
                         chestInfo.InventoryIndexesOfStackableItemInChestNotFull.RemoveAt(0);
                     }
@@ -152,10 +169,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestInventory.Add(rightMostInventoryItem);
                     chestItem = rightMostInventoryItem;
                     chestItemIndex = chestInventory.IndexOf(chestItem);
+                    this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
                     // item has been fully transferred to chest
                     this.Player.removeItemFromInventory(rightMostInventoryItem);
                     itemIndexesInInventory.RemoveAt(0);
-                    movedItemIndexes.Add(currentInventoryItemIndex);
+                    this.InventoryItemAtIndexHasBeenMoved(currentInventoryItemIndex);
                     // Following items might be put in this stack
                     if (chestItem.Stack < chestItem.maximumStackSize())
                     {
@@ -167,7 +185,33 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestInfo.IsFull = true;
                 }
             }
-            return movedItemIndexes;
+        }
+
+        /// <summary>
+        /// When an item is 
+        /// </summary>
+        /// <param name="chestItemIndex"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void ShakeChestItemIfIsDisplayedChest(int chestItemIndex, IList<Item> chestInventory)
+        {
+            if(this.OpenChestInventory != null && this.OpenChestInventory.actualInventory == chestInventory)
+            {
+                this.OpenChestInventory.ShakeItem(chestItemIndex);
+            }
+        }
+
+        /// <summary>
+        /// When an item with the given index in player inventory has moved partly or fully
+        /// </summary>
+        /// <param name="itemIndex"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void InventoryItemAtIndexHasBeenMoved(int itemIndex)
+        {
+            if(this.OwnInventoryPage != null && !this.ItemIndexHasMoved.Contains(itemIndex))
+            {
+                this.OwnInventoryPage.ShakeItem(itemIndex);
+            }
+            this.ItemIndexHasMoved.Add(itemIndex);
         }
 
         /// <summary>
@@ -270,7 +314,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         }
 
         /// <summary>
-        /// Whether the given item should be put to a chest
+        /// Whether the given item should be put to a chest.
         /// </summary>
         /// <returns></returns>
         private bool ItemShouldBePutToChest(Item item)
