@@ -97,9 +97,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         private void PushItemGroupFromInventoryToChests(List<int> orderedItemsInInventory, List<ChestItemInformation> orderedChests, IList<Item> playerItems)
         {
             // Push to chests as long as there are items in inventory and there is space in chests
-            while (orderedItemsInInventory.Count > 0 && orderedChests.Where(x => x.IsFull).ToList().Count > 0)
+            while (orderedItemsInInventory.Count > 0 && orderedChests.Where(x => !x.IsFull).ToList().Count > 0)
             {
-                var currentChest = orderedChests.Where(x => x.IsFull).ToList().First();
+                var currentChest = orderedChests.Where(x => !x.IsFull).ToList().First();
                 this.PushItemGroupFromInventoryToChest(orderedItemsInInventory, currentChest, playerItems);
             }
         }
@@ -128,6 +128,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestItemIndex = chestInfo.InventoryIndexesOfStackableItemInChestNotFull[0];
                     chestItem = chestInventory[chestItemIndex];
                     rightMostInventoryItem.Stack = chestItem.addToStack(rightMostInventoryItem);
+                    // if item stack in chest is at maximum ignore it from now on
+                    if(chestItem.Stack == chestItem.maximumStackSize())
+                    {
+                        chestInfo.InventoryIndexesOfStackableItemInChestNotFull.RemoveAt(0);
+                    }
                     if (rightMostInventoryItem.Stack <= 0)
                     {
                         this.Player.removeItemFromInventory(rightMostInventoryItem);
@@ -142,6 +147,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestItemIndex = chestInventory.IndexOf(chestItem);
                     // item has been fully transferred to chest
                     this.Player.removeItemFromInventory(rightMostInventoryItem);
+                    itemIndexesInInventory.RemoveAt(0);
                     // Following items might be put in this stack
                     if (chestItem.Stack < chestItem.maximumStackSize())
                     {
