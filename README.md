@@ -15,7 +15,7 @@ Active mods:
 * **Content Patcher** <small>([ModDrop](https://www.moddrop.com/stardew-valley/mods/470174) | [Nexus](https://www.nexusmods.com/stardewvalley/mods/1915) | [source](ContentPatcher))</small>  
   _Load content packs that change the game's images and data without replacing XNB files. Unlike
   XNB mods, these content packs get automatic update checks and compatibility checks, are easy to
-  install and uninstall, and are less likely to break due to game updates._
+  install and uninstall and are less likely to break due to game updates._
 
 * **Crops Anytime Anywhere** <small>([ModDrop](https://www.moddrop.com/stardew-valley/mods/606647) | [Nexus](https://www.nexusmods.com/stardewvalley/mods/3000) | [source](CropsAnytimeAnywhere))</small>  
   _Grow crops in any season and location, including on grass/dirt tiles you normally couldn't till._
@@ -99,8 +99,8 @@ Turkish     | ❑                          | [↻](ChestsAnywhere/i18n/tr.json) 
 [Ukrainian]: https://www.nexusmods.com/stardewvalley/mods/8427
 
 ## Compiling the mods
-Installing stable releases from Nexus Mods is recommended for most users. If you really want to
-compile the mod yourself, read on.
+Installing stable releases from Nexus Mods is recommended for most users. If you want to
+compile the mod yourself; read on.
 
 These mods use the [crossplatform build config](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
 so they can be built on Linux, Mac, and Windows without changes. See [the build config documentation](https://www.nuget.org/packages/Pathoschild.Stardew.ModBuildConfig)
