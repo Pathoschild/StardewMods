@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Messages;
+using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
@@ -54,6 +56,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             I18n.Init(helper.Translation);
             this.Config = helper.ReadConfig<ModConfig>();
             this.Data = helper.Data.ReadJsonFile<ModData>("assets/data.json") ?? new ModData();
+            BaseChestOverlay.QuickStackIcon = helper.Content.Load<Texture2D>("assets/QuickStackButtonIcon.png", ContentSource.ModFolder);
             this.ChestFactory = new ChestFactory(helper.Multiplayer, helper.Reflection, () => this.Config.EnableShippingBin);
 
             // hook events

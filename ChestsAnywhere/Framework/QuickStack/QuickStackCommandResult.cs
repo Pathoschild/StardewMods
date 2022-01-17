@@ -11,8 +11,19 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
     /// </summary>
     internal class QuickStackCommandResult
     {
-        public readonly Dictionary<int, List<ManagedChest>> InventoryIndexToMovedChests = new();
+        public readonly List<int> InventoryIndexesItemMovedToChest;
 
-        public readonly Dictionary<int, List<ManagedChest>> FullyMovedInventoryIndexToMovedChests = new();
+        public QuickStackCommandResult(IEnumerable<int> inventoryIndexesItemMovedToChest)
+        {
+            var result = inventoryIndexesItemMovedToChest ?? throw new ArgumentNullException(nameof(inventoryIndexesItemMovedToChest));
+            var list = result.ToList();
+            list.Sort();
+            this.InventoryIndexesItemMovedToChest = list;
+        }
+
+        public bool ItemsHaveBeenMoved()
+        {
+            return this.InventoryIndexesItemMovedToChest.Count > 0;
+        }
     }
 }

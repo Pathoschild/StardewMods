@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

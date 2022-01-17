@@ -35,6 +35,7 @@
     "button.sort-inventory": "sort inventory",
     "button.save": "save",
     "button.reset": "reset",
+    "button.quickstack":  "Stack to available chests",
 
 
     /**********

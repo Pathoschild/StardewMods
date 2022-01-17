@@ -101,6 +101,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         /// <summary>The quickstack button.</summary>
         protected ClickableTextureComponent QuickStackButton;
 
+        /// <summary>Icon for quickstack button.</summary>
+        public static Texture2D QuickStackIcon;
+
         /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
         private readonly int TopOffset;
 
@@ -637,10 +640,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             // edit quick stack button overlay
             if (this.Config.EnableStackToAllAvailableChests)
             {
-                Rectangle sprite = CommonSprites.Icons.UpArrow;
-                float zoom = Game1.pixelZoom / 2f;
-                Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y - 100, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
-                this.QuickStackButton = new ClickableTextureComponent("quickstack-button", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
+                Rectangle sprite = BaseChestOverlay.QuickStackIcon.Bounds;
+                var buttonBounds = new Rectangle(bounds.Left - (int)(Game1.tileSize * 1.3), bounds.Y + bounds.Height / 3, Game1.tileSize, Game1.tileSize);
+                this.QuickStackButton = new ClickableTextureComponent("quickstackButton", buttonBounds, null, I18n.Button_Quickstack(), BaseChestOverlay.QuickStackIcon, Rectangle.Empty, Game1.pixelZoom);
             }
 
             // edit form
@@ -840,7 +842,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private void InvokeQuickStackAction()
         {
             QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player);
-            quickStackCommand.Execute();
+            var result = quickStackCommand.Execute();
+            Game1.playSound("Ship");
         }
 
         /// <summary>Get the chests in a given category.</summary>
