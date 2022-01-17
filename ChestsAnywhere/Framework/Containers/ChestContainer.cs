@@ -37,6 +37,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate => this.Chest.SpecialChestType != Chest.SpecialChestTypes.JunimoChest && this.Chest.SpecialChestType != Chest.SpecialChestTypes.MiniShippingBin;
 
+        public int ActualCapacity => this.Chest.GetActualCapacity();
 
         /*********
         ** Public methods

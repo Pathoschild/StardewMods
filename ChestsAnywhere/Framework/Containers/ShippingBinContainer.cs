@@ -49,6 +49,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>The type of shipping bin menu to create.</summary>
         public ShippingBinMode Mode { get; }
 
+        // needs to be changed later
+        public int ActualCapacity => 9;
+
 
         /*********
         ** Public methods

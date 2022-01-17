@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         bool CanConfigureAutomate { get; }
 
+        /// <summary>Number of items the container can hold.</summary>
+        int ActualCapacity { get; }
+
 
         /*********
         ** Public methods
