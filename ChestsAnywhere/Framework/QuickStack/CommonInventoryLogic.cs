@@ -42,8 +42,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                         continue;
                     }
                     var chestMetaData = new ChestInventoryItemMetaData(groupRepresentativeItem, chest);
-                    // Only if stackable items in the chest are found and it is not full can items be pushed there
-                    if (!chestMetaData.ItemGroup.IsEmpty() && !chestMetaData.IsFull())
+                    // Only if stackable items in the chest are found can items be pushed there
+                    if (!chestMetaData.ItemGroup.IsEmpty())
                     {
                         chestsItemsCanBeMovedTo.Add(chestMetaData);
                     }
