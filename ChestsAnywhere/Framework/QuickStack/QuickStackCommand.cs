@@ -77,7 +77,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         private void PushItemGroupFromInventoryToChest(InventoryStackableItemGroup itemGroup, ChestInventoryItemMetaData chestInfo, IList<Item> playerItems)
         {
             chestInfo.ItemGroup.InventoryIndexesOfStackableItemStackNotFull.Sort();
-            int currentInventoryItemIndex;
             var chestInventory = chestInfo.Chest.Container.Inventory;
             // continue as long as there are items in inventory and the chest still has space
             while (!itemGroup.IsEmpty() && !chestInfo.IsFull())
@@ -110,7 +109,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestItemIndex = chestInventory.IndexOf(chestItem);
                     this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
                     // item has been fully transferred to chest
-                    itemGroup.HandleItemWithIndex(rightmostInventoryItem, rightmostInventoryItemIndex);
+                    itemGroup.RemoveIndex(rightmostInventoryItemIndex);
                     this.Player.removeItemFromInventory(rightmostInventoryItem);
                     // Following items might be put in this stack
                     chestInfo.ItemGroup.HandleItemWithIndex(chestItem, chestItemIndex);

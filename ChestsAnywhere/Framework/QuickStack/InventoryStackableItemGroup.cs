@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             }
         }
 
-        private void RemoveIndex(int index)
+        public void RemoveIndex(int index)
         {
             this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
             this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         public override List<int> GetIndexes()
         {
             var union = this.InventoryIndexesOfStackableItemStackNotFull.Union(this.InventoryIndexesOfStackableItemStackFull);
-            var list = new List<int>(union);
+            var list = new HashSet<int>(union).ToList();
             return list;
         }
 
