@@ -181,8 +181,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 .SelectMany(recipe =>
                 {
                     Item outputItem = recipe.TryCreateItem(ingredient);
-                    if (outputItem == null)
-                        return Array.Empty<RecipeEntry>();
 
                     RecipeItemEntry output = this.CreateItemEntry(
                         name: recipe.SpecialOutput?.DisplayText ?? outputItem?.DisplayName,
