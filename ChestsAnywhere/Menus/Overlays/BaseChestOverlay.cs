@@ -842,8 +842,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private void InvokeQuickStackAction()
         {
             QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player, this.Menu);
-            var result = quickStackCommand.Execute();
-            Game1.playSound("Ship");
+            quickStackCommand.Execute();
         }
 
         /// <summary>Get the chests in a given category.</summary>

@@ -10,317 +10,150 @@ using static StardewValley.Objects.Chest;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 {
-
-    /// <summary>
-    /// Data class to hold information about a chest that already contains certain item
-    /// </summary>
-    internal class ChestItemInformation
-    {
-        /// <summary>
-        /// The chest holding the type of item
-        /// </summary>
-        public readonly ManagedChest Chest;
-
-        /// <summary>
-        /// List of index of items in chest that can stack with item and is not at max stack size yet
-        /// </summary>
-        public List<int> InventoryIndexesOfStackableItemInChestNotFull;
-
-        /// <summary>
-        /// How many stacks of item are already in the chest
-        /// </summary>
-        public int TotalStackNumberInChest;
-
-        /// <summary>
-        /// If chest is full and can't hold any more of the item
-        /// </summary>
-        public bool IsFull;
-
-        public ChestItemInformation(ManagedChest chest, int totalStackNumberInChest, List<int> inventoryIndexesOfStackableItemInChestNotFull, bool chestFull)
-        {
-            this.Chest = chest;
-            this.TotalStackNumberInChest = totalStackNumberInChest;
-            this.InventoryIndexesOfStackableItemInChestNotFull = inventoryIndexesOfStackableItemInChestNotFull;
-            this.IsFull = chestFull;
-        }
-    }
-
     /// <summary>
     /// Class to hold logic about quick stack
     /// </summary>
-    internal class QuickStackCommand
+    internal class QuickStackCommand : InventoryToChestCommand
     {
         private readonly QuickStackConfig Config;
 
-        private readonly List<ManagedChest> AvailableChests;
-
-        private readonly Farmer Player;
-
-        private readonly InventoryMenu OpenChestInventory;
-
-        private readonly InventoryMenu OwnInventoryPage;
-
-        private readonly HashSet<int> ItemIndexHasMoved = new();
-
-        public QuickStackCommand(QuickStackConfig config, List<ManagedChest> availableChests, Farmer player, IClickableMenu menu)
+        public QuickStackCommand(QuickStackConfig config, List<ManagedChest> availableChests, Farmer player, IClickableMenu menu) : base(availableChests, player, menu)
         {
             this.Config = config ?? throw new ArgumentNullException(nameof(config));
-            this.AvailableChests = availableChests ?? throw new ArgumentNullException(nameof(availableChests));
-            this.Player = player = player ?? throw new ArgumentNullException(nameof(player));
-            if(menu is ItemGrabMenu itemGrabmenu)
-            {
-                this.OpenChestInventory = itemGrabmenu.ItemsToGrabMenu;
-                this.OwnInventoryPage = itemGrabmenu.inventory;
-            }else if(menu is MenuWithInventory menuWithInventory)
-            {
-                this.OwnInventoryPage = menuWithInventory.inventory;
-            }
         }
 
         /// <summary>
         /// Performs the quickstacking with the parameters given in the constructor
         /// </summary>
         /// <returns></returns>
-        public QuickStackCommandResult Execute()
+        public void Execute()
         {
             var playerItems = this.Player.Items;
             var stackableGroupsToChestsItemsCanBeMovedTo = this.GetPlayerItemToChestMapping(playerItems);
-            return this.MoveItemsToChests(stackableGroupsToChestsItemsCanBeMovedTo, playerItems);
+            this.MoveItemsToChests(stackableGroupsToChestsItemsCanBeMovedTo, playerItems);
+            Game1.playSound("Ship");
         }
 
-        private QuickStackCommandResult MoveItemsToChests(Dictionary<List<int>, List<ChestItemInformation>> itemGroupsToChestMapping, IList<Item> playerItems)
+        private void MoveItemsToChests(List<Tuple<InventoryStackableItemGroup, List<ChestInventoryItemMetaData>>> itemGroupsToChestMapping, IList<Item> playerItems)
         {
-            // Only select those item groups that can be moved to chests
-            var itemGroupsThatCanBeMovedToChests = itemGroupsToChestMapping.Where(x => x.Value.Count > 0);
+            // Only select those inventory item groups where chests have been found that can take items from the group
+            var itemGroupsThatCanBeMovedToChests = itemGroupsToChestMapping.Where(x => x.Item2.Count > 0);
             // prioritize those items that have the fewest chests they can be moved to
-            var orderedPairs = itemGroupsThatCanBeMovedToChests.OrderBy(x => x.Value.Count);
+            var orderedPairs = itemGroupsThatCanBeMovedToChests.OrderBy(x => x.Item2.Count);
 
             foreach (var pair in orderedPairs)
             {
-                var possibleChestsToBeMovedTo = pair.Value;
-                var stackableGroup = pair.Key;
-
-                // begin with rightmost item of group
-                var orderedStackableGroup = stackableGroup.OrderByDescending(i => i).ToList();
-                // begin with chest that already has most of the given Item
-                var orderedChests = possibleChestsToBeMovedTo.OrderByDescending(x => x.TotalStackNumberInChest).ToList();
-
-                this.PushItemGroupFromInventoryToChests(orderedStackableGroup, orderedChests, playerItems);
+                var possibleChestsToBeMovedTo = pair.Item2;
+                var stackableGroup = pair.Item1;
+                this.PushItemGroupFromInventoryToChests(stackableGroup, possibleChestsToBeMovedTo, playerItems);
             }
-            return new QuickStackCommandResult(this.ItemIndexHasMoved);
         }
 
         /// <summary>
         /// Push items from the given stackable item group to the chests in the given order.
         /// Returns a list of indexes describing which items in inventory have been (partially) moved
         /// </summary>
-        /// <param name="orderedItemsInInventory"></param>
-        /// <param name="orderedChests"></param>
+        /// <param name="inventoryGroup"></param>
+        /// <param name="chests"></param>
         /// <param name="playerItems"></param>
-        private void PushItemGroupFromInventoryToChests(List<int> orderedItemsInInventory, List<ChestItemInformation> orderedChests, IList<Item> playerItems)
+        private void PushItemGroupFromInventoryToChests(InventoryStackableItemGroup inventoryGroup, List<ChestInventoryItemMetaData> chests, IList<Item> playerItems)
         {
+            // begin with chest that already has most of the given Item
+            var orderedChests = chests.OrderByDescending(x => x.ItemGroup.GetTotalStackNumber()).ToList();
             // Push to chests as long as there are items in inventory and there is space in chests
-            while (orderedItemsInInventory.Count > 0 && orderedChests.Where(x => !x.IsFull).ToList().Count > 0)
+            while (!inventoryGroup.IsEmpty() && orderedChests.Where(x => !x.IsFull()).ToList().Count > 0)
             {
-                var currentChest = orderedChests.Where(x => !x.IsFull).ToList().First();
-                this.PushItemGroupFromInventoryToChest(orderedItemsInInventory, currentChest, playerItems);
+                var currentChest = orderedChests.Where(x => !x.IsFull()).ToList().First();
+                this.PushItemGroupFromInventoryToChest(inventoryGroup, currentChest, playerItems);
             }
         }
 
         /// <summary>
         /// Pushes the given items from the inventory to the given chest
         /// </summary>
-        /// <param name="itemIndexesInInventory"></param>
+        /// <param name="itemGroup"></param>
         /// <param name="chestInfo"></param>
         /// <param name="playerItems"></param>
-        private void PushItemGroupFromInventoryToChest(List<int> itemIndexesInInventory, ChestItemInformation chestInfo, IList<Item> playerItems)
+        private void PushItemGroupFromInventoryToChest(InventoryStackableItemGroup itemGroup, ChestInventoryItemMetaData chestInfo, IList<Item> playerItems)
         {
+            chestInfo.ItemGroup.InventoryIndexesOfStackableItemStackNotFull.Sort();
             int currentInventoryItemIndex;
             var chestInventory = chestInfo.Chest.Container.Inventory;
             // continue as long as there are items in inventory and the chest still has space
-            while (itemIndexesInInventory.Count > 0 && !chestInfo.IsFull)
+            while (!itemGroup.IsEmpty() && !chestInfo.IsFull())
             {
-                currentInventoryItemIndex = itemIndexesInInventory[0];
-                var rightMostInventoryItem = playerItems[currentInventoryItemIndex];
+                var inventoryIndexes = itemGroup.GetIndexes().OrderByDescending(x => x);
+                int rightmostInventoryItemIndex = inventoryIndexes.First();
+                var rightmostInventoryItem = playerItems[rightmostInventoryItemIndex];
                 int chestItemIndex;
                 Item chestItem;
                 // prefer stacks that are there but not full yet
-                if (chestInfo.InventoryIndexesOfStackableItemInChestNotFull.Count > 0)
+                var chestStacksNotFull = chestInfo.ItemGroup.InventoryIndexesOfStackableItemStackNotFull;
+                if (chestStacksNotFull.Count > 0)
                 {
-                    chestItemIndex = chestInfo.InventoryIndexesOfStackableItemInChestNotFull[0];
+                    chestItemIndex = chestStacksNotFull[0];
                     chestItem = chestInventory[chestItemIndex];
-                    rightMostInventoryItem.Stack = chestItem.addToStack(rightMostInventoryItem);
+                    rightmostInventoryItem.Stack = chestItem.addToStack(rightmostInventoryItem);
                     this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
-                    this.InventoryItemAtIndexHasBeenMoved(currentInventoryItemIndex);
-                    // if item stack in chest is at maximum ignore it from now on
-                    if (chestItem.Stack >= chestItem.maximumStackSize())
+                    chestInfo.ItemGroup.HandleItemWithIndex(chestItem, chestItemIndex);
+                    if (rightmostInventoryItem.Stack <= 0)
                     {
-                        chestInfo.InventoryIndexesOfStackableItemInChestNotFull.RemoveAt(0);
-                    }
-                    if (rightMostInventoryItem.Stack <= 0)
-                    {
-                        this.Player.removeItemFromInventory(rightMostInventoryItem);
-                        itemIndexesInInventory.RemoveAt(0);
+                        itemGroup.HandleItemWithIndex(rightmostInventoryItem, rightmostInventoryItemIndex);
+                        this.Player.removeItemFromInventory(rightmostInventoryItem);
                     }
                 }
                 // add new item if there is space in container
-                else if(chestInventory.Count < chestInfo.Chest.Container.ActualCapacity)
+                else if (chestInventory.Count < chestInfo.Chest.Container.ActualCapacity)
                 {
-                    chestInventory.Add(rightMostInventoryItem);
-                    chestItem = rightMostInventoryItem;
+                    chestInventory.Add(rightmostInventoryItem);
+                    chestItem = rightmostInventoryItem;
                     chestItemIndex = chestInventory.IndexOf(chestItem);
                     this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
                     // item has been fully transferred to chest
-                    this.Player.removeItemFromInventory(rightMostInventoryItem);
-                    itemIndexesInInventory.RemoveAt(0);
-                    this.InventoryItemAtIndexHasBeenMoved(currentInventoryItemIndex);
+                    itemGroup.HandleItemWithIndex(rightmostInventoryItem, rightmostInventoryItemIndex);
+                    this.Player.removeItemFromInventory(rightmostInventoryItem);
                     // Following items might be put in this stack
-                    if (chestItem.Stack < chestItem.maximumStackSize())
-                    {
-                        chestInfo.InventoryIndexesOfStackableItemInChestNotFull.Add(chestItemIndex);
-                    }
-                }
-                else
-                {
-                    chestInfo.IsFull = true;
+                    chestInfo.ItemGroup.HandleItemWithIndex(chestItem, chestItemIndex);
                 }
             }
-        }
-
-        /// <summary>
-        /// When an item is 
-        /// </summary>
-        /// <param name="chestItemIndex"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void ShakeChestItemIfIsDisplayedChest(int chestItemIndex, IList<Item> chestInventory)
-        {
-            if(this.OpenChestInventory != null && this.OpenChestInventory.actualInventory == chestInventory)
-            {
-                this.OpenChestInventory.ShakeItem(chestItemIndex);
-            }
-        }
-
-        /// <summary>
-        /// When an item with the given index in player inventory has moved partly or fully
-        /// </summary>
-        /// <param name="itemIndex"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void InventoryItemAtIndexHasBeenMoved(int itemIndex)
-        {
-            if(this.OwnInventoryPage != null && !this.ItemIndexHasMoved.Contains(itemIndex))
-            {
-                this.OwnInventoryPage.ShakeItem(itemIndex);
-            }
-            this.ItemIndexHasMoved.Add(itemIndex);
         }
 
         /// <summary>
         /// Determines which item groups (stackable items) in inventory can be put into which chests
         /// </summary>
-        private Dictionary<List<int>, List<ChestItemInformation>> GetPlayerItemToChestMapping(IList<Item> playerItems)
+        private List<Tuple<InventoryStackableItemGroup, List<ChestInventoryItemMetaData>>> GetPlayerItemToChestMapping(IList<Item> playerItems)
         {
-            Dictionary<List<int>, List<ChestItemInformation>> stackablgeGroupsToChests = new();
-            var stackableGroupsInInventory = GetStackableGroupsWithinItemList(playerItems);
-
-            // check for every group if a chest is relevant
-            foreach(var group in stackableGroupsInInventory)
-            {
-                var groupRepresentativeItem = playerItems[group[0]];
-                var chestsItemsCanBeMovedTo = new List<ChestItemInformation>();
-                foreach(var chest in this.AvailableChests)
-                {
-                    var container = chest.Container;
-                    if((!this.Config.ConsiderJunimoHuts && container is JunimoHutContainer)
-                       || (!this.Config.ConsiderShippingBin && container is ShippingBinContainer)
-                       || (!this.Config.ConsiderAutoGrabber && container is AutoGrabberContainer)
-                       || chest.Container is StorageFurnitureContainer)
-                    {
-                        continue;
-                    }
-                    if (!this.Config.ConsiderMiniShippingBins)
-                    {
-                        if(container is ChestContainer chestContainer && chestContainer.Chest.SpecialChestType == SpecialChestTypes.MiniShippingBin)
-                        {
-                            continue;
-                        }
-                    }
-                    if (!container.CanAcceptItem(groupRepresentativeItem))
-                    {
-                        continue;
-                    }
-                    int numStacksOfItemFoundInChest = 0;
-                    bool itemFoundInChest = false;
-                    List<int> indexFoundItemsInChest = new List<int>();
-                    for(int i = 0; i < container.Inventory.Count; i++)
-                    {
-                        var chestItem = container.Inventory[i];
-                        if (groupRepresentativeItem.canStackWith(chestItem))
-                        {
-                            numStacksOfItemFoundInChest += chestItem.Stack;
-                            itemFoundInChest = true;
-                            // only rember item if stack isn't full yet
-                            if(chestItem.Stack < chestItem.maximumStackSize())
-                            {
-                                indexFoundItemsInChest.Add(i);
-                            }
-                        }
-                    }
-                    // sort found items, that way items will be tried to be pushed leftmost first
-                    indexFoundItemsInChest.Sort();
-                    bool chestIsFull = true;
-                    if(indexFoundItemsInChest.Count > 0 || chest.Container.Inventory.Count < chest.Container.ActualCapacity)
-                    {
-                        chestIsFull = false;
-                    }
-                    if (itemFoundInChest)
-                    {
-                        chestsItemsCanBeMovedTo.Add(new ChestItemInformation(chest, numStacksOfItemFoundInChest, indexFoundItemsInChest, chestIsFull));
-                    }
-                }
-                stackablgeGroupsToChests.Add(group, chestsItemsCanBeMovedTo);
-            }
-            return stackablgeGroupsToChests;
+            List<InventoryStackableItemGroup> groupsInInventory = InventoryStackableItemGroup.DetermineStackableItemGroups(playerItems);
+            return CommonInventoryLogic.GetMappingBetweenInventoryGroupsAndChestGroups(playerItems, groupsInInventory, this.GetFilteredAvailableChests());
         }
 
         /// <summary>
-        /// Determines the stackable groups within the given inventory
-        /// </summary>
-        private static List<List<int>> GetStackableGroupsWithinItemList(IList<Item> itemList)
-        {
-            List<List<int>> stackableGroups = new();
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                var item = itemList[i];
-                if (item != null)
-                {
-                    bool stackableGroupForItemAlreadyExists = false;
-                    foreach (var group in stackableGroups)
-                    {
-                        var firstItemOfGroup = itemList[group[0]];
-                        if (item.canStackWith(firstItemOfGroup))
-                        {
-                            group.Add(i);
-                            stackableGroupForItemAlreadyExists = true;
-                            break;
-                        }
-                    }
-                    if (!stackableGroupForItemAlreadyExists)
-                    {
-                        stackableGroups.Add(new List<int> { i });
-                    }
-                }
-            }
-            return stackableGroups;
-        }
-
-        /// <summary>
-        /// Whether the given item should be put to a chest.
+        /// Returns all chests that are available and have to be considered according to config
         /// </summary>
         /// <returns></returns>
-        private bool ItemShouldBePutToChest(Item item)
+        private List<ManagedChest> GetFilteredAvailableChests()
         {
-            return true;
+            var filteredChests = new List<ManagedChest>();
+            foreach (var chest in this.AvailableChests)
+            {
+                var container = chest.Container;
+                if ((!this.Config.ConsiderJunimoHuts && container is JunimoHutContainer)
+                   || (!this.Config.ConsiderShippingBin && container is ShippingBinContainer)
+                   || (!this.Config.ConsiderAutoGrabber && container is AutoGrabberContainer)
+                   || chest.Container is StorageFurnitureContainer)
+                {
+                    continue;
+                }
+                if (!this.Config.ConsiderMiniShippingBins)
+                {
+                    if (container is ChestContainer chestContainer && chestContainer.Chest.SpecialChestType == SpecialChestTypes.MiniShippingBin)
+                    {
+                        continue;
+                    }
+                }
+                filteredChests.Add(chest);
+            }
+            return filteredChests;
         }
-
     }
 }
