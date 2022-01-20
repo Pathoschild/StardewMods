@@ -843,8 +843,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             if(this.Menu is ItemGrabMenu menuWithInventory)
             {
                 var item = menuWithInventory.hoveredItem;
-                var inventory = menuWithInventory.inventory;
-                if (item != null && menuWithInventory.ItemsToGrabMenu.actualInventory != Game1.player.Items)
+                if (item != null && Game1.player.Items.IndexOf(item) > -1)
                 {
                     int currentChestIndex = this.GetChestIndex(this.Chest, this.Chests);
                     if(currentChestIndex >= 0)
@@ -880,11 +879,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                             if(Game1.activeClickableMenu is ItemGrabMenu menu)
                             {
-                                inventory = menu.inventory;
+                                // indicate items by shaking them
+                                var inventory = menu.inventory;
                                 var grabInventory = menu.ItemsToGrabMenu;
                                 foreach (int invItemIndex in inventoryGroup.GetIndexes())
                                 {
-                                    if (inventory != null && inventory.actualInventory == Game1.player.Items)
+                                    if (inventory != null)
                                     {
                                         inventory.ShakeItem(invItemIndex);
                                     }
@@ -892,9 +892,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                                 var inventoryGroupForChest = chestIndexToInventoryGroup[firstContainingItemIndex];
                                 foreach (int itemIndex in inventoryGroupForChest.GetIndexes())
                                 {
-                                    grabInventory.ShakeItem(itemIndex);
+                                    if (grabInventory != null)
+                                    {
+                                        grabInventory.ShakeItem(itemIndex);
+                                    }
                                 }
-                                Game1.playSound("bigSelect");
+                                Game1.playSound("smallSelect");
                             }
                         }
                     }
@@ -920,7 +923,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             int firstChestAfterContainingItem;
             for (firstChestAfterContainingItem = currentIndex - 1; firstChestAfterContainingItem != currentIndex; firstChestAfterContainingItem--)
             {
-                if (firstChestAfterContainingItem <= 0)
+                if (firstChestAfterContainingItem < 0)
                     firstChestAfterContainingItem = this.Chests.Length;
                 if (chestsIndexesHasItem.Contains(firstChestAfterContainingItem))
                     break;
