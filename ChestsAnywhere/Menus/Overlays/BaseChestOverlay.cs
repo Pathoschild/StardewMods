@@ -428,12 +428,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             this.SelectNextChest();
                         else
                             this.SelectPreviousChest();
+                        return true;
                     }
                     if (scrollNext)
                         return this.SelectNextChestContainingHoveredItem();
                     else
                         return this.SelectLastChestContainingHoveredItem();
-                    return false;
 
                 case Element.ChestList:
                     this.ChestDropdown.ReceiveScrollWheelAction(amount);
@@ -828,27 +828,42 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
         }
 
+        /// <summary>
+        /// Selects the next chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         private bool SelectNextChestContainingHoveredItem()
         {
             return this.SelectChestContainingHoveredItem(true);
         }
 
+        /// <summary>
+        /// Selects the last chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         private bool SelectLastChestContainingHoveredItem()
         {
             return this.SelectChestContainingHoveredItem(false);
         }
 
+        /// <summary>
+        /// Selects the next (next == true) or last (next == false) chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
         private bool SelectChestContainingHoveredItem(bool next)
         {
             if(this.Menu is ItemGrabMenu menuWithInventory)
             {
                 var item = menuWithInventory.hoveredItem;
-                if (item != null && Game1.player.Items.IndexOf(item) > -1)
+                var playerInventoryItems = Game1.player.Items;
+                // Only check for items in inventory
+                if (item != null && playerInventoryItems.IndexOf(item) > -1)
                 {
                     int currentChestIndex = this.GetChestIndex(this.Chest, this.Chests);
                     if(currentChestIndex >= 0)
                     {
-                        InventorySameNameGroup inventoryGroup = new(Game1.player.Items, item);
+                        // Determine all items of this group in the inventory
+                        InventorySameNameGroup inventoryGroup = new(playerInventoryItems, item);
                         if (inventoryGroup.IsEmpty())
                             return false;
                         var chestsIndexesHasItem = new HashSet<int>();
@@ -875,8 +890,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                                 firstContainingItemIndex = this.GetFirstIndexBefore(chestsIndexesHasItem, currentChestIndex);
                             var firstChest = this.Chests[firstContainingItemIndex];
                             this.SelectChest(firstChest);
-                            // new inventory has just been created, so take it from Game
 
+                            // new inventory has just been created, so take it from Game
                             if(Game1.activeClickableMenu is ItemGrabMenu menu)
                             {
                                 // indicate items by shaking them
@@ -899,6 +914,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                                 }
                                 Game1.playSound("smallSelect");
                             }
+                            return true;
                         }
                     }
                 }
@@ -906,6 +922,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             return false;
         }
 
+        /// <summary>
+        /// Gets the first index in the given set of indexes of the current chests after the given index
+        /// </summary>
+        /// <param name="chestsIndexesHasItem">Set of chest indexes that also contain the item</param>
+        /// <param name="currentIndex">The current chest index</param>
+        /// <returns>The found integer</returns>
         private int GetFirstIndexAfter(HashSet<int> chestsIndexesHasItem, int currentIndex)
         {
             int firstChestAfterContainingItem;
@@ -918,6 +940,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
             return firstChestAfterContainingItem;
         }
+
+        /// <summary>
+        /// Gets the first index in the given set of indexes of the current chests before the given index
+        /// </summary>
+        /// <param name="chestsIndexesHasItem">Set of chest indexes that also contain the item</param>
+        /// <param name="currentIndex">The current chest index</param>
+        /// <returns>The found integer</returns>
         private int GetFirstIndexBefore(HashSet<int> chestsIndexesHasItem, int currentIndex)
         {
             int firstChestAfterContainingItem;
