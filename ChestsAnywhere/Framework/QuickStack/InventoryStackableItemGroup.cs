@@ -57,33 +57,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             }
         }
 
-        public void RemoveIndex(int index)
-        {
-            this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
-            this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
-        }
-
-        /// <summary>
-        /// Determines all items that are stackable with the given item in the given inventory and returns their indexes
-        /// </summary>
-        /// <param name="inventory"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        private void DetermineIndexesForItem(Item item)
-        {
-            if (item != null)
-            {
-                for (int i = 0; i < this.RefInventory.Count; i++)
-                {
-                    var inventoryItem = this.RefInventory[i];
-                    if (item.canStackWith(inventoryItem))
-                    {
-                        this.HandleItemWithIndex(inventoryItem, i);
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Returns a group representative of this stackable item group
         /// </summary>
@@ -127,30 +100,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         }
 
         /// <summary>
-        /// Returns the total summed number of stacks of the item group
+        /// Removes the index, i.e. the item has disappeared from the inventory
         /// </summary>
-        /// <returns></returns>
-        public int GetTotalStackNumber()
+        /// <param name="index"></param>
+        public void RemoveIndex(int index)
         {
-            int totalStacks = 0;
-            foreach (int index in this.GetIndexes())
-            {
-                var item = this.RefInventory[index];
-                if (item != null)
-                {
-                    totalStacks += item.Stack;
-                }
-            }
-            return totalStacks;
-        }
-
-        /// <summary>
-        /// Returns true if there are no indexes in this group
-        /// </summary>
-        /// <returns></returns>
-        public bool IsEmpty()
-        {
-            return this.GetIndexes().Count == 0;
+            this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
+            this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
         }
 
         /// <summary>
@@ -186,6 +142,35 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                 }
             }
             return itemGroups;
+        }
+
+        public bool TryRemoveItem(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool TryAddItem(int index)
+        {
+            var item = this.RefInventory[index];
+            if (this.ItemBelongsToGroup(item))
+            {
+                if(item.Stack >= item.maximumStackSize())
+                {
+                    this.InventoryIndexesOfStackableItemStackFull.Add(index);
+                    this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
+                }
+            }
+            return false;
+        }
+
+        public override bool ItemBelongsToGroup(Item item)
+        {
+            var groupRepresentative = this.GetGroupRepresentativeItem();
+            if(groupRepresentative != null)
+            {
+                return groupRepresentative.canStackWith(item);
+            }
+            return false;
         }
     }
 }

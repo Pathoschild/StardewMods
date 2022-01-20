@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 
         public bool IsFull()
         {
-            return this.ItemGroup.RefInventory.Count == this.Chest.Container.ActualCapacity && this.ItemGroup.InventoryIndexesOfStackableItemStackNotFull.Count == 0;
+            return this.ItemGroup.GetInventoryCount() == this.Chest.Container.ActualCapacity && this.ItemGroup.InventoryIndexesOfStackableItemStackNotFull.Count == 0;
         }
     }
 }

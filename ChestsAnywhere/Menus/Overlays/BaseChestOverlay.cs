@@ -429,6 +429,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                         else
                             this.SelectPreviousChest();
                     }
+                    if (scrollNext)
+                        return this.SelectNextChestContainingHoveredItem();
+                    else
+                        return this.SelectLastChestContainingHoveredItem();
                     return false;
 
                 case Element.ChestList:
@@ -822,6 +826,106 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             int curIndex = Array.IndexOf(this.Categories, this.SelectedCategory);
             string category = this.Categories[(curIndex + 1) % this.Categories.Length];
             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
+        }
+
+        private bool SelectNextChestContainingHoveredItem()
+        {
+            return this.SelectChestContainingHoveredItem(true);
+        }
+
+        private bool SelectLastChestContainingHoveredItem()
+        {
+            return this.SelectChestContainingHoveredItem(false);
+        }
+
+        private bool SelectChestContainingHoveredItem(bool next)
+        {
+            if(this.Menu is ItemGrabMenu menuWithInventory)
+            {
+                var item = menuWithInventory.hoveredItem;
+                var inventory = menuWithInventory.inventory;
+                if (item != null && menuWithInventory.ItemsToGrabMenu.actualInventory != Game1.player.Items)
+                {
+                    int currentChestIndex = this.GetChestIndex(this.Chest, this.Chests);
+                    if(currentChestIndex >= 0)
+                    {
+                        InventorySameNameGroup inventoryGroup = new(Game1.player.Items, item);
+                        if (inventoryGroup.IsEmpty())
+                            return false;
+                        var chestsIndexesHasItem = new HashSet<int>();
+                        Dictionary<int, InventorySameNameGroup> chestIndexToInventoryGroup = new();
+                        for(int i = 0; i < this.Chests.Length; i++)
+                        {
+                            var chest = this.Chests[i];
+                            if (chest == null)
+                                continue;
+                            var chestItemGroup = new InventorySameNameGroup(chest.Container.Inventory, item);
+                            chestIndexToInventoryGroup.Add(i, chestItemGroup);
+                            if (!chestItemGroup.IsEmpty())
+                            {
+                                chestsIndexesHasItem.Add(i);
+                            }
+                        }
+
+                        if(chestsIndexesHasItem.Count > 0)
+                        {
+                            int firstContainingItemIndex;
+                            if (next)
+                                firstContainingItemIndex = this.GetFirstIndexAfter(chestsIndexesHasItem, currentChestIndex);
+                            else
+                                firstContainingItemIndex = this.GetFirstIndexBefore(chestsIndexesHasItem, currentChestIndex);
+                            var firstChest = this.Chests[firstContainingItemIndex];
+                            this.SelectChest(firstChest);
+                            // new inventory has just been created, so take it from Game
+
+                            if(Game1.activeClickableMenu is ItemGrabMenu menu)
+                            {
+                                inventory = menu.inventory;
+                                var grabInventory = menu.ItemsToGrabMenu;
+                                foreach (int invItemIndex in inventoryGroup.GetIndexes())
+                                {
+                                    if (inventory != null && inventory.actualInventory == Game1.player.Items)
+                                    {
+                                        inventory.ShakeItem(invItemIndex);
+                                    }
+                                }
+                                var inventoryGroupForChest = chestIndexToInventoryGroup[firstContainingItemIndex];
+                                foreach (int itemIndex in inventoryGroupForChest.GetIndexes())
+                                {
+                                    grabInventory.ShakeItem(itemIndex);
+                                }
+                                Game1.playSound("bigSelect");
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private int GetFirstIndexAfter(HashSet<int> chestsIndexesHasItem, int currentIndex)
+        {
+            int firstChestAfterContainingItem;
+            for (firstChestAfterContainingItem = currentIndex + 1; firstChestAfterContainingItem != currentIndex; firstChestAfterContainingItem++)
+            {
+                if (firstChestAfterContainingItem >= this.Chests.Length)
+                    firstChestAfterContainingItem = 0;
+                if (chestsIndexesHasItem.Contains(firstChestAfterContainingItem))
+                    break;
+            }
+            return firstChestAfterContainingItem;
+        }
+        private int GetFirstIndexBefore(HashSet<int> chestsIndexesHasItem, int currentIndex)
+        {
+            int firstChestAfterContainingItem;
+            for (firstChestAfterContainingItem = currentIndex - 1; firstChestAfterContainingItem != currentIndex; firstChestAfterContainingItem--)
+            {
+                if (firstChestAfterContainingItem <= 0)
+                    firstChestAfterContainingItem = this.Chests.Length;
+                if (chestsIndexesHasItem.Contains(firstChestAfterContainingItem))
+                    break;
+            }
+            return firstChestAfterContainingItem;
         }
 
         /// <summary>Reset and display the edit screen.</summary>

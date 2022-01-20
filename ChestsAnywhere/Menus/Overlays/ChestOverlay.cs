@@ -1,6 +1,8 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
@@ -97,6 +99,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             }
 
             return base.ReceiveLeftClick(x, y);
+        }
+
+        internal void HandleMouseWheelScrolledEvent(object sender, MouseWheelScrolledEventArgs e)
+        {
+            if(this.MenuInventoryMenu != null)
+            {
+                var item = this.MenuInventoryMenu.getItemAt((int) e.Position.ScreenPixels.X, (int) e.Position.ScreenPixels.Y);
+                if(item != null)
+                {
+                    var group = new InventorySameNameGroup(this.MenuInventoryMenu.actualInventory, item);
+                    //foreach(var chest in this.chests)
+                }
+            }
+            throw new NotImplementedException();
         }
 
         /// <summary>The method invoked when the cursor is hovered.</summary>
