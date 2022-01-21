@@ -20,55 +20,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         /// <summary>
         /// Determines a stackable item group in the given inventory by having an item group representative
         /// </summary>
-        public InventoryStackableItemGroup(IList<Item> refInventory, Item item) : base(refInventory)
+        public InventoryStackableItemGroup(IList<Item> refInventory, Item item) : base(refInventory, item)
         {
-            this.DetermineIndexesForItem(item);
-        }
-
-        /// <summary>
-        /// Initializes empty group
-        /// </summary>
-        /// <param name="refInventory"></param>
-        public InventoryStackableItemGroup(IList<Item> refInventory) : base(refInventory)
-        {
-        }
-
-        /// <summary>
-        /// Adds or removes the given index to the group
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="index"></param>
-        public void HandleItemWithIndex(Item item, int index)
-        {
-            if (item != null)
-            {
-                if (item.Stack >= item.maximumStackSize())
-                {
-                    this.AddItemIndexFull(index);
-                }
-                else if(item.Stack <= 0)
-                {
-                    this.RemoveIndex(index);
-                }
-                else
-                {
-                    this.AddItemIndexNotFull(index);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns a group representative of this stackable item group
-        /// </summary>
-        /// <returns></returns>
-        public Item GetGroupRepresentativeItem()
-        {
-            var items = this.GetIndexes();
-            if (items.Count > 0)
-            {
-                return this.RefInventory[items.First()];
-            }
-            return null;
         }
 
         /// <inheritdoc/>
@@ -77,26 +30,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             var union = this.InventoryIndexesOfStackableItemStackNotFull.Union(this.InventoryIndexesOfStackableItemStackFull);
             var list = new HashSet<int>(union).ToList();
             return list;
-        }
-
-        /// <summary>
-        /// Adds the given item index to the group as not full stack
-        /// </summary>
-        /// <param name="index"></param>
-        private void AddItemIndexNotFull(int index)
-        {
-            this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
-            this.InventoryIndexesOfStackableItemStackNotFull.Add(index);
-        }
-
-        /// <summary>
-        /// Adds the given item index to the group as full stack
-        /// </summary>
-        /// <param name="index"></param>
-        private void AddItemIndexFull(int index)
-        {
-            this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
-            this.InventoryIndexesOfStackableItemStackFull.Add(index);
         }
 
         /// <summary>
@@ -119,48 +52,29 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             List<InventoryStackableItemGroup> itemGroups = new();
             for (int i = 0; i < refInventory.Count; i++)
             {
-                var refItem = refInventory[i];
-                if (refItem != null && refItem.maximumStackSize() > 1)
+                var inventoryItem = refInventory[i];
+                if (inventoryItem != null && inventoryItem.maximumStackSize() > 1)
                 {
                     bool stackableGroupForItemAlreadyExists = false;
                     foreach (var group in itemGroups)
                     {
                         var groupRefItem = group.GetGroupRepresentativeItem();
-                        if (groupRefItem != null && refItem.canStackWith(groupRefItem))
+                        if (groupRefItem != null && inventoryItem.canStackWith(groupRefItem))
                         {
-                            group.HandleItemWithIndex(refItem, i);
+                            group.AddIndex(i);
                             stackableGroupForItemAlreadyExists = true;
                             break;
                         }
                     }
                     if (!stackableGroupForItemAlreadyExists)
                     {
-                        var newStackableGroup = new InventoryStackableItemGroup(refInventory);
-                        newStackableGroup.HandleItemWithIndex(refItem, i);
+                        var newStackableGroup = new InventoryStackableItemGroup(refInventory, inventoryItem);
+                        newStackableGroup.AddIndex(i);
                         itemGroups.Add(newStackableGroup);
                     }
                 }
             }
             return itemGroups;
-        }
-
-        public bool TryRemoveItem(int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool TryAddItem(int index)
-        {
-            var item = this.RefInventory[index];
-            if (this.ItemBelongsToGroup(item))
-            {
-                if(item.Stack >= item.maximumStackSize())
-                {
-                    this.InventoryIndexesOfStackableItemStackFull.Add(index);
-                    this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
-                }
-            }
-            return false;
         }
 
         public override bool ItemBelongsToGroup(Item item)
@@ -171,6 +85,24 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                 return groupRepresentative.canStackWith(item);
             }
             return false;
+        }
+
+        protected override void AddIndex(int index)
+        {
+            var item = this.GetItemAtIndex(index);
+            if(item != null)
+            {
+                if (item.Stack >= item.maximumStackSize())
+                {
+                    this.InventoryIndexesOfStackableItemStackFull.Add(index);
+                    this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
+                }
+                else
+                {
+                    this.InventoryIndexesOfStackableItemStackNotFull.Add(index);
+                    this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
+                }
+            }
         }
     }
 }

@@ -864,6 +864,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     {
                         // Determine all items of this group in the inventory
                         InventorySameNameGroup inventoryGroup = new(playerInventoryItems, item);
+                        inventoryGroup.DetermineAllGroupsInInventory();
                         if (inventoryGroup.IsEmpty())
                             return false;
                         var chestsIndexesHasItem = new HashSet<int>();
@@ -874,6 +875,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             if (chest == null)
                                 continue;
                             var chestItemGroup = new InventorySameNameGroup(chest.Container.Inventory, item);
+                            chestItemGroup.DetermineAllGroupsInInventory();
                             chestIndexToInventoryGroup.Add(i, chestItemGroup);
                             if (!chestItemGroup.IsEmpty())
                             {

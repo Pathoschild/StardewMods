@@ -1,27 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 {
     internal class InventorySameNameGroup : InventoryItemGroup
     {
-        private readonly List<int> Indexes;
+        private readonly HashSet<int> Indexes;
 
         private readonly Item RefItem;
-        public InventorySameNameGroup(IList<Item> refInventory, Item refItem) : base(refInventory)
+
+        /// <summary>
+        /// At initializing, determines whole group for the given inventory
+        /// </summary>
+        /// <param name="refInventory"></param>
+        /// <param name="refItem"></param>
+        public InventorySameNameGroup(IList<Item> refInventory, Item refItem) : base(refInventory, refItem)
         {
-            this.RefItem = refItem.getOne() ?? throw new ArgumentException(nameof(refItem));
             this.Indexes = new();
-            this.DetermineIndexesForItem(this.RefItem);
         }
 
         public override List<int> GetIndexes()
         {
-            return this.Indexes;
+            return this.Indexes.ToList();
         }
 
         public override bool ItemBelongsToGroup(Item item)
@@ -33,10 +35,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             return false;
         }
 
-        public override bool TryAddItem(int index)
+        protected override void AddIndex(int index)
         {
             this.Indexes.Add(index);
-            return true;
         }
     }
 }

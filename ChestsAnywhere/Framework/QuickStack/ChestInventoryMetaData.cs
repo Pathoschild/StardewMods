@@ -13,11 +13,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
     internal class ChestInventoryItemMetaData
     {
         /// <summary>
-        /// Reference item for which information is held in this class
-        /// </summary>
-        public readonly Item ReferenceItem;
-
-        /// <summary>
         /// The chest holding the type of item
         /// </summary>
         public readonly ManagedChest Chest;
@@ -29,9 +24,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
     
         public ChestInventoryItemMetaData(Item refItem, ManagedChest chest)
         {
-            this.ReferenceItem = refItem.getOne();
             this.Chest = chest;
-            this.ItemGroup = new InventoryStackableItemGroup(chest.Container.Inventory, this.ReferenceItem);
+            this.ItemGroup = new InventoryStackableItemGroup(chest.Container.Inventory, refItem);
         }
 
         public bool IsFull()
