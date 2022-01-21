@@ -9,11 +9,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
     {
         private readonly HashSet<int> Indexes;
 
-        /// <summary>
-        /// At initializing, determines whole group for the given inventory
-        /// </summary>
-        /// <param name="refInventory"></param>
-        /// <param name="refItem"></param>
         public InventorySameNameGroup(IList<Item> refInventory, Item refItem) : base(refInventory, refItem)
         {
             this.Indexes = new();
