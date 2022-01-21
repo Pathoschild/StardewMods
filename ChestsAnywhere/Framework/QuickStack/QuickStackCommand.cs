@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewValley;
 using StardewValley.Menus;
+using static StardewValley.Menus.ItemGrabMenu;
 using static StardewValley.Objects.Chest;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack

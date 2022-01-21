@@ -18,10 +18,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
 
         protected readonly InventoryMenu OwnInventoryPage;
 
+        protected readonly IClickableMenu MainMenu;
+
         public InventoryToChestCommand(List<ManagedChest> availableChests, Farmer player, IClickableMenu menu)
         {
             this.AvailableChests = availableChests ?? throw new ArgumentNullException(nameof(availableChests));
-            this.Player = player = player ?? throw new ArgumentNullException(nameof(player));
+            this.Player = player ?? throw new ArgumentNullException(nameof(player));
+            this.MainMenu = menu ?? throw new ArgumentNullException(nameof(menu));
             if (menu is ItemGrabMenu itemGrabmenu)
             {
                 this.OpenChestInventory = itemGrabmenu.ItemsToGrabMenu;

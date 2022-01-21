@@ -52,36 +52,5 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             }
             return stackablgeGroupsToChests;
         }
-
-        /// <summary>
-        /// Determines all possible item groups in the list of given chests for the given item group in the given inventory
-        /// </summary>
-        /// <param name="inventory"></param>
-        /// <param name="itemGroupInInventory"></param>
-        /// <param name="availableChests"></param>
-        /// <returns></returns>
-        public static Tuple<InventoryStackableItemGroup, List<ChestInventoryItemMetaData>> GetMappingBetweenInventoryGroupAndChestGroups(IList<Item> inventory, InventoryStackableItemGroup itemGroupInInventory, List<ManagedChest> availableChests)
-        {
-            var list = GetMappingBetweenInventoryGroupsAndChestGroups(inventory, new List<InventoryStackableItemGroup> { itemGroupInInventory }, availableChests);
-            return list.FirstOrDefault();
-        }
-
-        // Updates transferredItemSprite animation
-        public static void Update(GameTime time)
-        {
-            for (int i = 0; i < TransferredItemSprites.Count; i++)
-            {
-                if (TransferredItemSprites[i].Update(time))
-                {
-                    TransferredItemSprites.RemoveAt(i);
-                    i--;
-                }
-            }
-        }
-
-        public static void AddTransferredItemSprite(TransferredItemSprite itemSprite)
-        {
-            TransferredItemSprites.Add(itemSprite);
-        }
     }
 }
