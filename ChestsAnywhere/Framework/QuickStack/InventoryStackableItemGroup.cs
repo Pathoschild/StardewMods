@@ -94,12 +94,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
             {
                 if (item.Stack >= item.maximumStackSize())
                 {
-                    this.InventoryIndexesOfStackableItemStackFull.Add(index);
+                    if(!this.InventoryIndexesOfStackableItemStackFull.Contains(index))
+                        this.InventoryIndexesOfStackableItemStackFull.Add(index);
                     this.InventoryIndexesOfStackableItemStackNotFull.RemoveAll(x => x == index);
                 }
                 else
                 {
-                    this.InventoryIndexesOfStackableItemStackNotFull.Add(index);
+                    if (!this.InventoryIndexesOfStackableItemStackNotFull.Contains(index))
+                        this.InventoryIndexesOfStackableItemStackNotFull.Add(index);
                     this.InventoryIndexesOfStackableItemStackFull.RemoveAll(x => x == index);
                 }
             }

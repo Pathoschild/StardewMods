@@ -43,12 +43,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         }
 
         /// <summary>
-        /// Determines all items in this inventory that belong to the group defined by the given item
+        /// Determines the item group in this inventory defined by the given item
         /// </summary>
         /// <param name="inventory"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public void DetermineAllGroupsInInventory()
+        public void DetermineGroupInThisInventory()
         {
             for (int i = 0; i < this.RefInventory.Count; i++)
             {

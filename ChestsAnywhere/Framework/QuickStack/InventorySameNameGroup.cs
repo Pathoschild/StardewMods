@@ -9,8 +9,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
     {
         private readonly HashSet<int> Indexes;
 
-        private readonly Item RefItem;
-
         /// <summary>
         /// At initializing, determines whole group for the given inventory
         /// </summary>
@@ -30,7 +28,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         {
             if(item != null)
             {
-                return this.RefItem.Name == item.Name;
+                return this.GroupRepresentative.Name == item.Name;
             }
             return false;
         }

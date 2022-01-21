@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         public void Execute()
         {
             var playerItems = this.Player.Items;
-            var stackableGroupsToChestsItemsCanBeMovedTo = this.GetPlayerItemToChestMapping(playerItems);
+            var stackableGroupsToChestsItemsCanBeMovedTo = this.GetPlayerItemsToChestMapping(playerItems);
             this.MoveItemsToChests(stackableGroupsToChestsItemsCanBeMovedTo, playerItems);
             Game1.playSound("Ship");
         }
@@ -90,14 +90,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                 var chestStacksNotFull = chestInfo.ItemGroup.InventoryIndexesOfStackableItemStackNotFull;
                 if (chestStacksNotFull.Count > 0)
                 {
+                    // begin with leftmost stack in chest
                     chestItemIndex = chestStacksNotFull[0];
                     chestItem = chestInventory[chestItemIndex];
                     rightmostInventoryItem.Stack = chestItem.addToStack(rightmostInventoryItem);
                     this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
-                    chestInfo.ItemGroup.HandleItemWithIndex(chestItem, chestItemIndex);
+                    // stack might be full
+                    chestInfo.ItemGroup.TryAddItem(chestItemIndex);
                     if (rightmostInventoryItem.Stack <= 0)
                     {
-                        itemGroup.HandleItemWithIndex(rightmostInventoryItem, rightmostInventoryItemIndex);
+                        itemGroup.RemoveIndex(rightmostInventoryItemIndex);
                         this.Player.removeItemFromInventory(rightmostInventoryItem);
                     }
                 }
@@ -107,12 +109,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     chestInventory.Add(rightmostInventoryItem);
                     chestItem = rightmostInventoryItem;
                     chestItemIndex = chestInventory.IndexOf(chestItem);
+                    chestInfo.ItemGroup.TryAddItem(chestItemIndex);
                     this.ShakeChestItemIfIsDisplayedChest(chestItemIndex, chestInfo.Chest.Container.Inventory);
                     // item has been fully transferred to chest
                     itemGroup.RemoveIndex(rightmostInventoryItemIndex);
                     this.Player.removeItemFromInventory(rightmostInventoryItem);
-                    // Following items might be put in this stack
-                    chestInfo.ItemGroup.HandleItemWithIndex(chestItem, chestItemIndex);
                 }
             }
         }
@@ -120,7 +121,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         /// <summary>
         /// Determines which item groups (stackable items) in inventory can be put into which chests
         /// </summary>
-        private List<Tuple<InventoryStackableItemGroup, List<ChestInventoryItemMetaData>>> GetPlayerItemToChestMapping(IList<Item> playerItems)
+        private List<Tuple<InventoryStackableItemGroup, List<ChestInventoryItemMetaData>>> GetPlayerItemsToChestMapping(IList<Item> playerItems)
         {
             List<InventoryStackableItemGroup> groupsInInventory = InventoryStackableItemGroup.DetermineStackableItemGroups(playerItems);
             return CommonInventoryLogic.GetMappingBetweenInventoryGroupsAndChestGroups(playerItems, groupsInInventory, this.GetFilteredAvailableChests());

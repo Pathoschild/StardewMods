@@ -26,6 +26,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         {
             this.Chest = chest;
             this.ItemGroup = new InventoryStackableItemGroup(chest.Container.Inventory, refItem);
+            this.ItemGroup.DetermineGroupInThisInventory();
         }
 
         public bool IsFull()
