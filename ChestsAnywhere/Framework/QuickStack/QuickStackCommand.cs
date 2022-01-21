@@ -39,6 +39,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         {
             // Only select those inventory item groups where chests have been found that can take items from the group
             var itemGroupsThatCanBeMovedToChests = itemGroupsToChestMapping.Where(x => x.Item2.Count > 0);
+
             // prioritize those items that have the fewest chests they can be moved to
             var orderedPairs = itemGroupsThatCanBeMovedToChests.OrderBy(x => x.Item2.Count);
 
@@ -59,8 +60,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
         /// <param name="playerItems"></param>
         private void PushItemGroupFromInventoryToChests(InventoryStackableItemGroup inventoryGroup, List<ChestInventoryItemMetaData> chests, IList<Item> playerItems)
         {
-            // begin with chest that already has most of the given Item
+            // prioritize chests that contain the most of the given item
             var orderedChests = chests.OrderByDescending(x => x.ItemGroup.GetTotalStackNumber()).ToList();
+
             // Push to chests as long as there are items in inventory and there is space in chests
             while (!inventoryGroup.IsEmpty() && orderedChests.Where(x => !x.IsFull()).ToList().Count > 0)
             {

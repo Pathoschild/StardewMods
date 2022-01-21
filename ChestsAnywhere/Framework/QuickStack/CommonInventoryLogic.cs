@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack
                     continue;
                 }
                 var chestsItemsCanBeMovedTo = new List<ChestInventoryItemMetaData>();
-                // check every available chest if items in the group can be pushed to it
+                // for every available chest check if items in the group can be pushed to it
                 foreach (var chest in chestsToBeSearched)
                 {
                     var container = chest.Container;
