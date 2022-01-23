@@ -5,9 +5,7 @@ This document helps mod authors create a content pack for Content Patcher.
 **See the [main README](README.md) for other info**.
 
 ## Contents
-* [Intro](#intro)
-  * [What is Content Patcher?](#what-is-content-patcher)
-  * [Content Patcher vs XNB mods](#content-patcher-vs-xnb-mods)
+* [What is Content Patcher?](#what-is-content-patcher)
 * [Format](#format)
   * [Overview](#overview)
   * [Common fields](#common-fields)
@@ -46,8 +44,7 @@ This document helps mod authors create a content pack for Content Patcher.
 * [Configure](#configure)
 * [See also](#see-also)
 
-## Intro
-### What is Content Patcher?
+## What is Content Patcher?
 Content Patcher lets you create a [standard content pack](https://stardewvalleywiki.com/Modding:Content_packs)
 which changes the game's data and images, no programming needed. Players can install it by
 unzipping it into `Mods`, just like a SMAPI mod.
@@ -55,21 +52,6 @@ unzipping it into `Mods`, just like a SMAPI mod.
 Just by editing a JSON file, you can make very simple changes to the game (like replace one image
 file), or more interesting changes (like things that look different in each season), or very
 specific changes (like coffee is more expensive in winter when it's snowing on the weekend).
-
-### Content Patcher vs XNB mods
-If you're familiar with creating XNB mods, Content Patcher supports everything XNB mods supported.
-Here's a quick comparison:
-
-&nbsp;               | XNB mod                         | Content Patcher
--------------------- | ------------------------------- | ---------------
-easy to create       | ✘ need to unpack/repack files  | ✓ edit JSON files
-easy to install      | ✘ different for every mod      | ✓ drop into `Mods`
-easy to uninstall    | ✘ manually restore files       | ✓ remove from `Mods`
-update checks        | ✘ no                           | ✓ yes (via SMAPI)
-compatibility checks | ✘ no                           | ✓ yes (via SMAPI DB)
-mod compatibility    | ✘ very poor<br /><small>(each file can only be changed by one mod)</small> | ✓ high<br /><small>(mods only conflict if they edit the same part of a file)</small>
-game compatibility   | ✘ break in most updates        | ✓ only affected if the part they edited changes
-easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log + Content Patcher validation
 
 ## Format
 ### Overview
