@@ -7,6 +7,7 @@ This document helps mod authors update their content packs for newer versions of
 ## Contents
 * [FAQs](#faqs)
 * [Migration guides](#migration-guides)
+  * [1.25](#125)
   * [1.24](#124)
   * [1.21](#121)
   * [1.20](#120)
@@ -72,6 +73,9 @@ Feel free to [ask on Discord](https://smapi.io/community#Discord) if you need he
 ## Migration guides
 These changes only apply when you set the `Format` version in your `content.json` to the listed
 version or higher. See [release notes](release-notes.md) for a full list of changes.
+
+## 1.25
+* The older `Enabled` field is no longer supported. You can use `When` conditions instead.
 
 ## 1.24
 Released 31 October 2021.

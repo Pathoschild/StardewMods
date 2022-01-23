@@ -200,15 +200,6 @@ errors; if not specified, will default to a name like `entry #14 (EditImage Anim
 </tr>
 
 <tr>
-<td><code>Enabled</code></td>
-<td>
-
-_(optional)_ Whether to apply this patch. Default true.
-
-</td>
-</tr>
-
-<tr>
 <td><code>Update</code></td>
 <td>
 

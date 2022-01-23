@@ -11,6 +11,11 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
+* The deprecated `Enabled` patch field is now obsolete.
+
+**Update notes for mod authors:**  
+The `Enabled` patch field is no longer supported when the `Format` field is `1.25.0` or later. See the
+[migration guide](author-migration-guide.md) for more info.
 
 ## 1.24.8
 Released 14 January 2022 for SMAPI 3.13.0 or later.

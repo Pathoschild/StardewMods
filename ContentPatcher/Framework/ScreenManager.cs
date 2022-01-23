@@ -198,7 +198,6 @@ namespace ContentPatcher.Framework
         private void LoadContentPacks(IEnumerable<LoadedContentPack> contentPacks, InvariantHashSet installedMods)
         {
             // load content packs
-
             foreach (LoadedContentPack current in contentPacks)
             {
                 this.Monitor.VerboseLog($"Loading content pack '{current.Manifest.Name}'...");

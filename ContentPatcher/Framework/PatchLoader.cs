@@ -377,8 +377,16 @@ namespace ContentPatcher.Framework
 
                 // parse 'enabled'
                 bool enabled = true;
+                if (entry.Enabled != null)
                 {
-                    if (entry.Enabled != null && !this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.Enabled)), out string error, out enabled))
+                    bool isEnabledAllowed = rawContentPack.Content.Format.IsOlderThan("1.25.0");
+                    if (!isEnabledAllowed)
+                    {
+                        if (!bool.TryParse(entry.Enabled, out bool raw) || !raw) // special case: if it's just the literal value "true", ignore it instead of breaking the content pack
+                            return TrackSkip($"the {nameof(PatchConfig.Enabled)} field is obsolete and should be removed");
+                    }
+
+                    if (!this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.Enabled)), out string error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
