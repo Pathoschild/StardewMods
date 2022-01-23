@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Migrations
         public bool TryMigrate(ContentConfig content, out string error)
         {
             // validate format version
-            if (!this.ValidVersions.Contains(content.Format.ToString()))
+            if (!this.ValidVersions.Contains(new SemanticVersion(content.Format.MajorVersion, content.Format.MinorVersion, 0).ToString()))
             {
                 string latestVersion = this.LatestVersion;
                 error = content.Format.IsNewerThan(latestVersion)

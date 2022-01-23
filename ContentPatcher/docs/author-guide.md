@@ -82,8 +82,7 @@ The `content.json` file has four main fields:
 <td><code>Format</code></td>
 <td>
 
-The Content Patcher version the content pack is designed for (ignoring the third number in the
-version), to enable backwards compatibility.
+The Content Patcher version the content pack is designed for, to enable backwards compatibility.
 
 **You should use the latest format version (currently `1.24.0`), and update it when updating the
 content pack.** This enables the latest features, avoids undocumented obsolete behavior, and
