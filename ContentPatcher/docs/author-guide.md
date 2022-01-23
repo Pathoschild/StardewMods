@@ -8,7 +8,6 @@ This document helps mod authors create a content pack for Content Patcher.
 * [Intro](#intro)
   * [What is Content Patcher?](#what-is-content-patcher)
   * [Content Patcher vs XNB mods](#content-patcher-vs-xnb-mods)
-  * [Content Patcher vs other mods](#content-patcher-vs-other-mods)
 * [Format](#format)
   * [Overview](#overview)
   * [Common fields](#common-fields)
@@ -71,16 +70,6 @@ compatibility checks | ✘ no                           | ✓ yes (via SMAPI DB)
 mod compatibility    | ✘ very poor<br /><small>(each file can only be changed by one mod)</small> | ✓ high<br /><small>(mods only conflict if they edit the same part of a file)</small>
 game compatibility   | ✘ break in most updates        | ✓ only affected if the part they edited changes
 easy to troubleshoot | ✘ no record of changes         | ✓ SMAPI log + Content Patcher validation
-
-### Content Patcher vs other mods
-Content Patcher supports all game assets with some very powerful features, but it's a generalist
-framework. More specialized frameworks might be better for specific things. You should consider
-whether one of these would work for you:
-
-  * [TMXL Map Toolkit](https://www.nexusmods.com/stardewvalley/mods/1820) for complex changes to maps. (For simple changes, see _[edit part of a map](#editmap)_ below.)
-  * [Producer Framework Mod](https://www.nexusmods.com/stardewvalley/mods/4970) to add machines.
-  * [Custom Furniture](https://www.nexusmods.com/stardewvalley/mods/1254) to add furniture.
-  * [Json Assets](https://www.nexusmods.com/stardewvalley/mods/1720) to add many things like items, crafting recipes, crops, fruit trees, hats, and weapons.
 
 ## Format
 ### Overview
