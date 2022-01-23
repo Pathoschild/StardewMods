@@ -46,12 +46,22 @@ This document helps mod authors create a content pack for Content Patcher.
 
 ## What is Content Patcher?
 Content Patcher lets you create a [standard content pack](https://stardewvalleywiki.com/Modding:Content_packs)
-which changes the game's data and images, no programming needed. Players can install it by
+which changes the game's data/images/maps, no programming needed. Players can install it by
 unzipping it into `Mods`, just like a SMAPI mod.
 
-Just by editing a JSON file, you can make very simple changes to the game (like replace one image
-file), or more interesting changes (like things that look different in each season), or very
-specific changes (like coffee is more expensive in winter when it's snowing on the weekend).
+Just by editing a text file (in JSON format), you can make a wide array of changes to the game:
+
+* change any images, dialogue, etc used by the game;
+* add custom locations;
+* and much more.
+<!-- in Stardew Valley 1.6:
+* add custom items, fruit trees, and more;
+* change shop inventory;
+-->
+
+Using optional features like conditions, you can also make highly dynamic changes to the game. For
+example, change the price of coffee in winter weekend evenings when it's snowing unless the player
+has befriended Pierre.
 
 ## Format
 ### Overview
