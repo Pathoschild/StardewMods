@@ -60,8 +60,7 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
         /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-        /// <param name="contentPacks">The content packs to load.</param>
-        public ScreenManager(IModHelper helper, IMonitor monitor, InvariantHashSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators, LoadedContentPack[] contentPacks)
+        public ScreenManager(IModHelper helper, IMonitor monitor, InvariantHashSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators)
         {
             this.Helper = helper;
             this.Monitor = monitor;
@@ -69,8 +68,21 @@ namespace ContentPatcher.Framework
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
             this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, helper.Reflection, installedMods, helper.Content.NormalizeAssetName);
             this.CustomLocationManager = new CustomLocationManager(this.Monitor);
+        }
 
-            this.Initialize(contentPacks, installedMods);
+        /// <summary>Initialize the mod and content packs.</summary>
+        /// <param name="contentPacks">The content packs to load.</param>
+        /// <param name="installedMods">The installed mod IDs.</param>
+        public void Initialize(LoadedContentPack[] contentPacks, InvariantHashSet installedMods)
+        {
+            // set initial context before loading any custom mod tokens
+            this.UpdateContext(ContextUpdateType.All);
+
+            // load context
+            this.LoadContentPacks(contentPacks, installedMods);
+
+            // set initial context once patches + dynamic tokens + custom tokens are loaded
+            this.UpdateContext(ContextUpdateType.All);
         }
 
         /// <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs.</summary>
@@ -175,21 +187,6 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
-        /// <summary>Initialize the mod and content packs.</summary>
-        /// <param name="contentPacks">The content packs to load.</param>
-        /// <param name="installedMods">The installed mod IDs.</param>
-        private void Initialize(LoadedContentPack[] contentPacks, InvariantHashSet installedMods)
-        {
-            // set initial context before loading any custom mod tokens
-            this.UpdateContext(ContextUpdateType.All);
-
-            // load context
-            this.LoadContentPacks(contentPacks, installedMods);
-
-            // set initial context once patches + dynamic tokens + custom tokens are loaded
-            this.UpdateContext(ContextUpdateType.All);
-        }
-
         /// <summary>Load the patches from all registered content packs.</summary>
         /// <param name="contentPacks">The content packs to load.</param>
         /// <param name="installedMods">The mod IDs which are currently installed.</param>

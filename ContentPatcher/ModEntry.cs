@@ -26,8 +26,11 @@ namespace ContentPatcher
         /*********
         ** Fields
         *********/
+        /// <summary>Whether this is the first tick for a new screen, so <see cref="ScreenManager"/> isn't initialized yet.</summary>
+        private readonly PerScreen<bool> IsNewScreen = new(() => true);
+
         /// <summary>Manages state for each screen.</summary>
-        private PerScreen<ScreenManager> ScreenManager;
+        private readonly PerScreen<ScreenManager> ScreenManager = new();
 
         /// <summary>The recognized format versions and their migrations.</summary>
         private readonly Func<ContentConfig, IMigration[]> GetFormatVersions = content => new IMigration[]
@@ -194,7 +197,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            // initialize after first tick on main screen so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
             if (this.IsFirstTick)
             {
                 this.IsFirstTick = false;
@@ -202,6 +205,11 @@ namespace ContentPatcher
                 this.ConditionsApiReadyTick = Game1.ticks + 1; // mods can only use conditions API on the next tick, to avoid race conditions
             }
 
+            // initialize the screen manager for a secondary split screen
+            if (this.IsNewScreen.Value)
+                this.InitializeScreenManager();
+
+            // run update logic
             this.ScreenManager.Value.OnUpdateTicked();
         }
 
@@ -223,11 +231,6 @@ namespace ContentPatcher
 
             // fetch content packs
             LoadedContentPack[] contentPacks = this.GetContentPacks().ToArray();
-            InvariantHashSet installedMods = new InvariantHashSet(
-                (contentPacks.Select(p => p.Manifest.UniqueID))
-                .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderByHuman()
-            );
 
             // log custom tokens
             {
@@ -241,17 +244,7 @@ namespace ContentPatcher
             }
 
             // load screen manager
-            var modTokens = this.QueuedModTokens.ToArray();
-            this.ScreenManager = new(() =>
-                new ScreenManager(
-                    helper: this.Helper,
-                    monitor: this.Monitor,
-                    installedMods: installedMods,
-                    modTokens: modTokens,
-                    assetValidators: this.AssetValidators(),
-                    contentPacks: contentPacks
-                )
-            );
+            this.InitializeScreenManager();
 
             // register asset interceptor
             var interceptor = new AssetInterceptor(this.ScreenManager);
@@ -298,6 +291,30 @@ namespace ContentPatcher
 
             // can no longer queue tokens
             this.QueuedModTokens = null;
+        }
+
+        /// <summary>Initialize the screen manager for the current screen.</summary>
+        private void InitializeScreenManager()
+        {
+            // get installed mods
+            var contentPacks = this.GetContentPacks().ToArray();
+            InvariantHashSet installedMods = new InvariantHashSet(
+                (contentPacks.Select(p => p.Manifest.UniqueID))
+                .Concat(this.Helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
+                .OrderByHuman()
+            );
+
+            // load screen manager
+            var modTokens = this.QueuedModTokens.ToArray();
+            this.ScreenManager.Value = new ScreenManager(
+                helper: this.Helper,
+                monitor: this.Monitor,
+                installedMods: installedMods,
+                modTokens: modTokens,
+                assetValidators: this.AssetValidators()
+            );
+            this.ScreenManager.Value.Initialize(contentPacks, installedMods);
+            this.IsNewScreen.Value = false;
         }
 
         /// <summary>Raised after a content pack's configuration changed.</summary>
