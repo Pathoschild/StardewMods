@@ -48,6 +48,45 @@ data       | Only directly affects players that have it installed, but can indir
 * To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](extensibility.md).
 * To use Content Patcher conditions in your own SMAPI mod, see the [conditions API](conditions-api.md).
 
+
+## Configure
+Content Patcher creates a `config.json` file in its mod folder the first time you run it. You can
+open that file in a text editor to configure the mod.
+
+These are the available settings:
+
+<table>
+<tr>
+  <th>setting</th>
+  <th>what it affects</th>
+</tr>
+
+<tr>
+  <td><code>EnableDebugFeatures</code></td>
+  <td>
+
+Default `false`. Whether to enable [debug features meant for content pack creators](#debug-mode).
+
+  </td>
+</tr>
+
+<tr>
+  <td><code>Controls</code></td>
+  <td>
+
+The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
+The default button bindings are...
+
+* `F3` to show the [debug overlay](#debug-mode) (if enabled);
+* `LeftControl` and `RightControl` to switch textures in the debug overlay.
+
+You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
+bindings with plus signs (like `LeftShift + B`).
+
+  </td>
+</tr>
+</table>
+
 ## See also
 * [Release notes](release-notes.md)
 * [Nexus mod](https://www.nexusmods.com/stardewvalley/mods/1915)

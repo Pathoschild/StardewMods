@@ -1,8 +1,8 @@
-﻿← [README](README.md) • [author guide](author-guide.md)
+﻿← [author guide](../author-guide.md)
 
 This document lists the tokens available in Content Patcher packs.
 
-**See the [main README](README.md) for other info**.
+**See the [main README](../README.md) for other info**.
 
 ## Contents
 * [Introduction](#introduction)
@@ -191,7 +191,7 @@ This can also be used with range tokens:
 }
 ```
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
 
 </td>
 <td><a href="#Time">#</a></td>
@@ -212,7 +212,7 @@ value   | meaning
 `Snow`  | Snow is falling.
 `Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token without specifying a
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token without specifying a
 location context.
 
 </td>
@@ -443,7 +443,7 @@ Whether the [current or specified player](#target-player) is the main player. Po
 Whether the [current or specified player](#target-player) is outdoors. Possible values: `true`,
 `false`.
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
 
 </td>
 <td><a href="#IsOutdoors">#</a></td>
@@ -457,7 +457,7 @@ The general world area recognized by the game containing the [current or specifi
 player](#target-player). Possible values: `Island` (locations on [Ginger
 Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere else).
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
 
 </td>
 <td><a href="#LocationContext">#</a></td>
@@ -470,7 +470,7 @@ Island](https://stardewvalleywiki.com/Ginger_Island)) and `Valley` (anywhere els
 The internal name of the [current or specified player](#target-player)'s current location, like
 `FarmHouse` or `Town`. You can see the name for the current location using
 [Debug Mode](https://www.nexusmods.com/stardewvalley/mods/679) or [`patch
-summary`](author-guide.md#patch-summary).
+summary`](../author-guide.md#patch-summary).
 
 Notes:
 * Temporary festival maps always have the location name "Temp".
@@ -479,7 +479,7 @@ Notes:
   `LocationUniqueName` "Coop7379e3db-1c12-4963-bb93-23a1323a25f7". The `LocationUniqueName` can be
   used as the target location for warp properties.
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
 
 </td>
 <td><a href="#LocationName">#</a></td>
@@ -504,7 +504,7 @@ farm building | player who constructed it
 
 This can be used to get other info for the owner, like `{{PlayerName: {{LocationOwnerId}}}}`.
 
-ℹ See _[update rate](author-guide.md#update-rate)_ before using this token.
+ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token.
 
 </td>
 <td><a href="#LocationOwnerId">#</a></td>
@@ -1064,8 +1064,8 @@ return true if the resulting string is non-blank:
 <td>i18n</td>
 <td>
 
-Get text from the content pack's `i18n` translation files. See [_Translations_ in the author
-guide](author-guide.md#Translations) for more info.
+Get text from the content pack's `i18n` translation files. See the [translation
+documentation](translations.md) for more info.
 
 </td>
 <td><a href="#I18n">#</a></td>
@@ -1227,9 +1227,9 @@ The `valueAt` argument gets one value from a token at the given position (starti
 first value). If the index is outside the list, this returns an empty list.
 
 This depends on the token's order, which you can check with the [`patch summary unsorted` console
-command](author-guide.md#patch-summary). Some tokens like `ChildNames` have a consistent order
-(which will be documented in the info for each token); most others like `HasFlag` are listed in the
-order they're defined in the game data, which may change from one save to the next.
+command](troubleshooting.md#summary). Some tokens like `ChildNames` have a consistent order (which
+will be documented in the info for each token); most others like `HasFlag` are listed in the order
+they're defined in the game data, which may change from one save to the next.
 
 For example:
 
@@ -1302,125 +1302,35 @@ For example, this can allow commas in random dialogue:
 The behavior when separators conflict with token syntax depends on implementation details that may
 change from one Content Patcher version to the next.
 
-## Player config
-You can let players configure your mod using a `config.json` file. Content Patcher will
-automatically create and load the file, and you can use the config values as
-[tokens & conditions](#introduction). Config fields are not case-sensitive.
+### Player config
+You can let players configure your mod using a `config.json` file. If the player has [Generic Mod
+Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed, they'll also be able to
+configure the mod through an in-game options menu.
 
-If the player has [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098)
-installed, they'll be able to configure the mod through an in-game options menu on the title
-screen or the in-game menu.
-
-### Set up configuration
-To do this, you add a `ConfigSchema` section which defines your config fields and how to validate
-them (see below for an example).
-
-Available fields for each field:
-
-   field               | meaning
-   ------------------- | -------
-   `AllowValues`       | _(optional.)_ The values the player can provide, as a comma-delimited string. If omitted, any value is allowed.<br />**Tip:** use `"true, false"` for a field that can be enabled or disabled, and Content Patcher will recognize it as a boolean (e.g. to represent as a checkbox in Generic Mod Config Menu).
-   `AllowBlank`        | _(optional.)_ Whether the field can be left blank. If false or omitted, blank fields will be replaced with the default value.
-   `AllowMultiple`     | _(optional.)_ Whether the player can specify multiple comma-delimited values. Default false.
-   `Default`           | _(optional unless `AllowBlank` is false.)_ The default values when the field is missing. Can contain multiple comma-delimited values if `AllowMultiple` is true. If omitted, blank fields are left blank.
-   `Description`       | _(optional.)_ An explanation of the config option for the player. This is shown in UIs like Generic Mod Config Menu.
-
-### Basic example
-This `content.json` defines a `Material` config field and uses it to change which patch is applied.
+For example, you can use config values as tokens and conditions:
 
 ```js
 {
-   "Format": "1.24.0",
-   "ConfigSchema": {
-      "Material": {
-         "AllowValues": "Wood, Metal",
-         "Default": "Wood",
-         "Description": "The material style for the billboard background."
-      }
-   },
-   "Changes": [
-      // as a token
-      {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_{{material}}.png"
-      },
-
-      // as a condition
-      {
-         "Action": "Load",
-         "Target": "LooseSprites/Billboard",
-         "FromFile": "assets/material_wood.png",
-         "When": {
-            "Material": "Wood"
-         }
-      }
-   ]
+    "Format": "1.24.0",
+    "ConfigSchema": {
+        "EnableJohn": {
+            "AllowValues": "true, false",
+            "Default": true
+        }
+    },
+    "Changes": [
+        {
+            "Action": "Include",
+            "FromFile": "assets/john.json",
+            "When": {
+                "EnableJohn": true
+            }
+        }
+    ]
 }
 ```
 
-When you run the game, a `config.json` file will appear automatically with text like this:
-
-```js
-{
-  "Material": "Wood"
-}
-```
-
-Players can edit it to configure your content pack.
-
-### Translations
-You can [add translation files](https://stardewvalleywiki.com/Modding:Translations) for
-your config field names & descriptions. If the player has [Generic Mod Config
-Menu](https://www.nexusmods.com/stardewvalley/mods/5098) (GMCM) installed, the fields will be shown
-with your translation text (if available).
-
-To do that, create an `i18n/default.json` for your default text. For each field, add any
-combination of these translation keys:
-
-key format                     | description
-:----------------------------- | :----------
-`config.<name>.name`           | The field name.
-`config.<name>.description`    | The field description (shown as a tooltip in GMCM).
-`config.<name>.values.<value>` | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
-
-All translation keys are optional, and they're not case-sensitive. 
-
-For example, let's say your content pack has these files:
-```js
-// content.json
-{
-   "Format": "1.24.0",
-   "ConfigSchema": {
-      "Material": {
-         "AllowValues": "Wood, Metal",
-         "Default": "Wood"
-      }
-   }
-}
-
-// i18n/default.json
-{
-   "config.Material.name": "Material",
-   "config.Material.description": "The material style for the billboard background.",
-   "config.Material.values.Wood": "wood",
-   "config.Material.values.Metal": "metal"
-}
-
-// i18n/fr.json
-{
-   "config.Material.name": "Matériel",
-   "config.Material.description": "Le style du matériel pour l'arrière-plan du panneau d'affichage.",
-   "config.Material.values.Wood": "bois",
-   "config.Material.values.Metal": "métal"
-}
-```
-
-Here's how that would look in Generic Mod Config Menu for a French player:
-
-> <img src="screenshots/config-translations.png" width="500" />
-
-See [_translations_ on the wiki](https://stardewvalleywiki.com/Modding:Translations) for more info.
+See the [player config documentation](config.md) for more info.
 
 ## Randomization
 ### Overview
@@ -1494,7 +1404,7 @@ if all the choices are 'true' or 'false', or numeric contexts if all the choices
 A `Random` token changes its choices on day start by default. If you want randomization to change
 within a day, you need to make two changes:
 
-* Specify a [patch update rate](author-guide.md#update-rate) so the patch itself updates more often.
+* Specify a [patch update rate](../author-guide.md#update-rate) so the patch itself updates more often.
 * Use a [pinned key](#pinned-key) to set the seed to a value which changes more often. For example,
   this would change every time the in-game time changes:
   ```
@@ -1681,7 +1591,7 @@ Query expressions are very powerful, but you should be aware of the caveats:
 * Query expressions have **very little validation**. An invalid expression generally won't show
   warnings ahead of time, it'll just fail when the patch is applied. Make sure to carefully test
   any content pack features which use expressions, and check new or edited expressions with
-  [`patch parse`](author-guide.md#patch-parse).
+  [`patch parse`](troubleshooting.md#parse).
 * Query expressions **evaluate the expanded text**. For example, if the player name contains a
   single-quote like `D'Artagnan`, then this expression will fail due to a syntax error:
   ```js
@@ -1854,5 +1764,4 @@ value | meaning
 _player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
 
 ## See also
-* [README](README.md) for other info
-* [Author guide](author-guide.md)
+* [Author guide](../author-guide.md) for other actions and options
