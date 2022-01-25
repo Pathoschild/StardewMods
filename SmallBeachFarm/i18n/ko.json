@@ -1,0 +1,20 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "작은 해변 농장",
+    "farm.description": "강물과 바다 물고기를 모두 잡을 수 있는 비옥한 작은 해변.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.campfire.name": "캠프파이어 추가",
+    "config.campfire.tooltip": "농가 앞에 기능성 캠프파이어를 추가하세요.",
+
+    "config.islands.name": "섬 추가",
+    "config.islands.tooltip": "육지 면적이 넓은 바다 섬을 추가하세요.",
+
+    "config.beach-sounds.name": "해변 소리 재생",
+    "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다."
+}
