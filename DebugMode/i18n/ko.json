@@ -18,16 +18,14 @@
     ** Generic Mod Config Menu UI
     *********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enable-game-debug.name": "Enable game debug hotkeys",
-    "config.enable-game-debug.desc": "Whether showing the debug info also enables the game's debug hotkeys, like pressing 5 to warp to the beach.",
-    "config.enable-dangerous-hotkeys.name": "Allow dangerous hotkeys",
-    "config.enable-dangerous-hotkeys.desc": "When game debug hotkeys are enabled, also enable destructive hotkeys which can immediately ends the current day, randomize the player or farmhouse decorations, or crash the game.",
+    "config.title.general-options": "일반 옵션",
+    "config.enable-game-debug.name": "게임 디버그 단축키 활성화",
+    "config.enable-game-debug.desc": "디버그 정보가 표시되면 숫자 5 키를 눌러 해변으로 워프 할 수 있는 게임의 디버그 단축키를 활성화합니다.",
+    "config.enable-dangerous-hotkeys.name": "위험한 단축키 허용",
+    "config.enable-dangerous-hotkeys.desc": "게임 디버그 단축키가 활성화되면 현재 날짜를 즉시 종료하거나 플레이어 또는 농가 장식을 무작위화하거나 게임을 중단시킬 수 있는 파괴적인 단축키를 활성화 합니다.",
 
     // controls
-    // TODO
-    "config.title.controls": "Controls",
-    "config.toggle-debug-key.name": "Toggle debug info",
-    "config.toggle-debug-key.desc": "The keys which toggle the debug info."
+    "config.title.controls": "단축키 설정",
+    "config.toggle-debug-key.name": "디버그 정보 전환",
+    "config.toggle-debug-key.desc": "디버그 정보를 실행하는 키."
 }
