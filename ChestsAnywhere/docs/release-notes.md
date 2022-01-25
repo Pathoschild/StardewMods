@@ -2,9 +2,9 @@
 
 # Release notes
 ## 1.21.2
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
-* Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (added Spanish), mezen (added German), and Zangorr (added Polish)!
+* Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (updated Spanish), mezen (updated German), and Zangorr (added Polish)!
 
 ## 1.21.1
 Released 25 December 2021 for SMAPI 3.13.0 or later.

@@ -5,7 +5,7 @@
 * Fixed item lookups no longer showing construction recipes.
 
 ## 1.36.2
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Fixed scroll up/down arrows and keybinds not working in the search UI.
 * Fixed error clicking 'see also' crop link from a seed lookup.

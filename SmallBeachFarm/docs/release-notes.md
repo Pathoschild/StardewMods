@@ -2,7 +2,7 @@
 
 # Release notes
 ## 2.1.0
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Added default interior decoration for new saves created with the new farm type.
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), ellipszist (added Thai), and Evexyron (added Spanish)!

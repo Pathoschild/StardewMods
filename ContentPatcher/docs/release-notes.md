@@ -10,7 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## 1.24.8
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Fixed patches added through `Action: Include` not applied immediately in some cases.
 * Fixed `Random` values not in sync in multiplayer in Stardew Valley 1.5.5+.
