@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "건너뛰기",
+    "config.skip-to.tooltip": "건너뛸 화면. 기본값 타이틀 화면.",
+    "config.skip-to.values.title-menu": "메인 메뉴",
+    "config.skip-to.values.load-menu": "메뉴 로드",
+    "config.skip-to.values.join-coop": "협동 플레이",
+    "config.skip-to.values.host-coop": "호스트"
+}
