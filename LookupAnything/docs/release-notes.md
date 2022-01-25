@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed item lookups no longer showing construction recipes.
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
 
 ## 1.36.2
 Released 14 January 2022 for SMAPI 3.13.0 or later.
