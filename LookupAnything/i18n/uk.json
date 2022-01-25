@@ -540,7 +540,7 @@
 
     // values
     "pet.last-petted.yes": "Так (+12 од. прихильності)",
-    "pet.last-petted.days-ago": "{{days}} днів потому",
+    "pet.last-petted.days-ago": "{{days}} дні(в) потому",
     "pet.last-petted.never": "ніколи",
     "pet.water-bowl.empty": "Порожньо",
     "pet.water-bowl.filled": "Наповнена (+6 од. прихильності)",
