@@ -1,0 +1,33 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "메인 옵션",
+    "config.junimo-huts-output-gems.name": "주니모 오두막에서 보석 생산",
+    "config.junimo-huts-output-gems.desc": "주니모 오두막에서 보석을 꺼낼지 여부입니다.\ntrue인 경우 오두막에 보석을 놓아 주니모 색상을 변경할 수 없습니다.",
+    "config.automation-interval.name": "자동화 간격",
+    "config.automation-interval.desc": "각 자동화 공정 사이의 간격 수.(초당 60개, 2초당 120개 등)",
+    "config.toggle-overlay-key.name": "오버레이 키 전환 ",
+    "config.toggle-overlay-key.desc": "자동화 오버레이를 토글하는 키.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "모드 호환성",
+    "config.better-junimos.name": "Better Junimos(더 나은 주니모)",
+    "config.better-junimos.desc": "Better Junimos 모드와의 호환성을 사용하도록 설정합니다.\n설치된 경우 주니모 오두막은 비료나 씨앗을 생산하지 않습니다.",
+    "config.warn-for-missing-bridge-mod.name": "연결 모드 누락 경고",
+    "config.warn-for-missing-bridge-mod.desc": "설치되지 않은 별도의 호환성 패치가 필요한 사용자 지정 모드를 설치한 경우 시작 시 경고를 기록할지 여부.",
+
+    // connectors
+    "config.title.connectors": "연결 활성화",
+    "config.connector.desc": "{{itemName}}이(가) 기계와 상자를 서로 연결하는지 여부.",
+    "config.custom-connectors.name": "사용자 지정 연결",
+    "config.custom-connectors.desc": "인접한 기계를 서로 연결하는 항목의 정확한 영어 이름 입력.\n여러 항목을 쉼표로 나열할 수 있습니다.", // note: 다른 언어로 재생되는 경우에도 영어여야 합니다.
+
+    // machine overrides
+    "config.title.machine-overrides": "기계 재설정",
+    "config.override.ShippingBin-name": "배송 상자",
+    "config.override.MiniShippingBin-name": "미니 배송 상자",
+    "config.override.desc": "{{machineName}} 자동화 활성화 여부.",
+    "config.custom-overrides-note": "사용자 지정 재정의의 경우 config.json 파일을 직접 편집하는 방법에 대한 도움말은 https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure를 참조하십시오."
+}
