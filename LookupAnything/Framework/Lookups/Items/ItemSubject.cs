@@ -119,6 +119,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead.Value == true;
             bool canSell = obj?.canBeShipped() == true || this.Metadata.Shops.Any(shop => shop.BuysCategories.Contains(item.Category));
+            bool isMovieTicket = obj?.ParentSheetIndex == 809 && !obj.bigCraftable.Value;
 
             // get overrides
             bool showInventoryFields = !this.IsSpawnedStoneNode();
@@ -208,14 +209,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     yield return new GenericField(I18n.Item_CanBeDyed(), this.Stringify(clothing.dyeable.Value));
 
                 // gift tastes
-                IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item);
-                yield return new ItemGiftTastesField(I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                yield return new ItemGiftTastesField(I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes || this.ShowAllGiftTastes)
+                if (!isMovieTicket)
                 {
-                    yield return new ItemGiftTastesField(I18n.Item_NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    yield return new ItemGiftTastesField(I18n.Item_DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
-                    yield return new ItemGiftTastesField(I18n.Item_HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    IDictionary<GiftTaste, GiftTasteModel[]> giftTastes = this.GetGiftTastes(item);
+                    yield return new ItemGiftTastesField(I18n.Item_LovesThis(), giftTastes, GiftTaste.Love, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    yield return new ItemGiftTastesField(I18n.Item_LikesThis(), giftTastes, GiftTaste.Like, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    if (this.ProgressionMode || this.HighlightUnrevealedGiftTastes || this.ShowAllGiftTastes)
+                    {
+                        yield return new ItemGiftTastesField(I18n.Item_NeutralAboutThis(), giftTastes, GiftTaste.Neutral, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                        yield return new ItemGiftTastesField(I18n.Item_DislikesThis(), giftTastes, GiftTaste.Dislike, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                        yield return new ItemGiftTastesField(I18n.Item_HatesThis(), giftTastes, GiftTaste.Hate, onlyRevealed: this.ProgressionMode, highlightUnrevealed: this.HighlightUnrevealedGiftTastes);
+                    }
                 }
             }
 
@@ -280,7 +284,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             }
 
             // movie ticket
-            if (obj?.ParentSheetIndex == 809 && !obj.bigCraftable.Value)
+            if (isMovieTicket)
             {
                 MovieData movie = MovieTheater.GetMovieForDate(Game1.Date);
                 if (movie == null)
