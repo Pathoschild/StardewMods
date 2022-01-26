@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Filmi sevenler",
     "item.movie-ticket.likes-movie": "Filmi beğenenler",
     "item.movie-ticket.dislikes-movie": "Filmi beğenmeyenler",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} bunu seviyor",

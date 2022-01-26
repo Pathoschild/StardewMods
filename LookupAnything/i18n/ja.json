@@ -463,6 +463,7 @@
     "item.movie-ticket.loves-movie": "大好きな映画",
     "item.movie-ticket.likes-movie": "好きな映画",
     "item.movie-ticket.dislikes-movie": "嫌いな映画",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}}が大好き",

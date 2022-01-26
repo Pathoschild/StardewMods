@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "사랑하는 영화",
     "item.movie-ticket.likes-movie": "좋아하는 영화",
     "item.movie-ticket.dislikes-movie": "싫어하는 영화",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} 사랑함",

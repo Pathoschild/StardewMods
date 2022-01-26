@@ -454,6 +454,7 @@
     "item.movie-ticket.loves-movie": "热爱电影",
     "item.movie-ticket.likes-movie": "喜欢电影",
     "item.movie-ticket.dislikes-movie": "不喜欢电影",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}}酷爱这个",

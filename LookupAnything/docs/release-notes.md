@@ -2,7 +2,9 @@
 
 # Release notes
 ## Upcoming release
+* When looking up a movie ticket, added a list of NPCs would refuse to watch the current movie.
 * Fixed item lookups no longer showing construction recipes.
+* Fixed error looking up movie ticket if some NPCs will reject the invitation.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian) and wally232 (added Korean)!
 
 ## 1.36.2
