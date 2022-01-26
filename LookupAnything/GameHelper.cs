@@ -281,7 +281,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         yield return new KeyValuePair<NPC, GiftTaste?>(npc, null);
                         break;
 
-                    // any other value will be ignored for movie preferences
+                        // any other value will be ignored for movie preferences
                 }
             }
         }
@@ -342,7 +342,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Read parsed data about the Community Center bundles.</summary>
         public IEnumerable<BundleModel> GetBundleData()
         {
-            return this.DataParser.GetBundles();
+            return this.DataParser.GetBundles(this.Monitor);
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>

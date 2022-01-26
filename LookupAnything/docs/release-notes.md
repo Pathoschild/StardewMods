@@ -7,6 +7,7 @@
   * Fixed error if some NPCs will reject the invitation.
   * Fixed gift tastes shown (a movie ticket isn't giftable).
 * Fixed item lookups no longer showing construction recipes.
+* Fixed error when the community center bundle data is invalid.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian) and wally232 (added Korean)!
 
 ## 1.36.2

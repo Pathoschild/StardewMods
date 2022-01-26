@@ -39,39 +39,51 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Read parsed data about the Community Center bundles.</summary>
+        /// <param name="monitor">The monitor with which to log errors.</param>
         /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
-        public IEnumerable<BundleModel> GetBundles()
+        public IEnumerable<BundleModel> GetBundles(IMonitor monitor)
         {
             IDictionary<string, string> data = Game1.netWorldState.Value.BundleData;
             foreach (var entry in data)
             {
-                // parse key
-                string[] keyParts = entry.Key.Split('/');
-                string area = keyParts[0];
-                int id = int.Parse(keyParts[1]);
-
-                // parse bundle info
-                string[] valueParts = entry.Value.Split('/');
-                string name = valueParts[0];
-                string reward = valueParts[1];
-                string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
-                    ? name // field isn't present in English
-                    : valueParts.Last(); // number of fields varies, but display name is always last
-
-                // parse ingredients
-                List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
-                string[] ingredientData = valueParts[2].Split(' ');
-                for (int i = 0; i < ingredientData.Length; i += 3)
+                BundleModel bundle;
+                try
                 {
-                    int index = i / 3;
-                    int itemID = int.Parse(ingredientData[i]);
-                    int stack = int.Parse(ingredientData[i + 1]);
-                    ItemQuality quality = (ItemQuality)int.Parse(ingredientData[i + 2]);
-                    ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
+                    // parse key
+                    string[] keyParts = entry.Key.Split('/');
+                    string area = keyParts[0];
+                    int id = int.Parse(keyParts[1]);
+
+                    // parse bundle info
+                    string[] valueParts = entry.Value.Split('/');
+                    string name = valueParts[0];
+                    string reward = valueParts[1];
+                    string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
+                        ? name // field isn't present in English
+                        : valueParts.Last(); // number of fields varies, but display name is always last
+
+                    // parse ingredients
+                    List<BundleIngredientModel> ingredients = new List<BundleIngredientModel>();
+                    string[] ingredientData = valueParts[2].Split(' ');
+                    for (int i = 0; i < ingredientData.Length; i += 3)
+                    {
+                        int index = i / 3;
+                        int itemID = int.Parse(ingredientData[i]);
+                        int stack = int.Parse(ingredientData[i + 1]);
+                        ItemQuality quality = (ItemQuality)int.Parse(ingredientData[i + 2]);
+                        ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
+                    }
+
+                    // create bundle
+                    bundle = new BundleModel(id, name, displayName, area, reward, ingredients);
+                }
+                catch (Exception ex)
+                {
+                    monitor.LogOnce($"Couldn't parse community center bundle '{entry.Key}' due to an invalid format.\nRecipe data: '{entry.Value}'\nError: {ex}", LogLevel.Warn);
+                    continue;
                 }
 
-                // create bundle
-                yield return new BundleModel(id, name, displayName, area, reward, ingredients);
+                yield return bundle;
             }
         }
 
