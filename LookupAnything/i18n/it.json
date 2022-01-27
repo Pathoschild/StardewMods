@@ -83,7 +83,7 @@
     "data.npc.pet.description": "Il tuo fedele animale domestico.",
     "data.npc.horse.description": "Il tuo fedele destriero.",
     "data.npc.junimo.description": "Uno spirito della foresta, proveniente dal mondo degli spiriti. Si sa molto poco di loro.",
-    "data.npc.trashbear.description": "Uno spirito amichevole che ripulisce la spazzatura.",
+    "data.npc.trash-bear.description": "Uno spirito amichevole che ripulisce la spazzatura.",
 
     // item types
     "data.type.debris": "Detriti",

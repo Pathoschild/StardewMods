@@ -84,7 +84,7 @@
     "data.npc.pet.description": "당신의 믿음직한 반려동물이다.",
     "data.npc.horse.description": "당신의 충직한 애마이다.",
     "data.npc.junimo.description": "정령계로부터 건너온 숲의 정령. 그들에 대하여는 알려진 바가 거의 없다.",
-    "data.npc.trashbear.description": "쓰레기를 치우는 친절한 정신.",
+    "data.npc.trash-bear.description": "쓰레기를 치우는 친절한 정신.",
 
     // item types
     "data.type.debris": "잔해",

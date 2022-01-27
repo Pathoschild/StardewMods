@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed missing translation in Portuguese.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
 ## 1.15.3

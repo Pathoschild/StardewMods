@@ -8,6 +8,7 @@
   * Fixed gift tastes shown (a movie ticket isn't giftable).
 * Fixed item lookups no longer showing construction recipes.
 * Fixed error when the community center bundle data is invalid.
+* Fixed a few missing translations in some languages.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian) and wally232 (added Korean)!
 
 ## 1.36.2

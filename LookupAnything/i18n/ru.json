@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
     "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
-    "data.npc.trashbear.description": "Дружелюбный дух, который убирает мусор.",
+    "data.npc.trash-bear.description": "Дружелюбный дух, который убирает мусор.",
 
     // item types
     "data.type.debris": "Мусор",
