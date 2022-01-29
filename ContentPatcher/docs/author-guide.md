@@ -31,8 +31,8 @@ This document helps mod authors create a content pack for Content Patcher.
 
 ## Introduction
 ### What is Content Patcher?
-Content Patcher lets you change the game's data, images, maps, and locations using only JSON files.
-JSON is just a text format, so no programming experience is needed.
+Content Patcher lets you change the game content using only JSON files. JSON is just a text format,
+so no programming experience is needed.
 
 You can make a wide range of changes to the game:
 
@@ -142,7 +142,6 @@ avoid obsolete behavior, and reduce startup time.
 ### Changes
 The `Changes` field describes what you want to change in the game. Each entry in the list is called
 a **patch**, and describes a specific action to perform: edit this image, change this dialogue, etc.
-
 You can list any number of patches, and you can apply multiple patches to the same file (they'll be
 applied one after another in the order listed).
 
@@ -192,7 +191,8 @@ See the [`Action: Load` documentation](author-guide/action-load.md) for more inf
 <td>
 
 `EditData` changes the data read from a data asset. This supports simple lookup assets like
-`Data/ObjectInformation`, or full data model assets like `Data/WildTrees`.
+`Data/ObjectInformation`, or full data model assets like `Data/WildTrees`. Any number of content
+packs can edit the same asset.
 
 This lets you...
 * add, edit, or delete entries;
@@ -291,9 +291,9 @@ See the [`Action: EditMap` documentation](author-guide/action-editmap.md) for mo
 <td><code>Include</code></td>
 <td>
 
-`Include` adds patches from a `Changes` field in another file. This is just a way to organize your
-content pack into multiple files, instead of having everything in one `content.json`. The included
-patches work exactly as if they were directly in `content.json`.
+`Include` adds patches from another file. This is just a way to organize your content pack into
+multiple files, instead of having everything in one `content.json`. The included patches work
+exactly as if they were directly in `content.json`.
 
 For example, you can combine this with [tokens and condition](#tokens) to load a dynamic file:
 ```js
