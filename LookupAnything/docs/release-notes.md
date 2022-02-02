@@ -9,7 +9,7 @@
 * Fixed item lookups no longer showing construction recipes.
 * Fixed error when the community center bundle data is invalid.
 * Fixed a few missing translations in some languages.
-* Improved translations. Thanks to ChulkyBow (updated Ukrainian) and wally232 (added Korean)!
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian), Evexyron (updated Spanish), and wally232 (added Korean)!
 
 ## 1.36.2
 Released 14 January 2022 for SMAPI 3.13.0 or later.
