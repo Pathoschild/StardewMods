@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed dropdown options not selectable when gamepad mode is enabled.
 * Improved translations. Thanks to wally232 (updated Korean) and ZijieFeng (updated Chinese)!
 
 ## 1.21.2

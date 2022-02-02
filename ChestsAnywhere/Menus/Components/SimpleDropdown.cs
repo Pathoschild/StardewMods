@@ -122,6 +122,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
                 return false;
 
             this.Dropdown.leftClickHeld(x, y);
+
+            // This duplicates the selection logic in leftClickHeld above, since the game may skip
+            // the selection depending on the controller settings.
+            this.Dropdown.selectedOption = (int)Math.Max(Math.Min((y - this.Dropdown.dropDownBounds.Y) / (float)this.Dropdown.bounds.Height, this.Dropdown.dropDownOptions.Count - 1), 0);
+
             return true;
         }
 
