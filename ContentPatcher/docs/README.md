@@ -44,7 +44,7 @@ maps       | Only visible to players that have it installed. Players without the
 data       | Only directly affects players that have it installed, but can indirectly affect other players. For example, if a content pack changes `Data/ObjectInformation` and you create a new object, other player will see that object's custom values even if their `Data/ObjectInformation` doesn't have those changes.
 
 ## For mod authors
-* To create content packs, see the [author guide](author-guide.md) and its [tokens subpage](author-tokens-guide.md).
+* To create content packs, see the [author guide](author-guide.md) and its [tokens subpage](author-guide/tokens.md).
 * To add custom Content Patcher tokens from a SMAPI mod, see the [extensibility API](extensibility.md).
 * To use Content Patcher conditions in your own SMAPI mod, see the [conditions API](conditions-api.md).
 
@@ -65,7 +65,7 @@ These are the available settings:
   <td><code>EnableDebugFeatures</code></td>
   <td>
 
-Default `false`. Whether to enable [debug features meant for content pack creators](#debug-mode).
+Default `false`. Whether to enable [debug features meant for content pack creators](author-guide/troubleshooting.md#debug-mode).
 
   </td>
 </tr>
@@ -77,7 +77,7 @@ Default `false`. Whether to enable [debug features meant for content pack creato
 The configured controller, keyboard, and mouse buttons (see [key bindings](https://stardewvalleywiki.com/Modding:Key_bindings)).
 The default button bindings are...
 
-* `F3` to show the [debug overlay](#debug-mode) (if enabled);
+* `F3` to show the [debug overlay](author-guide/troubleshooting.md#debug-mode) (if enabled);
 * `LeftControl` and `RightControl` to switch textures in the debug overlay.
 
 You can separate bindings with commas (like `B, LeftShoulder` for either one), and set multi-key
