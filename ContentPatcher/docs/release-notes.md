@@ -13,6 +13,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
 * The deprecated `Enabled` patch field is now obsolete.
 * Fixed content packs being loaded/validated more than once per screen.
+* Fixed error loading a patch which has some required fields missing.
 
 **Update notes for mod authors:**  
 The `Enabled` patch field is no longer supported when the `Format` field is `1.25.0` or later. See the

@@ -296,9 +296,22 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to name.</param>
         private string GetDefaultPatchName(PatchConfig patch)
         {
-            return Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type) && type == PatchType.Include
-                ? $"{type} {PathUtilities.NormalizeAssetName(patch.FromFile)}"
-                : $"{patch.Action} {PathUtilities.NormalizeAssetName(patch.Target)}";
+            // default name if valid
+            if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type))
+            {
+                string path = type == PatchType.Include
+                    ? patch.FromFile
+                    : patch.Target;
+
+                return !string.IsNullOrWhiteSpace(path)
+                    ? $"{type} {PathUtilities.NormalizeAssetName(path)}"
+                    : $"{type} invalid";
+            }
+
+            // invalid patch with missing required fields
+            return !string.IsNullOrWhiteSpace(patch.Action)
+                ? $"{patch.Action}"
+                : "invalid";
         }
 
         /// <summary>Unload patches matching a condition.</summary>
