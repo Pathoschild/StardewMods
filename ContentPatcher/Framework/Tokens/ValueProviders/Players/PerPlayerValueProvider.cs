@@ -26,8 +26,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <summary>The values as of the last context update.</summary>
         private readonly IDictionary<long, InvariantHashSet> Values = new Dictionary<long, InvariantHashSet>();
 
-        /// <summary>The player IDs by type as of the last update.</summary>
-        private readonly IDictionary<PlayerType, long> PlayerIdsByType = new Dictionary<PlayerType, long>();
+        /// <summary>The player ID for the host player.</summary>
+        private long HostPlayerId;
+
+        /// <summary>The player ID for the local player.</summary>
+        private long LocalPlayerId;
 
 
         /*********
@@ -46,10 +49,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
             this.FetchValues = player => new InvariantHashSet(values(player));
             this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
-
-            // prepopulate player IDs for validation
-            foreach (PlayerType playerType in Enum.GetValues(typeof(PlayerType)))
-                this.PlayerIdsByType[playerType] = 0;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -70,13 +69,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
-                    // update player type => ID map
-                    foreach (PlayerType type in Enum.GetValues(typeof(PlayerType)))
-                    {
-                        long id = this.SaveReader.GetPlayer(type).UniqueMultiplayerID;
-                        changed |= !this.PlayerIdsByType.TryGetValue(type, out long oldId) || oldId != id;
-                        this.PlayerIdsByType[type] = id;
-                    }
+                    // update host/local player IDs
+                    long hostId = this.SaveReader.GetPlayer(PlayerType.HostPlayer).UniqueMultiplayerID;
+                    long localId = this.SaveReader.GetPlayer(PlayerType.CurrentPlayer).UniqueMultiplayerID;
+
+                    changed |= this.HostPlayerId != hostId || this.LocalPlayerId != localId;
+
+                    this.HostPlayerId = hostId;
+                    this.LocalPlayerId = localId;
 
                     // update values by player ID
                     HashSet<long> removeIds = new HashSet<long>(this.Values.Keys);
@@ -106,7 +106,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                 else
                 {
                     this.Values.Clear();
-                    this.PlayerIdsByType.Clear();
+                    this.HostPlayerId = 0;
+                    this.LocalPlayerId = 0;
                 }
 
                 return changed;
@@ -167,7 +168,25 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                 else if (Enum.TryParse(arg, ignoreCase: true, out PlayerType type))
                 {
                     if (!testOnly)
-                        playerIds.Add(this.PlayerIdsByType[type]);
+                    {
+                        switch (type)
+                        {
+                            case PlayerType.HostPlayer:
+                                playerIds.Add(this.HostPlayerId);
+                                break;
+
+                            case PlayerType.CurrentPlayer:
+                                playerIds.Add(this.LocalPlayerId);
+                                break;
+
+                            case PlayerType.AnyPlayer:
+                                playerIds.AddMany(this.Values.Keys);
+                                break;
+
+                            default:
+                                throw new InvalidOperationException($"Unknown player type {type}.");
+                        }
+                    }
                 }
                 else
                 {
@@ -186,10 +205,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         {
             // default to current player
             if (!playerIds.Any())
-            {
-                if (this.PlayerIdsByType.TryGetValue(PlayerType.CurrentPlayer, out long id))
-                    playerIds.Add(id);
-            }
+                playerIds.Add(this.LocalPlayerId);
 
             // get single value (avoids copying the collection in most cases)
             if (playerIds.Count == 1)

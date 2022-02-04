@@ -1753,6 +1753,7 @@ example                                  | meaning
 `{{HasFlag}}`<br />`{{HasFlag: curentPlayer}}` | Get flags for the current player.
 `{{HasFlag: hostPlayer}}`                | Get flags for the host player.
 `{{HasFlag: currentPlayer, hostPlayer}}` | Get flags for the current _and_ host player(s).
+`{{HasFlag: anyPlayer}}`                 | Get flags which any one or more players have.
 `{{HasFlag: 3864039824286870457}}`       | Get flags for the player with the unique multiplayer ID `3864039824286870457`.
 
 The possible player types are:
@@ -1761,6 +1762,7 @@ value | meaning
 ----- | -------
 `currentPlayer` | The current player who has the mod installed.
 `hostPlayer` | The player hosting the multiplayer world. This is the same as `currentPlayer` in single-player or if the current player is hosting.
+`anyPlayer` | The combined values for all players, regardless of whether they're online.
 _player ID_ | The unique multiplayer ID for a specific player, like `3864039824286870457`.
 
 ## See also

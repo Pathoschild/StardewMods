@@ -7,6 +7,9 @@ namespace ContentPatcher.Framework.Constants
         HostPlayer,
 
         /// <summary>The current player, regardless of whether they're the main or secondary player.</summary>
-        CurrentPlayer
+        CurrentPlayer,
+
+        /// <summary>Any player instance. For token values, this is the combined result for all players. In other contexts, this is equivalent to <see cref="CurrentPlayer"/>.</summary>
+        AnyPlayer
     }
 }

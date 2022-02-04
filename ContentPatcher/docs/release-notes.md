@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
 * The deprecated `Enabled` patch field is now obsolete.
 * Fixed content packs being loaded/validated more than once per screen.
