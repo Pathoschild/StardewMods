@@ -8,8 +8,8 @@ using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 {
-    /// <summary>A value provider for a built-in condition whose value may change with the context, and accepts flags to indicate whether to check the host or local player.</summary>
-    internal class LocalOrHostPlayerValueProvider : BaseValueProvider
+    /// <summary>A value provider for a built-in condition whose value may change with the context and which c, and accepts flags to indicate whether to check the host or local player.</summary>
+    internal class PerPlayerValueProvider : BaseValueProvider
     {
         /*********
         ** Fields
@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public PerPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
             : base(type, mayReturnMultipleValues)
         {
             this.SaveReader = saveReader;
@@ -58,7 +58,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public LocalOrHostPlayerValueProvider(ConditionType type, Func<Farmer, string> value, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public PerPlayerValueProvider(ConditionType type, Func<Farmer, string> value, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
             : this(type, player => new[] { value(player) }, saveReader, mayReturnMultipleValues, allowedValues) { }
 
         /// <inheritdoc />
