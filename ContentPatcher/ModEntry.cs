@@ -26,11 +26,8 @@ namespace ContentPatcher
         /*********
         ** Fields
         *********/
-        /// <summary>Whether this is the first tick for a new screen, so <see cref="ScreenManager"/> isn't initialized yet.</summary>
-        private readonly PerScreen<bool> IsNewScreen = new(() => true);
-
         /// <summary>Manages state for each screen.</summary>
-        private readonly PerScreen<ScreenManager> ScreenManager = new();
+        private PerScreen<ScreenManager> ScreenManager;
 
         /// <summary>The recognized format versions and their migrations.</summary>
         private readonly Func<ContentConfig, IMigration[]> GetFormatVersions = content => new IMigration[]
@@ -80,7 +77,7 @@ namespace ContentPatcher
         private readonly PerScreen<DebugOverlay> DebugOverlay = new();
 
         /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
-        private List<ModProvidedToken> QueuedModTokens = new();
+        private readonly List<ModProvidedToken> QueuedModTokens = new();
 
         /// <summary>The game tick when the conditions API became ready for use.</summary>
         private int ConditionsApiReadyTick = int.MaxValue;
@@ -97,6 +94,8 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
+
+            this.ScreenManager = new(this.CreateScreenManager);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
@@ -205,11 +204,8 @@ namespace ContentPatcher
                 this.ConditionsApiReadyTick = Game1.ticks + 1; // mods can only use conditions API on the next tick, to avoid race conditions
             }
 
-            // initialize the screen manager for a secondary split screen
-            if (this.IsNewScreen.Value)
-                this.InitializeScreenManager();
-
             // run update logic
+            this.InitializeScreenManagerIfNeeded();
             this.ScreenManager.Value.OnUpdateTicked();
         }
 
@@ -244,7 +240,7 @@ namespace ContentPatcher
             }
 
             // load screen manager
-            this.InitializeScreenManager();
+            this.InitializeScreenManagerIfNeeded();
 
             // register asset interceptor
             var interceptor = new AssetInterceptor(this.ScreenManager);
@@ -288,33 +284,38 @@ namespace ContentPatcher
                     configMenu.Register();
                 }
             }
-
-            // can no longer queue tokens
-            this.QueuedModTokens = null;
         }
 
-        /// <summary>Initialize the screen manager for the current screen.</summary>
-        private void InitializeScreenManager()
+        /// <summary>Create a raw uninitialized screen manager instance.</summary>
+        private ScreenManager CreateScreenManager()
         {
-            // get installed mods
-            var contentPacks = this.GetContentPacks().ToArray();
-            InvariantHashSet installedMods = new InvariantHashSet(
-                (contentPacks.Select(p => p.Manifest.UniqueID))
-                .Concat(this.Helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderByHuman()
-            );
-
-            // load screen manager
             var modTokens = this.QueuedModTokens.ToArray();
-            this.ScreenManager.Value = new ScreenManager(
+            return new ScreenManager(
                 helper: this.Helper,
                 monitor: this.Monitor,
-                installedMods: installedMods,
+                installedMods: this.GetInstalledMods(),
                 modTokens: modTokens,
                 assetValidators: this.AssetValidators()
             );
-            this.ScreenManager.Value.Initialize(contentPacks, installedMods);
-            this.IsNewScreen.Value = false;
+        }
+
+        /// <summary>Initialize the screen manager if needed.</summary>
+        private void InitializeScreenManagerIfNeeded()
+        {
+            var manager = this.ScreenManager.Value;
+            if (!manager.IsInitialized)
+                manager.Initialize(this.GetContentPacks().ToArray(), this.GetInstalledMods());
+        }
+
+        /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
+        private InvariantHashSet GetInstalledMods()
+        {
+            return new InvariantHashSet(
+                this.Helper.ModRegistry
+                    .GetAll()
+                    .Select(p => p.Manifest.UniqueID)
+                    .OrderByHuman()
+            );
         }
 
         /// <summary>Raised after a content pack's configuration changed.</summary>

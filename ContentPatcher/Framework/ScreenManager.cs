@@ -50,6 +50,9 @@ namespace ContentPatcher.Framework
         /// <summary>Handles loading custom location data and adding it to the game.</summary>
         public CustomLocationManager CustomLocationManager { get; }
 
+        /// <summary>Whether <see cref="Initialize"/> has been called for this instance.</summary>
+        public bool IsInitialized { get; private set; }
+
 
         /*********
         ** Public methods
@@ -75,6 +78,11 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         public void Initialize(LoadedContentPack[] contentPacks, InvariantHashSet installedMods)
         {
+            if (this.IsInitialized)
+                this.Monitor.Log($"{nameof(ScreenManager)}.{nameof(this.Initialize)} was called more than once for screen {Context.ScreenId}.", LogLevel.Error);
+
+            this.IsInitialized = true;
+
             // set initial context before loading any custom mod tokens
             this.UpdateContext(ContextUpdateType.All);
 
