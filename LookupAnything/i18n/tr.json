@@ -1,4 +1,4 @@
-{
+﻿{
     /*********
     ** Generic translations
     *********/
@@ -81,7 +81,7 @@
     "recipe-type.tailoring": "Terzilik",
 
     // NPC descriptions
-    "data.npc.pet.description": "Sadık evcil hayvanın",
+    "data.npc.pet.description": "Sadık evcil hayvanın.",
     "data.npc.horse.description": "Sadık atın.",
     "data.npc.junimo.description": "Ruh dünyasından bir orman ruhu. Onlar hakkında çok az şey biliniyor.",
     "data.npc.trash-bear.description": "Çöpleri temizleyen arkadaş canlısı bir ruh.",
@@ -251,7 +251,7 @@
     "building.owner.none": "sahipsiz",
     "building.output-processing": "Ürün işleniyor",
     "building.output-ready": "Ürün hazır",
-    "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca ",
+    "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca",
     "building.stored-hay.summary-one-silo": "{{hayCount}} saman (kapasite: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{siloCount}} siloda {{hayCount}} saman var (kapasite: {{maxHay}})",
     "building.upgrades.barn.0": "4 hayvana kadar, inekler eklenebilir",
@@ -295,7 +295,7 @@
     "bush.description.berry": "Ahududu ve böğürtlen yetiştiren bir çalı.",
     "bush.description.plain": "Hiçbir şey yetiştirmeyen ova çalısı.",
     "bush.description.Tea": "Çay yaprakları yetiştiren bir çalı.",
-    "bush.date-planted": "Ekim tarihi ",
+    "bush.date-planted": "Ekim tarihi",
     "bush.growth": "Büyüme",
     "bush.next-harvest": "Sonraki hasat",
 
@@ -628,12 +628,12 @@
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.tile": "Tile",
-    "tile.tile-index": "{{layerName}}: tile index",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: blend mode",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.tile": "Tile", // TODO
+    "tile.tile-index": "{{layerName}}: tile index", // TODO
+    "tile.tilesheet": "{{layerName}}: tilesheet", // TODO
+    "tile.blend-mode": "{{layerName}}: blend mode", // TODO
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
 
     // values
     "tile.tile.none-here": "burada karo yok",
@@ -684,17 +684,17 @@
     *********/
     // main options
     "config.title.main-options": "Ana seçenekler",
-    "config.progression-mode.name": "İlerleme modu ",
+    "config.progression-mode.name": "İlerleme modu",
     "config.progression-mode.desc": "Oyunda keşfedene kadar bazı içeriklerin (örn. hediye zevkleri ve bulmaca çözümleri) gizlenip gizlenmeyeceği.",
     "config.highlight-unrevealed-gift-tastes.name": "Açıklanmayan hediye zevklerini vurgulayın",
     "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak ve aramalarda ayrıca beğenilmeyen/nefret edilen hediyeler de gösterilecek.",
     "config.show-all-gift-tastes.name": "Bütün hediye zevklerini göster",
-    "config.show-all-gift-tastes.desc": "NPC ve item aramaları için tüm hediye zevklerinin gösterilip gösterilmeyeceği; devre dışı bırakıldığında, yalnızca en alakalı lezzetler (örneğin sevilen veya sevilen hediyeler) gösterilir. ",
+    "config.show-all-gift-tastes.desc": "NPC ve item aramaları için tüm hediye zevklerinin gösterilip gösterilmeyeceği; devre dışı bırakıldığında, yalnızca en alakalı lezzetler (örneğin sevilen veya sevilen hediyeler) gösterilir.",
 
     // advanced options
     "config.title.advanced-options": "Gelişmiş Seçenekler",
     "config.tile-lookups.name": "Karo aramaları",
-    "config.tile-lookups.desc": "Harita karolarının arama hedefleri olarak dahil edilip edilmeyeceği. ",
+    "config.tile-lookups.desc": "Harita karolarının arama hedefleri olarak dahil edilip edilmeyeceği.",
     "config.data-mining-fields.name": "Veri madenciliği alanlarını göster",
     "config.data-mining-fields.desc": "Veri madencileri için yararlı olan ham verilerin gösterilip gösterilmeyeceği (arama sonuçlarının altında ayrı alanlar olarak). Bu, çoğu oyuncu için tasarlanmayan gelişmiş bir özelliktir.",
     "config.force-full-screen.name": "Tam ekranı zorla",
@@ -706,7 +706,7 @@
 
     // controls section
     "config.title.controls": "Kontroller",
-    "config.hide-on-key-up.name": "Hide on key up",
+    "config.hide-on-key-up.name": "Hide on key up", // TODO
     "config.hide-on-key-up.desc": "Arama anahtarını bıraktığınızda arama kullanıcı arabiriminin gizlenip gizlenmeyeceği.",
     "config.toggle-lookup.name": "Aramayı aç/kapat",
     "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",
@@ -717,9 +717,9 @@
     "config.scroll-down.name": "Aşağı Kaydır",
     "config.scroll-down.desc": "Uzun içeriği birkaç satır aşağı kaydıran tuşlar.",
     "config.page-up.name": "Sayfayı yukarı kaydır",
-    "config.page-up.desc": "Uzun içeriği tam sayfa yukarı kaydıran tuşlar. ",
+    "config.page-up.desc": "Uzun içeriği tam sayfa yukarı kaydıran tuşlar.",
     "config.page-down.name": "Sayfayı aşağı kaydır",
-    "config.page-down.desc": "Uzun içeriği tam sayfa aşağı kaydıran tuşlar. ",
+    "config.page-down.desc": "Uzun içeriği tam sayfa aşağı kaydıran tuşlar.",
     "config.toggle-debug.name": "Hata ayıklamayı aç/kapat",
     "config.toggle-debug.desc": "Hata ayıklama bilgilerinin görüntülenmesini değiştiren tuşlar."
 }

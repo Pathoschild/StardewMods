@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Improved translations. Thanks to Scartiana (added German) and wally232 (added Korean)!
+* Improved translations. Thanks to EmWhyKay (added Turkish), Scartiana (added German), and wally232 (added Korean)!
 
 ## 1.9.7
 Released 14 January 2022 for SMAPI 3.13.0 or later.
