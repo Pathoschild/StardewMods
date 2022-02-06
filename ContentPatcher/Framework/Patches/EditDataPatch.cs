@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
+using ContentPatcher.Framework.Patches.EditData;
 using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
@@ -23,8 +23,8 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>Simplifies dynamic access to game code.</summary>
-        private readonly IReflectionHelper Reflection;
+        /// <summary>Constructs key/value editors for arbitrary data.</summary>
+        private readonly KeyValueEditorFactory EditorFactory;
 
         /// <summary>The data records to edit.</summary>
         private EditDataPatchRecord[] Records;
@@ -105,7 +105,7 @@ namespace ContentPatcher.Framework.Patches
             this.MoveRecords = moveRecords?.ToArray();
             this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
             this.Monitor = monitor;
-            this.Reflection = reflection;
+            this.EditorFactory = new(reflection);
             this.TryParseFields = tryParseFields;
 
             // track contextuals
@@ -167,60 +167,23 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
-            // throw on invalid type
-            if (typeof(Texture2D).IsAssignableFrom(typeof(T)) || typeof(Map).IsAssignableFrom(typeof(T)))
+            // get editor
+            IKeyValueEditor editor = this.EditorFactory.GetEditorFor(asset.Data);
+            if (editor is null)
             {
-                this.Monitor.Log($"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}: this file isn't a data file (found {(typeof(Texture2D).IsAssignableFrom(typeof(T)) ? "image" : typeof(T).Name)}).", LogLevel.Warn);
+                string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
+
+                if (typeof(Texture2D).IsAssignableFrom(typeof(T)))
+                    this.Monitor.Log($"{errorPrefix}: the target asset is an image, not data.", LogLevel.Warn);
+                else if (typeof(Map).IsAssignableFrom(typeof(T)))
+                    this.Monitor.Log($"{errorPrefix}: this target asset is a map, not data.", LogLevel.Warn);
+                else
+                    this.Monitor.Log($"{errorPrefix}: the target asset has type '{asset.DataType.FullName}', which isn't recognized by Content Patcher.", LogLevel.Warn);
                 return;
             }
 
-            // handle dictionary types
-            if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Dictionary<,>))
-            {
-                // get dictionary's key/value types
-                Type[] genericArgs = typeof(T).GetGenericArguments();
-                if (genericArgs.Length != 2)
-                    throw new InvalidOperationException("Can't parse the asset's dictionary key/value types.");
-                Type keyType = typeof(T).GetGenericArguments().FirstOrDefault();
-                Type valueType = typeof(T).GetGenericArguments().LastOrDefault();
-                if (keyType == null)
-                    throw new InvalidOperationException("Can't parse the asset's dictionary key type.");
-                if (valueType == null)
-                    throw new InvalidOperationException("Can't parse the asset's dictionary value type.");
-
-                // get underlying apply method
-                MethodInfo method = this.GetType().GetMethod(nameof(this.ApplyDictionary), BindingFlags.Instance | BindingFlags.NonPublic);
-                if (method == null)
-                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.ApplyDictionary)} method.");
-
-                // invoke method
-                method
-                    .MakeGenericMethod(keyType, valueType)
-                    .Invoke(this, new object[] { asset });
-            }
-
-            // handle list types
-            else if (typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(List<>))
-            {
-                // get list's value type
-                Type keyType = typeof(T).GetGenericArguments().FirstOrDefault();
-                if (keyType == null)
-                    throw new InvalidOperationException("Can't parse the asset's list value type.");
-
-                // get underlying apply method
-                MethodInfo method = this.GetType().GetMethod(nameof(this.ApplyList), BindingFlags.Instance | BindingFlags.NonPublic);
-                if (method == null)
-                    throw new InvalidOperationException($"Can't fetch the internal {nameof(this.ApplyList)} method.");
-
-                // invoke method
-                method
-                    .MakeGenericMethod(keyType)
-                    .Invoke(this, new object[] { asset });
-            }
-
-            // unknown type
-            else
-                throw new NotSupportedException($"Unknown data asset type {typeof(T).FullName}, expected dictionary or list.");
+            // apply edits
+            this.ApplyEdits(asset, editor);
         }
 
         /// <inheritdoc />
@@ -291,93 +254,22 @@ namespace ContentPatcher.Framework.Patches
             return this.TryParseFields(context, model, out entries, out fields, out moveEntries, out error);
         }
 
-        /// <summary>Apply the patch to a dictionary asset.</summary>
-        /// <typeparam name="TKey">The dictionary key type.</typeparam>
-        /// <typeparam name="TValue">The dictionary value type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        private void ApplyDictionary<TKey, TValue>(IAssetData asset)
-        {
-            // get data
-            IDictionary<TKey, TValue> data = asset.AsDictionary<TKey, TValue>().Data;
-
-            // apply field/record edits
-            this.ApplyEdits<TKey, TValue>(
-                asset,
-                hasEntry: key => data.ContainsKey(key),
-                getEntry: key => data[key],
-                setEntry: (key, value) => data[key] = value,
-                removeEntry: key => data.Remove(key)
-            );
-
-            // apply moves
-            if (this.MoveRecords.Any())
-                this.Monitor.LogOnce($"Can't move records for \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list).", LogLevel.Warn);
-        }
-
-        /// <summary>Apply the patch to a list asset.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="asset">The asset to edit.</param>
-        private void ApplyList<TValue>(IAssetData asset)
-        {
-            // get data
-            IList<TValue> data = asset.GetData<List<TValue>>();
-            TValue GetByKey(string key) => data.FirstOrDefault(p => this.GetKey(p) == key);
-
-            // apply field/record edits
-            this.ApplyEdits<string, TValue>(
-                asset,
-                hasEntry: key => GetByKey(key) != null,
-                getEntry: GetByKey,
-                setEntry: (key, value) =>
-                {
-                    TValue match = GetByKey(key);
-                    if (match != null)
-                    {
-                        int index = data.IndexOf(match);
-                        data.RemoveAt(index);
-                        data.Insert(index, value);
-                    }
-                    else
-                        data.Add(value);
-                },
-                removeEntry: key =>
-                {
-                    TValue match = GetByKey(key);
-                    if (match != null)
-                    {
-                        int index = data.IndexOf(match);
-                        data.RemoveAt(index);
-                    }
-                }
-            );
-
-            // apply moves
-            this.ApplyMoveEntries(data, GetByKey);
-        }
-
         /// <summary>Apply the patch to a data asset.</summary>
-        /// <typeparam name="TKey">The data key type.</typeparam>
-        /// <typeparam name="TValue">The data value type.</typeparam>
         /// <param name="asset">The asset being edited.</param>
-        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
-        /// <param name="getEntry">Get an entry from the collection.</param>
-        /// <param name="removeEntry">Remove an entry from the collection.</param>
-        /// <param name="setEntry">Add or replace an entry in the collection.</param>
-        private void ApplyEdits<TKey, TValue>(IAssetInfo asset, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
+        /// <param name="editor">The asset editor to apply.</param>
+        private void ApplyEdits(IAssetInfo asset, IKeyValueEditor editor)
         {
             char fieldDelimiter = this.GetStringFieldDelimiter(asset);
 
-            this.ApplyRecords(removeEntry, setEntry);
-            this.ApplyFields(hasEntry, getEntry, setEntry, fieldDelimiter);
-            this.ApplyTextOperations(hasEntry, getEntry, setEntry, fieldDelimiter);
+            this.ApplyRecords(editor);
+            this.ApplyFields(editor, fieldDelimiter);
+            this.ApplyTextOperations(editor, fieldDelimiter);
+            this.ApplyMoveEntries(editor);
         }
 
         /// <summary>Apply entry overwrites to the data asset.</summary>
-        /// <typeparam name="TKey">The data key type.</typeparam>
-        /// <typeparam name="TValue">The data value type.</typeparam>
-        /// <param name="removeEntry">Remove an entry from the collection.</param>
-        /// <param name="setEntry">Add or replace an entry in the collection.</param>
-        private void ApplyRecords<TKey, TValue>(Action<TKey> removeEntry, Action<TKey, TValue> setEntry)
+        /// <param name="editor">The asset editor to apply.</param>
+        private void ApplyRecords(IKeyValueEditor editor)
         {
             if (this.Records == null)
                 return;
@@ -388,16 +280,17 @@ namespace ContentPatcher.Framework.Patches
                 string errorPrefix = $"Can't apply data patch \"{this.Path} > entry #{i}\" to {this.TargetAsset}";
                 i++;
 
-                // get key
-                TKey key = (TKey)Convert.ChangeType(record.Key.Value, typeof(TKey));
+                // get entry info
+                object key = editor.ParseKey(record.Key.Value);
+                Type valueType = editor.GetEntryType(key);
 
                 // apply string
-                if (typeof(TValue) == typeof(string))
+                if (valueType == typeof(string))
                 {
                     if (record.Value?.Value == null)
-                        removeEntry(key);
+                        editor.RemoveEntry(key);
                     else if (record.Value.Value is JValue field)
-                        setEntry(key, field.Value<TValue>());
+                        editor.SetEntry(key, field);
                     else
                         this.Monitor.Log($"{errorPrefix}: this asset has string values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                 }
@@ -406,23 +299,19 @@ namespace ContentPatcher.Framework.Patches
                 else
                 {
                     if (record.Value?.Value == null)
-                        removeEntry(key);
+                        editor.RemoveEntry(key);
                     else if (record.Value.Value is JObject field)
-                        setEntry(key, field.ToObject<TValue>());
+                        editor.SetEntry(key, field);
                     else
-                        this.Monitor.Log($"{errorPrefix}: this asset has {typeof(TValue)} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
+                        this.Monitor.Log($"{errorPrefix}: this asset has {valueType} values (but {record.Value.Value.Type} values were provided).", LogLevel.Warn);
                 }
             }
         }
 
         /// <summary>Apply field overwrites to the data asset.</summary>
-        /// <typeparam name="TKey">The data key type.</typeparam>
-        /// <typeparam name="TValue">The data value type.</typeparam>
-        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
-        /// <param name="getEntry">Get an entry from the collection.</param>
-        /// <param name="setEntry">Add or replace an entry in the collection.</param>
+        /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
-        private void ApplyFields<TKey, TValue>(Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey, TValue> setEntry, char fieldDelimiter)
+        private void ApplyFields(IKeyValueEditor editor, char fieldDelimiter)
         {
             if (this.Fields == null)
                 return;
@@ -431,18 +320,21 @@ namespace ContentPatcher.Framework.Patches
             {
                 string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
 
-                // get key
-                TKey key = (TKey)Convert.ChangeType(recordGroup.Key, typeof(TKey));
-                if (!hasEntry(key))
+                // get entry info
+                object key = editor.ParseKey(recordGroup.Key);
+                Type valueType = editor.GetEntryType(key);
+
+                // skip if doesn't exist
+                if (!editor.HasEntry(key))
                 {
                     this.Monitor.Log($"{errorPrefix}: there's no record matching key '{key}' under {nameof(PatchConfig.Fields)}.", LogLevel.Warn);
                     continue;
                 }
 
                 // apply string
-                if (typeof(TValue) == typeof(string))
+                if (valueType == typeof(string))
                 {
-                    string[] actualFields = ((string)(object)getEntry(key)).Split(fieldDelimiter);
+                    string[] actualFields = ((string)editor.GetEntry(key)).Split(fieldDelimiter);
                     foreach (EditDataPatchField field in recordGroup)
                     {
                         if (!int.TryParse(field.FieldKey.Value, out int index))
@@ -459,7 +351,7 @@ namespace ContentPatcher.Framework.Patches
                         actualFields[index] = field.Value.Value.Value<string>();
                     }
 
-                    setEntry(key, (TValue)(object)string.Join(fieldDelimiter.ToString(), actualFields));
+                    editor.SetEntry(key, string.Join(fieldDelimiter.ToString(), actualFields));
                 }
 
                 // apply object
@@ -469,179 +361,167 @@ namespace ContentPatcher.Framework.Patches
                     foreach (EditDataPatchField field in recordGroup)
                         obj[field.FieldKey.Value] = field.Value.Value;
                     using JsonReader reader = obj.CreateReader();
-                    this.Serializer.Value.Populate(reader, getEntry(key));
+                    this.Serializer.Value.Populate(reader, editor.GetEntry(key));
                 }
             }
         }
 
         /// <summary>Apply text operations to the data asset.</summary>
-        /// <typeparam name="TKey">The data key type.</typeparam>
-        /// <typeparam name="TValue">The data value type.</typeparam>
-        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
-        /// <param name="getEntry">Get an entry from the collection.</param>
-        /// <param name="setEntry">Add or replace an entry in the collection.</param>
+        /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
-        private void ApplyTextOperations<TKey, TValue>(Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey, TValue> setEntry, char fieldDelimiter)
+        private void ApplyTextOperations(IKeyValueEditor editor, char fieldDelimiter)
         {
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
-                if (!this.TryApplyTextOperation(this.TextOperations[i], hasEntry, getEntry, setEntry, fieldDelimiter, out string error))
+                if (!this.TryApplyTextOperation(this.TextOperations[i], editor, fieldDelimiter, out string error))
                     this.Monitor.Log($"Can't data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
             }
         }
 
         /// <summary>Apply entry moves to the data asset.</summary>
-        /// <typeparam name="TValue">The data value type.</typeparam>
-        /// <param name="data">The list being reordered.</param>
-        /// <param name="getEntry">Get an entry from the collection.</param>
-        private void ApplyMoveEntries<TValue>(IList<TValue> data, Func<string, TValue> getEntry)
+        /// <param name="editor">The asset editor to apply.</param>
+        private void ApplyMoveEntries(IKeyValueEditor editor)
         {
+            if (!this.MoveRecords.Any())
+                return;
+
+            if (!editor.CanMoveEntries)
+            {
+                this.Monitor.LogOnce($"Can't move records for \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)}: target asset '{this.TargetAsset}' isn't an ordered list.", LogLevel.Warn);
+                return;
+            }
+
             foreach (EditDataPatchMoveRecord moveRecord in this.MoveRecords)
             {
                 if (!moveRecord.IsReady)
                     continue;
+
+                object key = editor.ParseKey(moveRecord.ID.Value);
                 string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID}\"";
 
-                // get entry
-                TValue entry = getEntry(moveRecord.ID.Value);
-                if (entry == null)
-                {
-                    this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.", LogLevel.Warn);
-                    continue;
-                }
-                int fromIndex = data.IndexOf(entry);
-
-                // move to position
-                if (moveRecord.ToPosition == MoveEntryPosition.Top)
-                {
-                    data.RemoveAt(fromIndex);
-                    data.Insert(0, entry);
-                }
-                else if (moveRecord.ToPosition == MoveEntryPosition.Bottom)
-                {
-                    data.RemoveAt(fromIndex);
-                    data.Add(entry);
-                }
+                // move record
+                MoveResult result = MoveResult.Success;
+                if (moveRecord.ToPosition is MoveEntryPosition.Top or MoveEntryPosition.Bottom)
+                    result = editor.MoveEntry(key, moveRecord.ToPosition);
                 else if (moveRecord.AfterID.IsMeaningful() || moveRecord.BeforeID.IsMeaningful())
                 {
                     // get config
-                    bool isAfterID = moveRecord.AfterID.IsMeaningful();
-                    string anchorID = isAfterID ? moveRecord.AfterID.Value : moveRecord.BeforeID.Value;
-                    errorLabel += $" {(isAfterID ? nameof(PatchMoveEntryConfig.AfterID) : nameof(PatchMoveEntryConfig.BeforeID))} \"{anchorID}\"";
+                    bool isAfter = moveRecord.AfterID.IsMeaningful();
+                    string rawAnchorKey = isAfter ? moveRecord.AfterID.Value : moveRecord.BeforeID.Value;
+                    object anchorKey = editor.ParseKey(rawAnchorKey);
 
-                    // get anchor entry
-                    TValue anchorEntry = getEntry(anchorID);
-                    if (anchorEntry == null)
-                    {
-                        this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.", LogLevel.Warn);
-                        continue;
-                    }
-                    if (object.ReferenceEquals(entry, anchorEntry))
-                    {
-                        this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.", LogLevel.Warn);
-                        continue;
-                    }
+                    // move entry
+                    errorLabel += $" {(isAfter ? nameof(PatchMoveEntryConfig.AfterID) : nameof(PatchMoveEntryConfig.BeforeID))} \"{rawAnchorKey}\"";
+                    result = editor.MoveEntry(key, anchorKey, isAfter);
+                }
 
-                    // move record
-                    data.RemoveAt(fromIndex);
-                    int newIndex = data.IndexOf(anchorEntry);
-                    data.Insert(isAfterID ? newIndex + 1 : newIndex, entry);
+                // log error
+                if (result != MoveResult.Success)
+                {
+                    switch (result)
+                    {
+                        case MoveResult.TargetNotFound:
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with that ID exists.");
+                            break;
+
+                        case MoveResult.AnchorNotFound:
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: no entry with the relative ID exists.");
+                            break;
+
+                        case MoveResult.AnchorIsMain:
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: can't move entry relative to itself.");
+                            break;
+
+                        default:
+                            this.Monitor.LogOnce($"Can't move {errorLabel}: an unknown error occurred.");
+                            break;
+                    }
                 }
             }
         }
 
         /// <summary>Try to apply a text operation.</summary>
-        /// <typeparam name="TKey">The dictionary key type.</typeparam>
-        /// <typeparam name="TValue">The dictionary value type.</typeparam>
         /// <param name="operation">The text operation to apply.</param>
-        /// <param name="hasEntry">Get whether the collection has the given entry.</param>
-        /// <param name="getEntry">Get an entry from the collection.</param>
-        /// <param name="setEntry">Add or replace an entry in the collection.</param>
+        /// <param name="editor">The asset editor to apply.</param>
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
         /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
         /// <returns>Returns whether applying the operation succeeded.</returns>
-        private bool TryApplyTextOperation<TKey, TValue>(TextOperation operation, Func<TKey, bool> hasEntry, Func<TKey, TValue> getEntry, Action<TKey, TValue> setEntry, char fieldDelimiter, out string error)
+        private bool TryApplyTextOperation(TextOperation operation, IKeyValueEditor editor, char fieldDelimiter, out string error)
         {
             var targetRoot = operation.GetTargetRoot();
             switch (targetRoot)
             {
                 case TextOperationTargetRoot.Entries:
                     {
-                        // validate
-                        if (typeof(TValue) != typeof(string))
-                            return this.Fail($"an '{TextOperationTargetRoot.Entries}' text operation can only be used for string entries. For data model entries, use '{TextOperationTargetRoot.Fields}' instead.", out error);
+                        // validate format
                         if (operation.Target.Length != 2)
                             return this.Fail($"an '{TextOperationTargetRoot.Entries}' path must have exactly one other segment: the entry key.", out error);
 
-                        // parse path
-                        if (!this.TryParseEntryKey(operation.Target[1].Value, out TKey key, out error))
-                            return false;
-
-                        // get value
-                        string value = hasEntry(key)
-                            ? (string)(object)getEntry(key)
-                            : null;
+                        // get entry
+                        object key = editor.ParseKey(operation.Target[1].Value);
+                        Type entryType = editor.GetEntryType(key);
+                        if (entryType != typeof(string))
+                            return this.Fail($"can't apply text operation to the '{operation.Target[1].Value}' entry because it's not a string value.", out error);
+                        string value = (string)editor.GetEntry(key);
 
                         // set value
-                        setEntry(key, (TValue)(object)operation.Apply(value));
+                        editor.SetEntry(key, operation.Apply(value));
                     }
                     break;
 
                 case TextOperationTargetRoot.Fields:
                     {
-                        // validate
+                        // validate format
                         if (operation.Target.Length != 3)
                             return this.Fail($"a '{TextOperationTargetRoot.Fields}' path must have exactly two other segments: one for the entry key, and one for the field key or index.", out error);
 
-                        // parse path
-                        if (!this.TryParseEntryKey(operation.Target[1].Value, out TKey entryKey, out error))
-                            return false;
-                        string fieldKey = operation.Target[2].Value;
-
-                        // get entry
-                        TValue entry;
+                        // get entry editor
+                        string rawEntryKey = operation.Target[1].Value;
+                        string rawFieldKey = operation.Target[2].Value;
+                        IKeyValueEditor entryEditor;
                         {
-                            bool entryExists = hasEntry(entryKey);
-                            entry = entryExists
-                                ? getEntry(entryKey)
-                                : default;
+                            object key = editor.ParseKey(rawEntryKey);
+                            Type entryType = editor.GetEntryType(key);
+                            object entry = editor.GetEntry(key);
+                            if (entry is null)
+                                return this.Fail($"record '{rawEntryKey}' has no value, so field '{rawFieldKey}' can't be modified using text operations.", out error);
 
-                            if (!entryExists || entry is null)
-                                return this.Fail($"record '{entryKey}' has no value, so field '{fieldKey}' can't be modified using text operations.", out error);
+                            // get entry editor
+                            entryEditor = this.EditorFactory.GetEditorFor(entry);
+                            if (entryEditor is null)
+                                return this.Fail($"record '{rawEntryKey}' > field '{rawFieldKey}' can't be modified using text operations because its type ({entryType.FullName}) isn't supported.", out error);
                         }
 
+                        // get field
+                        object fieldKey = entryEditor.ParseKey(rawFieldKey);
+                        Type fieldType = entryEditor.GetEntryType(fieldKey);
+                        object fieldValue = entryEditor.GetEntry(fieldKey);
+
                         // edit field value
-                        if (typeof(TValue) == typeof(string))
+                        if (fieldType == typeof(string))
                         {
                             // read fields
-                            string[] actualFields = ((string)(object)entry).Split(fieldDelimiter);
+                            string[] actualFields = ((string)fieldValue).Split(fieldDelimiter);
 
                             // validate key
-                            if (!int.TryParse(fieldKey, out int fieldIndex))
-                                return this.Fail($"record '{entryKey}' needs a field index between 0 and {actualFields.Length - 1} (received \"{fieldKey}\" instead)).", out error);
+                            if (!int.TryParse(rawFieldKey, out int fieldIndex))
+                                return this.Fail($"record '{rawEntryKey}' needs a field index between 0 and {actualFields.Length - 1} (received \"{rawFieldKey}\" instead)).", out error);
                             if (fieldIndex < 0 || fieldIndex > actualFields.Length - 1)
-                                return this.Fail($"record '{entryKey}' has no field with index {fieldIndex} (must be 0 to {actualFields.Length - 1}).", out error);
+                                return this.Fail($"record '{rawEntryKey}' has no field with index {fieldIndex} (must be 0 to {actualFields.Length - 1}).", out error);
 
                             // apply change
                             actualFields[fieldIndex] = operation.Apply(actualFields[fieldIndex]);
-                            setEntry(entryKey, (TValue)(object)string.Join(fieldDelimiter.ToString(), actualFields));
+                            entryEditor.SetEntry(fieldKey, string.Join(fieldDelimiter.ToString(), actualFields));
                         }
                         else
                         {
-                            // get field
-                            JObject entryToken = (JObject)(object)entry;
-                            JProperty field = entryToken.Property(fieldKey);
-
                             // apply change
-                            if (field == null)
-                                entryToken[fieldKey] = operation.Apply("");
+                            if (fieldValue is null)
+                                entryEditor.SetEntry(fieldKey, operation.Apply(""));
+                            else if (fieldValue is string fieldStr)
+                                entryEditor.SetEntry(fieldKey, operation.Apply(fieldStr));
                             else
-                            {
-                                if (field.Value.Type != JTokenType.String)
-                                    return this.Fail($"field '{entryKey}' > '{fieldKey}' has type '{entryToken.Type}', but you can only apply text operations to a text field.", out error);
-
-                                field.Value = operation.Apply(field.Value<string>());
-                            }
+                                return this.Fail($"field '{rawEntryKey}' > '{rawFieldKey}' has type '{fieldType}', but you can only apply text operations to a text field.", out error);
                         }
                     }
                     break;
@@ -657,47 +537,6 @@ namespace ContentPatcher.Framework.Patches
 
             error = null;
             return true;
-        }
-
-        /// <summary>Try to parse a raw string into an entry key.</summary>
-        /// <typeparam name="TKey">The dictionary key type.</typeparam>
-        /// <param name="rawKey">The string key to parse.</param>
-        /// <param name="parsed">The parsed key.</param>
-        /// <param name="error">The error indicating why the <paramref name="rawKey"/> couldn't be parsed, if applicable.</param>
-        /// <returns>Returns whether parsing succeeded.</returns>
-        bool TryParseEntryKey<TKey>(string rawKey, out TKey parsed, out string error)
-        {
-            parsed = default;
-            error = null;
-
-            // to string
-            if (typeof(TKey) == typeof(string))
-            {
-                parsed = (TKey)(object)rawKey;
-                return true;
-            }
-
-            // to int
-            if (typeof(TKey) == typeof(int))
-            {
-                if (!int.TryParse(rawKey, out int intKey))
-                    return this.Fail($"can't use value '{rawKey}' as an entry key because this asset uses numeric keys.", out error);
-
-                parsed = (TKey)(object)intKey;
-                return true;
-            }
-
-            // invalid
-            parsed = default;
-            return this.Fail($"unsupported asset key type '{typeof(TKey).FullName}'.", out error);
-        }
-
-        /// <summary>Get the key for a list asset entry.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="entity">The entity whose ID to fetch.</param>
-        private string GetKey<TValue>(TValue entity)
-        {
-            return InternalConstants.GetListAssetKey(entity, this.Reflection);
         }
 
         /// <summary>Get the delimiter used in string entries for an asset.</summary>
