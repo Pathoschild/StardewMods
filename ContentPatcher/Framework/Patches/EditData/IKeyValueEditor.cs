@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <summary>Whether entries in the data can be reordered.</summary>
         public bool CanMoveEntries { get; }
 
+        /// <summary>Whether new entries can be added to the data model.</summary>
+        public bool CanAddEntries { get; }
+
 
         /*********
         ** Public methods

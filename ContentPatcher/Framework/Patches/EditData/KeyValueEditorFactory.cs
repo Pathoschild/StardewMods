@@ -80,6 +80,10 @@ namespace ContentPatcher.Framework.Patches.EditData
                     .Invoke(this, new[] { data });
             }
 
+            // data model
+            if (!type.IsValueType && !type.IsGenericType && type != typeof(string))
+                return new ModelKeyValueEditor(data);
+
             // unknown type
             return null;
         }

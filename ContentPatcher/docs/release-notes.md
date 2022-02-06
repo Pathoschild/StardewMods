@@ -10,6 +10,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Added support for editing arbitrary data structures loaded by mods (i.e. non-list/dictionary assets).
 * Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
 * The deprecated `Enabled` patch field is now obsolete.

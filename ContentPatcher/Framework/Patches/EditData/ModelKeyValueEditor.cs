@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Newtonsoft.Json.Linq;
+using Sickhead.Engine.Util;
+
+namespace ContentPatcher.Framework.Patches.EditData
+{
+    /// <summary>Encapsulates applying key/value edits to a data model.</summary>
+    internal class ModelKeyValueEditor : BaseDataEditor
+    {
+        /*********
+        ** Fields
+        *********/
+        /// <summary>The underlying data.</summary>
+        private readonly object Data;
+
+        /// <summary>Maps entry names to the associated field or property.</summary>
+        private readonly Lazy<IDictionary<string, MemberInfo>> FieldMap;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="data">The underlying data.</param>
+        public ModelKeyValueEditor(object data)
+        {
+            this.CanAddEntries = false;
+
+            this.Data = data;
+            this.FieldMap = new(this.GetFieldMap);
+        }
+
+        /// <inheritdoc />
+        public override object ParseKey(string key)
+        {
+            return key;
+        }
+
+        /// <inheritdoc />
+        public override bool HasEntry(object key)
+        {
+            string name = (string)key;
+
+            return this.FieldMap.Value.ContainsKey(name);
+        }
+
+        /// <inheritdoc />
+        public override object GetEntry(object key)
+        {
+            string name = (string)key;
+
+            return this
+                .GetMember(name)
+                ?.GetValue(this.Data);
+        }
+
+        /// <inheritdoc />
+        public override void RemoveEntry(object key)
+        {
+            this.SetEntry(key, null);
+        }
+
+        /// <inheritdoc />
+        public override Type GetEntryType(object key)
+        {
+            string name = (string)key;
+
+            return this
+                .GetMember(name)
+                ?.GetDataType();
+        }
+
+        /// <inheritdoc />
+        public override void SetEntry(object key, JToken value)
+        {
+            string name = (string)key;
+
+            MemberInfo member = this.GetMember(name);
+            if (member != null)
+                member.SetValue(this.Data, value.ToObject(member.GetDataType()));
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get a map of field/property names to class members.</summary>
+        private IDictionary<string, MemberInfo> GetFieldMap()
+        {
+            Type type = this.Data.GetType();
+            var map = new Dictionary<string, MemberInfo>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (FieldInfo field in type.GetFields())
+            {
+                if (field.IsPrivate || field.IsFamily)
+                    continue;
+
+                map[field.Name] = field;
+            }
+
+            foreach (PropertyInfo property in type.GetProperties())
+            {
+                if (!property.CanRead || !property.CanWrite)
+                    continue;
+
+                map[property.Name] = property;
+            }
+
+            return map;
+        }
+
+        /// <summary>Get the member for the given field or property name, if any.</summary>
+        /// <param name="name">The field or property name.</param>
+        private MemberInfo GetMember(string name)
+        {
+            return this.FieldMap.Value.TryGetValue(name, out MemberInfo member)
+                ? member
+                : default;
+        }
+    }
+}

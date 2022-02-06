@@ -12,6 +12,9 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <inheritdoc />
         public bool CanMoveEntries { get; protected set; }
 
+        /// <inheritdoc />
+        public bool CanAddEntries { get; protected set; } = true;
+
 
         /*********
         ** Public methods

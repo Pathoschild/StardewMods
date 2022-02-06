@@ -284,8 +284,12 @@ namespace ContentPatcher.Framework.Patches
                 object key = editor.ParseKey(record.Key.Value);
                 Type valueType = editor.GetEntryType(key);
 
+                // validate
+                if (!editor.CanAddEntries && !editor.HasEntry(key))
+                    this.Monitor.Log($"{errorPrefix}: this asset is a data model, which doesn't allow adding new entries. The entry '{record.Key.Value}' isn't defined in the model.", LogLevel.Warn);
+
                 // apply string
-                if (valueType == typeof(string))
+                else if (valueType == typeof(string))
                 {
                     if (record.Value?.Value == null)
                         editor.RemoveEntry(key);
