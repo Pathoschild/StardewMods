@@ -4,7 +4,6 @@ using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 {
@@ -143,29 +142,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             // This gets the original item name for items which could be edited in previous Chests
             // Anywhere versions. This deliberately does *not* support new or custom containers
             // which didn't exist at the time.
-            if (item is Object obj && obj.bigCraftable.Value)
+            return item.QualifiedItemId switch
             {
-                return item.ParentSheetIndex switch
-                {
-                    130 => "Chest",
-                    216 => "Mini-Fridge",
-                    _ => null
-                };
-            }
-
-            if (item is Furniture furniture)
-            {
-                return furniture.ParentSheetIndex switch
-                {
-                    704 => "Oak Dresser",
-                    709 => "Walnut Dresser",
-                    714 => "Birch Dresser",
-                    719 => "Mahogany Dresser",
-                    _ => null
-                };
-            }
-
-            return null;
+                "(BC)130" => "Chest",
+                "(BC)216" => "Mini-Fridge",
+                "(F)704" => "Oak Dresser",
+                "(F)709" => "Walnut Dresser",
+                "(F)714" => "Birch Dresser",
+                "(F)719" => "Mahogany Dresser",
+                _ => null
+            };
         }
     }
 }

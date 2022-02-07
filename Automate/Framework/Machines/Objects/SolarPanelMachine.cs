@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             this.GenericReset(item);
 
-            this.Machine.heldObject.Value = new Object(Vector2.Zero, 787, null, canBeSetDown: false, canBeGrabbed: true, isHoedirt: false, isSpawnedObject: false);
+            this.Machine.heldObject.Value = ItemRegistry.Create<SObject>("(O)787");
             this.Machine.MinutesUntilReady = 16800;
         }
     }

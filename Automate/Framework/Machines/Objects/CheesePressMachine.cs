@@ -16,33 +16,33 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // goat milk => goat cheese
             new Recipe(
-                input: 436,
+                input: "(O)436",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 426, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)426"),
                 minutes: 200
             ),
 
             // large goat milk => gold-quality goat cheese
             new Recipe(
-                input: 438,
+                input: "(O)438",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 426, null, false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => ItemRegistry.Create("(O)426", quality: SObject.highQuality),
                 minutes: 200
             ),
 
             // milk => cheese
             new Recipe(
-                input: 184,
+                input: "(O)184",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 424, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)424"),
                 minutes: 200
             ),
 
             // large milk => gold-quality cheese
             new Recipe(
-                input: 186,
+                input: "(O)186",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 424, "Cheese (=)", false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => ItemRegistry.Create("(O)424", quality: SObject.highQuality),
                 minutes: 200
             )
         };

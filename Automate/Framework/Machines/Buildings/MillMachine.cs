@@ -22,8 +22,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>The mill's output chest.</summary>
         private Chest Output => this.Machine.output.Value;
 
-        /// <summary>The maximum input stack size to allow per item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
-        private readonly IDictionary<int, int> MaxInputStackSize;
+        /// <summary>The maximum input stack size to allow per qualified item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
+        private readonly IDictionary<string, int> MaxInputStackSize;
 
 
         /*********
@@ -35,9 +35,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         public MillMachine(Mill mill, GameLocation location)
             : base(mill, location, BaseMachine.GetTileAreaFor(mill))
         {
-            this.MaxInputStackSize = new Dictionary<int, int>
+            this.MaxInputStackSize = new Dictionary<string, int>
             {
-                [284] = new SObject(284, 1).maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
+                ["(O)284"] = ItemRegistry.Create("(O)284").maximumStackSize() / 3 // beet => 3 sugar (reduce stack to avoid overfilling output)
             };
         }
 
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
             // fill input with wheat (262), beets (284), and rice (271)
             bool anyPulled = false;
-            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Type == ItemType.Object && i.Sample.ParentSheetIndex is 262 or 284 or 271))
+            foreach (ITrackedStack stack in input.GetItems().Where(i => i.Sample.QualifiedItemId is "(O)262" or "(O)284" or "(O)271"))
             {
                 // add item
                 bool anyAdded = this.TryAddInput(stack);
@@ -171,7 +171,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
             if (item == null)
                 return 0;
 
-            return this.MaxInputStackSize.TryGetValue(item.ParentSheetIndex, out int max)
+            return this.MaxInputStackSize.TryGetValue(item.QualifiedItemId, out int max)
                 ? max
                 : item.maximumStackSize();
         }

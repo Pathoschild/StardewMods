@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         /// <param name="__result">The return value to use for the method.</param>
         /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer? who, double baitPotency, Vector2 bobberTile, ref SObject __result)
+        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, string bait, int waterDepth, Farmer? who, double baitPotency, Vector2 bobberTile, ref SObject __result)
         {
             if (FarmPatcher.IsInPatch || !FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
                 return true;
@@ -150,14 +150,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
             {
                 if (!__instance.objects.ContainsKey(campfireTile))
                 {
-                    __instance.objects.Add(campfireTile, new Torch(campfireTile, 146, true)
+                    __instance.objects.Add(campfireTile, new Torch("146", true)
                     {
                         IsOn = false,
                         Fragility = SObject.fragility_Indestructable
                     });
                 }
             }
-            else if (__instance.objects.TryGetValue(campfireTile, out SObject obj) && obj is Torch { ParentSheetIndex: 146 })
+            else if (__instance.objects.TryGetValue(campfireTile, out SObject obj) && obj is Torch { QualifiedItemId: "(O)146" })
                 __instance.objects.Remove(campfireTile);
         }
 

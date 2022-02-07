@@ -201,8 +201,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 // the game doesn't reliably track heavy tappers, so we need to check manually
                 || (
                     location.objects.TryGetValue(tile, out SObject obj)
-                    && obj.bigCraftable.Value
-                    && obj.ParentSheetIndex is 105 or 264
+                    && obj.IsTapper()
                 );
         }
     }

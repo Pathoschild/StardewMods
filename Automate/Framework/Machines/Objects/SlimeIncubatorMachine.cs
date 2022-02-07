@@ -28,14 +28,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             int minutesUntilReady = this.GetOwner().professions.Contains(Farmer.butcher) ? 2000 : 4000; // coopmaster
             this.Recipes = new IRecipe[] {
                 new Recipe(
-                    input: p => p.ParentSheetIndex is
-                        413 // blue slime egg
-                        or 437 // red slime egg
-                        or 439 // purple slime egg
-                        or 680 // green slime egg
-                        or 857, // tiger slime egg
+                    input: p => p.QualifiedItemId is
+                        "(O)413" // blue slime egg
+                        or "(O)437" // red slime egg
+                        or "(O)439" // purple slime egg
+                        or "(O)680" // green slime egg
+                        or "(O)857", // tiger slime egg
                     inputCount: 1,
-                    output: input => new SObject(input.ParentSheetIndex, 1),
+                    output: input => ItemRegistry.Create(input.QualifiedItemId),
                     minutes: _ => minutesUntilReady
                 )
             };

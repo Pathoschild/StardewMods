@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
@@ -71,10 +72,12 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 int indexInAnimation = Game1.player.FarmerSprite.currentAnimationIndex;
                 if (indexInAnimation <= 1)
                     this.ItemAnimations.Clear();
-                if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.ParentSheetIndex != Object.stardrop)
+                if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.QualifiedItemId != Object.stardropQID)
                 {
-                    Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16);
-                    TemporaryAnimatedSprite? tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
+                    var data = ItemRegistry.GetDataOrErrorItem(Game1.player.itemToEat.QualifiedItemId);
+                    Texture2D texture = data.GetTexture();
+                    Rectangle sourceRect = data.GetSourceRect();
+                    TemporaryAnimatedSprite? tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == texture && p.sourceRect == sourceRect);
                     if (tempAnimation != null)
                         this.ItemAnimations.Add(tempAnimation);
                 }

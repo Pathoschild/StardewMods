@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using StardewModdingAPI.Utilities;
 using StardewValley;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common.DataParsers
 {
@@ -96,7 +95,7 @@ namespace Pathoschild.Stardew.Common.DataParsers
             if (this.Crop == null)
                 throw new InvalidOperationException("Can't get a sample drop because there's no crop.");
 
-            return new SObject(this.Crop.indexOfHarvest.Value, 1);
+            return ItemRegistry.Create(this.Crop.indexOfHarvest.Value);
         }
     }
 }

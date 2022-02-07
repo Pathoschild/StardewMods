@@ -1,6 +1,6 @@
-using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.GameData.Objects;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 return null;
 
             // get flower data
-            int flowerId = -1;
+            string? flowerId = null;
             string? flowerName = null;
             int addedPrice = 0;
             {
@@ -44,14 +44,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 if (flower != null)
                 {
                     flowerId = flower.indexOfHarvest.Value;
-                    string[] fields = Game1.objectInformation[flowerId].Split('/');
-                    flowerName = fields[0];
-                    addedPrice = Convert.ToInt32(fields[1]) * 2;
+                    ObjectData data = Game1.objectData[flowerId];
+                    flowerName = data.Name;
+                    addedPrice = data.Price * 2;
                 }
             }
 
             // build object
-            SObject result = new(output.ParentSheetIndex, output.Stack)
+            SObject result = new(output.QualifiedItemId, output.Stack)
             {
                 name = $"{flowerName ?? "Wild"} Honey",
                 Price = output.Price + addedPrice,
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             SObject machine = this.Machine;
 
-            machine.heldObject.Value = new SObject(Vector2.Zero, 340, null, false, true, false, false);
+            machine.heldObject.Value = ItemRegistry.Create<SObject>("(O)340");
             machine.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay, 4);
             machine.readyForHarvest.Value = false;
             machine.showNextIndex.Value = false;

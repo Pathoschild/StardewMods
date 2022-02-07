@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using StardewValley;
 using StardewValley.Objects;
 using SObject = StardewValley.Object;
@@ -180,7 +181,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <param name="item">The item to track.</param>
         private ITrackedStack? GetTrackedItem(Item? item)
         {
-            if (item == null || item.Stack <= 0)
+            if (item is not { Stack: > 0 })
                 return null;
 
             try
@@ -193,8 +194,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             }
             catch (Exception ex)
             {
-                string error = $"Failed to retrieve item #{item.ParentSheetIndex} ('{item.Name}'";
-                if (item is SObject obj && obj.preservedParentSheetIndex.Value >= 0)
+                string error = $"Failed to retrieve item {item.QualifiedItemId} ('{item.Name}'";
+                if (item is SObject obj && CommonHelper.IsItemId(obj.preservedParentSheetIndex.Value))
                     error += $", preserved item #{obj.preservedParentSheetIndex.Value}";
                 error += $") from container '{this.Chest.Name}' at {this.Location.Name} (tile: {this.TileArea.X}, {this.TileArea.Y}).";
 

@@ -93,12 +93,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 return;
 
             // use vanilla logic
-            texture = Game1.cropSpriteSheet;
+            texture = target.DrawnCropTexture;
             sourceRect = this.Reflection.GetField<Rectangle>(target, "sourceRect").GetValue();
             if (target.forageCrop.Value)
             {
-                texture = Game1.mouseCursors;
-                if (target.whichForageCrop.Value == Crop.forageCrop_ginger)
+                if (target.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
                     sourceRect = new Rectangle(128 + (int)((Game1.currentGameTime.TotalGameTime.TotalMilliseconds + (this.Tile.X * 111f + this.Tile.Y * 77f)) % 800.0 / 200.0) * 16, 128, 16, 16);
             }
         }

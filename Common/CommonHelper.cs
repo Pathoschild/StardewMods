@@ -5,15 +5,11 @@ using System.Linq;
 using System.Security.Cryptography;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Objects;
-using StardewValley.Tools;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -87,47 +83,17 @@ namespace Pathoschild.Stardew.Common
             return new Vector2((int)(position.X / Game1.tileSize), (int)(position.Y / Game1.tileSize)); // note: player.getTileLocationPoint() isn't reliable in many cases, e.g. right after a warp when riding a horse
         }
 
-        /// <summary>Get the item type for an item to disambiguate IDs.</summary>
-        /// <param name="item">The item to check.</param>
-        public static ItemType GetItemType(this Item? item)
+        /// <summary>Get whether an item ID is non-empty, ignoring placeholder values like "-1".</summary>
+        /// <param name="itemId">The unqualified item ID to check.</param>
+        /// <param name="allowZero">Whether to allow zero as a valid ID.</param>
+        public static bool IsItemId(string itemId, bool allowZero = true)
         {
-            switch (item)
-            {
-                case Boots:
-                    return ItemType.Boots;
-
-                case Clothing:
-                    return ItemType.Clothing;
-
-                case Furniture:
-                    return ItemType.Furniture;
-
-                case Hat:
-                    return ItemType.Hat;
-
-                case MeleeWeapon:
-                case Slingshot:
-                    return ItemType.Weapon;
-
-                case Ring:
-                    return ItemType.Ring;
-
-                case Tool:
-                    return ItemType.Tool;
-
-                case Wallpaper wallpaper:
-                    return wallpaper.isFloor.Value
-                        ? ItemType.Flooring
-                        : ItemType.Wallpaper;
-
-                case SObject obj:
-                    return obj.bigCraftable.Value
-                        ? ItemType.BigCraftable
-                        : ItemType.Object;
-
-                default:
-                    return ItemType.Unknown;
-            }
+            return
+                !string.IsNullOrWhiteSpace(itemId)
+                && (
+                    !int.TryParse(itemId, out int id)
+                    || id >= (allowZero ? 0 : 1)
+                );
         }
 
         /****

@@ -55,10 +55,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             if (item == null || item.Stack <= 0)
                 return false;
 
-            switch (item.ParentSheetIndex)
+            switch (item.QualifiedItemId)
             {
                 // tree fertilizer
-                case 805:
+                case "(O)805":
                     if (tileFeature is Tree tree && !tree.fertilized.Value && tree.growthStage.Value < Tree.treeStage && tree.fertilize(location))
                     {
                         this.ConsumeItem(player, item);
@@ -69,7 +69,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 // crop fertilizer
                 default:
                     // get unfertilized dirt
-                    if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out _) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
+                    if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out _) || dirt.HasFertilizer())
                         return false;
 
                     // ignore if there's a giant crop, meteorite, etc covering the tile
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                         return false;
 
                     // apply fertilizer
-                    bool fertilized = dirt.plant(item.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, isFertilizer: true, location);
+                    bool fertilized = dirt.plant(item.ItemId, (int)tile.X, (int)tile.Y, player, isFertilizer: true, location);
                     if (fertilized)
                         this.ConsumeItem(player, item);
                     return fertilized;

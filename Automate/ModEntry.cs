@@ -94,7 +94,6 @@ namespace Pathoschild.Stardew.Automate
                     config: () => this.Config,
                     monitor: this.Monitor,
                     reflection: helper.Reflection,
-                    data: this.Data,
                     isBetterJunimosLoaded: helper.ModRegistry.IsLoaded("hawkfalcon.BetterJunimos")
                 ),
                 monitor: this.Monitor

@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile)
-            : base(gameHelper, I18n.FruitTree_Name(fruitName: gameHelper.GetObjectBySpriteIndex(tree.indexOfFruit.Value).DisplayName), null, I18n.Type_FruitTree())
+            : base(gameHelper, I18n.FruitTree_Name(fruitName: gameHelper.GetObjectById(tree.indexOfFruit.Value).DisplayName), null, I18n.Type_FruitTree())
         {
             this.Target = tree;
             this.Tile = tile;

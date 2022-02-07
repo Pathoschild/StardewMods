@@ -37,12 +37,9 @@ so no programming experience is needed.
 You can make a wide range of changes to the game:
 
 * change images, dialogue, maps, etc;
-* add custom locations;
-* and much more.
-<!-- in Stardew Valley 1.6:
 * add custom items, fruit trees, locations, etc;
 * change shop inventory;
--->
+* and much more.
 
 You can also make very dynamic changes to the game. For example, raise the price of coffee on
 winter weekend evenings when it's snowing unless the player married Abigail.

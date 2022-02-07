@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="label">A short field label.</param>
         /// <param name="fishID">The fish ID.</param>
-        public FishSpawnRulesField(GameHelper gameHelper, string label, int fishID)
+        public FishSpawnRulesField(GameHelper gameHelper, string label, string fishID)
             : base(label)
         {
             this.Checkboxes = this.GetConditions(gameHelper, fishID).ToArray();
@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the formatted checkbox conditions to display.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="fishID">The fish ID.</param>
-        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, int fishID)
+        private IEnumerable<KeyValuePair<IFormattedText[], bool>> GetConditions(GameHelper gameHelper, string fishID)
         {
             // get spawn data
             FishSpawnData? spawnRules = gameHelper.GetFishSpawnRules(fishID);

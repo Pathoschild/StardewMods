@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using Netcode;
-using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Items.ItemData;
 using StardewValley;
 using StardewValley.Quests;
 using SObject = StardewValley.Object;
@@ -66,25 +64,28 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="item">The item to check.</param>
         private bool NeedsItem(Quest quest, Item? item)
         {
+            if (item is null)
+                return false;
+
             switch (quest)
             {
                 case CraftingQuest required:
-                    return this.IsMatch(item, required.indexToCraft.Value, ItemType.BigCraftable);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 case ItemDeliveryQuest required:
-                    return this.IsMatch(item, required.item.Value);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 case ItemHarvestQuest required:
-                    return this.IsMatch(item, required.itemIndex.Value);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 case LostItemQuest required:
-                    return this.IsMatch(item, required.itemIndex.Value);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 case ResourceCollectionQuest required:
-                    return this.IsMatch(item, required.resource.Value);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 case SecretLostItemQuest required:
-                    return this.IsMatch(item, required.itemIndex.Value);
+                    return required.ItemId.Value == item.QualifiedItemId;
 
                 default:
                     return false;
@@ -132,17 +133,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         {
             QuestModel.DonateObjective.acceptableContextTagSets = contextTags;
             return QuestModel.DonateObjective.IsValidItem(item);
-        }
-
-        /// <summary>Get whether an item matches the expected values.</summary>
-        /// <param name="item">The item to check.</param>
-        /// <param name="id">The expected item ID.</param>
-        /// <param name="type">The expected item type.</param>
-        private bool IsMatch(Item? item, int id, ItemType type = ItemType.Object)
-        {
-            return
-                item?.ParentSheetIndex == id
-                && item.GetItemType() == type;
         }
     }
 }

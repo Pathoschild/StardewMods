@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         {
             foreach (ItemDropData drop in drops)
             {
-                SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                SObject item = this.GameHelper.GetObjectById(drop.ItemID);
                 SpriteInfo? sprite = gameHelper.GetSprite(item);
                 yield return Tuple.Create(drop, item, sprite);
             }

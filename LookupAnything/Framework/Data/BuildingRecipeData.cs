@@ -8,5 +8,5 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
     /// <param name="ExceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
     /// <param name="Output">The item created by the recipe.</param>
     /// <param name="OutputCount">The number of items produced by the recipe (or <c>null</c> for the default).</param>
-    internal record BuildingRecipeData(string BuildingKey, Dictionary<int, int> Ingredients, int[]? ExceptIngredients, int Output, int? OutputCount);
+    internal record BuildingRecipeData(string BuildingKey, Dictionary<string, int> Ingredients, string[]? ExceptIngredients, string Output, int? OutputCount);
 }

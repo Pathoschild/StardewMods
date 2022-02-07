@@ -155,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             foreach (FishPondDropData drop in gameHelper.GetFishPondDrops(data))
             {
                 bool isUnlocked = currentPopulation >= drop.MinPopulation;
-                SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                SObject item = this.GameHelper.GetObjectById(drop.ItemID);
                 SpriteInfo? sprite = gameHelper.GetSprite(item);
                 yield return new FishPondDrop(drop, item, sprite, isUnlocked);
             }

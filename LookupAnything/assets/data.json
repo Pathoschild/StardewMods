@@ -49,66 +49,95 @@ You shouldn't change this file unless you know what you're doing.
             /* animal products */
             -5, // eggs
             -6, // milks
-            430, // truffle
-            440, // wool
-            444, // duck feather
-            446, // rabbit's foot
+            "(O)430", // truffle
+            "(O)440", // wool
+            "(O)444", // duck feather
+            "(O)446", // rabbit's foot
 
             /* forage (foods) */
-            16, // wild horseradish
-            18, // daffodil
-            20, // leek
-            22, // dandelion
-            78, // cave carrot
-            88, // coconut
-            90, // cactus fruit
-            257, // morel
-            259, // fiddlehead fern
-            281, // chanterelle
-            283, // holly
-            296, // salmonberry
-            396, // spice berry
-            398, // grape
-            399, // spring onion
-            402, // sweet pea
-            404, // common mushroom
-            406, // wild plum
-            408, // hazelnut
-            410, // blackberry
-            412, // winter root
-            414, // crystal fruit
-            416, // snow yam
-            420, // red mushroom
-            422, // purple mushroom
+            "(O)16", // wild horseradish
+            "(O)18", // daffodil
+            "(O)20", // leek
+            "(O)22", // dandelion
+            "(O)78", // cave carrot
+            "(O)88", // coconut
+            "(O)90", // cactus fruit
+            "(O)257", // morel
+            "(O)259", // fiddlehead fern
+            "(O)281", // chanterelle
+            "(O)283", // holly
+            "(O)296", // salmonberry
+            "(O)396", // spice berry
+            "(O)398", // grape
+            "(O)399", // spring onion
+            "(O)402", // sweet pea
+            "(O)404", // common mushroom
+            "(O)406", // wild plum
+            "(O)408", // hazelnut
+            "(O)410", // blackberry
+            "(O)412", // winter root
+            "(O)414", // crystal fruit
+            "(O)416", // snow yam
+            "(O)420", // red mushroom
+            "(O)422", // purple mushroom
 
             /* forage (beach) */
-            372, // clam
-            392, // nautilus shell
-            393, // coral
-            394, // rainbow shell
-            397, // sea urchin
-            719, // mussel
-            723, // oyster
+            "(O)372", // clam
+            "(O)392", // nautilus shell
+            "(O)393", // coral
+            "(O)394", // rainbow shell
+            "(O)397", // sea urchin
+            "(O)719", // mussel
+            "(O)723", // oyster
 
             /* fruit tree produce */
-            613, // apple
-            634, // apricot
-            635, // orange
-            636, // peach
-            637, // pomegranate
-            638, // cherry
+            "(O)613", // apple
+            "(O)634", // apricot
+            "(O)635", // orange
+            "(O)636", // peach
+            "(O)637", // pomegranate
+            "(O)638", // cherry
 
             /* cask-aged artisanal products */
-            303, // pale ale
-            346, // beer
-            348, // wine
-            424, // cheese
-            426, // goat cheese
-            459 // mead
+            "(O)303", // pale ale
+            "(O)346", // beer
+            "(O)348", // wine
+            "(O)424", // cheese
+            "(O)426", // goat cheese
+            "(O)459" // mead
         ],
 
         /* achievements */
-        "PolycultureCrops": [ 24, 188, 190, 192, 248, 250, 252, 254, 256, 258, 260, 262, 264, 266, 268, 270, 272, 274, 276, 278, 280, 282, 284, 300, 304, 398, 400, 433 ],
+        "PolycultureCrops": [
+            "(O)24",
+            "(O)188",
+            "(O)190",
+            "(O)192",
+            "(O)248",
+            "(O)250",
+            "(O)252",
+            "(O)254",
+            "(O)256",
+            "(O)258",
+            "(O)260",
+            "(O)262",
+            "(O)264",
+            "(O)266",
+            "(O)268",
+            "(O)270",
+            "(O)272",
+            "(O)274",
+            "(O)276",
+            "(O)278",
+            "(O)280",
+            "(O)282",
+            "(O)284",
+            "(O)300",
+            "(O)304",
+            "(O)398",
+            "(O)400",
+            "(O)433"
+        ],
         "PolycultureCount": 15
     },
 
@@ -156,14 +185,14 @@ You shouldn't change this file unless you know what you're doing.
             "Ingredients": {
                 "262": 1 // wheat
             },
-            "Output": 246 // wheat flour
+            "Output": "246" // wheat flour
         },
         {
             "BuildingKey": "Mill",
             "Ingredients": {
                 "284": 1 // beet
             },
-            "Output": 245, // sugar
+            "Output": "245", // sugar
             "MaxOutput": 3
         },
         {
@@ -171,7 +200,7 @@ You shouldn't change this file unless you know what you're doing.
             "Ingredients": {
                 "271": 1 // unmilled rice
             },
-            "Output": 423 // rice
+            "Output": "423" // rice
         }
     ],
 
@@ -181,56 +210,56 @@ You shouldn't change this file unless you know what you're doing.
     "MachineRecipes": [
         /* bone mill */
         {
-            "MachineID": 90,
+            "MachineID": "90",
             "Recipes": [
                 {
                     "Ingredients": [
                         {
                             "PossibleIds": [
-                                579, // Prehistoric Scapula
-                                580, // Prehistoric Tibia
-                                581, // Prehistoric Skull
-                                582, // Skeletal Hand
-                                583, // Prehistoric Rib
-                                584, // Prehistoric Vertebra
-                                585, // Skeletal Tail
-                                586, // Nautilus Fossil
-                                587, // Amphibian Fossil
-                                588, // Palm Fossil
-                                589, // Trilobyte
-                                820, // Fossilized Skull
-                                821, // Fossilized Spine
-                                822, // Fossilized Tail
-                                823, // Fossilized Leg
-                                824, // Fossilized Ribs
-                                825, // Snake Skull
-                                826, // Snake Vertebrae
-                                827, // Mummified Bat
-                                828 // Mummified Frog
+                                "579", // Prehistoric Scapula
+                                "580", // Prehistoric Tibia
+                                "581", // Prehistoric Skull
+                                "582", // Skeletal Hand
+                                "583", // Prehistoric Rib
+                                "584", // Prehistoric Vertebra
+                                "585", // Skeletal Tail
+                                "586", // Nautilus Fossil
+                                "587", // Amphibian Fossil
+                                "588", // Palm Fossil
+                                "589", // Trilobyte
+                                "820", // Fossilized Skull
+                                "821", // Fossilized Spine
+                                "822", // Fossilized Tail
+                                "823", // Fossilized Leg
+                                "824", // Fossilized Ribs
+                                "825", // Snake Skull
+                                "826", // Snake Vertebrae
+                                "827", // Mummified Bat
+                                "828" // Mummified Frog
                             ]
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 466 ], // Deluxe Speed-Gro
+                            "Ids": [ "466" ], // Deluxe Speed-Gro
                             "MinOutput": 3,
                             "MaxOutput": 6,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 465 ], // Speed-Gro
+                            "Ids": [ "465" ], // Speed-Gro
                             "MinOutput": 5,
                             "MaxOutput": 10,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 369 ], // Quality Fertilizer
+                            "Ids": [ "369" ], // Quality Fertilizer
                             "MinOutput": 10,
                             "MaxOutput": 20,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 805 ], // Tree Fertilizer
+                            "Ids": [ "805" ], // Tree Fertilizer
                             "MinOutput": 5,
                             "MaxOutput": 10,
                             "OutputChance": 22.5
@@ -240,31 +269,31 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 881 ], // bone fragment
+                            "PossibleIds": [ "881" ], // bone fragment
                             "Count": 5
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 466 ], // Deluxe Speed-Gro
+                            "Ids": [ "466" ], // Deluxe Speed-Gro
                             "MinOutput": 3,
                             "MaxOutput": 6,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 465 ], // Speed-Gro
+                            "Ids": [ "465" ], // Speed-Gro
                             "MinOutput": 5,
                             "MaxOutput": 10,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 369 ], // Quality Fertilizer
+                            "Ids": [ "369" ], // Quality Fertilizer
                             "MinOutput": 10,
                             "MaxOutput": 20,
                             "OutputChance": 22.5
                         },
                         {
-                            "Ids": [ 805 ], // Tree Fertilizer
+                            "Ids": [ "805" ], // Tree Fertilizer
                             "MinOutput": 5,
                             "MaxOutput": 10,
                             "OutputChance": 22.5
@@ -276,18 +305,18 @@ You shouldn't change this file unless you know what you're doing.
 
         /* charcoal kiln */
         {
-            "MachineID": 114,
+            "MachineID": "114",
             "Recipes": [
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 388 ], // wood
+                            "PossibleIds": [ "388" ], // wood
                             "Count": 10
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 382 ] // coal
+                            "Ids": [ "382" ] // coal
                         }
                     ]
                 }
@@ -301,24 +330,24 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 184, 186 ] // milk, large milk
+                            "PossibleIds": [ "184", "186" ] // milk, large milk
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 424 ] // cheese
+                            "Ids": [ "424" ] // cheese
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 436, 438 ] // goat milk, large goat milk
+                            "PossibleIds": [ "436", "438" ] // goat milk, large goat milk
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 426 ] // goat cheese
+                            "Ids": [ "426" ] // goat cheese
                         }
                     ]
                 }
@@ -332,95 +361,95 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 378 ], // copper ore
+                            "PossibleIds": [ "378" ], // copper ore
                             "Count": 5
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 334 ] // copper bar
+                            "Ids": [ "334" ] // copper bar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 380 ], // iron ore
+                            "PossibleIds": [ "380" ], // iron ore
                             "Count": 5
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 335 ] // iron bar
+                            "Ids": [ "335" ] // iron bar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 384 ], // gold ore
+                            "PossibleIds": [ "384" ], // gold ore
                             "Count": 5
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 336 ] // gold bar
+                            "Ids": [ "336" ] // gold bar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 386 ], // gold ore
+                            "PossibleIds": [ "386" ], // gold ore
                             "Count": 5
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 337 ] // iridium bar
+                            "Ids": [ "337" ] // iridium bar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 909 ], // radioactive ore
+                            "PossibleIds": [ "909" ], // radioactive ore
                             "Count": 5
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 910 ] // radioactive bar
+                            "Ids": [ "910" ] // radioactive bar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 82 ] // fire quartz
+                            "PossibleIds": [ "82" ] // fire quartz
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 338 ], // refined quartz
+                            "Ids": [ "338" ], // refined quartz
                             "MaxOutput": 3
                         }
                     ]
@@ -428,27 +457,27 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 80 ] // quartz
+                            "PossibleIds": [ "80" ] // quartz
                         },
                         {
-                            "PossibleIds": [ 382 ] // coal
+                            "PossibleIds": [ "382" ] // coal
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 338 ] // refined quartz
+                            "Ids": [ "338" ] // refined quartz
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 458 ] // bouquet
+                            "PossibleIds": [ "458" ] // bouquet
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 277 ] // wilted bouquet
+                            "Ids": [ "277" ] // wilted bouquet
                         }
                     ]
                 }
@@ -462,61 +491,61 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 262 ] // wheat
+                            "PossibleIds": [ "262" ] // wheat
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 346 ] // beer
+                            "Ids": [ "346" ] // beer
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 433 ], // coffee bean
+                            "PossibleIds": [ "433" ], // coffee bean
                             "Count": 5
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 395 ] // coffee
+                            "Ids": [ "395" ] // coffee
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 815 ] // tea leaves
+                            "PossibleIds": [ "815" ] // tea leaves
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 614 ] // green tea
+                            "Ids": [ "614" ] // green tea
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 340 ] // honey
+                            "PossibleIds": [ "340" ] // honey
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 459 ] // mead
+                            "Ids": [ "459" ] // mead
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 304 ] // hops
+                            "PossibleIds": [ "304" ] // hops
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 303 ] // pale ale
+                            "Ids": [ "303" ] // pale ale
                         }
                     ]
                 },
@@ -528,7 +557,7 @@ You shouldn't change this file unless you know what you're doing.
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 348 ] // wine
+                            "Ids": [ "348" ] // wine
                         }
                     ]
                 },
@@ -540,12 +569,12 @@ You shouldn't change this file unless you know what you're doing.
                     ],
                     "ExceptIngredients": [
                         {
-                            "PossibleIds": [ 262, 304, 815 ] // wheat, hops, tea leaves
+                            "PossibleIds": [ "262", "304", "815" ] // wheat, hops, tea leaves
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 350 ] // juice
+                            "Ids": [ "350" ] // juice
                         }
                     ]
                 }
@@ -559,12 +588,12 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 440 ] // wool
+                            "PossibleIds": [ "440" ] // wool
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 428 ] // cloth
+                            "Ids": [ "428" ] // cloth
                         }
                     ]
                 }
@@ -578,48 +607,48 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 174, 176, 180, 182 ] // large white egg, white egg, brown egg, large brown egg
+                            "PossibleIds": [ "174", "176", "180", "182" ] // large white egg, white egg, brown egg, large brown egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 306 ] // mayonnaise
+                            "Ids": [ "306" ] // mayonnaise
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 107 ] // dinosaur egg
+                            "PossibleIds": [ "107" ] // dinosaur egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 807 ] // dinosaur mayonnaise
+                            "Ids": [ "807" ] // dinosaur mayonnaise
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 442 ] // duck egg
+                            "PossibleIds": [ "442" ] // duck egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 307 ] // duck mayonnaise
+                            "Ids": [ "307" ] // duck mayonnaise
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 928 ] // golden egg
+                            "PossibleIds": [ "928" ] // golden egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 928 ], // mayonnaise
+                            "Ids": [ "928" ], // mayonnaise
                             "MaxOutput": 3
                         }
                     ]
@@ -627,12 +656,12 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 289 ] // ostrich egg
+                            "PossibleIds": [ "289" ] // ostrich egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 306 ], // mayonnaise
+                            "Ids": [ "306" ], // mayonnaise
                             "MaxOutput": 10
                         }
                     ]
@@ -640,12 +669,12 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 305 ] // void egg
+                            "PossibleIds": [ "305" ] // void egg
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 308 ] // void mayonnaise
+                            "Ids": [ "308" ] // void mayonnaise
                         }
                     ]
                 }
@@ -659,24 +688,24 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 430 ] // truffle
+                            "PossibleIds": [ "430" ] // truffle
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 432 ] // truffle oil
+                            "Ids": [ "432" ] // truffle oil
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 270, 421, 431 ] // corn, sunflower, sunflower seeds
+                            "PossibleIds": [ "270", "421", "431" ] // corn, sunflower, sunflower seeds
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 247 ] // oil
+                            "Ids": [ "247" ] // oil
                         }
                     ]
                 }
@@ -695,7 +724,7 @@ You shouldn't change this file unless you know what you're doing.
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 344 ] // jelly
+                            "Ids": [ "344" ] // jelly
                         }
                     ]
                 },
@@ -707,22 +736,22 @@ You shouldn't change this file unless you know what you're doing.
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 342 ] // pickled
+                            "Ids": [ "342" ] // pickled
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 829 ] // ginger
+                            "PossibleIds": [ "829" ] // ginger
                         }
                     ],
                     "PossibleOutputs": [
                         // pickled ginger
                         {
-                            "Ids": [ 342 ],
+                            "Ids": [ "342" ],
                             "PreserveType": "Pickle",
-                            "PreservedParentSheetIndex": 829
+                            "PreservedParentSheetIndex": "829"
                         }
                     ]
                 },
@@ -730,34 +759,34 @@ You shouldn't change this file unless you know what you're doing.
                     "Ingredients": [
                         // sturgeon roe
                         {
-                            "PossibleIds": [ 812 ],
+                            "PossibleIds": [ "812" ],
                             "PreserveType": "Roe",
-                            "PreservedParentSheetIndex": 698
+                            "PreservedParentSheetIndex": "698"
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 445 ] // caviar
+                            "Ids": [ "445" ] // caviar
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 812 ] // roe (non-sturgeon)
+                            "PossibleIds": [ "812" ] // roe (non-sturgeon)
                         }
                     ],
                     "ExceptIngredients": [
                         // sturgeon roe
                         {
-                            "PossibleIds": [ 812 ],
+                            "PossibleIds": [ "812" ],
                             "PreserveType": "Roe",
-                            "PreservedParentSheetIndex": 698
+                            "PreservedParentSheetIndex": "698"
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 447 ] // aged roe
+                            "Ids": [ "447" ] // aged roe
                         }
                     ]
                 }
@@ -771,24 +800,24 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 168 ] // trash
+                            "PossibleIds": [ "168" ] // trash
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 382 ], // coal
+                            "Ids": [ "382" ], // coal
                             "MinOutput": 1,
                             "MaxOutput": 3,
                             "OutputChance": 30
                         },
                         {
-                            "Ids": [ 380 ], // iron ore
+                            "Ids": [ "380" ], // iron ore
                             "MinOutput": 1,
                             "MaxOutput": 3,
                             "OutputChance": 21
                         },
                         {
-                            "Ids": [ 390 ], // stone
+                            "Ids": [ "390" ], // stone
                             "MinOutput": 1,
                             "MaxOutput": 3,
                             "OutputChance": 49
@@ -798,18 +827,18 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 169 ] // driftwood
+                            "PossibleIds": [ "169" ] // driftwood
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 382 ], // coal
+                            "Ids": [ "382" ], // coal
                             "MinOutput": 1,
                             "MaxOutput": 3,
                             "OutputChance": 25
                         },
                         {
-                            "Ids": [ 388 ], // wood
+                            "Ids": [ "388" ], // wood
                             "MinOutput": 1,
                             "MaxOutput": 3,
                             "OutputChance": 75
@@ -819,40 +848,40 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 170 ] // broken glasses
+                            "PossibleIds": [ "170" ] // broken glasses
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 338 ] // refined quartz
+                            "Ids": [ "338" ] // refined quartz
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 171 ] // broken CD
+                            "PossibleIds": [ "171" ] // broken CD
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 338 ] // refined quartz
+                            "Ids": [ "338" ] // refined quartz
                         }
                     ]
                 },
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 172 ] // soggy newspaper
+                            "PossibleIds": [ "172" ] // soggy newspaper
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 428 ], // cloth
+                            "Ids": [ "428" ], // cloth
                             "OutputChance": 10
                         },
                         {
-                            "Ids": [ 93 ], // torch
+                            "Ids": [ "93" ], // torch
                             "MinOutput": 3,
                             "OutputChance": 90
                         }
@@ -868,25 +897,25 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 766 ], // slime
+                            "PossibleIds": [ "766" ], // slime
                             "Count": 100
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 680 ], // green slime egg
+                            "Ids": [ "680" ], // green slime egg
                             "OutputChance": 64
                         },
                         {
-                            "Ids": [ 439 ], // purple slime egg
+                            "Ids": [ "439" ], // purple slime egg
                             "OutputChance": 5
                         },
                         {
-                            "Ids": [ 437 ], // red slime egg
+                            "Ids": [ "437" ], // red slime egg
                             "OutputChance": 10
                         },
                         {
-                            "Ids": [ 413 ], // blue slime egg
+                            "Ids": [ "413" ], // blue slime egg
                             "OutputChance": 21
                         }
                     ]
@@ -901,30 +930,30 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 709 ] // hardwood
+                            "PossibleIds": [ "709" ] // hardwood
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 724 ], // maple syrup
+                            "Ids": [ "724" ], // maple syrup
                             "OutputChance": 0.67
                         },
                         {
-                            "Ids": [ 725 ], // oak resin
+                            "Ids": [ "725" ], // oak resin
                             "OutputChance": 0.67
                         },
                         {
-                            "Ids": [ 726 ], // pine tar
+                            "Ids": [ "726" ], // pine tar
                             "OutputChance": 0.67
                         },
                         {
-                            "Ids": [ 388 ], // wood
+                            "Ids": [ "388" ], // wood
                             "MinOutput": 5,
                             "MaxOutput": 10,
                             "OutputChance": 88.2
                         },
                         {
-                            "Ids": [ 388 ], // wood
+                            "Ids": [ "388" ], // wood
                             "MinOutput": 15,
                             "MaxOutput": 20,
                             "OutputChance": 9.8
@@ -934,12 +963,12 @@ You shouldn't change this file unless you know what you're doing.
                 {
                     "Ingredients": [
                         {
-                            "PossibleIds": [ 169 ] // driftwood
+                            "PossibleIds": [ "169" ] // driftwood
                         }
                     ],
                     "PossibleOutputs": [
                         {
-                            "Ids": [ 388 ], // wood
+                            "Ids": [ "388" ], // wood
                             "MinOutput": 5,
                             "MaxOutput": 9
                         }
@@ -1161,48 +1190,47 @@ You shouldn't change this file unless you know what you're doing.
     ],
 
     /*********
-    ** Corrects metadata for game objects (including inventory items, terrain features, crops, trees, and other map objects).
+    ** Corrects item metadata
     *********/
-    "Objects": [
+    "Items": [
         /****
         ** Farm
         ****/
         {
-            "Type": "BigCraftable",
-            "SpriteID": [ 102 /*duck or white egg*/, 103 /*brown or void egg*/ ],
+            "QualifiedId": [ "(BC)101" ],
             "Context": "World",
             "DescriptionKey": "data.item.egg-incubator.description" // no description when it contains an egg
         },
         {
-            "SpriteID": [ 294, 295 ],
+            "QualifiedId": [ "(O)294", "(O)295" ],
             "Context": "World",
             "NameKey": "data.item.broken-branch.name",
             "TypeKey": "data.type.debris",
             "DescriptionKey": "data.item.broken-branch.description" // no meaningful default
         },
         {
-            "SpriteID": [ 343, 450 ],
+            "QualifiedId": [ "(O)343", "(O)450" ],
             "Context": "World",
             "NameKey": "data.item.stone.name",
             "TypeKey": "data.type.debris", // default is 'asdf'
             "DescriptionKey": "data.item.stone.description" // no meaningful default
         },
         {
-            "SpriteID": [ 75 ],
+            "QualifiedId": [ "(O)75" ],
             "Context": "World",
             "NameKey": "data.item.geode.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.geode.description" // no meaningful default
         },
         {
-            "SpriteID": [ 76 ],
+            "QualifiedId": [ "(O)76" ],
             "Context": "World",
             "NameKey": "data.item.frozen-geode.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.frozen-geode.name" // no meaningful default
         },
         {
-            "SpriteID": [ 77 ],
+            "QualifiedId": [ "(O)77" ],
             "Context": "World",
             "NameKey": "data.item.magma-geode.name",
             "TypeKey": "data.type.stone",
@@ -1213,7 +1241,7 @@ You shouldn't change this file unless you know what you're doing.
         ** Weeds & crystals (all identified as "Weeds" with no meaningful description, with a sale price despite being unsellable)
         ****/
         {
-            "SpriteID": [ 313, 314, 315, 316, 317, 318, 452, 674, 675, 676, 677, 678, 679, 750, 784, 785, 786 ],
+            "QualifiedId": [ "(O)313", "(O)314", "(O)315", "(O)316", "(O)317", "(O)318", "(O)452", "(O)674", "(O)675", "(O)676", "(O)677", "(O)678", "(O)679", "(O)750", "(O)784", "(O)785", "(O)786" ],
             "Context": "World",
             "NameKey": "data.item.weed.name",
             "TypeKey": "data.type.debris",
@@ -1221,7 +1249,7 @@ You shouldn't change this file unless you know what you're doing.
             "ShowInventoryFields": false
         },
         {
-            "SpriteID": [ 792, 793, 794 ],
+            "QualifiedId": [ "(O)792", "(O)793", "(O)794" ],
             "Context": "World",
             "NameKey": "data.item.fertile-weed.name",
             "TypeKey": "data.type.debris",
@@ -1229,7 +1257,7 @@ You shouldn't change this file unless you know what you're doing.
             "ShowInventoryFields": false
         },
         {
-            "SpriteID": [ 319, 320, 321 ],
+            "QualifiedId": [ "(O)319", "(O)320", "(O)321" ],
             "Context": "World",
             "NameKey": "data.item.ice-crystal.name",
             "TypeKey": "data.type.debris",
@@ -1242,84 +1270,84 @@ You shouldn't change this file unless you know what you're doing.
         ****/
         /* gems */
         {
-            "SpriteID": [ 8, 66 ],
+            "QualifiedId": [ "(O)8", "(O)66" ],
             "Context": "World",
             "NameKey": "data.item.amethyst-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.amethyst-node.description"
         },
         {
-            "SpriteID": [ 14, 62 ],
+            "QualifiedId": [ "(O)14", "(O)62" ],
             "Context": "World",
             "NameKey": "data.item.aquamarine-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.aquamarine-node.description"
         },
         {
-            "SpriteID": [ 843, 844 ], // volcano
+            "QualifiedId": [ "(O)843", "(O)844" ], // volcano
             "Context": "World",
             "NameKey": "data.item.cinder-shard-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.cinder-shard-node.description"
         },
         {
-            "SpriteID": [ 2 /*skull cavern*/, 72 ],
+            "QualifiedId": [ "(O)2" /*skull cavern*/, "(O)72" ],
             "Context": "World",
             "NameKey": "data.item.diamond-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.diamond-node.description"
         },
         {
-            "SpriteID": [ 12 /*skull cavern*/, 60 ],
+            "QualifiedId": [ "(O)12" /*skull cavern*/, "(O)60" ],
             "Context": "World",
             "NameKey": "data.item.emerald-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.emerald-node.description"
         },
         {
-            "SpriteID": [ 44 ],
+            "QualifiedId": [ "(O)44" ],
             "Context": "World",
             "NameKey": "data.item.gem-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.gem-node.description"
         },
         {
-            "SpriteID": [ 6, 70 ],
+            "QualifiedId": [ "(O)6", "(O)70" ],
             "Context": "World",
             "NameKey": "data.item.jade-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.jade-node.description"
         },
         {
-            "SpriteID": [ 46 ],
+            "QualifiedId": [ "(O)46" ],
             "Context": "World",
             "NameKey": "data.item.mystic-stone.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.mystic-stone.description"
         },
         {
-            "SpriteID": [ 74 ],
+            "QualifiedId": [ "(O)74" ],
             "Context": "World",
             "NameKey": "data.item.prismatic-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.prismatic-node.description"
         },
         {
-            "SpriteID": [ 4 /*skull cavern*/, 64 ],
+            "QualifiedId": [ "(O)4" /*skull cavern*/, "(O)64" ],
             "Context": "World",
             "NameKey": "data.item.ruby-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.ruby-node.description"
         },
         {
-            "SpriteID": [ 10, 68 ],
+            "QualifiedId": [ "(O)10", "(O)68" ],
             "Context": "World",
             "NameKey": "data.item.topaz-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.topaz-node.description"
         },
         {
-            "SpriteID": [ 819 ], // volcano
+            "QualifiedId": [ "(O)819" ], // volcano
             "Context": "World",
             "NameKey": "data.item.omni-geode-node.name",
             "TypeKey": "data.type.stone",
@@ -1328,28 +1356,28 @@ You shouldn't change this file unless you know what you're doing.
 
         /* ores */
         {
-            "SpriteID": [ 751, 849/* volcano */ ],
+            "QualifiedId": [ "(O)751", "(O)849"/* volcano */ ],
             "Context": "World",
             "NameKey": "data.item.copper-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.copper-node.description"
         },
         {
-            "SpriteID": [ 764 ],
+            "QualifiedId": [ "(O)764" ],
             "Context": "World",
             "NameKey": "data.item.gold-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.gold-node.description"
         },
         {
-            "SpriteID": [ 765 ],
+            "QualifiedId": [ "(O)765" ],
             "Context": "World",
             "NameKey": "data.item.iridium-node.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.iridium-node.description"
         },
         {
-            "SpriteID": [ 290, 850/* volcano */ ],
+            "QualifiedId": [ "(O)290", 850/* volcano */ ],
             "Context": "World",
             "NameKey": "data.item.iron-node.name",
             "TypeKey": "data.type.stone",
@@ -1358,14 +1386,14 @@ You shouldn't change this file unless you know what you're doing.
 
         /* generic stones */
         {
-            "SpriteID": [ 32 /*grey*/, 34 /*blue*/, 36 /*blue*/, 38 /*blue*/, 40 /*brown*/, 42 /*brown*/, 48 /*snowy*/, 50 /*snowy*/, 52 /*snowy*/, 54 /*snowy*/, 56 /*snowy*/, 58 /*snowy*/ ],
+            "QualifiedId": [ "(O)32" /*grey*/, "(O)34" /*blue*/, "(O)36" /*blue*/, "(O)38" /*blue*/, "(O)40" /*brown*/, "(O)42" /*brown*/, "(O)48" /*snowy*/, "(O)50" /*snowy*/, "(O)52" /*snowy*/, "(O)54" /*snowy*/, "(O)56" /*snowy*/, "(O)58" /*snowy*/ ],
             "Context": "World",
             "NameKey": "data.item.colored-stone.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.colored-stone.description"
         },
         {
-            "SpriteID": [ 668, 670, 845, 846, 847 ], // 845+ in volcano
+            "QualifiedId": [ "(O)668", "(O)670", "(O)845", "(O)846", "(O)847" ], // 845+ in volcano
             "Context": "World",
             "NameKey": "data.item.mine-stone.name",
             "TypeKey": "data.type.stone",
@@ -1374,21 +1402,21 @@ You shouldn't change this file unless you know what you're doing.
 
         /* other stones */
         {
-            "SpriteID": [ 818 ], // IslandNorth
+            "QualifiedId": [ "(O)818" ], // IslandNorth
             "Context": "World",
             "NameKey": "data.item.clay-stone.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.clay-stone.description"
         },
         {
-            "SpriteID": [ 816, 817 ], // IslandNorth
+            "QualifiedId": [ "(O)816", "(O)817" ], // IslandNorth
             "Context": "World",
             "NameKey": "data.item.fossil-stone.name",
             "TypeKey": "data.type.stone",
             "DescriptionKey": "data.item.fossil-stone.description"
         },
         {
-            "SpriteID": [ 25 ], // IslandWest
+            "QualifiedId": [ "(O)25" ], // IslandWest
             "Context": "World",
             "TypeKey": "data.type.stone"
         },
@@ -1398,16 +1426,14 @@ You shouldn't change this file unless you know what you're doing.
         ** Mine containers (all identified as "Barrel" with no meaningful description)
         ****/
         {
-            "Type": "BigCraftable",
-            "SpriteID": [ 118 /*barrel*/, 120 /*frost barrel*/, 122 /*dark barrel*/, 124 /*desert barrel*/ ],
+            "QualifiedId": [ "(BC)118" /*barrel*/, "(BC)120" /*frost barrel*/, "(BC)122" /*dark barrel*/, "(BC)124" /*desert barrel*/ ],
             "Context": "World",
             "NameKey": "data.item.barrel.name",
             "TypeKey": "data.type.container",
             "DescriptionKey": "data.item.barrel.description"
         },
         {
-            "Type": "BigCraftable",
-            "SpriteID": [ 119 /*box*/, 121 /*frost box*/, 123 /*dark box*/, 125 /*desert box*/ ],
+            "QualifiedId": [ "(BC)119" /*box*/, "(BC)121" /*frost box*/, "(BC)123" /*dark box*/, "(BC)125" /*desert box*/ ],
             "Context": "World",
             "NameKey": "data.item.box.name",
             "TypeKey": "data.type.container",

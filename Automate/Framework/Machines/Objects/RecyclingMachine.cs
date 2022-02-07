@@ -1,6 +1,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.Extensions;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -20,33 +21,33 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // trash => coal/iron ore/stone
             new Recipe(
-                input: 168,
+                input: "(O)168",
                 inputCount: 1,
-                output: _ => new SObject(RecyclingMachine.Random.NextDouble() < 0.3 ? 382 : (RecyclingMachine.Random.NextDouble() < 0.3 ? 380 : 390), RecyclingMachine.Random.Next(1, 4)),
+                output: _ => ItemRegistry.Create(RecyclingMachine.Random.Choose("(O)382", "380", "390"), RecyclingMachine.Random.Next(1, 4)),
                 minutes: 60
             ),
 
             // driftwood => coal/wood
             new Recipe(
-                input: 169,
+                input: "(O)169",
                 inputCount: 1,
-                output: _ => new SObject(RecyclingMachine.Random.NextDouble() < 0.25 ? 382 : 388, RecyclingMachine.Random.Next(1, 4)),
+                output: _ => ItemRegistry.Create(RecyclingMachine.Random.NextDouble() < 0.25 ? "382" : "388", RecyclingMachine.Random.Next(1, 4)),
                 minutes: 60
             ),
 
             // broken glasses or broken CD => refined quartz
             new Recipe(
-                input: item => item.ParentSheetIndex is 170 or 171,
+                input: item => item.QualifiedItemId is "(O)170" or"(O)171",
                 inputCount: 1,
-                output: _ => new SObject(338, 1),
+                output: _ => ItemRegistry.Create("(O)338"),
                 minutes: _ => 60
             ),
 
             // soggy newspaper => cloth/torch
             new Recipe(
-                input: 172,
+                input: "(O)172",
                 inputCount: 1,
-                output: _ => RecyclingMachine.Random.NextDouble() < 0.1 ? new SObject(428, 1) : new Torch(Vector2.Zero, 3),
+                output: _ => RecyclingMachine.Random.NextDouble() < 0.1 ? ItemRegistry.Create("(O)428") : new Torch(3),
                 minutes: 60
             )
         };

@@ -16,9 +16,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // wool => cloth
             new Recipe(
-                input: 440,
+                input: "(O)440",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 428, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)428"),
                 minutes: 240
             )
         };
@@ -54,11 +54,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 // get output
                 var inputStack = consumable.Take()!;
                 Item output = recipe.Output(inputStack);
-                if (consumable.Sample is SObject sampleInput)
-                {
-                    if (Game1.random.NextDouble() <= this.GetProbabilityOfDoubleOutput(sampleInput.Quality))
-                        output.Stack = 2;
-                }
+                if (Game1.random.NextDouble() <= this.GetProbabilityOfDoubleOutput(inputStack.Quality))
+                    output.Stack = 2;
 
                 machine.heldObject.Value = (SObject)output;
                 machine.MinutesUntilReady = recipe.Minutes(inputStack);

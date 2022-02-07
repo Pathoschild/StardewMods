@@ -9,9 +9,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         /*********
         ** Accessors
         *********/
-        /// <summary>The item type to accept, or <c>null</c> to accept any.</summary>
-        public ItemType? Type { get; } = ItemType.Object;
-
         /// <summary>Matches items that can be used as input.</summary>
         public Func<Item, bool> Input { get; }
 
@@ -29,19 +26,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="input">The input item or category ID.</param>
+        /// <param name="input">The qualified input item ID or category ID.</param>
         /// <param name="inputCount">The number of inputs needed.</param>
         /// <param name="output">The output to generate (given an input).</param>
         /// <param name="minutes">The time needed to prepare an output.</param>
-        public Recipe(int input, int inputCount, Func<Item, Item> output, int minutes)
+        public Recipe(string input, int inputCount, Func<Item, Item> output, int minutes)
             : this(input, inputCount, output, _ => minutes) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="input">The input item or category ID.</param>
+        /// <param name="input">The qualified input item ID or category ID.</param>
         /// <param name="inputCount">The number of inputs needed.</param>
         /// <param name="output">The output to generate (given an input).</param>
         /// <param name="minutes">The time needed to prepare an output (given an input).</param>
-        public Recipe(int input, int inputCount, Func<Item, Item> output, Func<Item, int> minutes)
+        public Recipe(string input, int inputCount, Func<Item, Item> output, Func<Item, int> minutes)
             : this(item => Recipe.MatchesInputId(item, input), inputCount, output, minutes) { }
 
         /// <summary>Construct an instance.</summary>
@@ -61,9 +58,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="stack">The item to check.</param>
         public bool AcceptsInput(ITrackedStack stack)
         {
-            return
-                (this.Type == null || stack.Type == this.Type)
-                && this.Input(stack.Sample);
+            return this.Input(stack.Sample);
         }
 
 
@@ -73,9 +68,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get whether an item matches the given ID.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="inputId">The input item or category ID.</param>
-        private static bool MatchesInputId(Item item, int inputId)
+        private static bool MatchesInputId(Item item, string inputId)
         {
-            return item.ParentSheetIndex == inputId || item.Category == inputId;
+            return
+                item.QualifiedItemId == inputId
+                || (int.TryParse(inputId, out int category) && item.Category == category);
         }
     }
 }

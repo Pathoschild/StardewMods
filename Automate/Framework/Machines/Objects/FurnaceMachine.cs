@@ -16,65 +16,65 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // copper => copper bar
             new Recipe(
-                input: SObject.copper,
+                input: $"(O){SObject.copper}",
                 inputCount: 5,
-                output: _ => new SObject(SObject.copperBar, 1),
+                output: _ => ItemRegistry.Create(SObject.copperBarQID),
                 minutes: 30
             ),
 
             // iron => iron bar
             new Recipe(
-                input: SObject.iron,
+                input: $"(O){SObject.iron}",
                 inputCount: 5,
-                output: _ => new SObject(SObject.ironBar, 1),
+                output: _ => ItemRegistry.Create(SObject.ironBarQID),
                 minutes: 120
             ),
 
             // gold => gold bar
             new Recipe(
-                input: SObject.gold,
+                input: $"(O){SObject.gold}",
                 inputCount: 5,
-                output: _ => new SObject(SObject.goldBar, 1),
+                output: _ => ItemRegistry.Create(SObject.goldBarQID),
                 minutes: 300
             ),
 
             // iridium => iridium bar
             new Recipe(
-                input: SObject.iridium,
+                input: $"(O){SObject.iridium}",
                 inputCount: 5,
-                output: _ => new SObject(SObject.iridiumBar, 1),
+                output: _ => ItemRegistry.Create(SObject.iridiumBarQID),
                 minutes: 480
             ),
 
             // radioactive ore => radioactive bar
             new Recipe(
-                input: 909,
+                input: "(O)909",
                 inputCount: 5,
-                output: _ => new SObject(910, 1),
+                output: _ => ItemRegistry.Create("(O)910"),
                 minutes: 560
             ),
 
             // quartz => refined quartz
             new Recipe(
-                input: SObject.quartzIndex,
+                input: $"(O){SObject.quartzID}",
                 inputCount: 1,
-                output: _ => new SObject(338, 1),
+                output: _ => ItemRegistry.Create("(O)338"),
                 minutes: 90
             ),
 
             // fire quartz => refined quartz
             new Recipe(
-                input: 82,
+                input: "(O)82",
                 inputCount: 1,
-                output: _ => new SObject(338, 3),
+                output: _ => ItemRegistry.Create("(O)338", 3),
                 minutes: 90
             ),
 
             // bouquet => wilted bouquet
             new Recipe(
-                input: 458,
+                input: "(O)458",
                 inputCount: 1,
-                output: _ => new SObject(277, 1),
+                output: _ => ItemRegistry.Create("(O)277"),
                 minutes: 10
             )
         };
@@ -95,7 +95,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (input.TryGetIngredient(SObject.coal, 1, out IConsumable? coal) && this.GenericPullRecipe(input, this.Recipes))
+            if (input.TryGetIngredient(p => p.Sample.QualifiedItemId == SObject.coalQID, 1, out IConsumable? coal) && this.GenericPullRecipe(input, this.Recipes))
             {
                 coal.Reduce();
                 this.Machine.initializeLightSource(this.Machine.TileLocation);

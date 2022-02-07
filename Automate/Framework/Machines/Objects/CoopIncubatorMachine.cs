@@ -30,17 +30,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // egg (except ostrich) => chicken
                 new Recipe(
-                    input: item => item.Category == -5 && item.ParentSheetIndex != 289,
+                    input: item => item.Category == -5 && item.QualifiedItemId != "(O)289",
                     inputCount: 1,
-                    output: item => new SObject(item.ParentSheetIndex, 1),
+                    output: item => ItemRegistry.Create(item.QualifiedItemId),
                     minutes: _ => minutesUntilReady / 2
                 ),
 
                 // dinosaur egg => dinosaur
                 new Recipe(
-                    input: 107,
+                    input: "(O)107",
                     inputCount: 1,
-                    output: _ => new SObject(107, 1),
+                    output: _ => ItemRegistry.Create("(O)107"),
                     minutes: minutesUntilReady
                 )
             };
@@ -70,8 +70,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             bool started = this.GenericPullRecipe(input, this.Recipes);
             if (started)
             {
-                int eggID = this.Machine.heldObject.Value.ParentSheetIndex;
-                this.Machine.ParentSheetIndex = eggID is 180 or 182 or 305
+                string eggId = this.Machine.heldObject.Value.QualifiedItemId;
+                this.Machine.ParentSheetIndex = eggId is "(O)180" or "(O)182" or "(O)305"
                     ? this.Machine.ParentSheetIndex + 2
                     : this.Machine.ParentSheetIndex + 1;
             }

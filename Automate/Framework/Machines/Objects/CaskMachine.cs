@@ -47,7 +47,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             Cask cask = this.Machine;
 
-            foreach (ITrackedStack consumable in input.GetItems().Where(match => match.Type == ItemType.Object && (match.Sample as SObject)?.Quality < SObject.bestQuality))
+            foreach (ITrackedStack consumable in input.GetItems().Where(match => match.Type == ItemRegistry.type_object && match.Sample.Quality < SObject.bestQuality))
             {
                 float agingRate = cask.GetAgingMultiplierForItem(consumable.Sample);
                 if (agingRate <= 0)

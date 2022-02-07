@@ -14,7 +14,6 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.GameData;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using xTile;
 using xTile.Dimensions;
@@ -74,7 +73,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
 
             // hook events
             helper.Events.Content.AssetRequested += this.OnAssetRequested;
-            helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
 
@@ -253,29 +251,6 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                 monitor: this.Monitor,
                 manifest: this.ModManifest
             ).Register();
-        }
-
-        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
-        /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event data.</param>
-        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
-        {
-            if (!this.IsSmallBeachFarm(Game1.getFarm(), out Farm? farm))
-                return;
-
-            // when the player first loads the save, fix the broken TV if needed
-            if (Context.IsMainPlayer && Game1.currentLocation is FarmHouse farmhouse && Game1.dayOfMonth == 1 && Game1.currentSeason == "spring" && Game1.year == 1)
-            {
-                var brokenTvs = farmhouse.furniture
-                    .Where(furniture => furniture.ParentSheetIndex == 1680 && furniture is not TV)
-                    .ToArray();
-                foreach (var tv in brokenTvs)
-                {
-                    farmhouse.furniture.Remove(tv);
-                    farmhouse.furniture.Add(new TV(1680, tv.TileLocation));
-                }
-
-            }
         }
 
         /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>

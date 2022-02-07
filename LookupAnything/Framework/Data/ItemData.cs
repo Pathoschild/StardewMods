@@ -1,10 +1,9 @@
-using System;
-using Pathoschild.Stardew.Common.Items.ItemData;
+using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game item.</summary>
-    internal record ObjectData
+    internal record ItemData
     {
         /*********
         ** Accessors
@@ -15,11 +14,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /// <summary>The context in which to override the object.</summary>
         public ObjectContext Context { get; set; } = ObjectContext.Any;
 
-        /// <summary>The item types to disambiguate IDs which can be duplicated between two sprite sheets.</summary>
-        public ItemType Type { get; set; } = ItemType.Object;
-
-        /// <summary>The sprite IDs for this object.</summary>
-        public int[] SpriteID { get; set; } = Array.Empty<int>();
+        /// <summary>The qualified item IDs for this object.</summary>
+        public HashSet<string> QualifiedId { get; set; } = new();
 
         /****
         ** Overrides

@@ -58,13 +58,13 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             // tea bush
             if (this.Machine.size.Value == Bush.greenTeaBush)
-                return new TrackedItem(new SObject(815, 1), onReduced: this.OnOutputReduced);
+                return new TrackedItem(ItemRegistry.Create("(O)815"), onReduced: this.OnOutputReduced);
 
             // berry bush
-            int itemId = Game1.currentSeason == "fall" ? 410 : 296; // blackberry or salmonberry
+            string itemId = Game1.currentSeason == "fall" ? "(O)410"/*blackberry*/ : "(O)296"/*salmonberry*/;
             int quality = Game1.player.professions.Contains(Farmer.botanist) ? SObject.bestQuality : SObject.lowQuality;
             int count = 1 + Game1.player.ForagingLevel / 4;
-            return new TrackedItem(new SObject(itemId, initialStack: count, quality: quality), onReduced: this.OnOutputReduced);
+            return new TrackedItem(ItemRegistry.Create(itemId, count, quality), onReduced: this.OnOutputReduced);
         }
 
         /// <summary>Get the machine's processing state.</summary>

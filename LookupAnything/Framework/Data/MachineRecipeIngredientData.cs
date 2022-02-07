@@ -8,9 +8,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
     /// <param name="PreserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
     /// <param name="PreservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
     internal record MachineRecipeIngredientData(
-        int[] PossibleIds,
+        string[] PossibleIds,
         int? Count,
         SObject.PreserveType? PreserveType,
-        int? PreservedParentSheetIndex
+        string? PreservedItemId
     );
 }
