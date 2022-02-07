@@ -13,6 +13,9 @@ content packs can edit the same asset.
   * [Edit a list](#edit-a-list)
   * [Edit a model](#edit-a-model)
   * [Combining operations](#combining-operations)
+* [Target field](#target-field)
+  * [Format](#format)
+  * [Example](#example)
 * [See also](#see-also)
 
 ## Introduction
@@ -142,11 +145,12 @@ field      | purpose
 <dt>Optional fields:</dt>
 <dd>
 
-field     | purpose
---------- | -------
-`When`    | _(optional)_ Only apply the patch if the given [conditions](../author-guide.md#conditions) match.
-`LogName` | _(optional)_ A name for this patch to show in log messages. This is useful for understanding errors; if not specified, it'll default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
-`Update`  | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
+field         | purpose
+------------- | -------
+`TargetField` | When targeting a [list or dictionary](#data-assets), the field within the value to set as the root scope; see [_target field_](#target-field) below. This field supports [tokens](../author-guide.md#tokens).
+`When`        | _(optional)_ Only apply the patch if the given [conditions](../author-guide.md#conditions) match.
+`LogName`     | _(optional)_ A name for this patch to show in log messages. This is useful for understanding errors; if not specified, it'll default to a name like `entry #14 (EditImage Animals/Dinosaurs)`.
+`Update`      | _(optional)_ How often the patch fields should be updated for token changes. See [update rate](../author-guide.md#update-rate) for more info.
 
 </dd>
 </dl>
@@ -210,6 +214,9 @@ recreate it with different conditions:
 }
 ```
 
+When the value has nested entries, you can use [`TargetField`](#target-field) to edit a specific
+one.
+
 ### Edit a list
 You can edit a [list](#data-assets) the same way too, with a few caveats.
 
@@ -257,6 +264,29 @@ You can perform any number of edit operations within the same patch. For example
 entry and then move it into the right order at the same time. They'll be applied in this order:
 `Entries`, `Fields`, `MoveEntries`, and `TextOperations`.
 
+## Target field
+Your changes normally apply to the top-level entries, but `TargetField` lets you apply changes to a
+nested subset of the entry instead. For example, you can change one field within a field within the
+entry.
+
+This affects all of the change fields (e.g. `Fields`, `Entries`, `TextOperations`, etc).
+
+### Format
+`TargetFields` describes a path to 'drill into' relative to the entire data asset.
+
+For example, `"TargetField": [ "Crafts Room", "BundleSets", "Bundles" ]` will...
+1. select the `Crafts Room` entry;
+2. select the `BundleSets` field on that entry;
+3. select the `Bundles` field on the `BundleSets` value.
+
+At that point any changes will be applied within the selected value, instead of the entire model.
+
+Each value in the list can be one of these:
+
+type        | effect
+----------- | ------
+ID          | A dictionary key or [list key](#edit-a-list) within a dictionary/list (e.g. `"Crafts Room"` in the example below).
+field name  | The name of a field on the data model (e.g. `"BundleSets"` and `"Bundles"` in the example below).
 
 ## See also
 * [Author guide](../author-guide.md) for other actions and options

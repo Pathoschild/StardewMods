@@ -26,6 +26,9 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Constructs key/value editors for arbitrary data.</summary>
         private readonly KeyValueEditorFactory EditorFactory;
 
+        /// <summary>The field within the data asset to which edits should be applied, or empty to apply to the root asset.</summary>
+        private readonly IManagedTokenString[] TargetField;
+
         /// <summary>The data records to edit.</summary>
         private EditDataPatchRecord[] Records;
 
@@ -60,9 +63,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="entries">The parsed data entry changes.</param>
         /// <param name="fields">The parsed data field changes.</param>
         /// <param name="moveEntries">The parsed move entry records.</param>
+        /// <param name="targetFields">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error);
+        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetFields, out string error);
 
 
         /*********
@@ -78,6 +82,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fields">The data fields to edit.</param>
         /// <param name="moveRecords">The records to reorder, if the target is a list asset.</param>
         /// <param name="textOperations">The text operations to apply to existing values.</param>
+        /// <param name="targetField">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
@@ -85,7 +90,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="reflection">Simplifies dynamic access to game code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -104,6 +109,7 @@ namespace ContentPatcher.Framework.Patches
             this.Fields = fields?.ToArray();
             this.MoveRecords = moveRecords?.ToArray();
             this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
+            this.TargetField = targetField?.ToArray() ?? Array.Empty<IManagedTokenString>();
             this.Monitor = monitor;
             this.EditorFactory = new(reflection);
             this.TryParseFields = tryParseFields;
@@ -114,6 +120,7 @@ namespace ContentPatcher.Framework.Patches
                 .Add(this.Fields)
                 .Add(this.MoveRecords)
                 .Add(this.TextOperations)
+                .Add(this.TargetField)
                 .Add(this.Conditions);
         }
 
@@ -167,19 +174,36 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
+            string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
+
             // get editor
             IKeyValueEditor editor = this.EditorFactory.GetEditorFor(asset.Data);
             if (editor is null)
             {
-                string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
-
-                if (typeof(Texture2D).IsAssignableFrom(typeof(T)))
-                    this.Monitor.Log($"{errorPrefix}: the target asset is an image, not data.", LogLevel.Warn);
-                else if (typeof(Map).IsAssignableFrom(typeof(T)))
-                    this.Monitor.Log($"{errorPrefix}: this target asset is a map, not data.", LogLevel.Warn);
-                else
-                    this.Monitor.Log($"{errorPrefix}: the target asset has type '{asset.DataType.FullName}', which isn't recognized by Content Patcher.", LogLevel.Warn);
+                this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true)}", LogLevel.Warn);
                 return;
+            }
+
+            // apply target field
+            if (this.TargetField.Any())
+            {
+                var path = new List<string>(this.TargetField.Length);
+
+                foreach (IManagedTokenString fieldName in this.TargetField)
+                {
+                    path.Add(fieldName.Value);
+                    IKeyValueEditor parentEditor = editor;
+
+                    object key = parentEditor.ParseKey(fieldName.Value);
+                    object data = parentEditor.GetEntry(key);
+
+                    editor = this.EditorFactory.GetEditorFor(data);
+                    if (editor is null)
+                    {
+                        this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key))}", LogLevel.Warn);
+                        return;
+                    }
+                }
             }
 
             // apply edits
@@ -252,7 +276,9 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // parse fields
-            return this.TryParseFields(context, model, out entries, out fields, out moveEntries, out error);
+            // note: this is only used for the legacy FromFile field, so it shouldn't allow
+            // features added in Content Patcher 1.18.0+ (like TargetField).
+            return this.TryParseFields(context, model, out entries, out fields, out moveEntries, out _, out error);
         }
 
         /// <summary>Apply the patch to a data asset.</summary>
@@ -549,6 +575,24 @@ namespace ContentPatcher.Framework.Patches
             return asset.AssetNameEquals("Data/Achievements")
                 ? '^'
                 : '/';
+        }
+
+        /// <summary>If an editor can't be constructed for a given data structure, get a human-readable error indicating why.</summary>
+        /// <param name="nounPhrase">A noun phase </param>
+        /// <param name="data">The data for which an editor couldn't be constructed.</param>
+        /// <param name="entryExists">Whether the entry exists in the asset.</param>
+        private string GetEditorNotCompatibleError(string nounPhrase, object data, bool entryExists)
+        {
+            if (!entryExists || data is null)
+                return $"{nounPhrase} is null and can't be targeted for edits";
+
+            Type type = data.GetType();
+
+            if (typeof(Texture2D).IsAssignableFrom(type))
+                return $"{nounPhrase} is an image, not data";
+            if (typeof(Map).IsAssignableFrom(type))
+                return $"{nounPhrase} is a map, not data";
+            return $"{nounPhrase} has type '{type.FullName}', which isn't recognized by Content Patcher";
         }
     }
 }
