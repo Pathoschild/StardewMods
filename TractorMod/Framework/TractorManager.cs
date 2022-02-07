@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Fields
         *********/
         /// <summary>The unique buff ID for the tractor speed.</summary>
-        private readonly int BuffUniqueID = 58012397;
+        private readonly string BuffUniqueID = "Pathoschild.TractorMod";
 
         /// <summary>The number of ticks between each tractor action check.</summary>
         private readonly int TicksPerAction = 12; // roughly five times per second
@@ -34,6 +34,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
+
+        /// <summary>Get the buff icon texture.</summary>
+        private readonly Func<Texture2D?> GetBuffIconTexture;
 
         /// <summary>The tractor attachments to apply.</summary>
         private IAttachment[] Attachments = Array.Empty<IAttachment>();
@@ -77,11 +80,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The mod settings.</param>
         /// <param name="keys">The configured key bindings.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection)
+        /// <param name="getBuffIconTexture">Get the buff icon texture.</param>
+        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture)
         {
             this.Config = config;
             this.Keys = keys;
             this.Reflection = reflection;
+            this.GetBuffIconTexture = getBuffIconTexture;
         }
 
         /// <summary>Set the base tractor data for a horse.</summary>
@@ -161,7 +166,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 }
 
                 // apply tractor buff
-                this.UpdateBuff();
+                this.UpdateBuff(true);
 
                 // apply tool effects
                 if (this.UpdateCooldown())
@@ -170,6 +175,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         this.UpdateAttachmentEffects();
                 }
             }
+            else
+                this.UpdateBuff(false);
         }
 
         /// <summary>Draw a radius around the player.</summary>
@@ -211,9 +218,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             this.Attachments = attachments.WhereNotNull().ToArray();
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, _ => 0);
 
-            // clear buff so it's reapplied with new values
-            Game1.buffsDisplay?.otherBuffs?.RemoveAll(p => p.which == this.BuffUniqueID);
-
             // reset cooldowns
             this.SkippedActionTicks = 0;
         }
@@ -237,15 +241,35 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         }
 
         /// <summary>Apply the tractor buff to the current player.</summary>
-        private void UpdateBuff()
+        /// <param name="isRiding">Whether the player is riding the</param>
+        private void UpdateBuff(bool isRiding)
         {
-            Buff? buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
-            if (buff == null)
+            // remove if no longer riding
+            if (!isRiding)
             {
-                buff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", I18n.Buff_Name()) { which = this.BuffUniqueID };
-                Game1.buffsDisplay.addOtherBuff(buff);
+                Game1.player.buffs.Remove(this.BuffUniqueID);
+                return;
             }
-            buff.millisecondsDuration = 100;
+
+            // else reapply if expired or expiring
+            Game1.player.buffs.AppliedBuffs.TryGetValue(this.BuffUniqueID, out Buff? buff);
+            if (buff == null || buff.millisecondsDuration < 5000 || buff.effects.MagneticRadius.Value != this.Config.MagneticRadius || buff.effects.Speed.Value != this.Config.TractorSpeed)
+            {
+                buff = new Buff(
+                    id: this.BuffUniqueID,
+                    source: "Tractor Power",
+                    displayName: I18n.Buff_Name(),
+                    duration: 60000,
+                    iconTexture: this.GetBuffIconTexture(),
+                    iconSheetIndex: 0,
+                    effects: new StardewValley.Buffs.BuffEffects()
+                    {
+                        MagneticRadius = { this.Config.MagneticRadius },
+                        Speed = { this.Config.TractorSpeed }
+                    }
+                );
+                Game1.player.applyBuff(buff);
+            }
         }
 
         /// <summary>Update the attachment cooldown.</summary>

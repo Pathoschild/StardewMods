@@ -39,6 +39,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Accessors
         *********/
+        /// <summary>The buff icon texture.</summary>
+        public Texture2D? BuffIconTexture { get; private set; }
+
         /// <summary>The garage texture to apply.</summary>
         public Texture2D? GarageTexture { get; private set; }
 
@@ -76,6 +79,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // garage
             if (this.TryLoadFromContent("garage", out texture, out error))
                 this.GarageTexture = texture;
+            else
+                this.Monitor.Log(error, LogLevel.Error);
+
+            // buff icon
+            if (this.TryLoadFromContent("buffIcon", out texture, out error))
+                this.BuffIconTexture = texture;
             else
                 this.Monitor.Log(error, LogLevel.Error);
         }
@@ -141,8 +150,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             if (e.NameWithoutLocale.IsEquivalentTo("Buildings/TractorGarage") && this.GarageTexture != null)
                 e.LoadFrom(() => this.GarageTexture, AssetLoadPriority.Low);
 
-            // load tractor or garage texture
-            if (e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Tractor") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Garage"))
+            // load tractor, garage, or buff texture
+            if (e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Tractor") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Garage") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/BuffIcon"))
             {
                 string key = PathUtilities.GetSegments(e.NameWithoutLocale.Name).Last();
                 e.LoadFrom(
