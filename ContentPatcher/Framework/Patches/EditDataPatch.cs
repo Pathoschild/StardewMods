@@ -183,7 +183,8 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // apply edits
-            this.ApplyEdits(asset, editor);
+            char fieldDelimiter = this.GetStringFieldDelimiter(asset);
+            this.ApplyEdits(editor, fieldDelimiter);
         }
 
         /// <inheritdoc />
@@ -255,12 +256,10 @@ namespace ContentPatcher.Framework.Patches
         }
 
         /// <summary>Apply the patch to a data asset.</summary>
-        /// <param name="asset">The asset being edited.</param>
         /// <param name="editor">The asset editor to apply.</param>
-        private void ApplyEdits(IAssetInfo asset, IKeyValueEditor editor)
+        /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
+        private void ApplyEdits(IKeyValueEditor editor, char fieldDelimiter)
         {
-            char fieldDelimiter = this.GetStringFieldDelimiter(asset);
-
             this.ApplyRecords(editor);
             this.ApplyFields(editor, fieldDelimiter);
             this.ApplyTextOperations(editor, fieldDelimiter);
