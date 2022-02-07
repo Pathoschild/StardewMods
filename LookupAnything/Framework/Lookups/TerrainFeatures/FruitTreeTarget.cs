@@ -60,7 +60,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             }
 
             // grown tree
-            return new Rectangle(this.SourceRect.X + ((12 + (tree.GreenHouseTree ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
+            return new Rectangle(this.SourceRect.X + ((12 + (tree.IgnoresSeasonsHere() ? 1 : Utility.getSeasonNumber(Game1.currentSeason)) * 3) * 16), this.SourceRect.Y, 48, 16 + 64);
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
@@ -121,8 +121,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 return;
 
             // use vanilla logic
-            texture = FruitTree.texture;
-            sourceRect = new Rectangle(x: 0, y: target.treeType.Value * 5 * 16, width: 432, height: 80);
+            texture = target.texture;
+            sourceRect = new Rectangle(x: 0, y: target.GetSpriteRowNumber() * 5 * 16, width: 432, height: 80);
         }
     }
 }

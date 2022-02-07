@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Enums;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewValley;
+using StardewValley.GameData.WildTrees;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
@@ -59,7 +60,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             if (!drops.Any())
             {
                 // seed must be last item dropped, since collecting the seed will reset the stack
-                string? seedId = TreeMachine.GetSeedForTree(tree);
+                string? seedId = TreeMachine.GetSeedForTree(tree, this.Location);
                 if (seedId != null)
                     drops.Push(seedId);
 
@@ -84,9 +85,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
         /// <summary>Get whether a tree can be automated.</summary>
         /// <param name="tree">The tree to automate.</param>
-        public static bool CanAutomate(Tree tree)
+        /// <param name="location">The location containing the tree.</param>
+        public static bool CanAutomate(Tree tree, GameLocation location)
         {
-            return TreeMachine.GetSeedForTree(tree) != null;
+            return TreeMachine.GetSeedForTree(tree, location) != null;
         }
 
 
@@ -119,7 +121,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         private IEnumerable<string> GetRandomExtraDrops()
         {
             Tree tree = this.Machine;
-            TreeType type = (TreeType)tree.treeType.Value;
+            string type = tree.treeType.Value;
 
             // golden coconut
             if ((type == TreeType.Palm || type == TreeType.Palm2) && this.Location is IslandLocation && new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed + this.TileArea.X * 13 + this.TileArea.Y * 54).NextDouble() < 0.1)
@@ -133,21 +135,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
         /// <summary>Get the seed ID dropped by a tree, regardless of whether it currently has a seed.</summary>
         /// <param name="tree">The tree instance.</param>
-        private static string? GetSeedForTree(Tree tree)
+        /// <param name="location">The location containing the tree.</param>
+        /// <remarks>Derived from <see cref="Tree.shake"/>.</remarks>
+        private static string? GetSeedForTree(Tree tree, GameLocation location)
         {
-            TreeType type = (TreeType)tree.treeType.Value;
-            return type switch
-            {
-                TreeType.Oak => "309", // acorn
-                TreeType.Maple => Game1.GetSeasonForLocation(tree.currentLocation) == "fall" && Game1.dayOfMonth >= 14
-                    ? "408" // hazelnut
-                    : "310", // maple seed
-                TreeType.Pine => "311", // pine code
-                TreeType.Palm => "88", // coconut
-                TreeType.Palm2 => "88", // coconut
-                TreeType.Mahogany => "292", // mahogany seed
-                _ => null
-            };
+            WildTreeData? data = tree.GetData();
+
+            string? seed = data?.SeedItemId;
+            if (Game1.GetSeasonForLocation(location) == "fall" && seed == "309"/*acorn*/ && Game1.dayOfMonth >= 14)
+                seed = "408";/*hazelnut*/
+
+            return seed;
         }
     }
 }

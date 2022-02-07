@@ -676,7 +676,7 @@
     // labels
     "tree.stage": "生长阶段",
     "tree.next-growth": "下次生长",
-    "tree.has-seed": "产出种子",
+    "tree.seed": "产出种子",
     "tree.is-fertilized": "播洒树肥",
 
     // values
@@ -692,6 +692,9 @@
     "tree.next-growth.winter": "除非施肥，冬天在温室之外无法生长",
     "tree.next-growth.adjacent-trees": "因其他树靠的太近无法生长",
     "tree.next-growth.chance": "有{{chance}}%几率明天成长到{{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "种子",

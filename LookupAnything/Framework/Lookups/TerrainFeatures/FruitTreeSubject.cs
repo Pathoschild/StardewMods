@@ -8,6 +8,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.FruitTrees;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
@@ -33,7 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="tree">The lookup target.</param>
         /// <param name="tile">The tree's tile position.</param>
         public FruitTreeSubject(GameHelper gameHelper, FruitTree tree, Vector2 tile)
-            : base(gameHelper, I18n.FruitTree_Name(fruitName: gameHelper.GetObjectById(tree.indexOfFruit.Value).DisplayName), null, I18n.Type_FruitTree())
+            : base(gameHelper, I18n.FruitTree_Name(fruitName: FruitTreeSubject.GetDisplayName(tree)), null, I18n.Type_FruitTree())
         {
             this.Target = tree;
             this.Tile = tile;
@@ -60,7 +61,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                     yield return new GenericField(label, I18n.FruitTree_NextFruit_StruckByLightning(count: tree.struckByLightningCountdown.Value));
                 else if (!this.IsInSeason(tree, nextFruit.Season))
                     yield return new GenericField(label, I18n.FruitTree_NextFruit_OutOfSeason());
-                else if (tree.fruitsOnTree.Value == FruitTree.maxFruitsOnTrees)
+                else if (tree.fruit.Count >= FruitTree.maxFruitsOnTrees)
                     yield return new GenericField(label, I18n.FruitTree_NextFruit_MaxFruit());
                 else
                     yield return new GenericField(label, I18n.Generic_Tomorrow());
@@ -112,11 +113,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 }
             }
 
-            // show season
-            yield return new GenericField(
-                I18n.FruitTree_Season(),
-                I18n.FruitTree_Season_Summary(I18n.GetSeasonName(tree.fruitSeason.Value == "island" ? "summer" : tree.fruitSeason.Value))
-            );
+            // show seasons
+            {
+                IEnumerable<string>? seasons = tree.GetData()?.Seasons?.Select(I18n.GetSeasonName);
+                if (seasons != null)
+                {
+                    yield return new GenericField(
+                        I18n.FruitTree_Season(),
+                        I18n.FruitTree_Season_Summary(string.Join(", ", seasons))
+                    );
+                }
+            }
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -149,6 +156,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the display name for a tree, without the 'tree' suffix (like "Banana" for a banana tree).</summary>
+        /// <param name="tree">The fruit tree.</param>
+        private static string GetDisplayName(FruitTree tree)
+        {
+            FruitTreeData? data = tree.GetData();
+            string displayName = TokenParser.ParseText(data?.DisplayName);
+
+            return string.IsNullOrWhiteSpace(data?.DisplayName)
+                ? "???"
+                : displayName;
+        }
+
         /// <summary>Get the fruit quality produced by a tree.</summary>
         /// <param name="tree">The fruit tree.</param>
         /// <param name="daysPerQuality">The number of days before the tree begins producing a higher quality.</param>
@@ -195,11 +214,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <remarks>Derived from <see cref="FruitTree.IsInSeasonHere"/> and <see cref="FruitTree.seasonUpdate"/>.</remarks>
         private bool IsInSeason(FruitTree tree, string season)
         {
-            if (season == tree.fruitSeason.Value || tree.currentLocation.SeedsIgnoreSeasonsHere())
+            if (tree.currentLocation.SeedsIgnoreSeasonsHere())
                 return true;
 
-            if (tree.fruitSeason.Value == "island")
-                return season == "summer" || tree.currentLocation.GetLocationContext() == GameLocation.LocationContext.Island;
+            List<string>? growSeasons = tree.GetData()?.Seasons;
+            if (growSeasons != null)
+            {
+                foreach (string growSeason in growSeasons)
+                {
+                    if (string.Equals(growSeason, season, StringComparison.OrdinalIgnoreCase))
+                        return true;
+                }
+            }
 
             return false;
         }

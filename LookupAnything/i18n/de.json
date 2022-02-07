@@ -674,7 +674,7 @@
     // labels
     "tree.stage": "Wachstumsstadium",
     "tree.next-growth": "Nächstes Wachstum",
-    "tree.has-seed": "Trägt Samen",
+    "tree.seed": "Trägt Samen",
     "tree.is-fertilized": "Ist gedüngt",
 
     // values
@@ -690,6 +690,9 @@
     "tree.next-growth.winter": "Kann nicht im Winter außerhalb des Gewächshauses wachsen, wenn es nicht gedüngt wird.",
     "tree.next-growth.adjacent-trees": "Kann nicht wachsen, weil andere Bäume zu nah sind.",
     "tree.next-growth.chance": "{{chance}}% Chance in das nächste Stadium zu kommen. Im nächstem Stadium wird es ein {{stage}} sein.",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "Samen",

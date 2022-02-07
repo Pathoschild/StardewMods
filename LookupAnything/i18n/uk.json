@@ -675,7 +675,7 @@
     // labels
     "tree.stage": "Стадія росту",
     "tree.next-growth": "Наступна стадія",
-    "tree.has-seed": "Містить насінини",
+    "tree.seed": "Містить насінини",
     "tree.is-fertilized": "Використано добриво",
 
     // values
@@ -691,6 +691,9 @@
     "tree.next-growth.winter": "Не може рости взимку поза теплицею",
     "tree.next-growth.adjacent-trees": "Не може рости, бо поряд займано місце",
     "tree.next-growth.chance": "{{chance}}% шанс, що завтра буде {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "Насінина",

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewValley;
+using StardewValley.GameData.WildTrees;
 using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
@@ -43,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             }
 
             // grown tree
-            return tree.treeTopSourceRect;
+            return Tree.treeTopSourceRect;
         }
 
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>

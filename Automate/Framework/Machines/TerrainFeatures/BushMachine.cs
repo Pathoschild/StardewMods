@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             : base(bush, location, tileArea)
         {
             this.IsInSeason = new Cached<bool>(
-                getCacheKey: () => $"{Game1.GetSeasonForLocation(bush.currentLocation)},{Game1.dayOfMonth},{bush.overrideSeason.Value}",
+                getCacheKey: () => $"{Game1.GetSeasonForLocation(bush.Location)},{Game1.dayOfMonth},{bush.IsSheltered()}",
                 fetchNew: this.RecalculateIsInSeason
             );
         }
@@ -128,19 +128,17 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         {
             // get info
             Bush bush = this.Machine;
-            string season = Game1.GetSeasonForLocation(bush.currentLocation);
-            int day = Game1.dayOfMonth;
 
             // check if in season
             if (bush.tileSheetOffset.Value == 1)
-                return bush.inBloom(season, day);
+                return bush.inBloom();
 
             // workaround: we want to know if it's in season, not whether it's currently blooming
             int prevOffset = bush.tileSheetOffset.Value;
             try
             {
                 bush.tileSheetOffset.Value = 1;
-                return bush.inBloom(season, day);
+                return bush.inBloom();
             }
             finally
             {

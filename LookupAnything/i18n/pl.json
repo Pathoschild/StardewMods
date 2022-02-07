@@ -677,7 +677,7 @@
     // labels
     "tree.stage": "Etap wzrostu",
     "tree.next-growth": "Następny wzrost",
-    "tree.has-seed": "Posiada nasiono",
+    "tree.seed": "Posiada nasiono",
     "tree.is-fertilized": "Nawieziono",
 
     // values
@@ -693,6 +693,9 @@
     "tree.next-growth.winter": "nie może rosnąć zimą poza szklarnią, chyba że nawieziono",
     "tree.next-growth.adjacent-trees": "nie może rosnąć, ponieważ inne drzewa są zbyt blisko",
     "tree.next-growth.chance": "{{chance}}% szans, że jutro wyrośnie {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "nasiono",
