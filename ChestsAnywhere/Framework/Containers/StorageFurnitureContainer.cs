@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -44,7 +43,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
             this.Furniture = furniture;
             this.Data = new ContainerData(furniture.modData);
 
-            StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu(new List<ISalable>(), context: "Dresser").categoriesToSellHere);
+            StorageFurnitureContainer.DresserCategories ??= new HashSet<int>(new ShopMenu("Dresser", new List<ISalable>()).categoriesToSellHere);
         }
 
         /// <inheritdoc />
@@ -72,18 +71,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         /// <inheritdoc />
         public IClickableMenu OpenMenu()
         {
-            Dictionary<ISalable, int[]> itemPriceAndStock = this.Furniture.heldItems
-                .OfType<ISalable>() // cast as ISalable, and also ignore null in rare cases
-                .ToDictionary(item => item, _ => new[] { 0, 1 });
+            string shopId = this.Furniture.GetShopMenuContext();
 
-            ShopMenu menu = new ShopMenu(itemPriceAndStock, 0, null, this.Furniture.onDresserItemWithdrawn, this.Furniture.onDresserItemDeposited, this.Furniture.GetShopMenuContext())
-            {
-                source = this.Furniture,
-                behaviorBeforeCleanup = _ => this.Furniture.mutex.ReleaseLock()
-            };
+            this.Furniture.ShowShopMenu();
 
-            Game1.activeClickableMenu = menu;
-            return menu;
+            if (Game1.activeClickableMenu is ShopMenu shopMenu)
+                shopMenu.source = this.Furniture;
+
+            return Game1.activeClickableMenu;
         }
 
         /// <inheritdoc />

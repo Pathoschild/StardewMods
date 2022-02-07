@@ -91,15 +91,8 @@ namespace ContentPatcher.Framework
             return this.GetCached(
                 nameof(this.GetAllPlayers),
                 () => this.GetForState(
-                    loaded: Game1.getAllFarmers,
-                    reading: save => Enumerable
-                        .Repeat(save.player, 1)
-                        .Concat(
-                            from building in (this.GetLocationFromName("Farm") as Farm)?.buildings ?? Enumerable.Empty<Building>()
-                            let farmhand = (building.indoors.Value as Cabin)?.farmhand.Value
-                            where farmhand != null
-                            select farmhand
-                        ),
+                loaded: Game1.getAllFarmers,
+                    reading: save => new[] { save.player }.Concat(save.farmhands),
                     defaultValue: Array.Empty<Farmer>()
                 )
             );
@@ -145,7 +138,7 @@ namespace ContentPatcher.Framework
                     {
                         // home
                         case FarmHouse farmhouse:
-                            return farmhouse.owner.UniqueMultiplayerID;
+                            return farmhouse.owner?.UniqueMultiplayerID;
                         case IslandFarmHouse:
                             return this.GetPlayer(PlayerType.HostPlayer)?.UniqueMultiplayerID;
 
@@ -272,8 +265,8 @@ namespace ContentPatcher.Framework
                 {
                     HashSet<string> contexts = new()
                     {
-                        GameLocation.LocationContext.Default.Name,
-                        GameLocation.LocationContext.Island.Name
+                        LocationContext.Default.Name,
+                        LocationContext.Island.Name
                     };
 
                     foreach (GameLocation location in this.GetLocations())
@@ -342,7 +335,7 @@ namespace ContentPatcher.Framework
             if (player == null)
                 yield break;
 
-            if (player.eventsSeen.Contains(2120303))
+            if (player.eventsSeen.Contains("2120303"))
                 yield return WalletItem.BearsKnowledge.ToString();
             if (player.hasClubCard)
                 yield return WalletItem.ClubCard.ToString();
@@ -362,7 +355,7 @@ namespace ContentPatcher.Framework
                 yield return WalletItem.SkullKey.ToString();
             if (player.hasSpecialCharm)
                 yield return WalletItem.SpecialCharm.ToString();
-            if (player.eventsSeen.Contains(3910979))
+            if (player.eventsSeen.Contains("3910979"))
                 yield return WalletItem.SpringOnionMastery.ToString();
         }
 
@@ -618,7 +611,7 @@ namespace ContentPatcher.Framework
         {
             // save is fully loaded, get context from location
             if (Context.IsWorldReady)
-                return location?.GetLocationContext()?.Name ?? GameLocation.LocationContext.Island.Name;
+                return location?.GetLocationContext()?.Name ?? LocationContext.Island.Name;
 
             // save is partly loaded, get from location if available.
             // Note: avoid calling GetLocationContext() which may trigger a map load before the
@@ -630,8 +623,8 @@ namespace ContentPatcher.Framework
             // location. If the player sleeps in a custom context, the token will only be incorrect
             // for a short period early in the load process.
             return location is IslandLocation or IslandFarmHouse
-                ? GameLocation.LocationContext.Island.Name
-                : GameLocation.LocationContext.Default.Name;
+                ? LocationContext.Island.Name
+                : LocationContext.Default.Name;
         }
 
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>
