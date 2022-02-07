@@ -10,10 +10,10 @@ using ContentPatcher.Framework.Tokens;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewValley.Extensions;
 using xTile;
 using xTile.Dimensions;
 using xTile.Layers;
-using xTile.ObjectModel;
 using xTile.Tiles;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -313,8 +313,8 @@ namespace ContentPatcher.Framework.Patches
             // prepend to map property
             if (validWarps.Any())
             {
-                string prevWarps = target.Properties.TryGetValue("Warp", out PropertyValue? rawWarps)
-                    ? rawWarps.ToString()
+                string prevWarps = target.Properties.TryGetValue("Warp", out string? rawWarps)
+                    ? rawWarps
                     : "";
                 string newWarps = string.Join(" ", validWarps);
 
@@ -369,8 +369,8 @@ namespace ContentPatcher.Framework.Patches
 
                         // get key/value
                         string key = operation.Target[1].Value!;
-                        string? value = target.Properties.TryGetValue(key, out PropertyValue? property)
-                            ? property.ToString()
+                        string? value = target.Properties.TryGetValue(key, out string? property)
+                            ? property
                             : null;
 
                         // apply

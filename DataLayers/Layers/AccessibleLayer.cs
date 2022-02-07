@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Extensions;
 using StardewValley.Locations;
 using xTile.Dimensions;
-using xTile.ObjectModel;
 using xTile.Tiles;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -128,12 +128,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
             // check tile actions
             Tile buildingTile = location.map.GetLayer("Buildings").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-            if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out PropertyValue? action) && this.WarpActions.Contains(action.ToString().Split(' ')[0]))
+            if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out string? action) && this.WarpActions.Contains(action.Split(' ')[0]))
                 return true;
 
             // check tile touch actions
             Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-            if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue? touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
+            if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out string? touchAction) && this.TouchWarpActions.Contains(touchAction.Split(' ')[0]))
                 return true;
 
             // check map warps
