@@ -10,17 +10,16 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 {
     /// <summary>A mill machine that accepts input and provides output.</summary>
-    /// <remarks>Derived from <see cref="Mill.doAction"/>.</remarks>
-    internal class MillMachine : BaseMachineForBuilding<Mill>
+    internal class MillMachine : BaseMachineForBuilding<Building>
     {
         /*********
         ** Fields
         *********/
         /// <summary>The mill's input chest.</summary>
-        private Chest Input => this.Machine.input.Value;
+        private Chest Input => this.Machine.GetBuildingChest("Input");
 
         /// <summary>The mill's output chest.</summary>
-        private Chest Output => this.Machine.output.Value;
+        private Chest Output => this.Machine.GetBuildingChest("Output");
 
         /// <summary>The maximum input stack size to allow per qualified item ID, if different from <see cref="Item.maximumStackSize"/>.</summary>
         private readonly IDictionary<string, int> MaxInputStackSize;
@@ -32,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Construct an instance.</summary>
         /// <param name="mill">The underlying mill.</param>
         /// <param name="location">The location which contains the machine.</param>
-        public MillMachine(Mill mill, GameLocation location)
+        public MillMachine(Building mill, GameLocation location)
             : base(mill, location, BaseMachine.GetTileAreaFor(mill))
         {
             this.MaxInputStackSize = new Dictionary<string, int>

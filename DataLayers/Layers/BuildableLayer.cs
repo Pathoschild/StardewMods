@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
@@ -67,14 +66,14 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         private IEnumerable<TileData> GetTiles(GameLocation location, IEnumerable<Vector2> visibleTiles)
         {
             // buildable location
-            if (location is BuildableGameLocation buildableLocation)
+            if (location.IsBuildableLocation())
             {
                 foreach (Vector2 tile in visibleTiles)
                 {
                     // get color
                     LegendEntry type;
-                    if (this.IsBuildable(buildableLocation, tile))
-                        type = this.IsOccupied(buildableLocation, tile) ? this.Occupied : this.Buildable;
+                    if (this.IsBuildable(location, tile))
+                        type = this.IsOccupied(location, tile) ? this.Occupied : this.Buildable;
                     else
                         type = this.NonBuildable;
 
@@ -95,8 +94,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Get whether a tile is buildable.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
-        /// <remarks>Derived from <see cref="BuildableGameLocation.buildStructure(Building, Vector2, Farmer, bool)"/>.</remarks>
-        private bool IsBuildable(BuildableGameLocation location, Vector2 tile)
+        /// <remarks>Derived from <see cref="GameLocation.buildStructure(Building, Vector2, Farmer, bool)"/>.</remarks>
+        private bool IsBuildable(GameLocation location, Vector2 tile)
         {
             return location.isBuildable(tile);
         }
@@ -104,8 +103,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <summary>Get whether a tile is blocked due to something it contains.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
-        /// <remarks>Derived from <see cref="BuildableGameLocation.buildStructure(Building, Vector2, Farmer, bool)"/>.</remarks>
-        private bool IsOccupied(BuildableGameLocation location, Vector2 tile)
+        /// <remarks>Derived from <see cref="GameLocation.buildStructure(Building, Vector2, Farmer, bool)"/>.</remarks>
+        private bool IsOccupied(GameLocation location, Vector2 tile)
         {
             // buildings
             foreach (Building building in location.buildings)

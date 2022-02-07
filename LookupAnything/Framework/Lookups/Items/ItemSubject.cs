@@ -14,7 +14,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.GameData.FishPond;
+using StardewValley.GameData.FishPonds;
 using StardewValley.GameData.Movies;
 using StardewValley.Locations;
 using StardewValley.Objects;

@@ -19,8 +19,9 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.Buildings;
 using StardewValley.GameData.Crafting;
-using StardewValley.GameData.FishPond;
+using StardewValley.GameData.FishPonds;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -845,39 +846,23 @@ namespace Pathoschild.Stardew.LookupAnything
             if (input?.TypeDefinitionId != ItemRegistry.type_object)
                 yield break;
 
-            var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
-            foreach ((string key, string value) in data)
+            foreach ((string key, BuildingData data) in Game1.buildingData)
             {
-                // ignore invalid blueprints
-                if (key == "Mine Elevator" || value.StartsWith("animal/"))
-                    continue;
-
-                // parse blueprint
-                BluePrint blueprint;
-                try
-                {
-                    blueprint = new BluePrint(key);
-                }
-                catch
-                {
-                    continue;
-                }
-
                 // create recipe
-                RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(blueprint);
+                RecipeIngredientModel[] ingredients = RecipeModel.ParseIngredients(data);
                 if (ingredients.Any(p => p.Matches(input)))
                 {
                     Building building;
                     try
                     {
-                        building = new Building(blueprint, Vector2.Zero);
+                        building = new Building(key, Vector2.Zero);
                     }
                     catch
                     {
                         continue; // ignore recipe if the building data is invalid
                     }
 
-                    yield return new RecipeModel(blueprint, building, ingredients);
+                    yield return new RecipeModel(building, ingredients);
                 }
             }
         }

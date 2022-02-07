@@ -59,14 +59,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // animals
-            if (location is IAnimalLocation animalLocation)
+            foreach (FarmAnimal animal in location.Animals.Values)
             {
-                foreach (FarmAnimal animal in animalLocation.Animals.Values)
-                {
-                    Vector2 entityTile = animal.getTileLocation();
-                    if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                        yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
-                }
+                Vector2 entityTile = animal.getTileLocation();
+                if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
+                    yield return new FarmAnimalTarget(this.GameHelper, animal, entityTile, () => this.BuildSubject(animal));
             }
 
             // players
@@ -229,7 +226,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                     yield return this.BuildSubject(npc);
 
                 // animals
-                foreach (var location in CommonHelper.GetLocations().OfType<IAnimalLocation>())
+                foreach (GameLocation location in CommonHelper.GetLocations())
                 {
                     foreach (FarmAnimal animal in location.Animals.Values)
                         yield return this.BuildSubject(animal);

@@ -5,6 +5,7 @@ using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.GameData.Buildings;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -127,15 +128,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="blueprint">The building blueprint.</param>
         /// <param name="building">A sample building constructed by the blueprint.</param>
-        /// <param name="ingredients">The items needed to construct the blueprint, or <c>null</c> to parse them from the blueprint.</param>
-        public RecipeModel(BluePrint blueprint, Building building, RecipeIngredientModel[]? ingredients = null)
+        /// <param name="ingredients">The items needed to construct the building.</param>
+        public RecipeModel(Building building, RecipeIngredientModel[] ingredients)
             : this(
-                key: blueprint.displayName,
+                key: TokenParser.ParseText(building.GetData()?.Name) ?? building.buildingType.Value,
                 type: RecipeType.BuildingBlueprint,
                 displayType: I18n.Building_Construction(),
-                ingredients: ingredients ?? RecipeModel.ParseIngredients(blueprint),
+                ingredients: ingredients,
                 item: _ => null,
                 isKnown: () => true,
                 machineId: null,
@@ -143,8 +143,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             )
         {
             this.SpecialOutput = new RecipeItemEntry(
-                Sprite: new SpriteInfo(building.texture.Value, building.getSourceRectForMenu()),
-                DisplayText: blueprint.displayName ?? building.buildingType.Value
+                Sprite: new SpriteInfo(building.texture.Value, building.getSourceRectForMenu() ?? building.getSourceRect()),
+                DisplayText: TokenParser.ParseText(building.GetData()?.Name) ?? building.buildingType.Value
             );
         }
 
@@ -176,12 +176,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         }
 
         /// <summary>Parse the ingredients for a recipe.</summary>
-        /// <param name="blueprint">The building blueprint.</param>
-        public static RecipeIngredientModel[] ParseIngredients(BluePrint blueprint)
+        /// <param name="building">The building data.</param>
+        public static RecipeIngredientModel[] ParseIngredients(BuildingData building)
         {
-            return blueprint.itemsRequired
-                .Select(ingredient => new RecipeIngredientModel(ingredient.Key, ingredient.Value))
-                .ToArray();
+            if (building?.BuildMaterials?.Count > 0)
+            {
+                return building.BuildMaterials
+                    .Select(ingredient => new RecipeIngredientModel(ingredient.ItemId, ingredient.Amount))
+                    .ToArray();
+            }
+            else
+                return Array.Empty<RecipeIngredientModel>();
         }
 
         /// <summary>Create the item crafted by this recipe if it's valid.</summary>

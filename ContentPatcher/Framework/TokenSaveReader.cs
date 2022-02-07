@@ -601,7 +601,7 @@ namespace ContentPatcher.Framework
 
                     reading: save => save.locations
                         .Concat(
-                            from location in save.locations.OfType<BuildableGameLocation>()
+                            from location in save.locations
                             from building in location.buildings
                             where building.indoors.Value != null
                             select building.indoors.Value
@@ -647,7 +647,7 @@ namespace ContentPatcher.Framework
                     {
                         foreach (Building building in farm.buildings)
                         {
-                            GameLocation? interior = building.indoors.Value;
+                            GameLocation? interior = building.GetIndoors();
                             long owner = building.owner.Value;
 
                             if (interior is not null && owner != 0)

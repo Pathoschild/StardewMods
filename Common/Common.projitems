@@ -31,14 +31,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\AutomateIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\Automate\IAutomateApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BaseIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterJunimos\BetterJunimosIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterJunimos\IBetterJunimosApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\BetterSprinklersIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\BetterSprinklers\IBetterSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\FarmExpansion\FarmExpansionIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\FarmExpansion\IFarmExpansionApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IModIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\JsonAssets\IJsonAssetsApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\JsonAssets\JsonAssetsIntegration.cs" />

@@ -8,7 +8,6 @@ using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using SObject = StardewValley.Object;
@@ -101,7 +100,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             {
                 SObject obj => this.GetEntityFor(location, tile, obj),
                 TerrainFeature feature => this.GetEntityFor(location, tile, feature),
-                Building building when location is BuildableGameLocation buildableLocation => this.GetEntityFor(buildableLocation, tile, building),
+                Building building => this.GetEntityFor(location, tile, building),
                 _ => null
             };
         }
@@ -227,7 +226,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                     case Building building:
                         {
-                            IAutomatable? entity = this.GetEntityFor((BuildableGameLocation)location, tile, building);
+                            IAutomatable? entity = this.GetEntityFor(location, tile, building);
                             if (entity != null)
                                 return entity;
                         }
@@ -283,7 +282,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="building">The building to check.</param>
-        private IAutomatable? GetEntityFor(BuildableGameLocation location, Vector2 tile, Building building)
+        private IAutomatable? GetEntityFor(GameLocation location, Vector2 tile, Building building)
         {
             foreach (IAutomationFactory factory in this.AutomationFactories)
             {

@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         private readonly bool HasIgnoredOutput;
 
         /// <summary>The Junimo hut's output chest.</summary>
-        private Chest Output => this.Machine.output.Value;
+        private Chest Output => this.Machine.GetOutputChest();
 
 
         /*********
