@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
+using Pathoschild.Stardew.Common.Enums;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
@@ -250,7 +251,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             switch (terrainFeature)
             {
                 case FruitTree tree:
-                    if (this.Config.HarvestFruitTrees && tree.fruitsOnTree.Value > 0)
+                    if (this.Config.HarvestFruitTrees && tree.fruit.Count > 0)
                     {
                         tree.performUseAction(tile, location);
                         return true;
@@ -260,7 +261,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 case Tree tree:
                     if (tree.hasSeed.Value && !tree.tapped.Value)
                     {
-                        bool shouldHarvest = tree.treeType.Value is Tree.palmTree or Tree.palmTree2
+                        bool shouldHarvest = tree.treeType.Value == TreeType.Palm || tree.treeType.Value == TreeType.Palm2
                             ? this.Config.HarvestFruitTrees
                             : this.Config.HarvestTreeSeeds;
 

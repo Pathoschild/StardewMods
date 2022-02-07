@@ -677,7 +677,7 @@
     // labels
     "tree.stage": "Büyüme durumu",
     "tree.next-growth": "Sonraki büyüme",
-    "tree.has-seed": "Tohum var",
+    "tree.seed": "Tohum var",
     "tree.is-fertilized": "Gübrelenmiş",
 
     // values
@@ -693,6 +693,9 @@
     "tree.next-growth.winter": "gübrelenmediği sürece kışın sera dışında büyüyemez",
     "tree.next-growth.adjacent-trees": "büyüyemiyor çünkü diğer ağaçlar çok yakın",
     "tree.next-growth.chance": "{{chance}}% şansla yarın {{stage}} aşamasına olgunlaşacak",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "tohum",

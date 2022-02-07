@@ -677,7 +677,7 @@
     // labels
     "tree.stage": "Стадия роста",
     "tree.next-growth": "След. стадия",
-    "tree.has-seed": "Содержит семена",
+    "tree.seed": "Содержит семена",
     "tree.is-fertilized": "Использовано удобрение",
 
     // values
@@ -693,6 +693,9 @@
     "tree.next-growth.winter": "не может расти зимой вне теплицы без удобрения",
     "tree.next-growth.adjacent-trees": "не может расти, т.к рядом нет места.",
     "tree.next-growth.chance": "20% шанс, что завтра вырастит в {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "семя",

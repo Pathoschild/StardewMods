@@ -677,7 +677,7 @@
     // labels
     "tree.stage": "Estágio do crescimento",
     "tree.next-growth": "Próximo cultivo",
-    "tree.has-seed": "Tem sementes",
+    "tree.seed": "Tem sementes",
     "tree.is-fertilized": "Está fertilizado",
 
     // values
@@ -693,6 +693,9 @@
     "tree.next-growth.winter": "Não pode crescer no inverno fora da estufa, a menos que seja fertilizado",
     "tree.next-growth.adjacent-trees": "Não pode crescer pois as outras árvores estão muito perto",
     "tree.next-growth.chance": "{{chance}}% Chance de crescer {{stage}} amanhã",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "Semente",

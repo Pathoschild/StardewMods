@@ -675,7 +675,7 @@
     // labels
     "tree.stage": "Growth stage",
     "tree.next-growth": "Next growth",
-    "tree.has-seed": "Has seed",
+    "tree.seed": "Seed",
     "tree.is-fertilized": "Is fertilized",
 
     // values
@@ -691,6 +691,9 @@
     "tree.next-growth.winter": "can't grow in winter outside greenhouse unless fertilized",
     "tree.next-growth.adjacent-trees": "can't grow because other trees are too close",
     "tree.next-growth.chance": "{{chance}}% chance to grow into {{stage}} tomorrow",
+    "tree.seed.not-ready": "Not ready",
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.",
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.",
 
     // growth stages
     "tree.stages.seed": "seed",

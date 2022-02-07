@@ -21,9 +21,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>The underlying target.</summary>
         private readonly Bush Target;
 
-        /// <summary>The location which contains the bush.</summary>
-        private readonly GameLocation Location;
-
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
 
@@ -34,13 +31,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
-        /// <param name="location">The location which contains the bush.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
-        public BushSubject(GameHelper gameHelper, Bush bush, GameLocation location, IReflectionHelper reflection)
+        public BushSubject(GameHelper gameHelper, Bush bush, IReflectionHelper reflection)
             : base(gameHelper)
         {
             this.Target = bush;
-            this.Location = location;
             this.Reflection = reflection;
 
             if (this.IsBerryBush(bush))
@@ -95,9 +90,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
             // pinned fields
             yield return new GenericDebugField("health", target.health, pinned: true);
-            yield return new GenericDebugField("is greenhouse bush", this.Stringify(target.greenhouseBush.Value), pinned: true);
             yield return new GenericDebugField("is town bush", this.Stringify(target.townBush.Value), pinned: true);
-            yield return new GenericDebugField("is in bloom", this.Stringify(target.inBloom(Game1.currentSeason, Game1.dayOfMonth)), pinned: true);
+            yield return new GenericDebugField("is in bloom", this.Stringify(target.inBloom()), pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
@@ -194,7 +188,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 if (minDate < tomorrow)
                     minDate = tomorrow;
 
-                if (minDate.Season == "winter" && !bush.greenhouseBush.Value && this.Location.locationContext != GameLocation.LocationContext.Island)
+                if (minDate.Season == "winter" && !bush.IsSheltered())
                     return new(22, "spring", minDate.Year + 1);
                 if (minDate.Day < 22)
                     return new(22, minDate.Season);

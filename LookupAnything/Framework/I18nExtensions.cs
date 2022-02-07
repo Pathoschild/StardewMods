@@ -11,6 +11,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.GameData.WildTrees;
 using StardewValley.Network;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework

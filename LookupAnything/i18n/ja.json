@@ -687,7 +687,7 @@
     // labels
     "tree.stage": "成長段階",
     "tree.next-growth": "次の成長",
-    "tree.has-seed": "種をつけている",
+    "tree.seed": "種をつけている",
     "tree.is-fertilized": "肥料",
 
     // values
@@ -703,6 +703,9 @@
     "tree.next-growth.winter": "肥料を与えないと温室の外では冬に育たない",
     "tree.next-growth.adjacent-trees": "他の木に近いため育たない",
     "tree.next-growth.chance": "{{chance}}%の確率で明日{{stage}}に成長する",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "種",

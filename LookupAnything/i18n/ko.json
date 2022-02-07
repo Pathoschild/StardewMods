@@ -675,7 +675,7 @@
     // labels
     "tree.stage": "성장 단계",
     "tree.next-growth": "다음 성장",
-    "tree.has-seed": "씨앗 보유 여부",
+    "tree.seed": "씨앗 보유 여부",
     "tree.is-fertilized": "수정됨",
 
     // values
@@ -691,6 +691,9 @@
     "tree.next-growth.winter": "겨울에 온실 밖에서 성장 불가.",
     "tree.next-growth.adjacent-trees": "다른 나무들과 너무 가까와 성장 불가.",
     "tree.next-growth.chance": "내일 {{chance}}%의 확률로 다음으로 성장: {{stage}}",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "씨앗",

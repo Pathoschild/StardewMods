@@ -677,7 +677,7 @@
     // labels
     "tree.stage": "ระยะการเจริญเติบโต",
     "tree.next-growth": "การเติบโตถัดไป",
-    "tree.has-seed": "มีเมล็ด",
+    "tree.seed": "มีเมล็ด",
     "tree.is-fertilized": "ใส่ปุ๋ยแล้วหรือยัง",
 
     // values
@@ -693,6 +693,9 @@
     "tree.next-growth.winter": "ไม่สามารถเติบโตได้ ในสภาพอากาศหนาว ภายนอกเรือนกระจก (Green House)",
     "tree.next-growth.adjacent-trees": "ไม่สามารถเติบโตได้ เนื่องจากมีต้นไม้อยู่ใกล้ ๆ",
     "tree.next-growth.chance": "โอกาส {{chance}}% ที่จะโตเป็น{{stage}}ในวันพรุ่งนี้",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "เมล็ดพันธุ์",

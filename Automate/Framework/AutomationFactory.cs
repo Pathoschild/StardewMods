@@ -214,7 +214,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 case FruitTree fruitTree:
                     return new FruitTreeMachine(fruitTree, location, tile);
 
-                case Tree tree when TreeMachine.CanAutomate(tree) && tree.growthStage.Value >= Tree.treeStage: // avoid accidental machine links due to seeds spreading automatically
+                case Tree tree when TreeMachine.CanAutomate(tree, location) && tree.growthStage.Value >= Tree.treeStage: // avoid accidental machine links due to seeds spreading automatically
                     return new TreeMachine(tree, location, tile);
             }
 

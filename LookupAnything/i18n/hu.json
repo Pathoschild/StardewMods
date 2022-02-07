@@ -685,7 +685,7 @@
     // labels
     "tree.stage": "Növekedési fázis",
     "tree.next-growth": "Következő növekedés",
-    "tree.has-seed": "Van magja",
+    "tree.seed": "Van magja",
     "tree.is-fertilized": "Megtermékenyített",
 
     // values
@@ -701,6 +701,9 @@
     "tree.next-growth.winter": "télen nem tud növekedni, csak ha üvegházban van, hacsak nem trágyázzák",
     "tree.next-growth.adjacent-trees": "nem tud nőni, mert egy vagy több fa túl közel van",
     "tree.next-growth.chance": "{{chance}}% eséllyel lesz {{stage}} holnapra",
+    "tree.seed.not-ready": "Not ready", // TODO
+    "tree.seed.probability-daily": "{{chance}}% chance of {{itemName}} each day.", // TODO
+    "tree.seed.probability-on-chop": "{{chance}}% chance of dropping {{itemName}} when chopped down.", // TODO
 
     // growth stages
     "tree.stages.seed": "mag",
