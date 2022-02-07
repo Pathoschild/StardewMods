@@ -21,8 +21,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
 
-        /// <summary>The fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
-        private static readonly ISet<int> LoggedInvalidDataErrors = new HashSet<int>();
+        /// <summary>The qualified fish IDs for which any crab pot has logged an 'invalid fish data' error.</summary>
+        private static readonly ISet<string> LoggedInvalidDataErrors = new HashSet<string>();
 
 
         /*********
@@ -64,7 +64,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override bool SetInput(IStorage input)
         {
             // get bait
-            if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable? bait))
+            if (input.TryGetIngredient(p => p.Sample.TypeDefinitionId == ItemRegistry.type_object && p.Sample.Category == SObject.baitCategory, 1, out IConsumable? bait))
             {
                 this.Machine.bait.Value = (SObject)bait.Take()!;
                 this.Reflection.GetField<bool>(this.Machine, "lidFlapping").SetValue(true);
@@ -91,8 +91,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             owner.gainExperience(Farmer.fishingSkill, 5);
 
             // mark fish caught for achievements and stats
-            IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-            if (fishData.TryGetValue(item.ParentSheetIndex, out string? fishRow))
+            IDictionary<string, string> fishData = Game1.content.Load<Dictionary<string, string>>("Data\\Fish");
+            if (fishData.TryGetValue(item.ItemId, out string? fishRow))
             {
                 int size = 0;
                 try
@@ -106,11 +106,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 {
                     // The fish length stats don't affect anything, so it's not worth notifying the
                     // user; just log one trace message per affected fish for troubleshooting.
-                    if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.ParentSheetIndex))
-                        this.Monitor.Log($"The game's fish data has an invalid entry (#{item.ParentSheetIndex}: {fishData[item.ParentSheetIndex]}). Automated crab pots won't track fish length stats for that fish.\n{ex}");
+                    if (CrabPotMachine.LoggedInvalidDataErrors.Add(item.QualifiedItemId))
+                        this.Monitor.Log($"The game's fish data has an invalid entry ({item.ItemId}: {fishData[item.ItemId]}). Automated crab pots won't track fish length stats for that fish.\n{ex}");
                 }
 
-                owner.caughtFish(item.ParentSheetIndex, size);
+                owner.caughtFish(item.ItemId, size);
             }
 
             // reset pot

@@ -16,9 +16,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // wood => coal
             new Recipe(
-                input: 388,
+                input: "(O)388",
                 inputCount: 10,
-                output: _ => new SObject(382, 1),
+                output: _ => ItemRegistry.Create("(O)382"),
                 minutes: 30
             )
         };

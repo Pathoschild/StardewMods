@@ -30,16 +30,16 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override bool SetInput(IStorage input)
         {
             // slime => slime egg
-            if (input.TryConsume(766, 100))
+            if (input.TryConsume(p => p.Sample.QualifiedItemId == "(O)766", 100))
             {
-                int parentSheetIndex = 680;
+                string id = "(O)680";
                 if (Game1.random.NextDouble() < 0.05)
-                    parentSheetIndex = 439;
+                    id = "(O)439";
                 else if (Game1.random.NextDouble() < 0.1)
-                    parentSheetIndex = 437;
+                    id = "(O)437";
                 else if (Game1.random.NextDouble() < 0.25)
-                    parentSheetIndex = 413;
-                this.Machine.heldObject.Value = new SObject(parentSheetIndex, 1);
+                    id = "(O)413";
+                this.Machine.heldObject.Value = ItemRegistry.Create<Object>(id);
                 this.Machine.MinutesUntilReady = 1200;
                 return true;
             }

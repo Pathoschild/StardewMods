@@ -215,7 +215,7 @@ example, this adds an item to `Data/ObjectInformation` (with the key `900`):
             "Action": "EditData",
             "Target": "Data/ObjectInformation",
             "Entries": {
-                "900": "Pufferchick/1200/100/Seeds -74/Pufferchick/An example object."
+                "Example.ModId_Pufferchick": "Pufferchick/1200/100/Seeds -74/Pufferchick/An example object.////0/Mods\\Example.ModId\\Objects"
             }
         },
     ]

@@ -39,7 +39,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         {
             return
                 this.Config.Enable
-                && item is { ParentSheetIndex: 297, Stack: > 0 };
+                && item is { QualifiedItemId: "(O)297", Stack: > 0 };
         }
 
         /// <summary>Apply the tool to the given tile.</summary>

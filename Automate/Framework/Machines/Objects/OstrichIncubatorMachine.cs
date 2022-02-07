@@ -30,9 +30,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // ostrich egg => ostrich
                 new Recipe(
-                    input: 289,
+                    input: "(O)289",
                     inputCount: 1,
-                    output: item => new SObject(item.ParentSheetIndex, 1),
+                    output: item => ItemRegistry.Create(item.QualifiedItemId),
                     minutes: minutesUntilReady / 2
                 )
             };

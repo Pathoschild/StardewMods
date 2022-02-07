@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -67,7 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     for (int i = 0; i < ingredientData.Length; i += 3)
                     {
                         int index = i / 3;
-                        int itemID = int.Parse(ingredientData[i]);
+                        string itemID = ingredientData[i];
                         int stack = int.Parse(ingredientData[i + 1]);
                         ItemQuality quality = (ItemQuality)int.Parse(ingredientData[i + 2]);
                         ingredients.Add(new BundleIngredientModel(index, itemID, stack, quality));
@@ -105,12 +104,13 @@ namespace Pathoschild.Stardew.LookupAnything
                     {
                         // parse ID
                         string[] parts = entry.Split(' ');
-                        if (parts.Length is < 1 or > 3 || !int.TryParse(parts[0], out int id))
+                        if (parts.Length is < 1 or > 3)
                             return null;
 
                         // parse counts
                         int minCount = 1;
                         int maxCount = 1;
+                        string id = parts[0];
                         if (parts.Length >= 2)
                             int.TryParse(parts[1], out minCount);
                         if (parts.Length >= 3)
@@ -138,19 +138,19 @@ namespace Pathoschild.Stardew.LookupAnything
         public IEnumerable<FishPondDropData> GetFishPondDrops(FishPondData data)
         {
             foreach (FishPondReward drop in data.ProducedItems)
-                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemID, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
+                yield return new FishPondDropData(drop.RequiredPopulation, drop.ItemId, drop.MinQuantity, drop.MaxQuantity, drop.Chance);
         }
 
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
         /// <param name="fishID">The fish ID.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-        public FishSpawnData? GetFishSpawnRules(int fishID, Metadata metadata)
+        public FishSpawnData? GetFishSpawnRules(string fishID, Metadata metadata)
         {
             // get raw fish data
             string[] fishFields;
             {
-                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string? rawData))
+                if (!Game1.content.Load<Dictionary<string, string>>("Data\\Fish").TryGetValue(fishID, out string? rawData))
                     return null;
                 fishFields = rawData.Split('/');
                 if (fishFields.Length < 13)
@@ -182,7 +182,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
                     for (int i = 0, last = seasonFields.Length + 1; i + 1 < last; i += 2)
                     {
-                        if (!int.TryParse(seasonFields[i], out int curFishID) || curFishID != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
+                        if (!CommonHelper.IsItemId(seasonFields[i]) || seasonFields[i] != fishID || !int.TryParse(seasonFields[i + 1], out int areaID))
                             continue;
 
                         curLocations.Add(new FishSpawnLocationData(locationName, areaID, new[] { season }));
@@ -308,42 +308,42 @@ namespace Pathoschild.Stardew.LookupAnything
                 for (int i = 0; i < dropFields.Length; i += 2)
                 {
                     // get drop info
-                    int itemID = int.Parse(dropFields[i]);
+                    string itemID = dropFields[i];
                     float chance = float.Parse(dropFields[i + 1]);
                     int maxDrops = 1;
 
                     // if itemID is negative, game randomly drops 1-3
-                    if (itemID < 0)
+                    if (int.TryParse(itemID, out int id) && id < 0)
                     {
-                        itemID = -itemID;
+                        itemID = (-id).ToString();
                         maxDrops = 3;
                     }
 
                     // some item IDs have special meaning
-                    if (itemID == Debris.copperDebris)
-                        itemID = SObject.copper;
-                    else if (itemID == Debris.ironDebris)
-                        itemID = SObject.iron;
-                    else if (itemID == Debris.coalDebris)
-                        itemID = SObject.coal;
-                    else if (itemID == Debris.goldDebris)
-                        itemID = SObject.gold;
-                    else if (itemID == Debris.coinsDebris)
+                    if (itemID == Debris.copperDebris.ToString())
+                        itemID = SObject.copper.ToString();
+                    else if (itemID == Debris.ironDebris.ToString())
+                        itemID = SObject.iron.ToString();
+                    else if (itemID == Debris.coalDebris.ToString())
+                        itemID = SObject.coal.ToString();
+                    else if (itemID == Debris.goldDebris.ToString())
+                        itemID = SObject.gold.ToString();
+                    else if (itemID == Debris.coinsDebris.ToString())
                         continue; // no drop
-                    else if (itemID == Debris.iridiumDebris)
-                        itemID = SObject.iridium;
-                    else if (itemID == Debris.woodDebris)
-                        itemID = SObject.wood;
-                    else if (itemID == Debris.stoneDebris)
-                        itemID = SObject.stone;
+                    else if (itemID == Debris.iridiumDebris.ToString())
+                        itemID = SObject.iridium.ToString();
+                    else if (itemID == Debris.woodDebris.ToString())
+                        itemID = SObject.wood.ToString();
+                    else if (itemID == Debris.stoneDebris.ToString())
+                        itemID = SObject.stone.ToString();
 
                     // add drop
                     drops.Add(new ItemDropData(itemID, 1, maxDrops, chance));
                 }
                 if (isMineMonster && Game1.player.timesReachedMineBottom >= 1)
                 {
-                    drops.Add(new ItemDropData(SObject.diamondIndex, 1, 1, 0.008f));
-                    drops.Add(new ItemDropData(SObject.prismaticShardIndex, 1, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.diamondIndex.ToString(), 1, 1, 0.008f));
+                    drops.Add(new ItemDropData(SObject.prismaticShardIndex.ToString(), 1, 1, 0.008f));
                 }
 
                 // yield data
@@ -392,7 +392,7 @@ namespace Pathoschild.Stardew.LookupAnything
             // machine recipes
             recipes.AddRange(
                 from entry in metadata.MachineRecipes
-                let machine = this.GameHelper.GetObjectBySpriteIndex(entry.MachineID, bigcraftable: true)
+                let machine = this.GameHelper.GetObjectById(entry.MachineID, bigcraftable: true)
 
                 from recipe in entry.Recipes
                 from output in recipe.PossibleOutputs
@@ -403,15 +403,15 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.MachineInput,
                     displayType: machine.DisplayName,
                     ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, outputId, output),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.QualifiedItemId, outputId, output),
                     isKnown: () => true,
                     exceptIngredients: recipe.ExceptIngredients?.Select(p => new RecipeIngredientModel(p)),
-                    outputItemIndex: outputId,
+                    outputQualifiedItemId: outputId,
                     minOutput: output.MinOutput,
                     maxOutput: output.MaxOutput,
                     outputChance: output.OutputChance,
-                    machineParentSheetIndex: entry.MachineID,
-                    isForMachine: p => p is SObject obj && obj.GetItemType() == ItemType.BigCraftable && obj.ParentSheetIndex == entry.MachineID
+                    machineId: entry.MachineID,
+                    isForMachine: p => p is SObject obj && obj.QualifiedItemId == $"{ItemRegistry.type_object}{entry.MachineID}"
                 )
             );
 
@@ -424,12 +424,12 @@ namespace Pathoschild.Stardew.LookupAnything
                     type: RecipeType.BuildingInput,
                     displayType: building.displayName,
                     ingredients: entry.Ingredients.Select(p => new RecipeIngredientModel(p.Key, p.Value)),
-                    item: ingredient => this.CreateRecipeItem(ingredient?.ParentSheetIndex, entry.Output, null),
+                    item: ingredient => this.CreateRecipeItem(ingredient?.QualifiedItemId, entry.Output, null),
                     isKnown: () => true,
-                    outputItemIndex: entry.Output,
+                    outputQualifiedItemId: entry.Output,
                     minOutput: entry.OutputCount ?? 1,
                     exceptIngredients: entry.ExceptIngredients?.Select(p => new RecipeIngredientModel(p, 1)),
-                    machineParentSheetIndex: null,
+                    machineId: null,
                     isForMachine: p => p is Building target && target.buildingType.Value == entry.BuildingKey
                 )
             );
@@ -445,28 +445,28 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
         /// <param name="output">The output data, if applicable.</param>
-        private SObject CreateRecipeItem(int? inputID, int outputID, MachineRecipeOutputData? output)
+        private SObject CreateRecipeItem(string? inputID, string outputID, MachineRecipeOutputData? output)
         {
-            SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
+            SObject item = this.GameHelper.GetObjectById(outputID);
             if (inputID != null)
             {
                 switch (outputID)
                 {
-                    case 342:
+                    case "342":
                         item.preserve.Value = SObject.PreserveType.Pickle;
-                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        item.preservedParentSheetIndex.Value = inputID;
                         break;
-                    case 344:
+                    case "344":
                         item.preserve.Value = SObject.PreserveType.Jelly;
-                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        item.preservedParentSheetIndex.Value = inputID;
                         break;
-                    case 348:
+                    case "348":
                         item.preserve.Value = SObject.PreserveType.Wine;
-                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        item.preservedParentSheetIndex.Value = inputID;
                         break;
-                    case 350:
+                    case "350":
                         item.preserve.Value = SObject.PreserveType.Juice;
-                        item.preservedParentSheetIndex.Value = inputID.Value;
+                        item.preservedParentSheetIndex.Value = inputID;
                         break;
                 }
             }

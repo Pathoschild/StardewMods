@@ -23,10 +23,10 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         ** Fields
         *********/
         /// <summary>The unique item ID for a horse flute.</summary>
-        private const int HorseFluteId = 911;
+        private const string HorseFluteId = "911";
 
         /// <summary>The horse flute to play when the summon key is pressed.</summary>
-        private readonly Lazy<SObject> HorseFlute = new(() => new SObject(ModEntry.HorseFluteId, 1));
+        private readonly Lazy<SObject> HorseFlute = new(() => ItemRegistry.Create<SObject>("(O)" + ModEntry.HorseFluteId));
 
         /// <summary>The mod configuration.</summary>
         private ModConfig Config = null!; // set in Entry
@@ -337,11 +337,12 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <param name="player">The player to check.</param>
         private bool CanPlayFlute(Farmer player)
         {
+            const string id = $"{ItemRegistry.type_object}{ModEntry.HorseFluteId}";
             return
                 Context.IsPlayerFree
                 && (
                     !this.Config.RequireHorseFlute
-                    || player.Items.Any(p => Utility.IsNormalObjectAtParentSheetIndex(p, ModEntry.HorseFluteId))
+                    || player.Items.Any(p => p?.QualifiedItemId == id)
                 );
         }
 

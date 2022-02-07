@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
-using Pathoschild.Stardew.Common.Items.ItemData;
+using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
 using StardewValley;
@@ -62,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                     continue; // part of the Fern Islands shrine puzzle, which is handled by the tile lookup provider
 
                 if (this.GameHelper.CouldSpriteOccludeTile(tile, lookupTile))
-                    yield return new ObjectTarget(this.GameHelper, obj, tile, this.Reflection, () => this.BuildSubject(obj, ObjectContext.World, location, knownQuality: false));
+                    yield return new ObjectTarget(this.GameHelper, obj, tile, () => this.BuildSubject(obj, ObjectContext.World, location, knownQuality: false));
             }
 
             // furniture
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             {
                 Vector2 entityTile = furniture.TileLocation;
                 if (this.GameHelper.CouldSpriteOccludeTile(entityTile, lookupTile))
-                    yield return new ObjectTarget(this.GameHelper, furniture, entityTile, this.Reflection, () => this.BuildSubject(furniture, ObjectContext.Inventory, location));
+                    yield return new ObjectTarget(this.GameHelper, furniture, entityTile, () => this.BuildSubject(furniture, ObjectContext.Inventory, location));
             }
 
             // crops
@@ -188,8 +188,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                         {
                             if (component.containsPoint(cursorX, cursorY))
                             {
-                                int itemID = Convert.ToInt32(component.name.Split(' ')[0]);
-                                SObject obj = this.GameHelper.GetObjectBySpriteIndex(itemID);
+                                string itemID = component.name.Split(' ')[0];
+                                SObject obj = this.GameHelper.GetObjectById(itemID);
                                 return this.BuildSubject(obj, ObjectContext.Inventory, null, knownQuality: false);
                             }
                         }
@@ -263,7 +263,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                             {
                                 Bundle bundle = this.Reflection.GetField<Bundle>(bundleMenu, "currentPageBundle").GetValue();
                                 var ingredient = bundle.ingredients[i];
-                                var item = this.GameHelper.GetObjectBySpriteIndex(ingredient.index, ingredient.stack);
+                                var item = this.GameHelper.GetObjectById(ingredient.id, ingredient.stack);
                                 item.Quality = ingredient.quality;
                                 return this.BuildSubject(item, ObjectContext.Inventory, null);
                             }
@@ -289,8 +289,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                                 return this.BuildSubject(slot.item, ObjectContext.Inventory, null, knownQuality: false);
 
                             // empty slot
-                            if (int.TryParse(slot.label, out int itemId))
-                                return this.BuildSubject(this.GameHelper.GetObjectBySpriteIndex(itemId), ObjectContext.Inventory, null, knownQuality: false);
+                            if (CommonHelper.IsItemId(slot.label))
+                                return this.BuildSubject(this.GameHelper.GetObjectById(slot.label), ObjectContext.Inventory, null, knownQuality: false);
                         }
                     }
                     break;
@@ -357,15 +357,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="dirt">The dirt containing the crop, if applicable.</param>
         private ISubject BuildSubject(Crop target, ObjectContext context, HoeDirt? dirt)
         {
-            int indexOfHarvest = target.indexOfHarvest.Value;
-            if (indexOfHarvest == 0 && target.forageCrop.Value)
+            string indexOfHarvest = target.indexOfHarvest.Value;
+            if (!CommonHelper.IsItemId(indexOfHarvest, allowZero: false) && target.forageCrop.Value)
             {
-                indexOfHarvest = target.whichForageCrop.Value switch
-                {
-                    Crop.forageCrop_ginger => 829,
-                    Crop.forageCrop_springOnion => 399,
-                    _ => indexOfHarvest
-                };
+                if (target.whichForageCrop.Value == Crop.forageCrop_ginger.ToString())
+                    indexOfHarvest = "829";
+                else if (target.whichForageCrop.Value == Crop.forageCrop_springOnion.ToString())
+                    indexOfHarvest = "399";
             }
 
             ModConfig config = this.Config();
@@ -375,7 +373,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 progressionMode: config.ProgressionMode,
                 highlightUnrevealedGiftTastes: config.HighlightUnrevealedGiftTastes,
                 showGiftTastes: config.ShowGiftTastes,
-                item: this.GameHelper.GetObjectBySpriteIndex(indexOfHarvest),
+                item: this.GameHelper.GetObjectById(indexOfHarvest),
                 context: context,
                 location: dirt?.currentLocation,
                 knownQuality: false,

@@ -16,57 +16,57 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // void egg => void mayonnaise
             new Recipe(
-                input: 305,
+                input: "(O)305",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 308, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)308"),
                 minutes: 180
             ),
 
             // duck egg => duck mayonnaise
             new Recipe(
-                input: 442,
+                input: "(O)442",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 307, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)307"),
                 minutes: 180
             ),
 
             // dinosaur egg => dinosaur mayonnaise
             new Recipe(
-                input: 107,
+                input: "(O)107",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 807, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)807"),
                 minutes: 180
             ),
 
             // ostrich egg => 10x same-quality mayonnaise
             new Recipe(
-                input: 289,
+                input: "(O)289",
                 inputCount: 1,
-                output: input => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 10, Quality = ((SObject)input).Quality },
+                output: input => ItemRegistry.Create("(O)306", 10, input.Quality),
                 minutes: 180
             ),
 
             // white/brown egg => normal mayonnaise
             new Recipe(
-                input: item => item.ParentSheetIndex is 176 or 180,
+                input: item => item.QualifiedItemId is "(O)176" or "(O)180",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)306"),
                 minutes: _ => 180
             ),
             
             // dinosaur or large white/brown egg => gold-quality mayonnaise
             new Recipe(
-                input: item => item.ParentSheetIndex is 107 or 174 or 182,
+                input: item => item.QualifiedItemId is "(O)107" or "(O)174" or "(O)182",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Quality = SObject.highQuality },
+                output: _ => ItemRegistry.Create("(O)306", quality: SObject.highQuality),
                 minutes: _ => 180
             ),
 
             // golden egg => 3x gold-quality mayonnaise
             new Recipe(
-                input: 928,
+                input: "(O)928",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 306, null, false, true, false, false) { Stack = 3, Quality = SObject.highQuality },
+                output: _ => ItemRegistry.Create("(O)306", 3, SObject.highQuality),
                 minutes: 180
             ),
         };

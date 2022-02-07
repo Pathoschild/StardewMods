@@ -31,11 +31,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // hardwood => maple syrup, oak resin, pine tar, wood
                 new Recipe(
-                    input: 709,
+                    input: "(O)709",
                     inputCount: 1,
                     output: input =>
                     {
-                        KeyValuePair<int, int> result = this.Machine.GetResultItem(input as SObject);
+                        KeyValuePair<string, int> result = this.Machine.GetResultItem(input as SObject);
                         return new SObject(result.Key, result.Value);
                     },
                     minutes: 180
@@ -43,11 +43,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
                 // driftwood => wood
                 new Recipe(
-                    input: 169,
+                    input: "(O)169",
                     inputCount: 1,
                     output: input =>
                     {
-                        KeyValuePair<int, int> result = this.Machine.GetResultItem(input as SObject);
+                        KeyValuePair<string, int> result = this.Machine.GetResultItem(input as SObject);
                         return new SObject(result.Key, result.Value);
                     },
                     minutes: 180

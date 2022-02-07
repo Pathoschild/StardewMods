@@ -15,30 +15,30 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         *********/
         /// <summary>The recipes to process.</summary>
         private readonly IRecipe[] Recipes =
-            new Dictionary<int, int>
+            new Dictionary<string, int>
             {
-                [579] = 1, // Prehistoric Scapula
-                [580] = 1, // Prehistoric Tibia
-                [581] = 1, // Prehistoric Skull
-                [582] = 1, // Skeletal Hand
-                [583] = 1, // Prehistoric Rib
-                [584] = 1, // Prehistoric Vertebra
-                [585] = 1, // Skeletal Tail
-                [586] = 1, // Nautilus Fossil
-                [587] = 1, // Amphibian Fossil
-                [588] = 1, // Palm Fossil
-                [589] = 1, // Trilobyte
-                [820] = 1, // Fossilized Skull
-                [821] = 1, // Fossilized Spine
-                [822] = 1, // Fossilized Tail
-                [823] = 1, // Fossilized Leg
-                [824] = 1, // Fossilized Ribs
-                [825] = 1, // Snake Skull
-                [826] = 1, // Snake Vertebrae
-                [827] = 1, // Mummified Bat
-                [828] = 1, // Mummified Frog
+                ["(O)579"] = 1, // Prehistoric Scapula
+                ["(O)580"] = 1, // Prehistoric Tibia
+                ["(O)581"] = 1, // Prehistoric Skull
+                ["(O)582"] = 1, // Skeletal Hand
+                ["(O)583"] = 1, // Prehistoric Rib
+                ["(O)584"] = 1, // Prehistoric Vertebra
+                ["(O)585"] = 1, // Skeletal Tail
+                ["(O)586"] = 1, // Nautilus Fossil
+                ["(O)587"] = 1, // Amphibian Fossil
+                ["(O)588"] = 1, // Palm Fossil
+                ["(O)589"] = 1, // Trilobyte
+                ["(O)820"] = 1, // Fossilized Skull
+                ["(O)821"] = 1, // Fossilized Spine
+                ["(O)822"] = 1, // Fossilized Tail
+                ["(O)823"] = 1, // Fossilized Leg
+                ["(O)824"] = 1, // Fossilized Ribs
+                ["(O)825"] = 1, // Snake Skull
+                ["(O)826"] = 1, // Snake Vertebrae
+                ["(O)827"] = 1, // Mummified Bat
+                ["(O)828"] = 1, // Mummified Frog
 
-                [881] = 5 // Bone Fragment
+                ["(O)881"] = 5 // Bone Fragment
             }
             .Select(pair => (IRecipe)new Recipe(
                 input: pair.Key,
@@ -71,25 +71,25 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <param name="item">The input ingredient.</param>
         private static SObject GetRecipeOutput(Item item)
         {
-            int which = -1;
+            string? which = null;
             int howMany = -1;
 
             switch (Game1.random.Next(4))
             {
                 case 0:
-                    which = 466;
+                    which = "466";
                     howMany = 3;
                     break;
                 case 1:
-                    which = 465;
+                    which = "465";
                     howMany = 5;
                     break;
                 case 2:
-                    which = 369;
+                    which = "369";
                     howMany = 10;
                     break;
                 case 3:
-                    which = 805;
+                    which = "805";
                     howMany = 5;
                     break;
             }
@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             if (Game1.random.NextDouble() < 0.1)
                 howMany *= 2;
 
-            return new SObject(which, howMany);
+            return ItemRegistry.Create<SObject>(which, howMany);
         }
     }
 }

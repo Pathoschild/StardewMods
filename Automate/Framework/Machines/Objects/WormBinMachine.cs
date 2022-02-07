@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             SObject bin = this.Machine;
             return this.GetTracked(bin.heldObject.Value, _ =>
             {
-                bin.heldObject.Value = new SObject(685, Game1.random.Next(2, 6));
+                bin.heldObject.Value = ItemRegistry.Create<SObject>("(O)685", Game1.random.Next(2, 6));
                 bin.MinutesUntilReady = Utility.CalculateMinutesUntilMorning(Game1.timeOfDay);
                 bin.readyForHarvest.Value = false;
                 bin.showNextIndex.Value = false;

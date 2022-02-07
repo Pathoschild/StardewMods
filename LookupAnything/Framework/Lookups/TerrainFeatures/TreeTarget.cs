@@ -2,7 +2,6 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 
@@ -14,24 +13,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /*********
         ** Public methods
         *********/
-        /// <summary>Simplifies access to private game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
-
-        /*********
-        ** Public methods
-        *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
-        /// <param name="reflectionHelper">Simplifies access to private game code.</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
-        public TreeTarget(GameHelper gameHelper, Tree value, Vector2 tilePosition, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
-            : base(gameHelper, SubjectType.WildTree, value, tilePosition, getSubject)
-        {
-            this.Reflection = reflectionHelper;
-        }
+        public TreeTarget(GameHelper gameHelper, Tree value, Vector2 tilePosition, Func<ISubject> getSubject)
+            : base(gameHelper, SubjectType.WildTree, value, tilePosition, getSubject) { }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public override Rectangle GetSpritesheetArea()
@@ -77,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             WildTreeGrowthStage growth = (WildTreeGrowthStage)tree.growthStage.Value;
 
             // get sprite data
-            Texture2D spriteSheet = this.Reflection.GetField<Lazy<Texture2D>>(tree, "texture").GetValue().Value;
+            Texture2D spriteSheet = tree.texture.Value;
             SpriteEffects spriteEffects = tree.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // check tree sprite

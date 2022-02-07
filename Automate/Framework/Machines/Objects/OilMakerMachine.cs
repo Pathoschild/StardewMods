@@ -16,33 +16,33 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // truffle => truffle oil
             new Recipe(
-                input: 430,
+                input: "(O)430",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 432, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)432"),
                 minutes: 360
             ),
 
             // sunflower seed => oil
             new Recipe(
-                input: 431,
+                input: "(O)431",
                 inputCount: 1,
-                output: _ => new SObject(247, 1),
+                output: _ => ItemRegistry.Create("(O)247"),
                 minutes: 3200
             ),
 
             // corn => oil
             new Recipe(
-                input: 270,
+                input: "(O)270",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)247"),
                 minutes: 1000
             ), 
 
             // sunflower => oil
             new Recipe(
-                input: 421,
+                input: "(O)421",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 247, null, false, true, false, false),
+                output: _ => ItemRegistry.Create("(O)247"),
                 minutes: 60
             )
         };

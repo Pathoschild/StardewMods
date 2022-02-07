@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
             // if struck by lightning => coal
             if (tree.struckByLightningCountdown.Value > 0)
-                return new TrackedItem(new SObject(382, tree.fruitsOnTree.Value), onReduced: this.OnOutputReduced);
+                return new TrackedItem(ItemRegistry.Create(SObject.coalQID, tree.fruitsOnTree.Value), onReduced: this.OnOutputReduced);
 
             // else => fruit
             int quality = SObject.lowQuality;

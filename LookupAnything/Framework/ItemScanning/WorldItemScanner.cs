@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
 
         /// <summary>Get all items owned by the player.</summary>
         /// <remarks>
-        /// This is derived from <see cref="Utility.iterateAllItems"/> with some improvements:
+        /// This is derived from <see cref="Utility.ForEachItem"/> with some improvements:
         ///   * removed items held by other players, items floating on the ground, spawned forage, and output in a non-ready machine (except casks which can be emptied anytime);
         ///   * added hay in silos;
         ///   * added tool attachments;
@@ -120,7 +120,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             int hayCount = farm?.piecesOfHay.Value ?? 0;
             while (hayCount > 0)
             {
-                SObject hay = new SObject(178, 1);
+                Item hay = ItemRegistry.Create("(O)178");
                 hay.Stack = Math.Min(hayCount, hay.maximumStackSize());
                 hayCount -= hay.Stack;
                 this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: hay, parent: farm);

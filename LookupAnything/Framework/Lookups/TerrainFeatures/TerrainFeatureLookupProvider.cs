@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
                     case Tree tree:
                         if (this.Reflection.GetField<float>(tree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
-                            yield return new TreeTarget(this.GameHelper, tree, entityTile, this.Reflection, () => this.BuildSubject(tree, entityTile));
+                            yield return new TreeTarget(this.GameHelper, tree, entityTile, () => this.BuildSubject(tree, entityTile));
                         break;
 
                     case Bush bush: // planted bush

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.DebugFields;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields;
@@ -140,7 +141,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                 {
                     // fish pond
                     case FishPond pond:
-                        if (pond.fishType.Value <= -1)
+                        if (!CommonHelper.IsItemId(pond.fishType.Value))
                             yield return new GenericField(I18n.Building_FishPond_Population(), I18n.Building_FishPond_Population_Empty());
                         else
                         {
@@ -293,7 +294,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     if (building.doesTileHaveProperty(x, y, "Trough", "Back") != null)
                     {
                         total++;
-                        if (building.objects.TryGetValue(new Vector2(x, y), out SObject obj) && obj.ParentSheetIndex == 178)
+                        if (building.objects.TryGetValue(new Vector2(x, y), out SObject obj) && obj.QualifiedItemId == "(O)178")
                             filled++;
                     }
                 }
@@ -352,7 +353,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     .Select(drop =>
                     {
                         // build display string
-                        SObject obj = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
+                        SObject obj = this.GameHelper.GetObjectById(drop.ItemID);
                         string summary = obj.DisplayName;
                         if (drop.MinCount != drop.MaxCount)
                             summary += $" ({I18n.Generic_Range(min: drop.MinCount, max: drop.MaxCount)})";

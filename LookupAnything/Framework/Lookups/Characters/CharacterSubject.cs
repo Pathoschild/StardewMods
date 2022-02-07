@@ -237,13 +237,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 var checkboxes = new List<KeyValuePair<IFormattedText[], bool>>();
                 for (int i = 0; i < maxQuests; i++)
                 {
-                    int index = cave.IndexForRequest(i);
-                    if (index == -1)
+                    string index = cave.IndexForRequest(i);
+                    if (!CommonHelper.IsItemId(index))
                         continue;
 
                     checkboxes.Add(
                         CheckboxListField.Checkbox(
-                            text: this.GameHelper.GetObjectBySpriteIndex(index).DisplayName,
+                            text: this.GameHelper.GetObjectById(index).DisplayName,
                             value: questsDone > i
                         )
                     );
@@ -263,7 +263,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private IEnumerable<ICustomField> GetDataForMonster(Monster monster)
         {
             // basic info
-            bool canRerollDrops = Game1.player.isWearingRing(Ring.burglarsRing);
+            bool canRerollDrops = Game1.player.isWearingRing(Ring.BurglarsRingId);
 
             yield return new GenericField(I18n.Monster_Invincible(), I18n.Generic_Seconds(count: this.Reflection.GetField<int>(monster, "invincibleCountdown").GetValue()), hasValue: monster.isInvincible());
             yield return new PercentageBarField(I18n.Monster_Health(), monster.Health, monster.MaxHealth, Color.Green, Color.Gray, I18n.Generic_PercentRatio(percent: (int)Math.Round((monster.Health / (monster.MaxHealth * 1f) * 100)), value: monster.Health, max: monster.MaxHealth));
@@ -332,8 +332,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             if (questsDone < maxQuests)
             {
                 this.Reflection.GetMethod(trashBear, "updateItemWanted").Invoke();
-                int itemWantedIndex = this.Reflection.GetField<int>(trashBear, "itemWantedIndex").GetValue();
-                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), this.GameHelper.GetObjectBySpriteIndex(itemWantedIndex), this.Codex);
+                string itemWantedIndex = this.Reflection.GetField<string>(trashBear, "itemWantedIndex").GetValue();
+                yield return new ItemIconField(this.GameHelper, I18n.TrashBearOrGourmand_ItemWanted(), this.GameHelper.GetObjectById(itemWantedIndex), this.Codex);
             }
 
             // show progress
@@ -512,7 +512,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             possibleDrops ??= Array.Empty<ItemDropData>();
 
             // get actual drops
-            IDictionary<int, List<ItemDropData>> dropsLeft = monster
+            IDictionary<string, List<ItemDropData>> dropsLeft = monster
                 .objectsToDrop
                 .Select(this.GetActualDrop)
                 .GroupBy(p => p.ItemID)
@@ -551,29 +551,29 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <summary>Get the drop info for a <see cref="Monster.objectsToDrop"/> ID, if it's valid.</summary>
         /// <param name="id">The ID to parse.</param>
         /// <remarks>Derived from <see cref="GameLocation.monsterDrop"/> and the <see cref="Debris"/> constructor.</remarks>
-        private ItemDropData GetActualDrop(int id)
+        private ItemDropData GetActualDrop(string id)
         {
             // basic info
             int minDrop = 1;
             int maxDrop = 1;
 
             // negative ID means the monster will drop 1-3 of the item
-            if (id < 0)
+            if (int.TryParse(id, out int numericId) && numericId < 0)
             {
-                id = -id;
+                id = (-numericId).ToString();
                 maxDrop = 3;
             }
 
             // handle hardcoded ID mappings in Debris constructor
             id = id switch
             {
-                0 => SObject.copper,
-                2 => SObject.iron,
-                4 => SObject.coal,
-                6 => SObject.gold,
-                10 => SObject.iridium,
-                12 => SObject.wood,
-                14 => SObject.stone,
+                "0" => SObject.copper.ToString(),
+                "2" => SObject.iron.ToString(),
+                "4" => SObject.coal.ToString(),
+                "6" => SObject.gold.ToString(),
+                "10" => SObject.iridium.ToString(),
+                "12" => SObject.wood.ToString(),
+                "14" => SObject.stone.ToString(),
                 _ => id
             };
 

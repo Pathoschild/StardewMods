@@ -1,7 +1,6 @@
-using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
-using StardewValley.Objects;
+using StardewValley.ItemTypeDefinitions;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -18,64 +17,26 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // fruit => jelly
             new Recipe(
-                input: SObject.FruitsCategory,
+                input: SObject.FruitsCategory.ToString(),
                 inputCount: 1,
-                output: input =>
-                {
-                    SObject jelly = new SObject(Vector2.Zero, 344, input.Name + " Jelly", false, true, false, false)
-                    {
-                        Price = 50 + ((SObject) input).Price * 2,
-                        name = input.Name + " Jelly",
-                        preserve = { Value = SObject.PreserveType.Jelly },
-                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                    };
-                    return jelly;
-                },
+                output: input => ItemRegistry.RequireTypeDefinition<ObjectDataDefinition>(ItemRegistry.type_object).CreateFlavoredJelly((SObject)input),
                 minutes: 4000
             ),
 
             // vegetable or ginger => pickled item
             new Recipe(
-                input: item => item.Category == SObject.VegetableCategory || item.ParentSheetIndex == 829,
+                input: item => item.Category == SObject.VegetableCategory || item.QualifiedItemId == "(O)829",
                 inputCount: 1,
-                output: input =>
-                {
-                    SObject item = new SObject(Vector2.Zero, 342, "Pickled " + input.Name, false, true, false, false)
-                    {
-                        Price = 50 + ((SObject) input).Price * 2,
-                        name = "Pickled " + input.Name,
-                        preserve = { Value = SObject.PreserveType.Pickle },
-                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                    };
-                    return item;
-
-                },
+                output: input => ItemRegistry.RequireTypeDefinition<ObjectDataDefinition>(ItemRegistry.type_object).CreateFlavoredPickle((SObject)input),
                 minutes: _ => 4000
             ),
 
             // roe => aged roe || sturgeon roe => caviar
             new Recipe(
-                input: 812, // Roe
+                input: "(O)812", // Roe
                 inputCount: 1,
-                output: input =>
-                {
-                    if (input is not SObject inputObj)
-                        throw new InvalidOperationException($"Unexpected recipe input: expected {typeof(SObject).FullName} instance.");
-
-                    // sturgeon roe => caviar
-                    if (inputObj.preservedParentSheetIndex.Value == 698)
-                        return new SObject(445, 1);
-
-                    // roe => aged roe
-                    var result = (input is ColoredObject coloredInput) ? new ColoredObject(447, 1, coloredInput.color.Value) : new SObject(447, 1);
-                    result.name = $"Aged {input.Name}";
-                    result.preserve.Value = SObject.PreserveType.AgedRoe;
-                    result.preservedParentSheetIndex.Value = inputObj.preservedParentSheetIndex.Value;
-                    result.Category = -26;
-                    result.Price = inputObj.Price * 2;
-                    return result;
-                },
-                minutes: input => input is SObject obj && obj.preservedParentSheetIndex.Value == 698
+                output: input => ItemRegistry.RequireTypeDefinition<ObjectDataDefinition>(ItemRegistry.type_object).CreateFlavoredAgedRoe((SObject)input),
+                minutes: input => input is SObject obj && obj.preservedParentSheetIndex.Value == "698"
                     ? 6000 // caviar
                     : 4000 // aged roe
             )

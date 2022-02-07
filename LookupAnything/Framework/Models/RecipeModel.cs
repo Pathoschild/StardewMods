@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Items.ItemData;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Objects;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
@@ -26,8 +24,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The recipe's lookup name (if any).</summary>
         public string? Key { get; }
 
-        /// <summary>The object parent sheet index for the machine, if applicable.</summary>
-        public int? MachineParentSheetIndex { get; }
+        /// <summary>The machine's unqualified item ID, if applicable.</summary>
+        public string? MachineId { get; }
 
         /// <summary>Get whether this recipe is for the given machine.</summary>
         public Func<object, bool> IsForMachine { get; }
@@ -41,11 +39,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
         public RecipeIngredientModel[] Ingredients { get; }
 
-        /// <summary>The item ID produced by this recipe, if applicable.</summary>
-        public int? OutputItemIndex { get; }
-
-        /// <summary>The item type produced by this recipe, if applicable.</summary>
-        public ItemType? OutputItemType { get; }
+        /// <summary>The qualified item ID produced by this recipe, if applicable.</summary>
+        public string? OutputQualifiedItemId { get; }
 
         /// <summary>The minimum number of items output by the recipe.</summary>
         public int MinOutput { get; }
@@ -76,15 +71,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="ingredients">The items needed to craft the recipe (item ID => number needed).</param>
         /// <param name="item">The item that's created by this recipe, given an optional input.</param>
         /// <param name="isKnown">Whether the player knows this recipe.</param>
-        /// <param name="machineParentSheetIndex">The object parent sheet index for the machine, if applicable.</param>
+        /// <param name="machineId">The machine's unqualified item ID, if applicable.</param>
         /// <param name="isForMachine">Get whether this recipe is for the given machine.</param>
         /// <param name="exceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
-        /// <param name="outputItemIndex">The item ID produced by this recipe, if applicable.</param>
-        /// <param name="outputItemType">The item type produced by this recipe, if applicable.</param>
+        /// <param name="outputQualifiedItemId">The qualified item ID produced by this recipe, if applicable.</param>
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string? key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item?, Item?>? item, Func<bool> isKnown, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel>? exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
+        public RecipeModel(string? key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item?, Item?>? item, Func<bool> isKnown, string? machineId, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel>? exceptIngredients = null, string? outputQualifiedItemId = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)
@@ -102,13 +96,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.Type = type;
             this.DisplayType = displayType;
             this.Ingredients = ingredients.ToArray();
-            this.MachineParentSheetIndex = machineParentSheetIndex;
+            this.MachineId = machineId;
             this.IsForMachine = isForMachine;
             this.ExceptIngredients = exceptIngredients?.ToArray() ?? Array.Empty<RecipeIngredientModel>();
             this.Item = item;
             this.IsKnown = isKnown;
-            this.OutputItemIndex = outputItemIndex;
-            this.OutputItemType = outputItemType;
+            this.OutputQualifiedItemId = outputQualifiedItemId;
             this.MinOutput = minOutput!.Value;
             this.MaxOutput = maxOutput!.Value;
             this.OutputChance = outputChance is > 0 and < 100 ? outputChance.Value : 100;
@@ -126,12 +119,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 item: _ => recipe.createItem(),
                 isKnown: () => recipe.name != null && Game1.player.knowsRecipe(recipe.name),
                 minOutput: recipe.numberProducedPerCraft,
-                machineParentSheetIndex: null,
+                machineId: null,
                 isForMachine: _ => false
             )
         {
-            this.OutputItemIndex = recipe.itemToProduce[0];
-            this.OutputItemType = this.GetItemType(recipe, this.OutputItemIndex.Value);
+            this.OutputQualifiedItemId = recipe.itemToProduce[0];
         }
 
         /// <summary>Construct an instance.</summary>
@@ -146,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 ingredients: ingredients ?? RecipeModel.ParseIngredients(blueprint),
                 item: _ => null,
                 isKnown: () => true,
-                machineParentSheetIndex: null,
+                machineId: null,
                 isForMachine: _ => false
             )
         {
@@ -167,10 +159,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 item: other.Item,
                 isKnown: other.IsKnown,
                 exceptIngredients: other.ExceptIngredients,
-                outputItemIndex: other.OutputItemIndex,
-                outputItemType: other.OutputItemType,
+                outputQualifiedItemId: other.OutputQualifiedItemId,
                 minOutput: other.MinOutput,
-                machineParentSheetIndex: other.MachineParentSheetIndex,
+                machineId: other.MachineId,
                 isForMachine: other.IsForMachine
             )
         { }
@@ -217,7 +208,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             switch (this.Type)
             {
                 case RecipeType.Cooking:
-                    return this.OutputItemIndex.HasValue && player.recipesCooked.TryGetValue(this.OutputItemIndex.Value, out int timesCooked) ? timesCooked : 0;
+                    return this.OutputQualifiedItemId != null && player.recipesCooked.TryGetValue(this.OutputQualifiedItemId, out int timesCooked) ? timesCooked : 0;
 
                 case RecipeType.Crafting:
                     return player.craftingRecipes.TryGetValue(this.Key, out int timesCrafted) ? timesCrafted : 0;
@@ -225,21 +216,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
                 default:
                     return -1;
             }
-        }
-
-        /// <summary>Get the item type produced by a recipe.</summary>
-        /// <param name="recipe">The recipe.</param>
-        /// <param name="itemID">The produced item ID.</param>
-        /// <remarks>Derived from <see cref="CraftingRecipe.createItem"/>.</remarks>
-        private ItemType GetItemType(CraftingRecipe recipe, int itemID)
-        {
-            if (recipe.bigCraftable)
-                return ItemType.BigCraftable;
-
-            if (itemID is >= Ring.ringLowerIndexRange and <= Ring.ringUpperIndexRange || itemID == 801)
-                return ItemType.Ring;
-
-            return ItemType.Object;
         }
     }
 }

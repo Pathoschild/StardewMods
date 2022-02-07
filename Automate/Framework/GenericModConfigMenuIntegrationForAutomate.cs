@@ -5,6 +5,10 @@ using Pathoschild.Stardew.Automate.Framework.Models;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;
+using StardewValley;
+using StardewValley.GameData;
+using StardewValley.GameData.FloorsAndPaths;
+using StardewValley.TerrainFeatures;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -80,15 +84,18 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // connectors
             menu.AddSectionTitle(I18n.Config_Title_Connectors);
-            foreach (DataModelFloor entry in this.Data.FloorNames.Values)
+            foreach (FloorPathData entry in Game1.floorPathData.Values.OrderBy(p => GameI18n.GetObjectName(p.ItemId), StringComparer.OrdinalIgnoreCase)) // sort by English display name; it's not ideal, but we can't re-sort when the language is loaded
             {
-                int itemId = entry.ItemId;
+                string itemId = entry.ItemId;
+                string? internalName = ItemRegistry.GetData(entry.ItemId)?.InternalName;
+                if (internalName is null)
+                    continue;
 
                 menu.AddCheckbox(
                     name: () => GameI18n.GetObjectName(itemId),
                     tooltip: () => I18n.Config_Connector_Desc(itemName: GameI18n.GetObjectName(itemId)),
-                    get: config => this.HasConnector(config, entry.Name),
-                    set: (config, value) => this.SetConnector(config, entry.Name, value)
+                    get: config => this.HasConnector(config, internalName),
+                    set: (config, value) => this.SetConnector(config, internalName, value)
                 );
             }
             menu.AddTextbox(
@@ -171,13 +178,15 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** Connectors
         ****/
-        /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="DataModel.FloorNames"/>.</summary>
+        /// <summary>Get whether the given item name isn't one of the connectors listed in <see cref="Flooring.GetFloorPathLookup"/>.</summary>
         /// <param name="name">The item name.</param>
         private bool IsCustomConnector(string name)
         {
-            foreach (DataModelFloor floor in this.Data.FloorNames.Values)
+            foreach (FloorPathData floor in Game1.floorPathData.Values)
             {
-                if (string.Equals(floor.Name, name, StringComparison.OrdinalIgnoreCase))
+                string? internalName = ItemRegistry.GetData(floor.ItemId)?.InternalName;
+
+                if (internalName != null && string.Equals(internalName, name, StringComparison.OrdinalIgnoreCase))
                     return false;
             }
 
@@ -267,7 +276,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the custom override for a mod, if any.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        /// <param name="enabled">Whether to set the machine to enabled.</param>
+        /// <param name="enabled">Whether the custom override should be enabled; else disabled.</param>
         public void SetCustomOverride(ModConfig config, string name, bool enabled)
         {
             // get updated settings

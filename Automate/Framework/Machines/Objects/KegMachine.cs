@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using StardewValley;
+using StardewValley.ItemTypeDefinitions;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
@@ -16,75 +17,55 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             // honey => mead
             new Recipe(
-                input: 340,
+                input: "(O)340",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 459, "Mead", false, true, false, false) { name = "Mead" },
+                output: _ => ItemRegistry.Create("(O)459"),
                 minutes: 600
             ),
 
             // coffee bean => coffee
             new Recipe(
-                input: 433,
+                input: "(O)433",
                 inputCount: 5,
-                output: _ => new SObject(Vector2.Zero, 395, "Coffee", false, true, false, false) { name = "Coffee" },
+                output: _ => ItemRegistry.Create("(O)395"),
                 minutes: 120
             ),
 
             // tea leaves => green tea
             new Recipe(
-                input: 815,
+                input: "(O)815",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 614, "Green Tea", false, true, false, false) { name = "Green Tea" },
+                output: _ => ItemRegistry.Create("(O)614"),
                 minutes: 180
             ),
 
             // wheat => beer
             new Recipe(
-                input: 262,
+                input: "(O)262",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 346, "Beer", false, true, false, false) { name = "Beer" },
+                output: _ => ItemRegistry.Create("(O)346"),
                 minutes: 1750
             ),
 
             // hops => pale ale
             new Recipe(
-                input: 304,
+                input: "(O)304",
                 inputCount: 1,
-                output: _ => new SObject(Vector2.Zero, 303, "Pale Ale", false, true, false, false) { name = "Pale Ale" },
+                output: _ => ItemRegistry.Create("(O)303"),
                 minutes: 2250
             ),
 
             // fruit => wine
             new Recipe(
-                input: SObject.FruitsCategory,
+                input: $"{SObject.FruitsCategory}",
                 inputCount: 1,
-                output: input =>
-                {
-                    SObject wine = new SObject(Vector2.Zero, 348, input.Name + " Wine", false, true, false, false)
-                    {
-                        name = input.Name + " Wine",
-                        Price = ((SObject)input).Price * 3,
-                        preserve = { Value = SObject.PreserveType.Wine },
-                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                    };
-                    return wine;
-                },
+                output: input => ItemRegistry.RequireTypeDefinition<ObjectDataDefinition>(ItemRegistry.type_object).CreateFlavoredWine((SObject)input),
                 minutes: 10000
             ),
             new Recipe(
-                input: SObject.VegetableCategory,
+                input: $"{SObject.VegetableCategory}",
                 inputCount: 1,
-                output: input =>
-                {
-                    SObject juice = new SObject(Vector2.Zero, 350, input.Name + " Juice", false, true, false, false)
-                    {
-                        name = input.Name + " Juice",
-                        Price = (int)(((SObject)input).Price * 2.25),
-                        preserve = { Value = SObject.PreserveType.Juice },
-                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                    };
-                    return juice;
-                },
+                output: input => ItemRegistry.RequireTypeDefinition<ObjectDataDefinition>(ItemRegistry.type_object).CreateFlavoredJuice((SObject)input),
                 minutes: 6000
             )
         };

@@ -6,7 +6,6 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using xTile.Dimensions;
-using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 {
@@ -108,49 +107,49 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
             bool hatCheck = Game1.stats.getStat("trashCansChecked") > 20U && random.NextDouble() < 0.002; // flag2
 
             if (hatCheck)
-                return new Hat(66); // garbage hat
+                return new Hat("66"); // garbage hat
 
             if (trashCheck || random.NextDouble() < 0.2 + who.DailyLuck)
             {
-                int itemID = random.Next(10) switch
+                string itemID = random.Next(10) switch
                 {
-                    0 => 168, // trash
-                    1 => 167, // Joja Cola
-                    2 => 170, // broken glasses
-                    3 => 171, // broken CD
-                    4 => 172, // soggy newspaper
-                    5 => 216, // bread
+                    0 => "168", // trash
+                    1 => "167", // Joja Cola
+                    2 => "170", // broken glasses
+                    3 => "171", // broken CD
+                    4 => "172", // soggy newspaper
+                    5 => "216", // bread
                     6 => Utility.getRandomItemFromSeason(Game1.currentSeason, tileLocation.X * 653 + tileLocation.Y * 777, false), // seasonal item
-                    7 => 403, // field snack
-                    8 => 309 + random.Next(3), // acorn, maple seed, or pine cone
-                    9 => 153, // green algae
-                    _ => 168 // trash
+                    7 => "403", // field snack
+                    8 => $"{309 + random.Next(3)}", // acorn, maple seed, or pine cone
+                    9 => "153", // green algae
+                    _ => "168" // trash
                 };
 
                 if (index == 3 && random.NextDouble() < 0.2 + who.DailyLuck)
                 {
-                    itemID = 535; // geode
+                    itemID = "535"; // geode
                     if (random.NextDouble() < 0.05)
-                        itemID = 749; // omni geode
+                        itemID = "749"; // omni geode
                 }
                 if (index == 4 && random.NextDouble() < 0.2 + who.DailyLuck)
                 {
-                    itemID = 378 + random.Next(3) * 2; // copper ore, iron ore, coal
+                    itemID = $"{378 + random.Next(3) * 2}"; // copper ore, iron ore, coal
                     random.Next(1, 5);
                 }
                 if (index == 5 && random.NextDouble() < 0.2 + who.DailyLuck && Game1.dishOfTheDay != null)
-                    itemID = Game1.dishOfTheDay.ParentSheetIndex != 217 ? Game1.dishOfTheDay.ParentSheetIndex : 216; // bread
+                    itemID = Game1.dishOfTheDay.QualifiedItemId != "(O)217" ? Game1.dishOfTheDay.QualifiedItemId : "216"; // bread
                 if (index == 6 && random.NextDouble() < 0.2 + who.DailyLuck)
-                    itemID = 223; // cookie
+                    itemID = "223"; // cookie
                 if (index == 7 && random.NextDouble() < 0.2)
                 {
-                    if (!Utility.HasAnyPlayerSeenEvent(191393))
-                        itemID = 167; // Joja Cola
+                    if (!Utility.HasAnyPlayerSeenEvent("191393"))
+                        itemID = "167"; // Joja Cola
                     if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater") && !Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheaterJoja"))
-                        itemID = random.NextDouble() >= 0.25 ? 270 : 809; // corn or movie ticket
+                        itemID = random.NextDouble() >= 0.25 ? "270" : "809"; // corn or movie ticket
                 }
 
-                return new SObject(itemID, 1);
+                return ItemRegistry.Create("(O)" + itemID);
             }
 
             return null;
