@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common.UI;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -63,10 +64,9 @@ namespace Pathoschild.Stardew.Common
         {
             var locations = Game1.locations
                 .Concat(
-                    from location in Game1.locations.OfType<BuildableGameLocation>()
-                    from building in location.buildings
-                    where building.indoors.Value != null
-                    select building.indoors.Value
+                    from location in Game1.locations
+                    from indoors in location.GetInstancedBuildingInteriors()
+                    select indoors
                 );
 
             if (includeTempLevels)

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using StardewValley;
 
@@ -26,24 +25,6 @@ namespace Pathoschild.Stardew.Common
             catch
             {
                 return $"(missing translation: bigcraftable object #{id} has an invalid format)";
-            }
-        }
-
-        /// <summary>Get the translated name for a building.</summary>
-        /// <param name="id">The building ID.</param>
-        public static string GetBuildingName(string id)
-        {
-            var blueprints = Game1.content.Load<Dictionary<string, string>>("Data/Blueprints");
-            if (!blueprints.ContainsKey(id))
-                return $"(missing translation: no blueprint with key '{id}')";
-
-            try
-            {
-                return new BluePrint(id).displayName;
-            }
-            catch
-            {
-                return $"(missing translation: blueprint with key '{id}' has an invalid format)";
             }
         }
 

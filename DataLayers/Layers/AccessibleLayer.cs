@@ -85,16 +85,13 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         {
             // get building warps
             HashSet<Vector2> buildingDoors = new HashSet<Vector2>();
-            if (location is BuildableGameLocation buildableLocation)
+            foreach (Building building in location.buildings)
             {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    if (building.indoors.Value == null || (building.humanDoor.X < 0 && building.humanDoor.Y < 0))
-                        continue;
+                if (!building.HasIndoors() || (building.humanDoor.X < 0 && building.humanDoor.Y < 0))
+                    continue;
 
-                    buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value));
-                    buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value - 1));
-                }
+                buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value));
+                buildingDoors.Add(new Vector2(building.humanDoor.X + building.tileX.Value, building.humanDoor.Y + building.tileY.Value - 1));
             }
 
             // get tile data
@@ -189,13 +186,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 return true;
 
             // buildings
-            if (location is BuildableGameLocation buildableLocation)
+            foreach (Building building in location.buildings)
             {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    if (building.occupiesTile(tile))
-                        return true;
-                }
+                if (building.occupiesTile(tile))
+                    return true;
             }
 
             // large terrain features

@@ -126,14 +126,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         private IEnumerable<GameLocation> GetNestedLocations(GameLocation location)
         {
             // building interiors
-            if (location is BuildableGameLocation buildableLocation)
+            foreach (GameLocation interior in location.buildings.Select(p => p.GetIndoors()).Where(p => p != null))
             {
-                foreach (GameLocation interior in buildableLocation.buildings.Select(p => p.indoors.Value).Where(p => p != null))
-                {
-                    yield return interior;
-                    foreach (GameLocation child in this.GetNestedLocations(interior))
-                        yield return child;
-                }
+                yield return interior;
+                foreach (GameLocation child in this.GetNestedLocations(interior))
+                    yield return child;
             }
 
             // farmhouse/cabin

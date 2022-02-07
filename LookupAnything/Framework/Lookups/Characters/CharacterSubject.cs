@@ -12,6 +12,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Models;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Monsters;
@@ -308,7 +309,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // water bowl
-            yield return new GenericField(I18n.Pet_WaterBowl(), farm.petBowlWatered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
+            PetBowl bowl = pet.GetPetBowl();
+            if (bowl != null)
+                yield return new GenericField(I18n.Pet_WaterBowl(), bowl.watered.Value ? I18n.Pet_WaterBowl_Filled() : I18n.Pet_WaterBowl_Empty());
         }
 
         /// <summary>Get the fields to display for the trash bear.</summary>

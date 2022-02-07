@@ -230,7 +230,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
-        public IAutomatable? GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
+        public IAutomatable? GetFor(Building building, GameLocation location, in Vector2 tile)
         {
             // building by type
             switch (building)
@@ -257,11 +257,16 @@ namespace Pathoschild.Stardew.Automate.Framework
                         return new JunimoHutMachine(hut, location, gemBehavior, fertilizerBehavior, seedBehavior);
                     }
 
-                case Mill mill:
-                    return new MillMachine(mill, location);
-
                 case ShippingBin bin:
                     return new ShippingBinMachine(bin, location);
+
+                default:
+                    switch (building.buildingType.Value)
+                    {
+                        case "Mill":
+                            return new MillMachine(building, location);
+                    }
+                    break;
             }
 
             // building by buildingType

@@ -9,7 +9,7 @@ using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.GameData.FishPond;
+using StardewValley.GameData.FishPonds;
 using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields

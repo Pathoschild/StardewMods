@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
@@ -12,7 +11,8 @@ using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
-using StardewValley.GameData.FishPond;
+using StardewValley.GameData.Buildings;
+using StardewValley.GameData.FishPonds;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using xTile;
@@ -52,17 +52,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             this.Target = building;
             this.SourceRectangle = sourceRectangle;
 
-            // get name/description from blueprint if available
-            try
-            {
-                BluePrint blueprint = new BluePrint(building.buildingType.Value);
-                this.Name = blueprint.displayName;
-                this.Description = blueprint.description;
-            }
-            catch (ContentLoadException)
-            {
-                // use default values
-            }
+            // get name/description from data if available
+            BuildingData? buildingData = building.GetData();
+            this.Name = TokenParser.ParseText(buildingData?.Name) ?? this.Name;
+            this.Description = TokenParser.ParseText(buildingData?.Description) ?? this.Description;
         }
 
         /// <summary>Get the data to display for this subject.</summary>
@@ -85,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             Farmer? owner = this.GetOwner();
             if (owner != null)
                 yield return new LinkField(I18n.Building_Owner(), owner.Name, () => this.Codex.GetByEntity(owner, owner.currentLocation)!);
-            else if (building.indoors.Value is Cabin)
+            else if (building.GetIndoors() is Cabin)
                 yield return new GenericField(I18n.Building_Owner(), I18n.Building_Owner_None());
 
             // stable horse
@@ -100,7 +93,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             }
 
             // animals
-            if (built && building.indoors.Value is AnimalHouse animalHouse)
+            if (built && building.GetIndoors() is AnimalHouse animalHouse)
             {
                 // animal counts
                 yield return new GenericField(I18n.Building_Animals(), I18n.Building_Animals_Summary(count: animalHouse.animalsThatLiveHere.Count, max: animalHouse.animalLimit.Value));
@@ -116,7 +109,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             }
 
             // slimes
-            if (built && building.indoors.Value is SlimeHutch slimeHutch)
+            if (built && building.GetIndoors() is SlimeHutch slimeHutch)
             {
                 // slime count
                 int slimeCount = slimeHutch.characters.OfType<GreenSlime>().Count();
@@ -178,13 +171,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                     // Junimo hut
                     case JunimoHut hut:
                         yield return new GenericField(I18n.Building_JunimoHarvestingEnabled(), I18n.Stringify(!hut.noHarvest.Value));
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), hut.output.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), hut.GetOutputChest()?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
                         break;
 
                     // mill
-                    case Mill mill:
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), mill.input.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
-                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), mill.output.Value?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
+                    case not null when building.buildingType.Value == "Mill":
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputProcessing(), building.GetBuildingChest("Input")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
+                        yield return new ItemIconListField(this.GameHelper, I18n.Building_OutputReady(), building.GetBuildingChest("Output")?.GetItemsForPlayer(Game1.player.UniqueMultiplayerID), showStackSize: true);
                         break;
 
                     // silo
@@ -194,7 +187,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
                             Farm farm = Game1.getFarm();
                             int siloCount = Utility.numSilos();
                             int hayCount = farm.piecesOfHay.Value;
-                            int maxHay = Math.Max(farm.piecesOfHay.Value, siloCount * 240);
+                            int maxHay = Math.Max(farm.piecesOfHay.Value, farm.GetHayCapacity());
                             yield return new GenericField(
                                 I18n.Building_StoredHay(),
                                 siloCount == 1
@@ -215,7 +208,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             // pinned fields
             yield return new GenericDebugField("building type", target.buildingType.Value, pinned: true);
             yield return new GenericDebugField("days of construction left", target.daysOfConstructionLeft.Value, pinned: true);
-            yield return new GenericDebugField("name of indoors", target.nameOfIndoors, pinned: true);
+            yield return new GenericDebugField("indoors name", target.GetIndoorsName(), pinned: true);
+            yield return new GenericDebugField("indoors type", target.GetIndoorsType().ToString(), pinned: true);
 
             // raw fields
             foreach (IDebugField field in this.GetDebugFieldsFrom(target))
@@ -231,7 +225,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         public override bool DrawPortrait(SpriteBatch spriteBatch, Vector2 position, Vector2 size)
         {
             Building target = this.Target;
-            spriteBatch.Draw(target.texture.Value, position, this.SourceRectangle, target.color.Value, 0.0f, Vector2.Zero, size.X / this.SourceRectangle.Width, SpriteEffects.None, 0.89f);
+            spriteBatch.Draw(target.texture.Value, position, this.SourceRectangle, target.color, 0.0f, Vector2.Zero, size.X / this.SourceRectangle.Width, SpriteEffects.None, 0.89f);
             return true;
         }
 
@@ -252,7 +246,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             }
 
             // cabin
-            if (this.Target.indoors.Value is Cabin cabin)
+            if (this.Target.GetIndoors() is Cabin cabin)
                 return cabin.owner;
 
             return null;
@@ -263,15 +257,15 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
         private int? GetUpgradeLevel(Building building)
         {
             // barn
-            if (building is Barn barn && int.TryParse(barn.nameOfIndoorsWithoutUnique.Substring("Barn".Length), out int barnUpgradeLevel))
+            if (building is Barn barn && int.TryParse(barn.GetIndoorsName().Substring("Barn".Length), out int barnUpgradeLevel))
                 return barnUpgradeLevel - 1; // Barn2 is first upgrade
 
             // cabin
-            if (building.indoors.Value is Cabin cabin)
+            if (building.GetIndoors() is Cabin cabin)
                 return cabin.upgradeLevel;
 
             // coop
-            if (building is Coop coop && int.TryParse(coop.nameOfIndoorsWithoutUnique.Substring("Coop".Length), out int coopUpgradeLevel))
+            if (building is Coop coop && int.TryParse(coop.GetIndoorsName().Substring("Coop".Length), out int coopUpgradeLevel))
                 return coopUpgradeLevel - 1; // Coop2 is first upgrade
 
             return null;
@@ -315,7 +309,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings
             }
 
             // cabin
-            else if (building.indoors.Value is Cabin)
+            else if (building.GetIndoors() is Cabin)
             {
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_0(), value: true);
                 yield return CheckboxListField.Checkbox(text: I18n.Building_Upgrades_Cabin_1(), value: upgradeLevel >= 1);

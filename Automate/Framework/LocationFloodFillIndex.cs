@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
@@ -100,14 +99,11 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // buildings
-            if (location is BuildableGameLocation buildableLocation)
+            foreach (Building building in location.buildings)
             {
-                foreach (Building building in buildableLocation.buildings)
-                {
-                    Rectangle tileArea = new(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
-                    foreach (Vector2 tile in this.GetTilesIn(tileArea))
-                        yield return new(tile, building);
-                }
+                Rectangle tileArea = new(building.tileX.Value, building.tileY.Value, building.tilesWide.Value, building.tilesHigh.Value);
+                foreach (Vector2 tile in this.GetTilesIn(tileArea))
+                    yield return new(tile, building);
             }
         }
 

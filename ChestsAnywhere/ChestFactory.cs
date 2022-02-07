@@ -149,28 +149,25 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                     }
 
                     // buildings
-                    if (location is BuildableGameLocation buildableLocation)
+                    foreach (Building building in location.buildings)
                     {
-                        foreach (Building building in buildableLocation.buildings)
+                        if (building is JunimoHut hut)
                         {
-                            if (building is JunimoHut hut)
-                            {
-                                yield return new ManagedChest(
-                                    container: new JunimoHutContainer(hut, this.Reflection),
-                                    location: location,
-                                    tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
-                                    mapEntity: building,
-                                    defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetBuildingName("Junimo Hut"), nameCounts),
-                                    defaultCategory: category
-                                );
-                            }
+                            yield return new ManagedChest(
+                                container: new JunimoHutContainer(hut, this.Reflection),
+                                location: location,
+                                tile: new Vector2(hut.tileX.Value, hut.tileY.Value),
+                                mapEntity: building,
+                                defaultDisplayName: this.GetDisambiguatedDefaultName(GameI18n.GetString("Strings\\Buildings:JunimoHut_Name"), nameCounts),
+                                defaultCategory: category
+                            );
                         }
                     }
 
                     // shipping bin
                     if (this.HasShippingBin(location))
                     {
-                        string shippingBinLabel = GameI18n.GetBuildingName("Shipping Bin");
+                        string shippingBinLabel = GameI18n.GetString("Strings\\Buildings:ShippingBin_Name");
 
                         if (Constants.TargetPlatform == GamePlatform.Android)
                         {
@@ -371,17 +368,30 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 case SObject obj when obj.QualifiedItemId == this.AutoGrabberID:
                     return this.GetChestInventory(obj.heldObject.Value as Chest);
 
-                // buildings
-                case JunimoHut hut:
-                    return this.GetChestInventory(hut.output.Value);
-                case Mill mill:
-                    return this.GetChestInventory(mill.output.Value);
-
                 // shipping bin
                 case Farm:
                 case IslandWest:
                 case ShippingBin:
                     return Game1.getFarm().getShippingBin(Game1.player);
+
+                // buildings
+                case JunimoHut hut:
+                    return this.GetChestInventory(hut.GetOutputChest());
+                case Building building:
+                    {
+                        // 'output' convention (e.g. vanilla Mill)
+                        Chest? output = building.GetBuildingChest("Output");
+                        if (output != null)
+                            return output.Items;
+
+                        // else only chest
+                        IList<Chest>? chests = building.buildingChests;
+                        if (chests?.Count == 1)
+                            return chests[0].Items;
+
+                        // else no match
+                        return null;
+                    }
 
                 // dresser
                 case StorageFurniture furniture:

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Netcode;
 using Pathoschild.Stardew.Common;
@@ -9,7 +8,6 @@ using Pathoschild.Stardew.Common.Utilities;
 using Pathoschild.Stardew.TractorMod.Framework.Attachments;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -224,26 +222,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             return new Rectangle((int)pos.X, (int)pos.Y, Game1.tileSize, Game1.tileSize);
         }
 
-        /// <summary>Get the resource clumps in a given location.</summary>
-        /// <param name="location">The location to search.</param>
-        private IEnumerable<ResourceClump> GetNormalResourceClumps(GameLocation location)
-        {
-            IEnumerable<ResourceClump> clumps = location.resourceClumps;
-
-            switch (location)
-            {
-                case Forest { log: not null } forest:
-                    clumps = clumps.Concat(new[] { forest.log });
-                    break;
-
-                case Woods woods when woods.stumps.Any():
-                    clumps = clumps.Concat(woods.stumps);
-                    break;
-            }
-
-            return clumps;
-        }
-
         /// <summary>Get the resource clump which covers a given tile, if any.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile to check.</param>
@@ -263,7 +241,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             Rectangle tileArea = this.GetAbsoluteTileArea(tile);
 
             // normal resource clumps
-            foreach (ResourceClump cur in this.GetNormalResourceClumps(location))
+            foreach (ResourceClump cur in location.resourceClumps)
             {
                 if (cur.getBoundingBox(cur.tile.Value).Intersects(tileArea))
                 {
@@ -303,14 +281,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <remarks>Derived from <see cref="Shears.beginUsing"/> and <see cref="Utility.GetBestHarvestableFarmAnimal"/>.</remarks>
         protected FarmAnimal? GetBestHarvestableFarmAnimal(Tool tool, GameLocation location, Vector2 tile)
         {
-            // ignore if location can't have animals
-            if (location is not IAnimalLocation animalLocation)
-                return null;
-
             // get best harvestable animal
             Vector2 useAt = this.GetToolPixelPosition(tile);
             FarmAnimal? animal = Utility.GetBestHarvestableFarmAnimal(
-                animals: animalLocation.Animals.Values,
+                animals: location.Animals.Values,
                 tool: tool,
                 toolRect: new Rectangle((int)useAt.X, (int)useAt.Y, Game1.tileSize, Game1.tileSize)
             );

@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -116,11 +115,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             }
 
             // buildings
-            if (location is BuildableGameLocation buildableLocation)
-            {
-                if (buildableLocation.buildings.Any(building => building.occupiesTile(tile)))
-                    return true;
-            }
+            if (location.buildings.Any(building => building.occupiesTile(tile)))
+                return true;
 
             return false;
         }
