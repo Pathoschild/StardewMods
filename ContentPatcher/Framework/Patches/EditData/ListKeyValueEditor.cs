@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json.Linq;
-using StardewModdingAPI;
+using StardewValley.GameData;
+using StardewValley.GameData.Crafting;
+using StardewValley.GameData.FishPond;
+using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework.Patches.EditData
 {
@@ -15,8 +19,8 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <summary>The underlying data.</summary>
         private readonly IList<TValue> Data;
 
-        /// <summary>Simplifies dynamic access to game code.</summary>
-        private readonly IReflectionHelper Reflection;
+        /// <summary>Get the unique key for an entry, if available.</summary>
+        private readonly Lazy<Func<TValue, string>> GetAssetKeyImpl;
 
 
         /*********
@@ -24,12 +28,11 @@ namespace ContentPatcher.Framework.Patches.EditData
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="data">The underlying data.</param>
-        /// <param name="reflection">Simplifies dynamic access to game code.</param>
-        public ListKeyValueEditor(IList<TValue> data, IReflectionHelper reflection)
+        public ListKeyValueEditor(IList<TValue> data)
         {
             this.Data = data;
-            this.Reflection = reflection;
             this.CanMoveEntries = true;
+            this.GetAssetKeyImpl = new(this.GetAssetKeyFunc);
         }
 
         /// <inheritdoc />
@@ -131,10 +134,14 @@ namespace ContentPatcher.Framework.Patches.EditData
         ** Private methods
         *********/
         /// <summary>Get the key for a list asset entry.</summary>
-        /// <param name="entity">The entity whose ID to fetch.</param>
-        private string GetKey(TValue entity)
+        /// <param name="entry">The entity whose ID to fetch.</param>
+        private string GetKey(TValue entry)
         {
-            return InternalConstants.GetListAssetKey(entity, this.Reflection);
+            Func<TValue, string> getKey = this.GetAssetKeyImpl.Value;
+            if (getKey != null)
+                return getKey(entry);
+
+            throw new NotSupportedException($"No ID implementation for list value type {typeof(TValue).FullName}.");
         }
 
         /// <summary>Get a strongly-typed entry from the list.</summary>
@@ -157,6 +164,69 @@ namespace ContentPatcher.Framework.Patches.EditData
             value = default;
             index = -1;
             return false;
+        }
+
+        /// <summary>Get a function which returns the unique key for an entry, if available.</summary>
+        public Func<TValue, string> GetAssetKeyFunc()
+        {
+            Type type = typeof(TValue);
+
+            // predefined asset key
+            bool hasPredefined =
+                typeof(ConcessionItemData).IsAssignableFrom(type)
+                || typeof(ConcessionTaste).IsAssignableFrom(type)
+                || typeof(FishPondData).IsAssignableFrom(type)
+                || typeof(MovieCharacterReaction).IsAssignableFrom(type)
+                || typeof(RandomBundleData).IsAssignableFrom(type)
+                || typeof(TailorItemRecipe).IsAssignableFrom(type);
+            if (hasPredefined)
+                return this.GetPredefinedAssetKey;
+
+            // ID property
+            {
+                PropertyInfo property = typeof(TValue).GetProperty("ID");
+                if (property?.GetMethod != null)
+                    return entry => property.GetValue(entry)?.ToString();
+            }
+
+            // ID field
+            {
+                FieldInfo field = typeof(TValue).GetField("ID");
+                if (field != null)
+                    return entry => field.GetValue(entry)?.ToString();
+            }
+
+            return null;
+        }
+
+        /// <summary>Get the predefined key for a list asset entry.</summary>
+        /// <typeparam name="TValue">The list value type.</typeparam>
+        /// <param name="entity">The entity whose ID to fetch.</param>
+        public string GetPredefinedAssetKey(TValue entity)
+        {
+            switch (entity)
+            {
+                case ConcessionItemData entry:
+                    return entry.ID.ToString();
+
+                case ConcessionTaste entry:
+                    return entry.Name;
+
+                case FishPondData entry:
+                    return string.Join(",", entry.RequiredTags);
+
+                case MovieCharacterReaction entry:
+                    return entry.NPCName;
+
+                case RandomBundleData entry:
+                    return entry.AreaName;
+
+                case TailorItemRecipe entry:
+                    return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
+
+                default:
+                    throw new NotSupportedException($"No ID implementation for list asset value type {typeof(TValue).FullName}."); // should never happen, since we check before calling this method
+            }
         }
     }
 }

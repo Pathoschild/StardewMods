@@ -1,12 +1,6 @@
-using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
-using StardewModdingAPI;
-using StardewValley.GameData;
-using StardewValley.GameData.Crafting;
-using StardewValley.GameData.FishPond;
-using StardewValley.GameData.Movies;
 
 namespace ContentPatcher.Framework
 {
@@ -36,50 +30,5 @@ namespace ContentPatcher.Framework
 
         /// <summary>The tokens which depend on the <see cref="PatchConfig.Target"/> field.</summary>
         public static readonly ISet<ConditionType> TargetTokens = new HashSet<ConditionType> { ConditionType.Target, ConditionType.TargetPathOnly, ConditionType.TargetWithoutPath };
-
-
-        /*********
-        ** Methods
-        *********/
-        /// <summary>Get the key for a list asset entry.</summary>
-        /// <typeparam name="TValue">The list value type.</typeparam>
-        /// <param name="entity">The entity whose ID to fetch.</param>
-        /// <param name="reflection">Simplifies dynamic access to game code.</param>
-        public static string GetListAssetKey<TValue>(TValue entity, IReflectionHelper reflection)
-        {
-            switch (entity)
-            {
-                case ConcessionItemData entry:
-                    return entry.ID.ToString();
-
-                case ConcessionTaste entry:
-                    return entry.Name;
-
-                case FishPondData entry:
-                    return string.Join(",", entry.RequiredTags);
-
-                case MovieCharacterReaction entry:
-                    return entry.NPCName;
-
-                case RandomBundleData entry:
-                    return entry.AreaName;
-
-                case TailorItemRecipe entry:
-                    return string.Join(",", entry.FirstItemTags) + "|" + string.Join(",", entry.SecondItemTags);
-
-                default:
-                    {
-                        var property = reflection.GetProperty<object>(entity, "ID", required: false);
-                        if (property != null)
-                            return property.GetValue()?.ToString();
-
-                        var field = reflection.GetField<object>(entity, "ID", required: false);
-                        if (field != null)
-                            return field.GetValue()?.ToString();
-
-                        throw new NotSupportedException($"No ID implementation for list asset value type {typeof(TValue).FullName}.");
-                    }
-            }
-        }
     }
 }

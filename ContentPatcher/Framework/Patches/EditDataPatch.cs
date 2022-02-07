@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>Constructs key/value editors for arbitrary data.</summary>
-        private readonly KeyValueEditorFactory EditorFactory;
+        private readonly KeyValueEditorFactory EditorFactory = new();
 
         /// <summary>The field within the data asset to which edits should be applied, or empty to apply to the root asset.</summary>
         private readonly IManagedTokenString[] TargetField;
@@ -87,10 +87,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="reflection">Simplifies dynamic access to game code.</param>
         /// <param name="normalizeAssetName">Normalize an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -111,7 +110,6 @@ namespace ContentPatcher.Framework.Patches
             this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
             this.TargetField = targetField?.ToArray() ?? Array.Empty<IManagedTokenString>();
             this.Monitor = monitor;
-            this.EditorFactory = new(reflection);
             this.TryParseFields = tryParseFields;
 
             // track contextuals

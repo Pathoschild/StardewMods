@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches.EditData
 {
@@ -10,22 +9,8 @@ namespace ContentPatcher.Framework.Patches.EditData
     internal class KeyValueEditorFactory
     {
         /*********
-        ** Fields
-        *********/
-        /// <summary>Simplifies dynamic access to game code.</summary>
-        private readonly IReflectionHelper Reflection;
-
-
-        /*********
         ** Public methods
         *********/
-        /// <summary>Construct an instance.</summary>
-        /// <param name="reflection">Simplifies dynamic access to game code.</param>
-        public KeyValueEditorFactory(IReflectionHelper reflection)
-        {
-            this.Reflection = reflection;
-        }
-
         /// <summary>Get an editor for the given data structure, if it can be edited.</summary>
         /// <param name="data">The data structure to edit.</param>
         /// <returns>Returns an editor if the data type is supported, else <c>null</c>.</returns>
@@ -106,7 +91,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <param name="data">The data to edit.</param>
         private IKeyValueEditor GetListEditor<TValue>(IList<TValue> data)
         {
-            return new ListKeyValueEditor<TValue>(data, this.Reflection);
+            return new ListKeyValueEditor<TValue>(data);
         }
     }
 }

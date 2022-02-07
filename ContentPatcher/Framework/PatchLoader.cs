@@ -540,7 +540,6 @@ namespace ContentPatcher.Framework
                                 contentPack: pack,
                                 parentPatch: parentPatch,
                                 monitor: this.Monitor,
-                                reflection: this.Reflection,
                                 normalizeAssetName: this.NormalizeAssetName,
                                 tryParseFields: TryParseFields
                             );
