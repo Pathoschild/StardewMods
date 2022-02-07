@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups.Buildings;
@@ -40,9 +39,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="showRawTileInfo">Whether to show raw tile info like tilesheets and tile indexes.</param>
-        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, JsonAssetsIntegration jsonAssets, Func<bool> showRawTileInfo)
+        public TargetFactory(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, Func<bool> showRawTileInfo)
         {
             this.GameHelper = gameHelper;
 
@@ -51,8 +49,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             {
                 new BuildingLookupProvider(reflection, gameHelper, codex),
                 new CharacterLookupProvider(reflection, gameHelper, config, codex),
-                new ItemLookupProvider(reflection, gameHelper, config, codex, jsonAssets),
-                new TerrainFeatureLookupProvider(reflection, gameHelper, codex, jsonAssets),
+                new ItemLookupProvider(reflection, gameHelper, config, codex),
+                new TerrainFeatureLookupProvider(reflection, gameHelper, codex),
                 new TileLookupProvider(reflection, gameHelper, config, showRawTileInfo)
             };
         }

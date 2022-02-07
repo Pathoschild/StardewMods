@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -16,9 +15,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Provides subject entries.</summary>
         private readonly ISubjectRegistry Codex;
 
-        /// <summary>The Json Assets API.</summary>
-        private readonly JsonAssetsIntegration JsonAssets;
-
 
         /*********
         ** Public methods
@@ -27,12 +23,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="codex">Provides subject entries.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
-        public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
+        public TerrainFeatureLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Codex = codex;
-            this.JsonAssets = jsonAssets;
         }
 
         /// <inheritdoc />
@@ -51,7 +45,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                 {
                     case FruitTree fruitTree:
                         if (this.Reflection.GetField<float>(fruitTree, "alpha").GetValue() >= 0.8f) // ignore when tree is faded out (so player can lookup things behind it)
-                            yield return new FruitTreeTarget(this.GameHelper, fruitTree, this.JsonAssets, entityTile, () => this.BuildSubject(fruitTree, entityTile));
+                            yield return new FruitTreeTarget(this.GameHelper, fruitTree, entityTile, () => this.BuildSubject(fruitTree, entityTile));
                         break;
 
                     case Tree tree:

@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -32,14 +31,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="value">The underlying in-game entity.</param>
         /// <param name="tilePosition">The object's tile position in the current location (if applicable).</param>
         /// <param name="reflectionHelper">Simplifies access to private game code.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="getSubject">Get the subject info about the target.</param>
-        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, IReflectionHelper reflectionHelper, JsonAssetsIntegration jsonAssets, Func<ISubject> getSubject)
+        public CropTarget(GameHelper gameHelper, HoeDirt value, Vector2 tilePosition, IReflectionHelper reflectionHelper, Func<ISubject> getSubject)
             : base(gameHelper, SubjectType.Crop, value, tilePosition, getSubject)
         {
             this.Reflection = reflectionHelper;
 
-            this.GetSpriteSheet(value.crop, jsonAssets, out this.Texture, out this.SourceRect);
+            this.GetSpriteSheet(value.crop, out this.Texture, out this.SourceRect);
         }
 
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
@@ -81,18 +79,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         *********/
         /// <summary>Get the in-world sprite sheet for a target.</summary>
         /// <param name="target">The target whose texture to get.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
         /// <remarks>Derived from <see cref="Crop.draw"/>.</remarks>
-        private void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D? texture, out Rectangle sourceRect)
+        private void GetSpriteSheet(Crop target, out Texture2D? texture, out Rectangle sourceRect)
         {
-            // get from Json Assets
-            if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect, currentSpriteOnly: true))
-                return;
-
-            // use vanilla logic
             texture = target.DrawnCropTexture;
             sourceRect = this.Reflection.GetField<Rectangle>(target, "sourceRect").GetValue();
             if (target.forageCrop.Value)

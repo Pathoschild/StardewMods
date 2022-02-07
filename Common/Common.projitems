@@ -36,8 +36,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\CustomFarmingReduxIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\CustomFarmingRedux\ICustomFarmingApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\IModIntegration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\JsonAssets\IJsonAssetsApi.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Integrations\JsonAssets\JsonAssetsIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\LineSprinklers\ILineSprinklersApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\LineSprinklers\LineSprinklersIntegration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Integrations\PelicanFiber\PelicanFiberIntegration.cs" />
