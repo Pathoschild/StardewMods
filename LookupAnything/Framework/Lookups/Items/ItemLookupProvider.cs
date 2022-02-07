@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
-using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.Common.Items;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewModdingAPI;
@@ -25,9 +24,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Provides methods for searching and constructing items.</summary>
         private readonly ItemRepository ItemRepository = new();
 
-        /// <summary>The Json Assets API.</summary>
-        private readonly JsonAssetsIntegration JsonAssets;
-
         /// <summary>The mod configuration.</summary>
         private readonly Func<ModConfig> Config;
 
@@ -43,13 +39,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="config">The mod configuration.</param>
         /// <param name="codex">Provides subject entries.</param>
-        /// <param name="jsonAssets">The Json Assets API.</param>
-        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex, JsonAssetsIntegration jsonAssets)
+        public ItemLookupProvider(IReflectionHelper reflection, GameHelper gameHelper, Func<ModConfig> config, ISubjectRegistry codex)
             : base(reflection, gameHelper)
         {
             this.Config = config;
             this.Codex = codex;
-            this.JsonAssets = jsonAssets;
         }
 
         /// <inheritdoc />
@@ -77,7 +71,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             foreach ((Vector2 tile, TerrainFeature feature) in location.terrainFeatures.Pairs)
             {
                 if (feature is HoeDirt { crop: not null } dirt && this.GameHelper.CouldSpriteOccludeTile(tile, lookupTile))
-                    yield return new CropTarget(this.GameHelper, dirt, tile, this.Reflection, this.JsonAssets, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
+                    yield return new CropTarget(this.GameHelper, dirt, tile, this.Reflection, () => this.BuildSubject(dirt.crop, ObjectContext.World, dirt));
             }
         }
 
