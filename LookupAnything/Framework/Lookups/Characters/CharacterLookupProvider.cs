@@ -92,8 +92,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case ProfileMenu profileMenu:
                     if (profileMenu.hoveredItem == null)
                     {
-                        if (profileMenu.GetCharacter() is NPC npc)
-                            return this.Codex.GetByEntity(npc, npc.currentLocation);
+                        Character character = profileMenu.Current.Character;
+                        if (character != null)
+                            return this.Codex.GetByEntity(character, character.currentLocation);
                     }
                     break;
 

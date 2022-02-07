@@ -45,12 +45,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             FarmAnimal animal = this.Target;
 
             // calculate maturity
-            bool isFullyGrown = animal.age.Value >= animal.ageWhenMature.Value;
+            bool isFullyGrown = animal.isAdult();
             int daysUntilGrown = 0;
             SDate? dayOfMaturity = null;
             if (!isFullyGrown)
             {
-                daysUntilGrown = animal.ageWhenMature.Value - animal.age.Value;
+                daysUntilGrown = animal.GetAnimalData().DaysToMature - animal.age.Value;
                 dayOfMaturity = SDate.Now().AddDays(daysUntilGrown);
             }
 
