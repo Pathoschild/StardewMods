@@ -101,7 +101,7 @@ namespace Pathoschild.Stardew.TractorMod
             );
             this.TractorManagerImpl = new(() =>
             {
-                var manager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection);
+                var manager = new TractorManager(this.Config, this.Keys, this.Helper.Reflection, () => this.TextureManager.BuffIconTexture);
                 this.UpdateConfigFor(manager);
                 return manager;
             });

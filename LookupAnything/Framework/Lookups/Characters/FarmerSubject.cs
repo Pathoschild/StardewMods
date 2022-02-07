@@ -86,8 +86,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             SFarmer target = this.Target;
 
             // pinned fields
-            yield return new GenericDebugField("immunity", target.immunity, pinned: true);
-            yield return new GenericDebugField("resilience", target.resilience, pinned: true);
+            yield return new GenericDebugField("immunity", target.Immunity, pinned: true);
+            yield return new GenericDebugField("defense", target.buffs.Defense, pinned: true);
             yield return new GenericDebugField("magnetic radius", target.MagneticRadius, pinned: true);
 
             // raw fields
