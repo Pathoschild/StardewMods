@@ -11,8 +11,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * `EditData` is now more powerful:
-  * You can now edit nested fields within a data model using [`TargetField`](author-guide/action-editdata.md#target-field). For example, you can edit the reward for a bundle in `Data/RandomBundle` without redefining the whole bundle area.
-  * You can now edit custom assets with arbitrary data models (i.e. non-list/dictionary assets).
+  * You can now edit nested fields using [`TargetField`](author-guide/action-editdata.md#target-field). For example, you can edit the reward for a bundle in `Data/RandomBundle` without redefining the whole bundle area.
+  * You can now edit arbitrary data models (e.g. non-list/dictionary assets added by mods).
+  * You can now edit list entries by their index position, even if they have no ID available.
 * Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
 * The deprecated `Enabled` patch field is now obsolete.

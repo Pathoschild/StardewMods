@@ -274,10 +274,12 @@ This affects all of the change fields (e.g. `Fields`, `Entries`, `TextOperations
 ### Format
 `TargetFields` describes a path to 'drill into' relative to the entire data asset.
 
-For example, `"TargetField": [ "Crafts Room", "BundleSets", "Bundles" ]` will...
+For example, `"TargetField": [ "Crafts Room", "BundleSets", "#0", "Bundles", "#0" ]` will...
 1. select the `Crafts Room` entry;
 2. select the `BundleSets` field on that entry;
-3. select the `Bundles` field on the `BundleSets` value.
+3. select the first bundle set in that `BundleSets` field;
+3. select the `Bundles` field on that bundle set;
+4. and select the first value in that `Bundles` array.
 
 At that point any changes will be applied within the selected value, instead of the entire model.
 
@@ -287,6 +289,70 @@ type        | effect
 ----------- | ------
 ID          | A dictionary key or [list key](#edit-a-list) within a dictionary/list (e.g. `"Crafts Room"` in the example below).
 field name  | The name of a field on the data model (e.g. `"BundleSets"` and `"Bundles"` in the example below).
+array index | The position of a value within the list (e.g. `#0` in the example below). This must be prefixed with `#`, otherwise it'll be treated as an ID instead.
+
+### Example
+The `Data/RandomBundles` asset has entries like this:
+```js
+[
+    {
+        "AreaName": "Crafts Room",
+        "Keys": "13 14 15 16 17 19",
+        "BundleSets": [
+            {
+                "Bundles": [
+                    {
+                        "Name": "Spring Foraging",
+                        "Index": 0,
+                        "Sprite": "13",
+                        "Color": "Green",
+                        "Items": "1 Wild Horseradish, 1 Daffodil, 1 Leek, 1 Dandelion, 1 Spring Onion",
+                        "Pick": 4,
+                        "RequiredItems": -1,
+                        "Reward": "30 Spring Seeds"
+                    },
+                    ...
+                ]
+            }
+        ],
+        ...
+    }
+]
+```
+
+Using `TargetField`, you can edit the bundle reward within the entry without needing to redefine
+the entire entry:
+
+```js
+{
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/RandomBundles",
+            "TargetField": [ "Crafts Room", "BundleSets", "#0", "Bundles", "#0" ],
+            "Entries": {
+                "Reward": "60 Spring Seeds" // double normal reward
+            }
+        },
+    ]
+}
+```
+
+The `TargetField` sets the selected value as the scope, so the rest of the fields work as if the
+entire data asset looked like this:
+```js
+{
+    "Name": "Spring Foraging",
+    "Index": 0,
+    "Sprite": "13",
+    "Color": "Green",
+    "Items": "1 Wild Horseradish, 1 Daffodil, 1 Leek, 1 Dandelion, 1 Spring Onion",
+    "Pick": 4,
+    "RequiredItems": -1,
+    "Reward": "30 Spring Seeds"
+}
+```
 
 ## See also
 * [Author guide](../author-guide.md) for other actions and options

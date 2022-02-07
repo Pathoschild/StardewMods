@@ -38,15 +38,22 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <inheritdoc />
         public override object ParseKey(string key)
         {
+            // array index (like "#5")
+            if (key != null)
+            {
+                string[] parts = key.Split('#', count: 2);
+                if (parts.Length == 2 && string.IsNullOrWhiteSpace(parts[0]) && int.TryParse(parts[1], out int index))
+                    return index;
+            }
+
+            // else entry key
             return key;
         }
 
         /// <inheritdoc />
         public override object GetEntry(object key)
         {
-            string parsedKey = (string)key;
-
-            return this.TryGetEntry(parsedKey, out TValue value, out _)
+            return this.TryGetEntry(key, out TValue value, out _)
                 ? value
                 : default;
         }
@@ -54,9 +61,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <inheritdoc />
         public override void RemoveEntry(object key)
         {
-            string parsedKey = (string)key;
-
-            if (this.TryGetEntry(parsedKey, out _, out int index))
+            if (this.TryGetEntry(key, out _, out int index))
                 this.Data.RemoveAt(index);
         }
 
@@ -69,9 +74,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <inheritdoc />
         public override void SetEntry(object key, JToken value)
         {
-            string parsedKey = (string)key;
-
-            if (this.TryGetEntry(parsedKey, out _, out int index))
+            if (this.TryGetEntry(key, out _, out int index))
                 this.Data[index] = value.ToObject<TValue>();
             else
                 this.Data.Add(value.ToObject<TValue>());
@@ -81,8 +84,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         public override MoveResult MoveEntry(object key, MoveEntryPosition toPosition)
         {
             // get entry
-            string parsedKey = (string)key;
-            if (!this.TryGetEntry(parsedKey, out TValue entry, out int index))
+            if (!this.TryGetEntry(key, out TValue entry, out int index))
                 return MoveResult.TargetNotFound;
 
             // move entry
@@ -112,9 +114,9 @@ namespace ContentPatcher.Framework.Patches.EditData
         public override MoveResult MoveEntry(object key, object anchorKey, bool afterAnchor)
         {
             // get entries
-            if (!this.TryGetEntry((string)key, out TValue entry, out int entryIndex))
+            if (!this.TryGetEntry(key, out TValue entry, out int entryIndex))
                 return MoveResult.TargetNotFound;
-            if (!this.TryGetEntry((string)anchorKey, out _, out int anchorIndex))
+            if (!this.TryGetEntry(anchorKey, out _, out int anchorIndex))
                 return MoveResult.AnchorNotFound;
             if (entryIndex == anchorIndex)
                 return MoveResult.TargetNotFound;
@@ -145,22 +147,38 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <summary>Get a strongly-typed entry from the list.</summary>
-        /// <param name="key">The entry key.</param>
+        /// <param name="keyOrIndex">The entry key or array index.</param>
         /// <param name="value">The entry found in the list.</param>
         /// <param name="index">The entry's index within the list.</param>
-        private bool TryGetEntry(string key, out TValue value, out int index)
+        private bool TryGetEntry(object keyOrIndex, out TValue value, out int index)
         {
-            for (int i = 0; i < this.Data.Count; i++)
+            // get entry by key or index
+            switch (keyOrIndex)
             {
-                value = this.Data[i];
+                case int searchIndex:
+                    if (searchIndex >= 0 && searchIndex < this.Data.Count)
+                    {
+                        value = this.Data[searchIndex];
+                        index = searchIndex;
+                        return true;
+                    }
+                    break;
 
-                if (this.GetKey(value) == key)
-                {
-                    index = i;
-                    return true;
-                }
+                case string key:
+                    for (int i = 0; i < this.Data.Count; i++)
+                    {
+                        value = this.Data[i];
+
+                        if (this.GetKey(value) == key)
+                        {
+                            index = i;
+                            return true;
+                        }
+                    }
+                    break;
             }
 
+            // not found
             value = default;
             index = -1;
             return false;
