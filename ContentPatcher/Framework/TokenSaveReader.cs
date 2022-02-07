@@ -12,6 +12,7 @@ using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Network;
 
 namespace ContentPatcher.Framework
 {
@@ -124,19 +125,9 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the current player's location context.</summary>
         /// <param name="player">The player instance.</param>
-        public LocationContext? GetCurrentLocationContext(Farmer? player)
+        public string GetCurrentLocationContext(Farmer? player)
         {
-            // Get the context from the game data if it's ready.
-            // This needs the location map to be loaded.
-            if (this.IsSaveBasicInfoLoaded)
-                return (LocationContext?)this.GetCurrentLocation(player)?.GetLocationContext();
-
-            // Else fake it based on the assumption that the player is sleeping in a vanilla
-            // location. If the player sleeps in a custom context, the token will only be incorrect
-            // for a short period early in the load process.
-            return this.GetCurrentLocation(player) is IslandLocation or IslandFarmHouse
-                ? LocationContext.Island
-                : LocationContext.Valley;
+            return this.GetLocationContext(this.GetCurrentLocation(player));
         }
 
         /// <summary>Get the player ID who owns the building containing the location.</summary>
@@ -272,33 +263,45 @@ namespace ContentPatcher.Framework
             );
         }
 
-        /// <summary>Get the weather value for a location context.</summary>
-        /// <param name="context">The location context.</param>
-        public Weather GetWeather(LocationContext context)
+        /// <summary>Get the currently defined contexts.</summary>
+        public HashSet<string> GetContexts()
         {
-            // special case: day events override weather in the valley
-            if (context == LocationContext.Valley)
-            {
-                if (Utility.isFestivalDay(this.GetDay(), this.GetSeason()) || (SaveGame.loaded?.weddingToday ?? Game1.weddingToday))
-                    return Weather.Sun;
-            }
+            return this.GetCached(
+                nameof(this.GetContexts),
+                () =>
+                {
+                    HashSet<string> contexts = new()
+                    {
+                        GameLocation.LocationContext.Default.Name,
+                        GameLocation.LocationContext.Island.Name
+                    };
 
-            // get from weather data
+                    foreach (GameLocation location in this.GetLocations())
+                        contexts.Add(this.GetLocationContext(location));
+
+                    return contexts;
+                }
+            );
+        }
+
+        /// <summary>Get the weather value for a location context.</summary>
+        /// <param name="contextName">The name of the location context.</param>
+        public string? GetWeather(string contextName)
+        {
             LocationWeather? model = this.GetForState(
-                loaded: () => Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context),
-                reading: save => save.locationWeather != null && save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather? weather) ? weather : null,
+                loaded: () => Game1.netWorldState.Value.GetWeatherForLocation(contextName),
+                reading: save => save.locationWeather != null && save.locationWeather.TryGetValue(contextName, out LocationWeather? weather) ? weather : null,
                 defaultValue: null
             );
-            if (model != null)
+
+            string? weather = model?.weather?.Value;
+            return weather switch
             {
-                if (model.isSnowing.Value)
-                    return Weather.Snow;
-                if (model.isRaining.Value)
-                    return model.isLightning.Value ? Weather.Storm : Weather.Rain;
-                if (model.isDebrisWeather.Value)
-                    return Weather.Wind;
-            }
-            return Weather.Sun;
+                Game1.weather_festival => Game1.weather_sunny,
+                Game1.weather_wedding => Game1.weather_sunny,
+                null => Game1.weather_sunny,
+                _ => weather
+            };
         }
 
         /// <summary>Get the time of day.</summary>
@@ -408,7 +411,7 @@ namespace ContentPatcher.Framework
                 nameof(this.GetFriendships),
                 () =>
                 {
-                    Dictionary<string, NetRef<Friendship>>? met = this.GetCurrentPlayer()
+                    Dictionary<string, NetRef<Friendship>> met = this.GetCurrentPlayer()
                         ?.friendshipData
                         ?.FieldDict
                         ?? new();
@@ -553,7 +556,7 @@ namespace ContentPatcher.Framework
         }
 
         /// <summary>Get whether the JojaMart is complete.</summary>
-        /// <remarks>See game logic in <see cref="GameLocation.checkJojaCompletePrerequisite"/>.</remarks>
+        /// <remarks>See game logic in <see cref="Utility.hasFinishedJojaRoute"/>.</remarks>
         public bool GetIsJojaMartComplete()
         {
             Farmer? host = this.GetPlayer(PlayerType.HostPlayer);
@@ -607,6 +610,28 @@ namespace ContentPatcher.Framework
                     defaultValue: Enumerable.Empty<GameLocation>()
                 )
             );
+        }
+
+        /// <summary>Get a location's context.</summary>
+        /// <param name="location">The location instance.</param>
+        private string GetLocationContext(GameLocation? location)
+        {
+            // save is fully loaded, get context from location
+            if (Context.IsWorldReady)
+                return location?.GetLocationContext()?.Name ?? GameLocation.LocationContext.Island.Name;
+
+            // save is partly loaded, get from location if available.
+            // Note: avoid calling GetLocationContext() which may trigger a map load before the
+            // game is fully initialized.
+            if (this.IsSaveBasicInfoLoaded && location?.locationContext != null)
+                return location.locationContext.Name;
+
+            // Else fake it based on the assumption that the player is sleeping in a vanilla
+            // location. If the player sleeps in a custom context, the token will only be incorrect
+            // for a short period early in the load process.
+            return location is IslandLocation or IslandFarmHouse
+                ? GameLocation.LocationContext.Island.Name
+                : GameLocation.LocationContext.Default.Name;
         }
 
         /// <summary>Get all owners for all constructed buildings on the farm.</summary>

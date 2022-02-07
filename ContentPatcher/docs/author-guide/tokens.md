@@ -206,13 +206,14 @@ This can also be used with range tokens:
 The weather type in the current world area (or the area specified with a
 [`LocationContext`](#location-context) argument). Possible values:
 
-value   | meaning
-------- | -------
-`Sun`   | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
-`Rain`  | Rain is falling, but without lightning.
-`Storm` | Rain is falling with lightning.
-`Snow`  | Snow is falling.
-`Wind`  | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+value    | meaning
+-------- | -------
+`Sun`    | The weather is sunny (including festival/wedding days). This is the default weather if no other value applies.
+`Rain`   | Rain is falling, but without lightning.
+`Storm`  | Rain is falling with lightning.
+`Snow`   | Snow is falling.
+`Wind`   | The wind is blowing with visible debris (e.g. flower petals in spring and leaves in fall).
+_custom_ | For custom weathers defined by a mod, the weather ID.
 
 ℹ See _[update rate](../author-guide.md#update-rate)_ before using this token without specifying a
 location context.
