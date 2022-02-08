@@ -34,6 +34,9 @@ namespace ContentPatcher.Framework
         /// <remarks>These must be stored in registration order, since each token value may affect the value of subsequent tokens.</remarks>
         private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
 
+        /// <summary>The user-defined alias token names for this content pack.</summary>
+        private readonly InvariantDictionary<string> AliasTokenNames = new InvariantDictionary<string>();
+
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
         private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new();
 
@@ -144,6 +147,15 @@ namespace ContentPatcher.Framework
             this.HasNewTokens = true;
         }
 
+        /// <summary>Add an alias token name to the context.</summary>
+        /// <param name="alias">The new alias token.</param>
+        /// <param name="actual">The referenced token.</param>
+        public void AddAliasTokenName(string alias, string actual)
+        {
+            this.AliasTokenNames.Add(alias, actual);
+            this.HasNewTokens = true; // update dynamic tokens
+        }
+
         /// <summary>Update the current context.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(InvariantHashSet globalChangedTokens)
@@ -218,9 +230,26 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            foreach (IContext context in this.GetContexts())
+            IToken GetTokenByExactName(string name)
             {
-                IToken token = context.GetToken(name, enforceContext);
+                foreach (IContext context in this.GetContexts())
+                {
+                    IToken token = context.GetToken(name, enforceContext);
+                    if (token != null)
+                        return token;
+                }
+                return null;
+            }
+
+            {
+                IToken token = GetTokenByExactName(name);
+                if (token != null)
+                    return token;
+            }
+
+            if (this.AliasTokenNames.TryGetValue(name, out string aliasedName))
+            {
+                IToken token = GetTokenByExactName(aliasedName);
                 if (token != null)
                     return token;
             }

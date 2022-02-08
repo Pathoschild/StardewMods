@@ -290,6 +290,10 @@ namespace ContentPatcher.Framework
                         }
                     }
 
+                    // load alias token names
+                    foreach (KeyValuePair<string, string> pair in content.AliasTokenNames)
+                        modContext.AddAliasTokenName(pair.Key, pair.Value);
+
                     // load patches
                     this.PatchLoader.LoadPatches(
                         contentPack: current,
