@@ -12,10 +12,17 @@ namespace ContentPatcher.Framework.Lexing
     internal class Lexer
     {
         /*********
+        ** Accessors
+        *********/
+        /// <summary>A singleton patch index comparer.</summary>
+        public static readonly Lexer Instance = new();
+
+
+        /*********
         ** Fields
         *********/
         /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
-        private readonly Regex LexicalSplitPattern = new Regex(@"({{|}}|:|\|)", RegexOptions.Compiled);
+        private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
 
 
         /*********
@@ -26,19 +33,24 @@ namespace ContentPatcher.Framework.Lexing
         public IEnumerable<LexBit> TokenizeString(string rawText)
         {
             // special cases
-            if (rawText == null)
-                yield break;
-            if (string.IsNullOrWhiteSpace(rawText))
+            switch (rawText)
             {
-                yield return new LexBit(LexBitType.Literal, rawText);
-                yield break;
+                case null:
+                    yield break;
+                case "true":
+                    yield return new LexBit(LexBitType.Literal, rawText);
+                    yield break;
+                case var _ when string.IsNullOrWhiteSpace(rawText):
+                    yield return new LexBit(LexBitType.Literal, rawText);
+                    yield break;
             }
 
             // parse
-            string[] parts = this.LexicalSplitPattern.Split(rawText);
+            //string[] parts2 = rawText.Split(new string[] { "{{", "}}", ":", @"\" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] parts = LexicalSplitPattern.Split(rawText);
             foreach (string part in parts)
             {
-                if (part == "")
+                if (part.Length == 0)
                     continue; // split artifact
 
                 LexBitType type = part switch
