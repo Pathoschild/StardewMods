@@ -57,12 +57,6 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void RemoveEntry(object key)
-        {
-            this.SetEntry(key, null);
-        }
-
-        /// <inheritdoc />
         public override Type GetEntryType(object key)
         {
             string name = (string)key;
@@ -70,6 +64,12 @@ namespace ContentPatcher.Framework.Patches.EditData
             return this
                 .GetMember(name)
                 ?.GetDataType();
+        }
+
+        /// <inheritdoc />
+        public override void RemoveEntry(object key)
+        {
+            this.SetEntry(key, null);
         }
 
         /// <inheritdoc />

@@ -401,7 +401,7 @@ namespace ContentPatcher.Framework.Patches
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
                 if (!this.TryApplyTextOperation(this.TextOperations[i], editor, fieldDelimiter, out string error))
-                    this.Monitor.Log($"Can't data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
+                    this.Monitor.Log($"Can't apply data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
             }
         }
 
@@ -516,7 +516,12 @@ namespace ContentPatcher.Framework.Patches
                             // get entry editor
                             entryEditor = this.EditorFactory.GetEditorFor(entry);
                             if (entryEditor is null)
-                                return this.Fail($"record '{rawEntryKey}' > field '{rawFieldKey}' can't be modified using text operations because its type ({entryType.FullName}) isn't supported.", out error);
+                            {
+                                if (entryType == typeof(string))
+                                    entryEditor = new DelimitedStringKeyValueEditor(editor, key, fieldDelimiter);
+                                else
+                                    return this.Fail($"record '{rawEntryKey}' > field '{rawFieldKey}' can't be modified using text operations because its type ({entryType.FullName}) isn't supported.", out error);
+                            }
                         }
 
                         // get field
@@ -528,7 +533,7 @@ namespace ContentPatcher.Framework.Patches
                         if (fieldType == typeof(string))
                         {
                             // read fields
-                            string[] actualFields = ((string)fieldValue).Split(fieldDelimiter);
+                            string[] actualFields = ((string)fieldValue).Split(operation.Delimiter);
 
                             // validate key
                             if (!int.TryParse(rawFieldKey, out int fieldIndex))

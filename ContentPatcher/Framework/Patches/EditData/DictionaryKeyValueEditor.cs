@@ -51,17 +51,17 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
+        public override Type GetEntryType(object key)
+        {
+            return typeof(TValue);
+        }
+
+        /// <inheritdoc />
         public override void RemoveEntry(object key)
         {
             TKey parsedKey = (TKey)key;
 
             this.Data.Remove(parsedKey);
-        }
-
-        /// <inheritdoc />
-        public override Type GetEntryType(object key)
-        {
-            return typeof(TValue);
         }
 
         /// <inheritdoc />

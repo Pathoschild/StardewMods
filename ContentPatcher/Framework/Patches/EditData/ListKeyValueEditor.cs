@@ -59,16 +59,16 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
+        public override Type GetEntryType(object key)
+        {
+            return typeof(TValue);
+        }
+
+        /// <inheritdoc />
         public override void RemoveEntry(object key)
         {
             if (this.TryGetEntry(key, out _, out int index))
                 this.Data.RemoveAt(index);
-        }
-
-        /// <inheritdoc />
-        public override Type GetEntryType(object key)
-        {
-            return typeof(TValue);
         }
 
         /// <inheritdoc />
