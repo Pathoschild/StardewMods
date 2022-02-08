@@ -1726,7 +1726,7 @@ To use a mod-provided token, at least one of these must be true:
 
 ### Aliases
 Using mod-provided tokens can become cumbersome if you need to use them over and over in your content pack, due to their sheer length.
-To combat that, you can specify aliases for tokens to be used in your pack. This can be done via the `AliasTokenNames` key directly in your `content.json`:
+To combat this, you can specify aliases for tokens to be used in your pack. This can be done via the `AliasTokenNames` key directly in your `content.json`:
 ```js
 {
    "Format": "1.25.0",
