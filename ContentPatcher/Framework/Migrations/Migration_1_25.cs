@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using ContentPatcher.Framework.Conditions;
+using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
@@ -36,6 +38,25 @@ namespace ContentPatcher.Framework.Migrations
                         error = this.GetNounPhraseError($"using the '{PlayerType.AnyPlayer}' player type");
                         return false;
                     }
+                }
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc />
+        public override bool TryMigrate(ContentConfig content, out string error)
+        {
+            if (!base.TryMigrate(content, out error))
+                return false;
+
+            foreach (PatchConfig patch in content.Changes)
+            {
+                // 1.25 adds TargetField
+                if (patch.TargetField.Any())
+                {
+                    error = this.GetNounPhraseError($"using {nameof(patch.TargetField)}");
+                    return false;
                 }
             }
 
