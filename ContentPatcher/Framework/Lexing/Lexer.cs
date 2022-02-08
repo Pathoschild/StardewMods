@@ -12,17 +12,17 @@ namespace ContentPatcher.Framework.Lexing
     internal class Lexer
     {
         /*********
-        ** Accessors
-        *********/
-        /// <summary>A singleton patch index comparer.</summary>
-        public static readonly Lexer Instance = new();
-
-
-        /*********
         ** Fields
         *********/
         /// <summary>A regular expression which matches lexical patterns that split lexical patterns. For example, ':' is a <see cref="LexBitType.PositionalInputArgSeparator"/> pattern that splits a token name and its input arguments. The split pattern is itself a lexical pattern.</summary>
         private static readonly Regex LexicalSplitPattern = new(@"({{|}}|:|\|)", RegexOptions.Compiled);
+
+
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>A singleton instance of the lexer.</summary>
+        public static Lexer Instance { get; } = new();
 
 
         /*********
@@ -33,24 +33,19 @@ namespace ContentPatcher.Framework.Lexing
         public IEnumerable<LexBit> TokenizeString(string rawText)
         {
             // special cases
-            switch (rawText)
+            if (rawText is null)
+                yield break;
+            if (rawText is "true" or "false" || string.IsNullOrWhiteSpace(rawText))
             {
-                case null:
-                    yield break;
-                case "true":
-                    yield return new LexBit(LexBitType.Literal, rawText);
-                    yield break;
-                case var _ when string.IsNullOrWhiteSpace(rawText):
-                    yield return new LexBit(LexBitType.Literal, rawText);
-                    yield break;
+                yield return new LexBit(LexBitType.Literal, rawText);
+                yield break;
             }
 
             // parse
-            //string[] parts2 = rawText.Split(new string[] { "{{", "}}", ":", @"\" }, StringSplitOptions.RemoveEmptyEntries);
-            string[] parts = LexicalSplitPattern.Split(rawText);
+            string[] parts = Lexer.LexicalSplitPattern.Split(rawText);
             foreach (string part in parts)
             {
-                if (part.Length == 0)
+                if (part == string.Empty)
                     continue; // split artifact
 
                 LexBitType type = part switch

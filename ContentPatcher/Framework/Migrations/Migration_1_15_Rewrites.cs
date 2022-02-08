@@ -18,8 +18,8 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Fields
         *********/
-        /// <summary>Pattern to check if a lexical separator does not need to be migrated.</summary>
-        private static readonly Regex CurrentLexicalSeparatorPattern = new(@"\|\s*key\s*=", RegexOptions.Compiled);
+        /// <summary>A pattern which matches a <c>{{Random}}</c> argument which was valid before 1.15.</summary>
+        private static readonly Regex IgnoreRandomArgumentPattern = new(@"\|\s*key\s*=", RegexOptions.Compiled);
 
         /// <summary>The names of tokens which dropped support for the {{token:search}} form in favor of the universal {{token |contains=search}} form.</summary>
         private readonly ISet<ConditionType> TokensWhichDroppedSearchForm = new HashSet<ConditionType>
@@ -108,7 +108,7 @@ namespace ContentPatcher.Framework.Migrations
                 if (conditionType == ConditionType.Random)
                 {
                     LexTokenLiteral lexSeparator = token.InputArgs.Parts.OfType<LexTokenLiteral>().FirstOrDefault(p => p.ToString().Contains("|"));
-                    if (lexSeparator != null && !CurrentLexicalSeparatorPattern.IsMatch(lexSeparator.Text))
+                    if (lexSeparator != null && !IgnoreRandomArgumentPattern.IsMatch(lexSeparator.Text))
                     {
                         int sepIndex = lexSeparator.Text.IndexOf("|", StringComparison.Ordinal);
                         string newText = lexSeparator.Text.Substring(0, sepIndex + 1) + "key=" + lexSeparator.Text.Substring(sepIndex + 1).TrimStart();

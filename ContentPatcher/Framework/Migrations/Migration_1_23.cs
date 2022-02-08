@@ -17,7 +17,7 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Fields
         *********/
-        /// <summary>Pattern to check for 'valueAt'.</summary>
+        /// <summary>A pattern which matches a 'valueAt' argument.</summary>
         private static readonly Regex ValueAtPattern = new(@"\|\s*valueAt\s*=", RegexOptions.Compiled);
 
 

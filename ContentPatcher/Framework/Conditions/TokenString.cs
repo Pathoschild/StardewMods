@@ -15,11 +15,14 @@ namespace ContentPatcher.Framework.Conditions
         /*********
         ** Fields
         *********/
+        /// <summary>Handles parsing raw strings into tokens.</summary>
+        private static readonly Lexer Lexer = Lexer.Instance;
+
         /// <summary>The token names used in the string.</summary>
-        private readonly InvariantHashSet TokensUsed = new InvariantHashSet();
+        private readonly InvariantHashSet TokensUsed = new();
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
-        private readonly ContextualState State = new ContextualState();
+        private readonly ContextualState State = new();
 
         /// <summary>Metadata for each lexical token in the string.</summary>
         private readonly TokenStringPart[] Parts;
@@ -61,7 +64,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
         public TokenString(string raw, IContext context, LogPathBuilder path)
-            : this(lexTokens: Lexer.Instance.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
+            : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="inputArgs">The raw token input arguments.</param>

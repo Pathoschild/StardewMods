@@ -13,10 +13,10 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_1_19 : BaseMigration
     {
         /*********
-        ** Accessors
+        ** Fields
         *********/
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private Lexer Lexer => Lexer.Instance;
+        private readonly Lexer Lexer = Lexer.Instance;
 
 
         /*********

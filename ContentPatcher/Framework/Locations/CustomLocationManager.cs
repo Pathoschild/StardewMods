@@ -20,8 +20,8 @@ namespace ContentPatcher.Framework.Locations
         /*********
         ** Fields
         *********/
-        /// <summary>Pattern to check if a string is only alphanumeric or underscores.</summary>
-        private static readonly Regex AlphanumericUnderscoresPattern = new("^[a-z0-9_]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        /// <summary>A pattern which matches a valid location name.</summary>
+        private static readonly Regex ValidNamePattern = new("^[a-z0-9_]+", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>The registered locations regardless of validity.</summary>
         private readonly List<CustomLocationData> CustomLocations = new();
@@ -189,7 +189,7 @@ namespace ContentPatcher.Framework.Locations
             // validate name
             if (string.IsNullOrWhiteSpace(name))
                 return Fail($"the {nameof(config.Name)} field is required.", parsed, out error);
-            if (!AlphanumericUnderscoresPattern.IsMatch(name))
+            if (!CustomLocationManager.ValidNamePattern.IsMatch(name))
                 return Fail($"the {nameof(config.Name)} field can only contain alphanumeric or underscore characters.", parsed, out error);
             if (!name.StartsWith("Custom_"))
                 return Fail($"the {nameof(config.Name)} field must be prefixed with 'Custom_' to avoid conflicting with current or future vanilla locations.", parsed, out error);

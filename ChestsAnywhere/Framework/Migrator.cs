@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /*********
         ** Fields
         *********/
-        /// <summary>A regular expression which matches a group of tags in the chest name.</summary>
+        /// <summary>A pattern which matches a group of tags in the chest name.</summary>
         private static readonly Regex TagGroupPattern = new(@"\|([^\|]+)\|", RegexOptions.Compiled);
 
 
@@ -99,7 +99,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
             // parse container data
             data = new ContainerData();
-            foreach (Match match in TagGroupPattern.Matches(item.Name))
+            foreach (Match match in Migrator.TagGroupPattern.Matches(item.Name))
             {
                 string tag = match.Groups[1].Value;
 
@@ -127,7 +127,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             }
 
             // read display name
-            string customName = TagGroupPattern.Replace(item.Name, "").Trim();
+            string customName = Migrator.TagGroupPattern.Replace(item.Name, "").Trim();
             data.Name = !string.IsNullOrWhiteSpace(customName) && customName != originalName
                 ? customName
                 : null;

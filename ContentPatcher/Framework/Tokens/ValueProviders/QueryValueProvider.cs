@@ -13,7 +13,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /*********
         ** Fields
         *********/
-        /// <summary>Pattern used to match 'Cannot find column' in errors.</summary>
+        /// <summary>A pattern which matches the 'Cannot find column' error message.</summary>
         private static readonly Regex CannotFindColumnPattern = new(@"Cannot find column \[([^\]]+)]\.", RegexOptions.Compiled);
 
 
@@ -96,7 +96,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             catch (Exception ex)
             {
                 string reason = ex.Message;
-                reason = CannotFindColumnPattern.Replace(reason, "invalid expression '$1'.");
+                reason = QueryValueProvider.CannotFindColumnPattern.Replace(reason, "invalid expression '$1'.");
 
                 result = 0;
                 error = $"Can't parse '{input}' as a math expression: {reason}";

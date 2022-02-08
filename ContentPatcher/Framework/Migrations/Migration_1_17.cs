@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Migrations
         /*********
         ** Fields
         *********/
-        /// <summary>Pattern to check for a location token.</summary>
+        /// <summary>A pattern which matches a location token name.</summary>
         private static readonly Regex LocationTokenPattern = new(@"\b(?:IsOutdoors|LocationName)\b", RegexOptions.Compiled);
 
 

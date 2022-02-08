@@ -14,15 +14,11 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_1_21 : BaseMigration
     {
         /*********
-        ** Accessors
-        *********/
-        /// <summary>Handles parsing raw strings into tokens.</summary>
-        private Lexer Lexer => Lexer.Instance;
-
-
-        /*********
         ** Fields
         *********/
+        /// <summary>Handles parsing raw strings into tokens.</summary>
+        private readonly Lexer Lexer = Lexer.Instance;
+
         /// <summary>Literal token strings to ignore when validating use of the <see cref="ConditionType.Render"/> token, since they were added by this migration.</summary>
         private readonly HashSet<string> IgnoreRenderStrings = new();
 
