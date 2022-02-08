@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Optimized legacy save migration a bit (thanks to Michael Kuklinski / Ameisen!).
 * Improved translations. Thanks to wally232 (added Korean)!
 
 ## 1.25.2

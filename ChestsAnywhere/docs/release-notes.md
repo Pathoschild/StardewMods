@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Fixed dropdown options not selectable when gamepad mode is enabled.
+* Optimized legacy save migration a bit (thanks to Michael Kuklinski / Ameisen!).
 * Improved translations. Thanks to wally232 (updated Korean) and ZijieFeng (updated Chinese)!
 
 ## 1.21.2
