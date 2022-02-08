@@ -15,6 +15,13 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_1_23 : BaseMigration
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>Pattern to check for 'valueAt'.</summary>
+        private static readonly Regex ValueAtPattern = new(@"\|\s*valueAt\s*=", RegexOptions.Compiled);
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -64,7 +71,7 @@ namespace ContentPatcher.Framework.Migrations
             if (lexToken is LexTokenToken token && token.HasInputArgs())
             {
                 string inputStr = token.InputArgs.ToString();
-                if (inputStr.ContainsIgnoreCase("valueAt") && Regex.IsMatch(inputStr, @"\|\s*valueAt\s*="))
+                if (inputStr.ContainsIgnoreCase("valueAt") && ValueAtPattern.IsMatch(inputStr))
                 {
                     error = this.GetNounPhraseError("using the 'valueAt' argument");
                     return false;

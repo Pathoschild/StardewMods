@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -15,11 +14,15 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_1_21 : BaseMigration
     {
         /*********
-        ** Fields
+        ** Accessors
         *********/
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private readonly Lazy<Lexer> Lexer = new(() => new Lexer());
+        private Lexer Lexer => Lexer.Instance;
 
+
+        /*********
+        ** Fields
+        *********/
         /// <summary>Literal token strings to ignore when validating use of the <see cref="ConditionType.Render"/> token, since they were added by this migration.</summary>
         private readonly HashSet<string> IgnoreRenderStrings = new();
 
@@ -58,7 +61,7 @@ namespace ContentPatcher.Framework.Migrations
                 // This converts them to 'When' conditions for backwards compatibility.
                 if (!string.IsNullOrWhiteSpace(patch.Enabled))
                 {
-                    ILexToken[] bits = this.Lexer.Value.ParseBits(patch.Enabled, impliedBraces: false, trim: true).ToArray();
+                    ILexToken[] bits = this.Lexer.ParseBits(patch.Enabled, impliedBraces: false, trim: true).ToArray();
                     if (bits.Length == 1 && bits[0].Type == LexTokenType.Token)
                     {
                         string renderStr = this.NormalizeLexicalString($"{ConditionType.Render}:{bits[0].ToString()}", impliedBraces: true);
@@ -108,7 +111,7 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         private string NormalizeLexicalString(string str, bool impliedBraces)
         {
-            var bits = this.Lexer.Value.ParseBits(str, impliedBraces);
+            var bits = this.Lexer.ParseBits(str, impliedBraces);
             return string.Join("", bits.Select(p => p.ToString()));
         }
     }

@@ -57,7 +57,7 @@ namespace ContentPatcher.Framework
         public bool TryParseString(string rawValue, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out IManagedTokenString parsed)
         {
             // parse lexical bits
-            var bits = new Lexer().ParseBits(rawValue, impliedBraces: false).ToArray();
+            var bits = Lexer.Instance.ParseBits(rawValue, impliedBraces: false).ToArray();
             for (int i = 0; i < bits.Length; i++)
             {
                 if (!this.Migrator.TryMigrate(ref bits[i], out error))

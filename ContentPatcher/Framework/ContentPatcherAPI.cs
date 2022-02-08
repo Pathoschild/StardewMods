@@ -26,8 +26,11 @@ namespace ContentPatcher.Framework
         /// <summary>The action to add a mod token.</summary>
         private readonly Action<ModProvidedToken> AddModToken;
 
+        /// <summary>The default regex pattern matching a valid token name.</summary>
+        private static readonly Regex ValidNameFormatDefault = new("^[a-z]+$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         /// <summary>A regex pattern matching a valid token name.</summary>
-        private readonly Regex ValidNameFormat = new("^[a-z]+$", RegexOptions.IgnoreCase);
+        private readonly Regex ValidNameFormat = ValidNameFormatDefault;
 
         /// <summary>Whether the conditions API is initialized and ready for use.</summary>
         private readonly Func<bool> IsConditionsApiReadyImpl;
