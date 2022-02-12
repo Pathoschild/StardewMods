@@ -210,13 +210,13 @@ namespace ContentPatcher.Framework
                 try
                 {
                     ContentConfig content = current.Content;
+                    InvariantDictionary<ConfigField> config = current.Config;
 
                     // load tokens
                     ModTokenContext modContext = this.TokenManager.TrackLocalTokens(current.ContentPack);
                     TokenParser tokenParser = new TokenParser(modContext, current.Manifest, current.Migrator, installedMods);
                     {
                         // load config.json
-                        var config = current.Config;
                         if (config.Any())
                             this.Monitor.VerboseLog($"   found config.json with {config.Count} fields...");
 
@@ -291,8 +291,29 @@ namespace ContentPatcher.Framework
                     }
 
                     // load alias token names
-                    foreach (KeyValuePair<string, string> pair in content.AliasTokenNames)
-                        modContext.AddAliasTokenName(pair.Key, pair.Value);
+                    {
+                        InvariantDictionary<string> aliasTokenNames = new();
+                        foreach ((string key, string value) in content.AliasTokenNames)
+                            aliasTokenNames[key.Trim()] = value?.Trim();
+
+                        foreach ((string key, string value) in aliasTokenNames)
+                        {
+                            void LogSkip(string reason) => this.Monitor.Log($"Ignored {current.Manifest.Name} > alias token name '{key}': {reason}", LogLevel.Warn);
+
+                            if (string.IsNullOrWhiteSpace(key))
+                                LogSkip("the alias can't be blank.");
+                            else if (string.IsNullOrWhiteSpace(value))
+                                LogSkip("the target value can't be blank.");
+                            else if (aliasTokenNames.ContainsKey(value))
+                                LogSkip("you can't create an alias which targets another alias.");
+                            else if (Enum.TryParse<ConditionType>(key, true, out _))
+                                LogSkip("you can't create an alias with the same name as a global token.");
+                            else if (config.ContainsKey(key))
+                                LogSkip("you can't create an alias with the same name as a config token.");
+                            else
+                                modContext.AddAliasTokenName(key, value);
+                        }
+                    }
 
                     // load patches
                     this.PatchLoader.LoadPatches(

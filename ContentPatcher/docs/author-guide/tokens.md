@@ -1725,23 +1725,57 @@ To use a mod-provided token, at least one of these must be true:
   ```
 
 ### Aliases
-Using mod-provided tokens can become cumbersome if you need to use them over and over in your content pack, due to their sheer length.
-To combat this, you can specify aliases for tokens to be used in your pack. This can be done via the `AliasTokenNames` key directly in your `content.json`:
+An _alias_ adds an optional alternate name for an existing token. This only affects your content
+pack, and you can use both the alias name and the original token name. This is mostly useful for
+custom tokens provided by other mods, which often have longer names.
+
+Aliases are defined by the `AliasTokenNames` field in `content.json`, where each key is the
+alternate name and the value is the original token name. For example:
+
 ```js
 {
-   "Format": "1.25.0",
-   "AliasTokenNames": {
-       "JAID": "spacechase0.jsonAssets/ObjectId"
-   },
-   "Changes": [
-      {
-         "Action": "EditData",
-         "Target": "Data/NpcGiftTastes",
-         "Entries": {
-            "Universal_Love": "74 446 797 373 {{JAID:item name}}",
-         }
-      }
-   ]
+    "Format": "1.24.0",
+    "AliasTokenNames": {
+        "ItemID": "spacechase0.jsonAssets/ObjectId",
+        "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
+    },
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/NpcGiftTastes",
+            "Entries": {
+                "Universal_Love": "74 446 797 373 {{ItemID: pufferchick}}"
+            }
+        }
+    ]
+}
+```
+
+When using `Include` patches, aliases automatically work in the included files too.
+
+The alias name can't match a global token or config token.
+
+**Note:** this aliases the token _name_, but you can alias the token _value_ by usuing a [dynamic
+token](#dynamic-tokens):
+
+```js
+{
+    "Format": "1.24.0",
+    "DynamicValues": [
+        {
+            "Name": "PufferchickId",
+            "Value": "{{spacechase0.jsonAssets/ObjectId: pufferchick}}"
+        }
+    ],
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/NpcGiftTastes",
+            "Entries": {
+                "Universal_Love": "74 446 797 373 {{PufferchickId}}"
+            }
+        }
+    ]
 }
 ```
 
