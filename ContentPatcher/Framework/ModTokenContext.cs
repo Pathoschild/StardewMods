@@ -156,6 +156,16 @@ namespace ContentPatcher.Framework
             this.HasNewTokens = true; // update dynamic tokens
         }
 
+        /// <summary>Get the actual name referenced by a token alias.</summary>
+        /// <param name="tokenName">The token name to resolve.</param>
+        /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
+        public string ResolveAlias(string tokenName)
+        {
+            return this.AliasTokenNames.TryGetValue(tokenName, out string targetName)
+                ? targetName
+                : tokenName;
+        }
+
         /// <summary>Update the current context.</summary>
         /// <param name="globalChangedTokens">The global token values which changed.</param>
         public void UpdateContext(InvariantHashSet globalChangedTokens)
@@ -230,8 +240,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
-            if (!this.AliasTokenNames.TryGetValue(name, out string targetName))
-                targetName = name;
+            string targetName = this.ResolveAlias(name);
 
             foreach (IContext context in this.GetContexts())
             {
