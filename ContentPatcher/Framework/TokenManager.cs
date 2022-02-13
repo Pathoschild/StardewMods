@@ -23,13 +23,18 @@ namespace ContentPatcher.Framework
         private readonly GenericTokenContext GlobalContext;
 
         /// <summary>The available tokens defined within the context of each content pack.</summary>
-        private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new();
+        private readonly InvariantDictionary<CachedContext> LocalTokens = new();
 
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
 
         /// <summary>Whether the next context update is the first one.</summary>
         private bool IsFirstUpdate = true;
+
+        /// <summary>A cached local context for a content pack.</summary>
+        /// <param name="ContentPack">The content pack for which the context was created.</param>
+        /// <param name="Context">The token context containing dynamic tokens and aliases for the content pack.</param>
+        private record CachedContext(IContentPack ContentPack, ModTokenContext Context);
 
 
         /*********
@@ -73,16 +78,29 @@ namespace ContentPatcher.Framework
         /// <param name="pack">The content pack to manage.</param>
         public ModTokenContext TrackLocalTokens(IContentPack pack)
         {
-            string scope = pack.Manifest.UniqueID;
+            string scope = pack.Manifest.UniqueID.Trim();
 
-            if (!this.LocalTokens.TryGetValue(pack, out ModTokenContext localTokens))
+            if (!this.LocalTokens.TryGetValue(scope, out CachedContext cached))
             {
-                this.LocalTokens[pack] = localTokens = new ModTokenContext(scope, this);
+                ModTokenContext context = new ModTokenContext(scope, this);
+                this.LocalTokens[scope] = cached = new CachedContext(pack, context);
+
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
-                    localTokens.AddLocalToken(new Token(valueProvider, scope));
+                    context.AddLocalToken(new Token(valueProvider, scope));
             }
 
-            return localTokens;
+            return cached.Context;
+        }
+
+        /// <summary>Get the actual name referenced by a token alias.</summary>
+        /// <param name="contentPackID">The content pack ID whose aliases to check.</param>
+        /// <param name="tokenName">The token name to resolve.</param>
+        /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
+        public string ResolveAlias(string contentPackID, string tokenName)
+        {
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+                ? cached.Context.ResolveAlias(tokenName)
+                : tokenName;
         }
 
         /// <summary>Get the token context for a given mod ID.</summary>
@@ -90,13 +108,11 @@ namespace ContentPatcher.Framework
         /// <exception cref="KeyNotFoundException">There's no content pack registered with the given <paramref name="contentPackID"/>.</exception>
         public IContext GetContextFor(string contentPackID)
         {
-            foreach (var pair in this.LocalTokens)
-            {
-                if (pair.Key.Manifest.UniqueID.Equals(contentPackID, StringComparison.OrdinalIgnoreCase))
-                    return pair.Value;
-            }
+            contentPackID = contentPackID.Trim();
 
-            throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+                ? cached.Context
+                : throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
         }
 
         /// <summary>Update the current context.</summary>
@@ -121,8 +137,8 @@ namespace ContentPatcher.Framework
                 changedGlobalTokens.Add(ConditionType.I18n.ToString());
 
             // update mod contexts
-            foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateContext(changedGlobalTokens);
+            foreach (CachedContext cached in this.LocalTokens.Values)
+                cached.Context.UpdateContext(changedGlobalTokens);
 
             this.IsFirstUpdate = false;
         }

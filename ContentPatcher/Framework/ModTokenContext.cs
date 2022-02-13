@@ -32,7 +32,10 @@ namespace ContentPatcher.Framework
 
         /// <summary>The possible values for the <see cref="DynamicTokens"/>.</summary>
         /// <remarks>These must be stored in registration order, since each token value may affect the value of subsequent tokens.</remarks>
-        private readonly IList<DynamicTokenValue> DynamicTokenValues = new List<DynamicTokenValue>();
+        private readonly List<DynamicTokenValue> DynamicTokenValues = new();
+
+        /// <summary>The alias token names defined for the content pack.</summary>
+        private readonly InvariantDictionary<string> AliasTokenNames = new();
 
         /// <summary>Maps tokens to those affected by changes to their value in the mod context.</summary>
         private InvariantDictionary<InvariantHashSet> TokenDependents { get; } = new();
@@ -100,7 +103,7 @@ namespace ContentPatcher.Framework
             if (this.ParentContext.Contains(name, enforceContext: false))
                 throw new InvalidOperationException($"Can't register a '{name}' token because there's a global token with that name.");
             if (this.LocalContext.Contains(name, enforceContext: false))
-                throw new InvalidOperationException($"Can't register a '{name}' dynamic token because there's a config token with that name.");
+                throw new InvalidOperationException($"Can't register a '{name}' dynamic token because there's a config token or alias with that name.");
 
             // get (or create) token
             if (!this.DynamicTokens.TryGetValue(name, out ManagedManualToken managed))
@@ -142,6 +145,25 @@ namespace ContentPatcher.Framework
 
             // track new token
             this.HasNewTokens = true;
+        }
+
+        /// <summary>Add an alias token name to the context.</summary>
+        /// <param name="alias">The custom token name.</param>
+        /// <param name="actual">The token name to reference.</param>
+        public void AddAliasTokenName(string alias, string actual)
+        {
+            this.AliasTokenNames.Add(alias, actual);
+            this.HasNewTokens = true; // update dynamic tokens
+        }
+
+        /// <summary>Get the actual name referenced by a token alias.</summary>
+        /// <param name="tokenName">The token name to resolve.</param>
+        /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
+        public string ResolveAlias(string tokenName)
+        {
+            return this.AliasTokenNames.TryGetValue(tokenName, out string targetName)
+                ? targetName
+                : tokenName;
         }
 
         /// <summary>Update the current context.</summary>
@@ -218,9 +240,11 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IToken GetToken(string name, bool enforceContext)
         {
+            string targetName = this.ResolveAlias(name);
+
             foreach (IContext context in this.GetContexts())
             {
-                IToken token = context.GetToken(name, enforceContext);
+                IToken token = context.GetToken(targetName, enforceContext);
                 if (token != null)
                     return token;
             }

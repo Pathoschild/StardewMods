@@ -17,6 +17,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The user-defined tokens whose values may depend on other tokens.</summary>
         public DynamicTokenConfig[] DynamicTokens { get; set; }
 
+        /// <summary>The user-defined alias token names.</summary>
+        public InvariantDictionary<string> AliasTokenNames { get; set; }
+
         /// <summary>The custom locations to add to the game.</summary>
         public CustomLocationConfig[] CustomLocations { get; set; }
 
@@ -36,6 +39,7 @@ namespace ContentPatcher.Framework.ConfigModels
         public void OnDeserialized(StreamingContext context)
         {
             this.DynamicTokens ??= Array.Empty<DynamicTokenConfig>();
+            this.AliasTokenNames ??= new InvariantDictionary<string>();
             this.CustomLocations ??= Array.Empty<CustomLocationConfig>();
             this.Changes ??= Array.Empty<PatchConfig>();
             this.ConfigSchema ??= new InvariantDictionary<ConfigSchemaFieldConfig>();
