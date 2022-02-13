@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Optimized legacy save migration a bit (thanks to Michael Kuklinski / Ameisen!).
-* Improved translations. Thanks to EmWhyKay (added Turkish) and wally232 (added Korean)!
+* Improved translations. Thanks to EmWhyKay (added Turkish), martin66789 (added Hungarian), and wally232 (added Korean)!
 
 ## 1.25.2
 Released 14 January 2022 for SMAPI 3.13.0 or later.

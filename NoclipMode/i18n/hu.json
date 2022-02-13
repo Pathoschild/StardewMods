@@ -1,4 +1,4 @@
 ﻿{
-    "enabled-message": "Noclip mód engedélyezve; nyomd meg újra a {{button}} gombot, hogy kikapcsold.",
-    "disabled-message": "Noclip mód letiltva; nyomd meg újra a {{button}} gombot, hogy bekapcsold."
+    "enabled-message": "Noclip mod bekapcsolva; a kikapcsoláshoz nyomd meg a {{button}} gombot.",
+    "disabled-message": "Noclip mod kikapcsolva; a bekapcsoláshoz nyomd meg a {{button}} gombot."
 }

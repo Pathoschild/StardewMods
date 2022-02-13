@@ -13,204 +13,193 @@
     /****
     ** Section titles
     ****/
-    // TODO
-    "config.main-options": "Main Options",
-    "config.controls": "Controls",
-    "config.axe": "Axe Features",
-    "config.hoe": "Hoe Features",
-    "config.pickaxe": "Pickaxe Features",
-    "config.scythe": "Scythe Features",
-    "config.melee-blunt": "Melee Blunt Weapons Features",
-    "config.melee-dagger": "Melee Dagger Features",
-    "config.melee-sword": "Melee Sword Features",
-    "config.other-tools": "Other Tools",
-    "config.custom-tools": "Custom Tools",
+    "config.main-options": "Fő beállítások",
+    "config.controls": "Vezérlők",
+    "config.axe": "Fejsze jellemzői",
+    "config.hoe": "Kapa jellemzői",
+    "config.pickaxe": "Csákány jellemzői",
+    "config.scythe": "Kasza jellemzői",
+    "config.melee-blunt": "Közelharci tompa fegyverek jellemzői",
+    "config.melee-dagger": "Közelharci tőrök jellemzői",
+    "config.melee-sword": "Közelharci kardok jellemzői",
+    "config.other-tools": "Egyéb eszközök",
+    "config.custom-tools": "Egyedi eszközök",
 
 
     /****
     ** Main options
     ****/
-    // TODO
-    "config.distance.name": "Distance",
-    "config.distance.tooltip": "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default {{defaultValue}}; a value of {{maxRecommendedValue}} covers most of the visible screen, and higher values may negatively impact game performance.",
+    "config.distance.name": "Távolság",
+    "config.distance.tooltip": "A traktor körül minden irányban a befolyásolandó csempék száma (az alatta lévő csempén kívül). Alapértelmezett {{defaultValue}}; a legnagyobb {{maxRecommendedValue}}, mely a látható képernyő nagy részét lefedi. A magas érték negatívan befolyásolhatja a játék teljesítményét.",
 
-    "config.speed.name": "Tractor Speed",
-    "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
+    "config.speed.name": "Traktor sebesség",
+    "config.speed.tooltip": "Sebesség módosító a traktorhoz. Alapértelmezett {{defaultValue}}.",
 
-    "config.magnetic-radius.name": "Magnetic Radius",
-    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+    "config.magnetic-radius.name": "Mágneses sugár",
+    "config.magnetic-radius.tooltip": "A tárgyak mágnesességének a mértéke (a magas érték nagyon távolról is vonzza a tárgyakat). Alapértelemzett {{defaultValue}}.",
 
-    "config.build-price.name": "Build Price",
-    "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
+    "config.build-price.name": "Építési ár",
+    "config.build-price.tooltip": "Egy traktor garázs megvásárlásának az ára. Alapértelmezett {{defaultValue}}g.",
 
-    "config.can-summon-without-garage.name": "Can Summon Without Garage",
-    "config.can-summon-without-garage.tooltip": "Whether you can summon a temporary tractor without building a garage first.",
+    "config.can-summon-without-garage.name": "Megidézhető garázs nélkül",
+    "config.can-summon-without-garage.tooltip": "Megidézhető egy ideiglenes traktor anélkül, hogy előbb garázs épülne.",
 
-    "config.invincible-on-tractor.name": "Invincible on Tractor",
-    "config.invincible-on-tractor.tooltip": "Whether you should be immune to damage from any source when riding the tractor.",
+    "config.invincible-on-tractor.name": "Legyőzhetetlen traktor",
+    "config.invincible-on-tractor.tooltip": "A traktorral való közlekedés során immunis bármilyen forrásból származó károkkal szemben.",
 
-    "config.highlight-radius.name": "Highlight Radius (Debug)",
-    "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+    "config.highlight-radius.name": "Kiemelés sugara (Hibakeresés)",
+    "config.highlight-radius.tooltip": "Kiemeli a traktor működési sugarát amikor használod, hogy segítsen beállítani a Távolság és Mágneses beállításokat.",
 
 
     /****
     ** Keybind options
     ****/
-    // TODO
-    "config.summon-key.name": "Summon Tractor",
-    "config.summon-key.tooltip": "Warp an available tractor to your position. Default backspace.",
+    "config.summon-key.name": "Traktor megidézése",
+    "config.summon-key.tooltip": "Egy rendelkezésre álló traktort a pozíciódhoz rak. Alapértelmezett: Backspace.",
 
-    "config.dismiss-key.name": "Dismiss Tractor",
-    "config.dismiss-key.tooltip": "Return the tractor you're riding to its home.",
+    "config.dismiss-key.name": "Traktor elbocsátása",
+    "config.dismiss-key.tooltip": "Traktor garázsba tétele, mielőtt bemegy a farmházba.",
 
-    "config.hold-to-activate-key.name": "Hold to Activate",
-    "config.hold-to-activate-key.tooltip": "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+    "config.hold-to-activate-key.name": "Aktiváláshoz nyomva tartva",
+    "config.hold-to-activate-key.tooltip": "Ha meg van adva, akkor csak akkor csinál valamit a traktor, ha ez a gomb nyomva van tartva. Ha semmi sincs megadva, a traktor automatikusan működik, amíg használva van.",
 
 
     /****
     ** Trees & bushes
     ****/
-    // TODO
-    "config.chop-fruit-trees-seeds.name": "Chop Fruit Trees (Seeds)",
-    "config.chop-fruit-trees-seeds.tooltip": "Whether to clear fruit tree seeds.",
+    "config.chop-fruit-trees-seeds.name": "Gyümölcsfák kivágása (Magvak)",
+    "config.chop-fruit-trees-seeds.tooltip": "A gyümölcsfa magvak eltávolítása.",
 
-    "config.chop-fruit-trees-saplings.name": "Chop Fruit Trees (Saplings)",
-    "config.chop-fruit-trees-saplings.tooltip": "Whether to clear fruit trees which aren't fully grown.",
+    "config.chop-fruit-trees-saplings.name": "Gyümölcsfák kivágása (Csemeték)",
+    "config.chop-fruit-trees-saplings.tooltip": "A teljesen ki nem fejlett gyümölcsfák kivágása.",
 
-    "config.chop-fruit-trees-grown.name": "Chop Fruit Trees (Grown)",
-    "config.chop-fruit-trees-grown.tooltip": "Whether to cut fully-grown fruit trees.",
+    "config.chop-fruit-trees-grown.name": "Gyümölcsfák kivágása (Kifejlett)",
+    "config.chop-fruit-trees-grown.tooltip": "A teljesen kifejlett gyümölcsfák kivágása.",
 
-    "config.chop-trees-seeds.name": "Chop Trees (Seeds)",
-    "config.chop-trees-seeds.tooltip": "Whether to clear non-fruit tree seeds.",
+    "config.chop-trees-seeds.name": "Fák kivágása (Magvak)",
+    "config.chop-trees-seeds.tooltip": "A nem gyümölcsfa magvak eltávolítása.",
 
-    "config.chop-trees-saplings.name": "Chop Trees (Saplings)",
-    "config.chop-trees-saplings.tooltip": "Whether to clear non-fruit trees which aren't fully grown.",
+    "config.chop-trees-saplings.name": "Fák kivágása (Csemeték)",
+    "config.chop-trees-saplings.tooltip": "A teljesen ki nem fejlett nem gyümölcsfák kivágása.",
 
-    "config.chop-trees-grown.name": "Chop Trees (Grown)",
-    "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
+    "config.chop-trees-grown.name": "Fák kivágása (Kifejlett)",
+    "config.chop-trees-grown.tooltip": "A teljesen kifejlett nem gyümölcsfák kivágása.",
 
-    "config.chop-bushes.name": "Chop Bushes",
-    "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
+    "config.chop-bushes.name": "Bokrok kivágása",
+    "config.chop-bushes.tooltip": "A kivágható bokrok kivágása.",
 
-    "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
-    "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
+    "config.harvest-fruit-trees.name": "Gyümölcsfák betakarítása",
+    "config.harvest-fruit-trees.tooltip": "A gyümölcsfa termések betakarítása.",
 
 
     /****
     ** Crops/forage/grass
     ****/
-    // TODO
-    "config.clear-dead-crops.name": "Clear Dead Crops",
-    "config.clear-dead-crops.tooltip": "Whether to destroy dead crops.",
+    "config.clear-dead-crops.name": "Halott termések eltávolítása",
+    "config.clear-dead-crops.tooltip": "Az elpusztult termések eltávolítása.",
 
-    "config.clear-live-crops.name": "Clear Live Crops",
-    "config.clear-live-crops.tooltip": "Whether to destroy live crops.",
+    "config.clear-live-crops.name": "Élő növények eltávolítása",
+    "config.clear-live-crops.tooltip": "Az élő növények eltávolítása.",
 
-    "config.harvest-giant-crops.name": "Harvest Giant Crops",
-    "config.harvest-giant-crops.tooltip": "Whether to cut giant crops.",
+    "config.harvest-giant-crops.name": "Óriás termények betakarítása",
+    "config.harvest-giant-crops.tooltip": "Az óriás termények betakarítása.",
 
-    "config.harvest-crops.name": "Harvest Crops",
-    "config.Harvest Crops.tooltip": "Whether to harvest crops.",
+    "config.harvest-crops.name": "Növények betakírítása",
+    "config.Harvest Crops.tooltip": "A növény termések betakarítása.",
 
-    "config.harvest-flowers.name": "Harvest Flowers",
-    "config.harvest-flowers.tooltip": "Whether to harvest flowers.",
+    "config.harvest-flowers.name": "Virágok szüretelése",
+    "config.harvest-flowers.tooltip": "A virágok betakarítása.",
 
-    "config.harvest-forage.name": "Harvest Forage",
-    "config.harvest-forage.tooltip": "Whether to harvest forage.",
+    "config.harvest-forage.name": "Takarmány betakarítása",
+    "config.harvest-forage.tooltip": "A takarmány betakarítása.",
 
-    "config.harvest-grass.name": "Harvest Grass",
-    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+    "config.harvest-grass.name": "Fűnyírás",
+    "config.harvest-grass.tooltip": "Ha van szabad hely a silóban, akkor a szokásos módon szénát ad.",
 
 
     /****
     ** Debris
     ****/
-    // TODO
-    "config.clear-debris.name": "Clear Debris",
-    "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
+    "config.clear-debris.name": "Törmelékek tisztítása",
+    "config.clear-debris.tooltip": "A törmelékek, pl.: gyomok, gallyak, óriási tuskók és kidőlt fatörzsek elpusztítása.",
 
-    "config.clear-weeds.name": "Clear Weeds",
-    "config.clear-weeds.tooltip": "Whether to destroy weeds.",
+    "config.clear-weeds.name": "Gyomok takarítása",
+    "config.clear-weeds.tooltip": "A gyomok elpusztítása.",
 
 
     /****
     ** Dirt
     ****/
-    // TODO
-    "config.till-dirt.name": "Till Dirt",
-    "config.till-dirt.tooltip": "Whether to till empty dirt.",
+    "config.till-dirt.name": "Föld művelés",
+    "config.till-dirt.tooltip": "Az üres föld megművelése.",
 
-    "config.dig-artifact-spots.name": "Dig Artifact Spots",
-    "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+    "config.dig-artifact-spots.name": "Ereklye kiásás",
+    "config.dig-artifact-spots.tooltip": "Az ereklyék kiásása.",
 
-    "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
-    "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
+    "config.clear-tilled-dirt.name": "Megművelt föld tisztítása",
+    "config.clear-tilled-dirt.tooltip": "A megművelt föld eltávolítása.",
 
 
     /****
     ** Mining
     ****/
-    // TODO
-    "config.break-boulders-and-meteorites.name": "Break Boulders and Meteorites",
-    "config.break-boulders-and-meteorites.tooltip": "Whether to break boulders and meteorites.",
+    "config.break-boulders-and-meteorites.name": "Sziklák és meteoritok törése",
+    "config.break-boulders-and-meteorites.tooltip": "A sziklák és a meteoritok feltörése.",
 
-    "config.harvest-mine-spawns.name": "Harvest Mine Spawns",
-    "config.harvest-mine-spawns.tooltip": "Whether to harvest spawned mine items like quartz and frozen tears.",
+    "config.harvest-mine-spawns.name": "Bánya elemek betakarítása",
+    "config.harvest-mine-spawns.tooltip": "A bányában létrehozott elemek pl. a kvarc és a fagyott könnyek betakarítása.",
 
 
     /****
     ** Placed items
     ****/
-    // TODO
-    "config.break-flooring.name": "Break Flooring",
-    "config.break-flooring.tooltip": "Whether to break placed flooring.",
+    "config.break-flooring.name": "Padló eltávolítása",
+    "config.break-flooring.tooltip": "A lerakott padlóburkolat eltávolítása.",
 
-    "config.break-objects.name": "Break Objects",
-    "config.break-objects.tooltip": "Whether to break placed objects.",
+    "config.break-objects.name": "Tárgyak eltávolítása",
+    "config.break-objects.tooltip": "Az elhelyezett objektumok eltávolítása.",
 
-    "config.break-mine-containers.name": "Break Mine Containers",
-    "config.break-mine-containers.tooltip": "Whether to break containers in the mine.",
+    "config.break-mine-containers.name": "Bánya tárolók széttörése",
+    "config.break-mine-containers.tooltip": "A bányában lévő tárolók széttörése.",
 
-    "config.harvest-machines.name": "Harvest Machines",
-    "config.harvest-machines.tooltip": "Whether to collect machine output.",
+    "config.harvest-machines.name": "Gépi termékek betakarítása",
+    "config.harvest-machines.tooltip": "A gépek termékeinek összegyűjtése.",
 
 
     /****
     ** Melee
     ****/
-    // TODO
-    "config.Attack-monsters.name": "Attack Monsters",
-    "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
+    "config.Attack-monsters.name": "Szörnyek támadása",
+    "config.Attack-monsters.tooltip": "A szörnyek megtámadása. (Ez a traktor szerszám sebessége miatt jelentősen túlterhelt.)",
 
 
     /****
     ** Other
     ****/
-    // TODO
-    "config.milk-pail.name": "Enable Milk Pail",
-    "config.milk-pail.tooltip": "Whether to collect milk from farm animals using the milk pail.",
+    "config.milk-pail.name": "Tejesvödör engedélyezése",
+    "config.milk-pail.tooltip": "A tej begyűjtése a haszonállatoktól a tejesvödör segítségével.",
 
-    "config.shears.name": "Enable Shears",
-    "config.shears.tooltip": "Whether to collect wool from farm animals using the shears.",
+    "config.shears.name": "Olló engedélyezése",
+    "config.shears.tooltip": "A gyapjú összegyűjtése a haszonállatoktól az olló segítségével.",
 
-    "config.watering-can.name": "Enable Watering Can",
-    "config.watering-can.tooltip": "Whether to water nearby tiles using the watering can. This doesn't consume water in the watering can.",
+    "config.watering-can.name": "Öntözőkanna engedélyezése",
+    "config.watering-can.tooltip": "A közeli csempék öntözése az öntözőka segítségével. Nem használja el az öntözőkannában lévő vizet.",
 
-    "config.fertilizer.name": "Enable Fertilizer",
-    "config.fertilizer.tooltip": "Whether to apply fertilizer to crops and tilled dirt.",
+    "config.fertilizer.name": "Műtrágya engedélyezése",
+    "config.fertilizer.tooltip": "A műtrágya használata a növényekre és a megművelt földre.",
 
-    "config.grass-starters.name": "Enable Grass Starters",
-    "config.grass-starters.tooltip": "Whether to plant grass starters.",
+    "config.grass-starters.name": "Fűindító engedélyezése",
+    "config.grass-starters.tooltip": "Független attól, hogy ültetsz-e fűmagot.",
 
-    "config.seeds.name": "Enable Seeds",
-    "config.seeds.tooltip": "Whether to plant seeds.",
+    "config.seeds.name": "Vetőmagok engedélyezése",
+    "config.seeds.tooltip": "Akár magokat is lehet ültetni.",
 
-    "config.seed-bags.name": "Enable Seed Bags",
-    "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
+    "config.seed-bags.name": "Vetőmag zsák mod engedélyezése",
+    "config.seed-bags.tooltip": "A Seed Bag modból származó vetőmagok ültetésének az engedélyezése.",
 
-    "config.slingshot.name": "Enable Slingshot",
-    "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
+    "config.slingshot.name": "Csúzli engedélyezése",
+    "config.slingshot.tooltip": "A csúzli lövedékének kilövése a kurzor felé. (Ez jelentősen túlterhelt, és a traktor szerszám sebessége miatt mohón fogyasztja a lőszert.)",
 
-    "config.custom-tool-names.name": "Custom Tool Names",
-    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+    "config.custom-tool-names.name": "Egyéni eszköznevek",
+    "config.custom-tool-names.tooltip": "A traktor használata közben engedélyezhető egyéni elemek/eszközök. Az eszközöket minden egyes környező csempén használja, amíg a tárgyakat lerakjuk. Ha megadunk valamit, ami már támogatott mint pl. a fejsze, az felülírja a használatára vonatkozó összes korlátozást. Pontos belső neveket kell megadni (nem a lefordított neveket), mint pl. 'Axe' vagy 'Mega Bomb'. Több érték megadása esetén vesszővel el kell választani a neveket."
 }
