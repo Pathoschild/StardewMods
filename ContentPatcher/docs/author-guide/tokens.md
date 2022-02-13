@@ -1755,7 +1755,7 @@ When using `Include` patches, aliases automatically work in the included files t
 
 The alias name can't match a global token or config token.
 
-**Note:** this aliases the token _name_, but you can alias the token _value_ by usuing a [dynamic
+**Note:** this aliases the token _name_, but you can alias the token _value_ by using a [dynamic
 token](#dynamic-tokens):
 
 ```js
