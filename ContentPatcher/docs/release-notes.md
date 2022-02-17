@@ -20,6 +20,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * The deprecated `Enabled` patch field is now obsolete.
 * Fixed content packs being loaded/validated more than once per screen.
 * Fixed error loading a patch which has some required fields missing.
+* Removed warning for null patches (they're now silently ignored instead).
 * Improved startup time with large content packs (thanks to Michael Kuklinski / Ameisen!).
 
 **Update notes for mod authors:**  

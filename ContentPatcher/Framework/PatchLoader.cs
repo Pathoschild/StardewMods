@@ -85,13 +85,7 @@ namespace ContentPatcher.Framework
 
             // ignore null patches with a warning
             PatchConfig[] patches = rawPatches
-                .Where((patch, i) =>
-                {
-                    bool isValid = patch != null;
-                    if (!isValid)
-                        this.Monitor.Log($"Ignored {path.With($"patch at index {i}")}: patch is null.", LogLevel.Warn);
-                    return isValid;
-                })
+                .Where(patch => patch != null)
                 .ToArray();
 
             // preprocess patches
