@@ -989,6 +989,20 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <th>&nbsp;</th>
 </tr>
 
+<tr valign="top" id="AbsoluteFilePath">
+<td>AbsoluteFilePath</td>
+<td>
+
+Get the absolute path for a file in your content pack's folder.
+
+For example, for a player with a default Windows Steam install, `{{AbsoluteFilePath: assets/portraits.png}}`
+will return a value similar to
+`C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\[CP] YourMod\assets\portraits.png`.
+
+</td>
+<td><a href="#AbsoluteFilePath">#</a></td>
+</tr>
+
 <tr valign="top" id="FirstValidFile">
 <td>FirstValidFile</td>
 <td>

@@ -269,6 +269,7 @@ namespace ContentPatcher.Framework
         {
             return new IValueProvider[]
             {
+                new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
                 new TranslationValueProvider(contentPack.Translation)

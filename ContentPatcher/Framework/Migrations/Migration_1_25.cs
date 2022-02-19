@@ -19,7 +19,12 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         public Migration_1_25()
-            : base(new SemanticVersion(1, 25, 0)) { }
+            : base(new SemanticVersion(1, 25, 0))
+        {
+            this.AddedTokens.Add(
+                ConditionType.AbsoluteFilePath.ToString()
+            );
+        }
 
         /// <inheritdoc />
         public override bool TryMigrate(ref ILexToken lexToken, out string error)
