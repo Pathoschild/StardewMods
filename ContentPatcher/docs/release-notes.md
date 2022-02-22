@@ -17,6 +17,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 * Added [token aliases](author-guide/tokens.md#aliases) (thanks to Shockah!).
 * Added new tokens:
   * [`AbsoluteFilePath`](author-guide/tokens.md#AbsoluteFilePath) to get the full path for a file in the content pack folder.
+  * [`FormatAssetName`](author-guide/tokens.md#FormatAssetName) to normalize an asset name into the form expected by the game.
+  * [`InternalAssetKey`](author-guide/tokens.md#InternalAssetKey) to get a special asset key which lets the game load a file directly from your content pack without needing to `Load` it first.
 * Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
 * The deprecated `Enabled` patch field is now obsolete.

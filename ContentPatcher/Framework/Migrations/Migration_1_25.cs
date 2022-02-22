@@ -6,6 +6,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -21,8 +22,10 @@ namespace ContentPatcher.Framework.Migrations
         public Migration_1_25()
             : base(new SemanticVersion(1, 25, 0))
         {
-            this.AddedTokens.Add(
-                ConditionType.AbsoluteFilePath.ToString()
+            this.AddedTokens.AddMany(
+                ConditionType.AbsoluteFilePath.ToString(),
+                ConditionType.FormatAssetName.ToString(),
+                ConditionType.InternalAssetKey.ToString()
             );
         }
 

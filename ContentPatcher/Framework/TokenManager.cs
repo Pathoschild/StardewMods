@@ -259,7 +259,10 @@ namespace ContentPatcher.Framework
                 // metadata
                 new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true),
                 new HasValueValueProvider(),
-                new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper))
+                new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper)),
+
+                // specialized
+                new FormatAssetNameValueProvider()
             };
         }
 
@@ -272,6 +275,7 @@ namespace ContentPatcher.Framework
                 new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
+                new InternalAssetKeyValueProvider(contentPack.GetActualAssetKey),
                 new TranslationValueProvider(contentPack.Translation)
             };
         }

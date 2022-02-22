@@ -1196,6 +1196,61 @@ will return a value similar to
 </td>
 <td><a href="#AbsoluteFilePath">#</a></td>
 </tr>
+
+<tr valign="top" id="FormatAssetName">
+<td>FormatAssetName</td>
+<td>
+
+Normalize an asset name into the form expected by the game. For example,
+`{{FormatAssetName: Data/\\///Achievements/}}` returns a value like `Data/Achievements`.
+
+This has one optional argument:
+
+argument    | effect
+----------- | ------
+`separator` | The folder separator to use in the asset name instead of the default `/`. This is only needed when adding the path to a `/`-delimited field, like `{{FormatAssetName: {{assetKey}} |separator=\\}}`.
+
+There's no need to use this in `Target` fields, which are normalized automatically.
+
+</td>
+<td><a href="#FormatAssetName">#</a></td>
+</tr>
+
+<tr valign="top" id="InternalAssetKey">
+<td>InternalAssetKey</td>
+<td>
+
+Get a special asset key which lets the game load a file directly from your content pack, without
+needing to `Load` it into a new `Content` asset.
+
+For example, you can use this to provide the textures for a custom farm type:
+
+```js
+{
+    "Format": "1.24.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/AdditionalFarms",
+            "Entries": {
+                "Example.ModId/FarmId": {
+                    ...,
+                    "IconTexture": "{{InternalAssetKey: assets/icon.png}}",
+                    "WorldMapTexture": "{{InternalAssetKey: assets/world-map.png}}"
+                }
+            }
+        }
+    ]
+}
+```
+
+Note that other content packs can't target an internal asset key (which is why it's internal). If
+you need to let other content packs edit it, you can use [`Action: Load`](action-load.md) to create
+a new asset for it, then use that asset name instead.
+
+</td>
+<td><a href="#InternalAssetKey">#</a></td>
+</tr>
 </table>
 
 ## Global input arguments
