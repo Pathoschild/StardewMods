@@ -529,32 +529,15 @@ namespace ContentPatcher.Framework.Patches
                         Type fieldType = entryEditor.GetEntryType(fieldKey);
                         object fieldValue = entryEditor.GetEntry(fieldKey);
 
-                        // edit field value
-                        if (fieldType == typeof(string))
-                        {
-                            // read fields
-                            string[] actualFields = ((string)fieldValue).Split(operation.Delimiter);
+                        // validate type
+                        if (fieldType != typeof(string))
+                            return this.Fail($"field '{rawEntryKey}' > '{rawFieldKey}' has type '{fieldType}', but you can only apply text operations to a text field.", out error);
 
-                            // validate key
-                            if (!int.TryParse(rawFieldKey, out int fieldIndex))
-                                return this.Fail($"record '{rawEntryKey}' needs a field index between 0 and {actualFields.Length - 1} (received \"{rawFieldKey}\" instead)).", out error);
-                            if (fieldIndex < 0 || fieldIndex > actualFields.Length - 1)
-                                return this.Fail($"record '{rawEntryKey}' has no field with index {fieldIndex} (must be 0 to {actualFields.Length - 1}).", out error);
-
-                            // apply change
-                            actualFields[fieldIndex] = operation.Apply(actualFields[fieldIndex]);
-                            entryEditor.SetEntry(fieldKey, string.Join(fieldDelimiter.ToString(), actualFields));
-                        }
+                        // edit value
+                        if (fieldValue is null)
+                            entryEditor.SetEntry(fieldKey, operation.Apply(""));
                         else
-                        {
-                            // apply change
-                            if (fieldValue is null)
-                                entryEditor.SetEntry(fieldKey, operation.Apply(""));
-                            else if (fieldValue is string fieldStr)
-                                entryEditor.SetEntry(fieldKey, operation.Apply(fieldStr));
-                            else
-                                return this.Fail($"field '{rawEntryKey}' > '{rawFieldKey}' has type '{fieldType}', but you can only apply text operations to a text field.", out error);
-                        }
+                            entryEditor.SetEntry(fieldKey, operation.Apply((string)fieldValue));
                     }
                     break;
 
