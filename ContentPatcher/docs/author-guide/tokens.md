@@ -19,6 +19,7 @@ This document lists the tokens available in Content Patcher packs.
   * [String manipulation](#string-manipulation)
   * [Metadata](#metadata)
   * [Field references](#field-references)
+  * [Specialized](#specialized)
 * [Global input arguments](#global-input-arguments)
   * [`contains`](#contains)
   * [`valueAt`](#valueat)
@@ -989,20 +990,6 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <th>&nbsp;</th>
 </tr>
 
-<tr valign="top" id="AbsoluteFilePath">
-<td>AbsoluteFilePath</td>
-<td>
-
-Get the absolute path for a file in your content pack's folder.
-
-For example, for a player with a default Windows Steam install, `{{AbsoluteFilePath: assets/portraits.png}}`
-will return a value similar to
-`C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\[CP] YourMod\assets\portraits.png`.
-
-</td>
-<td><a href="#AbsoluteFilePath">#</a></td>
-</tr>
-
 <tr valign="top" id="FirstValidFile">
 <td>FirstValidFile</td>
 <td>
@@ -1183,6 +1170,31 @@ See also [`PathPart`](#PathPart) for more advanced scenarios.
 
 </td>
 <td><a href="#Target">#</a></td>
+</tr>
+</table>
+
+### Specialized
+These are advanced tokens meant to support some specific situations.
+
+<table>
+<tr>
+<th>condition</th>
+<th>purpose</th>
+<th>&nbsp;</th>
+</tr>
+
+<tr valign="top" id="AbsoluteFilePath">
+<td>AbsoluteFilePath</td>
+<td>
+
+Get the absolute path for a file in your content pack's folder.
+
+For example, for a player with a default Windows Steam install, `{{AbsoluteFilePath: assets/portraits.png}}`
+will return a value similar to
+`C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Mods\[CP] YourMod\assets\portraits.png`.
+
+</td>
+<td><a href="#AbsoluteFilePath">#</a></td>
 </tr>
 </table>
 

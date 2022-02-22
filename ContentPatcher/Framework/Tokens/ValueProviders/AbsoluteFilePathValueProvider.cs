@@ -41,7 +41,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.GetAbsolutePath(input.GetPositionalSegment()).ToString();
+            string path = this.GetAbsolutePath(input.GetPositionalSegment());
+            if (path != null)
+                yield return path;
         }
 
 

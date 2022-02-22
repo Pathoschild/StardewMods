@@ -188,9 +188,6 @@ namespace ContentPatcher.Framework.Conditions
         /****
         ** Metadata
         ****/
-        /// <summary>A token which returns the absolute path for a file in the content pack's folder.</summary>
-        AbsoluteFilePath,
-
         /// <summary>A token which returns the first input argument which matches an existing file in the content pack.</summary>
         FirstValidFile,
 
@@ -209,6 +206,12 @@ namespace ContentPatcher.Framework.Conditions
 
         /// <summary>The <see cref="StardewValley.LocalizedContentManager.LanguageCode"/> name.</summary>
         Language,
+
+        /****
+        ** Specialized
+        ****/
+        /// <summary>A token which returns the absolute path for a file in the content pack's folder.</summary>
+        AbsoluteFilePath,
 
         /****
         ** Patch-specific
