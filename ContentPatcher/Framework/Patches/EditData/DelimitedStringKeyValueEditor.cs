@@ -69,8 +69,21 @@ namespace ContentPatcher.Framework.Patches.EditData
 
             // get fields
             string[] fields = this.GetFields();
-            if (fields is null || index >= fields.Length)
+            if (fields is null)
                 return;
+
+            // add empty fields if needed
+            // Data assets sometimes have optional fields, so this allows editing a later optional
+            // field. For example, given asset "a/b", setting index 5 to "c" will result in "a/b///c".
+            if (index > fields.Length - 1)
+            {
+                int firstAdded = fields.Length;
+
+                Array.Resize(ref fields, index + 1);
+
+                for (int i = firstAdded; i < fields.Length; i++)
+                    fields[i] = string.Empty;
+            }
 
             // apply change
             fields[index] = value.Value<string>();
@@ -81,6 +94,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the fields for the entry.</summary>
         private string[] GetFields()
         {
             if (this.EntryEditor.GetEntry(this.EntryKey) is not string str)
