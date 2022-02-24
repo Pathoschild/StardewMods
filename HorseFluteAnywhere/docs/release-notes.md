@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Fixed compatibility issue with Deep Woods mod.
 * Improved translations. Thanks to EmWhyKay (added Turkish) and wally232 (added Korean)!
 
 ## 1.1.13
