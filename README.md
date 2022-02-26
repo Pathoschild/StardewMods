@@ -60,11 +60,11 @@ Inactive mods:
   _(deleted) Disables SMAPI's F2 debug mode, which can cause unintended effects like skipping an
   entire season or teleporting into walls. No longer needed after SMAPI 1.0._
 
-* The Long Night <small>(~~[Nexus](https://www.nexusmods.com/stardewvalley/mods/1369)~~ | [source](LongNight))</small>  
+* The Long Night <small>(~~[Nexus](https://www.nexusmods.com/stardewvalley/mods/1369)~~ | [source](_archived/TheLongNight))</small>  
   _Disables collapsing. You just stay awake forever and the night never ends (until you go to bed).
   Broke permanently in Stardew Valley 1.3.20._
 
-* Rotate Toolbar <small>(~~[Nexus](https://www.nexusmods.com/stardewvalley/mods/1100)~~ | [source](RotateToolbar))</small>  
+* Rotate Toolbar <small>(~~[Nexus](https://www.nexusmods.com/stardewvalley/mods/1100)~~ | [source](_archived/RotateToolbar))</small>  
   _Rotate the top inventory row for the toolbar by pressing Tab (configurable). Added to the game
   in Stardew Valley 1.4.0._
 

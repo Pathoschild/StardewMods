@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28803.202
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{775A00CB-71CD-49BF-BB1B-B09951ABD325}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,8 +38,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LookupAnything", "LookupAny
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoclipMode", "NoclipMode\NoclipMode.csproj", "{81B42938-5567-469B-8B92-56E006DF588D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RotateToolbar", "RotateToolbar\RotateToolbar.csproj", "{EF6D963F-FBC1-444A-B481-B8CA9C034FBC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkipIntro", "SkipIntro\SkipIntro.csproj", "{F2C606B1-51D2-48F3-9CF7-2F8CD46DAFF9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmallBeachFarm", "SmallBeachFarm\SmallBeachFarm.csproj", "{495AA31A-ABFD-402D-A091-620CDB4BC7E1}"
@@ -50,11 +48,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Common", "Tests.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Mods", "Tests.Mods\Tests.Mods.csproj", "{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheLongNight", "TheLongNight\TheLongNight.csproj", "{8FE9BD36-31EB-4A47-9C98-C216FF361664}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TractorMod", "TractorMod\TractorMod.csproj", "{DDF905ED-320B-48AF-91A5-2A5563F256FA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "archived", "archived", "{864DC187-9307-4DAF-9EEE-0A36A8C6E19E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{183A028A-D606-4BA6-A211-51C966B98613}"
 	ProjectSection(SolutionItems) = preProject
@@ -76,12 +70,10 @@ Global
 		Common.Patching\Common.Patching.projitems*{7cd586e4-e766-494a-a06f-abac3e0e6c90}*SharedItemsImports = 5
 		Common\Common.projitems*{7cd586e4-e766-494a-a06f-abac3e0e6c90}*SharedItemsImports = 5
 		Common\Common.projitems*{81b42938-5567-469b-8b92-56e006df588d}*SharedItemsImports = 5
-		Common\Common.projitems*{8fe9bd36-31eb-4a47-9c98-c216ff361664}*SharedItemsImports = 5
 		Common\Common.projitems*{9eecb232-2178-4101-9397-cfb885bc25f2}*SharedItemsImports = 5
 		Common\Common.projitems*{b9e9edfc-e98a-4370-994f-40a9f39a0284}*SharedItemsImports = 13
 		Common\Common.projitems*{ddf905ed-320b-48af-91a5-2a5563f256fa}*SharedItemsImports = 5
 		Common\Common.projitems*{ef4f1a38-6601-4441-b7b1-e9c26b312192}*SharedItemsImports = 5
-		Common\Common.projitems*{ef6d963f-fbc1-444a-b481-b8ca9c034fbc}*SharedItemsImports = 5
 		Common\Common.projitems*{f2c606b1-51d2-48f3-9cf7-2f8cd46daff9}*SharedItemsImports = 5
 		Common\Common.projitems*{fca458cf-d872-47b7-9048-403c56a20905}*SharedItemsImports = 5
 	EndGlobalSection
@@ -130,10 +122,6 @@ Global
 		{81B42938-5567-469B-8B92-56E006DF588D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81B42938-5567-469B-8B92-56E006DF588D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81B42938-5567-469B-8B92-56E006DF588D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EF6D963F-FBC1-444A-B481-B8CA9C034FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF6D963F-FBC1-444A-B481-B8CA9C034FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF6D963F-FBC1-444A-B481-B8CA9C034FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF6D963F-FBC1-444A-B481-B8CA9C034FBC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F2C606B1-51D2-48F3-9CF7-2F8CD46DAFF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F2C606B1-51D2-48F3-9CF7-2F8CD46DAFF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2C606B1-51D2-48F3-9CF7-2F8CD46DAFF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -154,10 +142,6 @@ Global
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FE9BD36-31EB-4A47-9C98-C216FF361664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FE9BD36-31EB-4A47-9C98-C216FF361664}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FE9BD36-31EB-4A47-9C98-C216FF361664}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FE9BD36-31EB-4A47-9C98-C216FF361664}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDF905ED-320B-48AF-91A5-2A5563F256FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDF905ED-320B-48AF-91A5-2A5563F256FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDF905ED-320B-48AF-91A5-2A5563F256FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -167,11 +151,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EF6D963F-FBC1-444A-B481-B8CA9C034FBC} = {864DC187-9307-4DAF-9EEE-0A36A8C6E19E}
 		{EC5F07FF-A84F-4088-9FA2-DAE66046A093} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{EF4F1A38-6601-4441-B7B1-E9C26B312192} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
 		{729DB4C6-AD85-4BAF-B54A-DF6D534E50FF} = {5950ED4C-2284-4253-9583-BB7811FAF5EE}
-		{8FE9BD36-31EB-4A47-9C98-C216FF361664} = {864DC187-9307-4DAF-9EEE-0A36A8C6E19E}
 		{183A028A-D606-4BA6-A211-51C966B98613} = {775A00CB-71CD-49BF-BB1B-B09951ABD325}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
