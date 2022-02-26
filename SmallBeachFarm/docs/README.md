@@ -58,8 +58,8 @@ A few highlights:
   > ![](screenshots/fish-areas.png)
 * The exit to Marnie's ranch is on the right:
   > ![](screenshots/exits.png)
-* The beach has a functional campfire you can use (pairs well with
-  [Campfire Cooking](https://mods.smapi.io/#Campfire_Cooking)):  
+* The beach has a functional campfire you can use (pairs well with [Limited Campfire
+  Cooking](https://www.nexusmods.com/stardewvalley/mods/4971)):  
   > ![](screenshots/campfire.gif)
 * Forage and [supply crates](https://stardewvalleywiki.com/Supply_Crate) can occasionally spawn
   along the shore:
