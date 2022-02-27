@@ -116,6 +116,7 @@ namespace ContentPatcher.Framework.ConfigModels
                 entryFields => entryFields?.Clone(value => value?.DeepClone())
             );
             this.MoveEntries = other.MoveEntries.Select(p => new PatchMoveEntryConfig(p)).ToArray();
+            this.TargetField = other.TargetField.ToArray();
 
             // EditMap
             this.MapProperties = other.MapProperties.Clone();
