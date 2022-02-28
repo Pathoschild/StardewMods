@@ -23,13 +23,18 @@ namespace ContentPatcher.Framework
         private readonly GenericTokenContext GlobalContext;
 
         /// <summary>The available tokens defined within the context of each content pack.</summary>
-        private readonly Dictionary<IContentPack, ModTokenContext> LocalTokens = new();
+        private readonly InvariantDictionary<CachedContext> LocalTokens = new();
 
         /// <summary>The installed mod IDs.</summary>
         private readonly InvariantHashSet InstalledMods;
 
         /// <summary>Whether the next context update is the first one.</summary>
         private bool IsFirstUpdate = true;
+
+        /// <summary>A cached local context for a content pack.</summary>
+        /// <param name="ContentPack">The content pack for which the context was created.</param>
+        /// <param name="Context">The token context containing dynamic tokens and aliases for the content pack.</param>
+        private record CachedContext(IContentPack ContentPack, ModTokenContext Context);
 
 
         /*********
@@ -73,16 +78,29 @@ namespace ContentPatcher.Framework
         /// <param name="pack">The content pack to manage.</param>
         public ModTokenContext TrackLocalTokens(IContentPack pack)
         {
-            string scope = pack.Manifest.UniqueID;
+            string scope = pack.Manifest.UniqueID.Trim();
 
-            if (!this.LocalTokens.TryGetValue(pack, out ModTokenContext localTokens))
+            if (!this.LocalTokens.TryGetValue(scope, out CachedContext cached))
             {
-                this.LocalTokens[pack] = localTokens = new ModTokenContext(scope, this);
+                ModTokenContext context = new ModTokenContext(scope, this);
+                this.LocalTokens[scope] = cached = new CachedContext(pack, context);
+
                 foreach (IValueProvider valueProvider in this.GetLocalValueProviders(pack))
-                    localTokens.AddLocalToken(new Token(valueProvider, scope));
+                    context.AddLocalToken(new Token(valueProvider, scope));
             }
 
-            return localTokens;
+            return cached.Context;
+        }
+
+        /// <summary>Get the actual name referenced by a token alias.</summary>
+        /// <param name="contentPackID">The content pack ID whose aliases to check.</param>
+        /// <param name="tokenName">The token name to resolve.</param>
+        /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
+        public string ResolveAlias(string contentPackID, string tokenName)
+        {
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+                ? cached.Context.ResolveAlias(tokenName)
+                : tokenName;
         }
 
         /// <summary>Get the token context for a given mod ID.</summary>
@@ -90,13 +108,11 @@ namespace ContentPatcher.Framework
         /// <exception cref="KeyNotFoundException">There's no content pack registered with the given <paramref name="contentPackID"/>.</exception>
         public IContext GetContextFor(string contentPackID)
         {
-            foreach (var pair in this.LocalTokens)
-            {
-                if (pair.Key.Manifest.UniqueID.Equals(contentPackID, StringComparison.OrdinalIgnoreCase))
-                    return pair.Value;
-            }
+            contentPackID = contentPackID.Trim();
 
-            throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+                ? cached.Context
+                : throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
         }
 
         /// <summary>Update the current context.</summary>
@@ -121,8 +137,8 @@ namespace ContentPatcher.Framework
                 changedGlobalTokens.Add(ConditionType.I18n.ToString());
 
             // update mod contexts
-            foreach (ModTokenContext localContext in this.LocalTokens.Values)
-                localContext.UpdateContext(changedGlobalTokens);
+            foreach (CachedContext cached in this.LocalTokens.Values)
+                cached.Context.UpdateContext(changedGlobalTokens);
 
             this.IsFirstUpdate = false;
         }
@@ -185,37 +201,37 @@ namespace ContentPatcher.Framework
                 new TimeValueProvider(save),
 
                 // player
-                new LocalOrHostPlayerValueProvider(ConditionType.DailyLuck, player => save.GetDailyLuck(player).ToString(CultureInfo.InvariantCulture), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasCookingRecipe, player => player.cookingRecipes.Keys, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasCraftingRecipe, player => player.craftingRecipes.Keys, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered.Select(p => p.ToString()), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasFlag, player => save.GetFlags(player), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasProfession, player => player.professions.Select(id => ((Profession)id).ToString()), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.DailyLuck, player => save.GetDailyLuck(player).ToString(CultureInfo.InvariantCulture), save),
+                new PerPlayerValueProvider(ConditionType.FarmhouseUpgrade, player => player.HouseUpgradeLevel.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.HasCaughtFish, player => player.fishCaught.Keys.Select(p => p.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasConversationTopic, player => player.activeDialogueEvents.Keys, save),
+                new PerPlayerValueProvider(ConditionType.HasCookingRecipe, player => player.cookingRecipes.Keys, save),
+                new PerPlayerValueProvider(ConditionType.HasCraftingRecipe, player => player.craftingRecipes.Keys, save),
+                new PerPlayerValueProvider(ConditionType.HasDialogueAnswer, player => player.dialogueQuestionsAnswered.Select(p => p.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasFlag, player => save.GetFlags(player), save),
+                new PerPlayerValueProvider(ConditionType.HasProfession, player => player.professions.Select(id => ((Profession)id).ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasReadLetter, player => player.mailReceived, save),
+                new PerPlayerValueProvider(ConditionType.HasSeenEvent, player => player.eventsSeen.Select(p => p.ToString()), save),
+                new PerPlayerValueProvider(ConditionType.HasActiveQuest, player => player.questLog.Select(p => p.id.Value.ToString()), save),
                 new ConditionTypeValueProvider(ConditionType.HasWalletItem, save.GetWalletItems, NeedsSave, allowedValues: Enum.GetNames(typeof(WalletItem))),
-                new LocalOrHostPlayerValueProvider(ConditionType.IsMainPlayer, player => player.IsMainPlayer.ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.LocationOwnerId, player => save.GetLocationOwnerId(save.GetCurrentLocation(player))?.ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save),
+                new PerPlayerValueProvider(ConditionType.IsMainPlayer, player => player.IsMainPlayer.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.IsOutdoors, player => save.GetCurrentLocation(player)?.IsOutdoors.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.LocationContext, player => save.GetCurrentLocationContext(player)?.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.LocationName, player => save.GetCurrentLocation(player)?.Name, save),
+                new PerPlayerValueProvider(ConditionType.LocationOwnerId, player => save.GetLocationOwnerId(save.GetCurrentLocation(player))?.ToString(), save),
+                new PerPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save),
+                new PerPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save),
+                new PerPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save),
                 new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsSave),
                 new SkillLevelValueProvider(save),
 
                 // relationships
-                new LocalOrHostPlayerValueProvider(ConditionType.ChildNames, player => save.GetChildValues(player, ConditionType.ChildNames), save),
-                new LocalOrHostPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save),
+                new PerPlayerValueProvider(ConditionType.ChildNames, player => save.GetChildValues(player, ConditionType.ChildNames), save),
+                new PerPlayerValueProvider(ConditionType.ChildGenders, player => save.GetChildValues(player, ConditionType.ChildGenders), save),
                 new VillagerHeartsValueProvider(save),
                 new VillagerRelationshipValueProvider(save),
-                new LocalOrHostPlayerValueProvider(ConditionType.Roommate, player => player.hasRoommate() ? player.spouse : null, save),
-                new LocalOrHostPlayerValueProvider(ConditionType.Spouse, player => !player.hasRoommate() ? player.spouse : null, save),
+                new PerPlayerValueProvider(ConditionType.Roommate, player => player.hasRoommate() ? player.spouse : null, save),
+                new PerPlayerValueProvider(ConditionType.Spouse, player => !player.hasRoommate() ? player.spouse : null, save),
 
                 // world
                 new ConditionTypeValueProvider(ConditionType.FarmCave, () => save.GetFarmCaveType().ToString(), NeedsSave),
@@ -243,7 +259,10 @@ namespace ContentPatcher.Framework
                 // metadata
                 new ImmutableValueProvider(ConditionType.HasMod.ToString(), installedMods, canHaveMultipleValues: true),
                 new HasValueValueProvider(),
-                new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper))
+                new ConditionTypeValueProvider(ConditionType.Language, () => this.GetLanguage(contentHelper)),
+
+                // specialized
+                new FormatAssetNameValueProvider()
             };
         }
 
@@ -253,8 +272,10 @@ namespace ContentPatcher.Framework
         {
             return new IValueProvider[]
             {
+                new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
+                new InternalAssetKeyValueProvider(contentPack.GetActualAssetKey),
                 new TranslationValueProvider(contentPack.Translation)
             };
         }

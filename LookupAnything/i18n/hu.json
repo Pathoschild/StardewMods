@@ -84,7 +84,7 @@
     "data.npc.pet.description": "A hűséges háziállatod.",
     "data.npc.horse.description": "A hűséges hátasod.",
     "data.npc.junimo.description": "Egy erdeőlélek a lelkek világból. Nagyon keveset tudunk róluk.",
-    "data.npc.trashbear.description": "Egy barátságos lélek, aki összeszedi a szemetet.",
+    "data.npc.trash-bear.description": "Egy barátságos lélek, aki összeszedi a szemetet.",
 
     // item types
     "data.type.debris": "Törmelék",
@@ -454,6 +454,7 @@
     "item.movie-ticket.loves-movie": "Imádja a filmet",
     "item.movie-ticket.likes-movie": "Szereti a filmet",
     "item.movie-ticket.dislikes-movie": "Nem szereti a filmet",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} imádja ezt",

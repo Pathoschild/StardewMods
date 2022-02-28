@@ -84,7 +84,7 @@
     "data.npc.pet.description": "당신의 믿음직한 반려동물이다.",
     "data.npc.horse.description": "당신의 충직한 애마이다.",
     "data.npc.junimo.description": "정령계로부터 건너온 숲의 정령. 그들에 대하여는 알려진 바가 거의 없다.",
-    "data.npc.trashbear.description": "쓰레기를 치우는 친절한 정신.",
+    "data.npc.trash-bear.description": "쓰레기를 치우는 친절한 정신.",
 
     // item types
     "data.type.debris": "잔해",
@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "사랑하는 영화",
     "item.movie-ticket.likes-movie": "좋아하는 영화",
     "item.movie-ticket.dislikes-movie": "싫어하는 영화",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} 사랑함",
@@ -682,46 +683,43 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    // TODO
-    "config.title.main-options": "Main options",
-    "config.progression-mode.name": "Progression mode",
-    "config.progression-mode.desc": "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.",
-    "config.highlight-unrevealed-gift-tastes.name": "Highlight unrevealed gift tastes",
-    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
-    "config.show-all-gift-tastes.name": "Show all gift tastes",
-    "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
+    "config.title.main-options": "메인 옵션",
+    "config.progression-mode.name": "진행 모드",
+    "config.progression-mode.desc": "게임 내에서 발견할 때까지 일부 콘텐츠(예: 선물 취향 및 퍼즐 솔루션)를 숨길지 여부.",
+    "config.highlight-unrevealed-gift-tastes.name": "미공개 선물 취향 강조",
+    "config.highlight-unrevealed-gift-tastes.desc": "NPC 프로필에 표시되지 않은 항목 선물 취향을 강조 표시할지 여부. 활성화하면 공개되지 않은 선물 취향이 굵게 표시되고 조회 시 싫어하거나/증오하는 선물도 표시됩니다.",
+    "config.show-all-gift-tastes.name": "모든 선물 취향 표시",
+    "config.show-all-gift-tastes.desc": "NPC 및 아이템 조회에 대한 모든 선물 취향을 표시할지 여부. 비활성화되면 가장 관련성이 높은 취향(예: 사랑하거나 좋아하는 선물)만 표시됩니다.",
 
     // advanced options
-    // TODO
-    "config.title.advanced-options": "Advanced options",
-    "config.tile-lookups.name": "Tile lookups",
-    "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
-    "config.data-mining-fields.name": "Show data mining fields",
-    "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
-    "config.force-full-screen.name": "Force full screen",
-    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
-    "config.target-redirection.name": "Target redirection",
-    "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
-    "config.scroll-amount.name": "Scroll amount",
-    "config.scroll-amount.desc": "The number of pixels to shift content on each up/down scroll.",
+    "config.title.advanced-options": "고급 옵션",
+    "config.tile-lookups.name": "타일 조회",
+    "config.tile-lookups.desc": "지도 타일을 조회 대상으로 포함할지 여부",
+    "config.data-mining-fields.name": "데이터 마이닝 필드 표시",
+    "config.data-mining-fields.desc": "데이터 마이너에 유용한 원시 데이터를 표시할지 여부(검색 결과 하단에 별도의 필드로 표시). 이것은 대부분의 플레이어를 위한 것이 아닌 고급 기능입니다.",
+    "config.force-full-screen.name": "전체 화면 강제 표시",
+    "config.force-full-screen.desc": "메뉴가 창 중앙이 아닌 항상 전체 화면이어야 하는지 여부. 이 기능은 주로 데이터 마이닝 필드를 볼 때 유용합니다.",
+    "config.target-redirection.name": "대상 전환",
+    "config.target-redirection.desc": "어떤 경우에는 게임이 다른 개체를 나타내는 임시 개체를 생성합니다. 예를 들어 광산에 있는 아비게일은 실제로 '광산 아비게일'이라는 이름의 임시 NPC이기 때문에 그녀를 찾아보면 아비게일의 실제 정보가 표시되지 않습니다. 이 옵션을 활성화하면 Lookup Anything 모드에서 원래 아비게일을 대신 조회합니다.",
+    "config.scroll-amount.name": "스크롤 간격",
+    "config.scroll-amount.desc": "각 위/아래 스크롤에서 콘텐츠를 이동할 픽셀 수.",
 
     // controls section
-    // TODO
-    "config.title.controls": "Controls",
-    "config.hide-on-key-up.name": "Hide on key up",
-    "config.hide-on-key-up.desc": "Whether to hide the lookup UI when you release the lookup key.",
-    "config.toggle-lookup.name": "Toggle lookup",
-    "config.toggle-lookup.desc": "The keys which toggle the lookup UI for something under the cursor.",
-    "config.toggle-search.name": "Toggle search",
-    "config.toggle-search.desc": "The keys which toggle the search UI.",
-    "config.scroll-up.name": "Scroll up",
-    "config.scroll-up.desc": "The keys which scroll up long content by a few lines.",
-    "config.scroll-down.name": "Scroll down",
-    "config.scroll-down.desc": "The keys which scroll down long content by a few lines.",
-    "config.page-up.name": "Page up",
-    "config.page-up.desc": "The keys which scroll up long content by a full page.",
-    "config.page-down.name": "Page down",
-    "config.page-down.desc": "The keys which scroll down long content by a full page.",
-    "config.toggle-debug.name": "Toggle debug",
-    "config.toggle-debug.desc": "The keys which toggle the display of debug information."
+    "config.title.controls": "단축키 설정",
+    "config.hide-on-key-up.name": "키를 올릴 때 숨기기",
+    "config.hide-on-key-up.desc": "조회 키를 놓을 때 조회 UI를 숨길지 여부",
+    "config.toggle-lookup.name": "조회 전환",
+    "config.toggle-lookup.desc": "커서 아래에 있는 항목에 대한 조회 UI를 전환하는 키.",
+    "config.toggle-search.name": "검색 전환",
+    "config.toggle-search.desc": "검색창 실행 전환하는 키",
+    "config.scroll-up.name": "위로 스크롤",
+    "config.scroll-up.desc": "긴 내용을 몇 줄씩 위로 스크롤하는 키",
+    "config.scroll-down.name": "아래로 스크롤",
+    "config.scroll-down.desc": "긴 내용을 몇 줄씩 아래로 스크롤하는 키",
+    "config.page-up.name": "페이지 위로",
+    "config.page-up.desc": "긴 내용을 전체 페이지만큼 위로 스크롤하는 키.",
+    "config.page-down.name": "페이지 아래로",
+    "config.page-down.desc": "긴 내용을 전체 페이지만큼 아래로 스크롤하는 키.",
+    "config.toggle-debug.name": "디버그 전환",
+    "config.toggle-debug.desc": "디버그 정보 표시를 전환하는 키."
 }

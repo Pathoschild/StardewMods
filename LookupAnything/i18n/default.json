@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Loves movie",
     "item.movie-ticket.likes-movie": "Likes movie",
     "item.movie-ticket.dislikes-movie": "Dislikes movie",
+    "item.movie-ticket.rejects-movie": "Won't watch movie",
 
     // values
     "item.movie-snack-preference.love": "{{name}} loves this",

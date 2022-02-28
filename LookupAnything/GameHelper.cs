@@ -262,16 +262,27 @@ namespace Pathoschild.Stardew.LookupAnything
                 );
         }
 
-        /// <summary>Get how much each NPC likes watching this week's movie.</summary>
-        public IEnumerable<KeyValuePair<NPC, GiftTaste>> GetMovieTastes()
+        /// <summary>Get how much each NPC likes watching this week's movie. If an NPC would reject the movie, the gift taste is set to null.</summary>
+        public IEnumerable<KeyValuePair<NPC, GiftTaste?>> GetMovieTastes()
         {
             foreach (NPC npc in this.GetAllCharacters())
             {
                 if (!this.IsSocialVillager(npc))
                     continue;
 
-                GiftTaste taste = (GiftTaste)Enum.Parse(typeof(GiftTaste), MovieTheater.GetResponseForMovie(npc), ignoreCase: true);
-                yield return new KeyValuePair<NPC, GiftTaste>(npc, taste);
+                string rawTaste = MovieTheater.GetResponseForMovie(npc);
+                switch (rawTaste)
+                {
+                    case "love" or "like" or "dislike":
+                        yield return new KeyValuePair<NPC, GiftTaste?>(npc, Enum.Parse<GiftTaste>(rawTaste, ignoreCase: true));
+                        break;
+
+                    case "reject":
+                        yield return new KeyValuePair<NPC, GiftTaste?>(npc, null);
+                        break;
+
+                        // any other value will be ignored for movie preferences
+                }
             }
         }
 
@@ -331,7 +342,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Read parsed data about the Community Center bundles.</summary>
         public IEnumerable<BundleModel> GetBundleData()
         {
-            return this.DataParser.GetBundles();
+            return this.DataParser.GetBundles(this.Monitor);
         }
 
         /// <summary>Get the recipes for which an item is needed.</summary>

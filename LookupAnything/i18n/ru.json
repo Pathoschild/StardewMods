@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Ваш преданный питомец.",
     "data.npc.horse.description": "Ваш верный конь.",
     "data.npc.junimo.description": "Дух леса из мира духов. Мало что известно о них.",
-    "data.npc.trashbear.description": "Дружелюбный дух, который убирает мусор.",
+    "data.npc.trash-bear.description": "Дружелюбный дух, который убирает мусор.",
 
     // item types
     "data.type.debris": "Мусор",
@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Любит кино",
     "item.movie-ticket.likes-movie": "Нравится кино",
     "item.movie-ticket.dislikes-movie": "Не нравится кино",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} любит это",

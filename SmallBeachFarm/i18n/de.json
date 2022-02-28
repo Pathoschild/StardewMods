@@ -1,0 +1,20 @@
+﻿{
+    /*********
+    ** Farm info
+    *********/
+    "farm.name": "Kleine Strand Farm",
+    "farm.description": "Ein kleiner fruchtbarer Pocket-Strand, an dem man sowohl Fluss- als auch Meeresfische fangen kann.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.campfire.name": "Lagerfeuer hinzufügen",
+    "config.campfire.tooltip": "Füge ein funktionierendes Lagerfeuer vor dem Farmhaus hinzu.",
+
+    "config.islands.name": "Inseln hinzufügen",
+    "config.islands.tooltip": "Füge Meeresinseln mit zusätzlicher Landfläche hinzu.",
+
+    "config.beach-sounds.name": "Strandgeräusche abspielen",
+    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab."
+}

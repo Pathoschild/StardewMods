@@ -17,6 +17,13 @@ namespace ContentPatcher.Framework
     internal class TokenParser
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>Handles parsing raw strings into tokens.</summary>
+        private readonly Lexer Lexer = Lexer.Instance;
+
+
+        /*********
         ** Accessors
         *********/
         /// <summary>The manifest for the content pack being parsed.</summary>
@@ -57,7 +64,7 @@ namespace ContentPatcher.Framework
         public bool TryParseString(string rawValue, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out IManagedTokenString parsed)
         {
             // parse lexical bits
-            var bits = new Lexer().ParseBits(rawValue, impliedBraces: false).ToArray();
+            var bits = this.Lexer.ParseBits(rawValue, impliedBraces: false).ToArray();
             for (int i = 0; i < bits.Length; i++)
             {
                 if (!this.Migrator.TryMigrate(ref bits[i], out error))

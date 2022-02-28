@@ -83,7 +83,7 @@
     "data.npc.pet.description": "Vôtre loyal animal.",
     "data.npc.horse.description": "Vôtre loyal destrier.",
     "data.npc.junimo.description": "Un esprit de la forêt provenant du monde des esprits. On en sait très peu sur eux.",
-    "data.npc.trashbear.description": "Un esprit amical qui nettoie les déchets.",
+    "data.npc.trash-bear.description": "Un esprit amical qui nettoie les déchets.",
 
     // item types
     "data.type.debris": "Débris",
@@ -452,6 +452,7 @@
     "item.movie-ticket.loves-movie": "Films aimés",
     "item.movie-ticket.likes-movie": "Films appréciés",
     "item.movie-ticket.dislikes-movie": "Films non appréciés",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} aime ça",

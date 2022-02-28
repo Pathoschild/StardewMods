@@ -1,8 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.25.3
+Released 27 February 2022 for SMAPI 3.13.0 or later.
+
+* Optimized legacy save migration a bit (thanks to Michael Kuklinski / Ameisen!).
+* Improved translations. Thanks to EmWhyKay (added Turkish), martin66789 (added Hungarian), and wally232 (added Korean)!
+
 ## 1.25.2
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Fixed bushes in garden pots sometimes producing a second harvest when you enter the location.
 * Improved translations. Thanks to ChulkyBow (added Ukrainian), Evexyron (added Spanish), and mezen (added German)!

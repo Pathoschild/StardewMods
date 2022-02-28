@@ -67,6 +67,9 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>The records to reorder, if the target is a list asset.</summary>
         public PatchMoveEntryConfig[] MoveEntries { get; set; }
 
+        /// <summary>The field within the data asset to which edits should be applied, or empty to apply to the root asset.</summary>
+        public string[] TargetField { get; set; }
+
         /****
         ** EditMap
         ****/
@@ -113,6 +116,7 @@ namespace ContentPatcher.Framework.ConfigModels
                 entryFields => entryFields?.Clone(value => value?.DeepClone())
             );
             this.MoveEntries = other.MoveEntries.Select(p => new PatchMoveEntryConfig(p)).ToArray();
+            this.TargetField = other.TargetField.ToArray();
 
             // EditMap
             this.MapProperties = other.MapProperties.Clone();
@@ -135,6 +139,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Entries ??= new InvariantDictionary<JToken>();
             this.Fields ??= new InvariantDictionary<InvariantDictionary<JToken>>();
             this.MoveEntries ??= Array.Empty<PatchMoveEntryConfig>();
+            this.TargetField ??= Array.Empty<string>();
 
             // EditMap
             this.MapProperties ??= new InvariantDictionary<string>();

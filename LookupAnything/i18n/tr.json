@@ -12,10 +12,10 @@
 
     // generic field values
     "generic.percent": "{{percent}}%",
-    "generic.percent-chance-of": "{{percent}}% şansla {{label}}",
-    "generic.percent-ratio": "{{percent}}% ({{value}} of {{max}})",
-    "generic.ratio": "{{value}} of {{max}}",
-    "generic.range": "{{min}} ile {{max}}",
+    "generic.percent-chance-of": "{{percent}}% {{label}} şansı",
+    "generic.percent-ratio": "{{percent}}% ({{value}} / {{max}})",
+    "generic.ratio": "{{value}} / {{max}}",
+    "generic.range": "{{min}} ila {{max}}",
     "generic.yes": "evet",
     "generic.no": "hayır",
     "generic.seconds": "{{count}} saniye",
@@ -23,15 +23,15 @@
     "generic.hours": "{{count}} saat",
     "generic.days": "{{count}} gün",
     "generic.in-x-days": "{{count}} gün içinde",
-    "generic.x-days-ago": "{{count}} gün sonra",
+    "generic.x-days-ago": "{{count}} gün önce",
     "generic.price": "{{price}}g",
     "generic.price-for-quality": "{{price}}g ({{quality}})",
-    "generic.price-for-stack": "{{count}} tane için {{price}}g",
+    "generic.price-for-stack": "{{count}} adet için {{price}}g",
 
     // types
     "type.building": "Bina",
     "type.bush": "Çalı",
-    "type.fruit-tree": "Meyve ağacı",
+    "type.fruit-tree": "Meyve Ağacı",
     "type.map-tile": "Harita karosu",
     "type.monster": "Canavar",
     "type.player": "Oyuncu",
@@ -51,7 +51,7 @@
     "friendship-status.engaged": "Nişanlı",
     "friendship-status.married": "Evli",
     "friendship-status.divorced": "Boşanmış",
-    "friendship-status.kicked-out": "Terkedilmiş",
+    "friendship-status.kicked-out": "Terk edilmiş",
 
 
     /*********
@@ -82,9 +82,9 @@
 
     // NPC descriptions
     "data.npc.pet.description": "Sadık evcil hayvanın.",
-    "data.npc.horse.description": "Sadık küheylanın.",
+    "data.npc.horse.description": "Sadık atın.",
     "data.npc.junimo.description": "Ruh dünyasından bir orman ruhu. Onlar hakkında çok az şey biliniyor.",
-    "data.npc.trash-bear.description": "Çöpleri temizleyen arkadaş canlısı bir ruh",
+    "data.npc.trash-bear.description": "Çöpleri temizleyen arkadaş canlısı bir ruh.",
 
     // item types
     "data.type.debris": "Moloz",
@@ -211,7 +211,7 @@
     // labels
     "animal.love": "Sevgi",
     "animal.happiness": "Mutluluk",
-    "animal.mood": "Ruh hali",
+    "animal.mood": "Ruh Hali",
     "animal.complaints": "Şikayetler",
     "animal.produce-ready": "Ürün hazır",
     "animal.growth": "Büyüme",
@@ -222,7 +222,7 @@
     "animal.complaints.left-out": "dün gece dışarıda kaldı",
     "animal.complaints.new-home": "yeni evine taşındı",
     "animal.complaints.no-heater": "kış için ısıtıcı yok",
-    "animal.complaints.not-petted": "henüz bugün sevilmedi",
+    "animal.complaints.not-petted": "bugün henüz sevilmedi",
     "animal.complaints.wild-animal-attack": "gece vahşi hayvanların saldırısına uğradı",
 
 
@@ -242,7 +242,7 @@
     "building.water-trough": "Su yalağı",
 
     // values
-    "building.animals.summary": "şuan {{count}} hayvan, maksimum {{max}} hayvan ",
+    "building.animals.summary": "şuan {{count}} hayvan, maksimum {{max}} hayvan",
     "building.construction.summary": "{{date}} günü hazır",
     "building.feed-trough.automated": "otomatikleştirilmiş",
     "building.feed-trough.summary": "{{max}} yemlikten {{filled}} tanesi dolu",
@@ -251,7 +251,7 @@
     "building.owner.none": "sahipsiz",
     "building.output-processing": "Ürün işleniyor",
     "building.output-ready": "Ürün hazır",
-    "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca ",
+    "building.slimes.summary": "şuan {{count}} balçıkca, maksimum {{max}} balçıkca",
     "building.stored-hay.summary-one-silo": "{{hayCount}} saman (kapasite: {{maxHay}})",
     "building.stored-hay.summary-multiple-silos": "{{siloCount}} siloda {{hayCount}} saman var (kapasite: {{maxHay}})",
     "building.upgrades.barn.0": "4 hayvana kadar, inekler eklenebilir",
@@ -295,7 +295,7 @@
     "bush.description.berry": "Ahududu ve böğürtlen yetiştiren bir çalı.",
     "bush.description.plain": "Hiçbir şey yetiştirmeyen ova çalısı.",
     "bush.description.Tea": "Çay yaprakları yetiştiren bir çalı.",
-    "bush.date-planted": "Ekim tarihi ",
+    "bush.date-planted": "Ekim tarihi",
     "bush.growth": "Büyüme",
     "bush.next-harvest": "Sonraki hasat",
 
@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Filmi sevenler",
     "item.movie-ticket.likes-movie": "Filmi beğenenler",
     "item.movie-ticket.dislikes-movie": "Filmi beğenmeyenler",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} bunu seviyor",
@@ -627,15 +628,15 @@
     "tile.description": "Bir karonun haritadaki konumu. Bu gösteriliyor çünkü konfigürasyonda karo gösterimini etkinleştirdin.",
     "tile.game-location": "Konum",
     "tile.map-name": "Harita ismi",
-    "tile.tile": "Tile",
-    "tile.tile-index": "{{layerName}}: tile index",
-    "tile.tilesheet": "{{layerName}}: tilesheet",
-    "tile.blend-mode": "{{layerName}}: blend mode",
-    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}",
-    "tile.tile-property": "{{layerName}}: props: {{propertyName}}",
+    "tile.tile": "Tile", // TODO
+    "tile.tile-index": "{{layerName}}: tile index", // TODO
+    "tile.tilesheet": "{{layerName}}: tilesheet", // TODO
+    "tile.blend-mode": "{{layerName}}: blend mode", // TODO
+    "tile.index-property": "{{layerName}}: ix props: {{propertyName}}", // TODO
+    "tile.tile-property": "{{layerName}}: props: {{propertyName}}", // TODO
 
     // values
-    "tile.tile.none-here": "no tile here",
+    "tile.tile.none-here": "burada karo yok",
 
 
     /*********
@@ -682,46 +683,43 @@
     ** Generic Mod Config Menu UI
     *********/
     // main options
-    // TODO
-    "config.title.main-options": "Main options",
-    "config.progression-mode.name": "Progression mode",
-    "config.progression-mode.desc": "Whether to hide some content (e.g. gift tastes and puzzle solutions) until you've discovered it in-game.",
-    "config.highlight-unrevealed-gift-tastes.name": "Highlight unrevealed gift tastes",
-    "config.highlight-unrevealed-gift-tastes.desc": "Whether to highlight item gift tastes which haven't been revealed in the NPC profile. When enabled, unrevealed gift tastes will be bold and lookups will also show disliked/hated gifts.",
-    "config.show-all-gift-tastes.name": "Show all gift tastes",
-    "config.show-all-gift-tastes.desc": "Whether to show all gift tastes for NPC and item lookups; when disabled, only the most relevant tastes (e.g. loved or liked gifts) are shown.",
+    "config.title.main-options": "Ana seçenekler",
+    "config.progression-mode.name": "İlerleme modu",
+    "config.progression-mode.desc": "Oyunda keşfedene kadar bazı içeriklerin (örn. hediye zevkleri ve bulmaca çözümleri) gizlenip gizlenmeyeceği.",
+    "config.highlight-unrevealed-gift-tastes.name": "Açıklanmayan hediye zevklerini vurgulayın",
+    "config.highlight-unrevealed-gift-tastes.desc": "NPC profilinde açıklanmayan eşya hediye zevklerinin vurgulanıp vurgulanmayacağı. Etkinleştirildiğinde, açıklanmayan hediye zevkleri cesur olacak ve aramalarda ayrıca beğenilmeyen/nefret edilen hediyeler de gösterilecek.",
+    "config.show-all-gift-tastes.name": "Bütün hediye zevklerini göster",
+    "config.show-all-gift-tastes.desc": "NPC ve item aramaları için tüm hediye zevklerinin gösterilip gösterilmeyeceği; devre dışı bırakıldığında, yalnızca en alakalı lezzetler (örneğin sevilen veya sevilen hediyeler) gösterilir.",
 
     // advanced options
-    // TODO
-    "config.title.advanced-options": "Advanced options",
-    "config.tile-lookups.name": "Tile lookups",
-    "config.tile-lookups.desc": "Whether to include map tiles as lookup targets.",
-    "config.data-mining-fields.name": "Show data mining fields",
-    "config.data-mining-fields.desc": "Whether to show raw data useful for data miners (as separate fields at the bottom of lookup results). This is an advanced feature not intended for most players.",
-    "config.force-full-screen.name": "Force full screen",
-    "config.force-full-screen.desc": "Whether the menu should always be full-screen, instead of centered in the window. This is mainly useful when viewing data mining fields.",
-    "config.target-redirection.name": "Target redirection",
-    "config.target-redirection.desc": "In some cases the game spawns a temporary entity to represent another one. For example, Abigail in the mines is actually a temporary NPC with the name 'AbigailMine', so looking her up there won't show Abigail's real info. With this option enabled, Lookup Anything will look up the original Abigail instead.",
-    "config.scroll-amount.name": "Scroll amount",
-    "config.scroll-amount.desc": "The number of pixels to shift content on each up/down scroll.",
+    "config.title.advanced-options": "Gelişmiş Seçenekler",
+    "config.tile-lookups.name": "Karo aramaları",
+    "config.tile-lookups.desc": "Harita karolarının arama hedefleri olarak dahil edilip edilmeyeceği.",
+    "config.data-mining-fields.name": "Veri madenciliği alanlarını göster",
+    "config.data-mining-fields.desc": "Veri madencileri için yararlı olan ham verilerin gösterilip gösterilmeyeceği (arama sonuçlarının altında ayrı alanlar olarak). Bu, çoğu oyuncu için tasarlanmayan gelişmiş bir özelliktir.",
+    "config.force-full-screen.name": "Tam ekranı zorla",
+    "config.force-full-screen.desc": "Menünün pencerede ortalanmak yerine her zaman tam ekran olup olmayacağı. Bu, özellikle veri madenciliği alanlarını görüntülerken kullanışlıdır.",
+    "config.target-redirection.name": "Hedef yönlendirme",
+    "config.target-redirection.desc": "Bazı durumlarda oyun, bir başkasını temsil etmek için geçici bir varlık yaratır. Örneğin, madendeki Abigail aslında 'AbigailMine' adında geçici bir NPC'dir, bu yüzden ona orada bakmak Abigail'in gerçek bilgilerini göstermez. Bu seçenek etkinleştirildiğinde, Lookup Anything, bunun yerine orijinal Abigail'i arayacaktır.",
+    "config.scroll-amount.name": "Kaydırma miktarı",
+    "config.scroll-amount.desc": "Her yukarı/aşağı kaydırmada içeriği kaydırılacak piksel sayısı.",
 
     // controls section
-    // TODO
-    "config.title.controls": "Controls",
-    "config.hide-on-key-up.name": "Hide on key up",
-    "config.hide-on-key-up.desc": "Whether to hide the lookup UI when you release the lookup key.",
-    "config.toggle-lookup.name": "Toggle lookup",
-    "config.toggle-lookup.desc": "The keys which toggle the lookup UI for something under the cursor.",
-    "config.toggle-search.name": "Toggle search",
-    "config.toggle-search.desc": "The keys which toggle the search UI.",
-    "config.scroll-up.name": "Scroll up",
-    "config.scroll-up.desc": "The keys which scroll up long content by a few lines.",
-    "config.scroll-down.name": "Scroll down",
-    "config.scroll-down.desc": "The keys which scroll down long content by a few lines.",
-    "config.page-up.name": "Page up",
-    "config.page-up.desc": "The keys which scroll up long content by a full page.",
-    "config.page-down.name": "Page down",
-    "config.page-down.desc": "The keys which scroll down long content by a full page.",
-    "config.toggle-debug.name": "Toggle debug",
-    "config.toggle-debug.desc": "The keys which toggle the display of debug information."
+    "config.title.controls": "Kontroller",
+    "config.hide-on-key-up.name": "Hide on key up", // TODO
+    "config.hide-on-key-up.desc": "Arama anahtarını bıraktığınızda arama kullanıcı arabiriminin gizlenip gizlenmeyeceği.",
+    "config.toggle-lookup.name": "Aramayı aç/kapat",
+    "config.toggle-lookup.desc": "İmlecin altındaki bir şey için arama kullanıcı arayüzünü değiştiren tuşlar.",
+    "config.toggle-search.name": "Aramayı aç/kapat",
+    "config.toggle-search.desc": "Arama arayüzünü değiştiren tuşlar.",
+    "config.scroll-up.name": "Yukarı kaydır",
+    "config.scroll-up.desc": "Uzun içeriği birkaç satır yukarı kaydıran tuşlar.",
+    "config.scroll-down.name": "Aşağı Kaydır",
+    "config.scroll-down.desc": "Uzun içeriği birkaç satır aşağı kaydıran tuşlar.",
+    "config.page-up.name": "Sayfayı yukarı kaydır",
+    "config.page-up.desc": "Uzun içeriği tam sayfa yukarı kaydıran tuşlar.",
+    "config.page-down.name": "Sayfayı aşağı kaydır",
+    "config.page-down.desc": "Uzun içeriği tam sayfa aşağı kaydıran tuşlar.",
+    "config.toggle-debug.name": "Hata ayıklamayı aç/kapat",
+    "config.toggle-debug.desc": "Hata ayıklama bilgilerinin görüntülenmesini değiştiren tuşlar."
 }

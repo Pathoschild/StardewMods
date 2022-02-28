@@ -1,8 +1,20 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.37.0
+Released 27 February 2022 for SMAPI 3.13.0 or later.
+
+* Improved movie ticket lookups:
+  * Added list of villagers who'd refuse to watch it.
+  * Fixed error if some NPCs will reject the invitation.
+  * Fixed gift tastes shown (a movie ticket isn't giftable).
+* Fixed item lookups no longer showing construction recipes.
+* Fixed error when the community center bundle data is invalid.
+* Fixed a few missing translations in some languages.
+* Improved translations. Thanks to ChulkyBow (updated Ukrainian), EmWhyKay (updated Turkish), Evexyron (updated Spanish), Scartiana (updated German), and wally232 (added Korean)!
+
 ## 1.36.2
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Fixed scroll up/down arrows and keybinds not working in the search UI.
 * Fixed error clicking 'see also' crop link from a seed lookup.

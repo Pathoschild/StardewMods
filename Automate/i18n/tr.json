@@ -1,0 +1,33 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Ana Seçenekler",
+    "config.junimo-huts-output-gems.name": "Junimo kulübelerinden değerli taş çıkar",
+    "config.junimo-huts-output-gems.desc": "Junimo kulübelerinden değerli taş çıkıp çıkmayacağı. Eğer etkinse, kulübelerine değerli taşlar yerleştirerek Junimo renklerini değiştiremezsiniz.",
+    "config.automation-interval.name": "Otomasyon aralığı",
+    "config.automation-interval.desc": "Her bir otomasyon süreci arasındaki tıklama sayısı (saniyede bir kez 60, iki saniyede bir 120, vb.).",
+    "config.toggle-overlay-key.name": "Kaplama anahtarını aç/kapat",
+    "config.toggle-overlay-key.desc": "Otomasyon kaplamasını değiştiren tuşlar.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Mod uyumluluğu",
+    "config.better-junimos.name": "Daha iyi Junimolar",
+    "config.better-junimos.desc": "Daha iyi Junimolar ile uyumluluğu etkinleştirir. Kuruluysa, Junimo kulübeleri gübre veya tohum vermez.",
+    "config.warn-for-missing-bridge-mod.name": "Eksik köprü modu için uyar",
+    "config.warn-for-missing-bridge-mod.desc": "Yüklenmemiş ayrı bir uyumluluk düzeltme eki gerektiren bir özel makine modu yüklediyseniz, başlangıçta bir uyarının günlüğe kaydedilip kaydedilmeyeceği.",
+
+    // connectors
+    "config.title.connectors": "Etkin bağlayıcılar",
+    "config.connector.desc": "{{itemName}}'in makineleri ve sandıkları birbirine bağlayıp bağlamadığı.",
+    "config.custom-connectors.name": "Özel bağlayıcılar",
+    "config.custom-connectors.desc": "Bitişik makineleri birbirine bağlayan öğelerin tam İngilizce adları. Birden çok öğeyi virgülle listeleyebilirsiniz.",
+
+    // machine overrides
+    "config.title.machine-overrides": "Makine geçersiz kılmaları",
+    "config.override.ShippingBin-name": "Nakliye Kutusu",
+    "config.override.MiniShippingBin-name": "Küçük Nakliye Kutusu",
+    "config.override.desc": "{{machineName}} otomasyonunun etkinleştirilip etkinleştirilmeyeceği.",
+    "config.custom-overrides-note": "Özel geçersiz kılmalar için, config.json dosyasını doğrudan düzenleme konusunda yardım için https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure adresine bakın."
+}

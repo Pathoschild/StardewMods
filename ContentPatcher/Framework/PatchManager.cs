@@ -563,13 +563,15 @@ namespace ContentPatcher.Framework
                     affected.Add(patch);
                 }
 
+                // get mod context
+                ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
+
                 // get direct tokens
-                InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed());
+                InvariantHashSet tokensUsed = new InvariantHashSet(patch.GetTokensUsed().Select(name => this.TokenManager.ResolveAlias(patch.ContentPack.Manifest.UniqueID, name)));
                 foreach (string tokenName in tokensUsed)
                     IndexForToken(tokenName);
 
                 // get indirect tokens
-                ModTokenContext modContext = this.TokenManager.TrackLocalTokens(patch.ContentPack);
                 foreach (IToken token in this.TokenManager.GetTokens(enforceContext: false))
                 {
                     if (!tokensUsed.Contains(token.Name) && modContext.GetTokensAffectedBy(token.Name).Any(name => tokensUsed.Contains(name)))

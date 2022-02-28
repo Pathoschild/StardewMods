@@ -1,8 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.2.12
+Released 27 February 2022 for SMAPI 3.13.0 or later.
+
+* Improved translations. Thanks to martin66789 (updated Hungarian)!
+
 ## 1.2.11
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Improved translations. Thanks to ChulkyBow (added Ukrainian) and Zangorr (added Polish)!
 

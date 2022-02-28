@@ -448,11 +448,12 @@
     ** Item > movie lookups
     *********/
     // labels
-    "item.movie-snack-preference": "Перевага",
+    "item.movie-snack-preference": "Подобається",
     "item.movie-ticket.movie-this-week": "Фільм цього тижня",
     "item.movie-ticket.loves-movie": "Любить фільм",
     "item.movie-ticket.likes-movie": "Подобається фільм",
     "item.movie-ticket.dislikes-movie": "Не подобається фільм",
+    "item.movie-ticket.rejects-movie": "Не дивитиметься фільм",
 
     // values
     "item.movie-snack-preference.love": "{{name}} любить це",
@@ -540,7 +541,7 @@
 
     // values
     "pet.last-petted.yes": "Так (+12 од. прихильності)",
-    "pet.last-petted.days-ago": "{{days}} днів потому",
+    "pet.last-petted.days-ago": "{{days}} дні(в) потому",
     "pet.last-petted.never": "ніколи",
     "pet.water-bowl.empty": "Порожньо",
     "pet.water-bowl.filled": "Наповнена (+6 од. прихильності)",

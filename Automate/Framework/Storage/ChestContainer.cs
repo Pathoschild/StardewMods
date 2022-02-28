@@ -16,6 +16,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /*********
         ** Fields
         *********/
+        /// <summary>A pattern which matches legacy option tags.</summary>
+        private static readonly Regex LegacyOptionPattern = new(@"\|automate:[a-z\-]*\|", RegexOptions.Compiled);
+
         /// <summary>The underlying chest.</summary>
         private readonly Chest Chest;
 
@@ -201,7 +204,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
                 return;
 
             // get tags
-            MatchCollection matches = Regex.Matches(name, @"\|automate:[a-z\-]*\|");
+            MatchCollection matches = ChestContainer.LegacyOptionPattern.Matches(name);
             if (matches.Count == 0)
                 return;
 

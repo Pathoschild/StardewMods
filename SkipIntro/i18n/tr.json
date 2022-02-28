@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Atla",
+    "config.skip-to.tooltip": "Hangi ekrana geçilecek. Varsayılan Başlık.",
+    "config.skip-to.values.title-menu": "Başlık menüsü",
+    "config.skip-to.values.load-menu": "Yükleme menüsü",
+    "config.skip-to.values.join-coop": "Co-op katıl",
+    "config.skip-to.values.host-coop": "Co-op ev sahipliği yap"
+}

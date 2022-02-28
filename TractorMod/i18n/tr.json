@@ -4,7 +4,7 @@
     *********/
     "buff.name": "Traktör Gücü",
     "garage.name": "Traktör Garajı",
-    "garage.description": "İçine traktörünü koyabileceðin bir garaj. Traktör dahildir!",
+    "garage.description": "Traktörünüzü saklamak için bir garaj. Traktör dahil!",
 
 
     /*********
@@ -13,204 +13,193 @@
     /****
     ** Section titles
     ****/
-    // TODO
-    "config.main-options": "Main Options",
-    "config.controls": "Controls",
-    "config.axe": "Axe Features",
-    "config.hoe": "Hoe Features",
-    "config.pickaxe": "Pickaxe Features",
-    "config.scythe": "Scythe Features",
-    "config.melee-blunt": "Melee Blunt Weapons Features",
-    "config.melee-dagger": "Melee Dagger Features",
-    "config.melee-sword": "Melee Sword Features",
-    "config.other-tools": "Other Tools",
-    "config.custom-tools": "Custom Tools",
+    "config.main-options": "Ana Seçenekler",
+    "config.controls": "Kontroller",
+    "config.axe": "Balta Özellikleri",
+    "config.hoe": "Çapa özellikleri",
+    "config.pickaxe": "Kazma Özellikleri",
+    "config.scythe": "Tırpan Özellikleri",
+    "config.melee-blunt": "Yakın Dövüş Kör Silah Özellikleri",
+    "config.melee-dagger": "Yakın Dövüş Hançer Özellikleri",
+    "config.melee-sword": "Yakın Dövüş Kılıç Özellikleri",
+    "config.other-tools": "Diğer Aletler",
+    "config.custom-tools": "Özel Aletler",
 
 
     /****
     ** Main options
     ****/
-    // TODO
-    "config.distance.name": "Distance",
-    "config.distance.tooltip": "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default {{defaultValue}}; a value of {{maxRecommendedValue}} covers most of the visible screen, and higher values may negatively impact game performance.",
+    "config.distance.name": "Mesafe",
+    "config.distance.tooltip": "Traktörün etrafındaki her yönde etkilenecek karo sayısı (altındaki karoya ek olarak). Varsayılan {{defaultValue}}; {{maxRecommendedValue}} değeri görünen ekranın çoğunu kapsar ve daha yüksek değerler oyun performansını olumsuz etkileyebilir.",
 
-    "config.speed.name": "Tractor Speed",
-    "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
+    "config.speed.name": "Traktör Hızı",
+    "config.speed.tooltip": "Traktör sürerken hız değiştirici. Varsayılan {{defaultValue}}.",
 
-    "config.magnetic-radius.name": "Magnetic Radius",
-    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+    "config.magnetic-radius.name": "Manyetik Yarıçap",
+    "config.magnetic-radius.tooltip": "Eşya manyetizma miktarı (yüksek değerler eşyaları atadan uzağa çeker). Varsayılan {{defaultValue}}.",
 
-    "config.build-price.name": "Build Price",
-    "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
+    "config.build-price.name": "Yapı Fiyatı",
+    "config.build-price.tooltip": "Traktör garajı satın almak için altın fiyatı. Varsayılan {{defaultValue}}g.",
 
-    "config.can-summon-without-garage.name": "Can Summon Without Garage",
-    "config.can-summon-without-garage.tooltip": "Whether you can summon a temporary tractor without building a garage first.",
+    "config.can-summon-without-garage.name": "Garajsız Çağırabilir",
+    "config.can-summon-without-garage.tooltip": "İlk önce bir garaj inşa etmeden geçici bir traktör çağırıp çağıramadığınız.",
 
-    "config.invincible-on-tractor.name": "Invincible on Tractor",
-    "config.invincible-on-tractor.tooltip": "Whether you should be immune to damage from any source when riding the tractor.",
+    "config.invincible-on-tractor.name": "Traktörde Yenilmez",
+    "config.invincible-on-tractor.tooltip": "Traktörü sürerken herhangi bir kaynaktan gelen hasardan etkilenip etkilenmediğiniz.",
 
-    "config.highlight-radius.name": "Highlight Radius (Debug)",
-    "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+    "config.highlight-radius.name": "Vurgu Yarıçapı (Hata Ayıklama)",
+    "config.highlight-radius.tooltip": "Mesafe seçeneğini görselleştirmeye yardımcı olmak için, bir traktörü sürerken traktör yarıçapının vurgulanıp vurgulanmayacağı.",
 
 
     /****
     ** Keybind options
     ****/
-    // TODO
-    "config.summon-key.name": "Summon Tractor",
-    "config.summon-key.tooltip": "Warp an available tractor to your position. Default backspace.",
+    "config.summon-key.name": "Traktör Çağırma",
+    "config.summon-key.tooltip": "Mevcut bir traktörü konumunuza ışınlandırır. Varsayılan geri al tuşu.",
 
-    "config.dismiss-key.name": "Dismiss Tractor",
-    "config.dismiss-key.tooltip": "Return the tractor you're riding to its home.",
+    "config.dismiss-key.name": "Traktörü Geri Gönder",
+    "config.dismiss-key.tooltip": "Bindiğiniz traktörü evine geri götürür.",
 
-    "config.hold-to-activate-key.name": "Hold to Activate",
-    "config.hold-to-activate-key.tooltip": "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+    "config.hold-to-activate-key.name": "Etkinleştirmek için basılı tut",
+    "config.hold-to-activate-key.tooltip": "Belirtilirse, traktör yalnızca siz bu düğmeyi basılı tutarken bir şey yapacaktır. Hiçbir şey belirtilmezse, siz onu sürerken traktör otomatik olarak çalışacaktır. ",
 
 
     /****
     ** Trees & bushes
     ****/
-    // TODO
-    "config.chop-fruit-trees-seeds.name": "Chop Fruit Trees (Seeds)",
-    "config.chop-fruit-trees-seeds.tooltip": "Whether to clear fruit tree seeds.",
+    "config.chop-fruit-trees-seeds.name": "Meyve Ağaçlarını (Tohumları) Kes",
+    "config.chop-fruit-trees-seeds.tooltip": "Meyve ağacı tohumlarının temizlenip temizlenmeyeceği.",
 
-    "config.chop-fruit-trees-saplings.name": "Chop Fruit Trees (Saplings)",
-    "config.chop-fruit-trees-saplings.tooltip": "Whether to clear fruit trees which aren't fully grown.",
+    "config.chop-fruit-trees-saplings.name": "Meyve Ağaçlarını (Fidanları) Kes",
+    "config.chop-fruit-trees-saplings.tooltip": "Tamamen büyümemiş meyve ağaçlarının temizlenip temizlenmeyeceği.",
 
-    "config.chop-fruit-trees-grown.name": "Chop Fruit Trees (Grown)",
-    "config.chop-fruit-trees-grown.tooltip": "Whether to cut fully-grown fruit trees.",
+    "config.chop-fruit-trees-grown.name": "Meyve Ağaçlarını (Büyümüş) Kes",
+    "config.chop-fruit-trees-grown.tooltip": "Tamamen büyümüş meyve ağaçlarının kesilip kesilmeyeceği.",
 
-    "config.chop-trees-seeds.name": "Chop Trees (Seeds)",
-    "config.chop-trees-seeds.tooltip": "Whether to clear non-fruit tree seeds.",
+    "config.chop-trees-seeds.name": "Ağaçları (Tohumları) Kes",
+    "config.chop-trees-seeds.tooltip": "Meyve olmayan ağaç tohumlarının temizlenip temizlenmeyeceği.",
 
-    "config.chop-trees-saplings.name": "Chop Trees (Saplings)",
-    "config.chop-trees-saplings.tooltip": "Whether to clear non-fruit trees which aren't fully grown.",
+    "config.chop-trees-saplings.name": "Ağaçları (Fidanları) Kes",
+    "config.chop-trees-saplings.tooltip": "Tamamen büyümemiş meyve olmayan ağaçların temizlenip temizlenmeyeceği.",
 
-    "config.chop-trees-grown.name": "Chop Trees (Grown)",
-    "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
+    "config.chop-trees-grown.name": "Meyve Ağaçlarını (Büyümüş) Kes",
+    "config.chop-trees-grown.tooltip": "Tamamen büyümüş meyve olmayan ağaçların temizlenip temizlenmeyeceği.",
 
-    "config.chop-bushes.name": "Chop Bushes",
-    "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
+    "config.chop-bushes.name": "Çalıları Kes",
+    "config.chop-bushes.tooltip": "Kesilebilen çalıların kesilip kesilmeyeceği.",
 
-    "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
-    "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
+    "config.harvest-fruit-trees.name": "Meyve Ağaçlarını Hasat Et",
+    "config.harvest-fruit-trees.tooltip": "Meyve ağaçlarının hasat edilip edilmeyeceği.",
 
 
     /****
     ** Crops/forage/grass
     ****/
-    // TODO
-    "config.clear-dead-crops.name": "Clear Dead Crops",
-    "config.clear-dead-crops.tooltip": "Whether to destroy dead crops.",
+    "config.clear-dead-crops.name": "Ölü Ekinleri Temizle",
+    "config.clear-dead-crops.tooltip": "Ölü ekinlerin yok edilip edilmeyeceği.",
 
-    "config.clear-live-crops.name": "Clear Live Crops",
-    "config.clear-live-crops.tooltip": "Whether to destroy live crops.",
+    "config.clear-live-crops.name": "Canlı Ekinleri Temizle",
+    "config.clear-live-crops.tooltip": "Canlı ekinlerin yok edilip edilmeyeceği. ",
 
-    "config.harvest-giant-crops.name": "Harvest Giant Crops",
-    "config.harvest-giant-crops.tooltip": "Whether to cut giant crops.",
+    "config.harvest-giant-crops.name": "Dev Ekinleri Hasat Et",
+    "config.harvest-giant-crops.tooltip": "Dev ekinlerin kesilip kesilmeyeceği.",
 
-    "config.harvest-crops.name": "Harvest Crops",
-    "config.Harvest Crops.tooltip": "Whether to harvest crops.",
+    "config.harvest-crops.name": "Ekinleri Hasat Et",
+    "config.Harvest Crops.tooltip": "Ekinlerin hasat edilip edilmeyeceği.",
 
-    "config.harvest-flowers.name": "Harvest Flowers",
-    "config.harvest-flowers.tooltip": "Whether to harvest flowers.",
+    "config.harvest-flowers.name": "Çiçekleri Hasat Et",
+    "config.harvest-flowers.tooltip": "Çiçeklerin hasat edilip edilmeyeceği.",
 
-    "config.harvest-forage.name": "Harvest Forage",
-    "config.harvest-forage.tooltip": "Whether to harvest forage.",
+    "config.harvest-forage.name": "Yiyecekleri Hasat Et",
+    "config.harvest-forage.tooltip": "Yiyeceklerin hasat edilip edilmeyeceği.",
 
-    "config.harvest-grass.name": "Harvest Grass",
-    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+    "config.harvest-grass.name": "Otları Hasat Et",
+    "config.harvest-grass.tooltip": "Otların kesilip kesilmeyeceği. Boş silo alanınız varsa, bu size her zamanki gibi saman verir.",
 
 
     /****
     ** Debris
     ****/
-    // TODO
-    "config.clear-debris.name": "Clear Debris",
-    "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
+    "config.clear-debris.name": "Enkazı Temizle",
+    "config.clear-debris.tooltip": "Yabani otlar, dallar, dev kütükler ve düşmüş kütükler gibi kalıntıları yok edip etmeyeceği.",
 
-    "config.clear-weeds.name": "Clear Weeds",
-    "config.clear-weeds.tooltip": "Whether to destroy weeds.",
+    "config.clear-weeds.name": "Yabani Otları Temizle ",
+    "config.clear-weeds.tooltip": "Yabani otların yok edilip edilmeyeceği.",
 
 
     /****
     ** Dirt
     ****/
-    // TODO
-    "config.till-dirt.name": "Till Dirt",
-    "config.till-dirt.tooltip": "Whether to till empty dirt.",
+    "config.till-dirt.name": "Toprağı İşle",
+    "config.till-dirt.tooltip": "Boş toprağın işlenip işlenmeyeceği.",
 
-    "config.dig-artifact-spots.name": "Dig Artifact Spots",
-    "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+    "config.dig-artifact-spots.name": "Eser Noktalarını Kaz",
+    "config.dig-artifact-spots.tooltip": "Eser noktalarının kazılıp kazılmayacağı.",
 
-    "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
-    "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
+    "config.clear-tilled-dirt.name": "İşlenmiş Toprağı Temizle",
+    "config.clear-tilled-dirt.tooltip": "İşlenmiş toprağın temizlenip temizlenmeyeceği.",
 
 
     /****
     ** Mining
     ****/
-    // TODO
-    "config.break-boulders-and-meteorites.name": "Break Boulders and Meteorites",
-    "config.break-boulders-and-meteorites.tooltip": "Whether to break boulders and meteorites.",
+    "config.break-boulders-and-meteorites.name": "Kayaları ve Göktaşlarını Kır",
+    "config.break-boulders-and-meteorites.tooltip": "Kayaların ve göktaşlarının kırılıp kırılmayacağı.",
 
-    "config.harvest-mine-spawns.name": "Harvest Mine Spawns",
-    "config.harvest-mine-spawns.tooltip": "Whether to harvest spawned mine items like quartz and frozen tears.",
+    "config.harvest-mine-spawns.name": "Maden Öğelerini Hasat Et",
+    "config.harvest-mine-spawns.tooltip": "Kuvars ve donmuş gözyaşları gibi ortaya çıkan maden öğelerinin hasat edilip edilmeyeceği.",
 
 
     /****
     ** Placed items
     ****/
-    // TODO
-    "config.break-flooring.name": "Break Flooring",
-    "config.break-flooring.tooltip": "Whether to break placed flooring.",
+    "config.break-flooring.name": "Döşemeyi Kır",
+    "config.break-flooring.tooltip": "Yerleştirilmiş döşemenin kırılıp kırılmayacağı.",
 
-    "config.break-objects.name": "Break Objects",
-    "config.break-objects.tooltip": "Whether to break placed objects.",
+    "config.break-objects.name": "Nesneleri Kır",
+    "config.break-objects.tooltip": "Yerleştirilmiş nesnelerin kırılıp kırılmayacağı.",
 
-    "config.break-mine-containers.name": "Break Mine Containers",
-    "config.break-mine-containers.tooltip": "Whether to break containers in the mine.",
+    "config.break-mine-containers.name": "Maden Konteynerlerini Kır",
+    "config.break-mine-containers.tooltip": "Madende ki konteynerlerin kırılıp kırılmayacağı.",
 
-    "config.harvest-machines.name": "Harvest Machines",
-    "config.harvest-machines.tooltip": "Whether to collect machine output.",
+    "config.harvest-machines.name": "Makineleri Hasat Et",
+    "config.harvest-machines.tooltip": "Makine çıktısının toplanıp toplanmayacağı.",
 
 
     /****
     ** Melee
     ****/
-    // TODO
-    "config.Attack-monsters.name": "Attack Monsters",
-    "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
+    "config.Attack-monsters.name": "Canavarlara Saldır",
+    "config.Attack-monsters.tooltip": "Canavarlara saldırıp saldırmayacağı. (Bu, traktör aletinin hızı nedeniyle büyük ölçüde aşırı güçlenmiştir.)",
 
 
     /****
     ** Other
     ****/
-    // TODO
-    "config.milk-pail.name": "Enable Milk Pail",
-    "config.milk-pail.tooltip": "Whether to collect milk from farm animals using the milk pail.",
+    "config.milk-pail.name": "Süt Kovasını Etkinleştir",
+    "config.milk-pail.tooltip": "Süt kovasını kullanarak çiftlik hayvanlarından süt toplanıp toplanmayacağı.",
 
-    "config.shears.name": "Enable Shears",
-    "config.shears.tooltip": "Whether to collect wool from farm animals using the shears.",
+    "config.shears.name": "Makasları Etkinleştir",
+    "config.shears.tooltip": "Makas kullanarak çiftlik hayvanlarından yün toplanıp toplanmayacağı.",
 
-    "config.watering-can.name": "Enable Watering Can",
-    "config.watering-can.tooltip": "Whether to water nearby tiles using the watering can. This doesn't consume water in the watering can.",
+    "config.watering-can.name": "Sulama Kabını Etkinleştir ",
+    "config.watering-can.tooltip": "Sulama kabını kullanarak yakındaki fayansların sulanıp sulanmayacağı. Bu, sulama kabındaki suyu tüketmez.",
 
-    "config.fertilizer.name": "Enable Fertilizer",
-    "config.fertilizer.tooltip": "Whether to apply fertilizer to crops and tilled dirt.",
+    "config.fertilizer.name": "Gübreyi Etkinleştir",
+    "config.fertilizer.tooltip": "Ekinlere ve işlenmiş toprağa gübre uygulanıp uygulanmayacağı.",
 
-    "config.grass-starters.name": "Enable Grass Starters",
-    "config.grass-starters.tooltip": "Whether to plant grass starters.",
+    "config.grass-starters.name": "Çimen Yetiştiricisini Etkinleştir",
+    "config.grass-starters.tooltip": "Çimen yetiştiricilerinin dikilip dikilmeyeceği.",
 
-    "config.seeds.name": "Enable Seeds",
-    "config.seeds.tooltip": "Whether to plant seeds.",
+    "config.seeds.name": "Tohumları Etkinleştir",
+    "config.seeds.tooltip": "Tohumların dikilip dikilmeyeceği.",
 
-    "config.seed-bags.name": "Enable Seed Bags",
-    "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
+    "config.seed-bags.name": "Tohum Torbalarını Etkinleştir",
+    "config.seed-bags.tooltip": "Tohum Torbası modundan tohum ekilip ekilmeyeceği.",
 
-    "config.slingshot.name": "Enable Slingshot",
-    "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
+    "config.slingshot.name": "Sapanı Etkinleştir",
+    "config.slingshot.tooltip": "Sapanın imlece doğru ateşlenip ateşlenmeyeceği. (Bu, çok güçlüdür ve traktör aletinin hızı nedeniyle açgözlü bir şekilde cephane tüketecektir.)",
 
-    "config.custom-tool-names.name": "Custom Tool Names",
-    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+    "config.custom-tool-names.name": "Özel Alet Adları",
+    "config.custom-tool-names.tooltip": "Traktörü sürerken etkinleştirilecek özel öğeler/aletler. Öğeler indirilirken, her bir çevreleyen karoda araçlar kullanılacaktır. Halihazırda desteklenen bir şey belirtirseniz (balta gibi), bu, kullanımındaki tüm sınırlamaları geçersiz kılar. 'Balta' veya 'Büyük Bomba' gibi tam dahili adı (çevrilmiş görünen adı değil) belirtmelisiniz. Birden çok değeri virgülle ayırın."
 }

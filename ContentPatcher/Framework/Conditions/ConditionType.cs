@@ -208,6 +208,18 @@ namespace ContentPatcher.Framework.Conditions
         Language,
 
         /****
+        ** Specialized
+        ****/
+        /// <summary>A token which returns the absolute path for a file in the content pack's folder.</summary>
+        AbsoluteFilePath,
+
+        /// <summary>A token which normalizes an asset name into the form expected by the game.</summary>
+        FormatAssetName,
+
+        /// <summary>A token which gets the internal asset key for a content pack file, to allow loading it directly through a content manager.</summary>
+        InternalAssetKey,
+
+        /****
         ** Patch-specific
         ****/
         /// <summary>The current patch's FromFile value.</summary>

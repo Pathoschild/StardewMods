@@ -35,7 +35,7 @@
     "crop-harvest.name": "Saat: Bereit zum Ernten",
     "crop-harvest.ready": "Fertig",
     "crop-harvest.not-ready": "Nicht fertig",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "Nicht genug Zeit (oder tot)",
 
     // crops: watered
     "crop-water.name": "Bewässerung",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "Dünger",
     "crop-fertilizer.retaining-soil": "Hydrogel",
     "crop-fertilizer.speed-gro": "Geschwind-Wachs",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "Mehrere Düngerarten",
 
     // machine processing
     "machines.name": "Maschinelle Verarbeitung",

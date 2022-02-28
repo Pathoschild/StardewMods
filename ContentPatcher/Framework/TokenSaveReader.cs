@@ -355,7 +355,7 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => player.DailyLuck,
-                reading: save => save.dailyLuck + (player.hasSpecialCharm ? 0.025000000372529 : 0.0)
+                reading: save => save.dailyLuck + (player.hasSpecialCharm ? 0.025f : 0)
             );
         }
 

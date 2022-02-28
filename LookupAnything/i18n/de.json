@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Dein treues Haustier.",
     "data.npc.horse.description": "Dein treues Ross.",
     "data.npc.junimo.description": "Ein Waldgeist aus der Geisterwelt. Es ist nur wenig über sie bekannt.",
-    "data.npc.trashbear.description": "Ein freundlicher Geist, der Müll beseitigt.",
+    "data.npc.trash-bear.description": "Ein freundlicher Geist, der Müll beseitigt.",
 
     // item types
     "data.type.debris": "Verwilderung",
@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Liebt Film",
     "item.movie-ticket.likes-movie": "Mag Film",
     "item.movie-ticket.dislikes-movie": "Mag Film nicht",
+    "item.movie-ticket.rejects-movie": "Möchte den Film nicht sehen",
 
     // values
     "item.movie-snack-preference.love": "{{name}} liebt das",
@@ -610,7 +611,7 @@
     *********/
     // labels
     "puzzle.island-shrine.title": "Edelsteinvogel Rätsel",
-    "puzzle.island-shrine.description": "Lege den Edelstein auf den Sockel der vom Edelsteinvogel am passenden Ort bei Regen gelegt wurde. Die Edelsteine sind für jeden Speicherstand zufällig.",
+    "puzzle.island-shrine.solution": "Lege den Edelstein auf den Sockel der vom Edelsteinvogel am passenden Ort bei Regen gelegt wurde. Die Edelsteine sind für jeden Speicherstand zufällig.",
 
     // values
     "puzzle.island-shrine.solution.east": "Osten: {{item}}",

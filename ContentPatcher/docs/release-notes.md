@@ -9,8 +9,34 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.25.0
+Released 27 February 2022 for SMAPI 3.13.0 or later. See the [release highlights](https://www.patreon.com/posts/63137910).
+
+* `EditData` is now more powerful:
+  * You can now edit deeply nested fields using [`TargetField`](author-guide/action-editdata.md#target-field). For example, you can edit the reward for a bundle in `Data/RandomBundle` without redefining the whole entry.
+  * You can now edit arbitrary data models (e.g. non-list/dictionary assets added by mods).
+  * You can now edit list entries by their index position, even if they have no ID available.
+* Added [token aliases](author-guide/tokens.md#aliases) (thanks to Shockah!).
+* Added new tokens:
+  * [`AbsoluteFilePath`](author-guide/tokens.md#AbsoluteFilePath) to get the full path for a file in the content pack folder.
+  * [`FormatAssetName`](author-guide/tokens.md#FormatAssetName) to normalize an asset name into the form expected by the game.
+  * [`InternalAssetKey`](author-guide/tokens.md#InternalAssetKey) to let the game load a file directly from your content pack without needing to `Load` it separately.
+* Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
+* When using `Fields` with a delimited-string field, you can now patch past the end to fill in optional fields.
+* The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
+* The deprecated `Enabled` patch field is now obsolete and won't work with newer `Format` versions.
+* Fixed content packs being loaded/validated twice per screen.
+* Fixed error loading a patch which has some required fields missing.
+* Fixed float rounding in `DailyLuck` token.
+* Removed warning for null patches (they're now silently ignored instead).
+* Improved startup time with large content packs (thanks to Michael Kuklinski / Ameisen!).
+
+**Update notes for mod authors:**  
+The `Enabled` patch field is no longer supported when the `Format` field is `1.25.0` or later. See the
+[migration guide](author-migration-guide.md) for more info.
+
 ## 1.24.8
-Released 14 January 2021 for SMAPI 3.13.0 or later.
+Released 14 January 2022 for SMAPI 3.13.0 or later.
 
 * Fixed patches added through `Action: Include` not applied immediately in some cases.
 * Fixed `Random` values not in sync in multiplayer in Stardew Valley 1.5.5+.
@@ -62,12 +88,12 @@ Released 31 October 2021 for SMAPI 3.12.6 or later.
 Released 31 October 2021 for SMAPI 3.12.6 or later. See the [release highlights](https://www.patreon.com/posts/58121270).
 
 * Added new tokens:
-  * [`HasCookingRecipe`](author-tokens-guide.md#HasCookingRecipe) and [`HasCraftingRecipe`](author-tokens-guide.md#HasCraftingRecipe) to get the crafting/cooking recipes known by a player.
-  * [`LocationOwnerId`](author-tokens-guide.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
-  * [`Merge`](author-tokens-guide.md#Merge) to combine tokens in `When` conditions or perform value fallback.
-  * [`PathPart`](author-tokens-guide.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
-  * [`Roommate`](author-tokens-guide.md#Roommate) to get a player's roommate NPC (similar to `Spouse` for a married NPC).
-* Added support for [translating content pack config options in Generic Mod Config Menu](author-tokens-guide.md#player-config).
+  * [`HasCookingRecipe`](author-guide/tokens.md#HasCookingRecipe) and [`HasCraftingRecipe`](author-guide/tokens.md#HasCraftingRecipe) to get the crafting/cooking recipes known by a player.
+  * [`LocationOwnerId`](author-guide/tokens.md#LocationOwnerId) to get the player who owns a cabin, cellar, building, etc.
+  * [`Merge`](author-guide/tokens.md#Merge) to combine tokens in `When` conditions or perform value fallback.
+  * [`PathPart`](author-guide/tokens.md#PathPart) to get part of a file/asset path (e.g. for patches with multiple `Target` or `FromFile` values).
+  * [`Roommate`](author-guide/tokens.md#Roommate) to get a player's roommate NPC (similar to `Spouse` for a married NPC).
+* Added support for [translating content pack config options in Generic Mod Config Menu](author-guide/tokens.md#player-config).
 * Improved tokens:
   * Tokens which let you specify a player type now accept player IDs too (like `{{PlayerName: 3864039824286870457}}`).
   * You can now get per-player values for more tokens (specifically `IsMainPlayer`, `IsOutdoors`, `LocationContext`, `LocationName`, `LocationUniqueName`, `PlayerGender`, `PlayerName`, and `Spouse`).
@@ -129,16 +155,16 @@ Released 25 May 2021 for SMAPI 3.9.5 or later.
 ## 1.23.0
 Released 25 May 2021 for SMAPI 3.9.5 or later. See the [release highlights](https://www.patreon.com/posts/51685726).
 
-* Added [`valueAt` argument](author-tokens-guide.md#valueat) to get one value from any token.
+* Added [`valueAt` argument](author-guide/tokens.md#valueat) to get one value from any token.
 * Added `TextOperations` support for `EditData` fields.
 * Added new tokens:
-  * [`ChildGenders`](author-tokens-guide.md#ChildGenders) and [`ChildNames`](author-tokens-guide.md#ChildNames) to get the genders/names of a given player's children.
-  * [`Count`](author-tokens-guide.md#Count) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of active quests).
-  * [`HasCaughtFish`](author-tokens-guide.md#HasCaughtFish) to get fish caught by a player.
+  * [`ChildGenders`](author-guide/tokens.md#ChildGenders) and [`ChildNames`](author-guide/tokens.md#ChildNames) to get the genders/names of a given player's children.
+  * [`Count`](author-guide/tokens.md#Count) to get the number of values in a token (e.g. `{{Count: {{HasActiveQuest}} }}` for the number of active quests).
+  * [`HasCaughtFish`](author-guide/tokens.md#HasCaughtFish) to get fish caught by a player.
 * Improved sort order used in token values, patch commands, and error messages.
 * Fixed patches not applied correctly in some cases when added by a conditional `Include` patch.
 * Fixed error if `EnableDebugFeatures` is enabled and a debug overlay navigation key is pressed without a debug overlay open.
-* Fixed tokens which accept a [`PlayerType`](author-tokens-guide.md#playertype) argument always marked as returning multiple values for input arguments.
+* Fixed tokens which accept a [`PlayerType`](author-guide/tokens.md#playertype) argument always marked as returning multiple values for input arguments.
 
 **Note for SMAPI mod authors:**  
 If you use the [extensibility API](extensibility.md) to add custom tokens, the order of values
@@ -149,8 +175,8 @@ Released 17 April 2021 for SMAPI 3.9.5 or later. See the [release highlights](ht
 
 * Added a [conditions API](conditions-api.md), which lets other mods parse and use Content Patcher conditions.
 * Added new tokens:
-  * [`FirstValidFile`](author-tokens-guide.md#FirstValidFile) to enable fallback files without duplicating patches.
-  * [`HasActiveQuest`](author-tokens-guide.md#HasActiveQuest) to check a player's current quest list.
+  * [`FirstValidFile`](author-guide/tokens.md#FirstValidFile) to enable fallback files without duplicating patches.
+  * [`HasActiveQuest`](author-guide/tokens.md#HasActiveQuest) to check a player's current quest list.
 * Improved console commands:
   * Added `patch export` argument to optionally set the data type.
   * Tweaked console command handling.
@@ -179,7 +205,7 @@ Released 07 March 2021 for SMAPI 3.9.3 or later. See the [release highlights](ht
 * Added support for [creating custom locations](author-guide.md#custom-locations).
 * Added `AddWarps` field in [`EditMap` patches](https://github.com/Pathoschild/StardewMods/blob/develop/ContentPatcher/author-guide.md#editmap).
 * Added new tokens:
-  * [`Render`](author-tokens-guide.md#string-manipulation) to allow string comparison in `When` blocks.
+  * [`Render`](author-guide/tokens.md#string-manipulation) to allow string comparison in `When` blocks.
   * `DailyLuck` to get a player's daily luck (thanks to Thom1729!).
 * The `FarmhouseUpgrade` token can now check either the current player (default) or the host player.
 * The `Enabled` field no longer allows tokens (in format version 1.21.0+).
@@ -243,7 +269,7 @@ Released 21 December 2020 for SMAPI 3.8.0 or later.
 ## 1.19.0
 Released 05 December 2020 for SMAPI 3.7.3 or later. See the [release highlights](https://www.patreon.com/posts/44708077).
 
-* Added [query expressions](author-tokens-guide.md#query-expressions).
+* Added [query expressions](author-guide/tokens.md#query-expressions).
 * Added support for updating patches [on in-game time change](author-guide.md#update-rate).
 * Added support for patches with multiple `FromFile` values.
 * Added map patch modes for `"Action": "EditMap"`.
@@ -392,11 +418,11 @@ Released 06 July 2020 for SMAPI 3.6.1 or later.
 ## 1.15.0
 Released 04 July 2020 for SMAPI 3.6.1 or later. See the [release highlights for mod authors](https://www.patreon.com/posts/38962480).
 
-* Added [named token arguments](author-tokens-guide.md#global-input-arguments).
+* Added [named token arguments](author-guide/tokens.md#global-input-arguments).
 * Added a universal `|contains=` argument to search token values.
 * Added a universal `|inputSeparator=` argument to allow commas in input values using a custom separator.
 * Added a `key` argument to `{{Random}}`.
-* Several [player tokens](author-tokens-guide.md#player) now let you choose whether to check the host player, current player, or both.
+* Several [player tokens](author-guide/tokens.md#player) now let you choose whether to check the host player, current player, or both.
 * Added `HasConversationTopic` token.
 * Reduced trace logs when a mod adds many custom tokens.
 * Fixed custom tokens added by other mods able to break Content Patcher in some cases.

@@ -490,9 +490,23 @@ example:
 </dl>
 
 ## Custom textures
-You can drop new PNGs into the `assets` folder to change the appearance of tractors or garages.
-For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`). The mod
-will load the seasonal texture if present, else it'll load the default name (like `tractor.png`).
+### For players
+You can install content packs that edit the textures. You can find some by opening [Tractor Mod's
+mod page](https://www.nexusmods.com/stardewvalley/mods/1401), clicking "Requirements", and looking
+under "Mods requiring this file".
+
+You can also drop new PNGs into the `assets` folder to change the appearance of tractors or garages
+directly. For a seasonal texture, just prefix the name with the season (like `spring_tractor.png`).
+The mod will load the seasonal texture if present, else it'll load the default name (like
+`tractor.png`).
+
+### For mod authors
+You can edit Tractor Mod's textures by patching two assets:
+* `Mods/Pathoschild.TractorMod/Garage`
+* `Mods/Pathoschild.TractorMod/Tractor`
+
+Only edits (i.e. `EditImage` in content packs or `IAssetEditor` in C#) are allowed. Tractor Mod
+will load the base asset itself to ensure compatibility.
 
 ## Compatibility
 Tractor Mod is compatible with Stardew Valley 1.5+ on Linux/Mac/Windows, both single-player and

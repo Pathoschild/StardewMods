@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Kocha ten film",
     "item.movie-ticket.likes-movie": "Lubi ten film",
     "item.movie-ticket.dislikes-movie": "Nie lubi tego filmu",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} kocha to",

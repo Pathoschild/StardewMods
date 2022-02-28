@@ -24,11 +24,11 @@
     "label.automate-options": "Automate",
     "label.automate-store": "이 상자에 물건을 넣으십시오",
     "label.automate-store-first": "이 상자에 먼저 물건을 넣으십시오",
-    "label.automate-store-disabled": "Never put items in this chest", // TODO
+    "label.automate-store-disabled": "이 상자에 물건을 넣지 마십시오",
     "label.automate-take": "이 상자에서 물건을 가져 가십시오",
     "label.automate-take-first": "이 상자에서 먼저 물건을 가져 가십시오",
-    "label.automate-take-disabled": "Never take items from this chest", // TODO
-    "label.automate-prevent-remove-stacks": "Avoid removing the last item in a stack", // TODO
+    "label.automate-take-disabled": "이 상자에서 아이템을 가져오지 마십시오",
+    "label.automate-prevent-remove-stacks": "스택의 마지막 항목을 제거하지 않도록 합니다.",
 
     // button labels
     "button.edit-chest": "상자 편집",
@@ -50,52 +50,48 @@
     ** Generic Mod Config Menu UI
     **********/
     // general options
-    // TODO
-    "config.title.general-options": "General options",
-    "config.show-hover-tooltips.name": "Show hover tooltips",
-    "config.show-hover-tooltips.desc": "Whether to show the chest name in a tooltip when you point at a chest.",
-    "config.enable-shipping-bin.name": "Enable shipping bin",
-    "config.enable-shipping-bin.desc": "Whether to enable access to the shipping bin.",
-    "config.add-organize-player-items.name": "Add organize player items button",
-    "config.add-organize-player-items.desc": "Whether to add an 'organize' button in chest UIs for the player inventory.",
-    "config.range.name": "Range",
-    "config.range.desc": "The range at which chests are accessible through the menu.",
-    "config.range.unlimited": "All chests",
-    "config.range.currentWorldArea": "Chests within the current world area",
-    "config.range.currentLocation": "Chests within the current location",
-    "config.range.none": "None (can't access chests remotely)",
+    "config.title.general-options": "일반 옵션",
+    "config.show-hover-tooltips.name": "툴팁 표시",
+    "config.show-hover-tooltips.desc": "상자를 가리킬 때 툴팁에 상자 이름을 표시할지 여부.",
+    "config.enable-shipping-bin.name": "배송 상자 활성화",
+    "config.enable-shipping-bin.desc": "배송 상자에 대한 액세스를 활성화할지 여부.",
+    "config.add-organize-player-items.name": "플레이어 아이템 정리 버튼 추가",
+    "config.add-organize-player-items.desc": "플레이어 인벤토리의 상자 UI에 '구성' 버튼을 추가할지 여부.",
+    "config.range.name": "범위",
+    "config.range.desc": "메뉴를 통해 상자에 접근할 수 있는 범위.",
+    "config.range.unlimited": "모든 상자",
+    "config.range.currentWorldArea": "현재 세계 영역 내의 상자",
+    "config.range.currentLocation": "현재 위치 내의 상자",
+    "config.range.none": "없음 (상자에 원격으로 액세스할 수 없음)",
 
     // general controls
-    // TODO
-    "config.title.general-controls": "General controls",
-    "config.toggle-ui-key.name": "Toggle UI",
-    "config.toggle-ui-key.desc": "The keys which show or hide the chest UI.",
+    "config.title.general-controls": "일반 제어",
+    "config.toggle-ui-key.name": "UI 전환",
+    "config.toggle-ui-key.desc": "상자 UI를 보이 거나 숨기는 키.",
 
     // controls when chest UI is open
-    // TODO
-    "config.title.menu-controls": "Controls when chest UI is open",
-    "config.edit-chest.name": "Edit chest",
-    "config.edit-chest.desc": "The keys which edit the options for the current chest.",
-    "config.sort-items.name": "Sort items",
-    "config.sort-items.desc": "The keys which sort items in the current chest.",
-    "config.navigate-prev-chest.name": "Navigate: previous chest",
-    "config.navigate-prev-chest.desc": "The keys which navigate to the previous chest while the menu is open.",
-    "config.navigate-next-chest.name": "Navigate: next chest",
-    "config.navigate-next-chest.desc": "The keys which navigate to the next chest while the menu is open.",
-    "config.navigate-prev-category.name": "Navigate: previous category",
-    "config.navigate-prev-category.desc": "The keys which navigate to the previous category while the menu is open.",
-    "config.navigate-next-category.name": "Navigate: next category",
-    "config.navigate-next-category.desc": "The keys which navigate to the next category while the menu is open.",
-    "config.hold-to-scroll-categories.name": "Hold to scroll categories",
-    "config.hold-to-scroll-categories.desc": "The keys which, when held, enable scrolling the category dropdown with the mouse scroll wheel.",
-    "config.hold-to-scroll-chests.name": "Hold to scroll chests",
-    "config.hold-to-scroll-chests.desc": "The keys which, when held, enable scrolling the chests dropdown with the mouse scroll wheel.",
+    "config.title.menu-controls": "상자 제어",
+    "config.edit-chest.name": "상자 편집",
+    "config.edit-chest.desc": "현재 상자의 옵션을 편집하는 키.",
+    "config.sort-items.name": "항목 정렬",
+    "config.sort-items.desc": "현재 상자에 있는 항목을 정렬하는 키.",
+    "config.navigate-prev-chest.name": "탐색: 이전 상자",
+    "config.navigate-prev-chest.desc": "메뉴가 열려 있는 동안 이전 상자로 이동하는 키.",
+    "config.navigate-next-chest.name": "탐색: 다음 상자",
+    "config.navigate-next-chest.desc": "메뉴가 열려 있는 동안 다음 상자로 이동하는 키.",
+    "config.navigate-prev-category.name": "탐색: 이전 카테고리",
+    "config.navigate-prev-category.desc": "메뉴가 열려 있는 동안 이전 범주로 이동하는 키.",
+    "config.navigate-next-category.name": "탐색: 다음 카테고리",
+    "config.navigate-next-category.desc": "메뉴가 열려 있는 동안 다음 범주로 이동하는 키.",
+    "config.hold-to-scroll-categories.name": "카테고리를 스크롤하려면 길게 누르십시오.",
+    "config.hold-to-scroll-categories.desc": "누르고 있으면 마우스 스크롤 휠로 카테고리 드롭다운을 스크롤할 수 있는 키",
+    "config.hold-to-scroll-chests.name": "상자를 스크롤하려면 길게 누르십시오.",
+    "config.hold-to-scroll-chests.desc": "누르고 있으면 마우스 스크롤 휠로 상자 드롭다운을 스크롤할 수 있는 키.",
 
     // disable in locations
-    // TODO
-    "config.title.disable-in-locations": "Disable in locations",
-    "config.disable-mines.name": "Mines and Skull Cavern",
-    "config.disable-mines.desc": "Whether to disable accessing chests while in the mines or Skull Cavern.",
-    "config.disable-custom-names.name": "Custom location names",
-    "config.disable-custom-names.desc": "The internal names (as shown by the Debug Mode mod) for locations from which to disable accessing chests. You can list multiple with commas."
+    "config.title.disable-in-locations": "위치 비활성화",
+    "config.disable-mines.name": "광산과 해골 동굴",
+    "config.disable-mines.desc": "광산 또는 해골 동굴에 있는 동안 상자 액세스를 비활성화할지 여부",
+    "config.disable-custom-names.name": "사용자 지정 위치 이름",
+    "config.disable-custom-names.desc": "상자 액세스를 비활성화할 위치의 내부 이름(디버그 모드에 표시됨)입니다. 여러 개를 쉼표로 나열할 수 있습니다."
 }

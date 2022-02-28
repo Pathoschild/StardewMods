@@ -52,8 +52,14 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>The minimum version the host must have for the mod to be enabled on a farmhand.</summary>
         private readonly string MinHostVersion = "4.7.0";
 
-        /// <summary>A request from a farmhand to warp a tractor to the given player.</summary>
+        /// <summary>The base path for assets loaded through the game's content pipeline so other mods can edit them.</summary>
+        private readonly string PublicAssetBasePath = "Mods/Pathoschild.TractorMod";
+
+        /// <summary>The message ID for a request to warp a tractor to the given farmhand.</summary>
         private readonly string RequestTractorMessageID = "TractorRequest";
+
+        /// <summary>A case-insensitive list of files in the <c>assets</c> folder.</summary>
+        private readonly IDictionary<string, string> AssetMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         /****
         ** State
@@ -99,6 +105,7 @@ namespace Pathoschild.Stardew.TractorMod
                 return manager;
             });
             this.UpdateConfig();
+            this.InitAssetMap();
 
             // hook events
             IModEvents events = helper.Events;
@@ -125,16 +132,26 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public bool CanLoad<T>(IAssetInfo asset)
         {
-            // Allow for garages from older versions that didn't get normalized correctly.
-            // This can be removed once support for legacy data is dropped.
-            return asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}");
+            return
+                asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}")
+                || asset.AssetNameEquals($"{this.PublicAssetBasePath}/Tractor")
+                || asset.AssetNameEquals($"{this.PublicAssetBasePath}/Garage");
         }
 
         /// <summary>Load a matched asset.</summary>
         /// <param name="asset">Basic metadata about the asset being loaded.</param>
         public T Load<T>(IAssetInfo asset)
         {
-            return (T)(object)this.GarageTexture;
+            // Allow for garages from older versions that didn't get normalized correctly.
+            // This can be removed once support for legacy data is dropped.
+            if (asset.AssetNameEquals($"Buildings/{this.BlueprintBuildingType}"))
+                return (T)(object)this.GarageTexture;
+
+            // load tractor or garage texture
+            string key = PathUtilities.GetSegments(asset.AssetName).Last();
+            return this.TryLoadFromFile(key, out Texture2D texture, out string error)
+                ? (T)(object)texture
+                : throw new InvalidOperationException(error);
         }
 
 
@@ -214,7 +231,9 @@ namespace Pathoschild.Stardew.TractorMod
                 return;
 
             // reload textures
-            if (!this.TryGetTexture("tractor", out this.TractorTexture, out string error) || !this.TryGetTexture("garage", out this.GarageTexture, out error))
+            if (!this.TryLoadFromContent("tractor", out this.TractorTexture, out string error))
+                this.Monitor.Log(error, LogLevel.Error);
+            if (!this.TryLoadFromContent("garage", out this.GarageTexture, out error))
                 this.Monitor.Log(error, LogLevel.Error);
 
             // init garages + tractors
@@ -516,6 +535,22 @@ namespace Pathoschild.Stardew.TractorMod
             });
         }
 
+        /// <summary>Initialize the <see cref="AssetMap"/> from the files on disk.</summary>
+        private void InitAssetMap()
+        {
+            // get assets folder
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(this.Helper.DirectoryPath, "assets"));
+            if (!dir.Exists)
+            {
+                this.Monitor.Log("Tractor Mod's 'assets' folder is missing. The mod will not work correctly. Try reinstalling the mod to fix this.", LogLevel.Error);
+                return;
+            }
+
+            // create map
+            foreach (FileInfo file in dir.GetFiles())
+                this.AssetMap[file.Name] = file.Name;
+        }
+
         /// <summary>Summon an unused tractor to the player's current position, if any are available.</summary>
         private void SummonTractor()
         {
@@ -708,11 +743,32 @@ namespace Pathoschild.Stardew.TractorMod
             return new Vector2(garage.tileX.Value + 1, garage.tileY.Value + 1);
         }
 
+        /// <summary>Try to load the asset for a texture from the game's content folder so other mods can apply edits.</summary>
+        /// <param name="spritesheet">The spritesheet name without the path or extension (like 'Tractor' or 'Garage').</param>
+        /// <param name="texture">The loaded texture, if found.</param>
+        /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
+        private bool TryLoadFromContent(string spritesheet, out Texture2D texture, out string error)
+        {
+            try
+            {
+                texture = Game1.content.Load<Texture2D>($"{this.PublicAssetBasePath}/{spritesheet}");
+                error = null;
+            }
+            catch (Exception ex)
+            {
+                texture = null;
+                error = ex.ToString();
+                return false;
+            }
+
+            return texture != null;
+        }
+
         /// <summary>Try to load the asset for a texture from the assets folder (including seasonal logic if applicable).</summary>
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
         /// <param name="texture">The loaded texture, if found.</param>
         /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
-        private bool TryGetTexture(string spritesheet, out Texture2D texture, out string error)
+        private bool TryLoadFromFile(string spritesheet, out Texture2D texture, out string error)
         {
             texture = this.TryGetTextureKey(spritesheet, out string key, out error)
                 ? this.Helper.Content.Load<Texture2D>(key)
@@ -727,14 +783,14 @@ namespace Pathoschild.Stardew.TractorMod
         /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
         private bool TryGetTextureKey(string spritesheet, out string key, out string error)
         {
-            string seasonalKey = $"assets/{Game1.currentSeason}_{spritesheet}.png";
-            string defaultKey = $"assets/{spritesheet}.png";
+            string seasonalKey = $"{Game1.currentSeason}_{spritesheet}.png";
+            string defaultKey = $"{spritesheet}.png";
 
             foreach (string possibleKey in new[] { seasonalKey, defaultKey })
             {
-                if (File.Exists(Path.Combine(this.Helper.DirectoryPath, possibleKey)))
+                if (this.AssetMap.TryGetValue(possibleKey, out string actualKey) && File.Exists(Path.Combine(this.Helper.DirectoryPath, $"assets/{actualKey}")))
                 {
-                    key = possibleKey;
+                    key = $"assets/{actualKey}";
                     error = null;
                     return true;
                 }

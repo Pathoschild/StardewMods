@@ -114,7 +114,7 @@ argument   | type | purpose
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.24.0",
+   "Format": "1.25.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -216,7 +216,7 @@ etc).
 <dt>Input arguments</dt>
 <dd>
 
-See [_input arguments_ in the tokens guide](author-tokens-guide.md#input-arguments) for more info.
+See [_input arguments_ in the tokens guide](author-guide/tokens.md#input-arguments) for more info.
 
 Due to limitations in SMAPI's API proxying, your mod will receive a normalised input string
 identical to the format shown in the tokens guide instead of a parsed object. Any tokens in the
@@ -319,7 +319,7 @@ api.RegisterToken(this.ModManifest, "Initials", new InitialsToken());
 That's it! Now any content pack which lists your mod as a dependency can use the token in its fields:
 ```js
 {
-   "Format": "1.24.0",
+   "Format": "1.25.0",
    "Changes": [
       {
          "Action": "EditData",

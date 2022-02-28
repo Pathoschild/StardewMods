@@ -156,7 +156,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="reservedArgsList">An ordered list of the <paramref name="reservedArgs"/>, including duplicate args.</param>
         private static void Parse(ITokenString input, out string positionalSegment, out string[] positionalArgs, out IDictionary<string, IInputArgumentValue> namedArgs, out IDictionary<string, IInputArgumentValue> reservedArgs, out IList<KeyValuePair<string, IInputArgumentValue>> reservedArgsList)
         {
-            Lexer lexer = new Lexer();
+            Lexer lexer = Lexer.Instance;
             InputArguments.GetRawArguments(input, lexer, out positionalSegment, out InvariantDictionary<string> rawNamedArgs);
 
             // get value separator

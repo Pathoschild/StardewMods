@@ -35,7 +35,7 @@
     "crop-harvest.name": "작물: 수확 준비 완료",
     "crop-harvest.ready": "준비됨",
     "crop-harvest.not-ready": "준비되지 않음",
-    "crop-harvest.not-enough-time-or-dead": "Not Enough Time (or Dead)", // TODO
+    "crop-harvest.not-enough-time-or-dead": "시간이 충분하지 않음 (또는 죽은)",
 
     // crops: watered
     "crop-water.name": "작물: 물주기 여부",
@@ -52,7 +52,7 @@
     "crop-fertilizer.fertilizer": "비료",
     "crop-fertilizer.retaining-soil": "보습 토양",
     "crop-fertilizer.speed-gro": "성장 촉진제",
-    "crop-fertilizer.multiple": "Multiple Fertilizer Types", // TODO
+    "crop-fertilizer.multiple": "여러 비료 유형",
 
     // machine processing
     "machines.name": "기계 동작 여부",

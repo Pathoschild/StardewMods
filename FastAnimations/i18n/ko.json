@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "일반 옵션",
+
+    "config.disable-eat-prompt.name": "먹기/마시기 메시지 비활성화",
+    "config.disable-eat-prompt.tooltip": "정말 먹고 싶은지 묻는 확인 메시지를 건너뛸지 여부.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "플레이어 애니메이션 속도",
+
+    "config.eat-or-drink.name": "먹기/마시기",
+    "config.eat-or-drink.tooltip": "먹고 마시는 속도. 기본값 {{defaultValue}}.",
+
+    "config.fish.name": "낚시",
+    "config.fish.tooltip": "낚시할 던지고 낚는 속도(미니게임에 영향을 주지 않음) 기본값 {{defaultValue}}, 추천 {{suggestedValue}}.",
+
+    "config.harvest.name": "수확",
+    "config.harvest.tooltip": "손으로 작물과 채집물을 수확하는 속도. 기본값 {{defaultValue}}.",
+
+    "config.milk.name": "우유",
+    "config.milk.tooltip": "우유통을 사용하는 속도. 기본값 {{defaultValue}}.",
+
+    "config.mount.name": "말 타기/말 내리기",
+    "config.mount.tooltip": "말 타기/내리는 속도(트랙터 모드와 같은 사용자 지정 탈것 포함). 기본값 {{defaultValue}}.",
+
+    "config.shear.name": "가위",
+    "config.shear.tooltip": "가위를 사용하는 속도. 기본값 {{defaultValue}}.",
+
+    "config.tool.name": "도구 스윙",
+    "config.tool.tooltip": "도구를 휘두르는 속도(무기 및 낚싯대 제외). 기본값 {{defaultValue}}, 추천 {{suggestedValue}}.",
+
+    "config.weapon.name": "무기 스윙",
+    "config.weapon.tooltip": "무기를 휘두르는 속도. 기본값 {{defaultValue}}, 추천 {{suggestedValue}}.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "세계 애니메이션 속도",
+
+    "config.break-geodes.name": "정동석 깨기",
+    "config.break-geodes.tooltip": "대장장이가 정동석을 깨는 속도. 기본값 {{defaultValue}}.",
+
+    "config.casino-slots.name": "카지노 슬롯",
+    "config.casino-slots.tooltip": "카지노 슬롯이 회전하는 속도. 기본값 {{defaultValue}}.",
+
+    "config.bus.name": "팸 버스",
+    "config.bus.tooltip": "팸이 사막을 오가는 버스를 운전하는 속도. 기본값 {{defaultValue}}",
+
+    "config.tree-fall.name": "나무 쓰러짐",
+    "config.tree-fall.tooltip": "나무를 자른 후 나무가 쓰러지는 속도. 기본값 {{defaultValue}}, 추천 {{suggestedValue}}.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "UI 애니메이션 속도",
+
+    "config.title-menu.name": "타이틀 메뉴 전환",
+    "config.title-menu.tooltip": "타이틀 메뉴 화면 전환 속도. 기본값 {{defaultValue}}",
+
+    "config.load-game-blink.name": "게임 깜박임 로드",
+    "config.load-game-blink.tooltip": "로드 저장 슬롯을 클릭한 후 깜박이는 슬롯 지연이 발생하는 속도. 기본값 {{defaultValue}}."
+}

@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Seu animal de estimação leal.",
     "data.npc.horse.description": "Seu cavalo leal.",
     "data.npc.junimo.description": "Um espírito da floresta do mundo espiritual. Sabe-se muito pouco sobre eles.",
-    "data.npc.trashbear.description": "Um espírito amigável que limpa o lixo.",
+    "data.npc.trash-bear.description": "Um espírito amigável que limpa o lixo.",
 
     // item types
     "data.type.debris": "Detritos",
@@ -453,6 +453,7 @@
     "item.movie-ticket.loves-movie": "Ama o filme",
     "item.movie-ticket.likes-movie": "Gosta do filme",
     "item.movie-ticket.dislikes-movie": "Não gosta do filme",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}} ama isso",

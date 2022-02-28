@@ -84,7 +84,7 @@
     "data.npc.pet.description": "Tu fiel mascota.",
     "data.npc.horse.description": "Tu fiel corcel.",
     "data.npc.junimo.description": "Un espíritu forestal del mundo de los espíritus. Se sabe muy poco sobre ellos.",
-    "data.npc.trashbear.description": "Un espíritu amistodo que limpia la basura.",
+    "data.npc.trash-bear.description": "Un espíritu amistodo que limpia la basura.",
 
     // item types
     "data.type.debris": "Maleza",
@@ -452,6 +452,7 @@
     "item.movie-ticket.loves-movie": "Ama la película",
     "item.movie-ticket.likes-movie": "Le gusta la película",
     "item.movie-ticket.dislikes-movie": "No le gusta la película",
+    "item.movie-ticket.rejects-movie": "No verá la película",
 
     // values
     "item.movie-snack-preference.love": "{{name}} ama esto",

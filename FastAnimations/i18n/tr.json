@@ -1,0 +1,69 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "Genel Seçenekler",
+
+    "config.disable-eat-prompt.name": "Yeme/içme istemini kapat",
+    "config.disable-eat-prompt.tooltip": "Gerçekten bir şeyler yemek/içmek isteyip istemediğinizi soran onay istemini atlayıp atlamayacağı.",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "Oyuncu Animasyon Hızları",
+
+    "config.eat-or-drink.name": "Yeme/İçme",
+    "config.eat-or-drink.tooltip": "Ne kadar hızlı yiyip içtiğiniz. Varsayılan {{defaultValue}}x.",
+
+    "config.fish.name": "Balık",
+    "config.fish.tooltip": "Balık tutarken ne kadar hızlı atış ve makara yaptığınız (mini oyunu etkilemez). Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",
+
+    "config.harvest.name": "Hasat",
+    "config.harvest.tooltip": "Mahsulleri ve yemleri elle ne kadar hızlı hasat ettiğiniz. Varsayılan {{defaultValue}}x.",
+
+    "config.milk.name": "Süt",
+    "config.milk.tooltip": "Süt kovasını ne kadar hızlı kullandığınız. Varsayılan {{defaultValue}}x.",
+
+    "config.mount.name": "Binmek/İnmek",
+    "config.mount.tooltip": "Atlara ne kadar hızlı binip indiğiniz (Traktör Modu gibi özel binekler dahil). Varsayılan {{defaultValue}}x.",
+
+    "config.shear.name": "Kırpma",
+    "config.shear.tooltip": "Makasları ne kadar hızlı kullandığınız. Varsayılan {{defaultValue}}x.",
+
+    "config.tool.name": "Sallama aracı",
+    "config.tool.tooltip": "Aletlerinizi ne kadar hızlı salladığınız (silahlar ve olta hariç). Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",
+
+    "config.weapon.name": "Silah sallama",
+    "config.weapon.tooltip": "Silahlarınızı ne kadar hızlı salladığınız. Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "Dünya Animasyon Hızları",
+
+    "config.break-geodes.name": "Jeotları kırma",
+    "config.break-geodes.tooltip": "Demircinin senin için jeotları ne kadar hızlı kırdığı. Varsayılan {{defaultValue}}x.",
+
+    "config.casino-slots.name": "Kumarhane slotları",
+    "config.casino-slots.tooltip": "Kumarhane slotlarının ne kadar hızlı döndüğü. Varsayılan {{defaultValue}}x.",
+
+    "config.bus.name": "Pam'in otobüsü",
+    "config.bus.tooltip": "Pam'in otobüsünü çöle gidiş gelişte ne kadar hızlı kullandığı. Varsayılan {{defaultValue}}x.",
+
+    "config.tree-fall.name": "Ağaç düşüşü",
+    "config.tree-fall.tooltip": "Ağaçları kestikten sonra ne kadar hızlı düştüğü. Varsayılan {{defaultValue}}x, önerilen {{suggestedValue}}x.",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "Kullanıcı Arayüzü Animasyon Hızları",
+
+    "config.title-menu.name": "Başlık menüsü geçişleri",
+    "config.title-menu.tooltip": "Başlık menüsünün ekranlar arasında ne kadar hızlı geçiş yaptığı. Varsayılan {{defaultValue}}x.",
+
+    "config.load-game-blink.name": "Oyun yükleme yanıp sönmesi",
+    "config.load-game-blink.tooltip": "Bir oyun yükleme slotuna tıkladıktan sonra yanıp sönen yuva gecikmesinin ne kadar hızlı gerçekleştiği. Varsayılan {{defaultValue}}x."
+}

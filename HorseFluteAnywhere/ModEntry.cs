@@ -311,7 +311,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         {
             return location.characters
                 .OfType<Horse>()
-                .Where(p => !this.IsTractor(p));
+                .Where(p => !this.ShouldIgnore(p));
         }
 
         /// <summary>Warp a horse back to its home.</summary>
@@ -337,20 +337,30 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                 );
         }
 
-        /// <summary>Get whether a player is riding a (non-tractor) horse.</summary>
+        /// <summary>Get whether a player is riding a non-ignored horse.</summary>
         /// <param name="player">The player to check.</param>
         private bool IsRidingHorse(Farmer player)
         {
             return
                 player.mount != null
-                && !this.IsTractor(player.mount);
+                && !this.ShouldIgnore(player.mount);
+        }
+
+        /// <summary>Get whether a horse should be ignored by the main horse logic.</summary>
+        /// <param name="horse">The horse to check.</param>
+        private bool ShouldIgnore(Horse horse)
+        {
+            return
+                horse == null
+                || this.IsTractor(horse) // Tractor Mod tractor
+                || horse.GetType().FullName?.StartsWith("DeepWoodsMod.") == true; // Deep Woods unicorn
         }
 
         /// <summary>Get whether a horse is a tractor added by Tractor Mod, which manages the edge cases for tractor summoning automatically.</summary>
         /// <param name="horse">The horse to check.</param>
         private bool IsTractor(Horse horse)
         {
-            return horse?.modData?.TryGetValue("Pathoschild.TractorMod", out _) == true;
+            return horse.modData?.TryGetValue("Pathoschild.TractorMod", out _) == true;
         }
     }
 }

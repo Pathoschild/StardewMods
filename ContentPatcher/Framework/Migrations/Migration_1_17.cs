@@ -13,6 +13,13 @@ namespace ContentPatcher.Framework.Migrations
     internal class Migration_1_17 : BaseMigration
     {
         /*********
+        ** Fields
+        *********/
+        /// <summary>A pattern which matches a location token name.</summary>
+        private static readonly Regex LocationTokenPattern = new(@"\b(?:IsOutdoors|LocationName)\b", RegexOptions.Compiled);
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
@@ -47,7 +54,7 @@ namespace ContentPatcher.Framework.Migrations
                     bool hasLocationToken = patch.When.Keys.Any(key =>
                         !string.IsNullOrWhiteSpace(key)
                         && (key.ContainsIgnoreCase("IsOutdoors") || key.ContainsIgnoreCase("LocationName")) // quick check with false positives
-                        && Regex.IsMatch(key, @"\b(?:IsOutdoors|LocationName)\b") // slower but reliable check
+                        && LocationTokenPattern.IsMatch(key) // slower but reliable check
                     );
 
                     if (hasLocationToken)

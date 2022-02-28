@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "Überspringen zu",
+    "config.skip-to.tooltip": "Zu welchem Punkt soll übersprungen werden. Standardtitel.",
+    "config.skip-to.values.title-menu": "Titelmenü",
+    "config.skip-to.values.load-menu": "Lade Menü",
+    "config.skip-to.values.join-coop": "Beitritt Koop",
+    "config.skip-to.values.host-coop": "Host Koop"
+}

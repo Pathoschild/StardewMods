@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -17,7 +16,7 @@ namespace ContentPatcher.Framework.Migrations
         ** Fields
         *********/
         /// <summary>Handles parsing raw strings into tokens.</summary>
-        private readonly Lazy<Lexer> Lexer = new(() => new Lexer());
+        private readonly Lexer Lexer = Lexer.Instance;
 
 
         /*********
@@ -96,7 +95,7 @@ namespace ContentPatcher.Framework.Migrations
                 return false;
 
             // lexical check (this ensures a value like '{{Random: a, b}}' isn't incorrectly treated as two values)
-            return this.Lexer.Value
+            return this.Lexer
                 .SplitLexically(raw)
                 .Take(2)
                 .Count() > 1;

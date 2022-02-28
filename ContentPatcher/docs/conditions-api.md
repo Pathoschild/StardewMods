@@ -14,7 +14,7 @@ the [main README](README.md) for other info**.
 * [See also](#see-also)
 
 ## Overview
-Content Patcher has a [conditions system](author-tokens-guide.md) which lets content packs check
+Content Patcher has a [conditions system](author-guide/tokens.md) which lets content packs check
 dozens of contextual values for conditional changes. For example:
 ```js
 "When": {
@@ -35,7 +35,7 @@ To access the API:
 1. Add Content Patcher as [a **required** dependency in your mod's `manifest.json`](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Manifest#Dependencies):
    ```js
    "Dependencies": [
-      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "1.24.0" }
+      { "UniqueID": "Pathoschild.ContentPatcher", "MinimumVersion": "1.25.0" }
    ]
    ```
 2. Add a reference to the Content Patcher DLL in your mod's `.csproj` file. Make sure you set
@@ -56,7 +56,7 @@ Now that you have access to the API, you can parse conditions.
 
 1. Create a `Dictionary<string, string>` model of the conditions you want to check. This can use
    Content Patcher features like tokens. For this example, let's assume you have these hardcoded
-   conditions (see the [conditions documentation](author-tokens-guide.md) for the format):
+   conditions (see the [conditions documentation](author-guide/tokens.md) for the format):
    ```c#
    var rawConditions = new Dictionary<string, string>
    {

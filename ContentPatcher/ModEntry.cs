@@ -54,7 +54,8 @@ namespace ContentPatcher
             new Migration_1_21(),
             new Migration_1_22(),
             new Migration_1_23(),
-            new Migration_1_24()
+            new Migration_1_24(),
+            new Migration_1_25()
         };
 
         /// <summary>The special validation logic to apply to assets affected by patches.</summary>
@@ -76,7 +77,7 @@ namespace ContentPatcher
         private readonly PerScreen<DebugOverlay> DebugOverlay = new();
 
         /// <summary>The mod tokens queued for addition. This is null after the first update tick, when new tokens can no longer be added.</summary>
-        private List<ModProvidedToken> QueuedModTokens = new();
+        private readonly List<ModProvidedToken> QueuedModTokens = new();
 
         /// <summary>The game tick when the conditions API became ready for use.</summary>
         private int ConditionsApiReadyTick = int.MaxValue;
@@ -93,6 +94,8 @@ namespace ContentPatcher
         public override void Entry(IModHelper helper)
         {
             this.Config = helper.ReadConfig<ModConfig>();
+
+            this.ScreenManager = new(this.CreateScreenManager);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
@@ -193,7 +196,7 @@ namespace ContentPatcher
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // initialize after first tick so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
+            // initialize after first tick on main screen so other mods can register their tokens in SMAPI's GameLoop.GameLaunched event
             if (this.IsFirstTick)
             {
                 this.IsFirstTick = false;
@@ -201,6 +204,8 @@ namespace ContentPatcher
                 this.ConditionsApiReadyTick = Game1.ticks + 1; // mods can only use conditions API on the next tick, to avoid race conditions
             }
 
+            // run update logic
+            this.InitializeScreenManagerIfNeeded();
             this.ScreenManager.Value.OnUpdateTicked();
         }
 
@@ -222,11 +227,6 @@ namespace ContentPatcher
 
             // fetch content packs
             LoadedContentPack[] contentPacks = this.GetContentPacks().ToArray();
-            InvariantHashSet installedMods = new InvariantHashSet(
-                (contentPacks.Select(p => p.Manifest.UniqueID))
-                .Concat(helper.ModRegistry.GetAll().Select(p => p.Manifest.UniqueID))
-                .OrderByHuman()
-            );
 
             // log custom tokens
             {
@@ -240,17 +240,7 @@ namespace ContentPatcher
             }
 
             // load screen manager
-            var modTokens = this.QueuedModTokens.ToArray();
-            this.ScreenManager = new(() =>
-                new ScreenManager(
-                    helper: this.Helper,
-                    monitor: this.Monitor,
-                    installedMods: installedMods,
-                    modTokens: modTokens,
-                    assetValidators: this.AssetValidators(),
-                    contentPacks: contentPacks
-                )
-            );
+            this.InitializeScreenManagerIfNeeded();
 
             // register asset interceptor
             var interceptor = new AssetInterceptor(this.ScreenManager);
@@ -294,9 +284,38 @@ namespace ContentPatcher
                     configMenu.Register();
                 }
             }
+        }
 
-            // can no longer queue tokens
-            this.QueuedModTokens = null;
+        /// <summary>Create a raw uninitialized screen manager instance.</summary>
+        private ScreenManager CreateScreenManager()
+        {
+            var modTokens = this.QueuedModTokens.ToArray();
+            return new ScreenManager(
+                helper: this.Helper,
+                monitor: this.Monitor,
+                installedMods: this.GetInstalledMods(),
+                modTokens: modTokens,
+                assetValidators: this.AssetValidators()
+            );
+        }
+
+        /// <summary>Initialize the screen manager if needed.</summary>
+        private void InitializeScreenManagerIfNeeded()
+        {
+            var manager = this.ScreenManager.Value;
+            if (!manager.IsInitialized)
+                manager.Initialize(this.GetContentPacks().ToArray(), this.GetInstalledMods());
+        }
+
+        /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
+        private InvariantHashSet GetInstalledMods()
+        {
+            return new InvariantHashSet(
+                this.Helper.ModRegistry
+                    .GetAll()
+                    .Select(p => p.Manifest.UniqueID)
+                    .OrderByHuman()
+            );
         }
 
         /// <summary>Raised after a content pack's configuration changed.</summary>

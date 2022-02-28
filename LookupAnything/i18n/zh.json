@@ -84,7 +84,7 @@
     "data.npc.pet.description": "对你忠心耿耿的宠物。",
     "data.npc.horse.description": "对你忠心耿耿的坐骑。",
     "data.npc.junimo.description": "来自精神世界的森林精灵。人类对它们知之甚少。",
-    "data.npc.trashbear.description": "清理垃圾的友好精灵。",
+    "data.npc.trash-bear.description": "清理垃圾的友好精灵。",
 
     // item types
     "data.type.debris": "残骸",
@@ -454,6 +454,7 @@
     "item.movie-ticket.loves-movie": "热爱电影",
     "item.movie-ticket.likes-movie": "喜欢电影",
     "item.movie-ticket.dislikes-movie": "不喜欢电影",
+    "item.movie-ticket.rejects-movie": "Won't watch movie", // TODO
 
     // values
     "item.movie-snack-preference.love": "{{name}}酷爱这个",
