@@ -58,9 +58,16 @@ namespace ContentPatcher.Framework.Migrations
             if (!base.TryMigrate(content, out error))
                 return false;
 
+            // 1.25 is more forgiving about Format version
+            if (content.Format.PatchVersion != 0 || content.Format.PrereleaseTag != null)
+            {
+                error = this.GetNounPhraseError($"using {nameof(content.Format)} with a patch version (like {content.Format} instead of {new SemanticVersion(content.Format.MajorVersion, content.Format.MinorVersion, 0)})");
+                return false;
+            }
+
+            // 1.25 adds TargetField
             foreach (PatchConfig patch in content.Changes)
             {
-                // 1.25 adds TargetField
                 if (patch.TargetField.Any())
                 {
                     error = this.GetNounPhraseError($"using {nameof(patch.TargetField)}");
