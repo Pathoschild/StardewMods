@@ -104,8 +104,8 @@ namespace Pathoschild.Stardew.DataLayers.Layers
                 LegendEntry type;
                 if (this.IsWarp(location, tile, tilePixels, buildingDoors))
                     type = this.Warp;
-                else if (this.IsPassable(location, tile, tilePixels))
-                    type = this.IsOccupied(location, tile, tilePixels) ? this.Occupied : this.Clear;
+                else if (location.isTilePassable(tile))
+                    type = location.IsTileBlockedBy(tile, ignorePassables: CollisionMask.All) ? this.Occupied : this.Clear;
                 else
                     type = this.Impassable;
 
@@ -144,64 +144,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             const int ladderID = 173, shaftID = 174;
             if (location is MineShaft && buildingTile is { TileIndex: ladderID or shaftID } && buildingTile.TileSheet.Id == "mine")
                 return true;
-
-            return false;
-        }
-
-        /// <summary>Get whether a tile is passable.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <param name="tilePixels">The tile area in pixels.</param>
-        /// <remarks>Derived from <see cref="Farmer.MovePosition"/>, <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/>, <see cref="GameLocation.isTilePassable(xTile.Dimensions.Location,xTile.Dimensions.Rectangle)"/>, and <see cref="Fence"/>.</remarks>
-        private bool IsPassable(GameLocation location, Vector2 tile, Rectangle tilePixels)
-        {
-            // check layer properties
-            if (location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport))
-                return true;
-
-            // allow bridges
-            if (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Passable", "Buildings") != null)
-            {
-                Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-                if (backTile == null || !backTile.TileIndexProperties.TryGetValue("Passable", out PropertyValue? value) || value != "F")
-                    return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>Get whether a tile is blocked due to something it contains.</summary>
-        /// <param name="location">The current location.</param>
-        /// <param name="tile">The tile to check.</param>
-        /// <param name="tilePixels">The tile area in pixels.</param>
-        /// <remarks>Derived from <see cref="GameLocation.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool)"/> and <see cref="Farm.isCollidingPosition(Rectangle,xTile.Dimensions.Rectangle,bool,int,bool,Character,bool,bool,bool)"/>.</remarks>
-        private bool IsOccupied(GameLocation location, Vector2 tile, Rectangle tilePixels)
-        {
-            // show open gate as passable
-            if (location.objects.TryGetValue(tile, out Object obj) && obj is Fence fence && fence.isGate.Value && fence.gatePosition.Value == Fence.gateOpenedPosition)
-                return false;
-
-            // check for objects, characters, or terrain features
-            if (location.isTileOccupiedIgnoreFloors(tile))
-                return true;
-
-            // buildings
-            foreach (Building building in location.buildings)
-            {
-                if (building.occupiesTile(tile))
-                    return true;
-            }
-
-            // large terrain features
-            if (location.largeTerrainFeatures.Any(p => p.getBoundingBox().Intersects(tilePixels)))
-                return true;
-
-            // resource clumps
-            if (location is Farm farm)
-            {
-                if (farm.resourceClumps.Any(p => p.getBoundingBox(p.tile.Value).Intersects(tilePixels)))
-                    return true;
-            }
 
             return false;
         }
