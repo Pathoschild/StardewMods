@@ -42,7 +42,7 @@ applied:
 
 ```js
 {
-   "Format": "1.24.0",
+   "Format": "1.25.0",
    "ConfigSchema": {
       "Material": {
          "AllowValues": "Wood, Metal",

@@ -75,7 +75,9 @@ These changes only apply when you set the `Format` version in your `content.json
 version or higher. See [release notes](release-notes.md) for a full list of changes.
 
 ## 1.25
-* The older `Enabled` field is no longer supported. You can use `When` conditions instead.
+Released 27 February 2022.
+
+* **The `Enabled` field is no longer supported.** You can use `When` conditions instead.
 
 ## 1.24
 Released 31 October 2021.

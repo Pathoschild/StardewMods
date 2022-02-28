@@ -501,8 +501,7 @@ The mod will load the seasonal texture if present, else it'll load the default n
 `tractor.png`).
 
 ### For mod authors
-You can edit Tractor Mod's textures by patching three assets:
-* `Mods/Pathoschild.TractorMod/BuffIcon`
+You can edit Tractor Mod's textures by patching two assets:
 * `Mods/Pathoschild.TractorMod/Garage`
 * `Mods/Pathoschild.TractorMod/Tractor`
 

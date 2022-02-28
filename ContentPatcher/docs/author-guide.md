@@ -68,7 +68,7 @@ For example, here's a `content.json` which replaces Abigail's portraits with you
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "Load",
@@ -123,7 +123,7 @@ So if you wanted to change Abigail's portraits, you would use Content Patcher to
 5. Create a `content.json` file with this content:
    ```js
    {
-       "Format": "1.24.0",
+       "Format": "1.25.0",
        "Changes": [
            // your changes will go here
        ]
@@ -136,7 +136,7 @@ That's it! You now have a working Content Patcher pack, though it doesn't do any
 That `Format` field is the version of Content Patcher for which you designed the content pack. This
 is used to keep your content pack compatible with future versions.
 
-You should always use the latest format version (currently `1.24.0`) to enable the latest features,
+You should always use the latest format version (currently `1.25.0`) to enable the latest features,
 avoid obsolete behavior, and reduce startup time.
 
 ### Changes
@@ -169,7 +169,7 @@ would change her portraits in-game:
 
 ```js
 {
-   "Format": "1.24.0",
+   "Format": "1.25.0",
    "Changes": [
       {
          "Action": "Load",
@@ -203,7 +203,7 @@ For example, this doubles the price of coffee (see [object fields](https://stard
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -240,7 +240,7 @@ For example, if your content pack has an `assets/tuna.png` image with a custom
 
 ```js
 {
-   "Format": "1.24.0",
+   "Format": "1.25.0",
    "Changes": [
       {
          "Action": "EditImage",
@@ -271,7 +271,7 @@ This lets you...
 For example, this replaces the town square with a custom version in your content folder:
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "EditMap",
@@ -298,7 +298,7 @@ exactly as if they were directly in `content.json`.
 For example, you can combine this with [tokens and condition](#tokens) to load a dynamic file:
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "Include",
@@ -334,7 +334,7 @@ For example, this gives Abigail a different portrait for each season:
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "Load",
@@ -349,7 +349,7 @@ Or this gives her different seasonal portraits if you're married to her:
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "Load",
@@ -374,7 +374,7 @@ For example, you can use config values as [tokens and conditions](#tokens):
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -405,7 +405,7 @@ in any Content Patcher field that allows [tokens](#tokens):
 
 ```js
 {
-    "Format": "1.24.0",
+    "Format": "1.25.0",
     "Changes": [
         {
             "Action": "EditData",

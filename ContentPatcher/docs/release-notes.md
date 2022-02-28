@@ -9,21 +9,23 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.25.0
+Released 27 February 2022 for SMAPI 3.13.0 or later. See the [release highlights](https://www.patreon.com/posts/63137910).
+
 * `EditData` is now more powerful:
-  * You can now edit nested fields using [`TargetField`](author-guide/action-editdata.md#target-field). For example, you can edit the reward for a bundle in `Data/RandomBundle` without redefining the whole bundle area.
+  * You can now edit deeply nested fields using [`TargetField`](author-guide/action-editdata.md#target-field). For example, you can edit the reward for a bundle in `Data/RandomBundle` without redefining the whole entry.
   * You can now edit arbitrary data models (e.g. non-list/dictionary assets added by mods).
   * You can now edit list entries by their index position, even if they have no ID available.
 * Added [token aliases](author-guide/tokens.md#aliases) (thanks to Shockah!).
 * Added new tokens:
   * [`AbsoluteFilePath`](author-guide/tokens.md#AbsoluteFilePath) to get the full path for a file in the content pack folder.
   * [`FormatAssetName`](author-guide/tokens.md#FormatAssetName) to normalize an asset name into the form expected by the game.
-  * [`InternalAssetKey`](author-guide/tokens.md#InternalAssetKey) to get a special asset key which lets the game load a file directly from your content pack without needing to `Load` it first.
+  * [`InternalAssetKey`](author-guide/tokens.md#InternalAssetKey) to let the game load a file directly from your content pack without needing to `Load` it separately.
 * Added [`AnyPlayer` option](author-guide/tokens.md#target-player) for per-player tokens.
 * When using `Fields` with a delimited-string field, you can now patch past the end to fill in optional fields.
 * The `Format` field now ignores the third number, so `1.24.3` is equivalent to `1.24.0` instead of showing an error.
-* The deprecated `Enabled` patch field is now obsolete.
-* Fixed content packs being loaded/validated more than once per screen.
+* The deprecated `Enabled` patch field is now obsolete and won't work with newer `Format` versions.
+* Fixed content packs being loaded/validated twice per screen.
 * Fixed error loading a patch which has some required fields missing.
 * Fixed float rounding in `DailyLuck` token.
 * Removed warning for null patches (they're now silently ignored instead).

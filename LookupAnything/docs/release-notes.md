@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.37.0
+Released 27 February 2022 for SMAPI 3.13.0 or later.
+
 * Improved movie ticket lookups:
   * Added list of villagers who'd refuse to watch it.
   * Fixed error if some NPCs will reject the invitation.
