@@ -72,8 +72,36 @@ namespace ContentPatcher.Framework
                 return;
 
             this.ConfigMenu.Register();
-            foreach (var pair in this.Config)
-                this.AddField(pair.Key, pair.Value);
+
+            InvariantDictionary<ConfigField> noSectionConfigFields = new();
+            InvariantDictionary<InvariantDictionary<ConfigField>> sectionsConfigFields = new();
+
+            foreach (var (name, config) in this.Config)
+            {
+                if (string.IsNullOrEmpty(config.Section))
+                {
+                    noSectionConfigFields[name] = config;
+                }
+                else
+                {
+                    if (!sectionsConfigFields.TryGetValue(config.Section, out var sectionConfigFields))
+                    {
+                        sectionConfigFields = new();
+                        sectionsConfigFields[config.Section] = sectionConfigFields;
+                    }
+                    sectionConfigFields[name] = config;
+                }
+            }
+
+            foreach (var (name, config) in noSectionConfigFields)
+                this.AddField(name, config);
+
+            foreach (var (sectionName, sectionConfigFields) in sectionsConfigFields)
+            {
+                this.AddSection(sectionName);
+                foreach (var (name, config) in sectionConfigFields)
+                    this.AddField(name, config);
+            }
         }
 
 
@@ -183,6 +211,15 @@ namespace ContentPatcher.Framework
                     formatAllowedValue: GetValueText
                 );
             }
+        }
+
+        /// <summary>Register a config menu section with Generic Mod Config Menu.</summary>
+        /// <param name="name">The config section name.</param>
+        private void AddSection(string name)
+        {
+            string GetName() => this.TryTranslate($"config.section.{name}.name", name);
+            string GetDescription() => this.TryTranslate($"config.section.{name}.description", null);
+            this.ConfigMenu.AddSectionTitle(text: GetName, tooltip: GetDescription);
         }
 
         /// <summary>Reset the mod configuration.</summary>
