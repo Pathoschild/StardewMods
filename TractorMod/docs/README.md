@@ -97,6 +97,19 @@ multi-key bindings with plus signs (like `LeftShift + Backspace`).
 <tr>
 <td>
 
+`SoundEffects`
+
+</td>
+<td>
+
+Which sound effects to play while riding the tractor. The possible values are `None`, `Horse`, or `Tractor`. Default `Tractor`.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `BuildPrice`
 
 </td>

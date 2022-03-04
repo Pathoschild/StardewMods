@@ -38,6 +38,13 @@
     "config.magnetic-radius.name": "Rayon magnétique",
     "config.magnetic-radius.tooltip": "Le taux de magnétisme des objets (les valeurs les plus élevées attirent les objets de plus loin). Valeur par défaut {{defaultValue}}.",
 
+    // TODO
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
     "config.build-price.name": "Prix de construction",
     "config.build-price.tooltip": "Le prix pour acheter le hangar. Valeur par défaut {{defaultValue}}g.",
 

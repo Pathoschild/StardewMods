@@ -17,6 +17,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>The speed modifier when riding the tractor.</summary>
         public int TractorSpeed { get; set; } = -2;
 
+        /// <summary>Which sound effects to play while riding the tractor.</summary>
+        public TractorSoundType SoundEffects { get; set; } = TractorSoundType.Tractor;
+
         /// <summary>The magnetic radius when riding the tractor.</summary>
         public int MagneticRadius { get; set; } = 384;
 

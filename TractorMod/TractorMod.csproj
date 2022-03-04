@@ -2,6 +2,8 @@
   <PropertyGroup>
     <Version>4.16.6</Version>
     <RootNamespace>Pathoschild.Stardew.TractorMod</RootNamespace>
+
+    <TranslationClassBuilder_AddGetByKey>true</TranslationClassBuilder_AddGetByKey>
   </PropertyGroup>
 
   <ItemGroup>

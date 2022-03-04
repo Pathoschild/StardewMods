@@ -38,6 +38,13 @@
     "config.magnetic-radius.name": "Радіус Магнетизму",
     "config.magnetic-radius.tooltip": "Величина магнетизму предмета (При більших значеннях предмети притягуються з більшої відстані). За замовчуванням: {{defaultValue}}.",
 
+    // TODO
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
     "config.build-price.name": "Ціна побудови",
     "config.build-price.tooltip": "Золота ціна купівлі гаража трактора. За замовчуванням: {{defaultValue}} з.",
 

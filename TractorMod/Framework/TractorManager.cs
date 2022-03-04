@@ -17,7 +17,7 @@ using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
-    /// <summary>Manages tractor effects when the current player is riding a tractor horse.</summary>
+    /// <summary>Manages tractor effects when the current player is riding a tractor.</summary>
     internal sealed class TractorManager
     {
         /*********
@@ -31,6 +31,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>The <see cref="Horse.modData"/> key which indicates it's a tractor.</summary>
         private const string TractorDataKey = "Pathoschild.TractorMod";
+
+        /// <summary>Manages audio effects for the tractor.</summary>
+        private readonly AudioManager AudioManager;
 
         /// <summary>Simplifies access to private game code.</summary>
         private readonly IReflectionHelper Reflection;
@@ -81,21 +84,26 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="keys">The configured key bindings.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="getBuffIconTexture">Get the buff icon texture.</param>
-        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture)
+        /// <param name="audioManager">Manages audio effects for the tractor.</param>
+        public TractorManager(ModConfig config, ModConfigKeys keys, IReflectionHelper reflection, Func<Texture2D?> getBuffIconTexture, AudioManager audioManager)
         {
             this.Config = config;
             this.Keys = keys;
             this.Reflection = reflection;
             this.GetBuffIconTexture = getBuffIconTexture;
+            this.AudioManager = audioManager;
         }
 
         /// <summary>Set the base tractor data for a horse.</summary>
         /// <param name="tractor">The tractor instance.</param>
+        /// <param name="disableHorseSounds">Whether to disable the default horse sounds.</param>
         /// <returns>Returns the tractor instance for convenience.</returns>
-        public static Horse SetTractorInfo(Horse tractor)
+        public static Horse SetTractorInfo(Horse tractor, bool disableHorseSounds)
         {
             tractor.Name = $"tractor/{tractor.HorseId:N}";
             tractor.modData[TractorManager.TractorDataKey] = "1";
+            if (disableHorseSounds)
+                tractor.onFootstepAction = _ => { }; // disable horse clops, tractor audio will be managed separately
 
             return tractor;
         }
@@ -144,6 +152,18 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
                 // reset held-down tool power
                 Game1.player.toolPower = 0;
+
+                // set sound
+                this.AudioManager.SetEngineState(this.IsCurrentPlayerRiding ? EngineState.Idle : EngineState.Stop);
+            }
+
+            // update audio
+            if (this.IsCurrentPlayerRiding)
+            {
+                bool idle = !Game1.player.isMoving();
+
+                this.AudioManager.SetEngineState(idle ? EngineState.Idle : EngineState.Rev);
+                this.AudioManager.Update();
             }
 
             // detect activation or location change

@@ -38,6 +38,13 @@
     "config.magnetic-radius.name": "자력 범위",
     "config.magnetic-radius.tooltip": "아이템을 수집 할 수 있는 반경 설정. (기본 {{defaultValue}})",
 
+    // TODO
+    "config.tractor-sounds.name": "Sound Effects",
+    "config.tractor-sounds.tooltip": "Which sound effects to play while riding the tractor. Changes may not fully take effect until you reload the save. Default {{defaultValue}}.",
+    "config.tractor-sounds.value.None": "no sounds",
+    "config.tractor-sounds.value.Horse": "horse sounds",
+    "config.tractor-sounds.value.Tractor": "tractor sounds",
+
     "config.build-price.name": "트렉터 건설 가격",
     "config.build-price.tooltip": "트랙터 차고를 건설하기 위한 가격. (기본 {{defaultValue}}골드)",
 
