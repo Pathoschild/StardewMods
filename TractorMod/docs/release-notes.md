@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release for Stardew Valley 1.6
 * Updated for Stardew Valley 1.6.
+* Added tractor sounds (configurable).
 * Added custom buff icon + name.
 
 ## 4.16.5

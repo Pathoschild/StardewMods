@@ -218,7 +218,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             Horse horse = garage.getStableHorse();
             if (horse != null && horse.Name.StartsWith("tractor/"))
-                TractorManager.SetTractorInfo(horse);
+                TractorManager.SetTractorInfo(horse, disableHorseSounds: false);
         }
     }
 }
