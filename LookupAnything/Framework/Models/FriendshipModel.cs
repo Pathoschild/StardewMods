@@ -17,9 +17,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Whether the player can date the NPC.</summary>
         public bool CanDate { get; set; }
 
-        /// <summary>Whether the NPC is eligible to be a housemate, rather than spouse.</summary>
-        public bool CanHousemate { get; set; }
-
         /// <summary>Whether the NPC is dating the player.</summary>
         public bool IsDating { get; set; }
 
@@ -89,12 +86,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="friendship">The current friendship data.</param>
         public FriendshipModel(SFarmer player, NPC npc, Friendship friendship, ConstantData constants)
         {
+            bool marriedOrRoommate = friendship.IsMarried();
+            bool roommate = friendship.IsRoommate();
+
             // flags
             this.CanDate = npc.datable.Value;
             this.IsDating = friendship.IsDating();
-            this.CanHousemate = npc.Name == "Krobus";
-            this.IsSpouse = friendship.IsMarried() && !this.CanHousemate;
-            this.IsHousemate = friendship.IsMarried() && this.CanHousemate;
+            this.IsSpouse = marriedOrRoommate && !roommate;
+            this.IsHousemate = marriedOrRoommate && roommate;
             this.IsDivorced = friendship.IsDivorced();
             this.Status = friendship.Status;
             this.TalkedToday = friendship.TalkedToToday;
