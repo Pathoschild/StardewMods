@@ -18,7 +18,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>An optional explanation of the config field for players.</summary>
         public string Description { get; set; }
 
-        /// <summary>An optional section to put the option in.</summary>
+        /// <summary>An optional section key to group related fields.</summary>
         public string Section { get; set; }
     }
 }

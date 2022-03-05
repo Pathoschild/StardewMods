@@ -28,7 +28,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>An optional explanation of the config field for players.</summary>
         public string Description { get; set; }
 
-        /// <summary>An optional section to put the option in.</summary>
+        /// <summary>An optional section key to group related fields.</summary>
         public string Section { get; set; }
 
 
@@ -41,7 +41,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="allowBlank">Whether to allow blank values.</param>
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
         /// <param name="description">An optional explanation of the config field for players.</param>
-        /// <param name="section">An optional section to put the option in.</param>
+        /// <param name="section">An optional section key to group related fields.</param>
         public ConfigField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple, string description, string section)
         {
             this.AllowValues = allowValues;

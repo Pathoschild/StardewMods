@@ -73,33 +73,28 @@ namespace ContentPatcher.Framework
 
             this.ConfigMenu.Register();
 
-            InvariantDictionary<ConfigField> noSectionConfigFields = new();
-            InvariantDictionary<InvariantDictionary<ConfigField>> sectionsConfigFields = new();
-
+            // get fields by section
+            InvariantDictionary<InvariantDictionary<ConfigField>> fieldsBySection = new() { [""] = new() };
             foreach (var (name, config) in this.Config)
             {
-                if (string.IsNullOrEmpty(config.Section))
-                {
-                    noSectionConfigFields[name] = config;
-                }
-                else
-                {
-                    if (!sectionsConfigFields.TryGetValue(config.Section, out var sectionConfigFields))
-                    {
-                        sectionConfigFields = new();
-                        sectionsConfigFields[config.Section] = sectionConfigFields;
-                    }
-                    sectionConfigFields[name] = config;
-                }
+                string sectionId = config.Section?.Trim() ?? "";
+
+                if (!fieldsBySection.TryGetValue(sectionId, out InvariantDictionary<ConfigField> section))
+                    fieldsBySection[sectionId] = section = new();
+
+                section[name] = config;
             }
 
-            foreach (var (name, config) in noSectionConfigFields)
-                this.AddField(name, config);
-
-            foreach (var (sectionName, sectionConfigFields) in sectionsConfigFields)
+            // add section/field elements
+            foreach ((string sectionId, InvariantDictionary<ConfigField> fields) in fieldsBySection)
             {
-                this.AddSection(sectionName);
-                foreach (var (name, config) in sectionConfigFields)
+                if (!fields.Any())
+                    continue;
+
+                if (sectionId != "")
+                    this.AddSection(sectionId);
+
+                foreach ((string name, ConfigField config) in fields)
                     this.AddField(name, config);
             }
         }
@@ -217,9 +212,10 @@ namespace ContentPatcher.Framework
         /// <param name="name">The config section name.</param>
         private void AddSection(string name)
         {
-            string GetName() => this.TryTranslate($"config.section.{name}.name", name);
-            string GetDescription() => this.TryTranslate($"config.section.{name}.description", null);
-            this.ConfigMenu.AddSectionTitle(text: GetName, tooltip: GetDescription);
+            this.ConfigMenu.AddSectionTitle(
+                text: () => this.TryTranslate($"config.section.{name}.name", name),
+                tooltip: () => this.TryTranslate($"config.section.{name}.description", null)
+            );
         }
 
         /// <summary>Reset the mod configuration.</summary>
