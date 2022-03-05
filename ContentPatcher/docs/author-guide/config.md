@@ -10,6 +10,7 @@ selected by the player.
   * [Examples](#examples)
 * [Config UI](#config-ui)
   * [Display options](#display-options)
+  * [Sections](#sections)
   * [Translations](#translations)
 * [See also](#see-also)
 
@@ -92,6 +93,44 @@ There's one extra field to customize how config UIs are rendered:
 field         | meaning
 ------------- | -------
 `Description` | _(optional)_ An explanation of the config option for the player, usually shown in the config UI as a tooltip.
+`Section`     | _(optional)_ A section title to group related sections. See [_sections_](#sections) below.
+
+### Sections
+You can group your options into sections using the `Section` field. Options with no section are
+always listed first, followed by sections in the order they first appeared in `ConfigSchema`.
+
+For example, this adds two sections:
+
+```js
+{
+    "Format": "1.25.0",
+    "ConfigSchema": {
+        // appearance section
+        "Material": {
+            "AllowValues": "Wood, Metal",
+            "Default": "Wood",
+            "Section": "Appearance"
+        },
+        "Texture": {
+            "AllowValues": "Grainy, Smooth",
+            "Default": "Grainy",
+            "Section": "Appearance"
+        },
+
+        // behavior section
+        "Enabled": {
+            "AllowValues": "true, false",
+            "Default": "true",
+            "Section": "Behavior"
+        }
+    },
+    "Changes": [ ]
+}
+```
+
+Which would look something like this in-game:
+
+![](../screenshots/config-with-sections.png)
 
 ### Translations
 By default your config options are shown as-is in the config UI, with no display names or tooltips
@@ -108,6 +147,8 @@ key format                     | description
 `config.<name>.name`           | The field name.
 `config.<name>.description`    | The field description (usually shown as a tooltip).
 `config.<name>.values.<value>` | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
+`config.<section>.name`        | The [section](#sections) name.
+`config.<section>.description` | The [section](#sections) description (usually shown as a tooltip).
 
 All translation keys are optional, and they're not case-sensitive.
 
