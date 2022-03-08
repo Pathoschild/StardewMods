@@ -9,10 +9,10 @@ namespace Pathoschild.Stardew.SkipIntro.Framework
         /// <summary>Skip the initial intro.</summary>
         SkipIntro,
 
-        /// <summary>The title screen is transitioning to the co-op screen.</summary>
-        TransitioningToCoop,
-        
-        /// <summary>The co-op menu is waiting for a connection.</summary>
-        WaitingForConnection
+        /// <summary>Transition from the title screen to the co-op section.</summary>
+        TransitionToCoop,
+
+        /// <summary>Transition from the co-op section to the host screen.</summary>
+        TransitionToCoopHost
     }
 }
