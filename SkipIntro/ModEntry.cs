@@ -151,6 +151,8 @@ namespace Pathoschild.Stardew.SkipIntro
             return currentStage switch
             {
                 Stage.SkipIntro => this.SkipToTitle(menu),
+                Stage.TransitionToLoad => this.TransitionToLoad(menu),
+                Stage.StartTransitionToCoop => this.StartTransitionToCoop(menu),
                 Stage.TransitionToCoop => this.TransitionToCoop(menu),
                 Stage.TransitionToCoopHost => this.TransitionToCoopHost(),
                 _ => Stage.None
@@ -182,24 +184,18 @@ namespace Pathoschild.Stardew.SkipIntro
                     menu.update(Game1.currentGameTime);
             }
 
-            // skip to next screen
+            // set next step
             switch (this.Config.SkipTo)
             {
                 case Screen.Title:
                     return Stage.None;
 
                 case Screen.Load:
-                    // skip to load screen
-                    menu.performButtonAction("Load");
-                    while (TitleMenu.subMenu == null)
-                        menu.update(Game1.currentGameTime);
-                    return Stage.None;
+                    return Stage.TransitionToLoad;
 
                 case Screen.JoinCoop:
                 case Screen.HostCoop:
-                    // skip to co-op screen
-                    menu.performButtonAction("Co-op");
-                    return Stage.TransitionToCoop; // need a full game update before the next step to avoid crashes
+                    return Stage.StartTransitionToCoop;
 
                 default:
                     this.Monitor.Log($"Unrecognized skip option {this.Config.SkipTo}.", LogLevel.Warn);
@@ -207,17 +203,46 @@ namespace Pathoschild.Stardew.SkipIntro
             }
         }
 
-        /// <summary>Skip from the title screen to the co-op section.</summary>
+        /// <summary>Skip from the title screen to the load menu.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage TransitionToLoad(TitleMenu menu)
+        {
+            // start transition
+            menu.performButtonAction("Load");
+
+            // skip animation
+            while (TitleMenu.subMenu == null)
+                menu.update(Game1.currentGameTime);
+
+            return Stage.None;
+        }
+
+        /// <summary>Start transitioning from the title screen to the co-op section.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage StartTransitionToCoop(TitleMenu menu)
+        {
+            // start transition
+            menu.performButtonAction("Co-op");
+
+            // need a full game update before the next step to avoid crashes
+            return Stage.TransitionToCoop;
+        }
+
+        /// <summary>Finish transitioning from the title screen to the co-op section.</summary>
         /// <param name="menu">The title menu.</param>
         /// <returns>Returns the next step in the skip logic.</returns>
         private Stage TransitionToCoop(TitleMenu menu)
         {
+            // skip animation
             while (TitleMenu.subMenu == null)
                 menu.update(Game1.currentGameTime);
 
-            return this.Config.SkipTo == Screen.JoinCoop
-                ? Stage.None
-                : Stage.TransitionToCoopHost;
+            // set next step
+            return this.Config.SkipTo == Screen.HostCoop
+                ? Stage.TransitionToCoopHost
+                : Stage.None;
         }
 
         /// <summary>Skip from the co-op section to the host screen.</summary>
@@ -225,7 +250,7 @@ namespace Pathoschild.Stardew.SkipIntro
         private Stage TransitionToCoopHost()
         {
             // not applicable
-            if (this.Config.SkipTo != Screen.HostCoop || TitleMenu.subMenu is not CoopMenu submenu)
+            if (TitleMenu.subMenu is not CoopMenu submenu)
                 return Stage.None;
 
             // not connected yet
