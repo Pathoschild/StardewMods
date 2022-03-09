@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
 using StardewModdingAPI;
@@ -164,23 +163,20 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <returns>Returns the next step in the skip logic.</returns>
         private Stage SkipToTitle(TitleMenu menu)
         {
+            // skip to title screen
+            menu.skipToTitleButtons();
+
+            // skip button transition
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                // skip to title screen
-                menu.skipToTitleButtons();
-
-                // skip button transition
-                while (this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons").GetValue())
+                IReflectedField<bool> isTransitioningButtons = this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons");
+                while (isTransitioningButtons.GetValue())
                     menu.update(Game1.currentGameTime);
             }
             else
             {
-                // skip to title screen
-                menu.receiveKeyPress(Keys.Escape);
-                menu.update(Game1.currentGameTime);
-
-                // skip button transition
-                while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
+                IReflectedField<int> buttonsToShow = this.Helper.Reflection.GetField<int>(menu, "buttonsToShow");
+                while (buttonsToShow.GetValue() < TitleMenu.numberOfButtons)
                     menu.update(Game1.currentGameTime);
             }
 
