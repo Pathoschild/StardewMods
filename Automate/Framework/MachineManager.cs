@@ -118,13 +118,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** State management
         ****/
-        /// <summary>Clear all registered machines and add all locations to the reload queue.</summary>
-        public void Reset()
+        /// <summary>Clear all registered machines.</summary>
+        public void Clear()
         {
             this.ActiveMachineGroups.Clear();
             this.DisabledMachineGroups.Clear();
-
             this.JunimoMachineGroup.RemoveAll(_ => true);
+        }
+
+        /// <summary>Clear all registered machines and add all locations to the reload queue.</summary>
+        public void Reset()
+        {
+            this.Clear();
+
             this.JunimoMachineGroup.Rebuild();
 
             this.ReloadQueue.AddMany(CommonHelper.GetLocations());

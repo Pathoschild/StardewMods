@@ -4,6 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "Opciones principales",
+    "config.enabled.name": "Enabled", // TODO
+    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
     "config.junimo-huts-output-gems.name": "Cabañas de Junimos sacan gemas",
     "config.junimo-huts-output-gems.desc": "Si se sacan gemas de las cabañas de Junimo. Si es cierto, no podrás cambiar los colores de Junimo colocando gemas en su cabaña.",
     "config.automation-interval.name": "Intervalo de automatización",

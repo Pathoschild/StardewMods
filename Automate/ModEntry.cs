@@ -35,7 +35,7 @@ namespace Pathoschild.Stardew.Automate
         private CommandHandler CommandHandler;
 
         /// <summary>Whether to enable automation for the current save.</summary>
-        private bool EnableAutomation => Context.IsMainPlayer;
+        private bool EnableAutomation => Context.IsMainPlayer && this.Config.Enabled;
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
@@ -153,10 +153,15 @@ namespace Pathoschild.Stardew.Automate
             // disable if secondary player
             if (!this.EnableAutomation)
             {
-                if (this.HostHasAutomate(out ISemanticVersion installedVersion))
-                    this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
+                if (Context.IsMultiplayer)
+                {
+                    if (this.HostHasAutomate(out ISemanticVersion installedVersion))
+                        this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
+                    else
+                        this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                }
                 else
-                    this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                    this.Monitor.Log("You disabled Automate in the mod settings, so it won't do anything.", LogLevel.Info);
             }
         }
 
@@ -283,6 +288,9 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
         {
+            if (!this.Config.Enabled) // don't check EnableAutomation, since overlay is still available for farmhands
+                return;
+
             try
             {
                 // toggle overlay
@@ -334,8 +342,19 @@ namespace Pathoschild.Stardew.Automate
         {
             this.AutomateCountdown = Math.Min(this.AutomateCountdown, this.Config.AutomationInterval);
 
-            this.MachineManager.Reset();
-            this.ResetOverlayIfShown();
+            if (!this.Config.Enabled)
+            {
+                if (this.MachineManager.GetActiveMachineGroups().Any())
+                    this.Monitor.Log("Disabled per config change. Machines are no longer automated.", LogLevel.Warn);
+
+                this.MachineManager.Clear();
+                this.DisableOverlay();
+            }
+            else
+            {
+                this.MachineManager.Reset();
+                this.ResetOverlayIfShown();
+            }
         }
 
         /// <summary>Log warnings if custom-machine frameworks are installed without their automation component.</summary>

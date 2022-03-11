@@ -52,6 +52,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             menu
                 .AddSectionTitle(I18n.Config_Title_MainOptions)
                 .AddCheckbox(
+                    name: I18n.Config_Enabled_Name,
+                    tooltip: I18n.Config_Enabled_Desc,
+                    get: config => config.Enabled,
+                    set: (config, value) => config.Enabled = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_JunimoHutsOutputGems_Name,
                     tooltip: I18n.Config_JunimoHutsOutputGems_Desc,
                     get: config => config.PullGemstonesFromJunimoHuts,

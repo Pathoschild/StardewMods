@@ -4,6 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "Fő beállítások",
+    "config.enabled.name": "Enabled", // TODO
+    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
     "config.junimo-huts-output-gems.name": "Drágakövek begyűjtése",
     "config.junimo-huts-output-gems.desc": "A Junimo kunyhók begyűjtik a drágakövek. Ha igaz, akkor nem tudod majd megváltoztatni a Junimo kunyhók színét azzal, hogy drágaköveket helyezel el a kunyhókon.",
     "config.automation-interval.name": "Automatizálási időköz",

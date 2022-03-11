@@ -253,6 +253,14 @@ These are the available settings:
 </tr>
 <tr>
 <tr>
+  <td><code>Enabled</code></td>
+  <td>
+
+Whether Automate features are enabled. If this is `false`, no machines will be automated and the overlay won't appear.
+
+  </td>
+</tr>
+<tr>
   <td><code>Controls</code></td>
   <td>
 

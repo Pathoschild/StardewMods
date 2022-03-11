@@ -11,6 +11,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether Automate is enabled.</summary>
+        public bool Enabled { get; set; } = true;
+
         /// <summary>Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.</summary>
         public bool PullGemstonesFromJunimoHuts { get; set; } = false;
 
