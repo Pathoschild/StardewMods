@@ -1764,7 +1764,7 @@ The supported operators are listed below.
   ```
 
 ### Mod-provided tokens
-SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),
+SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](../extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
 ```js
