@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added support for horse flute animation.
+
 ## 1.9.12
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 

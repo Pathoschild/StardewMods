@@ -19,6 +19,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The animation speed multiplier to apply.</summary>
         protected readonly float Multiplier;
 
+        /// <summary>The approximate number of milliseconds per update frame.</summary>
+        protected const int MillisecondsPerFrame = 1000 / 60;
+
 
         /*********
         ** Public methods

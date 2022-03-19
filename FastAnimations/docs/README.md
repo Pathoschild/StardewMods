@@ -37,6 +37,7 @@ Here's what you can change:
   `EatAndDrinkSpeed`   | 10×     | How fast you eat and drink.
   `FishingSpeed`       | 1×      | How fast you cast and reel when fishing (doesn't affect the minigame).<br /><small>(Suggested value: 2×.)</small>
   `HarvestSpeed`       | 3×      | How fast you harvest crops and forage by hand.
+  `HorseFluteSpeed`    | 6×      | How fast you play the [horse flute](https://stardewvalleywiki.com/Horse_Flute).
   `MilkSpeed`          | 5×      | How fast you use the milk pail.
   `MountOrDismountSpeed` | 2×    | How fast you mount/dismount horses (including custom mounts like Tractor Mod).
   `ShearSpeed`         | 5×      | How fast you use the shears.

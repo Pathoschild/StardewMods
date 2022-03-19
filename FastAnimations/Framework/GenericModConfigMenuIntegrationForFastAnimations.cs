@@ -95,6 +95,14 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     max: maxSpeed
                 )
                 .AddNumberField(
+                    name: I18n.Config_HorseFlute_Name,
+                    tooltip: () => I18n.Config_HorseFlute_Tooltip(defaultValue: defaultConfig.HorseFluteSpeed),
+                    get: config => config.HorseFluteSpeed,
+                    set: (config, value) => config.HorseFluteSpeed = value,
+                    min: minSpeed,
+                    max: maxSpeed
+                )
+                .AddNumberField(
                     name: I18n.Config_Shear_Name,
                     tooltip: () => I18n.Config_Shear_Tooltip(defaultValue: defaultConfig.ShearSpeed),
                     get: config => config.ShearSpeed,

@@ -24,6 +24,9 @@
     "config.harvest.name": "수확",
     "config.harvest.tooltip": "손으로 작물과 채집물을 수확하는 속도. 기본값 {{defaultValue}}.",
 
+    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
+
     "config.milk.name": "우유",
     "config.milk.tooltip": "우유통을 사용하는 속도. 기본값 {{defaultValue}}.",
 
