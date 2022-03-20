@@ -72,8 +72,31 @@ namespace ContentPatcher.Framework
                 return;
 
             this.ConfigMenu.Register();
-            foreach (var pair in this.Config)
-                this.AddField(pair.Key, pair.Value);
+
+            // get fields by section
+            InvariantDictionary<InvariantDictionary<ConfigField>> fieldsBySection = new() { [""] = new() };
+            foreach (var (name, config) in this.Config)
+            {
+                string sectionId = config.Section?.Trim() ?? "";
+
+                if (!fieldsBySection.TryGetValue(sectionId, out InvariantDictionary<ConfigField> section))
+                    fieldsBySection[sectionId] = section = new();
+
+                section[name] = config;
+            }
+
+            // add section/field elements
+            foreach ((string sectionId, InvariantDictionary<ConfigField> fields) in fieldsBySection)
+            {
+                if (!fields.Any())
+                    continue;
+
+                if (sectionId != "")
+                    this.AddSection(sectionId);
+
+                foreach ((string name, ConfigField config) in fields)
+                    this.AddField(name, config);
+            }
         }
 
 
@@ -183,6 +206,16 @@ namespace ContentPatcher.Framework
                     formatAllowedValue: GetValueText
                 );
             }
+        }
+
+        /// <summary>Register a config menu section with Generic Mod Config Menu.</summary>
+        /// <param name="name">The config section name.</param>
+        private void AddSection(string name)
+        {
+            this.ConfigMenu.AddSectionTitle(
+                text: () => this.TryTranslate($"config.section.{name}.name", name),
+                tooltip: () => this.TryTranslate($"config.section.{name}.description", null)
+            );
         }
 
         /// <summary>Reset the mod configuration.</summary>

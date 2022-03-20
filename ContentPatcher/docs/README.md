@@ -31,7 +31,7 @@ the mod probably isn't configurable.)
 If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
 Content Patcher will automatically add configurable content packs to its in-game menu:
 
-![](screenshots/generic-config-menu.png)
+![](screenshots/config-with-sections.png)
 
 ### Multiplayer
 Content Patcher works fine in multiplayer. It's best if all players have the same content packs,

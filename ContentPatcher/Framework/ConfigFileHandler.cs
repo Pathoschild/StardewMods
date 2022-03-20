@@ -152,7 +152,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // add to schema
-                schema[rawKey] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple, field.Description);
+                schema[rawKey] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple, field.Description, field.Section);
             }
 
             return schema;
