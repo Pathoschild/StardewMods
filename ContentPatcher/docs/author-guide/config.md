@@ -88,7 +88,7 @@ using [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/509
 optionally provide extra info to improve the config UI.
 
 ### Display options
-There's one extra field to customize how config UIs are rendered:
+There's two extra fields to customize how config UIs are rendered:
 
 field         | meaning
 ------------- | -------

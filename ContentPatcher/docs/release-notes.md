@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Added support for [config UI sections](author-guide/config.md#display-options) (thanks to Shockah!).
+
 ## 1.25.0
 Released 27 February 2022 for SMAPI 3.13.0 or later. See the [release highlights](https://www.patreon.com/posts/63137910).
 
