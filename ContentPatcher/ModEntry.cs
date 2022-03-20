@@ -29,6 +29,9 @@ namespace ContentPatcher
         /// <summary>Manages state for each screen.</summary>
         private PerScreen<ScreenManager> ScreenManager;
 
+        /// <summary>The raw data for loaded content packs.</summary>
+        private LoadedContentPack[] ContentPacks;
+
         /// <summary>The recognized format versions and their migrations.</summary>
         private readonly Func<ContentConfig, IMigration[]> GetFormatVersions = content => new IMigration[]
         {
@@ -227,7 +230,7 @@ namespace ContentPatcher
             var helper = this.Helper;
 
             // fetch content packs
-            LoadedContentPack[] contentPacks = this.GetContentPacks().ToArray();
+            this.ContentPacks = this.GetContentPacks().ToArray();
 
             // log custom tokens
             {
@@ -262,14 +265,14 @@ namespace ContentPatcher
                 screenManager: this.ScreenManager,
                 monitor: this.Monitor,
                 contentHelper: this.Helper.Content,
-                contentPacks: contentPacks,
+                contentPacks: this.ContentPacks,
                 getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
                 updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)
             );
             this.CommandHandler.RegisterWith(helper.ConsoleCommands);
 
             // register content packs with Generic Mod Config Menu
-            foreach (LoadedContentPack contentPack in contentPacks)
+            foreach (LoadedContentPack contentPack in this.ContentPacks)
             {
                 if (contentPack.Config.Any())
                 {
@@ -305,7 +308,7 @@ namespace ContentPatcher
         {
             var manager = this.ScreenManager.Value;
             if (!manager.IsInitialized)
-                manager.Initialize(this.GetContentPacks().ToArray(), this.GetInstalledMods());
+                manager.Initialize(this.ContentPacks, this.GetInstalledMods());
         }
 
         /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
