@@ -246,7 +246,7 @@ For example, if your content pack has an `assets/tuna.png` image with a custom
          "Action": "EditImage",
          "Target": "Maps/springobjects",
          "FromFile": "assets/fish-object.png",
-         "ToArea": { "X": 160, "Y": 80, "Width": 16, "Height" 16 }
+         "ToArea": { "X": 160, "Y": 80, "Width": 16, "Height": 16 }
       }
    ]
 }
