@@ -142,13 +142,13 @@ You can add [translation files](https://stardewvalleywiki.com/Modding:Translatio
 to have a more user-friendly UI. To do that, create an `i18n/default.json` for your default text.
 For each field, add any combination of these translation keys:
 
-key format                     | description
-:----------------------------- | :----------
-`config.<name>.name`           | The field name.
-`config.<name>.description`    | The field description (usually shown as a tooltip).
-`config.<name>.values.<value>` | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
-`config.<section>.name`        | The [section](#sections) name.
-`config.<section>.description` | The [section](#sections) description (usually shown as a tooltip).
+key format                             | description
+:------------------------------------- | :----------
+`config.<name>.name`                   | The field name.
+`config.<name>.description`            | The field description (usually shown as a tooltip).
+`config.<name>.values.<value>`         | The display text for an `AllowValues` value when shown in a dropdown or checkbox list.
+`config.section.<section>.name`        | The [section](#sections) name.
+`config.section.<section>.description` | The [section](#sections) description (usually shown as a tooltip).
 
 All translation keys are optional, and they're not case-sensitive.
 
