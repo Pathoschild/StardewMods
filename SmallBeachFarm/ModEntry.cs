@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,7 +22,7 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Pathoschild.Stardew.SmallBeachFarm
 {
     /// <summary>The mod entry class loaded by SMAPI.</summary>
-    public class ModEntry : Mod, IAssetEditor, IAssetLoader
+    public class ModEntry : Mod
     {
         /*********
         ** Fields
@@ -69,6 +68,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             this.Config = this.Helper.ReadConfig<ModConfig>();
 
             // hook events
+            helper.Events.Content.AssetRequested += this.OnAssetRequested;
             helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             helper.Events.GameLoop.DayEnding += this.DayEnding;
             helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -84,109 +84,106 @@ namespace Pathoschild.Stardew.SmallBeachFarm
             );
         }
 
-        /// <inheritdoc />
-        public bool CanEdit<T>(IAssetInfo asset)
-        {
-            return
-                asset.AssetNameEquals("Data/AdditionalFarms")
-                || asset.AssetNameEquals("Strings/UI");
-        }
-
-        /// <inheritdoc />
-        public void Edit<T>(IAssetData asset)
-        {
-            // add farm type
-            if (asset.AssetNameEquals("Data/AdditionalFarms"))
-            {
-                var data = (List<ModFarmType>)asset.Data;
-                data.Add(new()
-                {
-                    ID = this.ModManifest.UniqueID,
-                    TooltipStringPath = "Strings/UI:Pathoschild_BeachFarm_Description",
-                    MapName = "Pathoschild_SmallBeachFarm"
-                });
-            }
-
-            // add farm description
-            else if (asset.AssetNameEquals("Strings/UI"))
-            {
-                var data = asset.AsDictionary<string, string>().Data;
-                data["Pathoschild_BeachFarm_Description"] = $"{I18n.Farm_Name()}_{I18n.Farm_Description()}";
-            }
-        }
-
-        /// <inheritdoc />
-        public bool CanLoad<T>(IAssetInfo asset)
-        {
-            return
-                asset.AssetNameEquals("Maps/Pathoschild_SmallBeachFarm")
-                || asset.AssetName.StartsWith(this.FakeAssetPrefix);
-        }
-
-        /// <inheritdoc />
-        public T Load<T>(IAssetInfo asset)
-        {
-            // load map
-            if (asset.AssetNameEquals("Maps/Pathoschild_SmallBeachFarm"))
-            {
-                // load map
-                Map map = this.Helper.Content.Load<Map>("assets/farm.tmx");
-
-                // add islands
-                if (this.Config.EnableIslands)
-                {
-                    Map islands = this.Helper.Content.Load<Map>("assets/islands.tmx");
-                    this.Helper.Content.GetPatchHelper(map)
-                        .AsMap()
-                        .PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
-                }
-
-                // add campfire
-                if (this.Config.AddCampfire)
-                {
-                    var buildingsLayer = map.GetLayer("Buildings");
-                    buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
-                    buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, map.GetTileSheet("untitled tile sheet"), BlendMode.Alpha, 242); // campfire
-                }
-
-                // apply tilesheet recolors
-                string internalRootKey = this.Helper.Content.GetActualAssetKey($"{this.TilesheetsPath}/_default");
-                foreach (TileSheet tilesheet in map.TileSheets)
-                {
-                    if (tilesheet.ImageSource.StartsWith(internalRootKey + PathUtilities.PreferredAssetSeparator))
-                        tilesheet.ImageSource = this.Helper.Content.GetActualAssetKey($"{this.FakeAssetPrefix}/{Path.GetFileNameWithoutExtension(tilesheet.ImageSource)}", ContentSource.GameContent);
-                }
-
-                return (T)(object)map;
-            }
-
-            // load tilesheet
-            if (asset.AssetName.StartsWith(this.FakeAssetPrefix))
-            {
-                string filename = Path.GetFileName(asset.AssetName);
-                if (!Path.HasExtension(filename))
-                    filename += ".png";
-
-                // get relative path to load
-                string relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))
-                    .EnumerateDirectories()
-                    .FirstOrDefault(p => p.Name != "_default" && this.Helper.ModRegistry.IsLoaded(p.Name))
-                    ?.Name;
-                relativePath = Path.Combine(this.TilesheetsPath, relativePath ?? "_default", filename);
-
-                // load asset
-                Texture2D tilesheet = this.Helper.Content.Load<Texture2D>(relativePath);
-                return (T)(object)tilesheet;
-            }
-
-            // unknown asset
-            throw new NotSupportedException($"Unexpected asset '{asset.AssetName}'.");
-        }
-
 
         /*********
         ** Private methods
         *********/
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        {
+            // add farm type
+            if (e.NameWithoutLocale.IsEquivalentTo("Data/AdditionalFarms"))
+            {
+                e.Edit(editor =>
+                {
+                    var data = editor.GetData<List<ModFarmType>>();
+                    data.Add(new()
+                    {
+                        ID = this.ModManifest.UniqueID,
+                        TooltipStringPath = "Strings/UI:Pathoschild_BeachFarm_Description",
+                        MapName = "Pathoschild_SmallBeachFarm"
+                    });
+                });
+            }
+
+            // add farm description
+            else if (e.NameWithoutLocale.IsEquivalentTo("Strings/UI"))
+            {
+                e.Edit(editor =>
+                {
+                    var data = editor.AsDictionary<string, string>().Data;
+                    data["Pathoschild_BeachFarm_Description"] = $"{I18n.Farm_Name()}_{I18n.Farm_Description()}";
+                });
+            }
+
+            // load map
+            else if (e.NameWithoutLocale.IsEquivalentTo("Maps/Pathoschild_SmallBeachFarm"))
+            {
+                e.LoadFrom(
+                    () =>
+                    {
+                        // load map
+                        Map map = this.Helper.ModContent.Load<Map>("assets/farm.tmx");
+
+                        // add islands
+                        if (this.Config.EnableIslands)
+                        {
+                            Map islands = this.Helper.ModContent.Load<Map>("assets/islands.tmx");
+                            this.Helper.ModContent.GetPatchHelper(map)
+                                .AsMap()
+                                .PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
+                        }
+
+                        // add campfire
+                        if (this.Config.AddCampfire)
+                        {
+                            var buildingsLayer = map.GetLayer("Buildings");
+                            buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
+                            buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, map.GetTileSheet("untitled tile sheet"), BlendMode.Alpha, 242); // campfire
+                        }
+
+                        // apply tilesheet recolors
+                        foreach (TileSheet tilesheet in map.TileSheets)
+                        {
+                            IAssetName imageSource = this.Helper.GameContent.ParseAssetName(tilesheet.ImageSource);
+                            if (imageSource.StartsWith($"{this.TilesheetsPath}/_default/"))
+                                tilesheet.ImageSource = PathUtilities.NormalizeAssetName($"{this.FakeAssetPrefix}/{Path.GetFileNameWithoutExtension(tilesheet.ImageSource)}");
+                        }
+
+                        return map;
+                    },
+                    AssetLoadPriority.Exclusive
+                );
+            }
+
+            // load tilesheet
+            else if (e.NameWithoutLocale.StartsWith(this.FakeAssetPrefix))
+            {
+                e.LoadFrom(
+                    () =>
+                    {
+                        string filename = Path.GetFileName(e.NameWithoutLocale.Name)!;
+                        if (!Path.HasExtension(filename))
+                            filename += ".png";
+
+                        // get relative path to load
+                        string relativePath = new DirectoryInfo(this.GetFullPath(this.TilesheetsPath))
+                            .EnumerateDirectories()
+                            .FirstOrDefault(p => p.Name != "_default" && this.Helper.ModRegistry.IsLoaded(p.Name))
+                            ?.Name;
+                        relativePath = Path.Combine(this.TilesheetsPath, relativePath ?? "_default", filename);
+
+                        // load asset
+                        Texture2D tilesheet = this.Helper.ModContent.Load<Texture2D>(relativePath);
+                        return tilesheet;
+                    },
+                    AssetLoadPriority.Exclusive
+                );
+            }
+        }
+
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>

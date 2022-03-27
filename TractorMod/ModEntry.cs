@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.TractorMod
             this.TextureManager = new(
                 directoryPath: this.Helper.DirectoryPath,
                 publicAssetBasePath: this.PublicAssetBasePath,
-                contentHelper: helper.Content,
+                contentHelper: helper.ModContent,
                 monitor: this.Monitor
             );
             this.TractorManagerImpl = new(() =>
@@ -104,11 +104,9 @@ namespace Pathoschild.Stardew.TractorMod
             });
             this.UpdateConfig();
 
-            // hook assets
-            helper.Content.AssetLoaders.Add(this.TextureManager);
-
             // hook events
             IModEvents events = helper.Events;
+            events.Content.AssetRequested += this.OnAssetRequested;
             events.GameLoop.GameLaunched += this.OnGameLaunched;
             events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             events.GameLoop.DayStarted += this.OnDayStarted;
@@ -242,6 +240,14 @@ namespace Pathoschild.Stardew.TractorMod
                     }
                 }
             }
+        }
+
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        {
+            this.TextureManager.OnAssetRequested(e);
         }
 
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Buildings;
@@ -13,7 +14,7 @@ using StardewValley.Menus;
 namespace Pathoschild.Stardew.TractorMod.Framework
 {
     /// <summary>Manages textures loaded for the tractor and garage.</summary>
-    internal class TextureManager : IAssetLoader, IDisposable
+    internal class TextureManager : IDisposable
     {
         /*********
         ** Fields
@@ -25,7 +26,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private readonly string PublicAssetBasePath;
 
         /// <summary>The content helper from which to load assets.</summary>
-        private readonly IContentHelper ContentHelper;
+        private readonly IModContentHelper ContentHelper;
 
         /// <summary>The monitor with which to log errors.</summary>
         private readonly IMonitor Monitor;
@@ -52,7 +53,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="publicAssetBasePath">The base path for assets loaded through the game's content pipeline so other mods can edit them.</param>
         /// <param name="contentHelper">The content helper from which to load assets.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
-        public TextureManager(string directoryPath, string publicAssetBasePath, IContentHelper contentHelper, IMonitor monitor)
+        public TextureManager(string directoryPath, string publicAssetBasePath, IModContentHelper contentHelper, IMonitor monitor)
         {
             this.DirectoryPath = directoryPath;
             this.PublicAssetBasePath = publicAssetBasePath;
@@ -130,6 +131,28 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                 stable.texture = new Lazy<Texture2D>(() => this.GarageTexture);
         }
 
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="e">The event data.</param>
+        public void OnAssetRequested(AssetRequestedEventArgs e)
+        {
+            // Allow for garages from older versions that didn't get normalized correctly.
+            // This can be removed once support for legacy data is dropped.
+            if (e.NameWithoutLocale.IsEquivalentTo("Buildings/TractorGarage"))
+                e.LoadFrom(() => this.GarageTexture, AssetLoadPriority.Low);
+
+            // load tractor or garage texture
+            if (e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Tractor") || e.NameWithoutLocale.IsEquivalentTo($"{this.PublicAssetBasePath}/Garage"))
+            {
+                string key = PathUtilities.GetSegments(e.NameWithoutLocale.Name).Last();
+                e.LoadFrom(
+                    () => this.TryLoadFromFile(key, out Texture2D texture, out string error)
+                        ? texture
+                        : throw new InvalidOperationException(error),
+                    AssetLoadPriority.Exclusive
+                );
+            }
+        }
+
         /// <inheritdoc />
         public void Dispose()
         {
@@ -141,30 +164,6 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /*********
         ** Private methods
         *********/
-        /// <inheritdoc />
-        bool IAssetLoader.CanLoad<T>(IAssetInfo asset)
-        {
-            return
-                asset.AssetNameEquals("Buildings/TractorGarage")
-                || asset.AssetNameEquals($"{this.PublicAssetBasePath}/Tractor")
-                || asset.AssetNameEquals($"{this.PublicAssetBasePath}/Garage");
-        }
-
-        /// <inheritdoc />
-        T IAssetLoader.Load<T>(IAssetInfo asset)
-        {
-            // Allow for garages from older versions that didn't get normalized correctly.
-            // This can be removed once support for legacy data is dropped.
-            if (asset.AssetNameEquals($"Buildings/TractorGarage"))
-                return (T)(object)this.GarageTexture;
-
-            // load tractor or garage texture
-            string key = PathUtilities.GetSegments(asset.AssetName).Last();
-            return this.TryLoadFromFile(key, out Texture2D texture, out string error)
-                ? (T)(object)texture
-                : throw new InvalidOperationException(error);
-        }
-
         /// <summary>Try to load the asset for a texture from the game's content folder so other mods can apply edits.</summary>
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'Tractor' or 'Garage').</param>
         /// <param name="texture">The loaded texture, if found.</param>
