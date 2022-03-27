@@ -78,8 +78,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="reflection">Simplifies access to private code.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<IManagedTokenString> addWarps, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, string> normalizeAssetName)
+        /// <param name="parseAssetName">Parse an asset name.</param>
+        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<IManagedTokenString> addWarps, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, IReflectionHelper reflection, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -90,7 +90,7 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 contentPack: contentPack,
                 parentPatch: parentPatch,
-                normalizeAssetName: normalizeAssetName
+                parseAssetName: parseAssetName
             )
         {
             this.FromArea = fromArea;
@@ -136,7 +136,7 @@ namespace ContentPatcher.Framework.Patches
             // apply map area patch
             if (this.AppliesMapPatch)
             {
-                Map source = this.ContentPack.LoadAsset<Map>(this.FromAsset);
+                Map source = this.ContentPack.ModContent.Load<Map>(this.FromAsset);
                 if (!this.TryApplyMapPatch(source, targetAsset, out string error))
                     this.Monitor.Log($"{errorPrefix}: map patch couldn't be applied: {error}", LogLevel.Warn);
             }

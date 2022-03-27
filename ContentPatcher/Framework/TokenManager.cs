@@ -63,7 +63,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        public TokenManager(IContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
+        public TokenManager(IGameContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
         {
             this.InstalledMods = installedMods;
             this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
@@ -183,7 +183,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get the global value providers with which to initialize the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
-        private IEnumerable<IValueProvider> GetGlobalValueProviders(IContentHelper contentHelper, InvariantHashSet installedMods)
+        private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, InvariantHashSet installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
             var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);
@@ -275,14 +275,14 @@ namespace ContentPatcher.Framework
                 new AbsoluteFilePathValueProvider(contentPack.DirectoryPath),
                 new FirstValidFileValueProvider(contentPack.HasFile),
                 new HasFileValueProvider(contentPack.HasFile),
-                new InternalAssetKeyValueProvider(contentPack.GetActualAssetKey),
+                new InternalAssetKeyValueProvider(contentPack.ModContent.GetInternalAssetName),
                 new TranslationValueProvider(contentPack.Translation)
             };
         }
 
         /// <summary>Get the current language code.</summary>
         /// <param name="contentHelper">The content helper from which to get the locale.</param>
-        private IEnumerable<string> GetLanguage(IContentHelper contentHelper)
+        private IEnumerable<string> GetLanguage(IGameContentHelper contentHelper)
         {
             // get vanilla language
             LocalizedContentManager.LanguageCode language = contentHelper.CurrentLocaleConstant;

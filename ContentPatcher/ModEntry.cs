@@ -102,7 +102,7 @@ namespace ContentPatcher
             this.ScreenManager = new(this.CreateScreenManager);
 
             helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            LocalizedContentManager.OnLanguageChange += this.OnLocaleChanged;
+            helper.Events.Content.LocaleChanged += this.OnLocaleChanged;
         }
 
         /// <summary>Get an API that other mods can access. This is always called after <see cref="Entry"/>.</summary>
@@ -136,7 +136,7 @@ namespace ContentPatcher
                 if (this.Keys.ToggleDebug.JustPressed())
                 {
                     if (this.DebugOverlay.Value == null)
-                        this.DebugOverlay.Value = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.Content, this.Helper.Reflection);
+                        this.DebugOverlay.Value = new DebugOverlay(this.Helper.Events, this.Helper.Input, this.Helper.GameContent, this.Helper.Reflection);
                     else
                     {
                         this.DebugOverlay.Value.Dispose();
@@ -153,6 +153,14 @@ namespace ContentPatcher
                         this.DebugOverlay.Value.NextTexture();
                 }
             }
+        }
+
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        {
+            this.ScreenManager.Value.OnAssetRequested(e);
         }
 
         /// <inheritdoc cref="ISpecializedEvents.LoadStageChanged"/>
@@ -213,9 +221,10 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnUpdateTicked();
         }
 
-        /// <summary>Raised after the game language is changed, and after SMAPI handles the change.</summary>
-        /// <param name="code">The new language code.</param>
-        private void OnLocaleChanged(LocalizedContentManager.LanguageCode code)
+        /// <inheritdoc cref="IContentEvents.LocaleChanged"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnLocaleChanged(object sender, LocaleChangedEventArgs e)
         {
             if (!this.IsFirstTick)
                 this.ScreenManager.Value.OnLocaleChanged();
@@ -246,14 +255,10 @@ namespace ContentPatcher
             // load screen manager
             this.InitializeScreenManagerIfNeeded();
 
-            // register asset interceptor
-            var interceptor = new AssetInterceptor(this.ScreenManager);
-            helper.Content.AssetLoaders.Add(interceptor);
-            helper.Content.AssetEditors.Add(interceptor);
-
             // set up events
             if (this.Config.EnableDebugFeatures)
                 helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
+            helper.Events.Content.AssetRequested += this.OnAssetRequested;
             helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
             helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
@@ -264,7 +269,7 @@ namespace ContentPatcher
             this.CommandHandler = new CommandHandler(
                 screenManager: this.ScreenManager,
                 monitor: this.Monitor,
-                contentHelper: this.Helper.Content,
+                contentHelper: this.Helper.GameContent,
                 contentPacks: this.ContentPacks,
                 getContext: modID => modID == null ? this.ScreenManager.Value.TokenManager : this.ScreenManager.Value.TokenManager.GetContextFor(modID),
                 updateContext: () => this.ScreenManager.Value.UpdateContext(ContextUpdateType.All)

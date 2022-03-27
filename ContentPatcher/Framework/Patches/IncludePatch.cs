@@ -49,10 +49,10 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="patchLoader">Handles loading and unloading patches for content packs.</param>
-        public IncludePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName, IMonitor monitor, PatchLoader patchLoader)
+        public IncludePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, IAssetName> parseAssetName, IMonitor monitor, PatchLoader patchLoader)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -63,7 +63,7 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 parentPatch: parentPatch,
                 contentPack: contentPack.ContentPack,
-                normalizeAssetName: normalizeAssetName
+                parseAssetName: parseAssetName
             )
         {
             this.RawContentPack = contentPack;
@@ -121,7 +121,7 @@ namespace ContentPatcher.Framework.Patches
                     }
 
                     // load raw file
-                    var content = this.ContentPack.LoadAsset<ContentConfig>(this.FromAsset);
+                    var content = this.ContentPack.ModContent.Load<ContentConfig>(this.FromAsset);
                     if (!content.Changes.Any())
                     {
                         this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?", LogLevel.Warn);

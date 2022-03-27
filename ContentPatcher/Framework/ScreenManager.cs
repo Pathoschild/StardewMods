@@ -11,6 +11,7 @@ using ContentPatcher.Framework.Validators;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Enums;
+using StardewModdingAPI.Events;
 using StardewValley;
 
 namespace ContentPatcher.Framework
@@ -67,10 +68,10 @@ namespace ContentPatcher.Framework
         {
             this.Helper = helper;
             this.Monitor = monitor;
-            this.TokenManager = new TokenManager(helper.Content, installedMods, modTokens);
+            this.TokenManager = new TokenManager(helper.GameContent, installedMods, modTokens);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
-            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, helper.Reflection, installedMods, helper.Content.NormalizeAssetName);
-            this.CustomLocationManager = new CustomLocationManager(this.Monitor);
+            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, helper.Reflection, installedMods, helper.GameContent.ParseAssetName);
+            this.CustomLocationManager = new CustomLocationManager(this.Monitor, helper.GameContent);
         }
 
         /// <summary>Initialize the mod and content packs.</summary>
@@ -91,6 +92,14 @@ namespace ContentPatcher.Framework
 
             // set initial context once patches + dynamic tokens + custom tokens are loaded
             this.UpdateContext(ContextUpdateType.All);
+        }
+
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="e">The event data.</param>
+        public void OnAssetRequested(AssetRequestedEventArgs e)
+        {
+            this.PatchManager.OnAssetRequested(e);
+            this.CustomLocationManager.OnAssetRequested(e);
         }
 
         /// <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs.</summary>
@@ -188,7 +197,7 @@ namespace ContentPatcher.Framework
         public void UpdateContext(ContextUpdateType updateType)
         {
             this.TokenManager.UpdateContext(out InvariantHashSet changedGlobalTokens);
-            this.PatchManager.UpdateContext(this.Helper.Content, changedGlobalTokens, updateType);
+            this.PatchManager.UpdateContext(this.Helper.GameContent, changedGlobalTokens, updateType);
         }
 
 

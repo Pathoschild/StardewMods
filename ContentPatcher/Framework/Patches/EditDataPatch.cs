@@ -87,9 +87,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 contentPack: contentPack,
                 parentPatch: parentPatch,
-                normalizeAssetName: normalizeAssetName,
+                parseAssetName: parseAssetName,
                 fromAsset: fromFile
             )
         {
@@ -558,7 +558,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset being edited.</param>
         private char GetStringFieldDelimiter(IAssetInfo asset)
         {
-            return asset.AssetNameEquals("Data/Achievements")
+            return asset.Name.IsEquivalentTo("Data/Achievements", useBaseName: true)
                 ? '^'
                 : '/';
         }

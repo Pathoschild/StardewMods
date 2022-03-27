@@ -34,7 +34,7 @@ namespace ContentPatcher.Framework.Patches
         ITokenString RawFromAsset { get; }
 
         /// <summary>The normalized asset name to intercept.</summary>
-        string TargetAsset { get; }
+        IAssetName TargetAsset { get; }
 
         /// <summary>The raw asset name to intercept, including tokens.</summary>
         ITokenString RawTargetAsset { get; }
@@ -60,9 +60,9 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Load the initial version of the asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="asset">The asset to load.</param>
+        /// <param name="assetName">The asset name to load.</param>
         /// <exception cref="System.NotSupportedException">The current patch type doesn't support loading assets.</exception>
-        T Load<T>(IAssetInfo asset);
+        T Load<T>(IAssetName assetName);
 
         /// <summary>Apply the patch to a loaded asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>

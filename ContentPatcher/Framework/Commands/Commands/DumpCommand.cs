@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -62,13 +63,13 @@ namespace ContentPatcher.Framework.Commands.Commands
                         StringBuilder str = new();
                         str.AppendLine("Here are the active patches grouped by their current target value. Within each group, patches are listed in the expected apply order and the checkbox indicates whether each patch is currently applied. See `patch summary` for more info about each patch, including reasons it may not be applied.");
 
-                        foreach (var group in patchManager.GetPatchesByTarget().OrderByHuman(p => p.Key))
+                        foreach ((IAssetName assetName, IEnumerable<IPatch> list) in patchManager.GetPatchesByTarget().OrderByHuman(p => p.Key.Name))
                         {
                             str.AppendLine();
-                            str.AppendLine(group.Key);
-                            str.AppendLine("".PadRight(group.Key.Length, '-'));
+                            str.AppendLine(assetName.Name);
+                            str.AppendLine("".PadRight(assetName.Name.Length, '-'));
 
-                            var patches = group.Value
+                            var patches = list
                                 .OrderByDescending(p => p.Type == PatchType.Load)
                                 .ThenBy(p => p, PatchIndexComparer.Instance);
 

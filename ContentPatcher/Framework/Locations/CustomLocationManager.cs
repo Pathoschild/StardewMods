@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.ConfigModels;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using xTile;
 
@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Locations
     [SuppressMessage("ReSharper", "CommentTypo", Justification = "'TMXL' is not a typo.")]
     [SuppressMessage("ReSharper", "IdentifierTypo", Justification = "'TMXL' is not a typo.")]
     [SuppressMessage("ReSharper", "StringLiteralTypo", Justification = "'TMXL' is not a typo.")]
-    internal class CustomLocationManager : IAssetLoader
+    internal class CustomLocationManager
     {
         /*********
         ** Fields
@@ -27,10 +27,13 @@ namespace ContentPatcher.Framework.Locations
         private readonly List<CustomLocationData> CustomLocations = new();
 
         /// <summary>The enabled locations indexed by their normalized map path.</summary>
-        private readonly InvariantDictionary<CustomLocationData> CustomLocationsByMapPath = new();
+        private readonly Dictionary<IAssetName, CustomLocationData> CustomLocationsByMapPath = new();
 
         /// <summary>Encapsulates monitoring and logging.</summary>
         private readonly IMonitor Monitor;
+
+        /// <summary>The content API with which to parse asset keys.</summary>
+        private readonly IGameContentHelper ContentHelper;
 
 
         /*********
@@ -38,9 +41,11 @@ namespace ContentPatcher.Framework.Locations
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        public CustomLocationManager(IMonitor monitor)
+        /// <param name="contentHelper">The content API with which to parse asset keys.</param>
+        public CustomLocationManager(IMonitor monitor, IGameContentHelper contentHelper)
         {
             this.Monitor = monitor;
+            this.ContentHelper = contentHelper;
         }
 
         /// <summary>Parse a raw custom location model, and validate that it's valid.</summary>
@@ -55,7 +60,7 @@ namespace ContentPatcher.Framework.Locations
 
             this.CustomLocations.Add(parsed);
             if (parsed.IsEnabled)
-                this.CustomLocationsByMapPath[parsed.PublicMapPath] = parsed;
+                this.CustomLocationsByMapPath[this.ContentHelper.ParseAssetName(parsed.PublicMapPath)] = parsed;
 
             return true;
         }
@@ -135,25 +140,26 @@ namespace ContentPatcher.Framework.Locations
             }
         }
 
-        /// <inheritdoc />
-        public bool CanLoad<T>(IAssetInfo asset)
+        /// <inheritdoc cref="IContentEvents.AssetRequested"/>
+        /// <param name="e">The event data.</param>
+        public void OnAssetRequested(AssetRequestedEventArgs e)
         {
-            return this.CustomLocationsByMapPath.ContainsKey(asset.AssetName);
-        }
+            IAssetName assetName = e.NameWithoutLocale;
 
-        /// <inheritdoc />
-        public T Load<T>(IAssetInfo asset)
-        {
             // not a handled map
-            if (!this.CustomLocationsByMapPath.TryGetValue(asset.AssetName, out CustomLocationData location))
-                throw new InvalidOperationException($"Unexpected asset name '{asset.AssetName}'.");
+            if (!this.CustomLocationsByMapPath.TryGetValue(assetName, out CustomLocationData location))
+                return;
 
             // invalid type
-            if (!typeof(Map).IsAssignableFrom(typeof(T)))
-                throw new InvalidOperationException($"Unexpected attempt to load asset '{asset.AssetName}' as a {typeof(T)} asset instead of {typeof(Map)}.");
+            if (!typeof(Map).IsAssignableFrom(e.DataType))
+                throw new InvalidOperationException($"Unexpected attempt to load asset '{assetName}' as a {e.DataType} asset instead of {typeof(Map)}.");
 
             // load asset
-            return location.ContentPack.LoadAsset<T>(location.FromMapFile);
+            e.LoadFrom(
+                load: () => location.ContentPack.ModContent.Load<Map>(location.FromMapFile),
+                priority: AssetLoadPriority.Exclusive,
+                onBehalfOf: location.ContentPack.Manifest.UniqueID
+            );
         }
 
         /// <summary>Get the defined custom locations.</summary>

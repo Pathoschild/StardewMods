@@ -20,8 +20,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="updateRate">When the patch should be updated.</param>
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, string> normalizeAssetName)
+        /// <param name="parseAssetName">Parse an asset name.</param>
+        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -31,15 +31,15 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 contentPack: contentPack,
                 parentPatch: parentPatch,
-                normalizeAssetName: normalizeAssetName,
+                parseAssetName: parseAssetName,
                 fromAsset: localAsset
             )
         { }
 
         /// <inheritdoc />
-        public override T Load<T>(IAssetInfo asset)
+        public override T Load<T>(IAssetName assetName)
         {
-            return this.ContentPack.LoadAsset<T>(this.FromAsset);
+            return this.ContentPack.ModContent.Load<T>(this.FromAsset);
         }
 
         /// <inheritdoc />
