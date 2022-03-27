@@ -75,7 +75,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         *********/
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
@@ -91,7 +91,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // validate game version
@@ -113,7 +113,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnRenderedHud(object sender, RenderedHudEventArgs e)
         {
             // show chest label
@@ -130,7 +130,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicking"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
         {
             this.ChangeOverlayIfNeeded();
@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             this.ChangeOverlayIfNeeded();

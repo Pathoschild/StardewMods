@@ -125,7 +125,7 @@ namespace ContentPatcher
         /****
         ** Event handlers
         ****/
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -155,7 +155,7 @@ namespace ContentPatcher
             }
         }
 
-        /// <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs.</summary>
+        /// <inheritdoc cref="ISpecializedEvents.LoadStageChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnLoadStageChanged(object sender, LoadStageChangedEventArgs e)
@@ -163,7 +163,7 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnLoadStageChanged(e.OldStage, e.NewStage);
         }
 
-        /// <summary>The method invoked when a new day starts.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -171,7 +171,7 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnDayStarted();
         }
 
-        /// <summary>The method invoked when the in-game clock changes.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.TimeChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
@@ -179,7 +179,7 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnTimeChanged();
         }
 
-        /// <summary>The method invoked when the player warps.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
@@ -187,7 +187,7 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnWarped();
         }
 
-        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
@@ -195,7 +195,7 @@ namespace ContentPatcher
             this.ScreenManager.Value.OnReturnedToTitle();
         }
 
-        /// <summary>Raised after the game performs its overall update tick (≈60 times per second).</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)

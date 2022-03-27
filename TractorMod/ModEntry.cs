@@ -135,9 +135,9 @@ namespace Pathoschild.Stardew.TractorMod
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add to Farm Expansion carpenter menu
@@ -168,9 +168,9 @@ namespace Pathoschild.Stardew.TractorMod
             ).Register();
         }
 
-        /// <summary>The event called after a save slot is loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // load legacy data
@@ -196,9 +196,9 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called when a new day begins.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             if (!this.IsEnabled)
@@ -244,9 +244,9 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the location list changes.</summary>
+        /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
         {
             if (!this.IsEnabled)
@@ -263,9 +263,9 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the list of NPCs in a location changes.</summary>
+        /// <inheritdoc cref="IWorldEvents.NpcListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnNpcListChanged(object sender, NpcListChangedEventArgs e)
         {
             if (!this.IsEnabled)
@@ -287,9 +287,9 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the player warps into a new location.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
             if (!e.IsLocalPlayer || !this.TractorManager.IsCurrentPlayerRiding)
@@ -306,9 +306,9 @@ namespace Pathoschild.Stardew.TractorMod
                 Game1.player.mount.dismount();
         }
 
-        /// <summary>The event called when the game updates (roughly sixty times per second).</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!this.IsEnabled)
@@ -348,9 +348,9 @@ namespace Pathoschild.Stardew.TractorMod
                 this.TractorManager?.Update();
         }
 
-        /// <summary>The event called before the day ends.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
             if (!this.IsEnabled)
@@ -390,17 +390,17 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>The event called after the game saves.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.Saved"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaved(object sender, SavedEventArgs e)
         {
             Migrator.AfterSave();
         }
 
-        /// <summary>The event called after the game draws the world to the screen.</summary>
+        /// <inheritdoc cref="IDisplayEvents.RenderedWorld"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
         {
             if (!this.IsEnabled)
@@ -411,9 +411,9 @@ namespace Pathoschild.Stardew.TractorMod
                 this.TractorManager.DrawRadius(Game1.spriteBatch);
         }
 
-        /// <summary>The event called after an active menu is opened or closed.</summary>
+        /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             if (!this.IsEnabled || !Context.IsWorldReady)
@@ -444,7 +444,7 @@ namespace Pathoschild.Stardew.TractorMod
             }
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -458,9 +458,9 @@ namespace Pathoschild.Stardew.TractorMod
                 this.DismissTractor(Game1.player.mount);
         }
 
-        /// <summary>Raised after a mod message is received over the network.</summary>
+        /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
         {
             // tractor request from a farmhand

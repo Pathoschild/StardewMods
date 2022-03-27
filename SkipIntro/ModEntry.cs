@@ -47,9 +47,9 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
@@ -67,9 +67,9 @@ namespace Pathoschild.Stardew.SkipIntro
             ).Register();
         }
 
-        /// <summary>The method called when the player returns to the title screen.</summary>
+        /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
             if (Constants.TargetPlatform == GamePlatform.Android)
@@ -79,9 +79,9 @@ namespace Pathoschild.Stardew.SkipIntro
                 this.CurrentStage = Stage.SkipIntro;
         }
 
-        /// <summary>Receives an update tick.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             try

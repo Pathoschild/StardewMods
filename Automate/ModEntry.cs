@@ -126,7 +126,7 @@ namespace Pathoschild.Stardew.Automate
         ****/
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
@@ -147,7 +147,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // disable if secondary player
@@ -167,7 +167,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             // reset
@@ -176,9 +176,9 @@ namespace Pathoschild.Stardew.Automate
             this.DisableOverlay();
         }
 
-        /// <summary>The method invoked when the player warps to a new location.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
             if (e.IsLocalPlayer)
@@ -187,7 +187,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
@@ -210,7 +210,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.BuildingListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnBuildingListChanged(object sender, BuildingListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
@@ -225,7 +225,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.ObjectListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnObjectListChanged(object sender, ObjectListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
@@ -240,7 +240,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.TerrainFeatureListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnTerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
@@ -255,7 +255,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady || !this.EnableAutomation)
@@ -310,7 +310,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
         {
             // update automation if chest options changed

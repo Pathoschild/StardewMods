@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.DebugMode
         ****/
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
@@ -137,7 +137,7 @@ namespace Pathoschild.Stardew.DebugMode
 
         /// <inheritdoc cref="IDisplayEvents.Rendered"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         public void OnRendered(object sender, RenderedEventArgs e)
         {
             if (this.ShowOverlay.Value)

@@ -325,7 +325,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.ReinitializeComponents();
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         protected override void ReceiveButtonsChanged(object sender, ButtonsChangedEventArgs e)

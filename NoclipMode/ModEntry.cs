@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.NoclipMode
         /*********
         ** Private methods
         *********/
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)

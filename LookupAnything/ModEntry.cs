@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /****
         ** Event handlers
         ****/
-        /// <summary>The method invoked on the first update tick, once all mods are initialized.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -129,7 +129,7 @@ namespace Pathoschild.Stardew.LookupAnything
             ).Register();
         }
 
-        /// <summary>The method invoked when a new day starts.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -138,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything
             this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -175,7 +175,7 @@ namespace Pathoschild.Stardew.LookupAnything
             });
         }
 
-        /// <summary>The method invoked when the player closes a displayed menu.</summary>
+        /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
@@ -188,7 +188,7 @@ namespace Pathoschild.Stardew.LookupAnything
             });
         }
 
-        /// <summary>The method invoked when the interface is rendering.</summary>
+        /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnRenderedHud(object sender, RenderedHudEventArgs e)

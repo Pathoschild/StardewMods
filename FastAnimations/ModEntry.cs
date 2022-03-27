@@ -46,9 +46,9 @@ namespace Pathoschild.Stardew.FastAnimations
         /****
         ** Events
         ****/
-        /// <summary>The method invoked when the game is launched.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
@@ -71,9 +71,9 @@ namespace Pathoschild.Stardew.FastAnimations
             ).Register();
         }
 
-        /// <summary>The method invoked after the player loads a saved game.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // initialize handlers
@@ -81,9 +81,9 @@ namespace Pathoschild.Stardew.FastAnimations
                 handler.OnNewLocation(Game1.currentLocation);
         }
 
-        /// <summary>The method invoked after the player warps to a new location.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnWarped(object sender, WarpedEventArgs e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any() || !e.IsLocalPlayer)
@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.FastAnimations
                 handler.OnNewLocation(e.NewLocation);
         }
 
-        /// <summary>The method invoked when the player presses a keyboard button.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)

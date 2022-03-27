@@ -71,9 +71,9 @@ namespace Pathoschild.Stardew.TestMod
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked when the player presses a button.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void Input_ButtonPressed(object sender, ButtonPressedEventArgs e)
         {
             // print list of loaded assets

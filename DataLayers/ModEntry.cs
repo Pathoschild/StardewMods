@@ -71,18 +71,18 @@ namespace Pathoschild.Stardew.DataLayers
         /*********
         ** Private methods
         *********/
-        /// <summary>The method invoked on the first game update tick.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             // init mod integrations
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
         }
 
-        /// <summary>The method invoked when the save is loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
             // init layers
@@ -132,9 +132,9 @@ namespace Pathoschild.Stardew.DataLayers
                 yield return new GridLayer(layers.TileGrid);
         }
 
-        /// <summary>The method invoked when the player returns to the title screen.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
             this.CurrentOverlay.Value?.Dispose();
@@ -142,7 +142,7 @@ namespace Pathoschild.Stardew.DataLayers
             this.Layers = null;
         }
 
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
         private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
@@ -206,9 +206,9 @@ namespace Pathoschild.Stardew.DataLayers
             });
         }
 
-        /// <summary>Receive an update tick.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
+        /// <param name="e">The event data.</param>
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             var overlay = this.CurrentOverlay.Value;
