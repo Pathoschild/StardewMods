@@ -11,6 +11,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 -->
 ## Upcoming release
 * Added support for [config UI sections](author-guide/config.md#display-options) (thanks to Shockah!).
+* Updated for the upcoming SMAPI 4.0.0.
 * Fixed content packs reloaded unnecessarily on startup.
 
 ## 1.25.0

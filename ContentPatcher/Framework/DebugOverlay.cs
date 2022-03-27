@@ -100,7 +100,7 @@ namespace ContentPatcher.Framework
             IList<string> textureKeys = new List<string>();
             contentHelper.InvalidateCache(asset =>
             {
-                if (typeof(Texture2D).IsAssignableFrom(asset.DataType) && !asset.AssetName.Contains("..") && !asset.AssetName.StartsWith(StardewModdingAPI.Constants.ExecutionPath))
+                if (typeof(Texture2D).IsAssignableFrom(asset.DataType) && !asset.AssetName.Contains("..") && !asset.AssetName.StartsWith(StardewModdingAPI.Constants.GamePath))
                     textureKeys.Add(asset.AssetName);
                 return false;
             });

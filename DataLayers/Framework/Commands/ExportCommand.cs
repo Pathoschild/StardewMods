@@ -79,8 +79,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
 
             // init export path
             string exportName = $"{DateTime.UtcNow:yyyy-MM-dd'T'HHmmss} {layer.Name} @ {Game1.currentLocation.Name}";
-            string fullTargetPath = Path.Combine(Constants.ExecutionPath, "layer-export", string.Join("_", exportName.Split(Path.GetInvalidFileNameChars())) + ".json");
-            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath));
+            string fullTargetPath = Path.Combine(Constants.GamePath, "layer-export", string.Join("_", exportName.Split(Path.GetInvalidFileNameChars())) + ".json");
+            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export
             File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(export, Formatting.Indented));
