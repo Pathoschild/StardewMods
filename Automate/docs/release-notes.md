@@ -3,6 +3,7 @@
 # Release notes
 ## Upcoming release
 * Added option to toggle whether Automate is enabled through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
+* Fixed saving machine overrides through Generic Mod Config Menu.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian) and Pedrowser (added Portuguese)!
 
 ## 1.25.3

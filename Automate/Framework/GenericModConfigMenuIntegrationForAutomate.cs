@@ -212,7 +212,6 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Get the default override for a mod, if any.</summary>
-        /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
         public ModConfigMachine GetDefaultOverride(string name)
         {
@@ -240,15 +239,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the custom override for a mod, if any.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
+        /// <param name="enabled">Whether to set the machine to enabled.</param>
         public void SetCustomOverride(ModConfig config, string name, bool enabled)
         {
+            // get updated settings
             ModConfigMachine options = this.GetCustomOverride(config, name) ?? new ModConfigMachine { Enabled = enabled };
-            ModConfigMachine defaults = this.GetDefaultOverride(name);
+            options.Enabled = enabled;
 
+            // check if it matches the default
+            ModConfigMachine defaults = this.GetDefaultOverride(name);
             bool isDefault = defaults != null
                 ? options.Enabled == defaults.Enabled && options.Priority == defaults.Priority
                 : !options.GetCustomSettings().Any();
 
+            // apply
             if (isDefault)
                 config.MachineOverrides.Remove(name);
             else
