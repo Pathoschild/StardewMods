@@ -39,7 +39,6 @@ An `Include` patch consists of a model under `Changes` (see examples below) with
 field     | purpose
 --------- | -------
 `Action`  | The kind of change to make. Set to `Include` for this action type.
-`Target`  | The [game asset name](../author-guide.md#what-is-an-asset) to replace (or multiple comma-delimited asset names), like `Portraits/Abigail`. This field supports [tokens](../author-guide.md#tokens), and capitalisation doesn't matter.
 `FromFile` | The relative path to the `.json` file containing patches in your content pack folder, or multiple comma-delimited paths to load. This path is always relative from your `content.json` (even when an include file includes another file).
 
 </td>
