@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -326,9 +327,22 @@ namespace ContentPatcher.Framework.Patches
         {
             try
             {
-                return string.IsNullOrWhiteSpace(path)
-                    ? null
-                    : PathUtilities.NormalizePath(path);
+                // ignore empty paths
+                if (string.IsNullOrWhiteSpace(path))
+                    return null;
+
+                // normalize format
+                string newPath = PathUtilities.NormalizePath(path);
+
+                // add .xnb extension if needed (it's stripped from asset names)
+                string fullPath = this.ContentPack.GetFullPath(newPath);
+                if (!File.Exists(fullPath))
+                {
+                    if (File.Exists($"{fullPath}.xnb"))
+                        newPath += ".xnb";
+                }
+
+                return newPath;
             }
             catch (Exception ex)
             {
