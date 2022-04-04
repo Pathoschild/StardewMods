@@ -46,8 +46,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /*********
         ** Public methods
         *********/
-        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
-        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
             // initialize
@@ -67,6 +66,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // validate translations
             if (!helper.Translation.GetTranslations().Any())
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
+        }
+
+        /// <inheritdoc />
+        public override object GetApi()
+        {
+            return new ChestsAnywhereApi(() => this.CurrentOverlay.Value);
         }
 
 

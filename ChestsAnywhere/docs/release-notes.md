@@ -1,6 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## Upcoming release
+* Added [mod-provided API to get overlay info](README.md#mod-integrations).
+
 ## 1.21.3
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 
