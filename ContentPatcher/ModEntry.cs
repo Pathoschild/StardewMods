@@ -252,9 +252,6 @@ namespace ContentPatcher
                     this.Monitor.Log($"{group.ModName} added {(group.TokenNames.Length == 1 ? "a custom token" : $"{group.TokenNames.Length} custom tokens")} with prefix '{group.ModPrefix}': {string.Join(", ", group.TokenNames)}.");
             }
 
-            // load screen manager
-            this.InitializeScreenManagerIfNeeded();
-
             // set up events
             if (this.Config.EnableDebugFeatures)
                 helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
@@ -264,6 +261,9 @@ namespace ContentPatcher
             helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             helper.Events.Player.Warped += this.OnWarped;
             helper.Events.Specialized.LoadStageChanged += this.OnLoadStageChanged;
+
+            // load screen manager
+            this.InitializeScreenManagerIfNeeded();
 
             // set up commands
             this.CommandHandler = new CommandHandler(
