@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // get output
                 var inputStack = consumable.Take();
-                this.Machine.heldObject.Value = recipe.Output(inputStack);
+                this.Machine.heldObject.Value = (SObject)recipe.Output(inputStack);
                 this.Machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }

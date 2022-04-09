@@ -53,14 +53,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             {
                 // get output
                 var inputStack = consumable.Take();
-                SObject output = recipe.Output(inputStack);
+                Item output = recipe.Output(inputStack);
                 if (consumable.Sample is SObject sampleInput)
                 {
                     if (Game1.random.NextDouble() <= this.GetProbabilityOfDoubleOutput(sampleInput.Quality))
                         output.Stack = 2;
                 }
 
-                machine.heldObject.Value = output;
+                machine.heldObject.Value = (SObject)output;
                 machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }
