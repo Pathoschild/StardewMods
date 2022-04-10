@@ -9,9 +9,9 @@ automatically pull raw items from the chest and push processed items into it.
   * [Examples](#examples)
 * [Automation techniques](#automation-techniques)
   * [Connectors](#connectors)
-  * [Machine pipelines](#machine-pipelines)
-  * [Machine priority](#machine-priority)
   * [Junimo chests](#junimo-chests)
+  * [Machine priority](#machine-priority)
+  * [Machine pipelines](#machine-pipelines)
 * [Configure](#configure)
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
@@ -137,6 +137,47 @@ together. For example, here are wooden paths used as connectors:
 Workbenches are the only connectors by default. You can edit the `config.json` to add connectors
 (see _[configure](#configure)_ below).
 
+### Junimo chests
+Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
+is part of a global machine group. This global group behaves just like a regular machine group
+(including for [machine priority](#machine-priority)), even if it's spread across many locations.
+
+For example, you can use this to distribute automation across the world:
+
+1. Junimo huts on your farm collect crops;
+2. kegs in a shed turn them into juice/wine;
+3. cellar casks age the juice/wine;
+4. the shipping bin collects the final output.
+
+Caveats:
+* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
+  chests are always automated if at least one is connected to a machine.
+ 
+  They have the highest priority for machine input, and the lowest priority for machine output.
+  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
+  still available to all machines in the global group either way.)
+
+### Machine priority
+The default order that machines are processed is unpredictable and subject to change, except that
+shipping bins are processed last by default.
+
+For example, let's say you have this machine setup and you place two tomatoes in the chest:
+```
+┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+│  chest   ││   keg    ││   keg    ││ shipping ││ preserves│
+│          ││          ││          ││   bin    ││   jar    │
+└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+```
+
+By default, all of the tomatoes will go into the kegs or preserves jar (since the shipping bin has
+a lower priority), but you won't know which ones will get them first. You can [change per-machine
+settings](#per-machine-settings) to set the priority for individual machine types and make them
+predictable.
+
+Note that if all higher-priority machines are busy, any remaining items may go into lower-priority
+machines.
+
+
 ### Machine pipelines
 A _pipeline_ is the directional flow of items along a set of machines. For example, milk in the
 chest gets processed in the cheese presses, then aged in the casks, then shipped:
@@ -170,46 +211,6 @@ are all busy. There are two common solutions:
 * Leave a space between the shipping bin and other machines, so it's not connected. When you're
   ready to ship all the output, put down a [path connector](#connectors) temporarily so it pulls
   all the available items.
-
-### Machine priority
-The default order that machines are processed is unpredictable and subject to change, except that
-shipping bins are processed last by default.
-
-For example, let's say you have this machine setup and you place two tomatoes in the chest:
-```
-┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
-│  chest   ││   keg    ││   keg    ││ shipping ││ preserves│
-│          ││          ││          ││   bin    ││   jar    │
-└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
-```
-
-By default, all of the tomatoes will go into the kegs or preserves jar (since the shipping bin has
-a lower priority), but you won't know which ones will get them first. You can [change per-machine
-settings](#per-machine-settings) to set the priority for individual machine types and make them
-predictable.
-
-Note that if all higher-priority machines are busy, any remaining items may go into lower-priority
-machines.
-
-### Junimo chests
-Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
-is part of a global machine group. This global group behaves just like a regular machine group
-(including for [machine priority](#machine-priority)), even if it's spread across many locations.
-
-For example, you can use this to distribute automation across the world:
-
-1. Junimo huts on your farm collect crops;
-2. kegs in a shed turn them into juice/wine;
-3. cellar casks age the juice/wine;
-4. the shipping bin collects the final output.
-
-Caveats:
-* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
-  chests are always automated if at least one is connected to a machine.
- 
-  They have the highest priority for machine input, and the lowest priority for machine output.
-  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
-  still available to all machines in the global group either way.)
 
 ## Configure
 ### In-game settings
