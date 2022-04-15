@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Pathoschild.Stardew.Common.Utilities
@@ -21,6 +22,7 @@ namespace Pathoschild.Stardew.Common.Utilities
 
         /// <summary>Get a hash code for the specified object.</summary>
         /// <param name="obj">The value.</param>
+        [SuppressMessage("MicrosoftCodeAnalysisCorrectness", "RS1024:Compare symbols correctly", Justification = "Comparing by object reference is intended.")]
         public int GetHashCode(T obj)
         {
             return RuntimeHelpers.GetHashCode(obj);
