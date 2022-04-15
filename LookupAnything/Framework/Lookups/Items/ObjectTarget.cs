@@ -66,7 +66,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             // get object info
             SObject obj = this.Value;
-            Rectangle boundingBox = obj.getBoundingBox(this.GetTile());
+            Rectangle boundingBox = obj.getBoundingBox(this.Tile);
 
             // get sprite area
             if (this.CustomSprite != null)

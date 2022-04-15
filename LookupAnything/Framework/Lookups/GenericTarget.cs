@@ -35,15 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /*********
         ** Public methods
         *********/
-        /// <summary>Get the target's tile position, or throw an exception if it doesn't have one.</summary>
-        /// <exception cref="InvalidOperationException">The target doesn't have a tile position.</exception>
-        public Vector2 GetTile()
-        {
-            if (this.Tile == null)
-                throw new InvalidOperationException($"This {this.Type} target doesn't have a tile position.");
-            return this.Tile;
-        }
-
         /// <summary>Get a strongly-typed instance.</summary>
         /// <typeparam name="T">The expected value type.</typeparam>
         public T GetValue<T>()
@@ -57,7 +48,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public virtual Rectangle GetWorldArea()
         {
-            return this.GameHelper.GetScreenCoordinatesFromTile(this.GetTile());
+            return this.GameHelper.GetScreenCoordinatesFromTile(this.Tile);
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>

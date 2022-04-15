@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (tree.growthStage.Value < 4)
             {
                 // apply crazy offset logic for growing fruit trees
-                Vector2 tile = this.GetTile();
+                Vector2 tile = this.Tile;
                 Vector2 offset = new Vector2((float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)), (float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)));
                 Vector2 centerBottom = new Vector2(tile.X * Game1.tileSize + Game1.tileSize / 2 + offset.X, tile.Y * Game1.tileSize - sprite.Height + Game1.tileSize * 2 + offset.Y) - new Vector2(Game1.uiViewport.X, Game1.uiViewport.Y);
                 x = (int)centerBottom.X - width / 2;
