@@ -4,8 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "主要选项",
-    "config.enabled.name": "Enabled", // TODO
-    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.enabled.name": "启用",
+    "config.enabled.desc": "是否启用自动化功能。如果禁用此选项，则不会自动运行任何机器，热键也不能使用",
     "config.junimo-huts-output-gems.name": "祝尼魔小屋输出宝石",
     "config.junimo-huts-output-gems.desc": "是否将宝石从祝尼魔小屋中拉出。 如果设置为true，你将无法通过在祝尼魔小屋中放置宝石来改变祝尼魔的颜色。",
     "config.automation-interval.name": "自动化间隔",
