@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework
             this.Monitor = monitor;
             this.TokenManager = new TokenManager(helper.GameContent, installedMods, modTokens);
             this.PatchManager = new PatchManager(this.Monitor, this.TokenManager, assetValidators);
-            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, helper.Reflection, installedMods, helper.GameContent.ParseAssetName);
+            this.PatchLoader = new PatchLoader(this.PatchManager, this.TokenManager, this.Monitor, installedMods, helper.GameContent.ParseAssetName);
             this.CustomLocationManager = new CustomLocationManager(this.Monitor, helper.GameContent);
         }
 
