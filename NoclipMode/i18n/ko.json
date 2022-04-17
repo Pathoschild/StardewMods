@@ -1,4 +1,22 @@
 ﻿{
+    /*********
+    ** In-game messages
+    *********/
     "enabled-message": "클립 없음 모드가 활성화되었습니다, {{button}} 를 다시 눌러 끕니다.",
-    "disabled-message": "클립 없음 모드가 비활성화됩니다, {{button}} 를 다시 눌러 켭니다."
+    "disabled-message": "클립 없음 모드가 비활성화됩니다, {{button}} 를 다시 눌러 켭니다.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // TODO
+    "config.title.general-options": "General options",
+    "config.enabled-message.name": "Show enabled message",
+    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
+    "config.disabled-message.name": "Show disabled message",
+    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+
+    "config.title.controls": "Controls",
+    "config.toggle-key.name": "Toggle key",
+    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
 }
