@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using System.Reflection;
 using Microsoft.Xna.Framework;

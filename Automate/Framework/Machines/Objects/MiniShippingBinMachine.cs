@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Machines.Buildings;
 using Pathoschild.Stardew.Automate.Framework.Storage;

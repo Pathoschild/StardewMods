@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.ChestsAnywhere
 {
     /// <summary>The Chests Anywhere API which other mods can access.</summary>

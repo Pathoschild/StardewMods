@@ -1,4 +1,6 @@
-﻿using Pathoschild.Stardew.LookupAnything.Framework.Constants;
+#nullable disable
+
+using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {

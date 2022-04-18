@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.Automate
 {
     /// <summary>A machine that accepts input and provides output.</summary>

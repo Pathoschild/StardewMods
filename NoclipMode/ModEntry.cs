@@ -1,3 +1,5 @@
+#nullable disable
+
 using Pathoschild.Stardew.NoclipMode.Framework;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

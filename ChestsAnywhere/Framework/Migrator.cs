@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Text.RegularExpressions;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;

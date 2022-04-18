@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>A loot entry parsed from the game data.</summary>

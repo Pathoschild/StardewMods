@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Patches

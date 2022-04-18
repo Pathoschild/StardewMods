@@ -1,3 +1,5 @@
+#nullable disable
+
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 

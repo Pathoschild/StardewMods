@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;

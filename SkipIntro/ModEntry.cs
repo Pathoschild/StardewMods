@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;

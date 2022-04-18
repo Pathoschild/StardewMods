@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.TractorMod.Framework.Config;

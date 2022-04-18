@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using System.Linq;
 using Pathoschild.Stardew.Common.Commands;

@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;

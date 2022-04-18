@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewModdingAPI.Utilities;
 
 namespace Pathoschild.Stardew.DataLayers.Framework

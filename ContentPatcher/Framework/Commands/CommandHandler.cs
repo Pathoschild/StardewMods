@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using ContentPatcher.Framework.Commands.Commands;
 using ContentPatcher.Framework.Tokens;

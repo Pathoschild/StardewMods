@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewValley;
 using StardewValley.Buildings;
 using SObject = StardewValley.Object;

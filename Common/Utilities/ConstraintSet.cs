@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Collections.Generic;
 
 namespace Pathoschild.Stardew.Common.Utilities

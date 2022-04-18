@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
     /// <summary>A floor to support by name in configuration.</summary>

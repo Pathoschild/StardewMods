@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
     /// <summary>The tile types to let the player till, beyond those normally allowed by the game.</summary>

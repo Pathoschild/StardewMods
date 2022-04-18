@@ -1,3 +1,5 @@
+#nullable disable
+
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 using StardewValley;
 

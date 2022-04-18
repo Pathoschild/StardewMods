@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.DataLayers.Framework
 {
     /// <summary>The parsed mod configuration.</summary>

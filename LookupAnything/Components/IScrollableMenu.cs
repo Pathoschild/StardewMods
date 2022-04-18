@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.LookupAnything.Components
 {
     /// <summary>A Lookup Anything menu which supports scrolling.</summary>

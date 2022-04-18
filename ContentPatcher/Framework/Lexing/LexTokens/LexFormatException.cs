@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 
 namespace ContentPatcher.Framework.Lexing.LexTokens

@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework

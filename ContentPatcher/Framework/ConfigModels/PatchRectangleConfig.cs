@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace ContentPatcher.Framework.ConfigModels
 {
     /// <summary>The input settings for a Rectangle field in <see cref="PatchConfig"/>.</summary>

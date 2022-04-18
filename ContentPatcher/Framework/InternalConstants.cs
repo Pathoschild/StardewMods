@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;

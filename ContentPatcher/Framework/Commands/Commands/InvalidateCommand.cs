@@ -1,3 +1,5 @@
+#nullable disable
+
 using Pathoschild.Stardew.Common.Commands;
 using StardewModdingAPI;
 

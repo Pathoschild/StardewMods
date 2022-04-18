@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Metadata for a machine's recipes.</summary>

@@ -1,4 +1,6 @@
-﻿using StardewValley;
+#nullable disable
+
+using StardewValley;
 
 namespace Pathoschild.Stardew.FastAnimations.Framework
 {

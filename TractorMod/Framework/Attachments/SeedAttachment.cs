@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;

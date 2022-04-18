@@ -1,3 +1,5 @@
+#nullable disable
+
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Fields

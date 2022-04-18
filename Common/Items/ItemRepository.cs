@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -362,7 +364,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
         /// <summary>Get valid shirt IDs.</summary>
         /// <remarks>
-        /// Shirts have a possible range of 1000–1999, but not all of those IDs are valid. There are two sets of IDs:
+        /// Shirts have a possible range of 1000ï¿½1999, but not all of those IDs are valid. There are two sets of IDs:
         ///
         /// <list type="number">
         ///   <item>
@@ -372,8 +374,8 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         ///     Shirts with a dynamic ID and no entry in <see cref="Game1.clothingInformation"/>. These automatically
         ///     use the generic shirt entry with ID <c>-1</c> and are mapped to a calculated position in the
         ///     <c>Characters/Farmer/shirts</c> spritesheet. There's no constant we can use, but some known valid
-        ///     ranges are 1000–1111 (used in <see cref="Farmer.changeShirt"/> for the customization screen and
-        ///     1000–1127 (used in <see cref="Utility.getShopStock"/> and <see cref="GameLocation.sandyShopStock"/>).
+        ///     ranges are 1000ï¿½1111 (used in <see cref="Farmer.changeShirt"/> for the customization screen and
+        ///     1000ï¿½1127 (used in <see cref="Utility.getShopStock"/> and <see cref="GameLocation.sandyShopStock"/>).
         ///     Based on the spritesheet, the max valid ID is 1299.
         ///   </item>
         /// </list>

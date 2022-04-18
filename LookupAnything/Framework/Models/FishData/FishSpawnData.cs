@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Linq;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData

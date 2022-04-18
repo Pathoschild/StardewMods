@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.Common.Commands
 {
     /// <summary>A console command implemented by Content Patcher.</summary>

@@ -1,4 +1,6 @@
-﻿using StardewModdingAPI;
+#nullable disable
+
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework

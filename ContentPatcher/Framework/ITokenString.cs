@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace ContentPatcher.Framework
 {
     /// <summary>A string value optionally containing tokens.</summary>

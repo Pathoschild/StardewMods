@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using StardewModdingAPI;

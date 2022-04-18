@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewValley.Locations;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data

@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>An item required to unlock a fish pond population gate.</summary>

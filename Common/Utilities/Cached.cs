@@ -1,3 +1,5 @@
+#nullable disable
+
 using System;
 
 namespace Pathoschild.Stardew.Common.Utilities

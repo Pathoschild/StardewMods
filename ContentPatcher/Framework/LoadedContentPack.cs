@@ -1,3 +1,5 @@
+#nullable disable
+
 using ContentPatcher.Framework.ConfigModels;
 using Pathoschild.Stardew.Common.Utilities;
 

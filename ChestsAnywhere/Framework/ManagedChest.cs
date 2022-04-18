@@ -1,3 +1,5 @@
+#nullable disable
+
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;

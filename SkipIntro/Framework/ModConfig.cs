@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.SkipIntro.Framework
 {
     /// <summary>The mod configuration.</summary>

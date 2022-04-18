@@ -1,3 +1,5 @@
+#nullable disable
+
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 

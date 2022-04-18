@@ -1,3 +1,5 @@
+#nullable disable
+
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models.FishData
 {
     /// <summary>A time of day range.</summary>
