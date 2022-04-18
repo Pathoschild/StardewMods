@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -33,7 +31,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <param name="itemTypes">The item types to fetch (or null for any type).</param>
         /// <param name="includeVariants">Whether to include flavored variants like "Sunflower Honey".</param>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "TryCreate invokes the lambda immediately.")]
-        public IEnumerable<SearchableItem> GetAll(ItemType[] itemTypes = null, bool includeVariants = true)
+        public IEnumerable<SearchableItem> GetAll(ItemType[]? itemTypes = null, bool includeVariants = true)
         {
             //
             //
@@ -45,9 +43,9 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
             //
             //
 
-            IEnumerable<SearchableItem> GetAllRaw()
+            IEnumerable<SearchableItem?> GetAllRaw()
             {
-                HashSet<ItemType> types = itemTypes?.Any() == true ? new HashSet<ItemType>(itemTypes) : null;
+                HashSet<ItemType>? types = itemTypes?.Any() == true ? new HashSet<ItemType>(itemTypes) : null;
                 bool ShouldGet(ItemType type) => types == null || types.Contains(type);
 
                 // get tools
@@ -108,7 +106,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                 {
                     foreach (int id in this.TryLoad<int, string>("Data\\weapons").Keys)
                     {
-                        yield return this.TryCreate(ItemType.Weapon, id, p => (p.ID >= 32 && p.ID <= 34)
+                        yield return this.TryCreate(ItemType.Weapon, id, p => p.ID is >= 32 and <= 34
                             ? new Slingshot(p.ID)
                             : new MeleeWeapon(p.ID)
                         );
@@ -134,37 +132,40 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                 {
                     foreach (int id in Game1.objectInformation.Keys)
                     {
-                        string[] fields = Game1.objectInformation[id]?.Split('/');
-
-                        // secret notes
-                        if (id == 79)
-                        {
-                            if (ShouldGet(ItemType.Object))
-                            {
-                                foreach (int secretNoteId in this.TryLoad<int, string>("Data\\SecretNotes").Keys)
-                                {
-                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset + secretNoteId, _ =>
-                                    {
-                                        SObject note = new SObject(79, 1);
-                                        note.name = $"{note.name} #{secretNoteId}";
-                                        return note;
-                                    });
-                                }
-                            }
-                        }
+                        string[]? fields = Game1.objectInformation[id]?.Split('/');
 
                         // ring
-                        else if (id != 801 && fields?.Length >= 4 && fields[3] == "Ring") // 801 = wedding ring, which isn't an equippable ring
+                        if (id != 801 && fields?.Length >= 4 && fields[3] == "Ring") // 801 = wedding ring, which isn't an equippable ring
                         {
                             if (ShouldGet(ItemType.Ring))
                                 yield return this.TryCreate(ItemType.Ring, id, p => new Ring(p.ID));
                         }
 
-                        // item
+                        // journal scrap
+                        else if (id == 842)
+                        {
+                            if (ShouldGet(ItemType.Object))
+                            {
+                                foreach (SearchableItem? journalScrap in this.GetSecretNotes(isJournalScrap: true))
+                                    yield return journalScrap;
+                            }
+                        }
+
+                        // secret notes
+                        else if (id == 79)
+                        {
+                            if (ShouldGet(ItemType.Object))
+                            {
+                                foreach (SearchableItem? secretNote in this.GetSecretNotes(isJournalScrap: false))
+                                    yield return secretNote;
+                            }
+                        }
+
+                        // object
                         else if (ShouldGet(ItemType.Object))
                         {
                             // spawn main item
-                            SObject item = null;
+                            SObject? item = null;
                             yield return this.TryCreate(ItemType.Object, id, p =>
                             {
                                 return item = (p.ID == 812 // roe
@@ -178,125 +179,179 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
                             // flavored items
                             if (includeVariants)
                             {
-                                switch (item.Category)
-                                {
-                                    // fruit products
-                                    case SObject.FruitsCategory:
-                                        // wine
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + item.ParentSheetIndex, _ => new SObject(348, 1)
-                                        {
-                                            Name = $"{item.Name} Wine",
-                                            Price = item.Price * 3,
-                                            preserve = { SObject.PreserveType.Wine },
-                                            preservedParentSheetIndex = { item.ParentSheetIndex }
-                                        });
-
-                                        // jelly
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + item.ParentSheetIndex, _ => new SObject(344, 1)
-                                        {
-                                            Name = $"{item.Name} Jelly",
-                                            Price = 50 + item.Price * 2,
-                                            preserve = { SObject.PreserveType.Jelly },
-                                            preservedParentSheetIndex = { item.ParentSheetIndex }
-                                        });
-                                        break;
-
-                                    // vegetable products
-                                    case SObject.VegetableCategory:
-                                        // juice
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + item.ParentSheetIndex, _ => new SObject(350, 1)
-                                        {
-                                            Name = $"{item.Name} Juice",
-                                            Price = (int)(item.Price * 2.25d),
-                                            preserve = { SObject.PreserveType.Juice },
-                                            preservedParentSheetIndex = { item.ParentSheetIndex }
-                                        });
-
-                                        // pickled
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ => new SObject(342, 1)
-                                        {
-                                            Name = $"Pickled {item.Name}",
-                                            Price = 50 + item.Price * 2,
-                                            preserve = { SObject.PreserveType.Pickle },
-                                            preservedParentSheetIndex = { item.ParentSheetIndex }
-                                        });
-                                        break;
-
-                                    // flower honey
-                                    case SObject.flowersCategory:
-                                        yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + item.ParentSheetIndex, _ =>
-                                        {
-                                            SObject honey = new SObject(Vector2.Zero, 340, $"{item.Name} Honey", false, true, false, false)
-                                            {
-                                                Name = $"{item.Name} Honey",
-                                                preservedParentSheetIndex = { item.ParentSheetIndex }
-                                            };
-                                            honey.Price += item.Price * 2;
-                                            return honey;
-                                        });
-                                        break;
-
-                                    // roe and aged roe (derived from FishPond.GetFishProduce)
-                                    case SObject.sellAtFishShopCategory when item.ParentSheetIndex == 812:
-                                        {
-                                            this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
-
-                                            foreach (var pair in Game1.objectInformation)
-                                            {
-                                                // get input
-                                                SObject input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
-                                                var inputTags = input?.GetContextTags();
-                                                if (inputTags?.Any() != true)
-                                                    continue;
-
-                                                // check if roe-producing fish
-                                                if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
-                                                    continue;
-
-                                                // yield roe
-                                                SObject roe = null;
-                                                Color color = this.GetRoeColor(input);
-                                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ =>
-                                                {
-                                                    roe = new ColoredObject(812, 1, color)
-                                                    {
-                                                        name = $"{input.Name} Roe",
-                                                        preserve = { Value = SObject.PreserveType.Roe },
-                                                        preservedParentSheetIndex = { Value = input.ParentSheetIndex }
-                                                    };
-                                                    roe.Price += input.Price / 2;
-                                                    return roe;
-                                                });
-
-                                                // aged roe
-                                                if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
-                                                {
-                                                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + item.ParentSheetIndex, _ => new ColoredObject(447, 1, color)
-                                                    {
-                                                        name = $"Aged {input.Name} Roe",
-                                                        Category = -27,
-                                                        preserve = { Value = SObject.PreserveType.AgedRoe },
-                                                        preservedParentSheetIndex = { Value = input.ParentSheetIndex },
-                                                        Price = roe.Price * 2
-                                                    });
-                                                }
-                                            }
-                                        }
-                                        break;
-                                }
+                                foreach (SearchableItem? variant in this.GetFlavoredObjectVariants(item))
+                                    yield return variant;
                             }
                         }
                     }
                 }
             }
 
-            return GetAllRaw().Where(p => p != null);
+            return (
+                from item in GetAllRaw()
+                where item != null
+                select item
+            );
         }
 
 
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the individual secret note or journal scrap items.</summary>
+        /// <param name="isJournalScrap">Whether to get journal scraps.</param>
+        /// <remarks>Derived from <see cref="GameLocation.tryToCreateUnseenSecretNote"/>.</remarks>
+        private IEnumerable<SearchableItem?> GetSecretNotes(bool isJournalScrap)
+        {
+            // get base item ID
+            int baseId = isJournalScrap ? 842 : 79;
+
+            // get secret note IDs
+            var ids = this
+                .TryLoad<int, string>("Data\\SecretNotes")
+                .Keys
+                .Where(isJournalScrap
+                    ? id => (id >= GameLocation.JOURNAL_INDEX)
+                    : id => (id < GameLocation.JOURNAL_INDEX)
+                )
+                .Select<int, int>(isJournalScrap
+                    ? id => (id - GameLocation.JOURNAL_INDEX)
+                    : id => id
+                );
+
+            // build items
+            foreach (int id in ids)
+            {
+                int fakeId = this.CustomIDOffset * 8 + id;
+                if (isJournalScrap)
+                    fakeId += GameLocation.JOURNAL_INDEX;
+
+                yield return this.TryCreate(ItemType.Object, fakeId, _ =>
+                {
+                    SObject note = new(baseId, 1);
+                    note.Name = $"{note.Name} #{id}";
+                    return note;
+                });
+            }
+        }
+
+        /// <summary>Get flavored variants of a base item (like Blueberry Wine for Blueberry), if any.</summary>
+        /// <param name="item">A sample of the base item.</param>
+        private IEnumerable<SearchableItem?> GetFlavoredObjectVariants(SObject item)
+        {
+            int id = item.ParentSheetIndex;
+
+            switch (item.Category)
+            {
+                // fruit products
+                case SObject.FruitsCategory:
+                    // wine
+                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 2 + id, _ => new SObject(348, 1)
+                    {
+                        Name = $"{item.Name} Wine",
+                        Price = item.Price * 3,
+                        preserve = { SObject.PreserveType.Wine },
+                        preservedParentSheetIndex = { id }
+                    });
+
+                    // jelly
+                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 3 + id, _ => new SObject(344, 1)
+                    {
+                        Name = $"{item.Name} Jelly",
+                        Price = 50 + item.Price * 2,
+                        preserve = { SObject.PreserveType.Jelly },
+                        preservedParentSheetIndex = { id }
+                    });
+                    break;
+
+                // vegetable products
+                case SObject.VegetableCategory:
+                    // juice
+                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 4 + id, _ => new SObject(350, 1)
+                    {
+                        Name = $"{item.Name} Juice",
+                        Price = (int)(item.Price * 2.25d),
+                        preserve = { SObject.PreserveType.Juice },
+                        preservedParentSheetIndex = { id }
+                    });
+
+                    // pickled
+                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + id, _ => new SObject(342, 1)
+                    {
+                        Name = $"Pickled {item.Name}",
+                        Price = 50 + item.Price * 2,
+                        preserve = { SObject.PreserveType.Pickle },
+                        preservedParentSheetIndex = { id }
+                    });
+                    break;
+
+                // flower honey
+                case SObject.flowersCategory:
+                    yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 5 + id, _ =>
+                    {
+                        SObject honey = new(Vector2.Zero, 340, $"{item.Name} Honey", false, true, false, false)
+                        {
+                            Name = $"{item.Name} Honey",
+                            preservedParentSheetIndex = { id }
+                        };
+                        honey.Price += item.Price * 2;
+                        return honey;
+                    });
+                    break;
+
+                // roe and aged roe (derived from FishPond.GetFishProduce)
+                case SObject.sellAtFishShopCategory when id == 812:
+                    {
+                        this.GetRoeContextTagLookups(out HashSet<string> simpleTags, out List<List<string>> complexTags);
+
+                        foreach (var pair in Game1.objectInformation)
+                        {
+                            // get input
+                            SObject? input = this.TryCreate(ItemType.Object, pair.Key, p => new SObject(p.ID, 1))?.Item as SObject;
+                            if (input == null)
+                                continue;
+
+                            HashSet<string> inputTags = input.GetContextTags();
+                            if (!inputTags.Any())
+                                continue;
+
+                            // check if roe-producing fish
+                            if (!inputTags.Any(tag => simpleTags.Contains(tag)) && !complexTags.Any(set => set.All(tag => input.HasContextTag(tag))))
+                                continue;
+
+                            // yield roe
+                            SObject? roe = null;
+                            Color color = this.GetRoeColor(input);
+                            yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + id, _ =>
+                            {
+                                roe = new ColoredObject(812, 1, color)
+                                {
+                                    name = $"{input.Name} Roe",
+                                    preserve = { Value = SObject.PreserveType.Roe },
+                                    preservedParentSheetIndex = { Value = input.ParentSheetIndex }
+                                };
+                                roe.Price += input.Price / 2;
+                                return roe;
+                            });
+
+                            // aged roe
+                            if (roe != null && pair.Key != 698) // aged sturgeon roe is caviar, which is a separate item
+                            {
+                                yield return this.TryCreate(ItemType.Object, this.CustomIDOffset * 7 + id, _ => new ColoredObject(447, 1, color)
+                                {
+                                    name = $"Aged {input.Name} Roe",
+                                    Category = -27,
+                                    preserve = { Value = SObject.PreserveType.AgedRoe },
+                                    preservedParentSheetIndex = { Value = input.ParentSheetIndex },
+                                    Price = roe.Price * 2
+                                });
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+
         /// <summary>Get optimized lookups to match items which produce roe in a fish pond.</summary>
         /// <param name="simpleTags">A lookup of simple singular tags which match a roe-producing fish.</param>
         /// <param name="complexTags">A list of tag sets which match roe-producing fish.</param>
@@ -322,6 +377,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <typeparam name="TValue">The asset value type.</typeparam>
         /// <param name="assetName">The data asset name.</param>
         private Dictionary<TKey, TValue> TryLoad<TKey, TValue>(string assetName)
+            where TKey : notnull
         {
             try
             {
@@ -338,7 +394,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         /// <param name="type">The item type.</param>
         /// <param name="id">The unique ID (if different from the item's parent sheet index).</param>
         /// <param name="createItem">Create an item instance.</param>
-        private SearchableItem TryCreate(ItemType type, int id, Func<SearchableItem, Item> createItem)
+        private SearchableItem? TryCreate(ItemType type, int id, Func<SearchableItem, Item> createItem)
         {
             try
             {
@@ -364,7 +420,7 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
 
         /// <summary>Get valid shirt IDs.</summary>
         /// <remarks>
-        /// Shirts have a possible range of 1000�1999, but not all of those IDs are valid. There are two sets of IDs:
+        /// Shirts have a possible range of 1000–1999, but not all of those IDs are valid. There are two sets of IDs:
         ///
         /// <list type="number">
         ///   <item>
@@ -374,8 +430,8 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
         ///     Shirts with a dynamic ID and no entry in <see cref="Game1.clothingInformation"/>. These automatically
         ///     use the generic shirt entry with ID <c>-1</c> and are mapped to a calculated position in the
         ///     <c>Characters/Farmer/shirts</c> spritesheet. There's no constant we can use, but some known valid
-        ///     ranges are 1000�1111 (used in <see cref="Farmer.changeShirt"/> for the customization screen and
-        ///     1000�1127 (used in <see cref="Utility.getShopStock"/> and <see cref="GameLocation.sandyShopStock"/>).
+        ///     ranges are 1000–1111 (used in <see cref="Farmer.changeShirt"/> for the customization screen and
+        ///     1000–1127 (used in <see cref="Utility.getShopStock"/> and <see cref="GameLocation.sandyShopStock"/>).
         ///     Based on the spritesheet, the max valid ID is 1299.
         ///   </item>
         /// </list>
