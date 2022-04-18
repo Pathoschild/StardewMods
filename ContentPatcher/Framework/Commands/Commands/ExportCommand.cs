@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -66,11 +67,52 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // get type
             string typeName = args.Length > 1 ? args[1] : "System.Object";
-            Type type = Type.GetType(typeName);
-            if (type == null)
+
+            // The fully qualified name for a Texture2D is kind of long.
+            // Here are some shortcuts.
+            if ((new[] {"png", "texture", "texture2d", "image"}).Any((a) => a.Contains(typeName, StringComparison.OrdinalIgnoreCase)))
             {
-                this.Monitor.Log($"Could not load type '{typeName}'. This must be the C# full type name like System.Collections.Generic.Dictionary`2[[System.String],[System.String]].", LogLevel.Error);
-                return;
+                typeName = "Microsoft.Xna.Framework.Graphics.Texture2D, MonoGame.Framework";
+            }
+            Type? type = Type.GetType(typeName);
+
+            if (type is null)
+            { // Type.GetType has failed to find something. Let's try searching manually.
+
+                HashSet<Type> possibleTypes = new();
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.IsDynamic)
+                    {
+                        continue;
+                    }
+                    try
+                    {   // Maybe .GetExportedTypes() ? Wasn't sure if nonpublic types should be excluded.
+                        // It's fine to ignore case here, I check to see if only one type possibly matches later.
+                        possibleTypes.UnionWith(assembly.GetTypes().Where((Type t) => t.FullName?.Equals(typeName, StringComparison.OrdinalIgnoreCase) == true));
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Monitor.Log($"Failed in searching for type '{typeName}' with error message: {ex}", LogLevel.Error);
+                    }
+                }
+
+                if (possibleTypes.Count == 0)
+                { // still empty handed.
+                    this.Monitor.Log($"Could not load type '{typeName}'. This must be the C# full type name like System.Collections.Generic.Dictionary`2[[System.String],[System.String]].", LogLevel.Error);
+                    return;
+                }
+                else if (possibleTypes.Count > 1)
+                {// more than one possible match. Ask user to specify.
+                    this.Monitor.Log($"Found more than one possible match for type '{typeName}'. Please specify the full qualified type name! Possibilites:\n\t{string.Join("\n\t", possibleTypes.Select( (a) => a.AssemblyQualifiedName ))}", LogLevel.Error);
+                    return;
+                }
+                else
+                {
+                    type = possibleTypes.First();
+                    this.Monitor.Log($"Attempting patch export with {type.AssemblyQualifiedName}.", LogLevel.Info);
+                }
+
             }
 
             // load asset
