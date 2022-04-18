@@ -319,7 +319,9 @@ namespace Pathoschild.Stardew.Automate
             if (Context.IsMainPlayer && e.FromModID == "Pathoschild.ChestsAnywhere" && e.Type == nameof(AutomateUpdateChestMessage))
             {
                 var message = e.ReadAs<AutomateUpdateChestMessage>();
-                var location = Game1.getLocationFromName(message.LocationName);
+                var location = message.LocationName != null
+                    ? Game1.getLocationFromName(message.LocationName)
+                    : null;
                 var player = Game1.getFarmer(e.FromPlayerID);
 
                 string label = player != Game1.MasterPlayer

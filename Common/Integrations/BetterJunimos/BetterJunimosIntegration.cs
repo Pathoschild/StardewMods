@@ -1,5 +1,3 @@
-#nullable disable
-
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos

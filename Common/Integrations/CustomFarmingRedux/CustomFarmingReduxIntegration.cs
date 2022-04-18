@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,11 +21,11 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 
         /// <summary>Get the sprite info for a custom object, or <c>null</c> if the object isn't custom.</summary>
         /// <param name="obj">The custom object.</param>
-        public SpriteInfo GetSprite(SObject obj)
+        public SpriteInfo? GetSprite(SObject obj)
         {
             this.AssertLoaded();
 
-            Tuple<Item, Texture2D, Rectangle, Color> data = this.ModApi.getRealItemAndTexture(obj);
+            Tuple<Item, Texture2D, Rectangle, Color>? data = this.ModApi.getRealItemAndTexture(obj);
             return data != null
                 ? new SpriteInfo(data.Item2, data.Item3)
                 : null;

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -60,7 +58,7 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
         /// <summary>Add a section title at the current position in the form.</summary>
         /// <param name="text">The title text shown in the form.</param>
         /// <param name="tooltip">The tooltip text shown when the cursor hovers on the title, or <c>null</c> to disable the tooltip.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddSectionTitle(Func<string> text, Func<string> tooltip = null)
+        public GenericModConfigMenuIntegration<TConfig> AddSectionTitle(Func<string> text, Func<string>? tooltip = null)
         {
             this.AssertLoaded();
 

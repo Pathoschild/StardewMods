@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +24,7 @@ namespace Pathoschild.Stardew.Common
         ** Fields
         *********/
         /// <summary>A blank pixel which can be colorized and stretched to draw geometric shapes.</summary>
-        private static readonly Lazy<Texture2D> LazyPixel = new Lazy<Texture2D>(() =>
+        private static readonly Lazy<Texture2D> LazyPixel = new(() =>
         {
             Texture2D pixel = new Texture2D(Game1.graphics.GraphicsDevice, 1, 1);
             pixel.SetData(new[] { Color.White });
@@ -44,7 +42,7 @@ namespace Pathoschild.Stardew.Common
         public static Texture2D Pixel => CommonHelper.LazyPixel.Value;
 
         /// <summary>The width of the horizontal and vertical scroll edges (between the origin position and start of content padding).</summary>
-        public static readonly Vector2 ScrollEdgeSize = new Vector2(CommonSprites.Scroll.TopLeft.Width * Game1.pixelZoom, CommonSprites.Scroll.TopLeft.Height * Game1.pixelZoom);
+        public static readonly Vector2 ScrollEdgeSize = new(CommonSprites.Scroll.TopLeft.Width * Game1.pixelZoom, CommonSprites.Scroll.TopLeft.Height * Game1.pixelZoom);
 
 
         /*********
@@ -83,7 +81,7 @@ namespace Pathoschild.Stardew.Common
 
         /// <summary>Get a player's current tile position.</summary>
         /// <param name="player">The player to check.</param>
-        public static Vector2 GetPlayerTile(Farmer player)
+        public static Vector2 GetPlayerTile(Farmer? player)
         {
             Vector2 position = player?.Position ?? Vector2.Zero;
             return new Vector2((int)(position.X / Game1.tileSize), (int)(position.Y / Game1.tileSize)); // note: player.getTileLocationPoint() isn't reliable in many cases, e.g. right after a warp when riding a horse
@@ -91,7 +89,7 @@ namespace Pathoschild.Stardew.Common
 
         /// <summary>Get the item type for an item to disambiguate IDs.</summary>
         /// <param name="item">The item to check.</param>
-        public static ItemType GetItemType(this Item item)
+        public static ItemType GetItemType(this Item? item)
         {
             switch (item)
             {
@@ -384,7 +382,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="bold">Whether to draw bold text.</param>
         /// <param name="scale">The font scale.</param>
         /// <returns>Returns the text dimensions.</returns>
-        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string text, in Vector2 position, float wrapWidth, in Color? color = null, bool bold = false, float scale = 1)
+        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string? text, in Vector2 position, float wrapWidth, in Color? color = null, bool bold = false, float scale = 1)
         {
             if (text == null)
                 return new Vector2(0, 0);
@@ -461,7 +459,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
         /// <param name="action">The action to invoke.</param>
         /// <param name="onError">A callback invoked if an error is intercepted.</param>
-        public static void InterceptErrors(this IMonitor monitor, string verb, Action action, Action<Exception> onError = null)
+        public static void InterceptErrors(this IMonitor monitor, string verb, Action action, Action<Exception>? onError = null)
         {
             monitor.InterceptErrors(verb, null, action, onError);
         }
@@ -472,7 +470,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
         /// <param name="action">The action to invoke.</param>
         /// <param name="onError">A callback invoked if an error is intercepted.</param>
-        public static void InterceptErrors(this IMonitor monitor, string verb, string detailedVerb, Action action, Action<Exception> onError = null)
+        public static void InterceptErrors(this IMonitor monitor, string verb, string? detailedVerb, Action action, Action<Exception>? onError = null)
         {
             try
             {
@@ -490,7 +488,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="ex">The exception to handle.</param>
         /// <param name="verb">The verb describing where the error occurred (e.g. "looking that up"). This is displayed on the screen, so it should be simple and avoid characters that might not be available in the sprite font.</param>
         /// <param name="detailedVerb">A more detailed form of <see cref="verb"/> if applicable. This is displayed in the log, so it can be more technical and isn't constrained by the sprite font.</param>
-        public static void InterceptError(this IMonitor monitor, Exception ex, string verb, string detailedVerb = null)
+        public static void InterceptError(this IMonitor monitor, Exception ex, string verb, string? detailedVerb = null)
         {
             detailedVerb ??= verb;
             monitor.Log($"Something went wrong {detailedVerb}:\n{ex}", LogLevel.Error);

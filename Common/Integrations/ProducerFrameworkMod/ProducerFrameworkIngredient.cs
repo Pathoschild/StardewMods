@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
 {
     /// <summary>Metadata about an input ingredient for a Producer Framework Mod machine.</summary>

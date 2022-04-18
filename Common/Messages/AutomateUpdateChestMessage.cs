@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.Common.Messages
@@ -8,7 +6,7 @@ namespace Pathoschild.Stardew.Common.Messages
     internal class AutomateUpdateChestMessage
     {
         /// <summary>The location name containing the chest.</summary>
-        public string LocationName { get; set; }
+        public string? LocationName { get; set; }
 
         /// <summary>The chest's tile position.</summary>
         public Vector2 Tile { get; set; }

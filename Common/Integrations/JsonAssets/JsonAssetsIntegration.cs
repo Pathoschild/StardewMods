@@ -1,5 +1,4 @@
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -25,7 +24,7 @@ namespace Pathoschild.Stardew.Common.Integrations.JsonAssets
         /// <param name="currentSpriteOnly">Whether to return a rectangle which only contains the entity's current sprite (e.g. for a crop's current phase of growth), instead of all its sprites.</param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
         /// <remarks>This returns a texture which matches the vanilla layout. For example, for a fruit tree this would return the area containing all the sprites for the tree's growth stages and states in the same layout as the vanilla tilesheet.</remarks>
-        public bool TryGetCustomSpriteSheet(object entity, out Texture2D texture, out Rectangle sourceRect, bool currentSpriteOnly = false)
+        public bool TryGetCustomSpriteSheet(object entity, [NotNullWhen(true)] out Texture2D? texture, out Rectangle sourceRect, bool currentSpriteOnly = false)
         {
             this.AssertLoaded();
 

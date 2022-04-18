@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using HarmonyLib;
 using StardewModdingAPI;

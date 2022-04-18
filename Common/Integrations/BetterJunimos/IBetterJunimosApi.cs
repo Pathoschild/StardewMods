@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos
 {
     /// <summary>The API provided by the Better Junimos mod.</summary>

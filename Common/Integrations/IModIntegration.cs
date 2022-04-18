@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace Pathoschild.Stardew.Common.Integrations
 {
     /// <summary>Handles integration with a given mod.</summary>

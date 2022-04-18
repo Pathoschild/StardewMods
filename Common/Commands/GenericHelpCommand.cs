@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Linq;
 using System.Text;
@@ -77,7 +75,7 @@ namespace Pathoschild.Stardew.Common.Commands
                     help.AppendLine();
                 }
             }
-            else if (commands.TryGetValue(args[0], out ICommand command))
+            else if (commands.TryGetValue(args[0], out ICommand? command))
                 help.AppendLine(command.Description);
             else
                 help.AppendLine($"Unknown command '{this.RootName} {args[0]}'. Type '{this.RootName} {GenericHelpCommand.CommandName}' for available commands.");

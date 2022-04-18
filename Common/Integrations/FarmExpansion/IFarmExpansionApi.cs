@@ -1,5 +1,3 @@
-#nullable disable
-
 using StardewValley;
 
 namespace Pathoschild.Stardew.Common.Integrations.FarmExpansion

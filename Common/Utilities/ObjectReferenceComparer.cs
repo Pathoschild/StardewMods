@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
@@ -17,7 +15,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <returns>true if the specified objects are equal; otherwise, false.</returns>
         /// <param name="x">The first object to compare.</param>
         /// <param name="y">The second object to compare.</param>
-        public bool Equals(T x, T y)
+        public bool Equals(T? x, T? y)
         {
             return object.ReferenceEquals(x, y);
         }

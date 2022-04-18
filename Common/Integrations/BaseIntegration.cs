@@ -1,6 +1,5 @@
-#nullable disable
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
 
 namespace Pathoschild.Stardew.Common.Integrations
@@ -49,7 +48,7 @@ namespace Pathoschild.Stardew.Common.Integrations
             this.Monitor = monitor;
 
             // validate mod
-            IManifest manifest = modRegistry.Get(this.ModID)?.Manifest;
+            IManifest? manifest = modRegistry.Get(this.ModID)?.Manifest;
             if (manifest == null)
                 return;
             if (manifest.Version.IsOlderThan(minVersion))
@@ -62,10 +61,10 @@ namespace Pathoschild.Stardew.Common.Integrations
 
         /// <summary>Get an API for the mod, and show a message if it can't be loaded.</summary>
         /// <typeparam name="TApi">The API type.</typeparam>
-        protected TApi GetValidatedApi<TApi>()
+        protected TApi? GetValidatedApi<TApi>()
             where TApi : class
         {
-            TApi api = this.ModRegistry.GetApi<TApi>(this.ModID);
+            TApi? api = this.ModRegistry.GetApi<TApi>(this.ModID);
             if (api == null)
             {
                 this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Disabled integration with this mod.", LogLevel.Warn);
@@ -76,7 +75,7 @@ namespace Pathoschild.Stardew.Common.Integrations
 
         /// <summary>Assert that the integration is loaded.</summary>
         /// <exception cref="InvalidOperationException">The integration isn't loaded.</exception>
-        protected void AssertLoaded()
+        protected virtual void AssertLoaded()
         {
             if (!this.IsLoaded)
                 throw new InvalidOperationException($"The {this.Label} integration isn't loaded.");
@@ -92,9 +91,10 @@ namespace Pathoschild.Stardew.Common.Integrations
         ** Accessors
         *********/
         /// <summary>The mod's public API.</summary>
-        public TApi ModApi { get; }
+        public TApi? ModApi { get; }
 
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(BaseIntegration<TApi>.ModApi))]
         public override bool IsLoaded => this.ModApi != null;
 
 
@@ -112,6 +112,15 @@ namespace Pathoschild.Stardew.Common.Integrations
         {
             if (base.IsLoaded)
                 this.ModApi = this.GetValidatedApi<TApi>();
+        }
+
+        /// <summary>Assert that the integration is loaded.</summary>
+        /// <exception cref="InvalidOperationException">The integration isn't loaded.</exception>
+        [MemberNotNull(nameof(BaseIntegration<TApi>.ModApi))]
+        protected override void AssertLoaded()
+        {
+            if (!this.IsLoaded)
+                throw new InvalidOperationException($"The {this.Label} integration isn't loaded.");
         }
     }
 }

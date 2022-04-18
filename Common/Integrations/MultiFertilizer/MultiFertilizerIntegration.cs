@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewValley.TerrainFeatures;
@@ -20,7 +18,7 @@ namespace Pathoschild.Stardew.Common.Integrations.MultiFertilizer
 
         /// <summary>Get the fertilizer item IDs applied to a dirt tile.</summary>
         /// <param name="dirt">The dirt tile to check.</param>
-        /// <remarks>See <a href="https://github.com/spacechase0/StardewValleyMods/tree/develop/MultiFertilizer#for-mod-authors" /> for details.</remarks>
+        /// <remarks>See <a href="https://github.com/spacechase0/StardewValleyMods/tree/develop/MultiFertilizer#for-mod-authors">MultiFertilizer's mod author docs</a> for details.</remarks>
         public IEnumerable<int> GetAppliedFertilizers(HoeDirt dirt)
         {
             if (!this.IsLoaded)

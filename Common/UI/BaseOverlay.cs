@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Reflection;
 using Microsoft.Xna.Framework;
@@ -34,7 +32,7 @@ namespace Pathoschild.Stardew.Common.UI
         private Rectangle LastViewport;
 
         /// <summary>Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</summary>
-        private readonly Func<bool> KeepAliveCheck;
+        private readonly Func<bool>? KeepAliveCheck;
 
         /// <summary>The UI mode to use for pixel coordinates in <see cref="ReceiveLeftClick"/> and <see cref="ReceiveCursorHover"/>, or <c>null</c> to use the current UI mode at the time the event is raised.</summary>
         private readonly bool? AssumeUiMode;
@@ -68,7 +66,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="keepAlive">Indicates whether to keep the overlay active. If <c>null</c>, the overlay is kept until explicitly disposed.</param>
         /// <param name="assumeUiMode">The UI mode to use for pixel coordinates in <see cref="ReceiveLeftClick"/> and <see cref="ReceiveCursorHover"/>, or <c>null</c> to use the current UI mode at the time the event is raised.</param>
-        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool> keepAlive = null, bool? assumeUiMode = null)
+        protected BaseOverlay(IModEvents events, IInputHelper inputHelper, IReflectionHelper reflection, Func<bool>? keepAlive = null, bool? assumeUiMode = null)
         {
             this.Events = events;
             this.InputHelper = inputHelper;
@@ -114,7 +112,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        protected virtual void ReceiveButtonsChanged(object sender, ButtonsChangedEventArgs e) { }
+        protected virtual void ReceiveButtonsChanged(object? sender, ButtonsChangedEventArgs e) { }
 
         /// <summary>The method invoked when the player uses the mouse scroll wheel.</summary>
         /// <param name="amount">The scroll amount.</param>
@@ -159,14 +157,14 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IDisplayEvents.Rendered"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnRendered(object sender, RenderedEventArgs e)
+        private void OnRendered(object? sender, RenderedEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
 
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                object originMatrix = this.Reflection.GetField<object>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
+                object originMatrix = this.Reflection.GetField<object?>(Game1.spriteBatch, "_matrix").GetValue() ?? Matrix.Identity;
                 float nativeZoomLevel = this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
 
                 Game1.spriteBatch.End();
@@ -183,7 +181,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IDisplayEvents.RenderedWorld"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
+        private void OnRenderedWorld(object? sender, RenderedWorldEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
@@ -194,7 +192,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             if (Context.ScreenId == this.ScreenId)
             {
@@ -221,7 +219,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
@@ -232,7 +230,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
@@ -244,7 +242,7 @@ namespace Pathoschild.Stardew.Common.UI
             bool handled;
             if (Constants.TargetPlatform == GamePlatform.Android)
             {
-                float nativeZoomLevel = (float)typeof(Game1).GetProperty("NativeZoomLevel", BindingFlags.Public | BindingFlags.Static).GetValue(null);
+                float nativeZoomLevel = this.Reflection.GetProperty<float>(typeof(Game1), "NativeZoomLevel").GetValue();
                 handled = this.ReceiveLeftClick((int)(Game1.getMouseX() * Game1.options.zoomLevel / nativeZoomLevel), (int)(Game1.getMouseY() * Game1.options.zoomLevel / nativeZoomLevel));
             }
             else
@@ -257,7 +255,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IInputEvents.MouseWheelScrolled"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnMouseWheelScrolled(object sender, MouseWheelScrolledEventArgs e)
+        private void OnMouseWheelScrolled(object? sender, MouseWheelScrolledEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
@@ -282,7 +280,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <inheritdoc cref="IInputEvents.CursorMoved"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnCursorMoved(object sender, CursorMovedEventArgs e)
+        private void OnCursorMoved(object? sender, CursorMovedEventArgs e)
         {
             if (Context.ScreenId != this.ScreenId)
                 return;
@@ -297,7 +295,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="name">The method name.</param>
         private bool IsMethodOverridden(string name)
         {
-            MethodInfo method = this.GetType().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            MethodInfo? method = this.GetType().GetMethod(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             if (method == null)
                 throw new InvalidOperationException($"Can't find method {this.GetType().FullName}.{name}.");
 
