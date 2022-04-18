@@ -5,15 +5,8 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos
 {
     /// <summary>Handles the logic for integrating with the Better Junimos mod.</summary>
-    internal class BetterJunimosIntegration : BaseIntegration
+    internal class BetterJunimosIntegration : BaseIntegration<IBetterJunimosApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly IBetterJunimosApi ModApi;
-
-
         /*********
         ** Accessors
         *********/
@@ -30,13 +23,8 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterJunimos
         public BetterJunimosIntegration(IModRegistry modRegistry, IMonitor monitor)
             : base("Better Junimos", "hawkfalcon.BetterJunimos", "0.5.0", modRegistry, monitor)
         {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<IBetterJunimosApi>();
-            this.IsLoaded = this.ModApi != null;
-            this.MaxRadius = this.ModApi?.GetJunimoHutMaxRadius() ?? 0;
+            if (base.IsLoaded)
+                this.MaxRadius = this.ModApi.GetJunimoHutMaxRadius();
         }
     }
 }

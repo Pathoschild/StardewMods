@@ -7,15 +7,8 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.Common.Integrations.JsonAssets
 {
     /// <summary>Handles the logic for integrating with the Json Assets mod.</summary>
-    internal class JsonAssetsIntegration : BaseIntegration
+    internal class JsonAssetsIntegration : BaseIntegration<IJsonAssetsApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly IJsonAssetsApi ModApi;
-
-
         /*********
         ** Public methods
         *********/
@@ -23,15 +16,7 @@ namespace Pathoschild.Stardew.Common.Integrations.JsonAssets
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public JsonAssetsIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Json Assets", "spacechase0.JsonAssets", "1.5.1", modRegistry, monitor)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<IJsonAssetsApi>();
-            this.IsLoaded = this.ModApi != null;
-        }
+            : base("Json Assets", "spacechase0.JsonAssets", "1.5.1", modRegistry, monitor) { }
 
         /// <summary>Get the custom spritesheet and source rectangle for an in-game entity.</summary>
         /// <param name="entity">The in-world entity (e.g. fruit tree).</param>
@@ -42,6 +27,8 @@ namespace Pathoschild.Stardew.Common.Integrations.JsonAssets
         /// <remarks>This returns a texture which matches the vanilla layout. For example, for a fruit tree this would return the area containing all the sprites for the tree's growth stages and states in the same layout as the vanilla tilesheet.</remarks>
         public bool TryGetCustomSpriteSheet(object entity, out Texture2D texture, out Rectangle sourceRect, bool currentSpriteOnly = false)
         {
+            this.AssertLoaded();
+
             return currentSpriteOnly
                 ? this.ModApi.TryGetCustomSprite(entity, out texture, out sourceRect)
                 : this.ModApi.TryGetCustomSpriteSheet(entity, out texture, out sourceRect);

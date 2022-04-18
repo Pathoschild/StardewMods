@@ -10,15 +10,8 @@ using SObject = StardewValley.Object;
 namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
 {
     /// <summary>Handles the logic for integrating with the Custom Farming Redux mod.</summary>
-    internal class CustomFarmingReduxIntegration : BaseIntegration
+    internal class CustomFarmingReduxIntegration : BaseIntegration<ICustomFarmingApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly ICustomFarmingApi ModApi;
-
-
         /*********
         ** Public methods
         *********/
@@ -26,15 +19,7 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public CustomFarmingReduxIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Custom Farming Redux", "Platonymous.CustomFarming", "2.8.5", modRegistry, monitor)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<ICustomFarmingApi>();
-            this.IsLoaded = this.ModApi != null;
-        }
+            : base("Custom Farming Redux", "Platonymous.CustomFarming", "2.8.5", modRegistry, monitor) { }
 
         /// <summary>Get the sprite info for a custom object, or <c>null</c> if the object isn't custom.</summary>
         /// <param name="obj">The custom object.</param>

@@ -16,11 +16,7 @@ namespace Pathoschild.Stardew.Common.Integrations.MultiFertilizer
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public MultiFertilizerIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("MultiFertilizer", "spacechase0.MultiFertilizer", "1.0.2", modRegistry, monitor)
-        {
-            if (!this.IsLoaded)
-                return;
-        }
+            : base("MultiFertilizer", "spacechase0.MultiFertilizer", "1.0.2", modRegistry, monitor) { }
 
         /// <summary>Get the fertilizer item IDs applied to a dirt tile.</summary>
         /// <param name="dirt">The dirt tile to check.</param>

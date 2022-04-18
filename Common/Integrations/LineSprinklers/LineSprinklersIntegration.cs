@@ -7,15 +7,8 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.Common.Integrations.LineSprinklers
 {
     /// <summary>Handles the logic for integrating with the Line Sprinklers mod.</summary>
-    internal class LineSprinklersIntegration : BaseIntegration
+    internal class LineSprinklersIntegration : BaseIntegration<ILineSprinklersApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly ILineSprinklersApi ModApi;
-
-
         /*********
         ** Accessors
         *********/
@@ -32,13 +25,8 @@ namespace Pathoschild.Stardew.Common.Integrations.LineSprinklers
         public LineSprinklersIntegration(IModRegistry modRegistry, IMonitor monitor)
             : base("Line Sprinklers", "hootless.LineSprinklers", "1.1.0", modRegistry, monitor)
         {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<ILineSprinklersApi>();
-            this.IsLoaded = this.ModApi != null;
-            this.MaxRadius = this.ModApi?.GetMaxGridSize() ?? 0;
+            if (base.IsLoaded)
+                this.MaxRadius = this.ModApi.GetMaxGridSize();
         }
 
         /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>

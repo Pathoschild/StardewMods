@@ -28,7 +28,7 @@ namespace Pathoschild.Stardew.Common.Integrations
         public string Label { get; }
 
         /// <summary>Whether the mod is available.</summary>
-        public bool IsLoaded { get; protected set; }
+        public virtual bool IsLoaded { get; }
 
 
         /*********
@@ -61,10 +61,11 @@ namespace Pathoschild.Stardew.Common.Integrations
         }
 
         /// <summary>Get an API for the mod, and show a message if it can't be loaded.</summary>
-        /// <typeparam name="TInterface">The API type.</typeparam>
-        protected TInterface GetValidatedApi<TInterface>() where TInterface : class
+        /// <typeparam name="TApi">The API type.</typeparam>
+        protected TApi GetValidatedApi<TApi>()
+            where TApi : class
         {
-            TInterface api = this.ModRegistry.GetApi<TInterface>(this.ModID);
+            TApi api = this.ModRegistry.GetApi<TApi>(this.ModID);
             if (api == null)
             {
                 this.Monitor.Log($"Detected {this.Label}, but couldn't fetch its API. Disabled integration with this mod.", LogLevel.Warn);
@@ -79,6 +80,38 @@ namespace Pathoschild.Stardew.Common.Integrations
         {
             if (!this.IsLoaded)
                 throw new InvalidOperationException($"The {this.Label} integration isn't loaded.");
+        }
+    }
+
+    /// <summary>The base implementation for a mod integration.</summary>
+    /// <typeparam name="TApi">The API type.</typeparam>
+    internal abstract class BaseIntegration<TApi> : BaseIntegration
+        where TApi : class
+    {
+        /*********
+        ** Accessors
+        *********/
+        /// <summary>The mod's public API.</summary>
+        public TApi ModApi { get; }
+
+        /// <inheritdoc />
+        public override bool IsLoaded => this.ModApi != null;
+
+
+        /*********
+        ** Public methods
+        *********/
+        /// <summary>Construct an instance.</summary>
+        /// <param name="label">A human-readable name for the mod.</param>
+        /// <param name="modID">The mod's unique ID.</param>
+        /// <param name="minVersion">The minimum version of the mod that's supported.</param>
+        /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
+        /// <param name="monitor">Encapsulates monitoring and logging.</param>
+        protected BaseIntegration(string label, string modID, string minVersion, IModRegistry modRegistry, IMonitor monitor)
+            : base(label, modID, minVersion, modRegistry, monitor)
+        {
+            if (base.IsLoaded)
+                this.ModApi = this.GetValidatedApi<TApi>();
         }
     }
 }
