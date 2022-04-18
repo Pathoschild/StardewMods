@@ -70,7 +70,7 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // The fully qualified name for a Texture2D is kind of long.
             // Here are some shortcuts.
-            if (typeName.Contains("image", StringComparison.OrdinalIgnoreCase))
+            if (typeName.Equals("image", StringComparison.OrdinalIgnoreCase))
             {
                 typeName = "Microsoft.Xna.Framework.Graphics.Texture2D, MonoGame.Framework";
             }
