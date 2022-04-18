@@ -222,7 +222,7 @@ namespace ContentPatcher.Framework.Patches
                 return this.Fail($"{sourceAreaLabel} size (Width:{sourceArea.Width}, Height:{sourceArea.Height}) doesn't match {targetAreaLabel} size (Width:{targetArea.Width}, Height:{targetArea.Height}).", out error);
 
             // apply source map
-            targetAsset.ExtendMap(target, minWidth: targetArea.Right, minHeight: targetArea.Bottom);
+            targetAsset.ExtendMap(minWidth: targetArea.Right, minHeight: targetArea.Bottom);
             targetAsset.PatchMap(source: source, sourceArea: sourceArea, targetArea: targetArea, patchMode: this.PatchMode);
 
             error = null;
