@@ -1,0 +1,11 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.skip-to.name": "跳转至",
+    "config.skip-to.tooltip": "跳转至哪个菜单。默认标题。",
+    "config.skip-to.values.title-menu": "标题",
+    "config.skip-to.values.load-menu": "加载存档",
+    "config.skip-to.values.join-coop": "加入联机",
+    "config.skip-to.values.host-coop": "主持联机"
+}
