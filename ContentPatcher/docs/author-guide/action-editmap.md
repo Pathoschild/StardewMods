@@ -67,7 +67,7 @@ You can then add the fields from one or more sections below.
 A 'map overlay' copies tiles, properties, and tilesheets from a source map into the target.
 Matching layers in the target area will be fully overwritten with the source area.
 
-The patch fields for this operaiton are:
+The patch fields for this operation are:
 
 <table>
 <tr>
