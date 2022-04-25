@@ -2,8 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using HarmonyLib;
 using Pathoschild.Stardew.Common.Patching;
 using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
@@ -102,7 +104,10 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         private static void After_SeedsIgnoreSeasonsHere(GameLocation __instance, ref bool __result)
         {
             if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig config) && config.GrowCrops && config.GrowCropsOutOfSeason)
-                __result = true;
+            {
+                if (!LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate))) // game skips tilled dirt decay on DayUpdate if we return true here
+                    __result = true;
+            }
         }
 
         /// <summary>A method called via Harmony after <see cref="GameLocation.doesTileHaveProperty"/>.</summary>
@@ -210,6 +215,20 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
             return found
                 ? type
                 : null;
+        }
+
+        /// <summary>Get whether the given method appears in the call stack.</summary>
+        /// <param name="type">The type which declared the method.</param>
+        /// <param name="name">The method name.</param>
+        private static bool CallStackIncludes(Type type, string name)
+        {
+            return new StackTrace()
+                .GetFrames()
+                .Any(frame =>
+                    frame.GetMethod() is { } method
+                    && method.DeclaringType == type
+                    && method.Name == name
+                );
         }
     }
 }
