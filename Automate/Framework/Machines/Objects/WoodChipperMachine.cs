@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -58,11 +56,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             WoodChipper machine = this.Machine;
 
-            return new TrackedItem(machine.heldObject.Value, this.Reset);
+            return this.GetTracked(machine.heldObject.Value, this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -70,7 +68,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (this.GenericPullRecipe(input, this.Recipes, out Item inputItem))
+            if (this.GenericPullRecipe(input, this.Recipes, out Item? inputItem))
             {
                 this.Machine.depositedItem.Value = (SObject)inputItem;
                 return true;

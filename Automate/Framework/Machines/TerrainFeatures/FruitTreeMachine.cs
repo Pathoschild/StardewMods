@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;

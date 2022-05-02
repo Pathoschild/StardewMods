@@ -1,8 +1,7 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Netcode;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
@@ -57,10 +56,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
-            IList<Item> inventory = this.Output.items;
-            return new TrackedItem(inventory.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
+            return this.GetTracked(this.Output.items.FirstOrDefault(item => item != null), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -121,7 +119,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                     Item slot = slots[i];
                     if (item.Sample.canStackWith(slot) && slot.Stack < maxStackSize)
                     {
-                        var sample = item.Sample.getOne();
+                        Item sample = item.Sample.getOne();
                         sample.Stack = Math.Min(item.Count, maxStackSize - slot.Stack); // the most items we can add to the stack (in theory)
                         int actualAdded = sample.Stack - slot.addToStack(sample); // how many items were actually added to the stack
                         item.Reduce(actualAdded);
@@ -130,7 +128,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
                 }
 
                 // add to new slot
-                slots.Add(item.Take(Math.Min(item.Count, maxStackSize)));
+                slots.Add(item.Take(Math.Min(item.Count, maxStackSize))!);
             }
 
             return item.Count < originalSize;
@@ -139,14 +137,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         /// <summary>Get whether the mill's input bin is full.</summary>
         private bool InputFull()
         {
-            var slots = this.Input.items;
+            NetObjectList<Item?>? slots = this.Input.items;
 
             // free slots
             if (slots.Count < Chest.capacity)
                 return false;
 
             // free space in stacks
-            foreach (Item slot in slots)
+            foreach (Item? slot in slots)
             {
                 if (slot == null || slot.Stack < this.GetMaxInputStackSize(slot))
                     return false;
@@ -168,7 +166,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
 
         /// <summary>Get the maximum input stack size to allow for an item.</summary>
         /// <param name="item">The input item to check.</param>
-        private int GetMaxInputStackSize(Item item)
+        private int GetMaxInputStackSize(Item? item)
         {
             if (item == null)
                 return 0;

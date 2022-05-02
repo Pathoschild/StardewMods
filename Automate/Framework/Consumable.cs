@@ -1,5 +1,3 @@
-#nullable disable
-
 using StardewValley;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -44,7 +42,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Remove the needed number of this item from the stack and return a new stack matching the count.</summary>
-        public Item Take()
+        public Item? Take()
         {
             return this.Consumables.Take(this.CountNeeded);
         }

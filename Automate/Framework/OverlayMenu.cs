@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -69,9 +67,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                 int tileSize = Game1.tileSize;
 
                 // get machine group
-                this.GroupTiles.TryGetValue(tile, out IMachineGroup group);
+                this.GroupTiles.TryGetValue(tile, out IMachineGroup? group);
                 bool isGrouped = group != null;
-                bool isActive = isGrouped && group.HasInternalAutomation;
+                bool isActive = isGrouped && group!.HasInternalAutomation;
 
                 // draw background
                 {

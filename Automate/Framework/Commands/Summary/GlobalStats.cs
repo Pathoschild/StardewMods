@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +46,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Commands.Summary
                 .ThenBy(p => p.Key)
                 .ToArray();
 
-            foreach (IGrouping<string, IMachineGroup> locationGroup in groupsByLocation)
+            foreach (IGrouping<string?, IMachineGroup> locationGroup in groupsByLocation)
             {
                 bool isJunimoGroup = locationGroup.Key == null;
                 string label = locationGroup.Key ?? "Machines connected to a Junimo chest";

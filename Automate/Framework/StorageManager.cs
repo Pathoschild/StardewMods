@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Pathoschild.Stardew.Automate.Framework.Storage;
 using Pathoschild.Stardew.Common;
@@ -35,6 +34,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
         /// <summary>Set the containers to use.</summary>
         /// <param name="containers">The storage containers.</param>
+        [MemberNotNull(nameof(StorageManager.InputContainers), nameof(StorageManager.OutputContainers))]
         public void SetContainers(IEnumerable<IContainer> containers)
         {
             containers = containers.ToArray();
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** TryGetIngredient
         ****/
         /// <inheritdoc />
-        public bool TryGetIngredient(Func<ITrackedStack, bool> predicate, int count, out IConsumable consumable)
+        public bool TryGetIngredient(Func<ITrackedStack, bool> predicate, int count, [NotNullWhen(true)] out IConsumable? consumable)
         {
             StackAccumulator stacks = new StackAccumulator();
             foreach (ITrackedStack input in this.GetItems().Where(predicate))
@@ -96,13 +96,13 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <inheritdoc />
-        public bool TryGetIngredient(int id, int count, out IConsumable consumable, ItemType? type = ItemType.Object)
+        public bool TryGetIngredient(int id, int count, [NotNullWhen(true)] out IConsumable? consumable, ItemType? type = ItemType.Object)
         {
             return this.TryGetIngredient(item => (type == null || item.Type == type) && (item.Sample.ParentSheetIndex == id || item.Sample.Category == id), count, out consumable);
         }
 
         /// <inheritdoc />
-        public bool TryGetIngredient(IRecipe[] recipes, out IConsumable consumable, out IRecipe recipe)
+        public bool TryGetIngredient(IRecipe[] recipes, [NotNullWhen(true)] out IConsumable? consumable, [NotNullWhen(true)] out IRecipe? recipe)
         {
             IDictionary<IRecipe, StackAccumulator> accumulator = recipes.ToDictionary(req => req, _ => new StackAccumulator());
 
@@ -136,7 +136,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <inheritdoc />
         public bool TryConsume(Func<ITrackedStack, bool> predicate, int count)
         {
-            if (this.TryGetIngredient(predicate, count, out IConsumable requirement))
+            if (this.TryGetIngredient(predicate, count, out IConsumable? requirement))
             {
                 requirement.Reduce();
                 return true;
@@ -154,7 +154,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** TryPush
         ****/
         /// <inheritdoc />
-        public bool TryPush(ITrackedStack item)
+        public bool TryPush(ITrackedStack? item)
         {
             if (item == null || item.Count <= 0)
                 return false;
@@ -206,7 +206,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="item">The item to identify.</param>
         private string GetItemKey(Item item)
         {
-            string key = item.GetType().FullName;
+            string key = item.GetType().FullName!;
             if (item is SObject obj)
                 key += "_craftable:" + obj.bigCraftable.Value;
             key += "_id:" + item.ParentSheetIndex;

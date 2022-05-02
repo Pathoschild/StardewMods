@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
@@ -14,7 +12,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <returns>Returns the affected stack.</returns>
         public TrackedItemCollection Add(ITrackedStack input)
         {
-            TrackedItemCollection stack = this.FirstOrDefault(p => p.CanStackWith(input));
+            TrackedItemCollection? stack = this.FirstOrDefault(p => p.CanStackWith(input));
             if (stack != null)
                 stack.Add(input);
             else

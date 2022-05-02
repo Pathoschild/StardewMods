@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common.Utilities;
@@ -30,7 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Accessors
         *********/
         /// <inheritdoc />
-        public string LocationKey { get; }
+        public string? LocationKey { get; }
 
         /// <inheritdoc />
         public IMachine[] Machines { get; protected set; }
@@ -42,6 +41,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public Vector2[] Tiles { get; protected set; }
 
         /// <inheritdoc />
+        [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
         public bool IsJunimoGroup { get; protected set; }
 
         /// <inheritdoc />
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="containers">The containers in the group.</param>
         /// <param name="tiles">The tiles comprising the group.</param>
         /// <param name="buildStorage">Build a storage manager for the given containers.</param>
-        public MachineGroup(string locationKey, IEnumerable<IMachine> machines, IEnumerable<IContainer> containers, IEnumerable<Vector2> tiles, Func<IContainer[], StorageManager> buildStorage)
+        public MachineGroup(string? locationKey, IEnumerable<IMachine> machines, IEnumerable<IContainer> containers, IEnumerable<Vector2> tiles, Func<IContainer[], StorageManager> buildStorage)
         {
             this.LocationKey = locationKey;
             this.Machines = machines.ToArray();
@@ -77,10 +77,10 @@ namespace Pathoschild.Stardew.Automate.Framework
             // clear expired timers
             if (this.MachinePauseExpiries.Count > 0)
             {
-                foreach (var entry in this.MachinePauseExpiries.ToArray())
+                foreach ((IMachine? machine, double expiryTime) in this.MachinePauseExpiries.ToArray())
                 {
-                    if (curTime >= entry.Value)
-                        this.MachinePauseExpiries.Remove(entry.Key);
+                    if (curTime >= expiryTime)
+                        this.MachinePauseExpiries.Remove(machine);
                 }
             }
 
@@ -109,11 +109,11 @@ namespace Pathoschild.Stardew.Automate.Framework
             // process output
             foreach (IMachine machine in outputReady)
             {
-                ITrackedStack output = null;
+                ITrackedStack? output = null;
                 try
                 {
                     output = machine.GetOutput();
-                    if (storage.TryPush(output) && machine.GetState() == MachineState.Empty)
+                    if ((output is null || storage.TryPush(output)) && machine.GetState() == MachineState.Empty)
                         inputReady.Add(machine);
                 }
                 catch (Exception ex)
@@ -136,7 +136,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             }
 
             // process input
-            HashSet<string> ignoreMachines = new HashSet<string>();
+            HashSet<string> ignoreMachines = new();
             foreach (IMachine machine in inputReady)
             {
                 if (ignoreMachines.Contains(machine.MachineTypeID))

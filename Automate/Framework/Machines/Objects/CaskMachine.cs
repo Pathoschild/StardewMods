@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -35,11 +33,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             Cask cask = this.Machine;
 
-            return new TrackedItem(cask.heldObject.Value, this.Reset);
+            return this.GetTracked(cask.heldObject.Value, this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -55,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
                 if (agingRate <= 0)
                     continue;
 
-                SObject ingredient = (SObject)consumable.Take(1);
+                SObject ingredient = (SObject)consumable.Take(1)!;
 
                 cask.heldObject.Value = ingredient;
                 cask.MinutesUntilReady = 999999;

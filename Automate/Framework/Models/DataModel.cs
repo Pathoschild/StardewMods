@@ -1,9 +1,5 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using Pathoschild.Stardew.Common;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -14,26 +10,23 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         ** Accessors
         *********/
         /// <summary>The name to use for each floor ID.</summary>
-        public Dictionary<int, DataModelFloor> FloorNames { get; set; } = new();
+        public Dictionary<int, DataModelFloor> FloorNames { get; } = new();
 
         /// <summary>Mods which add custom machine recipes and require a separate automation component.</summary>
-        public DataModelIntegration[] SuggestedIntegrations { get; set; } = Array.Empty<DataModelIntegration>();
+        public DataModelIntegration[] SuggestedIntegrations { get; }
 
         /// <summary>The configuration for specific machines by ID.</summary>
-        public Dictionary<string, ModConfigMachine> DefaultMachineOverrides { get; set; } = new();
+        public Dictionary<string, ModConfigMachine> DefaultMachineOverrides { get; } = new(StringComparer.OrdinalIgnoreCase);
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="suggestedIntegrations">Mods which add custom machine recipes and require a separate automation component.</param>
+        public DataModel(DataModelIntegration[]? suggestedIntegrations)
         {
-            this.FloorNames ??= new();
-            this.SuggestedIntegrations ??= Array.Empty<DataModelIntegration>();
-            this.DefaultMachineOverrides = this.DefaultMachineOverrides.ToNonNullCaseInsensitive();
+            this.SuggestedIntegrations = suggestedIntegrations ?? Array.Empty<DataModelIntegration>();
         }
     }
 }

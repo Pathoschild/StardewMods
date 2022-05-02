@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -43,7 +41,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         }
 
         /// <summary>Get the output item.</summary>
-        public ITrackedStack GetOutput()
+        public ITrackedStack? GetOutput()
         {
             return this.Machine.GetOutput();
         }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +21,10 @@ namespace Pathoschild.Stardew.Automate
         *********/
         /// <summary>A sample item for comparison.</summary>
         /// <remarks>This should be equivalent to the underlying item (except in stack size), but *not* a reference to it.</remarks>
-        public Item Sample { get; private set; }
+        public Item Sample { get; }
 
         /// <summary>The underlying item type.</summary>
-        public ItemType Type { get; private set; } = ItemType.Unknown;
+        public ItemType Type { get; }
 
         /// <summary>The number of items in the stack.</summary>
         public int Count => this.Stacks.Sum(p => p.Count);
@@ -39,6 +37,12 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stacks">The underlying item stacks.</param>
         public TrackedItemCollection(params ITrackedStack[] stacks)
         {
+            if (!stacks.Any())
+                throw new InvalidOperationException("Can't create a tracked item collection containing no items.");
+
+            this.Sample = stacks[0].Sample;
+            this.Type = (ItemType)this.Sample.GetItemType();
+
             foreach (ITrackedStack stack in stacks)
                 this.Add(stack);
         }
@@ -47,25 +51,21 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="stack">The item stack to add.</param>
         public void Add(ITrackedStack stack)
         {
-            if (stack?.Sample == null)
+            if (stack == null)
+                throw new ArgumentNullException(nameof(stack));
+            if (stack.Sample == null)
                 throw new InvalidOperationException("Can't track an item with no underlying item.");
 
             this.Stacks.Add(stack);
-            if (this.Sample == null)
-            {
-                this.Sample = stack.Sample;
-                this.Type = (ItemType)this.Sample.GetItemType();
-            }
         }
 
         /// <summary>Get whether the underlying items can stack with the items in another stack, based on their respective <see cref="Sample"/> values.</summary>
         /// <param name="stack">The other stack to check.</param>
-        public bool CanStackWith(ITrackedStack stack)
+        public bool CanStackWith(ITrackedStack? stack)
         {
-            if (stack?.Sample == null)
-                return false;
-
-            return this.Sample == null || this.Sample.canStackWith(stack.Sample);
+            return
+                stack?.Sample != null
+                && this.Sample.canStackWith(stack.Sample);
         }
 
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.Automate
         }
 
         /// <inheritdoc />
-        public Item Take(int count)
+        public Item? Take(int count)
         {
             if (count <= 0 || !this.Stacks.Any())
                 return null;
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.Automate
         /// <inheritdoc />
         public void PreventEmptyStacks()
         {
-            foreach (var stack in this.Stacks)
+            foreach (ITrackedStack stack in this.Stacks)
                 stack.PreventEmptyStacks();
         }
     }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -68,10 +66,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
             if (stack.Count <= 0 || this.Chest.SpecialChestType == Chest.SpecialChestTypes.AutoLoader)
                 return;
 
-            IList<Item> inventory = this.GetInventory();
+            IList<Item?> inventory = this.GetInventory();
 
             // try stack into existing slot
-            foreach (Item slot in inventory)
+            foreach (Item? slot in inventory)
             {
                 if (slot != null && stack.Sample.canStackWith(slot))
                 {
@@ -113,7 +111,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         }
 
         /// <inheritdoc />
-        public ITrackedStack Get(Func<Item, bool> predicate, int count)
+        public ITrackedStack? Get(Func<Item, bool> predicate, int count)
         {
             ITrackedStack[] stacks = this.GetImpl(predicate, count).ToArray();
             if (!stacks.Any())
@@ -124,9 +122,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         /// <inheritdoc />
         public IEnumerator<ITrackedStack> GetEnumerator()
         {
-            foreach (Item item in this.GetInventory().ToArray())
+            foreach (Item? item in this.GetInventory().ToArray())
             {
-                ITrackedStack stack = this.GetTrackedItem(item);
+                ITrackedStack? stack = this.GetTrackedItem(item);
                 if (stack != null)
                     yield return stack;
             }
@@ -143,7 +141,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         ** Private methods
         *********/
         /// <summary>Get the chest inventory.</summary>
-        private IList<Item> GetInventory()
+        private IList<Item?> GetInventory()
         {
             return this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
         }
@@ -155,11 +153,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
         private IEnumerable<ITrackedStack> GetImpl(Func<Item, bool> predicate, int count)
         {
             int countFound = 0;
-            foreach (Item item in this.GetInventory())
+            foreach (Item? item in this.GetInventory())
             {
                 if (item != null && predicate(item))
                 {
-                    ITrackedStack stack = this.GetTrackedItem(item);
+                    ITrackedStack? stack = this.GetTrackedItem(item);
                     if (stack == null)
                         continue;
 
@@ -173,7 +171,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Storage
 
         /// <summary>Get a tracked item synced with the chest inventory.</summary>
         /// <param name="item">The item to track.</param>
-        private ITrackedStack GetTrackedItem(Item item)
+        private ITrackedStack? GetTrackedItem(Item? item)
         {
             if (item == null || item.Stack <= 0)
                 return null;

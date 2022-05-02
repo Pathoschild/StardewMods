@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -55,9 +53,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.Reset);
+            return this.GetTracked(this.Machine.heldObject.Value, onEmpty: this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -66,9 +64,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         public override bool SetInput(IStorage input)
         {
             // get bait
-            if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable bait))
+            if (input.TryGetIngredient(SObject.baitCategory, 1, out IConsumable? bait))
             {
-                this.Machine.bait.Value = (SObject)bait.Take();
+                this.Machine.bait.Value = (SObject)bait.Take()!;
                 this.Reflection.GetField<bool>(this.Machine, "lidFlapping").SetValue(true);
                 this.Reflection.GetField<float>(this.Machine, "lidFlapTimer").SetValue(60);
                 return true;
@@ -94,7 +92,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
             // mark fish caught for achievements and stats
             IDictionary<int, string> fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
-            if (fishData.TryGetValue(item.ParentSheetIndex, out string fishRow))
+            if (fishData.TryGetValue(item.ParentSheetIndex, out string? fishRow))
             {
                 int size = 0;
                 try

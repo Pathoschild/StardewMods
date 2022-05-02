@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using StardewValley;
 using SObject = StardewValley.Object;
@@ -37,11 +35,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             : base(machine, location, tile) { }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             SObject machine = this.Machine;
 
-            return new TrackedItem(machine.heldObject.Value, this.Reset);
+            return this.GetTracked(machine.heldObject.Value, this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -51,10 +49,10 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         {
             SObject machine = this.Machine;
 
-            if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out IRecipe recipe))
+            if (input.TryGetIngredient(this.Recipes, out IConsumable? consumable, out IRecipe? recipe))
             {
                 // get output
-                var inputStack = consumable.Take();
+                var inputStack = consumable.Take()!;
                 Item output = recipe.Output(inputStack);
                 if (consumable.Sample is SObject sampleInput)
                 {

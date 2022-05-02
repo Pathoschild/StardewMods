@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Objects;
@@ -30,10 +28,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
-            Item next = this.GetNextOutput();
-            return new TrackedItem(next, onEmpty: this.OnOutputTaken);
+            return this.GetTracked(this.GetNextOutput(), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -65,7 +62,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the next output item.</summary>
-        private Item GetNextOutput()
+        private Item? GetNextOutput()
         {
             foreach (Item item in this.GetOutputChest().items)
             {
