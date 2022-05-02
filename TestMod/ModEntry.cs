@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -39,7 +37,7 @@ namespace Pathoschild.Stardew.TestMod
         /// <inheritdoc cref="IContentEvents.AssetRequested"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         {
             this.LoadedAssets.Add(e.Name);
 
@@ -57,7 +55,7 @@ namespace Pathoschild.Stardew.TestMod
         /// <inheritdoc cref="IInputEvents.ButtonPressed"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonPressed(object sender, ButtonPressedEventArgs e)
+        private void OnButtonPressed(object? sender, ButtonPressedEventArgs e)
         {
             // print list of loaded assets
             if (e.Button == SButton.F12)

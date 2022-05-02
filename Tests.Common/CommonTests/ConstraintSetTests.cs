@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -296,16 +294,16 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         /// <param name="expectedResult">The result that should be returned for each test value.</param>
         [TestCase(new[] { "boop", "BOOP", "foo" }, new[] { "BOOP" }, new[] { "boop", "foo" }, true)]
         [TestCase(new[] { "boop", "BOOP", "foo" }, new[] { "BOOP" }, new[] { "BOOP", "bOOp", null, "" }, false)]
-        public void Allows_WithCaseSensitiveComparer(string[] restrict, string[] exclude, string[] test, bool expectedResult)
+        public void Allows_WithCaseSensitiveComparer(string[] restrict, string[] exclude, string?[] test, bool expectedResult)
         {
             // arrange
-            ConstraintSet<string> set = this.CreateAndAssertSet<string>();
+            ConstraintSet<string?> set = this.CreateAndAssertSet<string?>();
             set.AddBound(restrict);
             set.Exclude(exclude);
             this.AssertBounds(set, restrict, exclude);
 
             // act/assert
-            foreach (string value in test)
+            foreach (string? value in test)
                 set.Allows(value).Should().Be(expectedResult, $"expected '{value}' to {(expectedResult ? "be allowed" : "be excluded")}");
         }
 
@@ -316,10 +314,10 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         /// <param name="expectedResult">The result that should be returned for each test value.</param>
         [TestCase(new[] { "boop", "BAR", "foo" }, new[] { "BOOP" }, new[] { "bar", "bAr", "foo" }, true)]
         [TestCase(new[] { "boop", "BOOP", "foo" }, new[] { "BOOP" }, new[] { "boop", "bOOp", "BOOP", null, "" }, false)]
-        public void Allows_WithCaseInsensitiveComparer(string[] restrict, string[] exclude, string[] test, bool expectedResult)
+        public void Allows_WithCaseInsensitiveComparer(string[] restrict, string[] exclude, string?[] test, bool expectedResult)
         {
             // arrange
-            ConstraintSet<string> set = this.CreateAndAssertSet(StringComparer.OrdinalIgnoreCase);
+            ConstraintSet<string?> set = this.CreateAndAssertSet<string?>(StringComparer.OrdinalIgnoreCase);
             set.AddBound(restrict);
             set.Exclude(exclude);
             this.AssertBounds(
@@ -329,7 +327,7 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
             );
 
             // act/assert
-            foreach (string value in test)
+            foreach (string? value in test)
                 set.Allows(value).Should().Be(expectedResult, $"expected '{value}' to {(expectedResult ? "be allowed" : "be excluded")}");
         }
 
@@ -442,10 +440,10 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         /// <summary>Create a constraint set and assert that its values match the expected values.</summary>
         /// <typeparam name="T">The set type.</typeparam>
         /// <param name="comparer">The equality comparer to use.</param>
-        private ConstraintSet<T> CreateAndAssertSet<T>(IEqualityComparer<T> comparer = null)
+        private ConstraintSet<T> CreateAndAssertSet<T>(IEqualityComparer<T?>? comparer = null)
         {
             // act
-            ConstraintSet<T> set = new ConstraintSet<T>(comparer ?? EqualityComparer<T>.Default);
+            ConstraintSet<T> set = new ConstraintSet<T>(comparer ?? EqualityComparer<T?>.Default);
 
             // assert
             set.IsInfinite.Should().BeTrue("the set should be infinite immediately after construction because no bounds have been set");
