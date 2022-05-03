@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewValley;
@@ -31,7 +29,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        public IList<Item> Inventory => this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
+        public IList<Item?> Inventory => this.Chest.GetItemsForPlayer(Game1.player.UniqueMultiplayerID);
 
         /// <summary>The persisted data for this container.</summary>
         public ContainerData Data { get; }
@@ -66,16 +64,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="container">The other container.</param>
-        public bool IsSameAs(IContainer container)
+        public bool IsSameAs(IContainer? container)
         {
-            return container != null && this.IsSameAs(container.Inventory);
+            return
+                container is not null
+                && this.IsSameAs(container.Inventory);
         }
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="inventory">The other container's inventory.</param>
-        public bool IsSameAs(IList<Item> inventory)
+        public bool IsSameAs(IList<Item?>? inventory)
         {
-            return object.ReferenceEquals(this.Inventory, inventory);
+            return
+                inventory is not null
+                && object.ReferenceEquals(this.Inventory, inventory);
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>

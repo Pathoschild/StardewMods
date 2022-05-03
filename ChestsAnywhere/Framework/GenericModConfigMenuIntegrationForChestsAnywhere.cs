@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Linq;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
@@ -155,7 +153,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                         if (config.DisabledInLocations.Contains(MinesName))
                             parsed.Add(MinesName);
 
-                        config.DisabledInLocations = parsed;
+                        config.DisabledInLocations.Clear();
+                        config.DisabledInLocations.AddMany(parsed);
                     }
                 );
         }

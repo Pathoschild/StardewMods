@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
@@ -34,7 +32,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         public Vector2 Tile { get; }
 
         /// <summary>The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</summary>
-        public object MapEntity { get; }
+        public object? MapEntity { get; }
 
         /// <summary>Whether Automate options can be configured for this chest.</summary>
         public bool CanConfigureAutomate => this.Container.CanConfigureAutomate;
@@ -71,7 +69,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="mapEntity">The map entity equivalent to the container (e.g. the object or furniture instance), if applicable.</param>
         /// <param name="defaultDisplayName">The default name to display if it hasn't been customized.</param>
         /// <param name="defaultCategory">The default category to display if it hasn't been customized.</param>
-        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, object mapEntity, string defaultDisplayName, string defaultCategory)
+        public ManagedChest(IContainer container, GameLocation location, Vector2 tile, object? mapEntity, string defaultDisplayName, string defaultCategory)
         {
             this.Container = container;
             this.Location = location;
@@ -95,7 +93,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="automatePreventRemovingStacks">Whether Automate should avoid removing the last item in a stack.</param>
         /// <param name="automateStoreItems">Whether Automate should take items from this container.</param>
         /// <param name="automateTakeItems">Whether Automate should put items in this container.</param>
-        public void Update(string name, string category, int? order, bool ignored, bool automatePreventRemovingStacks, AutomateContainerPreference automateStoreItems, AutomateContainerPreference automateTakeItems)
+        public void Update(string? name, string? category, int? order, bool ignored, bool automatePreventRemovingStacks, AutomateContainerPreference automateStoreItems, AutomateContainerPreference automateTakeItems)
         {
             ContainerData data = this.Container.Data;
 

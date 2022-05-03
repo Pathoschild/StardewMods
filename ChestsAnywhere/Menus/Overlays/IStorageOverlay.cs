@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
 
@@ -12,13 +10,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         ** Accessors
         *********/
         /// <summary>The overlay element which is currently handling input.</summary>
-        public Element ActiveElement { get; }
+        Element ActiveElement { get; }
 
         /// <summary>An event raised when the player selects a chest.</summary>
-        event Action<ManagedChest> OnChestSelected;
+        event Action<ManagedChest>? OnChestSelected;
 
         /// <summary>An event raised when the Automate options for a chest change.</summary>
-        event Action<ManagedChest> OnAutomateOptionsChanged;
+        event Action<ManagedChest>? OnAutomateOptionsChanged;
 
 
         /*********

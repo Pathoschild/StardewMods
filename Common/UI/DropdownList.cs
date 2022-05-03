@@ -92,7 +92,7 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="x">The X-position from which to render the list.</param>
         /// <param name="y">The Y-position from which to render the list.</param>
         /// <param name="font">The font with which to render text.</param>
-        public DropdownList(TValue selectedValue, TValue[] items, Func<TValue, string> getLabel, int x, int y, SpriteFont font)
+        public DropdownList(TValue? selectedValue, TValue[] items, Func<TValue, string> getLabel, int x, int y, SpriteFont font)
             : base(new Rectangle(), nameof(DropdownList<TValue>))
         {
             // save values

@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using StardewValley;
 using StardewValley.Menus;
@@ -18,14 +17,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         internal readonly StorageFurniture Furniture;
 
         /// <summary>The categories accepted by a dresser.</summary>
-        private static HashSet<int> DresserCategories;
+        private static HashSet<int> DresserCategories = null!; // set when the class is first constructed
 
 
         /*********
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        public IList<Item> Inventory => this.Furniture.heldItems;
+        public IList<Item?> Inventory => this.Furniture.heldItems;
 
         /// <summary>The persisted data for this container.</summary>
         public ContainerData Data { get; }
@@ -39,6 +38,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="furniture">The in-game storage furniture.</param>
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition", Justification = $"{nameof(StorageFurnitureContainer.DresserCategories)} is only non-null after the first instance is constructed.")]
         public StorageFurnitureContainer(StorageFurniture furniture)
         {
             this.Furniture = furniture;
@@ -56,16 +56,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="container">The other container.</param>
-        public bool IsSameAs(IContainer container)
+        public bool IsSameAs(IContainer? container)
         {
-            return container != null && this.IsSameAs(container.Inventory);
+            return
+                container is not null
+                && this.IsSameAs(container.Inventory);
         }
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="inventory">The other container's inventory.</param>
-        public bool IsSameAs(IList<Item> inventory)
+        public bool IsSameAs(IList<Item?>? inventory)
         {
-            return object.ReferenceEquals(this.Inventory, inventory);
+            return
+                inventory is not null
+                && object.ReferenceEquals(this.Inventory, inventory);
         }
 
         /// <summary>Open a menu to transfer items between the player's inventory and this chest.</summary>

@@ -1,5 +1,3 @@
-#nullable disable
-
 using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewValley.Objects;

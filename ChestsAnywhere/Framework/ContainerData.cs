@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -24,10 +22,10 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>The display name.</summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>The category name (if any).</summary>
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
         /// <summary>Whether the container should be ignored.</summary>
         public bool IsIgnored { get; set; }
@@ -49,13 +47,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used in deserialization for " + nameof(ShippingBinContainer))]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = $"Used in deserialization for {nameof(ShippingBinContainer)}")]
         public ContainerData() { }
 
         /// <summary>Load contain data for the given item.</summary>
         /// <param name="data">The mod data to read.</param>
         /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
-        public ContainerData(ModDataDictionary data, string discriminator = null)
+        public ContainerData(ModDataDictionary data, string? discriminator = null)
         {
             string prefix = ContainerData.GetKeyPrefix(discriminator);
 
@@ -71,7 +69,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Save the container data to the given mod data.</summary>
         /// <param name="data">The mod data.</param>
         /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
-        public void ToModData(ModDataDictionary data, string discriminator = null)
+        public void ToModData(ModDataDictionary data, string? discriminator = null)
         {
             string prefix = ContainerData.GetKeyPrefix(discriminator);
 
@@ -86,6 +84,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         }
 
         /// <summary>Whether the container has the default display name.</summary>
+        [MemberNotNullWhen(false, nameof(ContainerData.Name))]
         public bool HasDefaultDisplayName()
         {
             return string.IsNullOrWhiteSpace(this.Name);
@@ -109,7 +108,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         *********/
         /// <summary>Get the prefix for fields in a <see cref="ModDataDictionary"/> field.</summary>
         /// <param name="discriminator">A key added to the mod data keys to distinguish different containers in the same mod data.</param>
-        private static string GetKeyPrefix(string discriminator)
+        private static string GetKeyPrefix(string? discriminator)
         {
             string prefix = ContainerData.ModDataPrefix;
 
