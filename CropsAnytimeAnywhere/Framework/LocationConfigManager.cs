@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using StardewValley;
 
@@ -13,7 +12,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         ** Fields
         *********/
         /// <summary>A lookup cache of configurations by location key.</summary>
-        private readonly IDictionary<string, PerLocationConfig> ConfigCache = new Dictionary<string, PerLocationConfig>();
+        private readonly Dictionary<string, PerLocationConfig?> ConfigCache = new();
 
         /// <summary>The underlying mod configuration.</summary>
         private readonly ModConfig Config;
@@ -42,7 +41,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 
         /// <summary>Get the location config that applies for a given location name.</summary>
         /// <param name="location">The location.</param>
-        public PerLocationConfig GetForLocation(GameLocation location)
+        public PerLocationConfig? GetForLocation(GameLocation location)
         {
             // shortcut for common case
             if (this.OnlyHasGlobal)
@@ -50,7 +49,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 
             // get config with caching
             string cacheKey = $"{location.NameOrUniqueName}|{location.IsOutdoors}|{location.GetHashCode()}";
-            if (!this.ConfigCache.TryGetValue(cacheKey, out PerLocationConfig config))
+            if (!this.ConfigCache.TryGetValue(cacheKey, out PerLocationConfig? config))
             {
                 this.ConfigCache[cacheKey] = config =
                     (
@@ -67,7 +66,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         /// <summary>Get the configuration that applies for a given location, if any.</summary>
         /// <param name="location">The location being patched.</param>
         /// <param name="config">The config to apply, if any.</param>
-        public bool TryGetForLocation(GameLocation location, out PerLocationConfig config)
+        public bool TryGetForLocation(GameLocation location, [NotNullWhen(true)] out PerLocationConfig? config)
         {
             config = this.GetForLocation(location);
             return config != null;
@@ -83,8 +82,8 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         private bool AppliesTo(string key, GameLocation location)
         {
             key = key.ToLower();
-            string name = location.Name?.ToLower();
-            string uniqueName = location.NameOrUniqueName?.ToLower();
+            string? name = location.Name?.ToLower();
+            string? uniqueName = location.NameOrUniqueName?.ToLower();
 
             switch (key)
             {

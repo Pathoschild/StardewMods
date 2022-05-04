@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.Common.Patching;
@@ -16,7 +14,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private LocationConfigManager Config;
+        private LocationConfigManager Config = null!; // set in Entry
 
 
         /*********
@@ -46,7 +44,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
         *********/
         /// <summary>Load the fallback tile types.</summary>
         /// <returns>Returns the overrides if valid, else null.</returns>
-        private IDictionary<string, IDictionary<int, string>> LoadFallbackTileTypes()
+        private Dictionary<string, Dictionary<int, string>> LoadFallbackTileTypes()
         {
             const string path = "assets/data.json";
 
@@ -57,20 +55,18 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
                 if (raw == null)
                 {
                     this.Monitor.Log($"Can't find '{path}' file. Some features might not work; consider reinstalling the mod to fix this.", LogLevel.Warn);
-                    return null;
+                    return new();
                 }
 
                 // parse file
-                var data = new Dictionary<string, IDictionary<int, string>>(StringComparer.OrdinalIgnoreCase);
-                foreach (var tilesheetGroup in raw.FallbackTileTypes)
+                var data = new Dictionary<string, Dictionary<int, string>>(StringComparer.OrdinalIgnoreCase);
+                foreach ((string tilesheetName, Dictionary<string, int[]> tileGroups) in raw.FallbackTileTypes)
                 {
-                    string tilesheetName = tilesheetGroup.Key;
-
                     var typeLookup = new Dictionary<int, string>();
-                    foreach (var tileGroup in tilesheetGroup.Value)
+                    foreach ((string type, int[] tileIds) in tileGroups)
                     {
-                        foreach (int id in tileGroup.Value)
-                            typeLookup[id] = tileGroup.Key;
+                        foreach (int id in tileIds)
+                            typeLookup[id] = type;
                     }
 
                     data[tilesheetName] = typeLookup;
@@ -82,7 +78,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere
             {
                 this.Monitor.Log($"Can't load '{path}' file (see log for details). Some features might not work; consider reinstalling the mod to fix this.", LogLevel.Warn);
                 this.Monitor.Log(ex.ToString());
-                return null;
+                return new();
             }
         }
     }

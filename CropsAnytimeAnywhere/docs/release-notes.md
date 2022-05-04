@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Fixed mod preventing tilled dirt decay in affected locations.
 
 ## 1.4.2

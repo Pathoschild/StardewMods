@@ -27,5 +27,6 @@
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Premultiply/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=prepopulate/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=SMAPI_0027s/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=tillability/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Transpile/@EntryIndexedValue">True</s:Boolean>
 </wpf:ResourceDictionary>
