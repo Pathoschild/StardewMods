@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -30,6 +31,7 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <param name="target">The specific text field to change as a breadcrumb path. Each value in the list represents a field to navigate into.</param>
         /// <param name="value">The value to append or prepend.</param>
         /// <param name="delimiter">If the target field already has a value, text to add between the previous and inserted values, if any.</param>
+        [JsonConstructor]
         public TextOperationConfig(string? operation, string?[]? target, string? value, string? delimiter)
         {
             this.Operation = operation;
