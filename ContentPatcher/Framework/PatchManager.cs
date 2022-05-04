@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +9,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Validators;
 using Microsoft.Xna.Framework.Graphics;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -130,7 +129,7 @@ namespace ContentPatcher.Framework
                 foreach (IPatch patch in loaders)
                 {
                     e.LoadFrom(
-                        load: () => applyLoad.Invoke(this, new object[] { patch, assetName }),
+                        load: () => applyLoad.Invoke(this, new object[] { patch, assetName })!,
                         priority: AssetLoadPriority.Exclusive,
                         onBehalfOf: patch.ContentPack.Manifest.UniqueID
                     );
@@ -208,12 +207,12 @@ namespace ContentPatcher.Framework
             this.AssetsWithRemovedPatches.Clear();
 
             // init for verbose logging
-            List<PatchAuditChange> verbosePatchesReloaded = this.Monitor.IsVerbose
+            List<PatchAuditChange>? verbosePatchesReloaded = this.Monitor.IsVerbose
                 ? new()
                 : null;
 
             // update patches
-            IAssetName prevAssetName = null;
+            IAssetName? prevAssetName = null;
             HashSet<IPatch> newPatches = new(new ObjectReferenceComparer<IPatch>());
             while (patchQueue.Any())
             {
@@ -227,8 +226,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // track old values
-                string wasFromAsset = patch.FromAsset;
-                IAssetName wasTargetAsset = patch.TargetAsset;
+                string? wasFromAsset = patch.FromAsset;
+                IAssetName? wasTargetAsset = patch.TargetAsset;
                 bool wasReady = patch.IsReady && !wasPending.Contains(patch);
 
                 // update patch
@@ -291,9 +290,9 @@ namespace ContentPatcher.Framework
                 if (reloadAsset)
                 {
                     patch.IsApplied = false;
-                    if (wasReady)
+                    if (wasReady && wasTargetAsset != null)
                         reloadAssetNames.Add(wasTargetAsset);
-                    if (isReady)
+                    if (isReady && patch.TargetAsset != null)
                         reloadAssetNames.Add(patch.TargetAsset);
                 }
 
@@ -325,12 +324,12 @@ namespace ContentPatcher.Framework
                 {
                     var patch = entry.Patch;
 
-                    List<string> notes = new List<string>();
+                    List<string> notes = new();
 
                     if (entry.WillInvalidate)
                     {
-                        var assetNames = new[] { entry.WasTargetAsset, patch.TargetAsset }
-                            .Where(p => p != null)
+                        IEnumerable<IAssetName> assetNames = new[] { entry.WasTargetAsset, patch.TargetAsset }
+                            .WhereNotNull()
                             .Distinct();
                         notes.Add($"invalidates {string.Join(", ", assetNames.Select(p => p.Name).OrderByHuman())}");
                     }
@@ -397,7 +396,7 @@ namespace ContentPatcher.Framework
                 return;
 
             // mark asset to reload
-            if (patch.IsApplied)
+            if (patch.IsApplied && patch.TargetAsset != null)
                 this.AssetsWithRemovedPatches.Add(patch.TargetAsset);
 
             // rebuild indexes
@@ -436,7 +435,7 @@ namespace ContentPatcher.Framework
         /// <param name="assetName">The asset name for which to find patches.</param>
         public IEnumerable<IPatch> GetPatches(IAssetName assetName)
         {
-            if (this.PatchesByCurrentTarget.TryGetValue(assetName, out SortedSet<IPatch> patches))
+            if (this.PatchesByCurrentTarget.TryGetValue(assetName, out SortedSet<IPatch>? patches))
                 return patches;
             return Array.Empty<IPatch>();
         }
@@ -485,7 +484,8 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to apply.</param>
         /// <param name="assetName">The asset name to load.</param>
         /// <returns>Returns the loaded asset data.</returns>
-        private T ApplyLoad<T>(IPatch patch, IAssetName assetName)
+        private T? ApplyLoad<T>(IPatch patch, IAssetName assetName)
+            where T : notnull
         {
             if (this.Monitor.IsVerbose)
                 this.Monitor.VerboseLog($"Patch \"{patch.Path}\" loaded {assetName}.");
@@ -494,7 +494,7 @@ namespace ContentPatcher.Framework
 
             foreach (IAssetValidator validator in this.AssetValidators)
             {
-                if (!validator.TryValidate(assetName, data, patch, out string error))
+                if (!validator.TryValidate(assetName, data, patch, out string? error))
                 {
                     this.Monitor.Log($"Can't apply patch {patch.Path} to {assetName}: {error}.", LogLevel.Error);
                     return default;
@@ -510,6 +510,7 @@ namespace ContentPatcher.Framework
         /// <param name="patch">The patch to apply.</param>
         /// <param name="asset">The asset data to edit.</param>
         private void ApplyEdit<T>(IPatch patch, IAssetData asset)
+            where T : notnull
         {
             if (this.Monitor.IsVerbose)
                 this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.Name}.");
@@ -547,7 +548,7 @@ namespace ContentPatcher.Framework
             var patches = new HashSet<IPatch>(new ObjectReferenceComparer<IPatch>());
             foreach (string tokenName in globalChangedTokens)
             {
-                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch> affectedPatches))
+                if (this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affectedPatches))
                 {
                     foreach (IPatch patch in affectedPatches)
                     {
@@ -571,7 +572,7 @@ namespace ContentPatcher.Framework
             // index by target asset
             if (patch.TargetAsset != null)
             {
-                if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out SortedSet<IPatch> list))
+                if (!this.PatchesByCurrentTarget.TryGetValue(patch.TargetAsset, out SortedSet<IPatch>? list))
                     this.PatchesByCurrentTarget[patch.TargetAsset] = list = new SortedSet<IPatch>(PatchIndexComparer.Instance);
                 list.Add(patch);
             }
@@ -581,7 +582,7 @@ namespace ContentPatcher.Framework
             {
                 void IndexForToken(string tokenName)
                 {
-                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch> affected))
+                    if (!this.PatchesAffectedByToken.TryGetValue(tokenName, out SortedSet<IPatch>? affected))
                         this.PatchesAffectedByToken[tokenName] = affected = new SortedSet<IPatch>(PatchIndexComparer.Instance);
                     affected.Add(patch);
                 }

@@ -56,7 +56,7 @@ namespace Pathoschild.Stardew.Common.Integrations.ProducerFrameworkMod
         {
             return raw
                 .Select(this.ReadRecipe)
-                .Where(p => p != null)!;
+                .WhereNotNull();
         }
 
 

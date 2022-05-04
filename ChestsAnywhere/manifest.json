@@ -2,7 +2,7 @@
     "Name": "Chests Anywhere",
     "Author": "Pathoschild",
     "Version": "1.21.3",
-    "MinimumApiVersion": "3.13.0",
+    "MinimumApiVersion": "3.14.0",
     "Description": "Access your chests from anywhere and organize them your way.",
     "UniqueID": "Pathoschild.ChestsAnywhere",
     "EntryDll": "ChestsAnywhere.dll",

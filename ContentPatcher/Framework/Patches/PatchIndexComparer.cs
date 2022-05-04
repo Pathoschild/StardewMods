@@ -1,12 +1,10 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 
 namespace ContentPatcher.Framework.Patches
 {
     /// <summary>A comparer which sorts patches by their global index within the content pack's <c>content.json</c>.</summary>
-    internal class PatchIndexComparer : IComparer<IPatch>
+    internal class PatchIndexComparer : IComparer<IPatch?>
     {
         /*********
         ** Accessors
@@ -19,10 +17,10 @@ namespace ContentPatcher.Framework.Patches
         ** Public methods
         *********/
         /// <inheritdoc />
-        public int Compare(IPatch leftPatch, IPatch rightPatch)
+        public int Compare(IPatch? leftPatch, IPatch? rightPatch)
         {
-            int[] left = leftPatch?.IndexPath;
-            int[] right = rightPatch?.IndexPath;
+            int[]? left = leftPatch?.IndexPath;
+            int[]? right = rightPatch?.IndexPath;
 
             // handle null just in case
             if (left is null || right is null)

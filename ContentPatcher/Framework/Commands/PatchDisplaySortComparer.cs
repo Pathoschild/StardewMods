@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -15,7 +13,7 @@ namespace ContentPatcher.Framework.Commands
         ** Public methods
         *********/
         /// <inheritdoc />
-        public int Compare(PatchInfo left, PatchInfo right)
+        public int Compare(PatchInfo? left, PatchInfo? right)
         {
             // equivalent
             if (object.ReferenceEquals(left, right) || left?.Path == null || right?.Path == null)
@@ -48,7 +46,7 @@ namespace ContentPatcher.Framework.Commands
             // for an 'Include' patch, replace the patch name with the 'from' asset path to sort included patches under their include patch
             if (patch.ParsedType == PatchType.Include)
             {
-                string includeFrom = patch.ParsedFromAsset?.Value ?? patch.RawFromAsset;
+                string? includeFrom = patch.ParsedFromAsset?.Value ?? patch.RawFromAsset;
                 if (includeFrom != null)
                     path = new LogPathBuilder(path.Segments.Take(path.Segments.Length - 1)).With(PathUtilities.NormalizeAssetName(includeFrom));
             }

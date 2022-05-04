@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -61,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get whether the given file path exists.</summary>
         /// <param name="path">The relative file path.</param>
         /// <exception cref="InvalidOperationException">The path is not relative or contains directory climbing (../).</exception>
-        private bool GetPathExists(string path)
+        private bool GetPathExists(string? path)
         {
             if (string.IsNullOrWhiteSpace(path))
                 return false;

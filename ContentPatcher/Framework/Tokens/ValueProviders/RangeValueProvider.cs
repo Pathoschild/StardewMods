@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 
@@ -34,7 +33,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
@@ -68,7 +67,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="min">The parsed min value, if valid.</param>
         /// <param name="max">The parsed max value, if valid.</param>
         /// <param name="error">The error indicating why the range is invalid, if applicable.</param>
-        private bool TryParseRange(IInputArguments input, out int min, out int max, out string error)
+        private bool TryParseRange(IInputArguments input, out int min, out int max, [NotNullWhen(false)] out string? error)
         {
             min = 0;
             max = 0;

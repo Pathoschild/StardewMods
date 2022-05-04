@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using Microsoft.Xna.Framework;
@@ -68,7 +67,7 @@ namespace ContentPatcher.Framework.Commands.Commands
 
             // get type
             string typeName = args.Length > 1 ? args[1] : "System.Object";
-            Type type = Type.GetType(typeName);
+            Type? type = Type.GetType(typeName);
             if (type == null)
             {
                 this.Monitor.Log($"Could not load type '{typeName}'. This must be the C# full type name like System.Collections.Generic.Dictionary`2[[System.String],[System.String]].", LogLevel.Error);
@@ -76,7 +75,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             }
 
             // load asset
-            object asset;
+            object? asset;
             try
             {
                 asset = this.LoadAsset(assetName, type);
@@ -96,7 +95,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             {
                 fullTargetPath += ".png";
 
-                texture = this.UnpremultiplyTransparency(texture);
+                texture = this.UnPremultiplyTransparency(texture);
                 using (Stream stream = File.Create(fullTargetPath))
                     texture.SaveAsPng(stream, texture.Width, texture.Height);
 
@@ -120,7 +119,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         *********/
         /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>
         /// <param name="texture">The texture to adjust.</param>
-        private Texture2D UnpremultiplyTransparency(Texture2D texture)
+        private Texture2D UnPremultiplyTransparency(Texture2D texture)
         {
             Color[] data = new Color[texture.Width * texture.Height];
             texture.GetData(data);
@@ -146,9 +145,9 @@ namespace ContentPatcher.Framework.Commands.Commands
 
         /// <summary>Get whether an asset can be saved to JSON.</summary>
         /// <param name="asset">The asset to check.</param>
-        private bool IsDataAsset(object asset)
+        private bool IsDataAsset(object? asset)
         {
-            if (asset == null)
+            if (asset is null)
                 return false;
 
             Type type = asset.GetType();
@@ -160,7 +159,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>Load an asset from a content manager using the given type.</summary>
         /// <param name="assetName">The asset name to load.</param>
         /// <param name="type">The asset type to load.</param>
-        private object LoadAsset(string assetName, Type type)
+        private object? LoadAsset(string assetName, Type type)
         {
             return this
                 .GetType()
@@ -172,7 +171,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>Load an asset from a content manager using the given type.</summary>
         /// <typeparam name="TAsset">The asset type to load.</typeparam>
         /// <param name="assetName">The asset name to load.</param>
-        private TAsset LoadAssetImpl<TAsset>(string assetName)
+        private TAsset? LoadAssetImpl<TAsset>(string assetName)
         {
             // get from main content manager if it's already cached
             if (this.IsAssetLoaded(Game1.content, assetName))
@@ -181,12 +180,13 @@ namespace ContentPatcher.Framework.Commands.Commands
             // If it's not already cached, use a temporary content manager
             // This avoids corrupting the cache with an invalid type if it doesn't match.
             using ContentManager contentManager = Game1.content.CreateTemporary();
-            return contentManager.Load<TAsset>(assetName);
+            return contentManager.Load<TAsset?>(assetName);
         }
 
         /// <summary>Get whether the given content manager has already loaded and cached the given asset.</summary>
         /// <param name="contentManager">The content manager to check.</param>
         /// <param name="assetName">The asset path relative to the loader root directory, not including the <c>.xnb</c> extension.</param>
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier", Justification = "Extra validation in error-handling.")]
         private bool IsAssetLoaded(ContentManager contentManager, string assetName)
         {
             IAssetName parsedName = this.ContentHelper.ParseAssetName(assetName);

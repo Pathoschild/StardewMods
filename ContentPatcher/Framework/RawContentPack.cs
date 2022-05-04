@@ -1,6 +1,5 @@
-#nullable disable
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Migrations;
@@ -18,10 +17,10 @@ namespace ContentPatcher.Framework
         private readonly Func<ContentConfig, IMigration[]> GetMigrations;
 
         /// <summary>The backing field for <see cref="Content"/>.</summary>
-        private ContentConfig ContentImpl;
+        private ContentConfig? ContentImpl;
 
         /// <summary>The backing field for <see cref="Migrator"/>.</summary>
-        private IMigration MigratorImpl;
+        private IMigration? MigratorImpl;
 
 
         /*********
@@ -72,12 +71,12 @@ namespace ContentPatcher.Framework
 
         /// <summary>Parse the underlying <c>content.json</c> file and set the <see cref="Content"/> and <see cref="Migrator"/> fields.</summary>
         /// <param name="error">The error indicating why the content could not be reloaded, if applicable.</param>
-        public bool TryReloadContent(out string error)
+        public bool TryReloadContent([NotNullWhen(false)] out string? error)
         {
             const string filename = "content.json";
 
             // load raw file
-            ContentConfig content = this.ContentPack.ReadJsonFile<ContentConfig>(filename);
+            ContentConfig? content = this.ContentPack.ReadJsonFile<ContentConfig>(filename);
             if (content == null)
             {
                 error = $"content pack has no {filename} file";

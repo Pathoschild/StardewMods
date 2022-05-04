@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
@@ -22,16 +20,16 @@ namespace ContentPatcher.Framework
         public bool IsReady => this.IsInScope && !this.Errors.Any();
 
         /// <inheritdoc />
-        public InvariantHashSet InvalidTokens { get; } = new InvariantHashSet();
+        public InvariantHashSet InvalidTokens { get; } = new();
 
         /// <inheritdoc />
-        public InvariantHashSet UnreadyTokens { get; } = new InvariantHashSet();
+        public InvariantHashSet UnreadyTokens { get; } = new();
 
         /// <inheritdoc />
-        public InvariantHashSet UnavailableModTokens { get; } = new InvariantHashSet();
+        public InvariantHashSet UnavailableModTokens { get; } = new();
 
         /// <inheritdoc />
-        public InvariantHashSet Errors { get; } = new InvariantHashSet();
+        public InvariantHashSet Errors { get; } = new();
 
 
         /*********
@@ -54,7 +52,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Merge the data from another instance into this instance.</summary>
         /// <param name="other">The other contextual state to copy.</param>
-        public ContextualState MergeFrom(IContextualState other)
+        public ContextualState MergeFrom(IContextualState? other)
         {
             if (other != null)
             {
@@ -67,7 +65,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add unknown tokens required by the instance.</summary>
         /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddInvalidTokens(params string[] tokens)
+        public ContextualState AddInvalidTokens(params string[]? tokens)
         {
             this.AddRange(this.InvalidTokens, tokens);
             return this;
@@ -75,7 +73,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add valid tokens required by the instance which aren't available in the current context.</summary>
         /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddUnreadyTokens(params string[] tokens)
+        public ContextualState AddUnreadyTokens(params string[]? tokens)
         {
             this.AddRange(this.UnreadyTokens, tokens);
             return this;
@@ -83,7 +81,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add tokens which are provided by a mod which isn't installed, if any.</summary>
         /// <param name="tokens">The tokens to add.</param>
-        public ContextualState AddUnavailableModTokens(params string[] tokens)
+        public ContextualState AddUnavailableModTokens(params string[]? tokens)
         {
             this.AddRange(this.UnavailableModTokens, tokens);
             return this;
@@ -91,7 +89,7 @@ namespace ContentPatcher.Framework
 
         /// <summary>Add error phrases indicating why the instance is not ready to use.</summary>
         /// <param name="errors">The tokens to add.</param>
-        public ContextualState AddErrors(params string[] errors)
+        public ContextualState AddErrors(params string[]? errors)
         {
             this.AddRange(this.Errors, errors);
             return this;
@@ -104,7 +102,7 @@ namespace ContentPatcher.Framework
         /// <summary>Add a range of values to a target set.</summary>
         /// <param name="target">The set to update.</param>
         /// <param name="source">The values to add.</param>
-        private void AddRange(ISet<string> target, IEnumerable<string> source)
+        private void AddRange(ISet<string> target, IEnumerable<string>? source)
         {
             if (source == null)
                 return;

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -81,7 +79,7 @@ namespace ContentPatcher.Framework
             {
                 string sectionId = config.Section?.Trim() ?? "";
 
-                if (!fieldsBySection.TryGetValue(sectionId, out InvariantDictionary<ConfigField> section))
+                if (!fieldsBySection.TryGetValue(sectionId, out InvariantDictionary<ConfigField>? section))
                     fieldsBySection[sectionId] = section = new();
 
                 section[name] = config;
@@ -127,10 +125,12 @@ namespace ContentPatcher.Framework
                     get: _ => string.Join(", ", field.Value.ToArray()),
                     set: (_, newValue) =>
                     {
-                        field.Value = this.ParseCommaDelimitedField(newValue);
+                        InvariantHashSet values = this.ParseCommaDelimitedField(newValue);
 
-                        if (!field.AllowMultiple && field.Value.Count > 1)
-                            field.Value = new InvariantHashSet(field.Value.Take(1));
+                        field.Value.ReplaceWith(field.AllowMultiple
+                            ? values
+                            : values.Take(1)
+                        );
                     }
                 );
             }
@@ -154,7 +154,7 @@ namespace ContentPatcher.Framework
 
                             // set default if blank
                             if (!field.AllowBlank && !field.Value.Any())
-                                field.Value = new InvariantHashSet(field.DefaultValues);
+                                field.Value.ReplaceWith(new InvariantHashSet(field.DefaultValues));
                         }
                     );
                 }
@@ -186,7 +186,7 @@ namespace ContentPatcher.Framework
                     name: GetName,
                     tooltip: GetDescription,
                     get: _ => int.TryParse(field.Value.FirstOrDefault(), out int val) ? val : defaultValue,
-                    set: (_, val) => field.Value = new InvariantHashSet(val.ToString(CultureInfo.InvariantCulture)),
+                    set: (_, val) => field.Value.ReplaceWith(new[] { val.ToString(CultureInfo.InvariantCulture) }),
                     min: min,
                     max: max
                 );
@@ -203,7 +203,7 @@ namespace ContentPatcher.Framework
                     name: GetName,
                     tooltip: GetDescription,
                     get: _ => field.Value.FirstOrDefault() ?? "",
-                    set: (_, newValue) => field.Value = new InvariantHashSet(newValue),
+                    set: (_, newValue) => field.Value.ReplaceWith(new[] { newValue }),
                     allowedValues: choices.ToArray(),
                     formatAllowedValue: GetValueText
                 );
@@ -224,13 +224,13 @@ namespace ContentPatcher.Framework
         private void Reset()
         {
             foreach (ConfigField configField in this.Config.Values)
-                configField.Value = new InvariantHashSet(configField.DefaultValues);
+                configField.Value.ReplaceWith(configField.DefaultValues);
         }
 
         /// <summary>Get a translation if it exists, else get the fallback text.</summary>
         /// <param name="key">The translation key to find.</param>
         /// <param name="fallback">The fallback text.</param>
-        private string TryTranslate(string key, string fallback)
+        private string TryTranslate(string key, string? fallback)
         {
             string translation = this.ContentPack.Translation.Get(key).UsePlaceholder(false);
 

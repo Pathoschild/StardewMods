@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Tokens.Json
@@ -12,7 +11,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         ** Fields
         *********/
         /// <summary>The underlying contextual values.</summary>
-        private readonly AggregateContextual Contextuals = new AggregateContextual();
+        private readonly AggregateContextual Contextuals = new();
 
 
         /*********
@@ -28,6 +27,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         public bool IsReady => this.Contextuals.IsReady;
 
         /// <summary>Whether the tokenizable token represents a string value, instead of an object or array.</summary>
+        [MemberNotNullWhen(true, nameof(TokenizableJToken.Value))]
         public bool IsString => this.Value is JValue;
 
 

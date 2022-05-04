@@ -1,11 +1,10 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
+using Netcode;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -33,7 +32,7 @@ namespace ContentPatcher.Framework
         private readonly Func<bool> IsSaveBasicInfoLoadedImpl;
 
         /// <summary>A cache of common values fetched during the current context updates.</summary>
-        private readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
+        private readonly Dictionary<string, object?> Cache = new();
 
         /// <summary>The last context update for which cached values were updated.</summary>
         private int LastCacheTick;
@@ -68,19 +67,19 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Get a player instance.</summary>
         /// <param name="type">The player type.</param>
-        public Farmer GetPlayer(PlayerType type)
+        public Farmer? GetPlayer(PlayerType type)
         {
             return this.GetForState(
                 loaded: () => type == PlayerType.HostPlayer
                     ? Game1.MasterPlayer
                     : Game1.player,
-
-                reading: save => save.player // current == host if they're loading the save file
+                reading: save => save.player, // current == host if they're loading the save file
+                defaultValue: null
             );
         }
 
         /// <summary>Get the current player instance.</summary>
-        public Farmer GetCurrentPlayer()
+        public Farmer? GetCurrentPlayer()
         {
             return this.GetPlayer(PlayerType.CurrentPlayer);
         }
@@ -92,7 +91,6 @@ namespace ContentPatcher.Framework
                 nameof(this.GetAllPlayers),
                 () => this.GetForState(
                     loaded: Game1.getAllFarmers,
-
                     reading: save => Enumerable
                         .Repeat(save.player, 1)
                         .Concat(
@@ -100,29 +98,33 @@ namespace ContentPatcher.Framework
                             let farmhand = (building.indoors.Value as Cabin)?.farmhand.Value
                             where farmhand != null
                             select farmhand
-                        )
+                        ),
+                    defaultValue: Array.Empty<Farmer>()
                 )
             );
         }
 
         /// <summary>Get a player's location.</summary>
         /// <param name="player">The player instance.</param>
-        public GameLocation GetCurrentLocation(Farmer player)
+        public GameLocation? GetCurrentLocation(Farmer? player)
         {
             return this.GetCached(
-                $"{nameof(this.GetCurrentLocation)}:{player.UniqueMultiplayerID}",
+                $"{nameof(this.GetCurrentLocation)}:{player?.UniqueMultiplayerID}",
                 () => this.GetForState(
                     loaded: () => Context.IsWorldReady
-                        ? player.currentLocation
-                        : player.currentLocation ?? this.GetLocationFromName(player.lastSleepLocation.Value), // currentLocation is set later in the save loading process
-                    reading: _ => this.GetLocationFromName(player.lastSleepLocation.Value)
+                        ? player?.currentLocation
+                        : player?.currentLocation ?? (player != null ? this.GetLocationFromName(player.lastSleepLocation.Value) : null), // currentLocation is set later in the save loading process
+                    reading: _ => player != null
+                        ? this.GetLocationFromName(player.lastSleepLocation.Value)
+                        : null,
+                    defaultValue: null
                 )
             );
         }
 
         /// <summary>Get the current player's location context.</summary>
         /// <param name="player">The player instance.</param>
-        public LocationContext? GetCurrentLocationContext(Farmer player)
+        public LocationContext? GetCurrentLocationContext(Farmer? player)
         {
             // Get the context from the game data if it's ready.
             // This needs the location map to be loaded.
@@ -139,12 +141,12 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the player ID who owns the building containing the location.</summary>
         /// <param name="location">The location to check.</param>
-        public long? GetLocationOwnerId(GameLocation location)
+        public long? GetLocationOwnerId(GameLocation? location)
         {
             if (location is null)
                 return null;
 
-            long? id = this.GetCached<long?>(
+            long? id = this.GetCached(
                 $"{nameof(this.GetLocationOwnerId)}:{location.Name}",
                 () =>
                 {
@@ -154,21 +156,25 @@ namespace ContentPatcher.Framework
                         case FarmHouse farmhouse:
                             return farmhouse.owner.UniqueMultiplayerID;
                         case IslandFarmHouse:
-                            return this.GetPlayer(PlayerType.HostPlayer).UniqueMultiplayerID;
+                            return this.GetPlayer(PlayerType.HostPlayer)?.UniqueMultiplayerID;
 
                         // cellar
                         case Cellar:
                             {
-                                var cellarAssignments = this.GetForState<IDictionary<string, long>>(
+                                Dictionary<string, long>? cellarAssignments = this.GetForState(
                                     loaded: () => Game1.player.team.cellarAssignments.FieldDict.ToDictionary(p => $"Cellar{p.Key}", p => p.Value.Value),
-                                    reading: save => save.cellarAssignments.ToDictionary(p => $"Cellar{p.Key}", p => p.Value)
+                                    reading: save => save.cellarAssignments.ToDictionary(p => $"Cellar{p.Key}", p => p.Value),
+                                    defaultValue: null
                                 );
 
-                                string key = location.Name == "Cellar"
-                                    ? "Cellar1"
-                                    : location.Name;
-                                if (cellarAssignments.TryGetValue(key, out long owner))
-                                    return owner;
+                                if (cellarAssignments is not null)
+                                {
+                                    string key = location.Name == "Cellar"
+                                        ? "Cellar1"
+                                        : location.Name;
+                                    if (cellarAssignments.TryGetValue(key, out long owner))
+                                        return owner;
+                                }
 
                                 return null;
                             }
@@ -201,12 +207,13 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.dayOfMonth,
-                reading: save => save.dayOfMonth
+                reading: save => save.dayOfMonth,
+                defaultValue: 0
             );
         }
 
         /// <summary>Get the name for today's day event (e.g. wedding or festival).</summary>
-        public string GetDayEvent()
+        public string? GetDayEvent()
         {
             // marriage
             if (SaveGame.loaded?.weddingToday ?? Game1.weddingToday)
@@ -214,7 +221,7 @@ namespace ContentPatcher.Framework
 
             // festival
             IDictionary<string, string> festivalDates = Game1.content.Load<Dictionary<string, string>>("Data\\Festivals\\FestivalDates", LocalizedContentManager.LanguageCode.en); // {{DayEvent}} shouldn't be translated
-            if (festivalDates.TryGetValue($"{this.GetSeason()}{this.GetDay()}", out string festivalName))
+            if (festivalDates.TryGetValue($"{this.GetSeason()}{this.GetDay()}", out string? festivalName))
                 return festivalName;
 
             return null;
@@ -240,7 +247,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.stats.DaysPlayed,
-                reading: save => (save.player.stats ?? save.stats).DaysPlayed
+                reading: save => (save.player.stats ?? save.stats).DaysPlayed,
+                defaultValue: 0u
             );
         }
 
@@ -249,7 +257,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.currentSeason,
-                reading: save => save.currentSeason
+                reading: save => save.currentSeason,
+                defaultValue: "spring"
             );
         }
 
@@ -258,7 +267,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.year,
-                reading: save => save.year
+                reading: save => save.year,
+                defaultValue: 0
             );
         }
 
@@ -274,9 +284,10 @@ namespace ContentPatcher.Framework
             }
 
             // get from weather data
-            LocationWeather model = this.GetForState(
+            LocationWeather? model = this.GetForState(
                 loaded: () => Game1.netWorldState.Value.GetWeatherForLocation((GameLocation.LocationContext)context),
-                reading: save => save.locationWeather != null && save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather weather) ? weather : null
+                reading: save => save.locationWeather != null && save.locationWeather.TryGetValue((GameLocation.LocationContext)context, out LocationWeather? weather) ? weather : null,
+                defaultValue: null
             );
             if (model != null)
             {
@@ -295,7 +306,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => Game1.timeOfDay,
-                reading: _ => 0600
+                reading: _ => 0600,
+                defaultValue: 0600
             );
         }
 
@@ -313,17 +325,17 @@ namespace ContentPatcher.Framework
                 .Union(player.mailbox)
                 .Concat(
                     this.GetForState(
-                        loaded: () => Game1.worldStateIDs,
-                        reading: save => save.worldStateIDs
+                        loaded: () => Game1.worldStateIDs ?? Enumerable.Empty<string>(),
+                        reading: save => save.worldStateIDs ?? Enumerable.Empty<string>(),
+                        defaultValue: Array.Empty<string>()
                     )
-                    ?? Enumerable.Empty<string>()
                 );
         }
 
         /// <summary>Get the wallet items for the current player.</summary>
         public IEnumerable<string> GetWalletItems()
         {
-            Farmer player = this.GetCurrentPlayer();
+            Farmer? player = this.GetCurrentPlayer();
             if (player == null)
                 yield break;
 
@@ -357,7 +369,8 @@ namespace ContentPatcher.Framework
         {
             return this.GetForState(
                 loaded: () => player.DailyLuck,
-                reading: save => save.dailyLuck + (player.hasSpecialCharm ? 0.025f : 0)
+                reading: save => save.dailyLuck + (player.hasSpecialCharm ? 0.025f : 0),
+                defaultValue: 0
             );
         }
 
@@ -370,7 +383,7 @@ namespace ContentPatcher.Framework
         public IEnumerable<string> GetChildValues(Farmer player, ConditionType type)
         {
             // get children
-            List<Child> children = this.GetCached(
+            List<Child>? children = this.GetCached(
                 $"{nameof(this.GetChildValues)}:{player.UniqueMultiplayerID}",
                 () => (this.GetLocationFromName(player.homeLocation.Value) as FarmHouse)?.getChildren()
             );
@@ -389,19 +402,26 @@ namespace ContentPatcher.Framework
 
         /// <summary>Get the friendship data for the current player.</summary>
         /// <returns>Returns a list of friendship models for met NPCs, and null for unmet NPCs.</returns>
-        public IEnumerable<KeyValuePair<string, Friendship>> GetFriendships()
+        public IEnumerable<KeyValuePair<string, Friendship?>> GetFriendships()
         {
             return this.GetCached(
                 nameof(this.GetFriendships),
                 () =>
                 {
-                    var met = this.GetCurrentPlayer().friendshipData;
+                    Dictionary<string, NetRef<Friendship>>? met = this.GetCurrentPlayer()
+                        ?.friendshipData
+                        ?.FieldDict
+                        ?? new();
+
                     return
-                        met.Pairs
+                        (
+                            from pair in met
+                            select new KeyValuePair<string, Friendship?>(pair.Key, pair.Value.Value)
+                        )
                         .Concat(
                             from npc in this.GetSocialVillagers()
                             where !met.ContainsKey(npc.Name)
-                            select new KeyValuePair<string, Friendship>(npc.Name, null)
+                            select new KeyValuePair<string, Friendship?>(npc.Name, null)
                         );
                 }
             );
@@ -415,7 +435,7 @@ namespace ContentPatcher.Framework
         /// <param name="isPlayer">Whether the spouse is a player character.</param>
         /// <returns>Returns true if the player's spouse info was successfully found.</returns>
         [SuppressMessage("ReSharper", "VariableHidesOuterVariable", Justification = "This is deliberate.")]
-        public bool TryGetSpouseInfo(Farmer player, out string name, out Friendship friendship, out Gender gender, out bool isPlayer)
+        public bool TryGetSpouseInfo(Farmer player, [NotNullWhen(true)] out string? name, [NotNullWhen(true)] out Friendship? friendship, out Gender gender, out bool isPlayer)
         {
             var data = this.GetCached(
                 $"{nameof(this.TryGetSpouseInfo)}:{player.UniqueMultiplayerID}",
@@ -423,7 +443,7 @@ namespace ContentPatcher.Framework
                 {
                     // get raw data
                     long? spousePlayerID = null;
-                    Friendship friendship = this.GetForState(
+                    Friendship? friendship = this.GetForState(
                         loaded: () =>
                         {
                             spousePlayerID = player.team.GetSpouse(player.UniqueMultiplayerID);
@@ -446,16 +466,18 @@ namespace ContentPatcher.Framework
                             return player.spouse is not (null or "") && player.friendshipData.TryGetValue(player.spouse, out Friendship value)
                                 ? value
                                 : null;
-                        }
+                        },
+
+                        defaultValue: null
                     );
 
                     // parse spouse info
-                    string name = null;
+                    string? name = null;
                     Gender gender = Gender.Male;
                     bool isPlayer = false;
                     if (spousePlayerID.HasValue)
                     {
-                        Farmer spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
+                        Farmer? spouse = this.GetAllPlayers().FirstOrDefault(p => p.UniqueMultiplayerID == spousePlayerID);
                         if (spouse != null)
                         {
                             name = spouse.Name;
@@ -465,7 +487,7 @@ namespace ContentPatcher.Framework
                     }
                     else
                     {
-                        NPC spouse = this.GetAllCharacters().FirstOrDefault(p => p.Name == player.spouse && p.isVillager());
+                        NPC? spouse = this.GetAllCharacters().FirstOrDefault(p => p.Name == player.spouse && p.isVillager());
                         if (spouse != null)
                         {
                             name = spouse.Name;
@@ -476,15 +498,15 @@ namespace ContentPatcher.Framework
                     bool valid = name != null && friendship != null;
 
                     // create cache entry
-                    return Tuple.Create(name, friendship, gender, isPlayer, valid);
+                    return (Name: name, Friendship: friendship, Gender: gender, IsPlayer: isPlayer, IsValid: valid);
                 }
             );
 
-            name = data.Item1;
-            friendship = data.Item2;
-            gender = data.Item3;
-            isPlayer = data.Item4;
-            return data.Item5;
+            name = data.Name;
+            friendship = data.Friendship;
+            gender = data.Gender;
+            isPlayer = data.IsPlayer;
+            return data.IsValid;
         }
 
         /****
@@ -493,13 +515,16 @@ namespace ContentPatcher.Framework
         /// <summary>Get the current player's selected farm cave type.</summary>
         public FarmCaveType GetFarmCaveType()
         {
-            return this.GetEnum(this.GetCurrentPlayer().caveChoice.Value, FarmCaveType.None);
+            int? choice = this.GetCurrentPlayer()?.caveChoice.Value;
+            return choice.HasValue
+                ? this.GetEnum(choice.Value, FarmCaveType.None)
+                : FarmCaveType.None;
         }
 
         /// <summary>Get the farm name.</summary>
-        public string GetFarmName()
+        public string? GetFarmName()
         {
-            return this.GetCurrentPlayer().farmName.Value;
+            return this.GetCurrentPlayer()?.farmName.Value;
         }
 
         /// <summary>Get the farm type.</summary>
@@ -509,10 +534,10 @@ namespace ContentPatcher.Framework
                 loaded: () => Game1.whichFarm == Farm.mod_layout
                     ? Game1.whichModFarm?.ID ?? FarmType.Custom.ToString()
                     : this.GetEnum(Game1.whichFarm, FarmType.Custom).ToString(),
-
                 reading: save => int.TryParse(save.whichFarm, out _) && Enum.TryParse(save.whichFarm, out FarmType farmType)
                     ? farmType.ToString()
-                    : save.whichFarm
+                    : save.whichFarm,
+                defaultValue: FarmType.Standard.ToString()
             );
         }
 
@@ -520,20 +545,22 @@ namespace ContentPatcher.Framework
         /// <remarks>See game logic in <see cref="Town.resetLocalState"/>.</remarks>
         public bool GetIsCommunityCenterComplete()
         {
-            Farmer host = this.GetPlayer(PlayerType.HostPlayer);
+            Farmer? host = this.GetPlayer(PlayerType.HostPlayer);
 
-            return host.mailReceived.Contains("ccIsComplete") || host.hasCompletedCommunityCenter();
+            return
+                host?.mailReceived.Contains("ccIsComplete") == true
+                || host?.hasCompletedCommunityCenter() == true;
         }
 
         /// <summary>Get whether the JojaMart is complete.</summary>
         /// <remarks>See game logic in <see cref="GameLocation.checkJojaCompletePrerequisite"/>.</remarks>
         public bool GetIsJojaMartComplete()
         {
-            Farmer host = this.GetPlayer(PlayerType.HostPlayer);
+            Farmer? host = this.GetPlayer(PlayerType.HostPlayer);
 
             return
                 this.GetIsCommunityCenterComplete()
-                && host.mailReceived.Any(flag => flag is "jojaVault" or "jojaPantry" or "jojaBoilerRoom" or "jojaCraftsRoom" or "jojaFishTank" or "JojaMember");
+                && host?.mailReceived.Any(flag => flag is "jojaVault" or "jojaPantry" or "jojaBoilerRoom" or "jojaCraftsRoom" or "jojaFishTank" or "JojaMember") == true;
         }
 
 
@@ -542,7 +569,7 @@ namespace ContentPatcher.Framework
         *********/
         /// <summary>Get a location from the save by its name.</summary>
         /// <param name="name">The location name.</param>
-        private GameLocation GetLocationFromName(string name)
+        private GameLocation? GetLocationFromName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return null;
@@ -551,7 +578,8 @@ namespace ContentPatcher.Framework
                 $"{nameof(this.GetLocationFromName)}:{name}",
                 () => this.GetForState(
                     loaded: () => Game1.getLocationFromName(name),
-                    reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name)
+                    reading: save => save.locations.FirstOrDefault(p => p.NameOrUniqueName == name),
+                    defaultValue: null
                 )
             );
         }
@@ -590,7 +618,7 @@ namespace ContentPatcher.Framework
                     {
                         foreach (Building building in farm.buildings)
                         {
-                            GameLocation interior = building.indoors.Value;
+                            GameLocation? interior = building.indoors.Value;
                             long owner = building.owner.Value;
 
                             if (interior is not null && owner != 0)
@@ -612,7 +640,7 @@ namespace ContentPatcher.Framework
                     .GetAllCharacters()
                     .Where(npc =>
                         npc.CanSocialize
-                        || (npc.Name == "Krobus" && !this.GetCurrentPlayer().friendshipData.ContainsKey(npc.Name)) // Krobus is marked non-social before he's met
+                        || (npc.Name == "Krobus" && this.GetCurrentPlayer()?.friendshipData.ContainsKey(npc.Name) != true) // Krobus is marked non-social before he's met
                     )
             );
         }
@@ -635,7 +663,7 @@ namespace ContentPatcher.Framework
         /// <param name="loaded">Get the value if the save file is loaded into the base game data.</param>
         /// <param name="reading">Get the value if the save file has been parsed, but not loaded yet.</param>
         /// <param name="defaultValue">The default value if no save is parsed or loaded.</param>
-        private TValue GetForState<TValue>(Func<TValue> loaded, Func<SaveGame, TValue> reading, TValue defaultValue = default)
+        private TValue GetForState<TValue>(Func<TValue> loaded, Func<SaveGame, TValue> reading, TValue defaultValue)
         {
             if (this.IsSaveBasicInfoLoaded)
                 return loaded();
@@ -671,12 +699,12 @@ namespace ContentPatcher.Framework
             }
 
             // get from cache
-            if (this.Cache.TryGetValue(key, out object cacheEntry))
+            if (this.Cache.TryGetValue(key, out object? cacheEntry))
             {
                 return cacheEntry switch
                 {
                     TValue cachedValue => cachedValue,
-                    null when default(TValue) is null => default,
+                    null when default(TValue) is null => default!,
                     _ => throw new InvalidOperationException($"Can't fetch cached save data for the '{key}' cache key; requested a {typeof(TValue).FullName} value, but the cache contains {(cacheEntry == null ? "null" : $"'{cacheEntry.GetType().FullName}'")} instead.")
                 };
             }

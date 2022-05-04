@@ -32,5 +32,15 @@ namespace Pathoschild.Stardew.Common.Utilities
         {
             return set.AddMany((IEnumerable<T>)values);
         }
+
+        /// <summary>Clear the set and fill it with the given values.</summary>
+        /// <typeparam name="T">The value type.</typeparam>
+        /// <param name="set">The set to update.</param>
+        /// <param name="values">The values to set.</param>
+        public static void ReplaceWith<T>(this ISet<T> set, IEnumerable<T> values)
+        {
+            set.Clear();
+            set.AddMany(values);
+        }
     }
 }

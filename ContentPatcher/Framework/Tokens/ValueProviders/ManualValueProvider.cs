@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -12,10 +11,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>Whether the value provider can only contain those values that are explicitly added as possible values.</summary>
-        private bool IsBounded;
+        private readonly bool IsBounded;
 
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private InvariantHashSet AllowedRootValues;
+        private InvariantHashSet? AllowedRootValues;
 
         /// <summary>The current values.</summary>
         private InvariantHashSet Values = new();
@@ -70,7 +69,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Set the current values.</summary>
         /// <param name="values">The values to set.</param>
-        public void SetValue(ITokenString values)
+        public void SetValue(ITokenString? values)
         {
             this.Values = values.SplitValuesUnique();
         }
@@ -92,7 +91,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             allowedValues = this.IsBounded
                 ? this.AllowedRootValues

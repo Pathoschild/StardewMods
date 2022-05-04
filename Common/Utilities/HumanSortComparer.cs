@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace Pathoschild.Stardew.Common.Utilities
 {
     /// <summary>A comparer which sorts values by comparing alphabetical and numeric sequences within the strings, resulting in a more intuitive order like "1, 2, 10" instead of "1, 10, 2".</summary>
-    internal class HumanSortComparer : IComparer<string>
+    internal class HumanSortComparer : IComparer<string?>
     {
         /*********
         ** Fields
         *********/
         /// <summary>The comparer to use for alphabetical sequences.</summary>
-        private readonly IComparer<string> AlphaComparer;
+        private readonly IComparer<string?> AlphaComparer;
 
 
         /*********

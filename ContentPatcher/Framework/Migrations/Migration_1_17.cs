@@ -1,10 +1,9 @@
-#nullable disable
-
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -34,12 +33,12 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes.WhereNotNull())
             {
                 // 1.17 adds 'Update' field
                 if (patch.Update != null)
@@ -53,11 +52,11 @@ namespace ContentPatcher.Framework.Migrations
                 // point is difficult and a review of existing content packs shows that they
                 // only used these as condition keys.)
                 {
-                    bool hasLocationToken = patch.When.Keys.Any(key =>
+                    bool hasLocationToken = patch.When?.Keys.Any(key =>
                         !string.IsNullOrWhiteSpace(key)
                         && (key.ContainsIgnoreCase("IsOutdoors") || key.ContainsIgnoreCase("LocationName")) // quick check with false positives
                         && LocationTokenPattern.IsMatch(key) // slower but reliable check
-                    );
+                    ) == true;
 
                     if (hasLocationToken)
                         patch.Update = UpdateRate.OnLocationChange.ToString();

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +34,7 @@ namespace ContentPatcher.Framework.Patches
         ** Accessors
         *********/
         /// <summary>The patches that were loaded by the latest update, if any. This is cleared on the next update if no new patches were loaded.</summary>
-        public IEnumerable<IPatch> PatchesJustLoaded { get; private set; }
+        public IEnumerable<IPatch>? PatchesJustLoaded { get; private set; }
 
 
         /*********
@@ -54,7 +52,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="patchLoader">Handles loading and unloading patches for content packs.</param>
-        public IncludePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch parentPatch, Func<string, IAssetName> parseAssetName, IMonitor monitor, PatchLoader patchLoader)
+        public IncludePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString? assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, UpdateRate updateRate, RawContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName, IMonitor monitor, PatchLoader patchLoader)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -79,7 +77,7 @@ namespace ContentPatcher.Framework.Patches
             this.PatchesJustLoaded = null;
 
             // update context
-            if (!this.UpdateContext(context, out string previousFilePath))
+            if (!this.UpdateContext(context, out string? previousFilePath))
                 return false;
 
             // unload previous patches
@@ -105,12 +103,12 @@ namespace ContentPatcher.Framework.Patches
                     // prevent circular reference
                     {
                         List<string> loopPaths = new List<string>();
-                        for (IPatch parent = this.ParentPatch; parent != null; parent = parent.ParentPatch)
+                        for (IPatch? parent = this.ParentPatch; parent != null; parent = parent.ParentPatch)
                         {
                             if (parent.Type == PatchType.Include)
                             {
-                                loopPaths.Add(parent.FromAsset);
-                                if (this.IsSameFilePath(parent.FromAsset, this.FromAsset))
+                                loopPaths.Add(parent.FromAsset!);
+                                if (this.IsSameFilePath(parent.FromAsset!, this.FromAsset))
                                 {
                                     loopPaths.Reverse();
                                     loopPaths.Add(this.FromAsset);
@@ -173,7 +171,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="context">Provides access to contextual tokens.</param>
         /// <param name="previousFilePath">The file path that was previously loaded, if any.</param>
         /// <returns>Returns whether the patch data changed.</returns>
-        private bool UpdateContext(IContext context, out string previousFilePath)
+        private bool UpdateContext(IContext context, out string? previousFilePath)
         {
             previousFilePath = this.AttemptedDataLoad && this.IsReady && this.FromAssetExists() ? this.FromAsset : null;
             return base.UpdateContext(context);
@@ -182,7 +180,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Get whether two include paths are equivalent.</summary>
         /// <param name="left">The first path to compare.</param>
         /// <param name="right">The second path to compare.</param>
-        private bool IsSameFilePath(string left, string right)
+        private bool IsSameFilePath(string? left, string? right)
         {
             if (left == right)
                 return true;
@@ -204,7 +202,7 @@ namespace ContentPatcher.Framework.Patches
                 if (property.Name == nameof(ContentConfig.Changes))
                     continue;
 
-                object value = property.GetValue(content);
+                object? value = property.GetValue(content);
                 bool hasValue = value is IEnumerable list
                     ? list.Cast<object>().Any()
                     : value != null;

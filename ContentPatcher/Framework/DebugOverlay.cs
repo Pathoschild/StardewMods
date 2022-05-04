@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +30,10 @@ namespace ContentPatcher.Framework
         private readonly IAssetName[] TextureNames;
 
         /// <summary>The current spritesheet to display.</summary>
-        private IAssetName CurrentName;
+        private IAssetName? CurrentName;
 
         /// <summary>The current texture to display.</summary>
-        private Texture2D CurrentTexture;
+        private Texture2D? CurrentTexture;
 
 
         /*********
@@ -82,11 +80,13 @@ namespace ContentPatcher.Framework
         /// <param name="spriteBatch">The sprite batch to which to draw.</param>
         protected override void DrawUi(SpriteBatch spriteBatch)
         {
-            Vector2 labelSize = Game1.smallFont.MeasureString(this.CurrentName.Name);
+            string name = this.CurrentName?.Name ?? "???";
+
+            Vector2 labelSize = Game1.smallFont.MeasureString(name);
             int contentWidth = (int)Math.Max(labelSize.X, this.CurrentTexture?.Width ?? 0);
 
             CommonHelper.DrawScroll(spriteBatch, new Vector2(this.Margin), new Vector2(contentWidth, labelSize.Y + this.Padding + (this.CurrentTexture?.Height ?? (int)labelSize.Y)), out Vector2 contentPos, out Rectangle _, padding: this.Padding);
-            spriteBatch.DrawString(Game1.smallFont, this.CurrentName.Name, new Vector2(contentPos.X + ((contentWidth - labelSize.X) / 2), contentPos.Y), Color.Black);
+            spriteBatch.DrawString(Game1.smallFont, name, new Vector2(contentPos.X + ((contentWidth - labelSize.X) / 2), contentPos.Y), Color.Black);
 
             if (this.CurrentTexture != null)
                 spriteBatch.Draw(this.CurrentTexture, contentPos + new Vector2(0, labelSize.Y + this.Padding), Color.White);

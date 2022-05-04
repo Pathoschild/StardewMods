@@ -10,8 +10,8 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Added support for [config UI sections](author-guide/config.md#display-options) (thanks to Shockah!).
-* Updated for the upcoming SMAPI 4.0.0.
 * Fixed content packs reloaded unnecessarily on startup.
 * Fixed `patch summary` showing non-ready token values in some cases.
 

@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
@@ -31,7 +30,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
@@ -51,7 +50,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (!this.TryGetPart(input.PositionalArgs[0], input.PositionalArgs[1], out string part, out string error))
+            if (!this.TryGetPart(input.PositionalArgs[0], input.PositionalArgs[1], out string? part, out string? error))
                 throw new InvalidOperationException(error); // shouldn't happen since we check the input in TryValidateInput
 
             if (part != null)
@@ -67,7 +66,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="rawPart">The path fragment or index position.</param>
         /// <param name="part">The extracted path part. This may be null even if valid to indicate no value (e.g. retrieved the fourth index from a two-segment path).</param>
         /// <param name="error">The error indicating why the input arguments are invalid.</param>
-        private bool TryGetPart(string path, string rawPart, out string part, out string error)
+        private bool TryGetPart(string? path, string? rawPart, out string? part, [NotNullWhen(false)] out string? error)
         {
             error = null;
 

@@ -1,5 +1,4 @@
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace ContentPatcher.Framework.Lexing.LexTokens
@@ -11,7 +10,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         ** Accessors
         *********/
         /// <summary>The lexical token type.</summary>
-        public LexTokenType Type { get; } = LexTokenType.TokenInput;
+        public LexTokenType Type => LexTokenType.TokenInput;
 
         /// <summary>The lexical tokens making up the input arguments.</summary>
         public ILexToken[] Parts { get; private set; }
@@ -29,6 +28,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
 
         /// <summary>Apply changes for a format migration.</summary>
         /// <param name="tokenParts">The lexical token parts to set.</param>
+        [MemberNotNull(nameof(LexTokenInput.Parts))]
         public void MigrateTo(ILexToken[] tokenParts)
         {
             this.Parts = tokenParts;

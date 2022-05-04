@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
@@ -20,7 +19,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         private readonly TokenSaveReader SaveReader;
 
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet AllowedRootValues;
+        private readonly InvariantHashSet? AllowedRootValues;
 
         /// <summary>Get the current values for a player.</summary>
         private readonly Func<Farmer, InvariantHashSet> FetchValues;
@@ -44,7 +43,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public PerPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public PerPlayerValueProvider(ConditionType type, Func<Farmer, IEnumerable<string>> values, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string>? allowedValues = null)
             : base(type, mayReturnMultipleValues)
         {
             this.SaveReader = saveReader;
@@ -59,8 +58,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         /// <param name="saveReader">Handles reading info from the current save.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public PerPlayerValueProvider(ConditionType type, Func<Farmer, string> value, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
-            : this(type, player => new[] { value(player) }, saveReader, mayReturnMultipleValues, allowedValues) { }
+        public PerPlayerValueProvider(ConditionType type, Func<Farmer, string?> value, TokenSaveReader saveReader, bool mayReturnMultipleValues = false, IEnumerable<string>? allowedValues = null)
+            : this(type, player => BaseValueProvider.WrapOptionalValue(value(player)), saveReader, mayReturnMultipleValues, allowedValues) { }
 
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
@@ -72,8 +71,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
                     // update host/local player IDs
-                    long hostId = this.SaveReader.GetPlayer(PlayerType.HostPlayer).UniqueMultiplayerID;
-                    long localId = this.SaveReader.GetPlayer(PlayerType.CurrentPlayer).UniqueMultiplayerID;
+                    long hostId = this.SaveReader.GetPlayer(PlayerType.HostPlayer)?.UniqueMultiplayerID ?? 0;
+                    long localId = this.SaveReader.GetPlayer(PlayerType.CurrentPlayer)?.UniqueMultiplayerID ?? 0;
 
                     changed |= this.HostPlayerId != hostId || this.LocalPlayerId != localId;
 
@@ -87,7 +86,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                         // get values
                         long id = player.UniqueMultiplayerID;
                         InvariantHashSet newValues = this.FetchValues(player);
-                        if (!this.Values.TryGetValue(id, out InvariantHashSet oldValues))
+                        if (!this.Values.TryGetValue(id, out InvariantHashSet? oldValues))
                             oldValues = null;
 
                         // track changes
@@ -117,18 +116,18 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             return
                 base.TryValidateInput(input, out error)
                 && (
                     !input.HasPositionalArgs
-                    || this.TryParseInput(input, out _, out error, testOnly: true)
+                    || this.TryParseInput(input, null, out error)
                 );
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;
@@ -139,7 +138,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         {
             this.AssertInput(input);
 
-            return this.TryParseInput(input, out ISet<long> playerIds, out _)
+            if (!input.HasPositionalArgs)
+                return this.GetValuesFor(null);
+
+            var playerIds = new HashSet<long>();
+            return this.TryParseInput(input, playerIds, out _)
                 ? this.GetValuesFor(playerIds)
                 : Enumerable.Empty<string>();
         }
@@ -150,44 +153,35 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         *********/
         /// <summary>Parse the input arguments if valid.</summary>
         /// <param name="input">The input arguments.</param>
-        /// <param name="playerIds">The parsed player IDs.</param>
+        /// <param name="playerIds">The parsed player IDs to populate, if any.</param>
         /// <param name="error">The error indicating why the input is invalid, if applicable.</param>
-        /// <param name="testOnly">Whether we're only testing that the input is valid, so <paramref name="playerIds"/> doesn't need to be populated.</param>
         /// <returns>Returns whether the input is valid.</returns>
-        private bool TryParseInput(IInputArguments input, out ISet<long> playerIds, out string error, bool testOnly = false)
+        private bool TryParseInput(IInputArguments input, HashSet<long>? playerIds, [NotNullWhen(false)] out string? error)
         {
-            playerIds = !testOnly
-                ? new HashSet<long>()
-                : null;
-
             foreach (string arg in input.PositionalArgs)
             {
                 if (long.TryParse(arg, out long playerId))
                 {
-                    if (!testOnly)
-                        playerIds.Add(playerId);
+                    playerIds?.Add(playerId);
                 }
                 else if (Enum.TryParse(arg, ignoreCase: true, out PlayerType type))
                 {
-                    if (!testOnly)
+                    switch (type)
                     {
-                        switch (type)
-                        {
-                            case PlayerType.HostPlayer:
-                                playerIds.Add(this.HostPlayerId);
-                                break;
+                        case PlayerType.HostPlayer:
+                            playerIds?.Add(this.HostPlayerId);
+                            break;
 
-                            case PlayerType.CurrentPlayer:
-                                playerIds.Add(this.LocalPlayerId);
-                                break;
+                        case PlayerType.CurrentPlayer:
+                            playerIds?.Add(this.LocalPlayerId);
+                            break;
 
-                            case PlayerType.AnyPlayer:
-                                playerIds.AddMany(this.Values.Keys);
-                                break;
+                        case PlayerType.AnyPlayer:
+                            playerIds?.AddMany(this.Values.Keys);
+                            break;
 
-                            default:
-                                throw new InvalidOperationException($"Unknown player type {type}.");
-                        }
+                        default:
+                            throw new InvalidOperationException($"Unknown player type {type}.");
                     }
                 }
                 else
@@ -203,28 +197,29 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 
         /// <summary>Get the cached values for the given player IDs.</summary>
         /// <param name="playerIds">The player IDs.</param>
-        private IEnumerable<string> GetValuesFor(ISet<long> playerIds)
+        private IEnumerable<string> GetValuesFor(HashSet<long>? playerIds)
         {
-            // default to current player
-            if (!playerIds.Any())
-                playerIds.Add(this.LocalPlayerId);
-
             // get single value (avoids copying the collection in most cases)
-            if (playerIds.Count == 1)
-            {
-                return this.Values.TryGetValue(playerIds.First(), out InvariantHashSet set)
-                    ? set
-                    : Enumerable.Empty<string>();
-            }
+            if (playerIds is not { Count: > 1 })
+                return this.GetValuesFor(playerIds?.FirstOrDefault() ?? this.LocalPlayerId);
 
             // get multiple values
             HashSet<string> values = new();
             foreach (long id in playerIds)
             {
-                if (this.Values.TryGetValue(id, out InvariantHashSet set))
+                if (this.Values.TryGetValue(id, out InvariantHashSet? set))
                     values.AddMany(set);
             }
             return values;
+        }
+
+        /// <summary>Get the cached values for the given player ID.</summary>
+        /// <param name="playerId">The player ID.</param>
+        private IEnumerable<string> GetValuesFor(long playerId)
+        {
+            return this.Values.TryGetValue(playerId, out InvariantHashSet? set)
+                ? set
+                : Array.Empty<string>();
         }
     }
 }

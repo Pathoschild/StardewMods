@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +12,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>Get the current values for given input arguments (if any).</summary>
-        private readonly Func<IEnumerable<string>> GetValueImpl;
+        private readonly Func<IEnumerable<string>?> GetValueImpl;
 
         /// <summary>The current values.</summary>
-        private readonly InvariantHashSet Values = new InvariantHashSet();
+        private readonly InvariantHashSet Values = new();
 
 
         /*********

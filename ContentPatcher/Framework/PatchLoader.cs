@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -12,6 +11,7 @@ using ContentPatcher.Framework.Patches;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.Json;
 using Newtonsoft.Json.Linq;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework
         /// <param name="reindex">Whether to reindex the patch list immediately.</param>
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <returns>Returns the patches that were loaded.</returns>
-        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch parentPatch)
+        public IEnumerable<IPatch> LoadPatches(RawContentPack contentPack, PatchConfig?[] rawPatches, int[] rootIndexPath, LogPathBuilder path, bool reindex, Patch? parentPatch)
         {
             // get fake patch context (so patch tokens are available in patch validation)
             ModTokenContext modContext = this.TokenManager.TrackLocalTokens(contentPack.ContentPack);
@@ -82,7 +82,7 @@ namespace ContentPatcher.Framework
 
             // ignore null patches with a warning
             PatchConfig[] patches = rawPatches
-                .Where(patch => patch != null)
+                .WhereNotNull()
                 .ToArray();
 
             // preprocess patches
@@ -95,9 +95,9 @@ namespace ContentPatcher.Framework
             foreach (PatchConfig patch in patches)
             {
                 index++;
-                var localPath = path.With(patch.LogName);
+                var localPath = path.With(patch.LogName!);
                 this.Monitor.VerboseLog($"   loading {localPath}...");
-                IPatch loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
+                IPatch? loaded = this.LoadPatch(contentPack, patch, tokenParser, rootIndexPath.Concat(new[] { index }).ToArray(), localPath, reindex: false, parentPatch, logSkip: reasonPhrase => this.Monitor.Log($"Ignored {localPath}: {reasonPhrase}", LogLevel.Warn));
                 if (loaded != null)
                     loadedPatches.Add(loaded);
             }
@@ -132,41 +132,42 @@ namespace ContentPatcher.Framework
         /// <param name="conditions">The normalized conditions.</param>
         /// <param name="immutableRequiredModIDs">The immutable mod IDs always required by these conditions (if they're <see cref="ConditionType.HasMod"/> and immutable).</param>
         /// <param name="error">An error message indicating why normalization failed.</param>
-        public bool TryParseConditions(IDictionary<string, string> raw, TokenParser tokenParser, LogPathBuilder path, out IList<Condition> conditions, out InvariantHashSet immutableRequiredModIDs, out string error)
+        public bool TryParseConditions(IDictionary<string, string?>? raw, TokenParser tokenParser, LogPathBuilder path, out Condition[] conditions, out InvariantHashSet immutableRequiredModIDs, [NotNullWhen(false)] out string? error)
         {
-            conditions = new List<Condition>();
             immutableRequiredModIDs = new InvariantHashSet();
 
             // no conditions
             if (raw == null || !raw.Any())
             {
+                conditions = Array.Empty<Condition>();
                 error = null;
                 return true;
             }
 
             // parse conditions
             immutableRequiredModIDs = new InvariantHashSet();
-            foreach (KeyValuePair<string, string> pair in raw.OrderBy(p => this.GetConditionParseOrder(p.Key, p.Value)))
+            InvariantDictionary<Condition> parsed = new();
+            foreach ((string key, string? value) in raw.OrderBy(p => this.GetConditionParseOrder(p.Key, p.Value)))
             {
-                if (!this.TryParseCondition(pair.Key, pair.Value, tokenParser, path.With(pair.Key), out Condition condition, immutableRequiredModIDs, out error))
+                if (!this.TryParseCondition(key, value, tokenParser, path.With(key), out Condition? condition, immutableRequiredModIDs, out error))
                 {
-                    conditions = null;
+                    conditions = Array.Empty<Condition>();
                     return false;
                 }
 
-                conditions.Add(condition);
+                parsed[key] = condition;
             }
 
+            conditions = parsed.Values.ToArray();
             error = null;
             return true;
         }
 
         /// <summary>Normalize and parse the given update rate.</summary>
         /// <param name="raw">The raw update rate to normalize.</param>
-        /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="updateRate">The normalized update rate.</param>
         /// <param name="error">An error message indicating why parsing failed.</param>
-        public bool TryParseUpdateRate(string raw, LogPathBuilder path, out UpdateRate updateRate, out string error)
+        public bool TryParseUpdateRate(string? raw, out UpdateRate updateRate, [NotNullWhen(false)] out string? error)
         {
             // base update rate
             updateRate = UpdateRate.OnDayStart;
@@ -222,17 +223,17 @@ namespace ContentPatcher.Framework
 
                 // if `targets` or `fromFile` are missing, we still need to iterate one null value
                 // to populate the split patches.
-                IEnumerable<string> AlwaysIterate(string[] values)
+                IEnumerable<string?> AlwaysIterate(string[] values)
                 {
                     return values.Length > 0
                         ? values
-                        : new string[] { null };
+                        : new string?[] { null };
                 }
 
                 // create new patches
-                foreach (string target in AlwaysIterate(targets))
+                foreach (string? target in AlwaysIterate(targets))
                 {
-                    foreach (string fromFile in AlwaysIterate(fromFiles))
+                    foreach (string? fromFile in AlwaysIterate(fromFiles))
                     {
                         // create patch
                         var newPatch = new PatchConfig(patch)
@@ -290,7 +291,7 @@ namespace ContentPatcher.Framework
             // default name if valid
             if (Enum.TryParse(patch.Action, ignoreCase: true, out PatchType type))
             {
-                string path = type == PatchType.Include
+                string? path = type == PatchType.Include
                     ? patch.FromFile
                     : patch.Target;
 
@@ -331,12 +332,12 @@ namespace ContentPatcher.Framework
         /// <param name="parentPatch">The parent <see cref="PatchType.Include"/> patch for which the patches are being loaded, if any.</param>
         /// <param name="logSkip">The callback to invoke with the error reason if loading it fails.</param>
         /// <returns>The patch that was loaded, or <c>null</c> if it failed to load.</returns>
-        private IPatch LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch parentPatch, Action<string> logSkip)
+        private IPatch? LoadPatch(RawContentPack rawContentPack, PatchConfig entry, TokenParser tokenParser, int[] indexPath, LogPathBuilder path, bool reindex, Patch? parentPatch, Action<string> logSkip)
         {
             var pack = rawContentPack.ContentPack;
             PatchType? action = null;
 
-            IPatch TrackSkip(string reason, bool warn = true)
+            IPatch? TrackSkip(string reason, bool warn = true)
             {
                 reason = reason.TrimEnd('.', ' ');
                 this.PatchManager.AddPermanentlyDisabled(new DisabledPatch(path, entry.Action, action, entry.Target, pack, parentPatch, reason));
@@ -360,22 +361,22 @@ namespace ContentPatcher.Framework
                 }
 
                 // parse conditions
-                IList<Condition> conditions;
+                Condition[] conditions;
                 InvariantHashSet immutableRequiredModIDs;
                 {
-                    if (!this.TryParseConditions(entry.When, tokenParser, path.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string error))
+                    if (!this.TryParseConditions(entry.When, tokenParser, path.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string? error))
                         return TrackSkip($"the {nameof(PatchConfig.When)} field is invalid: {error}");
                 }
 
                 // parse target asset
-                IManagedTokenString targetAsset = null;
+                IManagedTokenString? targetAsset = null;
                 {
                     if (string.IsNullOrWhiteSpace(entry.Target))
                     {
                         if (action != PatchType.Include)
                             return TrackSkip($"must set the {nameof(PatchConfig.Target)} field");
                     }
-                    else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string error, out targetAsset))
+                    else if (!tokenParser.TryParseString(entry.Target, immutableRequiredModIDs, path.With(nameof(entry.Target)), out string? error, out targetAsset))
                         return TrackSkip($"the {nameof(PatchConfig.Target)} is invalid: {error}");
                 }
 
@@ -383,29 +384,29 @@ namespace ContentPatcher.Framework
                 bool enabled = true;
                 if (entry.Enabled != null)
                 {
-                    bool isEnabledAllowed = rawContentPack.Content.Format.IsOlderThan("1.25.0");
+                    bool isEnabledAllowed = rawContentPack.Content.Format!.IsOlderThan("1.25.0");
                     if (!isEnabledAllowed)
                     {
                         if (!bool.TryParse(entry.Enabled, out bool raw) || !raw) // special case: if it's just the literal value "true", ignore it instead of breaking the content pack
                             return TrackSkip($"the {nameof(PatchConfig.Enabled)} field is obsolete and should be removed");
                     }
 
-                    if (!this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.Enabled)), out string error, out enabled))
+                    if (!this.TryParseEnabled(entry.Enabled, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.Enabled)), out string? error, out enabled))
                         return TrackSkip($"invalid {nameof(PatchConfig.Enabled)} value '{entry.Enabled}': {error}");
                 }
 
                 // parse update rate
                 UpdateRate updateRate;
                 {
-                    if (!this.TryParseUpdateRate(entry.Update, path.With(nameof(entry.Update)), out updateRate, out string error))
+                    if (!this.TryParseUpdateRate(entry.Update, out updateRate, out string? error))
                         return TrackSkip(error);
                 }
 
                 // parse 'from file'
-                IManagedTokenString fromAsset = null;
+                IManagedTokenString? fromAsset = null;
                 if (entry.FromFile != null)
                 {
-                    if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromFile)), out string error, out fromAsset))
+                    if (!this.TryPrepareLocalAsset(entry.FromFile, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromFile)), out string? error, out fromAsset))
                         return TrackSkip(error);
                 }
 
@@ -464,7 +465,7 @@ namespace ContentPatcher.Framework
                             patch = new LoadPatch(
                                 indexPath: indexPath,
                                 path: path,
-                                assetName: targetAsset,
+                                assetName: targetAsset!,
                                 conditions: conditions,
                                 localAsset: fromAsset,
                                 updateRate: updateRate,
@@ -479,7 +480,7 @@ namespace ContentPatcher.Framework
                     case PatchType.EditData:
                         {
                             // validate
-                            bool fromFileAllowed = rawContentPack.Content.Format.IsOlderThan("1.18.0");
+                            bool fromFileAllowed = rawContentPack.Content.Format!.IsOlderThan("1.18.0");
                             bool missingRequiredFields = !entry.Entries.Any() && !entry.Fields.Any() && !entry.MoveEntries.Any() && !entry.TextOperations.Any();
                             if (fromFileAllowed)
                             {
@@ -497,29 +498,29 @@ namespace ContentPatcher.Framework
                             }
 
                             // parse data changes
-                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out List<IManagedTokenString> targetField, out string parseError)
+                            bool TryParseFields(IContext context, PatchConfig rawFields, out List<EditDataPatchRecord> parsedEntries, out List<EditDataPatchField> parsedFields, out List<EditDataPatchMoveRecord> parsedMoveEntries, out List<IManagedTokenString> targetField, [NotNullWhen(false)] out string? setParseError)
                             {
-                                return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, path, out parsedEntries, out parsedFields, out parsedMoveEntries, out targetField, out parseError);
+                                return this.TryParseEditDataFields(rawFields, tokenParser, immutableRequiredModIDs, path, out parsedEntries, out parsedFields, out parsedMoveEntries, out targetField, out setParseError);
                             }
-                            List<EditDataPatchRecord> entries = null;
-                            List<EditDataPatchField> fields = null;
-                            List<EditDataPatchMoveRecord> moveEntries = null;
-                            List<IManagedTokenString> targetField = null;
+                            List<EditDataPatchRecord>? entries = null;
+                            List<EditDataPatchField>? fields = null;
+                            List<EditDataPatchMoveRecord>? moveEntries = null;
+                            List<IManagedTokenString>? targetField = null;
                             if (fromAsset == null)
                             {
-                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out targetField, out string error))
+                                if (!TryParseFields(tokenParser.Context, entry, out entries, out fields, out moveEntries, out targetField, out string? error))
                                     return TrackSkip(error);
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // save
                             patch = new EditDataPatch(
                                 indexPath: indexPath,
                                 path: path,
-                                assetName: targetAsset,
+                                assetName: targetAsset!,
                                 conditions: conditions,
                                 fromFile: fromAsset,
                                 records: entries,
@@ -550,12 +551,12 @@ namespace ContentPatcher.Framework
                                 return TrackSkip($"the {nameof(PatchConfig.PatchMode)} is invalid. Expected one of these values: [{string.Join(", ", Enum.GetNames(typeof(PatchImageMode)))}]");
 
                             // read from area
-                            TokenRectangle fromArea = null;
-                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out string error, out fromArea))
+                            TokenRectangle? fromArea = null;
+                            if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out string? error, out fromArea))
                                 return TrackSkip(error);
 
                             // read to area
-                            TokenRectangle toArea = null;
+                            TokenRectangle? toArea = null;
                             if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
                                 return TrackSkip(error);
 
@@ -563,7 +564,7 @@ namespace ContentPatcher.Framework
                             patch = new EditImagePatch(
                                 indexPath: indexPath,
                                 path: path,
-                                assetName: targetAsset,
+                                assetName: targetAsset!,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
@@ -581,7 +582,7 @@ namespace ContentPatcher.Framework
                     // edit map
                     case PatchType.EditMap:
                         {
-                            string error;
+                            string? error;
 
                             // read map properties
                             var mapProperties = new List<EditMapPatchProperty>();
@@ -589,9 +590,9 @@ namespace ContentPatcher.Framework
                             {
                                 LogPathBuilder localPath = path.With(nameof(entry.MapProperties), pair.Key);
 
-                                if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString key))
+                                if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With("key"), out error, out IManagedTokenString? key))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' key is invalid: {error}");
-                                if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString value))
+                                if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With("value"), out error, out IManagedTokenString? value))
                                     return TrackSkip($"{nameof(PatchConfig.MapProperties)} > '{pair.Key}' value '{pair.Value}' is invalid: {error}");
 
                                 mapProperties.Add(new EditMapPatchProperty(key, value));
@@ -599,40 +600,43 @@ namespace ContentPatcher.Framework
 
                             // read map tiles
                             var mapTiles = new List<EditMapPatchTile>();
-                            for (int i = 0; i < entry.MapTiles.Length; i++)
+                            for (int i = 0; i < entry.MapTiles.Count; i++)
                             {
-                                PatchMapTileConfig tile = entry.MapTiles[i];
+                                PatchMapTileConfig? tile = entry.MapTiles[i];
+                                if (tile is null)
+                                    continue;
+
                                 LogPathBuilder localPath = path.With(nameof(entry.MapTiles), i.ToString());
                                 string errorPrefix = $"{nameof(PatchConfig.MapTiles)} > entry #{i + 1}";
 
                                 // layer
-                                if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIDs, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString layer))
+                                if (!tokenParser.TryParseString(tile.Layer, immutableRequiredModIDs, localPath.With(nameof(tile.Layer)), out error, out IManagedTokenString? layer))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Layer)} is invalid: {error}");
 
                                 // position
-                                if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Position)), out error, out TokenPosition position))
+                                if (!this.TryParsePosition(tile.Position, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Position)), out error, out TokenPosition? position))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Position)} is invalid: {error}");
 
                                 // tilesheet
-                                IManagedTokenString tilesheet = null;
+                                IManagedTokenString? tilesheet = null;
                                 if (tile.SetTilesheet != null && !tokenParser.TryParseString(tile.SetTilesheet, immutableRequiredModIDs, localPath.With(nameof(tile.SetTilesheet)), out error, out tilesheet))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetTilesheet)} is invalid: {error}");
 
                                 // index
-                                IManagedTokenString setIndex = null;
+                                IManagedTokenString? setIndex = null;
                                 if (tile.SetIndex != null && !this.TryParseInt(tile.SetIndex, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.SetIndex)), out error, out setIndex))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetIndex)} is invalid: {error}");
 
                                 // properties
-                                var tileProperties = new Dictionary<IManagedTokenString, IManagedTokenString>();
+                                var tileProperties = new Dictionary<IManagedTokenString, IManagedTokenString?>();
                                 {
                                     int p = 0;
                                     foreach (var pair in tile.SetProperties)
                                     {
                                         p++;
-                                        if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString key))
+                                        if (!tokenParser.TryParseString(pair.Key, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "key"), out error, out IManagedTokenString? key))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > key is invalid: {error}");
-                                        if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString value))
+                                        if (!tokenParser.TryParseString(pair.Value, immutableRequiredModIDs, localPath.With(nameof(tile.SetProperties), "value"), out error, out IManagedTokenString? value))
                                             return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.SetProperties)} > entry #{p + 1} > value is invalid: {error}");
 
                                         tileProperties[key] = value;
@@ -640,7 +644,7 @@ namespace ContentPatcher.Framework
                                 }
 
                                 // remove
-                                IManagedTokenString remove = null;
+                                IManagedTokenString? remove = null;
                                 if (tile.Remove != null && !this.TryParseBoolean(tile.Remove, tokenParser, immutableRequiredModIDs, localPath.With(nameof(tile.Remove)), out error, out remove))
                                     return TrackSkip($"{errorPrefix} > {nameof(EditMapPatchTile.Remove)} is invalid: {error}");
 
@@ -656,23 +660,23 @@ namespace ContentPatcher.Framework
 
                             // parse warps
                             var addWarps = new List<IManagedTokenString>();
-                            for (int i = 0; i < entry.AddWarps.Length; i++)
+                            for (int i = 0; i < entry.AddWarps.Count; i++)
                             {
                                 LogPathBuilder localPath = path.With(nameof(entry.AddWarps), i.ToString());
-                                if (!tokenParser.TryParseString(entry.AddWarps[i], immutableRequiredModIDs, localPath, out string warpError, out IManagedTokenString parsed))
+                                if (!tokenParser.TryParseString(entry.AddWarps[i], immutableRequiredModIDs, localPath, out string? warpError, out IManagedTokenString? parsed))
                                     return TrackSkip($"{nameof(PatchConfig.AddWarps)} > '{entry.AddWarps[i]}' is invalid: {warpError}");
                                 addWarps.Add(parsed);
                             }
 
                             // parse text operations
-                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string parseError))
+                            if (!this.TryParseTextOperations(entry, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.TextOperations)), out IList<TextOperation> textOperations, out string? parseError))
                                 return TrackSkip(parseError);
 
                             // read from/to asset areas
-                            TokenRectangle fromArea = null;
+                            TokenRectangle? fromArea = null;
                             if (entry.FromArea != null && !this.TryParseRectangle(entry.FromArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.FromArea)), out error, out fromArea))
                                 return TrackSkip(error);
-                            TokenRectangle toArea = null;
+                            TokenRectangle? toArea = null;
                             if (entry.ToArea != null && !this.TryParseRectangle(entry.ToArea, tokenParser, immutableRequiredModIDs, path.With(nameof(entry.ToArea)), out error, out toArea))
                                 return TrackSkip(error);
 
@@ -689,7 +693,7 @@ namespace ContentPatcher.Framework
                             patch = new EditMapPatch(
                                 indexPath: indexPath,
                                 path: path,
-                                assetName: targetAsset,
+                                assetName: targetAsset!,
                                 conditions: conditions,
                                 fromAsset: fromAsset,
                                 fromArea: fromArea,
@@ -713,7 +717,7 @@ namespace ContentPatcher.Framework
                 }
 
                 // skip if not enabled
-                // note: we process the patch even if it's disabled, so any errors are caught by the modder instead of only failing after the patch is enabled.
+                // note: we process the patch even if it's disabled, so any errors are caught by the mod author instead of only failing after the patch is enabled.
                 if (!enabled)
                     return TrackSkip($"{nameof(PatchConfig.Enabled)} is false", warn: false);
 
@@ -754,7 +758,7 @@ namespace ContentPatcher.Framework
         /// <param name="textOperations">The parsed text operations.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, out string error)
+        private bool TryParseTextOperations(PatchConfig patch, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out IList<TextOperation> textOperations, [NotNullWhen(false)] out string? error)
         {
             bool Fail(string reason, out string outReason)
             {
@@ -772,8 +776,11 @@ namespace ContentPatcher.Framework
 
             // parse entries
             int i = 0;
-            foreach (TextOperationConfig operation in patch.TextOperations)
+            foreach (TextOperationConfig? operation in patch.TextOperations)
             {
+                if (operation is null)
+                    continue;
+
                 LogPathBuilder localPath = path.With(i++.ToString());
                 string errorPrefix = $"{nameof(patch.TextOperations)} > {i} is invalid";
 
@@ -790,9 +797,9 @@ namespace ContentPatcher.Framework
 
                 // parse target
                 List<IManagedTokenString> target = new List<IManagedTokenString>();
-                foreach (string field in operation.Target)
+                foreach (string? field in operation.Target)
                 {
-                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string targetError, out IManagedTokenString parsed))
+                    if (!tokenParser.TryParseString(field, assumeModIds, localPath.With(nameof(TextOperation.Target), i.ToString()), out string? targetError, out IManagedTokenString? parsed))
                         return Fail($"{errorPrefix}: the {nameof(operation.Target)} value '{field}' couldn't be parsed: {targetError}", out error);
                     target.Add(parsed);
                 }
@@ -802,7 +809,7 @@ namespace ContentPatcher.Framework
                     return Fail($"{errorPrefix}: the {nameof(operation.Target)} value must specify at least two segments.", out error);
 
                 // parse value
-                if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string valueError, out IManagedTokenString value))
+                if (!tokenParser.TryParseString(operation.Value, assumeModIds, localPath.With(nameof(operation.Value)), out string? valueError, out IManagedTokenString? value))
                     return Fail($"{errorPrefix}: the {nameof(operation.Value)} value '{operation.Value}' couldn't be parsed: {valueError}", out error);
 
                 // create text operation entry
@@ -824,7 +831,7 @@ namespace ContentPatcher.Framework
         /// <param name="targetField">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryParseEditDataFields(PatchConfig entry, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetField, out string error)
+        private bool TryParseEditDataFields(PatchConfig entry, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetField, [NotNullWhen(false)] out string? error)
         {
             entries = new List<EditDataPatchRecord>();
             fields = new List<EditDataPatchField>();
@@ -838,39 +845,42 @@ namespace ContentPatcher.Framework
             }
 
             // parse entries
-            foreach (KeyValuePair<string, JToken> pair in entry.Entries)
+            foreach ((string entryId, JToken? entryObj) in entry.Entries)
             {
-                LogPathBuilder localPath = path.With(nameof(entry.Entries), pair.Key);
+                LogPathBuilder localPath = path.With(nameof(entry.Entries), entryId);
 
-                if (!tokenParser.TryParseString(pair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
-                    return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' key is invalid: {keyError}", out error);
-                if (!tokenParser.TryParseJson(pair.Value, assumeModIds, localPath.With("value"), out string valueError, out TokenizableJToken value))
-                    return Fail($"{nameof(PatchConfig.Entries)} > '{pair.Key}' value is invalid: {valueError}", out error);
+                if (!tokenParser.TryParseString(entryId, assumeModIds, localPath.With("key"), out string? keyError, out IManagedTokenString? key))
+                    return Fail($"{nameof(PatchConfig.Entries)} > '{entryId}' key is invalid: {keyError}", out error);
+                if (!tokenParser.TryParseJson(entryObj, assumeModIds, localPath.With("value"), out string? valueError, out TokenizableJToken? value))
+                    return Fail($"{nameof(PatchConfig.Entries)} > '{entryId}' value is invalid: {valueError}", out error);
 
                 entries.Add(new EditDataPatchRecord(key, value));
             }
 
             // parse fields
-            foreach (KeyValuePair<string, InvariantDictionary<JToken>> recordPair in entry.Fields)
+            foreach ((string entryId, Dictionary<string, JToken?>? entryFields) in entry.Fields)
             {
-                var localPath = path.With(nameof(entry.Fields), recordPair.Key);
+                if (entryFields is null)
+                    continue;
+
+                LogPathBuilder localPath = path.With(nameof(entry.Fields), entryId);
 
                 // parse entry key
-                if (!tokenParser.TryParseString(recordPair.Key, assumeModIds, localPath.With("key"), out string keyError, out IManagedTokenString key))
-                    return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} is invalid: {keyError}", out error);
+                if (!tokenParser.TryParseString(entryId, assumeModIds, localPath.With("key"), out string? keyError, out IManagedTokenString? key))
+                    return Fail($"{nameof(PatchConfig.Fields)} > entry {entryId} is invalid: {keyError}", out error);
 
                 // parse fields
-                foreach (KeyValuePair<string, JToken> fieldPair in recordPair.Value)
+                foreach ((string fieldId, JToken? field) in entryFields)
                 {
                     // parse field key
-                    if (!tokenParser.TryParseString(fieldPair.Key, assumeModIds, localPath.With(fieldPair.Key, "key"), out string fieldError, out IManagedTokenString fieldKey))
-                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldPair.Key} key is invalid: {fieldError}", out error);
+                    if (!tokenParser.TryParseString(fieldId, assumeModIds, localPath.With(fieldId, "key"), out string? fieldError, out IManagedTokenString? fieldKey))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {entryId} > field {fieldId} key is invalid: {fieldError}", out error);
 
                     // parse value
-                    if (!tokenParser.TryParseJson(fieldPair.Value, assumeModIds, localPath.With(fieldPair.Key, "value"), out string valueError, out TokenizableJToken value))
-                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: {valueError}", out error);
+                    if (!tokenParser.TryParseJson(field, assumeModIds, localPath.With(fieldId, "value"), out string? valueError, out TokenizableJToken? value))
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {entryId} > field {fieldKey} is invalid: {valueError}", out error);
                     if (value?.IsString == true && value.GetTokenStrings().SelectMany(p => p.LexTokens).OfType<LexTokenLiteral>().Any(p => p.Text.Contains("/")))
-                        return Fail($"{nameof(PatchConfig.Fields)} > entry {recordPair.Key} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
+                        return Fail($"{nameof(PatchConfig.Fields)} > entry {entryId} > field {fieldKey} is invalid: value can't contain field delimiter character '/'", out error);
 
                     fields.Add(new EditDataPatchField(key, fieldKey, value));
                 }
@@ -879,12 +889,15 @@ namespace ContentPatcher.Framework
             // parse move entries
             {
                 int i = 0;
-                foreach (PatchMoveEntryConfig moveEntry in entry.MoveEntries)
+                foreach (PatchMoveEntryConfig? moveEntry in entry.MoveEntries)
                 {
+                    if (moveEntry is null)
+                        continue;
+
                     LogPathBuilder localPath = path.With(nameof(entry.MoveEntries), i++.ToString());
 
                     // validate
-                    string[] targets = { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
+                    string?[] targets = { moveEntry.BeforeID, moveEntry.AfterID, moveEntry.ToPosition };
                     if (string.IsNullOrWhiteSpace(moveEntry.ID))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > move entry is invalid: must specify an {nameof(PatchMoveEntryConfig.ID)} value", out error);
                     if (targets.All(string.IsNullOrWhiteSpace))
@@ -893,11 +906,11 @@ namespace ContentPatcher.Framework
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' is invalid: must specify only one of {nameof(PatchMoveEntryConfig.ToPosition)}, {nameof(PatchMoveEntryConfig.BeforeID)}, and {nameof(PatchMoveEntryConfig.AfterID)}", out error);
 
                     // parse IDs
-                    if (!tokenParser.TryParseString(moveEntry.ID, assumeModIds, localPath.With(nameof(moveEntry.ID)), out string idError, out IManagedTokenString moveId))
+                    if (!tokenParser.TryParseString(moveEntry.ID, assumeModIds, localPath.With(nameof(moveEntry.ID)), out string? idError, out IManagedTokenString? moveId))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.ID)} is invalid: {idError}", out error);
-                    if (!tokenParser.TryParseString(moveEntry.BeforeID, assumeModIds, localPath.With(nameof(moveEntry.BeforeID)), out string beforeIdError, out IManagedTokenString beforeId))
+                    if (!tokenParser.TryParseString(moveEntry.BeforeID, assumeModIds, localPath.With(nameof(moveEntry.BeforeID)), out string? beforeIdError, out IManagedTokenString? beforeId))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.BeforeID)} is invalid: {beforeIdError}", out error);
-                    if (!tokenParser.TryParseString(moveEntry.AfterID, assumeModIds, localPath.With(nameof(moveEntry.AfterID)), out string afterIdError, out IManagedTokenString afterId))
+                    if (!tokenParser.TryParseString(moveEntry.AfterID, assumeModIds, localPath.With(nameof(moveEntry.AfterID)), out string? afterIdError, out IManagedTokenString? afterId))
                         return Fail($"{nameof(PatchConfig.MoveEntries)} > entry '{moveEntry.ID}' > {nameof(PatchMoveEntryConfig.AfterID)} is invalid: {afterIdError}", out error);
 
                     // parse position
@@ -917,7 +930,7 @@ namespace ContentPatcher.Framework
                 {
                     LogPathBuilder localPath = path.With(nameof(entry.TargetField), i++.ToString());
 
-                    if (!tokenParser.TryParseString(fieldName, assumeModIds, localPath, out string fieldError, out IManagedTokenString fieldKey))
+                    if (!tokenParser.TryParseString(fieldName, assumeModIds, localPath, out string? fieldError, out IManagedTokenString? fieldKey))
                         return Fail($"{nameof(PatchConfig.Fields)} > target path {i - 1} is invalid: {fieldError}", out error);
 
                     targetField.Add(fieldKey);
@@ -936,9 +949,9 @@ namespace ContentPatcher.Framework
         /// <param name="condition">The normalized condition.</param>
         /// <param name="immutableRequiredModIDs">The mod IDs always available when the condition is applied. If the condition has an immutable <see cref="ConditionType.HasMod"/> condition, it'll be added to this list.</param>
         /// <param name="error">An error message indicating why normalization failed.</param>
-        private bool TryParseCondition(string name, string value, TokenParser tokenParser, LogPathBuilder path, out Condition condition, InvariantHashSet immutableRequiredModIDs, out string error)
+        private bool TryParseCondition(string? name, string? value, TokenParser tokenParser, LogPathBuilder path, [NotNullWhen(true)] out Condition? condition, InvariantHashSet immutableRequiredModIDs, [NotNullWhen(false)] out string? error)
         {
-            bool Fail(string reason, out string setError, out Condition setCondition)
+            bool Fail(string reason, out string setError, out Condition? setCondition)
             {
                 setCondition = null;
                 setError = reason;
@@ -965,7 +978,7 @@ namespace ContentPatcher.Framework
             IInputArguments keyInputArgs = new InputArguments(keyInputStr);
 
             // get token
-            IToken token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
+            IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
             if (token == null)
                 return Fail($"'{name}' isn't a valid condition; must be one of {string.Join(", ", tokenParser.Context.GetTokens(enforceContext: false).Select(p => p.Name).OrderByHuman())}", out error, out condition);
             if (!tokenParser.TryValidateToken(keyLexToken, assumeModIds: immutableRequiredModIDs, out error))
@@ -978,11 +991,11 @@ namespace ContentPatcher.Framework
             // parse values
             if (string.IsNullOrWhiteSpace(value))
                 return Fail($"can't parse condition {name}: value can't be empty", out error, out condition);
-            if (!tokenParser.TryParseString(value, assumeModIds: immutableRequiredModIDs, path.With("value"), out error, out IManagedTokenString values))
+            if (!tokenParser.TryParseString(value, assumeModIds: immutableRequiredModIDs, path.With("value"), out error, out IManagedTokenString? values))
                 return Fail($"can't parse condition {name}: {error}", out error, out condition);
 
             // validate token keys & values
-            if (!values.IsMutable && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string customError))
+            if (!values.IsMutable && !token.TryValidateValues(keyInputArgs, values.SplitValuesUnique(token.NormalizeValue), tokenParser.Context, out string? customError))
                 return Fail($"invalid {keyLexToken.Name} condition: {customError}", out error, out condition);
 
             // create condition
@@ -994,7 +1007,7 @@ namespace ContentPatcher.Framework
             if (condition.IsReady && !condition.IsMutable && condition.Is(ConditionType.HasMod))
             {
                 // contains
-                if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue contains))
+                if (condition.Input.ReservedArgs.TryGetValue(InputArguments.ContainsKey, out IInputArgumentValue? contains))
                 {
                     if (bool.TryParse(condition.Values.Value, out bool required) && required)
                         immutableRequiredModIDs.AddMany(contains.Parsed);
@@ -1015,7 +1028,7 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseBoolean(string rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out IManagedTokenString parsed)
+        private bool TryParseBoolean(string? rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out IManagedTokenString? parsed)
         {
             // analyze string
             if (!tokenParser.TryParseString(rawValue, assumeModIds, path, out error, out parsed))
@@ -1033,7 +1046,7 @@ namespace ContentPatcher.Framework
 
                 // parse token
                 LexTokenToken lexToken = parsed.GetTokenPlaceholders(recursive: false).Single();
-                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                IToken? token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
                 IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
 
                 // check token options
@@ -1044,7 +1057,7 @@ namespace ContentPatcher.Framework
                 }
                 if (!token.BypassesContextValidation)
                 {
-                    if (!token.HasBoundedValues(input, out InvariantHashSet allowedValues) || allowedValues == null || !allowedValues.All(p => bool.TryParse(p, out _)))
+                    if (!token.HasBoundedValues(input, out InvariantHashSet? allowedValues) || !allowedValues.All(p => bool.TryParse(p, out _)))
                     {
                         error = "that token isn't restricted to 'true' or 'false'.";
                         return false;
@@ -1068,16 +1081,15 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseEnabled(string rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out bool parsed)
+        private bool TryParseEnabled(string? rawValue, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, out bool parsed)
         {
             parsed = false;
 
             // analyze string
-            if (!this.TryParseBoolean(rawValue, tokenParser, assumeModIds, path, out error, out IManagedTokenString tokenString))
+            if (!this.TryParseBoolean(rawValue, tokenParser, assumeModIds, path, out error, out IManagedTokenString? tokenString))
                 return false;
 
             // validate that it has no tokens
-            string text = rawValue;
             if (tokenString.HasAnyTokens)
             {
                 error = "cannot contain tokens.";
@@ -1085,7 +1097,7 @@ namespace ContentPatcher.Framework
             }
 
             // parse as boolean
-            if (!bool.TryParse(text, out parsed))
+            if (!bool.TryParse(rawValue, out parsed))
             {
                 error = $"can't parse {tokenString.Raw} as a true/false value.";
                 return false;
@@ -1100,9 +1112,9 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParsePosition(PatchPositionConfig raw, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out TokenPosition parsed)
+        private bool TryParsePosition(PatchPositionConfig? raw, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out TokenPosition? parsed)
         {
-            bool TryParseField(string rawField, string name, out IManagedTokenString result, out string parseError)
+            bool TryParseField(string? rawField, string name, [NotNullWhen(true)] out IManagedTokenString? result, [NotNullWhen(false)] out string? parseError)
             {
                 if (!this.TryParseInt(rawField, tokenParser, assumeModIds, path.With(name), out parseError, out result))
                 {
@@ -1112,9 +1124,16 @@ namespace ContentPatcher.Framework
                 return true;
             }
 
+            if (raw is null)
+            {
+                error = "the tile position is required";
+                parsed = null;
+                return false;
+            }
+
             if (
-                !TryParseField(raw.X, nameof(raw.X), out IManagedTokenString x, out error)
-                || !TryParseField(raw.Y, nameof(raw.Y), out IManagedTokenString y, out error)
+                !TryParseField(raw.X, nameof(raw.X), out IManagedTokenString? x, out error)
+                || !TryParseField(raw.Y, nameof(raw.Y), out IManagedTokenString? y, out error)
             )
             {
                 parsed = null;
@@ -1132,9 +1151,9 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseRectangle(PatchRectangleConfig raw, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out TokenRectangle parsed)
+        private bool TryParseRectangle(PatchRectangleConfig raw, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out TokenRectangle? parsed)
         {
-            bool TryParseField(string rawField, string name, out IManagedTokenString result, out string parseError)
+            bool TryParseField(string? rawField, string name, [NotNullWhen(true)] out IManagedTokenString? result, [NotNullWhen(false)] out string? parseError)
             {
                 if (!this.TryParseInt(rawField, tokenParser, assumeModIds, path.With(name), out parseError, out result))
                 {
@@ -1145,10 +1164,10 @@ namespace ContentPatcher.Framework
             }
 
             if (
-                !TryParseField(raw.X, nameof(raw.X), out IManagedTokenString x, out error)
-                || !TryParseField(raw.Y, nameof(raw.Y), out IManagedTokenString y, out error)
-                || !TryParseField(raw.Width, nameof(raw.Width), out IManagedTokenString width, out error)
-                || !TryParseField(raw.Height, nameof(raw.Height), out IManagedTokenString height, out error)
+                !TryParseField(raw.X, nameof(raw.X), out IManagedTokenString? x, out error)
+                || !TryParseField(raw.Y, nameof(raw.Y), out IManagedTokenString? y, out error)
+                || !TryParseField(raw.Width, nameof(raw.Width), out IManagedTokenString? width, out error)
+                || !TryParseField(raw.Height, nameof(raw.Height), out IManagedTokenString? height, out error)
             )
             {
                 parsed = null;
@@ -1166,12 +1185,12 @@ namespace ContentPatcher.Framework
         /// <param name="path">The path to the value from the root content file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
         /// <param name="parsed">The parsed value.</param>
-        private bool TryParseInt(string rawString, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, out string error, out IManagedTokenString parsed)
+        private bool TryParseInt(string? rawString, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder path, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out IManagedTokenString? parsed)
         {
             parsed = null;
 
             // analyze string
-            if (!tokenParser.TryParseString(rawString, assumeModIds, path, out error, out IManagedTokenString tokenString))
+            if (!tokenParser.TryParseString(rawString, assumeModIds, path, out error, out IManagedTokenString? tokenString))
                 return false;
 
             // validate tokens
@@ -1186,7 +1205,12 @@ namespace ContentPatcher.Framework
 
                 // parse token
                 LexTokenToken lexToken = tokenString.GetTokenPlaceholders(recursive: false).Single();
-                IToken token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                IToken? token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
+                if (token is null)
+                {
+                    error = $"unknown token {lexToken.Name}";
+                    return false;
+                }
                 IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
 
                 // check token options
@@ -1194,11 +1218,7 @@ namespace ContentPatcher.Framework
                 {
                     bool isIntegerBounded =
                         token.HasBoundedRangeValues(input, out _, out _)
-                        || (
-                            token.HasBoundedValues(input, out InvariantHashSet allowedValues)
-                            && allowedValues != null
-                            && allowedValues.All(p => int.TryParse(p, out _))
-                        );
+                        || (token.HasBoundedValues(input, out InvariantHashSet? allowedValues) && allowedValues.All(p => int.TryParse(p, out _)));
 
                     if (!isIntegerBounded)
                     {
@@ -1226,7 +1246,7 @@ namespace ContentPatcher.Framework
         /// <param name="error">The error reason if preparing the asset fails.</param>
         /// <param name="tokenedPath">The parsed value.</param>
         /// <returns>Returns whether the local asset was successfully prepared.</returns>
-        private bool TryPrepareLocalAsset(string path, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder logPath, out string error, out IManagedTokenString tokenedPath)
+        private bool TryPrepareLocalAsset(string? path, TokenParser tokenParser, InvariantHashSet assumeModIds, LogPathBuilder logPath, [NotNullWhen(false)] out string? error, [NotNullWhen(true)] out IManagedTokenString? tokenedPath)
         {
             // normalize raw value
             path = path?.Trim();
@@ -1238,7 +1258,7 @@ namespace ContentPatcher.Framework
             }
 
             // tokenize
-            if (!tokenParser.TryParseString(path, assumeModIds, logPath, out string tokenError, out tokenedPath))
+            if (!tokenParser.TryParseString(path, assumeModIds, logPath, out string? tokenError, out tokenedPath))
             {
                 error = $"the {nameof(PatchConfig.FromFile)} is invalid: {tokenError}";
                 tokenedPath = null;
@@ -1255,7 +1275,7 @@ namespace ContentPatcher.Framework
         /// <param name="child">The child patch.</param>
         private bool IsDescendant(IPatch parent, IPatch child)
         {
-            for (IPatch cur = child.ParentPatch; cur != null; cur = cur.ParentPatch)
+            for (IPatch? cur = child.ParentPatch; cur != null; cur = cur.ParentPatch)
             {
                 if (object.ReferenceEquals(cur, parent))
                     return true;
@@ -1267,7 +1287,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get a key which sorts conditions into the order they should be parsed.</summary>
         /// <param name="key">The condition key.</param>
         /// <param name="value">The condition value.</param>
-        private int GetConditionParseOrder(string key, string value)
+        private int GetConditionParseOrder(string key, string? value)
         {
             // parse HasMod conditions first (they allow mod-provided tokens in other conditions)
             if (key.Contains(ConditionType.HasMod.ToString()))

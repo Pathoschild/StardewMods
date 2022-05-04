@@ -1,6 +1,5 @@
-#nullable disable
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
 namespace ContentPatcher.Framework.Tokens
@@ -41,7 +40,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="rectangle">The rectangle value, if valid.</param>
         /// <param name="error">An error phrase indicating why the rectangle can't be constructed.</param>
         /// <returns>Returns whether the rectangle value was successfully created.</returns>
-        public bool TryGetRectangle(out Rectangle rectangle, out string error)
+        public bool TryGetRectangle(out Rectangle rectangle, [NotNullWhen(false)] out string? error)
         {
             if (
                 !this.TryGetNumber(this.X, nameof(this.X), out int x, out error)

@@ -1,5 +1,4 @@
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Patches;
 using StardewModdingAPI;
 
@@ -17,10 +16,10 @@ namespace ContentPatcher.Framework.Validators
         /// <param name="patch">The patch which loaded the asset.</param>
         /// <param name="error">An error message which indicates why validation failed.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public virtual bool TryValidate<T>(IAssetName assetName, T data, IPatch patch, out string error)
+        public virtual bool TryValidate<T>(IAssetName assetName, T data, IPatch patch, [NotNullWhen(false)] out string? error)
         {
             error = null;
-            return false;
+            return true;
         }
     }
 }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Diagnostics.CodeAnalysis;
 
 namespace ContentPatcher.Framework.Conditions

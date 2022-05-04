@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Pathoschild.Stardew.Common.Utilities;
@@ -21,7 +20,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether a value is equal to another, ignoring case.</summary>
         /// <param name="value">The first value to compare.</param>
         /// <param name="other">The second value to compare.</param>
-        public static bool EqualsIgnoreCase(this string value, string other)
+        public static bool EqualsIgnoreCase(this string? value, string? other)
         {
             return
                 value?.Equals(other, StringComparison.OrdinalIgnoreCase)
@@ -31,7 +30,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get whether a value contains a substring, ignoring case.</summary>
         /// <param name="value">The first value to compare.</param>
         /// <param name="other">The second value to compare.</param>
-        public static bool ContainsIgnoreCase(this string value, string other)
+        public static bool ContainsIgnoreCase(this string? value, string? other)
         {
             if (value == null || other == null)
                 return value == other;
@@ -70,7 +69,7 @@ namespace ContentPatcher.Framework
         /// <param name="source">A sequence of values to order.</param>
         /// <param name="keySelector">A function to extract a key from an element.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source" /> is <see langword="null" />.</exception>
-        public static IOrderedEnumerable<TSource> OrderByHuman<TSource>(this IEnumerable<TSource> source, Func<TSource, string> keySelector)
+        public static IOrderedEnumerable<TSource> OrderByHuman<TSource>(this IEnumerable<TSource> source, Func<TSource, string?> keySelector)
         {
             return source.OrderBy(keySelector, HumanSortComparer.DefaultIgnoreCase);
         }
@@ -80,7 +79,7 @@ namespace ContentPatcher.Framework
         ****/
         /// <summary>Get whether a token string has a meaningful value.</summary>
         /// <param name="str">The token string.</param>
-        public static bool IsMeaningful(this ITokenString str)
+        public static bool IsMeaningful([NotNullWhen(true)] this ITokenString? str)
         {
             return !string.IsNullOrWhiteSpace(str?.Value);
         }
@@ -89,7 +88,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static InvariantHashSet SplitValuesUnique(this ITokenString tokenStr, Func<string, string> normalize = null)
+        public static InvariantHashSet SplitValuesUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
         {
             return new InvariantHashSet(tokenStr.SplitValuesNonUnique(normalize));
         }
@@ -98,7 +97,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString tokenStr, Func<string, string> normalize = null)
+        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
         {
             if (tokenStr == null)
                 return Enumerable.Empty<string>();
@@ -113,18 +112,19 @@ namespace ContentPatcher.Framework
         /// <param name="str">The string to parse.</param>
         /// <param name="separator">The separator by which to split the value.</param>
         /// <param name="normalize">Normalize a value.</param>
-        public static IEnumerable<string> SplitValuesNonUnique(this string str, Func<string, string> normalize = null, string separator = ",")
+        public static IEnumerable<string> SplitValuesNonUnique(this string? str, Func<string, string?>? normalize = null, string separator = ",")
         {
             if (string.IsNullOrWhiteSpace(str))
                 return Enumerable.Empty<string>();
 
-            return str
-                .Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(p => normalize != null
-                    ? normalize(p.Trim())
-                    : p.Trim()
-                )
-                .Where(p => p != string.Empty);
+            return (
+                from raw in str.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+                let value = normalize != null
+                    ? normalize(raw.Trim())
+                    : raw.Trim()
+                where !string.IsNullOrEmpty(value)
+                select value
+            );
         }
 
         /****
@@ -152,7 +152,7 @@ namespace ContentPatcher.Framework
         /// <param name="modID">The mod ID.</param>
         /// <param name="minVersion">The minimum version required by the mod, if any.</param>
         /// <param name="canBeOptional">Whether the dependency can be optional.</param>
-        public static bool HasDependency(this IManifest manifest, string modID, out ISemanticVersion minVersion, bool canBeOptional = true)
+        public static bool HasDependency(this IManifest? manifest, string modID, out ISemanticVersion? minVersion, bool canBeOptional = true)
         {
             minVersion = null;
             if (manifest == null)
@@ -163,11 +163,11 @@ namespace ContentPatcher.Framework
                 return true;
 
             // check content pack for
-            if (manifest.ContentPackFor?.UniqueID?.EqualsIgnoreCase(modID) == true)
+            if (manifest.ContentPackFor?.UniqueID.EqualsIgnoreCase(modID) == true)
                 return true;
 
             // check dependencies
-            IManifestDependency dependency = manifest.Dependencies?.FirstOrDefault(p => p.UniqueID?.EqualsIgnoreCase(modID) == true);
+            IManifestDependency? dependency = manifest.Dependencies.FirstOrDefault(p => p.UniqueID.EqualsIgnoreCase(modID));
             minVersion = dependency?.MinimumVersion;
             return
                 dependency != null

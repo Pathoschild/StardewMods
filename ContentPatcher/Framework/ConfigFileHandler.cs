@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +19,7 @@ namespace ContentPatcher.Framework
         private readonly string Filename;
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        private readonly Func<string, InvariantHashSet> ParseCommaDelimitedField;
+        private readonly Func<string?, InvariantHashSet> ParseCommaDelimitedField;
 
         /// <summary>A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</summary>
         private readonly Action<IContentPack, string, string> LogWarning;
@@ -34,7 +32,7 @@ namespace ContentPatcher.Framework
         /// <param name="filename">The name of the config file.</param>
         /// <param name="parseCommandDelimitedField">Parse a comma-delimited set of case-insensitive condition values.</param>
         /// <param name="logWarning">A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</param>
-        public ConfigFileHandler(string filename, Func<string, InvariantHashSet> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
+        public ConfigFileHandler(string filename, Func<string?, InvariantHashSet> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
         {
             this.Filename = filename;
             this.ParseCommaDelimitedField = parseCommandDelimitedField;
@@ -45,7 +43,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentPack">The content pack.</param>
         /// <param name="rawSchema">The raw config schema from the mod's <c>content.json</c>.</param>
         /// <param name="formatVersion">The content format version.</param>
-        public InvariantDictionary<ConfigField> Read(IContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, ISemanticVersion formatVersion)
+        public InvariantDictionary<ConfigField> Read(IContentPack contentPack, InvariantDictionary<ConfigSchemaFieldConfig?>? rawSchema, ISemanticVersion formatVersion)
         {
             InvariantDictionary<ConfigField> config = this.LoadConfigSchema(rawSchema, logWarning: (field, reason) => this.LogWarning(contentPack, $"{nameof(ContentConfig.ConfigSchema)} field '{field}'", reason), formatVersion);
             this.LoadConfigValues(contentPack, config, logWarning: (field, reason) => this.LogWarning(contentPack, $"{this.Filename} > {field}", reason));
@@ -61,14 +59,14 @@ namespace ContentPatcher.Framework
             // save if settings valid
             if (config.Any())
             {
-                InvariantDictionary<string> data = new InvariantDictionary<string>(config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value)));
+                InvariantDictionary<string> data = new(config.ToDictionary(p => p.Key, p => string.Join(", ", p.Value.Value)));
                 contentPack.WriteJsonFile(this.Filename, data);
             }
 
             // delete if no settings
             else
             {
-                FileInfo file = new FileInfo(Path.Combine(contentPack.GetFullPath(this.Filename)));
+                FileInfo file = new(Path.Combine(contentPack.GetFullPath(this.Filename)));
                 if (file.Exists)
                     file.Delete();
             }
@@ -82,15 +80,17 @@ namespace ContentPatcher.Framework
         /// <param name="rawSchema">The raw config schema.</param>
         /// <param name="logWarning">The callback to invoke on each validation warning, passed the field name and reason respectively.</param>
         /// <param name="formatVersion">The content format version.</param>
-        private InvariantDictionary<ConfigField> LoadConfigSchema(InvariantDictionary<ConfigSchemaFieldConfig> rawSchema, Action<string, string> logWarning, ISemanticVersion formatVersion)
+        private InvariantDictionary<ConfigField> LoadConfigSchema(InvariantDictionary<ConfigSchemaFieldConfig?>? rawSchema, Action<string, string> logWarning, ISemanticVersion formatVersion)
         {
-            InvariantDictionary<ConfigField> schema = new InvariantDictionary<ConfigField>();
+            InvariantDictionary<ConfigField> schema = new();
             if (rawSchema == null || !rawSchema.Any())
                 return schema;
 
             foreach (string rawKey in rawSchema.Keys)
             {
-                ConfigSchemaFieldConfig field = rawSchema[rawKey];
+                ConfigSchemaFieldConfig? field = rawSchema[rawKey];
+                if (field is null)
+                    continue;
 
                 // validate format
                 if (string.IsNullOrWhiteSpace(rawKey))
@@ -154,7 +154,15 @@ namespace ContentPatcher.Framework
                 }
 
                 // add to schema
-                schema[rawKey] = new ConfigField(allowValues, defaultValues, field.AllowBlank, field.AllowMultiple, field.Description, field.Section);
+                schema[rawKey] = new ConfigField(
+                    allowValues: allowValues,
+                    defaultValues: defaultValues,
+                    value: new(),
+                    allowBlank: field.AllowBlank,
+                    allowMultiple: field.AllowMultiple,
+                    description: field.Description,
+                    section: field.Section
+                );
             }
 
             return schema;
@@ -188,22 +196,20 @@ namespace ContentPatcher.Framework
             foreach (string key in config.Keys)
             {
                 ConfigField field = config[key];
-                if (!configValues.TryGetValue(key, out InvariantHashSet values) || (!field.AllowBlank && !values.Any()))
+                if (!configValues.TryGetValue(key, out InvariantHashSet? values) || (!field.AllowBlank && !values.Any()))
                     configValues[key] = field.DefaultValues;
             }
 
             // parse each field
             foreach (string key in config.Keys)
             {
-                // set value
                 ConfigField field = config[key];
-                field.Value = configValues[key];
 
                 // validate allow-multiple
                 if (!field.AllowMultiple && field.Value.Count > 1)
                 {
                     logWarning(key, "field only allows a single value.");
-                    field.Value = field.DefaultValues;
+                    field.Value.ReplaceWith(field.DefaultValues);
                     continue;
                 }
 
@@ -213,11 +219,14 @@ namespace ContentPatcher.Framework
                     string[] invalidValues = field.Value.ExceptIgnoreCase(field.AllowValues).ToArray();
                     if (invalidValues.Any())
                     {
-                        logWarning(key,
-                            $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
-                        field.Value = field.DefaultValues;
+                        logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
+                        field.Value.ReplaceWith(field.DefaultValues);
+                        continue;
                     }
                 }
+
+                // save values
+                field.Value.ReplaceWith(configValues[key]);
             }
         }
     }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +5,7 @@ using System.Linq;
 namespace ContentPatcher.Framework
 {
     /// <summary>Encapsulates building a breadcrumb path for log messages.</summary>
-    internal class LogPathBuilder : IComparable<LogPathBuilder>
+    internal class LogPathBuilder : IComparable<LogPathBuilder?>
     {
         /*********
         ** Fields
@@ -53,7 +51,7 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public int CompareTo(LogPathBuilder other)
+        public int CompareTo(LogPathBuilder? other)
         {
             return string.Compare(this.PathString.Value, other?.PathString.Value, StringComparison.Ordinal);
         }

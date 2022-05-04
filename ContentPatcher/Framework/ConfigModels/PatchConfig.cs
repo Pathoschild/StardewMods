@@ -1,8 +1,6 @@
-#nullable disable
-
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -18,77 +16,87 @@ namespace ContentPatcher.Framework.ConfigModels
         ** All actions
         ****/
         /// <summary>A name for this patch shown in log messages.</summary>
-        public string LogName { get; set; }
+        public string? LogName { get; set; }
 
         /// <summary>The patch type to apply.</summary>
-        public string Action { get; set; }
+        public string? Action { get; set; }
 
         /// <summary>The asset key to change.</summary>
-        public string Target { get; set; }
+        public string? Target { get; set; }
 
         /// <summary>Indicates when a patch should be updated.</summary>
-        public string Update { get; set; }
+        public string? Update { get; set; }
 
         /// <summary>The local file to load.</summary>
-        public string FromFile { get; set; }
+        public string? FromFile { get; set; }
 
         /// <summary>Whether to apply this patch.</summary>
         /// <remarks>This must be a string to support config tokens.</remarks>
-        public string Enabled { get; set; } = "true";
+        public string? Enabled { get; set; }
 
         /// <summary>The criteria to apply. See readme for valid values.</summary>
-        public InvariantDictionary<string> When { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public InvariantDictionary<string?> When { get; } = new();
 
         /****
         ** Multiple actions
         ****/
         /// <summary>The text operations to apply.</summary>
-        public TextOperationConfig[] TextOperations { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public List<TextOperationConfig?> TextOperations { get; } = new();
 
         /****
         ** EditImage
         ****/
         /// <summary>The sprite area from which to read an image.</summary>
-        public PatchRectangleConfig FromArea { get; set; }
+        public PatchRectangleConfig? FromArea { get; set; }
 
         /// <summary>The sprite area to overwrite.</summary>
-        public PatchRectangleConfig ToArea { get; set; }
+        public PatchRectangleConfig? ToArea { get; set; }
 
         /// <summary>Indicates how the image should be patched.</summary>
-        public string PatchMode { get; set; }
+        public string? PatchMode { get; set; }
 
         /****
         ** EditData
         ****/
         /// <summary>The data records to edit.</summary>
-        public InvariantDictionary<JToken> Entries { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public InvariantDictionary<JToken?> Entries { get; } = new();
 
         /// <summary>The individual fields to edit in data records.</summary>
-        public InvariantDictionary<InvariantDictionary<JToken>> Fields { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public InvariantDictionary<InvariantDictionary<JToken?>?> Fields { get; } = new();
 
         /// <summary>The records to reorder, if the target is a list asset.</summary>
-        public PatchMoveEntryConfig[] MoveEntries { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public List<PatchMoveEntryConfig?> MoveEntries { get; } = new();
 
         /// <summary>The field within the data asset to which edits should be applied, or empty to apply to the root asset.</summary>
-        public string[] TargetField { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public List<string> TargetField { get; } = new();
 
         /****
         ** EditMap
         ****/
         /// <summary>The map properties to edit.</summary>
-        public InvariantDictionary<string> MapProperties { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public InvariantDictionary<string?> MapProperties { get; } = new();
 
         /// <summary>The warps to add to the location.</summary>
-        public string[] AddWarps { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public List<string?> AddWarps { get; } = new();
 
         /// <summary>The map tiles to edit.</summary>
-        public PatchMapTileConfig[] MapTiles { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public List<PatchMapTileConfig?> MapTiles { get; } = new();
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
+        [JsonConstructor]
         public PatchConfig() { }
 
         /// <summary>Construct an instance.</summary>
@@ -105,7 +113,7 @@ namespace ContentPatcher.Framework.ConfigModels
             this.When = other.When.Clone();
 
             // multiple actions
-            this.TextOperations = other.TextOperations.Select(p => new TextOperationConfig(p)).ToArray();
+            this.TextOperations = other.TextOperations.Select(p => p != null ? new TextOperationConfig(p) : null).ToList();
 
             // EditImage
             this.FromArea = other.FromArea != null ? new PatchRectangleConfig(other.FromArea) : null;
@@ -117,36 +125,13 @@ namespace ContentPatcher.Framework.ConfigModels
             this.Fields = other.Fields.Clone(
                 entryFields => entryFields?.Clone(value => value?.DeepClone())
             );
-            this.MoveEntries = other.MoveEntries.Select(p => new PatchMoveEntryConfig(p)).ToArray();
-            this.TargetField = other.TargetField.ToArray();
+            this.MoveEntries = other.MoveEntries.Select(p => p != null ? new PatchMoveEntryConfig(p) : null).ToList();
+            this.TargetField = other.TargetField.ToList();
 
             // EditMap
             this.MapProperties = other.MapProperties.Clone();
-            this.AddWarps = other.AddWarps.ToArray();
-            this.MapTiles = other.MapTiles.Select(p => new PatchMapTileConfig(p)).ToArray();
-        }
-
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
-        {
-            // all actions
-            this.When ??= new InvariantDictionary<string>();
-
-            // multiple actions
-            this.TextOperations ??= Array.Empty<TextOperationConfig>();
-
-            // EditData
-            this.Entries ??= new InvariantDictionary<JToken>();
-            this.Fields ??= new InvariantDictionary<InvariantDictionary<JToken>>();
-            this.MoveEntries ??= Array.Empty<PatchMoveEntryConfig>();
-            this.TargetField ??= Array.Empty<string>();
-
-            // EditMap
-            this.MapProperties ??= new InvariantDictionary<string>();
-            this.AddWarps ??= Array.Empty<string>();
-            this.MapTiles ??= Array.Empty<PatchMapTileConfig>();
+            this.AddWarps = other.AddWarps.ToList();
+            this.MapTiles = other.MapTiles.Select(p => p != null ? new PatchMapTileConfig(p) : null).ToList();
         }
     }
 }

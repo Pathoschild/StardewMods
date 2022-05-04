@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
@@ -23,7 +21,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, Func<string, IAssetName> parseAssetName)
+        public LoadPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IManagedTokenString localAsset, IEnumerable<Condition> conditions, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -41,7 +39,7 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override T Load<T>(IAssetName assetName)
         {
-            return this.ContentPack.ModContent.Load<T>(this.FromAsset);
+            return this.ContentPack.ModContent.Load<T>(this.FromAsset!);
         }
 
         /// <inheritdoc />

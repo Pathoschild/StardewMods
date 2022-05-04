@@ -1,6 +1,4 @@
-#nullable disable
-
-using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
@@ -12,47 +10,54 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The map layer name to edit.</summary>
-        public string Layer { get; set; }
+        public string? Layer { get; }
 
         /// <summary>The tile position to edit, relative to the top-left corner.</summary>
-        public PatchPositionConfig Position { get; set; }
+        public PatchPositionConfig? Position { get; }
 
         /// <summary>The tilesheet ID to set.</summary>
-        public string SetTilesheet { get; set; }
+        public string? SetTilesheet { get; }
 
         /// <summary>The tilesheet index to apply, the string <c>false</c> to remove it, or null to leave it as-is.</summary>
-        public string SetIndex { get; set; }
+        public string? SetIndex { get; }
 
         /// <summary>The tile properties to set.</summary>
-        public InvariantDictionary<string> SetProperties { get; set; }
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Auto)]
+        public InvariantDictionary<string?> SetProperties { get; } = new();
 
         /// <summary>Whether to remove the current tile and all its properties.</summary>
-        public string Remove { get; set; }
+        public string? Remove { get; }
 
 
         /*********
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        public PatchMapTileConfig() { }
+        /// <param name="layer">The map layer name to edit.</param>
+        /// <param name="position">The tile position to edit, relative to the top-left corner.</param>
+        /// <param name="setTilesheet">The tilesheet ID to set.</param>
+        /// <param name="setIndex">The tilesheet index to apply, the string <c>false</c> to remove it, or null to leave it as-is.</param>
+        /// <param name="remove">Whether to remove the current tile and all its properties.</param>
+        [JsonConstructor]
+        public PatchMapTileConfig(string? layer, PatchPositionConfig? position, string? setTilesheet, string? setIndex, string? remove)
+        {
+            this.Layer = layer;
+            this.Position = position;
+            this.SetTilesheet = setTilesheet;
+            this.SetIndex = setIndex;
+            this.Remove = remove;
+        }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="other">The other instance to copy.</param>
         public PatchMapTileConfig(PatchMapTileConfig other)
-        {
-            this.Position = other.Position;
-            this.Layer = other.Layer;
-            this.SetIndex = other.SetIndex;
-            this.SetTilesheet = other.SetTilesheet;
-            this.SetProperties = other.SetProperties;
-        }
-
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
-        {
-            this.SetProperties ??= new InvariantDictionary<string>();
-        }
+            : this(
+                  layer: other.Layer,
+                  position: other.Position,
+                  setTilesheet: other.SetTilesheet,
+                  setIndex: other.SetIndex,
+                  remove: other.Remove
+            )
+        { }
     }
 }

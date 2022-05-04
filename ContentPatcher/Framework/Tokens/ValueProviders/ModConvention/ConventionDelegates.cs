@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 {
@@ -26,7 +25,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <summary>Whether the token may return multiple values for the given input.</summary>
         /// <param name="input">The input arguments, if any.</param>
         /// <remarks>Default true.</remarks>
-        internal delegate bool CanHaveMultipleValues(string input = null);
+        internal delegate bool CanHaveMultipleValues(string? input = null);
 
         /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
         /// <remarks>Default unrestricted.</remarks>
@@ -36,21 +35,21 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <param name="input">The input arguments, if any.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
         /// <remarks>Default unrestricted.</remarks>
-        internal delegate bool HasBoundedValues(string input, out IEnumerable<string> allowedValues);
+        internal delegate bool HasBoundedValues(string? input, out IEnumerable<string> allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
         /// <param name="input">The input arguments, if any.</param>
         /// <param name="min">The minimum value this token may return.</param>
         /// <param name="max">The maximum value this token may return.</param>
         /// <remarks>Default false.</remarks>
-        internal delegate bool HasBoundedRangeValues(string input, out int min, out int max);
+        internal delegate bool HasBoundedRangeValues(string? input, out int min, out int max);
 
         /// <summary>Validate that the provided input arguments are valid.</summary>
         /// <param name="input">The input arguments, if any.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
         /// <remarks>Default true.</remarks>
-        internal delegate bool TryValidateInput(string input, out string error);
+        internal delegate bool TryValidateInput(string? input, [NotNullWhen(false)] out string? error);
 
         /// <summary>Validate that the provided values are valid for the given input arguments (regardless of whether they match).</summary>
         /// <param name="input">The input arguments, if any.</param>
@@ -58,11 +57,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
         /// <remarks>Default true.</remarks>
-        internal delegate bool TryValidateValues(string input, IEnumerable<string> values, out string error);
+        internal delegate bool TryValidateValues(string? input, IEnumerable<string> values, [NotNullWhen(false)] out string? error);
 
         /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
         /// <param name="value">The raw value.</param>
-        internal delegate string NormalizeValue(string value);
+        internal delegate string? NormalizeValue(string? value);
 
 
         /****
@@ -77,6 +76,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 
         /// <summary>Get the current values.</summary>
         /// <param name="input">The input arguments, if any.</param>
-        internal delegate IEnumerable<string> GetValues(string input);
+        internal delegate IEnumerable<string> GetValues(string? input);
     }
 }

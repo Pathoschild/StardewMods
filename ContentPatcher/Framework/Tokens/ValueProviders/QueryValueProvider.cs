@@ -1,8 +1,7 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Conditions;
@@ -23,7 +22,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Private methods
         *********/
         /// <summary>The underlying data table used to parse expressions.</summary>
-        private readonly DataTable DataTable = new DataTable();
+        private readonly DataTable DataTable = new();
 
         /// <summary>A cache of calculations since the last update.</summary>
         private readonly IDictionary<string, object> Cache = new Dictionary<string, object>();
@@ -53,13 +52,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.TryCalculate(input.GetPositionalSegment(), out object result, out _)
-                ? (result is IConvertible convertible ? convertible.ToString(CultureInfo.InvariantCulture) : result.ToString())
+            yield return this.TryCalculate(input.GetPositionalSegment(), out object? result, out _)
+                ? (result is IConvertible convertible
+                    ? convertible.ToString(CultureInfo.InvariantCulture)
+                    : (result.ToString() ?? string.Empty)
+                )
                 : "0";
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
@@ -78,7 +80,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input expression.</param>
         /// <param name="result">The result of the calculation.</param>
         /// <param name="error">The error indicating why parsing failed, if applicable.</param>
-        private bool TryCalculate(string input, out object result, out string error)
+        private bool TryCalculate(string? input, [NotNullWhen(true)] out object? result, [NotNullWhen(false)] out string? error)
         {
             // get cached value
             result = 0;

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -50,7 +48,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <inheritdoc />
         public override void Handle(string[] args)
         {
-            var patchManager = this.GetPatchManager();
+            PatchManager patchManager = this.GetPatchManager();
 
             if (args.Length != 1)
             {
@@ -58,7 +56,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 return;
             }
 
-            switch (args[0]?.ToLower())
+            switch (args[0].ToLower())
             {
                 case "applied":
                     {

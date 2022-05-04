@@ -1,4 +1,4 @@
-#nullable disable
+using System.Diagnostics.CodeAnalysis;
 
 namespace ContentPatcher.Framework.Lexing.LexTokens
 {
@@ -9,7 +9,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         ** Accessors
         *********/
         /// <summary>The lexical token type.</summary>
-        public LexTokenType Type { get; } = LexTokenType.Literal;
+        public LexTokenType Type => LexTokenType.Literal;
 
         /// <summary>A text representation of the lexical token.</summary>
         public string Text { get; private set; }
@@ -20,16 +20,17 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="text">The literal text value.</param>
-        public LexTokenLiteral(string text)
+        public LexTokenLiteral(string? text)
         {
             this.MigrateTo(text);
         }
 
         /// <summary>Apply changes for a format migration.</summary>
         /// <param name="text">The new text to set.</param>
-        public void MigrateTo(string text)
+        [MemberNotNull(nameof(LexTokenLiteral.Text))]
+        public void MigrateTo(string? text)
         {
-            this.Text = text;
+            this.Text = text ?? string.Empty;
         }
 
         /// <summary>Get a text representation of the lexical token.</summary>

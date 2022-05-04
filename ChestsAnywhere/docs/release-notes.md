@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Added [mod-provided API to get overlay info](README.md#mod-integrations).
 
 ## 1.21.3

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
@@ -27,7 +25,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ref ILexToken lexToken, out string error)
+        public override bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;

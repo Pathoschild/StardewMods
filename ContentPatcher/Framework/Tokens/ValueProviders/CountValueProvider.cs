@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Globalization;
 using ContentPatcher.Framework.Conditions;

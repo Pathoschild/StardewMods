@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Tokens.ValueProviders.ModConvention;
@@ -30,7 +28,7 @@ namespace ContentPatcher
         /// <para>The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>. You don't need to list the mod identified by <paramref name="manifest"/>, mods listed as a required dependency in the <paramref name="manifest"/>, or mods identified by a <c>HasMod</c> condition in the <paramref name="rawConditions"/>.</para>
         /// <para>NOTE: this is meant to prevent mods from breaking if a player doesn't have a required mod installed. You shouldn't simply list all installed mods, and parsing conditions will still fail if a mod isn't installed regardless of the listed mod IDs.</para>
         /// </param>
-        IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null);
+        IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null);
 
         /// <summary>Register a simple token.</summary>
         /// <param name="mod">The manifest of the mod defining the token (see <see cref="Mod.ModManifest"/> in your entry class).</param>

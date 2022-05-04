@@ -1,8 +1,7 @@
-#nullable disable
-
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Migrations
@@ -19,7 +18,7 @@ namespace ContentPatcher.Framework.Migrations
             : base(new SemanticVersion(1, 3, 0)) { }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
@@ -32,7 +31,7 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes.WhereNotNull())
             {
                 // 1.3 adds tokens in FromFile
                 if (patch.FromFile != null && patch.FromFile.Contains("{{"))

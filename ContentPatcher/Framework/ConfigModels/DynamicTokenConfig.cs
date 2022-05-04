@@ -1,6 +1,3 @@
-#nullable disable
-
-using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.ConfigModels
@@ -12,24 +9,27 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The name of the token to set.</summary>
-        public string Name { get; set; }
+        public string? Name { get; }
 
         /// <summary>The value to set.</summary>
-        public string Value { get; set; }
+        public string? Value { get; }
 
-        /// <summary>The criteria to apply. See readme for valid values.</summary>
-        public InvariantDictionary<string> When { get; set; }
+        /// <summary>The criteria to apply. See the README for valid values.</summary>
+        public InvariantDictionary<string?> When { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The name of the token to set.</param>
+        /// <param name="value">The value to set.</param>
+        /// <param name="when">The criteria to apply. See the README for valid values.</param>
+        public DynamicTokenConfig(string name, string value, InvariantDictionary<string?>? when)
         {
-            this.When ??= new InvariantDictionary<string>();
+            this.Name = name;
+            this.Value = value;
+            this.When = when ?? new();
         }
     }
 }

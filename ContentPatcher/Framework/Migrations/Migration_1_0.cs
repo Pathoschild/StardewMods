@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Diagnostics.CodeAnalysis;
 using StardewModdingAPI;
 

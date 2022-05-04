@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -29,10 +28,10 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The map area from which to read tiles.</summary>
-        private readonly TokenRectangle FromArea;
+        private readonly TokenRectangle? FromArea;
 
         /// <summary>The map area to overwrite.</summary>
-        private readonly TokenRectangle ToArea;
+        private readonly TokenRectangle? ToArea;
 
         /// <summary>Indicates how the map should be patched.</summary>
         private readonly PatchMapMode PatchMode;
@@ -77,7 +76,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="parseAssetName">Parse an asset name.</param>
-        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty> mapProperties, IEnumerable<EditMapPatchTile> mapTiles, IEnumerable<IManagedTokenString> addWarps, IEnumerable<TextOperation> textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
+        public EditMapPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchMapMode patchMode, IEnumerable<EditMapPatchProperty>? mapProperties, IEnumerable<EditMapPatchTile>? mapTiles, IEnumerable<IManagedTokenString>? addWarps, IEnumerable<TextOperation>? textOperations, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -133,8 +132,8 @@ namespace ContentPatcher.Framework.Patches
             // apply map area patch
             if (this.AppliesMapPatch)
             {
-                Map source = this.ContentPack.ModContent.Load<Map>(this.FromAsset);
-                if (!this.TryApplyMapPatch(source, targetAsset, out string error))
+                Map source = this.ContentPack.ModContent.Load<Map>(this.FromAsset!);
+                if (!this.TryApplyMapPatch(source, targetAsset, out string? error))
                     this.Monitor.Log($"{errorPrefix}: map patch couldn't be applied: {error}", LogLevel.Warn);
             }
 
@@ -145,7 +144,7 @@ namespace ContentPatcher.Framework.Patches
                 foreach (EditMapPatchTile tilePatch in this.MapTiles)
                 {
                     i++;
-                    if (!this.TryApplyTile(target, tilePatch, out string error))
+                    if (!this.TryApplyTile(target, tilePatch, out string? error))
                         this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.MapTiles)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
                 }
             }
@@ -153,8 +152,8 @@ namespace ContentPatcher.Framework.Patches
             // patch map properties
             foreach (EditMapPatchProperty property in this.MapProperties)
             {
-                string key = property.Key.Value;
-                string value = property.Value.Value;
+                string key = property.Key.Value!;
+                string? value = property.Value?.Value;
 
                 if (value == null)
                     target.Properties.Remove(key);
@@ -166,14 +165,14 @@ namespace ContentPatcher.Framework.Patches
             if (this.AddWarps.Any())
             {
                 this.ApplyWarps(target, out IDictionary<string, string> errors);
-                foreach (var pair in errors)
-                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.AddWarps)} > warp '{pair.Key}' couldn't be applied: {pair.Value}", LogLevel.Warn);
+                foreach ((string warp, string error) in errors)
+                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.AddWarps)} > warp '{warp}' couldn't be applied: {error}", LogLevel.Warn);
             }
 
             // apply text operations
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
-                if (!this.TryApplyTextOperation(target, this.TextOperations[i], out string error))
+                if (!this.TryApplyTextOperation(target, this.TextOperations[i], out string? error))
                     this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.TextOperations)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
             }
         }
@@ -200,10 +199,8 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="targetAsset">The target map to overlay.</param>
         /// <param name="error">An error indicating why applying the patch failed, if applicable.</param>
         /// <returns>Returns whether applying the patch succeeded.</returns>
-        private bool TryApplyMapPatch(Map source, IAssetDataForMap targetAsset, out string error)
+        private bool TryApplyMapPatch(Map source, IAssetDataForMap targetAsset, [NotNullWhen(false)] out string? error)
         {
-            Map target = targetAsset.Data;
-
             // read data
             Rectangle mapBounds = this.GetMapArea(source);
             if (!this.TryReadArea(this.FromArea, 0, 0, mapBounds.Width, mapBounds.Height, out Rectangle sourceArea, out error))
@@ -214,7 +211,7 @@ namespace ContentPatcher.Framework.Patches
             // validate area values
             string sourceAreaLabel = this.FromArea != null ? $"{nameof(this.FromArea)}" : "source map";
             string targetAreaLabel = this.ToArea != null ? $"{nameof(this.ToArea)}" : "target map";
-            Point sourceMapSize = new Point(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));
+            Point sourceMapSize = new(source.Layers.Max(p => p.LayerWidth), source.Layers.Max(p => p.LayerHeight));
 
             if (!this.TryValidateArea(sourceArea, sourceMapSize, "source", out error))
                 return this.Fail(error, out error);
@@ -236,20 +233,20 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="tilePatch">The tile patch info.</param>
         /// <param name="error">An error indicating why applying the patch failed, if applicable.</param>
         /// <returns>Returns whether applying the patch succeeded.</returns>
-        private bool TryApplyTile(Map map, EditMapPatchTile tilePatch, out string error)
+        private bool TryApplyTile(Map map, EditMapPatchTile tilePatch, [NotNullWhen(false)] out string? error)
         {
             // parse tile data
-            if (!this.TryReadTile(tilePatch, out string layerName, out Location position, out int? setIndex, out string setTilesheetId, out IDictionary<string, string> setProperties, out bool removeTile, out error))
+            if (!this.TryReadTile(tilePatch, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out IDictionary<string, string?> setProperties, out bool removeTile, out error))
                 return this.Fail(error, out error);
             bool hasEdits = setIndex != null || setTilesheetId != null || setProperties.Any();
 
             // get layer
-            var layer = map.GetLayer(layerName);
+            Layer? layer = map.GetLayer(layerName);
             if (layer == null)
                 return this.Fail($"{nameof(PatchMapTileConfig.Layer)} specifies a '{layerName}' layer which doesn't exist.", out error);
 
             // get tilesheet
-            TileSheet setTilesheet = null;
+            TileSheet? setTilesheet = null;
             if (setTilesheetId != null)
             {
                 setTilesheet = map.GetTileSheet(setTilesheetId);
@@ -271,13 +268,13 @@ namespace ContentPatcher.Framework.Patches
                 layer.Tiles[position] = null;
             if (setTilesheet != null || setIndex != null || setProperties.Any())
             {
-                var tile = new StaticTile(layer, setTilesheet ?? original.TileSheet, original?.BlendMode ?? BlendMode.Alpha, setIndex ?? original.TileIndex);
-                foreach (var pair in setProperties)
+                var tile = new StaticTile(layer, setTilesheet ?? original!.TileSheet, original?.BlendMode ?? BlendMode.Alpha, setIndex ?? original!.TileIndex);
+                foreach ((string key, string? value) in setProperties)
                 {
-                    if (pair.Value == null)
-                        tile.Properties.Remove(pair.Key);
+                    if (value == null)
+                        tile.Properties.Remove(key);
                     else
-                        tile.Properties[pair.Key] = pair.Value;
+                        tile.Properties[key] = value;
                 }
 
                 layer.Tiles[position] = tile;
@@ -296,9 +293,9 @@ namespace ContentPatcher.Framework.Patches
 
             // build new warp string
             List<string> validWarps = new List<string>(this.AddWarps.Length);
-            foreach (string warp in this.AddWarps.Select(p => p.Value))
+            foreach (string? warp in this.AddWarps.Select(p => p.Value))
             {
-                if (!this.ValidateWarp(warp, out string error))
+                if (!this.ValidateWarp(warp, out string? error))
                 {
                     errors[warp ?? "<null>"] = error;
                     continue;
@@ -310,7 +307,7 @@ namespace ContentPatcher.Framework.Patches
             // prepend to map property
             if (validWarps.Any())
             {
-                string prevWarps = target.Properties.TryGetValue("Warp", out PropertyValue rawWarps)
+                string prevWarps = target.Properties.TryGetValue("Warp", out PropertyValue? rawWarps)
                     ? rawWarps.ToString()
                     : "";
                 string newWarps = string.Join(" ", validWarps);
@@ -322,7 +319,7 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Validate that a warp string is in the value format.</summary>
         /// <param name="warp">The raw warp string.</param>
         /// <param name="error">The error indicating why it's invalid, if applicable.</param>
-        private bool ValidateWarp(string warp, out string error)
+        private bool ValidateWarp([NotNullWhen(true)] string? warp, [NotNullWhen(false)] out string? error)
         {
             // handle null
             if (warp == null)
@@ -353,7 +350,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="operation">The text operation to apply.</param>
         /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
         /// <returns>Returns whether applying the operation succeeded.</returns>
-        private bool TryApplyTextOperation(Map target, TextOperation operation, out string error)
+        private bool TryApplyTextOperation(Map target, TextOperation operation, [NotNullWhen(false)] out string? error)
         {
             var targetRoot = operation.GetTargetRoot();
             switch (targetRoot)
@@ -365,8 +362,8 @@ namespace ContentPatcher.Framework.Patches
                             return this.Fail($"a '{TextOperationTargetRoot.MapProperties}' path must only have one other segment for the property name.", out error);
 
                         // get key/value
-                        string key = operation.Target[1].Value;
-                        string value = target.Properties.TryGetValue(key, out PropertyValue property)
+                        string key = operation.Target[1].Value!;
+                        string? value = target.Properties.TryGetValue(key, out PropertyValue? property)
                             ? property.ToString()
                             : null;
 
@@ -398,14 +395,12 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="remove">The parsed remove flag.</param>
         /// <param name="error">An error indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing the tile succeeded.</returns>
-        private bool TryReadTile(EditMapPatchTile tile, out string layerName, out Location position, out int? setIndex, out string setTilesheetId, out IDictionary<string, string> properties, out bool remove, out string error)
+        private bool TryReadTile(EditMapPatchTile tile, out string? layerName, out Location position, out int? setIndex, out string? setTilesheetId, out IDictionary<string, string?> properties, out bool remove, [NotNullWhen(false)] out string? error)
         {
             // init
-            layerName = null;
             setIndex = null;
-            setTilesheetId = null;
             position = Location.Origin;
-            properties = new Dictionary<string, string>();
+            properties = new Dictionary<string, string?>();
             remove = false;
 
             // layer & tilesheet
@@ -425,11 +420,8 @@ namespace ContentPatcher.Framework.Patches
                 return this.Fail($"{nameof(PatchMapTileConfig.Position)} specifies '{tile.Position.X}, {tile.Position.Y}', which isn't a valid position.", out error);
 
             // tile properties
-            if (tile.SetProperties != null)
-            {
-                foreach (var pair in tile.SetProperties)
-                    properties[pair.Key.Value] = pair.Value.Value;
-            }
+            foreach ((ITokenString key, ITokenString? value) in tile.SetProperties)
+                properties[key.Value!] = value?.Value;
 
             // remove
             if (tile.Remove.IsMeaningful())
@@ -448,7 +440,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="name">The label for the area (e.g. 'source' or 'target').</param>
         /// <param name="error">An error indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing the tile succeeded.</returns>
-        private bool TryValidateArea(Rectangle area, Point? maxSize, string name, out string error)
+        private bool TryValidateArea(Rectangle area, Point? maxSize, string name, [NotNullWhen(false)] out string? error)
         {
             string errorPrefix = $"{name} area (X:{area.X}, Y:{area.Y}, Width:{area.Width}, Height:{area.Height})";
 

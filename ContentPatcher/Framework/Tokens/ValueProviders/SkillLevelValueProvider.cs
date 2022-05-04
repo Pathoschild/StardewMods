@@ -1,11 +1,10 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Constants;
 using Pathoschild.Stardew.Common.Utilities;
+using StardewValley;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -19,7 +18,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly TokenSaveReader SaveReader;
 
         /// <summary>The player's current skill levels.</summary>
-        private readonly IDictionary<Skill, int> SkillLevels = new Dictionary<Skill, int>();
+        private readonly Dictionary<Skill, int> SkillLevels = new();
 
 
         /*********
@@ -44,14 +43,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 this.SkillLevels.Clear();
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
-                    var player = this.SaveReader.GetCurrentPlayer();
+                    Farmer? player = this.SaveReader.GetCurrentPlayer();
 
-                    this.SkillLevels[Skill.Combat] = player.CombatLevel;
-                    this.SkillLevels[Skill.Farming] = player.FarmingLevel;
-                    this.SkillLevels[Skill.Fishing] = player.FishingLevel;
-                    this.SkillLevels[Skill.Foraging] = player.ForagingLevel;
-                    this.SkillLevels[Skill.Luck] = player.LuckLevel;
-                    this.SkillLevels[Skill.Mining] = player.MiningLevel;
+                    this.SkillLevels[Skill.Combat] = player?.CombatLevel ?? 0;
+                    this.SkillLevels[Skill.Farming] = player?.FarmingLevel ?? 0;
+                    this.SkillLevels[Skill.Fishing] = player?.FishingLevel ?? 0;
+                    this.SkillLevels[Skill.Foraging] = player?.ForagingLevel ?? 0;
+                    this.SkillLevels[Skill.Luck] = player?.LuckLevel ?? 0;
+                    this.SkillLevels[Skill.Mining] = player?.MiningLevel ?? 0;
 
                     return
                         this.SkillLevels.Count != oldSkillLevels.Count

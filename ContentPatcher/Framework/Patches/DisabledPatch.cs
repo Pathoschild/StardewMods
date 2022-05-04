@@ -1,5 +1,3 @@
-#nullable disable
-
 using ContentPatcher.Framework.Conditions;
 using StardewModdingAPI;
 
@@ -15,13 +13,13 @@ namespace ContentPatcher.Framework.Patches
         public LogPathBuilder Path { get; }
 
         /// <summary>The raw patch type.</summary>
-        public string RawType { get; }
+        public string? RawType { get; }
 
         /// <summary>The parsed patch type, if valid.</summary>
         public PatchType? ParsedType { get; }
 
         /// <summary>The raw asset name to intercept.</summary>
-        public string AssetName { get; }
+        public string? AssetName { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
         public IContentPack ContentPack { get; }
@@ -30,7 +28,7 @@ namespace ContentPatcher.Framework.Patches
         public string ReasonDisabled { get; }
 
         /// <summary>The parent patch for which this patch was loaded, if any.</summary>
-        public Patch ParentPatch { get; }
+        public Patch? ParentPatch { get; }
 
 
         /*********
@@ -44,7 +42,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="reasonDisabled">The reason this patch is disabled.</param>
-        public DisabledPatch(LogPathBuilder path, string rawType, PatchType? parsedType, string assetName, IContentPack contentPack, Patch parentPatch, string reasonDisabled)
+        public DisabledPatch(LogPathBuilder path, string? rawType, PatchType? parsedType, string? assetName, IContentPack contentPack, Patch? parentPatch, string reasonDisabled)
         {
             this.Path = path;
             this.RawType = rawType;

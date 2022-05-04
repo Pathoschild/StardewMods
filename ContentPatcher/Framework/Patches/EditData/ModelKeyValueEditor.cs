@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -49,7 +47,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override object GetEntry(object key)
+        public override object? GetEntry(object key)
         {
             string name = (string)key;
 
@@ -59,7 +57,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override Type GetEntryType(object key)
+        public override Type? GetEntryType(object key)
         {
             string name = (string)key;
 
@@ -75,13 +73,13 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken value)
+        public override void SetEntry(object key, JToken? value)
         {
             string name = (string)key;
 
-            MemberInfo member = this.GetMember(name);
+            MemberInfo? member = this.GetMember(name);
             if (member != null)
-                member.SetValue(this.Data, value.ToObject(member.GetDataType()));
+                member.SetValue(this.Data, value?.ToObject(member.GetDataType()));
         }
 
 
@@ -115,9 +113,9 @@ namespace ContentPatcher.Framework.Patches.EditData
 
         /// <summary>Get the member for the given field or property name, if any.</summary>
         /// <param name="name">The field or property name.</param>
-        private MemberInfo GetMember(string name)
+        private MemberInfo? GetMember(string name)
         {
-            return this.FieldMap.Value.TryGetValue(name, out MemberInfo member)
+            return this.FieldMap.Value.TryGetValue(name, out MemberInfo? member)
                 ? member
                 : default;
         }

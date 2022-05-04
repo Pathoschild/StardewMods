@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -54,10 +52,10 @@ namespace ContentPatcher.Framework.Locations
         /// <param name="config">The raw location config model.</param>
         /// <param name="contentPack">The content pack loading the file.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
-        public bool TryAddCustomLocationConfig(CustomLocationConfig config, IContentPack contentPack, out string error)
+        public bool TryAddCustomLocationConfig(CustomLocationConfig? config, IContentPack contentPack, [NotNullWhen(false)] out string? error)
         {
             // validate config
-            if (!this.TryParseCustomLocationConfig(config, contentPack, out CustomLocationData parsed, out error))
+            if (!this.TryParseCustomLocationConfig(config, contentPack, out CustomLocationData? parsed, out error))
                 return false;
 
             this.CustomLocations.Add(parsed);
@@ -104,7 +102,7 @@ namespace ContentPatcher.Framework.Locations
         /// <summary>Add all locations to the game, if applicable.</summary>
         /// <param name="saveLocations">The locations in the save file being loaded, or <c>null</c> when creating a new save.</param>
         /// <param name="gameLocations">The locations that will be populated from the save data.</param>
-        public void Apply(IList<GameLocation> saveLocations, IList<GameLocation> gameLocations)
+        public void Apply(IList<GameLocation>? saveLocations, IList<GameLocation> gameLocations)
         {
             // get valid locations
             CustomLocationData[] customLocations = this.CustomLocations.Where(p => p.IsEnabled).ToArray();
@@ -149,7 +147,7 @@ namespace ContentPatcher.Framework.Locations
             IAssetName assetName = e.NameWithoutLocale;
 
             // not a handled map
-            if (!this.CustomLocationsByMapPath.TryGetValue(assetName, out CustomLocationData location))
+            if (!this.CustomLocationsByMapPath.TryGetValue(assetName, out CustomLocationData? location))
                 return;
 
             // invalid type
@@ -179,36 +177,36 @@ namespace ContentPatcher.Framework.Locations
         /// <param name="contentPack">The content pack loading the file.</param>
         /// <param name="parsed">The parsed value.</param>
         /// <param name="error">An error phrase indicating why parsing failed (if applicable).</param>
-        private bool TryParseCustomLocationConfig(CustomLocationConfig config, IContentPack contentPack, out CustomLocationData parsed, out string error)
+        private bool TryParseCustomLocationConfig(CustomLocationConfig? config, IContentPack contentPack, [NotNullWhen(true)] out CustomLocationData? parsed, [NotNullWhen(false)] out string? error)
         {
-            static bool Fail(string reason, CustomLocationData parsed, out string setError)
+            static bool Fail(string reason, out string setError)
             {
                 setError = reason;
-                parsed.Disable(reason);
                 return false;
             }
 
             // read values
-            string name = config?.Name?.Trim();
-            string fromMapFile = config?.FromMapFile?.Trim();
-            string[] migrateLegacyNames = config?.MigrateLegacyNames?.Select(p => p.Trim()).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray() ?? Array.Empty<string>();
-            parsed = new CustomLocationData(name, fromMapFile, migrateLegacyNames, contentPack);
+            string? name = config?.Name?.Trim();
+            string? fromMapFile = config?.FromMapFile?.Trim();
+            string[] migrateLegacyNames = config?.MigrateLegacyNames.Select(p => p?.Trim()!).Where(p => !string.IsNullOrWhiteSpace(p)).ToArray() ?? Array.Empty<string>();
+            parsed = null;
 
             // validate name
             if (string.IsNullOrWhiteSpace(name))
-                return Fail($"the {nameof(config.Name)} field is required.", parsed, out error);
+                return Fail($"the {nameof(config.Name)} field is required.", out error);
             if (!CustomLocationManager.ValidNamePattern.IsMatch(name))
-                return Fail($"the {nameof(config.Name)} field can only contain alphanumeric or underscore characters.", parsed, out error);
+                return Fail($"the {nameof(config.Name)} field can only contain alphanumeric or underscore characters.", out error);
             if (!name.StartsWith("Custom_"))
-                return Fail($"the {nameof(config.Name)} field must be prefixed with 'Custom_' to avoid conflicting with current or future vanilla locations.", parsed, out error);
+                return Fail($"the {nameof(config.Name)} field must be prefixed with 'Custom_' to avoid conflicting with current or future vanilla locations.", out error);
 
             // validate map file
             if (string.IsNullOrWhiteSpace(fromMapFile))
-                return Fail($"the {nameof(config.FromMapFile)} field is required.", parsed, out error);
+                return Fail($"the {nameof(config.FromMapFile)} field is required.", out error);
             if (!contentPack.HasFile(fromMapFile))
-                return Fail($"the {nameof(config.FromMapFile)} field specifies a file '{fromMapFile}' which doesn't exist in the content pack.", parsed, out error);
+                return Fail($"the {nameof(config.FromMapFile)} field specifies a file '{fromMapFile}' which doesn't exist in the content pack.", out error);
 
             // create instance
+            parsed = new CustomLocationData(name, fromMapFile, migrateLegacyNames, contentPack);
             error = null;
             return true;
         }
@@ -228,7 +226,7 @@ namespace ContentPatcher.Framework.Locations
                 foreach (NPC npc in location.characters)
                 {
                     string curName = npc.DefaultMap;
-                    if (curName != null && oldNameMap.TryGetValue(curName, out MigratedLocation migration))
+                    if (curName != null && oldNameMap.TryGetValue(curName, out MigratedLocation? migration))
                     {
                         string newName = migration.SaveLocation.Name;
                         this.Monitor.Log($"'{migration.CustomLocation.ModName}' changed default map for NPC '{npc.Name}' from '{curName}' to '{newName}'.", LogLevel.Info);
@@ -295,7 +293,7 @@ namespace ContentPatcher.Framework.Locations
             // migrate from old name
             foreach (string legacyName in legacyNames)
             {
-                if (!saveLocationsByName.Value.TryGetValue(legacyName, out GameLocation saveLocation))
+                if (!saveLocationsByName.Value.TryGetValue(legacyName, out GameLocation? saveLocation))
                     continue;
 
                 this.Monitor.Log($"'{customLocation.ModName}' renamed saved location '{legacyName}' to '{customLocation.Name}'.", LogLevel.Info);
@@ -311,7 +309,7 @@ namespace ContentPatcher.Framework.Locations
             // migrate from TMXL Map Toolkit
             foreach (string legacyName in legacyNames)
             {
-                if (!tmxl.TryGetLocation(legacyName, out GameLocation tmxlLocation))
+                if (!tmxl.TryGetLocation(legacyName, out GameLocation? tmxlLocation))
                     continue;
 
                 this.Monitor.Log($"'{customLocation.ModName}' migrated saved TMXL Map Toolkit location '{legacyName}' to Content Patcher location '{customLocation.Name}'.", LogLevel.Info);

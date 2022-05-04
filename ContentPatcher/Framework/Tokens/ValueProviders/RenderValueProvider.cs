@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
 
@@ -31,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return input.TokenString.Value;
+            yield return input.TokenString!.Value!;
         }
     }
 }

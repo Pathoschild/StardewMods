@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +30,7 @@ namespace ContentPatcher.Framework.Lexing
         *********/
         /// <summary>Break a raw string into its constituent lexical character patterns.</summary>
         /// <param name="rawText">The raw text to tokenize.</param>
-        public IEnumerable<LexBit> TokenizeString(string rawText)
+        public IEnumerable<LexBit> TokenizeString(string? rawText)
         {
             // special cases
             if (rawText is null)
@@ -67,7 +65,7 @@ namespace ContentPatcher.Framework.Lexing
         /// <param name="rawText">The raw text to tokenize.</param>
         /// <param name="impliedBraces">Whether we're parsing a token context (so the outer '{{' and '}}' are implied); else parse as a tokenizable string which main contain a mix of literal and {{token}} values.</param>
         /// <param name="trim">Whether the value should be trimmed.</param>
-        public IEnumerable<ILexToken> ParseBits(string rawText, bool impliedBraces, bool trim = false)
+        public IEnumerable<ILexToken> ParseBits(string? rawText, bool impliedBraces, bool trim = false)
         {
             IEnumerable<LexBit> bits = this.TokenizeString(rawText);
             return this.ParseBits(bits, impliedBraces, trim);
@@ -87,7 +85,7 @@ namespace ContentPatcher.Framework.Lexing
         /// <param name="delimiter">The delimiter on which to split.</param>
         /// <param name="ignoreEmpty">Whether to ignore segments that only contain whitespace.</param>
         /// <param name="trim">Whether to trim returned values.</param>
-        public IEnumerable<string> SplitLexically(string str, string delimiter = ",", bool ignoreEmpty = true, bool trim = true)
+        public IEnumerable<string> SplitLexically(string? str, string delimiter = ",", bool ignoreEmpty = true, bool trim = true)
         {
             if (str == null)
                 return Enumerable.Empty<string>();
@@ -104,7 +102,7 @@ namespace ContentPatcher.Framework.Lexing
                 // shortcut if no lexical parsing needed
                 if (!lexer.MightContainTokens(str))
                 {
-                    foreach (string substr in str.Split(new[] { delimiter }, StringSplitOptions.None))
+                    foreach (string substr in str.Split(delimiter))
                         yield return substr;
                     yield break;
                 }
@@ -116,7 +114,7 @@ namespace ContentPatcher.Framework.Lexing
                     // handle split character(s)
                     if (bit is LexTokenLiteral literal && literal.Text.Contains(delimiter))
                     {
-                        string[] parts = literal.Text.Split(new[] { delimiter }, StringSplitOptions.None);
+                        string[] parts = literal.Text.Split(delimiter);
 
                         // yield up to comma
                         cur.Append(parts[0]);
@@ -145,7 +143,7 @@ namespace ContentPatcher.Framework.Lexing
 
         /// <summary>Perform a quick check to see if the string might contain tokens. This is only a preliminary check for optimizations and may have false positives.</summary>
         /// <param name="rawText">The raw text to check.</param>
-        public bool MightContainTokens(string rawText)
+        public bool MightContainTokens(string? rawText)
         {
             return
                 !string.IsNullOrEmpty(rawText)
@@ -221,20 +219,20 @@ namespace ContentPatcher.Framework.Lexing
 
             // normalize literal values
             ISet<LinkedListNode<ILexToken>> removeQueue = new HashSet<LinkedListNode<ILexToken>>(new ObjectReferenceComparer<LinkedListNode<ILexToken>>());
-            for (LinkedListNode<ILexToken> node = tokens.First; node != null; node = node.Next)
+            for (LinkedListNode<ILexToken>? node = tokens.First; node != null; node = node.Next)
             {
                 // fetch info
                 if (node.Value is not LexTokenLiteral current)
                     continue;
-                ILexToken previous = node.Previous?.Value;
-                ILexToken next = node.Next?.Value;
+                ILexToken? previous = node.Previous?.Value;
+                ILexToken? next = node.Next?.Value;
                 string newText = current.Text;
 
                 // collapse sequential literals
                 if (previous is LexTokenLiteral prevLiteral)
                 {
                     newText = prevLiteral.Text + newText;
-                    removeQueue.Add(node.Previous);
+                    removeQueue.Add(node.Previous!);
                 }
 
                 // trim before/after separator
@@ -297,7 +295,7 @@ namespace ContentPatcher.Framework.Lexing
             // the token name and input arguments, but a token can skip positional arguments and
             // start named arguments directly like {{TokenName |key=value}}. In that case the ':'
             // is implied, and the '|' separator *is* included in the input arguments string.
-            LexTokenInput inputArgs = null;
+            LexTokenInput? inputArgs = null;
             if (input.Any())
             {
                 var next = input.Peek().Type;

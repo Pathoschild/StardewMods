@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -10,8 +9,8 @@ namespace ContentPatcher.Framework.Tokens
         /*********
         ** Accessors
         *********/
-        /// <summary>The underlying tokenised string.</summary>
-        ITokenString TokenString { get; }
+        /// <summary>The underlying tokenized string.</summary>
+        ITokenString? TokenString { get; }
 
         /// <summary>The positional input arguments.</summary>
         string[] PositionalArgs { get; }
@@ -32,9 +31,11 @@ namespace ContentPatcher.Framework.Tokens
         bool HasPositionalArgs { get; }
 
         /// <summary>Whether the input arguments contain tokens that may change depending on the context.</summary>
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         bool IsMutable { get; }
 
         /// <summary>Whether the instance is valid for the current context.</summary>
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         bool IsReady { get; }
 
 
@@ -42,13 +43,13 @@ namespace ContentPatcher.Framework.Tokens
         ** Public methods
         *********/
         /// <summary>Get the first positional argument value, if any.</summary>
-        string GetFirstPositionalArg();
+        string? GetFirstPositionalArg();
 
         /// <summary>Get the raw value for a named argument, if any.</summary>
         /// <param name="key">The argument name.</param>
-        string GetRawArgumentValue(string key);
+        string? GetRawArgumentValue(string key);
 
         /// <summary>Get the raw input argument segment containing positional arguments, after parsing tokens but before splitting into individual arguments.</summary>
-        string GetPositionalSegment();
+        string? GetPositionalSegment();
     }
 }

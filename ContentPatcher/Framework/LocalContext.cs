@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
@@ -18,10 +16,10 @@ namespace ContentPatcher.Framework
         private readonly string Scope;
 
         /// <summary>The parent context that provides non-patch-specific tokens.</summary>
-        private IContext LastParentContext;
+        private IContext? LastParentContext;
 
         /// <summary>The local token values.</summary>
-        private readonly InvariantDictionary<ManagedManualToken> LocalTokens = new InvariantDictionary<ManagedManualToken>();
+        private readonly InvariantDictionary<ManagedManualToken> LocalTokens = new();
 
 
         /*********
@@ -37,7 +35,7 @@ namespace ContentPatcher.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="scope">The mod namespace in which the token is accessible.</param>
         /// <param name="parentContext">The initial parent context that provides non-patch-specific tokens, if any.</param>
-        public LocalContext(string scope, IContext parentContext = null)
+        public LocalContext(string scope, IContext? parentContext = null)
         {
             this.Scope = scope;
             this.LastParentContext = parentContext;
@@ -69,9 +67,9 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IToken GetToken(string name, bool enforceContext)
+        public IToken? GetToken(string name, bool enforceContext)
         {
-            return this.LocalTokens.TryGetValue(name, out ManagedManualToken managed)
+            return this.LocalTokens.TryGetValue(name, out ManagedManualToken? managed)
                 ? managed.Token
                 : this.LastParentContext?.GetToken(name, enforceContext);
         }
@@ -92,7 +90,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
-            IToken token = this.GetToken(name, enforceContext);
+            IToken? token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? Array.Empty<string>();
         }
 
@@ -100,7 +98,7 @@ namespace ContentPatcher.Framework
         /// <param name="name">The token name.</param>
         /// <param name="value">The token value.</param>
         /// <param name="ready">Whether to mark the token ready.</param>
-        public void SetLocalValue(string name, string value, bool ready = true)
+        public void SetLocalValue(string name, string? value, bool ready = true)
         {
             ITokenString str = new LiteralString(value, new LogPathBuilder(nameof(LocalContext), this.Scope, name));
             this.SetLocalValue(name, str, ready);
@@ -113,7 +111,7 @@ namespace ContentPatcher.Framework
         public void SetLocalValue(string name, ITokenString value, bool ready = true)
         {
             // get or create token
-            ManagedManualToken managed;
+            ManagedManualToken? managed;
             {
                 if (!this.LocalTokens.TryGetValue(name, out managed))
                     this.LocalTokens[name] = managed = new ManagedManualToken(name, isBounded: false, this.Scope);

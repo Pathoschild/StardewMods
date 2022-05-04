@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using Pathoschild.Stardew.Common.Utilities;
@@ -32,9 +31,6 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>The token name without the mod prefix.</summary>
         public string NameWithoutPrefix { get; }
 
-        /// <inheritdoc />
-        public override string Name => $"{this.NamePrefix}{this.NameWithoutPrefix}";
-
 
         /*********
         ** Public methods
@@ -45,7 +41,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="provider">The underlying value provider.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public ModProvidedToken(string nameWithoutPrefix, IManifest mod, IValueProvider provider, IMonitor monitor)
-            : base(null, provider)
+            : base($"{mod.UniqueID}{InternalConstants.ModTokenSeparator}{nameWithoutPrefix}", provider)
         {
             this.NamePrefix = $"{mod.UniqueID}{InternalConstants.ModTokenSeparator}";
             this.NameWithoutPrefix = nameWithoutPrefix;
@@ -110,7 +106,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             try
             {
@@ -125,7 +121,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, out string error)
+        public override bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, [NotNullWhen(false)] out string? error)
         {
             try
             {
@@ -140,7 +136,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetAllowedInputArguments()
+        public override InvariantHashSet? GetAllowedInputArguments()
         {
             try
             {
@@ -154,7 +150,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             try
             {

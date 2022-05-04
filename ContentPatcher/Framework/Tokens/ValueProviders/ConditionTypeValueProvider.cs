@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -14,16 +13,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet AllowedRootValues;
+        private readonly InvariantHashSet? AllowedRootValues;
 
         /// <summary>Get the current values.</summary>
         private readonly Func<InvariantHashSet> FetchValues;
 
         /// <summary>Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</summary>
-        private readonly Func<bool> IsValidInContextImpl;
+        private readonly Func<bool>? IsValidInContextImpl;
 
         /// <summary>The values as of the last context update.</summary>
-        private readonly InvariantHashSet Values = new InvariantHashSet();
+        private readonly InvariantHashSet Values = new();
 
 
         /*********
@@ -35,7 +34,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="isValidInContext">Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public ConditionTypeValueProvider(ConditionType type, Func<IEnumerable<string>> values, Func<bool> isValidInContext = null, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
+        public ConditionTypeValueProvider(ConditionType type, Func<IEnumerable<string>> values, Func<bool>? isValidInContext = null, bool mayReturnMultipleValues = false, IEnumerable<string>? allowedValues = null)
             : base(type, mayReturnMultipleValues)
         {
             this.IsValidInContextImpl = isValidInContext;
@@ -49,8 +48,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="isValidInContext">Get whether the value provider is applicable in the current context, or <c>null</c> if it's always applicable.</param>
         /// <param name="mayReturnMultipleValues">Whether the root may contain multiple values.</param>
         /// <param name="allowedValues">The allowed values (or <c>null</c> if any value is allowed).</param>
-        public ConditionTypeValueProvider(ConditionType type, Func<string> value, Func<bool> isValidInContext = null, bool mayReturnMultipleValues = false, IEnumerable<string> allowedValues = null)
-            : this(type, () => new[] { value() }, isValidInContext, mayReturnMultipleValues, allowedValues) { }
+        public ConditionTypeValueProvider(ConditionType type, Func<string?> value, Func<bool>? isValidInContext = null, bool mayReturnMultipleValues = false, IEnumerable<string>? allowedValues = null)
+            : this(type, () => BaseValueProvider.WrapOptionalValue(value()), isValidInContext, mayReturnMultipleValues, allowedValues) { }
 
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
@@ -64,7 +63,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;

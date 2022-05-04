@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Linq;
 using Pathoschild.Stardew.Common.Commands;
@@ -63,7 +61,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             string packId = args[0];
 
             // get pack
-            RawContentPack pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
+            RawContentPack? pack = this.ContentPacks.SingleOrDefault(p => p.Manifest.UniqueID == packId);
             if (pack == null)
             {
                 this.Monitor.Log($"No Content Patcher content pack with the unique ID \"{packId}\".", LogLevel.Error);
@@ -74,7 +72,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             patchLoader.UnloadPatchesLoadedBy(pack, false);
 
             // load pack patches
-            if (!pack.TryReloadContent(out string loadContentError))
+            if (!pack.TryReloadContent(out string? loadContentError))
             {
                 this.Monitor.Log($"Failed to reload content pack '{pack.Manifest.Name}' for configuration changes: {loadContentError}. The content pack may not be in a valid state.", LogLevel.Error); // should never happen
                 return;

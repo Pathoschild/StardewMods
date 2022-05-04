@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -48,10 +47,10 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(ContentConfig content, out string error)
+        public bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             // validate format version
-            if (!this.ValidVersions.Contains(new SemanticVersion(content.Format.MajorVersion, content.Format.MinorVersion, 0).ToString()))
+            if (!this.ValidVersions.Contains(new SemanticVersion(content.Format!.MajorVersion, content.Format.MinorVersion, 0).ToString()))
             {
                 string latestVersion = this.LatestVersion;
                 error = content.Format.IsNewerThan(latestVersion)
@@ -73,7 +72,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(ref ILexToken lexToken, out string error)
+        public bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)
@@ -88,7 +87,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(IManagedTokenString tokenStr, out string error)
+        public bool TryMigrate(IManagedTokenString tokenStr, [NotNullWhen(false)] out string? error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)
@@ -103,7 +102,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(TokenizableJToken tokenStructure, out string error)
+        public bool TryMigrate(TokenizableJToken tokenStructure, [NotNullWhen(false)] out string? error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)
@@ -118,7 +117,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(Condition condition, out string error)
+        public bool TryMigrate(Condition condition, [NotNullWhen(false)] out string? error)
         {
             // apply migrations
             foreach (IMigration migration in this.Migrations)

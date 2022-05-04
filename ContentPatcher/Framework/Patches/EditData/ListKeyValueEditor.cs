@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
 using StardewValley.GameData;
@@ -22,7 +21,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         private readonly IList<TValue> Data;
 
         /// <summary>Get the unique key for an entry, if available.</summary>
-        private readonly Lazy<Func<TValue, string>> GetAssetKeyImpl;
+        private readonly Lazy<Func<TValue, string?>?> GetAssetKeyImpl;
 
 
         /*********
@@ -41,21 +40,18 @@ namespace ContentPatcher.Framework.Patches.EditData
         public override object ParseKey(string key)
         {
             // array index (like "#5")
-            if (key != null)
-            {
-                string[] parts = key.Split('#', count: 2);
-                if (parts.Length == 2 && string.IsNullOrWhiteSpace(parts[0]) && int.TryParse(parts[1], out int index))
-                    return index;
-            }
+            string[] parts = key.Split('#', count: 2);
+            if (parts.Length == 2 && string.IsNullOrWhiteSpace(parts[0]) && int.TryParse(parts[1], out int index))
+                return index;
 
             // else entry key
             return key;
         }
 
         /// <inheritdoc />
-        public override object GetEntry(object key)
+        public override object? GetEntry(object key)
         {
-            return this.TryGetEntry(key, out TValue value, out _)
+            return this.TryGetEntry(key, out TValue? value, out _)
                 ? value
                 : default;
         }
@@ -77,16 +73,16 @@ namespace ContentPatcher.Framework.Patches.EditData
         public override void SetEntry(object key, JToken value)
         {
             if (this.TryGetEntry(key, out _, out int index))
-                this.Data[index] = value.ToObject<TValue>();
+                this.Data[index] = value.ToObject<TValue>()!;
             else
-                this.Data.Add(value.ToObject<TValue>());
+                this.Data.Add(value.ToObject<TValue>()!);
         }
 
         /// <inheritdoc />
         public override MoveResult MoveEntry(object key, MoveEntryPosition toPosition)
         {
             // get entry
-            if (!this.TryGetEntry(key, out TValue entry, out int index))
+            if (!this.TryGetEntry(key, out TValue? entry, out int index))
                 return MoveResult.TargetNotFound;
 
             // move entry
@@ -116,7 +112,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         public override MoveResult MoveEntry(object key, object anchorKey, bool afterAnchor)
         {
             // get entries
-            if (!this.TryGetEntry(key, out TValue entry, out int entryIndex))
+            if (!this.TryGetEntry(key, out TValue? entry, out int entryIndex))
                 return MoveResult.TargetNotFound;
             if (!this.TryGetEntry(anchorKey, out _, out int anchorIndex))
                 return MoveResult.AnchorNotFound;
@@ -139,9 +135,9 @@ namespace ContentPatcher.Framework.Patches.EditData
         *********/
         /// <summary>Get the key for a list asset entry.</summary>
         /// <param name="entry">The entity whose ID to fetch.</param>
-        private string GetKey(TValue entry)
+        private string? GetKey(TValue entry)
         {
-            Func<TValue, string> getKey = this.GetAssetKeyImpl.Value;
+            Func<TValue, string?>? getKey = this.GetAssetKeyImpl.Value;
             if (getKey != null)
                 return getKey(entry);
 
@@ -152,7 +148,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <param name="keyOrIndex">The entry key or array index.</param>
         /// <param name="value">The entry found in the list.</param>
         /// <param name="index">The entry's index within the list.</param>
-        private bool TryGetEntry(object keyOrIndex, out TValue value, out int index)
+        private bool TryGetEntry(object keyOrIndex, [NotNullWhen(true)] out TValue? value, out int index)
         {
             // get entry by key or index
             switch (keyOrIndex)
@@ -160,7 +156,7 @@ namespace ContentPatcher.Framework.Patches.EditData
                 case int searchIndex:
                     if (searchIndex >= 0 && searchIndex < this.Data.Count)
                     {
-                        value = this.Data[searchIndex];
+                        value = this.Data[searchIndex]!;
                         index = searchIndex;
                         return true;
                     }
@@ -169,7 +165,7 @@ namespace ContentPatcher.Framework.Patches.EditData
                 case string key:
                     for (int i = 0; i < this.Data.Count; i++)
                     {
-                        value = this.Data[i];
+                        value = this.Data[i]!;
 
                         if (this.GetKey(value) == key)
                         {
@@ -187,7 +183,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <summary>Get a function which returns the unique key for an entry, if available.</summary>
-        public Func<TValue, string> GetAssetKeyFunc()
+        public Func<TValue, string?>? GetAssetKeyFunc()
         {
             Type type = typeof(TValue);
 
@@ -204,14 +200,14 @@ namespace ContentPatcher.Framework.Patches.EditData
 
             // ID property
             {
-                PropertyInfo property = typeof(TValue).GetProperty("ID");
+                PropertyInfo? property = typeof(TValue).GetProperty("ID");
                 if (property?.GetMethod != null)
                     return entry => property.GetValue(entry)?.ToString();
             }
 
             // ID field
             {
-                FieldInfo field = typeof(TValue).GetField("ID");
+                FieldInfo? field = typeof(TValue).GetField("ID");
                 if (field != null)
                     return entry => field.GetValue(entry)?.ToString();
             }

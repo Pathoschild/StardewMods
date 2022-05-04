@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -82,7 +80,7 @@ namespace ContentPatcher.Framework
         {
             string scope = pack.Manifest.UniqueID.Trim();
 
-            if (!this.LocalTokens.TryGetValue(scope, out CachedContext cached))
+            if (!this.LocalTokens.TryGetValue(scope, out CachedContext? cached))
             {
                 ModTokenContext context = new ModTokenContext(scope, this);
                 this.LocalTokens[scope] = cached = new CachedContext(pack, context);
@@ -100,7 +98,7 @@ namespace ContentPatcher.Framework
         /// <returns>Returns the resolved token name, or the input token name if it's not an alias.</returns>
         public string ResolveAlias(string contentPackID, string tokenName)
         {
-            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext? cached)
                 ? cached.Context.ResolveAlias(tokenName)
                 : tokenName;
         }
@@ -112,7 +110,7 @@ namespace ContentPatcher.Framework
         {
             contentPackID = contentPackID.Trim();
 
-            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext cached)
+            return this.LocalTokens.TryGetValue(contentPackID, out CachedContext? cached)
                 ? cached.Context
                 : throw new KeyNotFoundException($"There's no content pack registered for ID '{contentPackID}'.");
         }
@@ -161,7 +159,7 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IToken GetToken(string name, bool enforceContext)
+        public IToken? GetToken(string name, bool enforceContext)
         {
             return this.GlobalContext.GetToken(name, enforceContext);
         }
@@ -224,7 +222,7 @@ namespace ContentPatcher.Framework
                 new PerPlayerValueProvider(ConditionType.LocationUniqueName, player => save.GetCurrentLocation(player)?.NameOrUniqueName, save),
                 new PerPlayerValueProvider(ConditionType.PlayerGender, player => (player.IsMale ? Gender.Male : Gender.Female).ToString(), save),
                 new PerPlayerValueProvider(ConditionType.PlayerName, player => player.Name, save),
-                new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer().catPerson ? PetType.Cat : PetType.Dog).ToString(), NeedsSave),
+                new ConditionTypeValueProvider(ConditionType.PreferredPet, () => (save.GetCurrentPlayer()?.catPerson == true ? PetType.Cat : PetType.Dog).ToString(), NeedsSave),
                 new SkillLevelValueProvider(save),
 
                 // relationships
