@@ -142,13 +142,14 @@ namespace ContentPatcher.Framework.Locations
 
         /// <inheritdoc cref="IContentEvents.AssetRequested"/>
         /// <param name="e">The event data.</param>
-        public void OnAssetRequested(AssetRequestedEventArgs e)
+        /// <returns>Returns whether the asset was loaded for a custom location.</returns>
+        public bool OnAssetRequested(AssetRequestedEventArgs e)
         {
             IAssetName assetName = e.NameWithoutLocale;
 
             // not a handled map
             if (!this.CustomLocationsByMapPath.TryGetValue(assetName, out CustomLocationData? location))
-                return;
+                return false;
 
             // invalid type
             if (!typeof(Map).IsAssignableFrom(e.DataType))
@@ -160,6 +161,7 @@ namespace ContentPatcher.Framework.Locations
                 priority: AssetLoadPriority.Exclusive,
                 onBehalfOf: location.ContentPack.Manifest.UniqueID
             );
+            return true;
         }
 
         /// <summary>Get the defined custom locations.</summary>

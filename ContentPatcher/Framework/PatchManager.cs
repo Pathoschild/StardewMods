@@ -81,11 +81,14 @@ namespace ContentPatcher.Framework
         ****/
         /// <inheritdoc cref="IContentEvents.AssetRequested"/>
         /// <param name="e">The event data.</param>
-        public void OnAssetRequested(AssetRequestedEventArgs e)
+        /// <param name="ignoreLoadPatches">Whether to ignore any load patches for this asset.</param>
+        public void OnAssetRequested(AssetRequestedEventArgs e, bool ignoreLoadPatches)
         {
             // get patches
             IAssetName assetName = e.NameWithoutLocale;
-            IPatch[] loaders = this.GetCurrentLoaders(assetName).ToArray();
+            IPatch[] loaders = !ignoreLoadPatches
+                ? this.GetCurrentLoaders(assetName).ToArray()
+                : Array.Empty<IPatch>();
             IPatch[] editors = this.GetCurrentEditors(assetName, e.DataType).ToArray();
 
             // pre-validate loaders to show more user-friendly messages

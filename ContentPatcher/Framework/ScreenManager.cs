@@ -98,8 +98,8 @@ namespace ContentPatcher.Framework
         /// <param name="e">The event data.</param>
         public void OnAssetRequested(AssetRequestedEventArgs e)
         {
-            this.PatchManager.OnAssetRequested(e);
-            this.CustomLocationManager.OnAssetRequested(e);
+            bool ignoreLoads = this.CustomLocationManager.OnAssetRequested(e);
+            this.PatchManager.OnAssetRequested(e, ignoreLoads);
         }
 
         /// <summary>Raised when the low-level stage in the game's loading process has changed. This is an advanced event for mods which need to run code at specific points in the loading process. The available stages or when they happen might change without warning in future versions (e.g. due to changes in the game's load process), so mods using this event are more likely to break or have bugs.</summary>
