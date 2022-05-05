@@ -84,83 +84,21 @@ namespace ContentPatcher.Framework
         /// <param name="ignoreLoadPatches">Whether to ignore any load patches for this asset.</param>
         public void OnAssetRequested(AssetRequestedEventArgs e, bool ignoreLoadPatches)
         {
-            // get patches
             IAssetName assetName = e.NameWithoutLocale;
             IPatch[] loaders = !ignoreLoadPatches
                 ? this.GetCurrentLoaders(assetName).ToArray()
                 : Array.Empty<IPatch>();
             IPatch[] editors = this.GetCurrentEditors(assetName, e.DataType).ToArray();
 
-            // pre-validate loaders to show more user-friendly messages
-            if (loaders.Length > 1)
+            if (loaders.Any() || editors.Any())
             {
-                string[] modNames = loaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByHuman().ToArray();
-                string[] patchNames = loaders.Select(p => p.Path.ToString()).OrderByHuman().ToArray();
-                switch (modNames.Length)
-                {
-                    case 1:
-                        this.Monitor.Log($"'{modNames[0]}' has multiple patches which load the '{assetName}' asset at the same time ({string.Join(", ", patchNames)}). None will be applied. You should report this to the content pack author.", LogLevel.Error);
-                        break;
-
-                    case 2:
-                        this.Monitor.Log($"Two content packs want to load the '{assetName}' asset ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
-                        break;
-
-                    default:
-                        this.Monitor.Log($"Multiple content packs want to load the '{assetName}' asset ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
-                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
-                        break;
-                }
-
-                loaders = Array.Empty<IPatch>();
-            }
-            else if (loaders.Length == 1 && !loaders[0].FromAssetExists())
-            {
-                this.Monitor.Log($"Can't apply load \"{loaders[0].Path}\" to {loaders[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{loaders[0].FromAsset}' doesn't exist.", LogLevel.Warn);
-                loaders = Array.Empty<IPatch>();
-            }
-
-            // apply load patches
-            if (loaders.Any())
-            {
-                MethodInfo applyLoad = this
+                MethodInfo apply = this
                     .GetType()
-                    .GetMethod(nameof(this.ApplyLoad), BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .GetMethod(nameof(this.ApplyPatchesToAsset), BindingFlags.Instance | BindingFlags.NonPublic)!
                     .MakeGenericMethod(e.DataType);
 
-                foreach (IPatch patch in loaders)
-                {
-                    e.LoadFrom(
-                        load: () => applyLoad.Invoke(this, new object[] { patch, assetName })!,
-                        priority: AssetLoadPriority.Exclusive,
-                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
-                    );
-                }
+                apply.Invoke(this, new object[] { e, loaders, editors });
             }
-
-            // apply edit patches
-            if (editors.Any())
-            {
-                MethodInfo applyEdit = this
-                    .GetType()
-                    .GetMethod(nameof(this.ApplyEdit), BindingFlags.Instance | BindingFlags.NonPublic)!
-                    .MakeGenericMethod(e.DataType);
-
-
-                foreach (IPatch patch in editors)
-                {
-                    e.Edit(
-                        apply: data => applyEdit.Invoke(this, new object[] { patch, data }),
-                        priority: AssetEditPriority.Default,
-                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
-                    );
-                }
-            }
-
-            // log result
-            if (this.Monitor.IsVerbose)
-                this.Monitor.VerboseLog($"asset requested: can [{(loaders.Any() ? "X" : " ")}] load [{(editors.Any() ? "X" : " ")}] edit {assetName}");
         }
 
         /// <summary>Update the current context.</summary>
@@ -482,6 +420,77 @@ namespace ContentPatcher.Framework
         /*********
         ** Private methods
         *********/
+        /// <summary>Apply load and edit patches to an asset.</summary>
+        /// <typeparam name="T">The asset type.</typeparam>
+        /// <param name="e">The asset requested context.</param>
+        /// <param name="loaders">The load patch to apply.</param>
+        /// <param name="editors">The edit patch to apply.</param>
+        private void ApplyPatchesToAsset<T>(AssetRequestedEventArgs e, IPatch[] loaders, IPatch[] editors)
+            where T : notnull
+        {
+            IAssetName assetName = e.NameWithoutLocale;
+
+            // pre-validate loaders to show more user-friendly messages
+            if (loaders.Length > 1)
+            {
+                string[] modNames = loaders.Select(p => p.ContentPack.Manifest.Name).Distinct().OrderByHuman().ToArray();
+                string[] patchNames = loaders.Select(p => p.Path.ToString()).OrderByHuman().ToArray();
+                switch (modNames.Length)
+                {
+                    case 1:
+                        this.Monitor.Log($"'{modNames[0]}' has multiple patches which load the '{assetName}' asset at the same time ({string.Join(", ", patchNames)}). None will be applied. You should report this to the content pack author.", LogLevel.Error);
+                        break;
+
+                    case 2:
+                        this.Monitor.Log($"Two content packs want to load the '{assetName}' asset ({string.Join(" and ", modNames)}). Neither will be applied. You should remove one of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
+                        break;
+
+                    default:
+                        this.Monitor.Log($"Multiple content packs want to load the '{assetName}' asset ({string.Join(", ", modNames)}). None will be applied. You should remove some of the content packs, or ask the authors about compatibility.", LogLevel.Error);
+                        this.Monitor.Log($"Affected patches: {string.Join(", ", patchNames)}");
+                        break;
+                }
+
+                loaders = Array.Empty<IPatch>();
+            }
+            else if (loaders.Length == 1 && !loaders[0].FromAssetExists())
+            {
+                this.Monitor.Log($"Can't apply load \"{loaders[0].Path}\" to {loaders[0].TargetAsset}: the {nameof(PatchConfig.FromFile)} file '{loaders[0].FromAsset}' doesn't exist.", LogLevel.Warn);
+                loaders = Array.Empty<IPatch>();
+            }
+
+            // apply load patches
+            if (loaders.Any())
+            {
+                foreach (IPatch patch in loaders)
+                {
+                    e.LoadFrom(
+                        load: () => this.ApplyLoad<T>(patch, assetName)!,
+                        priority: AssetLoadPriority.Exclusive,
+                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
+                    );
+                }
+            }
+
+            // apply edit patches
+            if (editors.Any())
+            {
+                foreach (IPatch patch in editors)
+                {
+                    e.Edit(
+                        apply: data => this.ApplyEdit<T>(patch, data),
+                        priority: AssetEditPriority.Default,
+                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
+                    );
+                }
+            }
+
+            // log result
+            if (this.Monitor.IsVerbose)
+                this.Monitor.VerboseLog($"asset requested: can [{(loaders.Any() ? "X" : " ")}] load [{(editors.Any() ? "X" : " ")}] edit {assetName}");
+        }
+
         /// <summary>Apply a load patch to an asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
         /// <param name="patch">The patch to apply.</param>
