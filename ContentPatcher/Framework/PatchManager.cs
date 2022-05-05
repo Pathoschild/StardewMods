@@ -463,14 +463,11 @@ namespace ContentPatcher.Framework
             // apply load patches
             if (loaders.Any())
             {
-                foreach (IPatch patch in loaders)
-                {
-                    e.LoadFrom(
-                        load: () => this.ApplyLoad<T>(patch, assetName)!,
-                        priority: AssetLoadPriority.Exclusive,
-                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
-                    );
-                }
+                e.LoadFrom(
+                    load: () => this.ApplyLoad<T>(loaders[0], assetName)!, // only returns null when invalid, in which case there's no other way to abort
+                    priority: AssetLoadPriority.Exclusive,
+                    onBehalfOf: loaders[0].ContentPack.Manifest.UniqueID
+                );
             }
 
             // apply edit patches
