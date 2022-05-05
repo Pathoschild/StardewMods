@@ -473,12 +473,14 @@ namespace ContentPatcher.Framework
             // apply edit patches
             if (editors.Any())
             {
-                foreach (IPatch patch in editors)
+                List<List<IPatch>> editGroups = this.GroupSortedPatchesByMod(editors);
+                foreach (List<IPatch> group in editGroups)
                 {
+                    List<IPatch> patches = group; // avoid capturing foreach variable in the deferred callback
                     e.Edit(
-                        apply: data => this.ApplyEdit<T>(patch, data),
+                        apply: data => this.ApplyEdits<T>(patches, data),
                         priority: AssetEditPriority.Default,
-                        onBehalfOf: patch.ContentPack.Manifest.UniqueID
+                        onBehalfOf: patches[0].ContentPack.Manifest.UniqueID
                     );
                 }
             }
@@ -514,25 +516,28 @@ namespace ContentPatcher.Framework
             return data;
         }
 
-        /// <summary>Apply an edit patch to an asset.</summary>
+        /// <summary>Apply edit patches to an asset.</summary>
         /// <typeparam name="T">The asset type.</typeparam>
-        /// <param name="patch">The patch to apply.</param>
+        /// <param name="patches">The patches to apply.</param>
         /// <param name="asset">The asset data to edit.</param>
-        private void ApplyEdit<T>(IPatch patch, IAssetData asset)
+        private void ApplyEdits<T>(List<IPatch> patches, IAssetData asset)
             where T : notnull
         {
-            if (this.Monitor.IsVerbose)
-                this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.Name}.");
+            foreach (IPatch patch in patches)
+            {
+                if (this.Monitor.IsVerbose)
+                    this.Monitor.VerboseLog($"Applied patch \"{patch.Path}\" to {asset.Name}.");
 
-            try
-            {
-                patch.Edit<T>(asset);
-                patch.IsApplied = true;
-            }
-            catch (Exception ex)
-            {
-                this.Monitor.Log($"Unhandled exception applying patch: {patch.Path}.\n{ex}", LogLevel.Error);
-                patch.IsApplied = false;
+                try
+                {
+                    patch.Edit<T>(asset);
+                    patch.IsApplied = true;
+                }
+                catch (Exception ex)
+                {
+                    this.Monitor.Log($"Unhandled exception applying patch: {patch.Path}.\n{ex}", LogLevel.Error);
+                    patch.IsApplied = false;
+                }
             }
         }
 
@@ -571,6 +576,36 @@ namespace ContentPatcher.Framework
             patches.AddMany(this.PendingPatches);
 
             return patches;
+        }
+
+        /// <summary>Group a list of patches by the mod which defines them, without changing the order they're applied.</summary>
+        /// <param name="patches">The patches to group.</param>
+        private List<List<IPatch>> GroupSortedPatchesByMod(IEnumerable<IPatch> patches)
+        {
+            List<List<IPatch>> groups = new();
+
+            string? lastModId = null;
+            List<IPatch> group = new();
+            foreach (IPatch patch in patches)
+            {
+                string modId = patch.ContentPack.Manifest.UniqueID;
+                if (modId != lastModId)
+                {
+                    lastModId = modId;
+                    if (group.Count > 0)
+                    {
+                        groups.Add(group);
+                        group = new();
+                    }
+                }
+
+                group.Add(patch);
+            }
+
+            if (group.Any())
+                groups.Add(group);
+
+            return groups;
         }
 
         /// <summary>Add a patch to the lookup indexes.</summary>
