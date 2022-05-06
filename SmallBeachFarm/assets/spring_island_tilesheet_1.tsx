@@ -73,6 +73,7 @@
  </tile>
  <tile id="72">
   <properties>
+   <property name="Diggable" value="T"/>
    <property name="Type" value="Dirt"/>
   </properties>
  </tile>

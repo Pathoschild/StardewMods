@@ -3,7 +3,7 @@
 # Release notes
 ## Upcoming release
 * Updated for the upcoming SMAPI 4.0.0.
-* Fixed some missing tile metadata in the island area (e.g. tiles not marked diggable).
+* Fixed some missing tile metadata (e.g. some tiles not marked diggable).
 
 ## 2.1.1
 Released 27 February 2022 for SMAPI 3.13.0 or later.
