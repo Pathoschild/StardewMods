@@ -16,5 +16,8 @@
     "config.islands.tooltip": "เพิ่มเกาะในมหาสมุทรพร้อมพื้นที่พิเศษ",
 
     "config.beach-sounds.name": "เล่นเสียงชายหาด",
-    "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด"
+    "config.beach-sounds.tooltip": "เล่นเพลงแบ็คกราวด์ของชายหาด (เช่น เสียงคลื่น) ในฟาร์มริมชายหาด",
+
+    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
 }

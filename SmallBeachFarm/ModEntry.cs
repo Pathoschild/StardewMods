@@ -128,14 +128,14 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                     {
                         // load map
                         Map map = this.Helper.ModContent.Load<Map>("assets/farm.tmx");
+                        IAssetDataForMap editor = this.Helper.ModContent.GetPatchHelper(map).AsMap();
+                        TileSheet outdoorTilesheet = map.GetTileSheet("untitled tile sheet");
 
                         // add islands
                         if (this.Config.EnableIslands)
                         {
                             Map islands = this.Helper.ModContent.Load<Map>("assets/islands.tmx");
-                            this.Helper.ModContent.GetPatchHelper(map)
-                                .AsMap()
-                                .PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
+                            editor.PatchMap(source: islands, targetArea: new Rectangle(0, 26, 56, 49));
                         }
 
                         // add campfire
@@ -143,7 +143,18 @@ namespace Pathoschild.Stardew.SmallBeachFarm
                         {
                             var buildingsLayer = map.GetLayer("Buildings");
                             buildingsLayer.Tiles[65, 23] = new StaticTile(buildingsLayer, map.GetTileSheet("zbeach"), BlendMode.Alpha, 157); // driftwood pile
-                            buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, map.GetTileSheet("untitled tile sheet"), BlendMode.Alpha, 242); // campfire
+                            buildingsLayer.Tiles[64, 22] = new StaticTile(buildingsLayer, outdoorTilesheet, BlendMode.Alpha, 242); // campfire
+                        }
+
+                        // remove shipping bin path
+                        if (!this.Config.ShippingBinPath)
+                        {
+                            var backLayer = map.GetLayer("Back");
+                            for (int x = 71; x <= 72; x++)
+                            {
+                                for (int y = 14; y <= 15; y++)
+                                    backLayer.Tiles[x, y] = new StaticTile(backLayer, outdoorTilesheet, BlendMode.Alpha, 175); // grass tile
+                            }
                         }
 
                         // apply tilesheet recolors

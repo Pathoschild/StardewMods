@@ -16,5 +16,8 @@
     "config.islands.tooltip": "Ekstra arazi alanına sahip okyanus adaları ekler.",
 
     "config.beach-sounds.name": "Plaj sesleri çal",
-    "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar."
+    "config.beach-sounds.tooltip": "Sahil çiftliğinde plajın fon müziğini (yani dalga sesleri) çalar.",
+
+    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
 }
