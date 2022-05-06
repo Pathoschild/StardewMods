@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
                 return this.UseToolOnTile(tool, tile, player, location);
 
             // handle dirt
-            if (tileFeature is HoeDirt dirt)
+            if (tileFeature is HoeDirt dirt && tileObj is null)
             {
                 // clear tilled dirt
                 if (this.Config.ClearDirt && dirt.crop == null)
