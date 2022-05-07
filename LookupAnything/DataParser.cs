@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,19 +43,18 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <remarks>Derived from the <see cref="StardewValley.Locations.CommunityCenter"/> constructor and <see cref="StardewValley.Menus.JunimoNoteMenu.openRewardsMenu"/>.</remarks>
         public IEnumerable<BundleModel> GetBundles(IMonitor monitor)
         {
-            IDictionary<string, string> data = Game1.netWorldState.Value.BundleData;
-            foreach (var entry in data)
+            foreach ((string key, string value) in Game1.netWorldState.Value.BundleData)
             {
                 BundleModel bundle;
                 try
                 {
                     // parse key
-                    string[] keyParts = entry.Key.Split('/');
+                    string[] keyParts = key.Split('/');
                     string area = keyParts[0];
                     int id = int.Parse(keyParts[1]);
 
                     // parse bundle info
-                    string[] valueParts = entry.Value.Split('/');
+                    string[] valueParts = value.Split('/');
                     string name = valueParts[0];
                     string reward = valueParts[1];
                     string displayName = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en
@@ -77,11 +74,18 @@ namespace Pathoschild.Stardew.LookupAnything
                     }
 
                     // create bundle
-                    bundle = new BundleModel(id, name, displayName, area, reward, ingredients);
+                    bundle = new BundleModel(
+                        ID: id,
+                        Name: name,
+                        DisplayName: displayName,
+                        Area: area,
+                        RewardData: reward,
+                        Ingredients: ingredients.ToArray()
+                    );
                 }
                 catch (Exception ex)
                 {
-                    monitor.LogOnce($"Couldn't parse community center bundle '{entry.Key}' due to an invalid format.\nRecipe data: '{entry.Value}'\nError: {ex}", LogLevel.Warn);
+                    monitor.LogOnce($"Couldn't parse community center bundle '{key}' due to an invalid format.\nRecipe data: '{value}'\nError: {ex}", LogLevel.Warn);
                     continue;
                 }
 
@@ -121,7 +125,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         // build entry
                         return new FishPondPopulationGateQuestItemData(id, minCount, maxCount);
                     })
-                    .Where(p => p != null)
+                    .WhereNotNull()
                     .ToArray();
 
                 // build entry
@@ -141,12 +145,12 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="fishID">The fish ID.</param>
         /// <param name="metadata">Provides metadata that's not available from the game data directly.</param>
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-        public FishSpawnData GetFishSpawnRules(int fishID, Metadata metadata)
+        public FishSpawnData? GetFishSpawnRules(int fishID, Metadata metadata)
         {
             // get raw fish data
             string[] fishFields;
             {
-                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string rawData))
+                if (!Game1.content.Load<Dictionary<int, string>>("Data\\Fish").TryGetValue(fishID, out string? rawData))
                     return null;
                 fishFields = rawData.Split('/');
                 if (fishFields.Length < 13)
@@ -155,16 +159,15 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // parse location data
             var locations = new List<FishSpawnLocationData>();
-            foreach (var entry in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
+            foreach ((string locationName, string value) in Game1.content.Load<Dictionary<string, string>>("Data\\Locations"))
             {
-                if (metadata.IgnoreFishingLocations.Contains(entry.Key))
+                if (metadata.IgnoreFishingLocations.Contains(locationName))
                     continue; // ignore event data
 
-                string locationName = entry.Key;
                 List<FishSpawnLocationData> curLocations = new List<FishSpawnLocationData>();
 
                 // get locations
-                string[] locationFields = entry.Value.Split('/');
+                string[] locationFields = value.Split('/');
                 for (int s = 4; s <= 7; s++)
                 {
                     string[] seasonFields = locationFields[s].Split(' ');
@@ -219,7 +222,7 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // read custom data
-            if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData customRules))
+            if (metadata.CustomFishSpawnRules.TryGetValue(fishID, out FishSpawnData? customRules))
             {
                 if (customRules.MinFishingLevel > minFishingLevel)
                     minFishingLevel = customRules.MinFishingLevel;
@@ -239,12 +242,12 @@ namespace Pathoschild.Stardew.LookupAnything
 
             // build model
             return new FishSpawnData(
-                fishID: fishID,
-                locations: locations.ToArray(),
-                timesOfDay: timesOfDay.ToArray(),
-                weather: weather,
-                minFishingLevel: minFishingLevel,
-                isUnique: isUnique
+                FishID: fishID,
+                Locations: locations.ToArray(),
+                TimesOfDay: timesOfDay.ToArray(),
+                Weather: weather,
+                MinFishingLevel: minFishingLevel,
+                IsUnique: isUnique
             );
         }
 
@@ -345,18 +348,18 @@ namespace Pathoschild.Stardew.LookupAnything
 
                 // yield data
                 yield return new MonsterData(
-                    name: name,
-                    health: health,
-                    damageToFarmer: damageToFarmer,
-                    isGlider: isGlider,
-                    durationOfRandomMovements: durationOfRandomMovements,
-                    resilience: resilience,
-                    jitteriness: jitteriness,
-                    moveTowardsPlayerThreshold: moveTowardsPlayerThreshold,
-                    speed: speed,
-                    missChance: missChance,
-                    isMineMonster: isMineMonster,
-                    drops: drops
+                    Name: name,
+                    Health: health,
+                    DamageToFarmer: damageToFarmer,
+                    IsGlider: isGlider,
+                    DurationOfRandomMovements: durationOfRandomMovements,
+                    Resilience: resilience,
+                    Jitteriness: jitteriness,
+                    MoveTowardsPlayerThreshold: moveTowardsPlayerThreshold,
+                    Speed: speed,
+                    MissChance: missChance,
+                    IsMineMonster: isMineMonster,
+                    Drops: drops.ToArray()
                 );
             }
         }
@@ -442,7 +445,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="inputID">The input ingredient ID.</param>
         /// <param name="outputID">The output item ID.</param>
         /// <param name="output">The output data, if applicable.</param>
-        private SObject CreateRecipeItem(int? inputID, int outputID, MachineRecipeOutputData output)
+        private SObject CreateRecipeItem(int? inputID, int outputID, MachineRecipeOutputData? output)
         {
             SObject item = this.GameHelper.GetObjectBySpriteIndex(outputID);
             if (inputID != null)

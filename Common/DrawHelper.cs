@@ -43,9 +43,9 @@ namespace Pathoschild.Stardew.Common
         /// <param name="y">The X-position at which to draw the sprite.</param>
         /// <param name="size">The size to draw.</param>
         /// <param name="color">The color to tint the sprite.</param>
-        public static void DrawSpriteWithin(this SpriteBatch spriteBatch, SpriteInfo sprite, float x, float y, Vector2 size, Color? color = null)
+        public static void DrawSpriteWithin(this SpriteBatch spriteBatch, SpriteInfo? sprite, float x, float y, Vector2 size, Color? color = null)
         {
-            sprite.Draw(spriteBatch, (int)x, (int)y, size, color);
+            sprite?.Draw(spriteBatch, (int)x, (int)y, size, color);
         }
 
         /// <summary>Draw a sprite to the screen scaled and centered to fit the given dimensions.</summary>

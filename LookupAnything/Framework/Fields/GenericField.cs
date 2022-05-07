@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         public string Label { get; protected set; }
 
         /// <summary>The field value.</summary>
-        public IFormattedText[] Value { get; protected set; }
+        public IFormattedText[]? Value { get; protected set; }
 
         /// <summary>Whether the field should be displayed.</summary>
         public bool HasValue { get; protected set; }
@@ -32,7 +30,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
-        public GenericField(string label, string value, bool? hasValue = null)
+        public GenericField(string label, string? value, bool? hasValue = null)
         {
             this.Label = label;
             this.Value = this.FormatValue(value);
@@ -80,7 +78,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
         /// <summary>Wrap text into a list of formatted snippets.</summary>
         /// <param name="value">The text to wrap.</param>
-        protected IFormattedText[] FormatValue(string value)
+        protected IFormattedText[] FormatValue(string? value)
         {
             return !string.IsNullOrWhiteSpace(value)
                 ? new IFormattedText[] { new FormattedText(value) }
@@ -90,7 +88,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValue">The flat sale price.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        public static string GetSaleValueString(int saleValue, int stackSize)
+        public static string? GetSaleValueString(int saleValue, int stackSize)
         {
             return GenericField.GetSaleValueString(new Dictionary<ItemQuality, int> { [ItemQuality.Normal] = saleValue }, stackSize);
         }
@@ -98,7 +96,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the display value for sale price data.</summary>
         /// <param name="saleValues">The sale price data.</param>
         /// <param name="stackSize">The number of items in the stack.</param>
-        public static string GetSaleValueString(IDictionary<ItemQuality, int> saleValues, int stackSize)
+        public static string? GetSaleValueString(IDictionary<ItemQuality, int>? saleValues, int stackSize)
         {
             // can't be sold
             if (saleValues == null || !saleValues.Any() || saleValues.Values.All(p => p == 0))

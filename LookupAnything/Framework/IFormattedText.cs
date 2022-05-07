@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework
@@ -11,7 +9,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         Color? Color { get; }
 
         /// <summary>The text to format.</summary>
-        string Text { get; }
+        string? Text { get; }
 
         /// <summary>Whether to draw bold text.</summary>
         bool Bold { get; }

@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,13 +29,13 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Configuration
         ****/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Provides metadata that's not available from the game data directly.</summary>
-        private Metadata Metadata;
+        private Metadata? Metadata;
 
         /// <summary>The relative path to the file containing data for the <see cref="Metadata"/> field.</summary>
         private readonly string DatabaseFileName = "assets/data.json";
@@ -45,19 +44,20 @@ namespace Pathoschild.Stardew.LookupAnything
         ** Validation
         ****/
         /// <summary>Whether the metadata validation passed.</summary>
-        private bool IsDataValid;
+        [MemberNotNullWhen(true, nameof(ModEntry.Metadata), nameof(ModEntry.GameHelper), nameof(ModEntry.TargetFactory), nameof(ModEntry.DebugInterface))]
+        private bool IsDataValid { get; set; }
 
         /****
         ** State
         ****/
         /// <summary>Provides utility methods for interacting with the game code.</summary>
-        private GameHelper GameHelper;
+        private GameHelper? GameHelper;
 
         /// <summary>Finds and analyzes lookup targets in the world.</summary>
-        private TargetFactory TargetFactory;
+        private TargetFactory? TargetFactory;
 
         /// <summary>Draws debug information to the screen.</summary>
-        private PerScreen<DebugInterface> DebugInterface;
+        private PerScreen<DebugInterface>? DebugInterface;
 
         /// <summary>The previous menus shown before the current lookup UI was opened.</summary>
         private readonly PerScreen<Stack<IClickableMenu>> PreviousMenus = new(() => new());
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything
             I18n.Init(helper.Translation);
 
             // load & validate database
-            this.LoadMetadata();
+            this.Metadata = this.LoadMetadata();
             this.IsDataValid = this.Metadata?.LooksValid() == true;
             if (!this.IsDataValid)
             {
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             if (!this.IsDataValid)
                 return;
@@ -134,8 +134,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnDayStarted(object sender, DayStartedEventArgs e)
+        private void OnDayStarted(object? sender, DayStartedEventArgs e)
         {
+            if (!this.IsDataValid)
+                return;
+
             // reset low-level cache once per game day (used for expensive queries that don't change within a day)
             this.GameHelper.ResetCache(this.Helper.Reflection, this.Monitor);
         }
@@ -143,8 +146,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
+            if (!this.IsDataValid)
+                return;
+
             this.Monitor.InterceptErrors("handling your input", () =>
             {
                 ModConfigKeys keys = this.Keys;
@@ -180,7 +186,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
         {
             // restore the previous menu if it was hidden to show the lookup UI
             this.Monitor.InterceptErrors("restoring the previous menu", () =>
@@ -193,8 +199,11 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnRenderedHud(object sender, RenderedHudEventArgs e)
+        private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
         {
+            if (!this.IsDataValid)
+                return;
+
             // render debug interface
             if (this.DebugInterface.Value.Enabled)
                 this.DebugInterface.Value.Draw(Game1.spriteBatch);
@@ -215,6 +224,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Show the lookup UI for the current target.</summary>
         private void ShowLookup()
         {
+            if (!this.IsDataValid)
+                return;
+
             // disable lookups if metadata is invalid
             if (!this.IsDataValid)
             {
@@ -223,13 +235,13 @@ namespace Pathoschild.Stardew.LookupAnything
             }
 
             // show menu
-            StringBuilder logMessage = new StringBuilder("Received a lookup request...");
+            StringBuilder logMessage = new("Received a lookup request...");
             this.Monitor.InterceptErrors("looking that up", () =>
             {
                 try
                 {
                     // get target
-                    ISubject subject = this.GetSubject(logMessage);
+                    ISubject? subject = this.GetSubject(logMessage);
                     if (subject == null)
                     {
                         this.Monitor.Log($"{logMessage} no target found.");
@@ -294,6 +306,9 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Show the search UI.</summary>
         private void ShowSearch()
         {
+            if (!this.IsDataValid)
+                return;
+
             this.PushMenu(
                 new SearchMenu(this.TargetFactory.GetSearchSubjects(), this.ShowLookupFor, this.Monitor, scroll: this.Config.ScrollAmount)
             );
@@ -323,12 +338,12 @@ namespace Pathoschild.Stardew.LookupAnything
                     JObject model = this.Helper.ReadConfig<JObject>();
 
                     // merge ToggleLookupInFrontOfPlayer bindings into ToggleLookup
-                    JObject controls = model.Value<JObject>("Controls");
-                    string toggleLookup = controls?.Value<string>("ToggleLookup");
-                    string toggleLookupInFrontOfPlayer = controls?.Value<string>("ToggleLookupInFrontOfPlayer");
+                    JObject? controls = model.Value<JObject?>("Controls");
+                    string? toggleLookup = controls?.Value<string>("ToggleLookup");
+                    string? toggleLookupInFrontOfPlayer = controls?.Value<string>("ToggleLookupInFrontOfPlayer");
                     if (!string.IsNullOrWhiteSpace(toggleLookupInFrontOfPlayer))
                     {
-                        controls.Remove("ToggleLookupInFrontOfPlayer");
+                        controls!.Remove("ToggleLookupInFrontOfPlayer");
                         controls["ToggleLookup"] = string.Join(", ", (toggleLookup ?? "").Split(',').Concat(toggleLookupInFrontOfPlayer.Split(',')).Select(p => p.Trim()).Where(p => p != "").Distinct());
                         this.Helper.WriteConfig(model);
                     }
@@ -346,8 +361,11 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the most relevant subject under the player's cursor.</summary>
         /// <param name="logMessage">The log message to which to append search details.</param>
-        private ISubject GetSubject(StringBuilder logMessage)
+        private ISubject? GetSubject(StringBuilder logMessage)
         {
+            if (!this.IsDataValid)
+                return null;
+
             // get context
             Vector2 cursorPos = this.GameHelper.GetScreenCoordinatesFromCursor();
             if (!Game1.uiMode)
@@ -394,17 +412,21 @@ namespace Pathoschild.Stardew.LookupAnything
         }
 
         /// <summary>Load the file containing metadata that's not available from the game directly.</summary>
-        private void LoadMetadata()
+        private Metadata? LoadMetadata()
         {
+            Metadata? metadata = null;
+
             this.Monitor.InterceptErrors("loading metadata", () =>
             {
-                this.Metadata = this.Helper.Data.ReadJsonFile<Metadata>(this.DatabaseFileName);
+                metadata = this.Helper.Data.ReadJsonFile<Metadata>(this.DatabaseFileName);
             });
+
+            return metadata;
         }
 
         /// <summary>Get whether a given menu should be restored when the lookup ends.</summary>
         /// <param name="menu">The menu to check.</param>
-        private bool ShouldRestoreMenu(IClickableMenu menu)
+        private bool ShouldRestoreMenu(IClickableMenu? menu)
         {
             // no menu
             if (menu == null)

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -40,7 +38,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             MovieConcession item = this.Target;
 
             // date's taste
-            NPC date = Game1.player.team.movieInvitations.FirstOrDefault(p => p.farmer == Game1.player)?.invitedNPC;
+            NPC? date = Game1.player.team.movieInvitations.FirstOrDefault(p => p.farmer == Game1.player)?.invitedNPC;
             if (date != null)
             {
                 string taste = MovieTheater.GetConcessionTasteForCharacter(date, item);

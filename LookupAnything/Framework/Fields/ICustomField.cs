@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,7 +13,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         string Label { get; }
 
         /// <summary>The field value.</summary>
-        IFormattedText[] Value { get; }
+        IFormattedText[]? Value { get; }
 
         /// <summary>Whether the field should be displayed.</summary>
         bool HasValue { get; }

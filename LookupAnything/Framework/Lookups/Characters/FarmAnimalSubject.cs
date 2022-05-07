@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -48,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // calculate maturity
             bool isFullyGrown = animal.age.Value >= animal.ageWhenMature.Value;
             int daysUntilGrown = 0;
-            SDate dayOfMaturity = null;
+            SDate? dayOfMaturity = null;
             if (!isFullyGrown)
             {
                 daysUntilGrown = animal.ageWhenMature.Value - animal.age.Value;
@@ -102,7 +100,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         /// <param name="animal">The farm animal.</param>
         private string GetMoodReason(FarmAnimal animal)
         {
-            List<string> factors = new List<string>();
+            List<string> factors = new();
 
             // winter without heat
             if (Game1.IsWinter && Game1.currentLocation.numberOfObjectsWithName(Constant.ItemNames.Heater) <= 0)

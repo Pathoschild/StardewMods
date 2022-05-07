@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                     this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: furniture, parent: location, isRootInWorld: true);
 
                 // farmhouse fridge
-                Chest fridge = location switch
+                Chest? fridge = location switch
                 {
                     FarmHouse house => house.fridge.Value,
                     IslandFarmHouse house => house.fridge.Value,
@@ -67,7 +65,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
                 // character hats
                 foreach (NPC npc in location.characters)
                 {
-                    Hat hat =
+                    Hat? hat =
                         (npc as Child)?.hat.Value
                         ?? (npc as Horse)?.hat.Value;
                     this.ScanAndTrack(tracked: items, itemsSeen: itemsSeen, root: hat, parent: npc);
@@ -157,7 +155,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
         /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
-        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, Item root, object parent, bool isInInventory = false, bool isRootInWorld = false, bool includeRoot = true)
+        private void ScanAndTrack(List<FoundItem> tracked, ISet<Item> itemsSeen, Item? root, object? parent, bool isInInventory = false, bool isRootInWorld = false, bool includeRoot = true)
         {
             foreach (FoundItem found in this.Scan(itemsSeen, root, parent, isInInventory, isRootInWorld, includeRoot))
                 tracked.Add(found);
@@ -184,7 +182,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="isInInventory">Whether the item being scanned is in the current player's inventory.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
         /// <param name="includeRoot">Whether to include the root item in the returned values.</param>
-        private IEnumerable<FoundItem> Scan(ISet<Item> itemsSeen, Item root, object parent, bool isInInventory, bool isRootInWorld, bool includeRoot = true)
+        private IEnumerable<FoundItem> Scan(ISet<Item> itemsSeen, Item? root, object? parent, bool isInInventory, bool isRootInWorld, bool includeRoot = true)
         {
             if (root == null || !itemsSeen.Add(root))
                 yield break;
@@ -200,7 +198,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <summary>Get the items contained by an item. This is not recursive and may return null values.</summary>
         /// <param name="root">The root item to search.</param>
         /// <param name="isRootInWorld">Whether the item is placed directly in the world.</param>
-        private IEnumerable<Item> GetDirectContents(Item root, bool isRootInWorld)
+        private IEnumerable<Item> GetDirectContents(Item? root, bool isRootInWorld)
         {
             if (root == null)
                 yield break;
@@ -214,7 +212,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
             else if (this.IsCustomItemClass(root))
             {
                 // convention for custom mod items
-                Item heldItem =
+                Item? heldItem =
                     this.Reflection.GetField<Item>(root, nameof(SObject.heldObject), required: false)?.GetValue()
                     ?? this.Reflection.GetProperty<Item>(root, nameof(SObject.heldObject), required: false)?.GetValue();
                 if (heldItem != null)

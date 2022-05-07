@@ -1,5 +1,4 @@
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
@@ -14,16 +13,17 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
         public string Label { get; protected set; }
 
         /// <inheritdoc />
-        public string Value { get; protected set; }
+        public string? Value { get; protected set; }
 
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(GenericDebugField.Value))]
         public bool HasValue { get; protected set; }
 
         /// <inheritdoc />
         public bool IsPinned { get; protected set; }
 
         /// <inheritdoc />
-        public string OverrideCategory { get; set; }
+        public string? OverrideCategory { get; set; }
 
 
         /*********
@@ -34,7 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.DebugFields
         /// <param name="value">The field value.</param>
         /// <param name="hasValue">Whether the field should be displayed (or <c>null</c> to check the <paramref name="value"/>).</param>
         /// <param name="pinned">Whether the field should be highlighted for special attention.</param>
-        public GenericDebugField(string label, string value, bool? hasValue = null, bool pinned = false)
+        public GenericDebugField(string label, string? value, bool? hasValue = null, bool pinned = false)
         {
             this.Label = label;
             this.Value = value;

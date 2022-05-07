@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         ** Fields
         *********/
         /// <summary>The items to draw.</summary>
-        private readonly Tuple<Item, SpriteInfo>[] Items;
+        private readonly Tuple<Item, SpriteInfo?>[] Items;
 
         /// <summary>Whether to draw the stack size on the item icon.</summary>
         private readonly bool ShowStackSize;
@@ -31,13 +29,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="label">A short field label.</param>
         /// <param name="items">The items to display.</param>
         /// <param name="showStackSize">Whether to draw the stack size on the item icon.</param>
-        public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item> items, bool showStackSize)
+        public ItemIconListField(GameHelper gameHelper, string label, IEnumerable<Item>? items, bool showStackSize)
             : base(label, hasValue: items != null)
         {
-            if (items == null)
-                return;
-
-            this.Items = items.Where(p => p != null).Select(item => Tuple.Create(item, gameHelper.GetSprite(item))).ToArray();
+            this.Items = items?.WhereNotNull().Select(item => Tuple.Create(item, gameHelper.GetSprite(item))).ToArray() ?? Array.Empty<Tuple<Item, SpriteInfo?>>();
             this.HasValue = this.Items.Any();
             this.ShowStackSize = showStackSize;
         }
@@ -57,11 +52,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             // draw list
             const int padding = 5;
             int topOffset = 0;
-            foreach (Tuple<Item, SpriteInfo> entry in this.Items)
+            foreach ((Item item, SpriteInfo? sprite) in this.Items)
             {
-                Item item = entry.Item1;
-                SpriteInfo sprite = entry.Item2;
-
                 // draw icon
                 spriteBatch.DrawSpriteWithin(sprite, position.X, position.Y + topOffset, iconSize);
                 if (this.ShowStackSize && item.Stack > 1)

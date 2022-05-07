@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -29,7 +27,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="bold">Whether to draw bold text.</param>
         /// <param name="scale">The font scale.</param>
         /// <returns>Returns the text dimensions.</returns>
-        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string text, Vector2 position, float wrapWidth, Color? color = null, bool bold = false, float scale = 1)
+        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, string? text, Vector2 position, float wrapWidth, Color? color = null, bool bold = false, float scale = 1)
         {
             return batch.DrawTextBlock(font, new IFormattedText[] { new FormattedText(text, color, bold) }, position, wrapWidth, scale);
         }
@@ -42,7 +40,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="wrapWidth">The width at which to wrap the text.</param>
         /// <param name="scale">The font scale.</param>
         /// <returns>Returns the text dimensions.</returns>
-        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, IEnumerable<IFormattedText> text, Vector2 position, float wrapWidth, float scale = 1)
+        public static Vector2 DrawTextBlock(this SpriteBatch batch, SpriteFont font, IEnumerable<IFormattedText?>? text, Vector2 position, float wrapWidth, float scale = 1)
         {
             if (text == null)
                 return new Vector2(0, 0);
@@ -56,7 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything
             float blockHeight = lineHeight;
 
             // draw text snippets
-            foreach (IFormattedText snippet in text)
+            foreach (IFormattedText? snippet in text)
             {
                 if (snippet?.Text == null)
                     continue;

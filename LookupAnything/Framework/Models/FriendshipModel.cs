@@ -1,5 +1,3 @@
-#nullable disable
-
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using StardewValley;
@@ -8,7 +6,7 @@ using SFarmer = StardewValley.Farmer;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 {
     /// <summary>Summarizes details about the friendship between an NPC and a player.</summary>
-    internal class FriendshipModel
+    internal record FriendshipModel
     {
         /*********
         ** Accessors
@@ -17,34 +15,34 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Flags
         ****/
         /// <summary>Whether the player can date the NPC.</summary>
-        public bool CanDate { get; set; }
+        public bool CanDate { get; }
 
         /// <summary>Whether the NPC is dating the player.</summary>
-        public bool IsDating { get; set; }
+        public bool IsDating { get; }
 
         /// <summary>Whether the NPC is married to the player.</summary>
-        public bool IsSpouse { get; set; }
+        public bool IsSpouse { get; }
 
         /// <summary>Whether the NPC is the player's housemate.</summary>
-        public bool IsHousemate { get; set; }
+        public bool IsHousemate { get; }
 
         /// <summary>Whether the NPC is divorced from the player.</summary>
-        public bool IsDivorced { get; set; }
+        public bool IsDivorced { get; }
 
         /// <summary>Whether the NPC has a stardrop to give to the player once they reach enough points.</summary>
-        public bool HasStardrop { get; set; }
+        public bool HasStardrop { get; }
 
         /// <summary>Whether the player talked to them today.</summary>
-        public bool TalkedToday { get; set; }
+        public bool TalkedToday { get; }
 
         /// <summary>The number of gifts the player gave the NPC today.</summary>
-        public int GiftsToday { get; set; }
+        public int GiftsToday { get; }
 
         /// <summary>The number of gifts the player gave the NPC this week.</summary>
-        public int GiftsThisWeek { get; set; }
+        public int GiftsThisWeek { get; }
 
         /// <summary>The current friendship status.</summary>
-        public FriendshipStatus Status { get; set; }
+        public FriendshipStatus Status { get; }
 
         /****
         ** Points
@@ -66,13 +64,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Hearts
         ****/
         /// <summary>The number of filled hearts in their friendship meter.</summary>
-        public int FilledHearts { get; set; }
+        public int FilledHearts { get; }
 
         /// <summary>The number of empty hearts in their friendship meter.</summary>
-        public int EmptyHearts { get; set; }
+        public int EmptyHearts { get; }
 
         /// <summary>The number of locked hearts in their friendship meter.</summary>
-        public int LockedHearts { get; set; }
+        public int LockedHearts { get; }
 
         /// <summary>The total number of hearts that can be unlocked with this NPC.</summary>
         public int TotalHearts => this.FilledHearts + this.EmptyHearts + this.LockedHearts;

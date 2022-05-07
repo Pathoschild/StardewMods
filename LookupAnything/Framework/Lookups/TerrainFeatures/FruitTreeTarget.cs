@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,7 +14,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         ** Fields
         *********/
         /// <summary>The underlying tree texture.</summary>
-        private readonly Texture2D Texture;
+        private readonly Texture2D? Texture;
 
         /// <summary>The source rectangle containing the tree sprites in the <see cref="Texture"/>.</summary>
         private readonly Rectangle SourceRect;
@@ -116,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
-        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
+        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D? texture, out Rectangle sourceRect)
         {
             // get from Json Assets
             if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect))

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -182,10 +180,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 // (e.g. a recipe with several possible inputs => several recipes with one possible input)
                 .SelectMany(recipe =>
                 {
-                    Item outputItem = recipe.TryCreateItem(ingredient);
+                    Item? outputItem = recipe.TryCreateItem(ingredient);
 
                     RecipeItemEntry output = this.CreateItemEntry(
-                        name: recipe.SpecialOutput?.DisplayText ?? outputItem?.DisplayName,
+                        name: recipe.SpecialOutput?.DisplayText ?? outputItem?.DisplayName ?? string.Empty,
                         item: outputItem,
                         sprite: recipe.SpecialOutput?.Sprite,
                         minCount: recipe.MinOutput,
@@ -200,7 +198,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                             // get ingredient models
                             IEnumerable<RecipeItemEntry> inputs = inputIds
                                 .Select((inputId, index) => this.TryCreateItemEntry(inputId, recipe.Ingredients[index]))
-                                .Where(p => p != null);
+                                .WhereNotNull();
                             if (recipe.Type != RecipeType.TailorInput) // tailoring is always two ingredients with cloth first
                                 inputs = inputs.OrderBy(entry => entry.DisplayText);
 
@@ -231,11 +229,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             /****
             ** build recipe groups with column widths
             ****/
-            foreach (var rawGroup in rawGroups)
+            foreach ((string type, RecipeEntry[] recipes) in rawGroups)
             {
                 // build column width list
                 var columnWidths = new List<float>();
-                void TrackWidth(int index, string text, SpriteInfo icon)
+                void TrackWidth(int index, string text, SpriteInfo? icon)
                 {
                     while (columnWidths.Count < index + 1)
                         columnWidths.Add(0);
@@ -248,7 +246,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 // get max width of each column in the group
-                foreach (var recipe in rawGroup.Value)
+                foreach (RecipeEntry recipe in recipes)
                 {
                     TrackWidth(0, $"{recipe.Output.DisplayText}:", recipe.Output.Sprite);
 
@@ -258,9 +256,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
 
                 // save widths
                 yield return new RecipeByTypeGroup(
-                    type: rawGroup.Key,
-                    recipes: rawGroup.Value,
-                    columnWidths: columnWidths
+                    Type: type,
+                    Recipes: recipes,
+                    ColumnWidths: columnWidths.ToArray()
                 );
             }
         }
@@ -277,7 +275,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="iconColor">The color to tint the sprite.</param>
         /// <param name="probe">Whether to calculate the positions without actually drawing anything to the screen.</param>
         /// <returns>Returns the drawn size.</returns>
-        private Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo icon = null, Vector2? iconSize = null, Color? iconColor = null, bool probe = false)
+        private Vector2 DrawIconText(SpriteBatch batch, SpriteFont font, Vector2 position, float absoluteWrapWidth, string text, Color textColor, SpriteInfo? icon = null, Vector2? iconSize = null, Color? iconColor = null, bool probe = false)
         {
             // draw icon
             int textOffset = 0;
@@ -306,12 +304,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="id">The item id.</param>
         /// <param name="ingredient">The recipe ingredient model for the item.</param>
         /// <returns>The equivalent item entry model, or <c>null</c> for a category with no matching items.</returns>
-        private RecipeItemEntry TryCreateItemEntry(int id, RecipeIngredientModel ingredient)
+        private RecipeItemEntry? TryCreateItemEntry(int id, RecipeIngredientModel ingredient)
         {
             // from category
             if (id < 0)
             {
-                Item input = this.GameHelper.GetObjectsByCategory(id).FirstOrDefault();
+                Item? input = this.GameHelper.GetObjectsByCategory(id).FirstOrDefault();
                 if (input == null)
                     return null;
 
@@ -335,7 +333,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 }
 
                 return this.CreateItemEntry(
-                    name: input?.DisplayName,
+                    name: input?.DisplayName ?? string.Empty,
                     item: input,
                     minCount: ingredient.Count,
                     maxCount: ingredient.Count
@@ -351,7 +349,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="maxCount">The maximum number of items needed or created.</param>
         /// <param name="chance">The chance of creating an output item.</param>
         /// <param name="isOutput">Whether the item is output or input.</param>
-        private RecipeItemEntry CreateItemEntry(string name, Item item = null, SpriteInfo sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, bool isOutput = false)
+        private RecipeItemEntry CreateItemEntry(string name, Item? item = null, SpriteInfo? sprite = null, int minCount = 1, int maxCount = 1, decimal chance = 100, bool isOutput = false)
         {
             // get display text
             string text;
@@ -374,8 +372,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             return new RecipeItemEntry(
-                sprite: sprite ?? this.GameHelper.GetSprite(item),
-                displayText: text
+                Sprite: sprite ?? this.GameHelper.GetSprite(item),
+                DisplayText: text
             );
         }
 

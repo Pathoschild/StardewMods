@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Linq;
 
@@ -19,7 +17,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         ** Accessors
         *********/
         /// <summary>The recipe name or key.</summary>
-        public string Name { get; }
+        public string? Name { get; }
 
         /// <summary>The recipe type.</summary>
         public string Type { get; }
@@ -46,7 +44,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <param name="isKnown">Whether the player knows the recipe.</param>
         /// <param name="inputs">The input items.</param>
         /// <param name="output">The output item.</param>
-        public RecipeEntry(string name, string type, bool isKnown, RecipeItemEntry[] inputs, RecipeItemEntry output)
+        public RecipeEntry(string? name, string type, bool isKnown, RecipeItemEntry[] inputs, RecipeItemEntry output)
         {
             this.Name = name;
             this.Type = type;
@@ -64,7 +62,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields.Models
         /// <param name="name">The recipe name or key.</param>
         /// <param name="inputs">The input items.</param>
         /// <param name="output">The output item.</param>
-        private static string GetUniqueKey(string name, RecipeItemEntry[] inputs, RecipeItemEntry output)
+        private static string GetUniqueKey(string? name, RecipeItemEntry[] inputs, RecipeItemEntry output)
         {
             var inputNames = inputs
                 .Select(item => item.DisplayText)

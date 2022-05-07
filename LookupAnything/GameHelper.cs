@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -90,11 +89,14 @@ namespace Pathoschild.Stardew.LookupAnything
             this.CustomFarmingRedux = new CustomFarmingReduxIntegration(modRegistry, this.Monitor);
             this.MultiFertilizer = new MultiFertilizerIntegration(modRegistry, monitor);
             this.ProducerFrameworkMod = new ProducerFrameworkModIntegration(modRegistry, this.Monitor);
+
+            this.ResetCache(reflection, monitor);
         }
 
         /// <summary>Reset the low-level cache used to store expensive query results, so the data is recalculated on demand.</summary>
         /// <param name="reflection">Simplifies access to private game code.</param>
         /// <param name="monitor">The monitor with which to log errors.</param>
+        [MemberNotNull(nameof(GameHelper.Objects), nameof(GameHelper.Recipes))]
         public void ResetCache(IReflectionHelper reflection, IMonitor monitor)
         {
             this.Objects = new(() => this.ItemRepository.GetAll(itemTypes: new[] { ItemType.Object }).ToArray());
@@ -305,7 +307,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Read parsed data about the spawn rules for a specific fish.</summary>
         /// <param name="fishID">The fish ID.</param>
         /// <remarks>Derived from <see cref="GameLocation.getFish"/>.</remarks>
-        public FishSpawnData GetFishSpawnRules(int fishID)
+        public FishSpawnData? GetFishSpawnRules(int fishID)
         {
             return this.DataParser.GetFishSpawnRules(fishID, this.Metadata);
         }
@@ -377,7 +379,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 if (recipe.Type != RecipeType.MachineInput)
                     return false;
 
-                RecipeIngredientModel ingredient = recipe.Ingredients.FirstOrDefault();
+                RecipeIngredientModel? ingredient = recipe.Ingredients.FirstOrDefault();
                 return
                     ingredient?.PossibleIds.Any(p => p < 0) == true
                     && recipes.Any(other => other.Ingredients.FirstOrDefault()?.PossibleIds.Contains(item.ParentSheetIndex) == true && other.DisplayType == recipe.DisplayType);
@@ -400,7 +402,7 @@ namespace Pathoschild.Stardew.LookupAnything
 
         /// <summary>Get the recipes for a given machine.</summary>
         /// <param name="machine">The machine.</param>
-        public IEnumerable<RecipeModel> GetRecipesForMachine(SObject machine)
+        public IEnumerable<RecipeModel> GetRecipesForMachine(SObject? machine)
         {
             if (machine == null)
                 return Enumerable.Empty<RecipeModel>();
@@ -437,7 +439,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="obj">The constructed object.</param>
         /// <param name="stack">The number of items in the stack.</param>
         /// <param name="bigcraftable">Whether to create a bigcraftable item.</param>
-        public bool TryGetObjectBySpriteIndex(int index, out SObject obj, int stack = 1, bool bigcraftable = false)
+        public bool TryGetObjectBySpriteIndex(int index, [NotNullWhen(true)] out SObject? obj, int stack = 1, bool bigcraftable = false)
         {
             try
             {
@@ -468,7 +470,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 string error = $"The game can't construct {(bigcraftable ? "bigcraftable" : "object")} #{index}.";
 
                 var data = bigcraftable ? Game1.bigCraftablesInformation : Game1.objectInformation;
-                if (data != null && data.TryGetValue(index, out string dataStr))
+                if (data != null && data.TryGetValue(index, out string? dataStr))
                     error += $"\nRaw data: {dataStr}";
                 else
                     error += " No raw data found.";
@@ -583,14 +585,14 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <param name="item">The item.</param>
         /// <param name="onlyCustom">Only return the sprite info if it's custom.</param>
         /// <returns>Returns a tuple containing the sprite sheet and the sprite's position and dimensions within the sheet.</returns>
-        public SpriteInfo GetSprite(Item item, bool onlyCustom = false)
+        public SpriteInfo? GetSprite(Item? item, bool onlyCustom = false)
         {
-            SObject obj = item as SObject;
+            SObject? obj = item as SObject;
 
             // Custom Farming Redux
             if (obj != null && this.CustomFarmingRedux.IsLoaded)
             {
-                SpriteInfo data = this.CustomFarmingRedux.GetSprite(obj);
+                SpriteInfo? data = this.CustomFarmingRedux.GetSprite(obj);
                 if (data != null)
                     return data;
             }
@@ -662,7 +664,7 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get whether two items are the same type (ignoring flavor text like 'blueberry wine' vs 'cranberry wine').</summary>
         /// <param name="a">The first item to compare.</param>
         /// <param name="b">The second item to compare.</param>
-        private bool AreEquivalent(Item a, Item b)
+        private bool AreEquivalent(Item? a, Item? b)
         {
             if (a == null || b == null || a.ParentSheetIndex != b.ParentSheetIndex)
                 return false;
@@ -708,7 +710,7 @@ namespace Pathoschild.Stardew.LookupAnything
                     recipes.RemoveAll(r => r.Type == RecipeType.MachineInput && r.MachineParentSheetIndex == recipe.MachineId && recipe.InputId != null && r.Ingredients[0].PossibleIds.Contains(recipe.InputId.Value));
 
                     // get machine
-                    if (!this.TryGetObjectBySpriteIndex(recipe.MachineId, out SObject machine, bigcraftable: true))
+                    if (!this.TryGetObjectBySpriteIndex(recipe.MachineId, out SObject? machine, bigcraftable: true))
                         continue;
 
                     // add recipe
@@ -716,7 +718,7 @@ namespace Pathoschild.Stardew.LookupAnything
                         key: null,
                         type: RecipeType.MachineInput,
                         displayType: machine.DisplayName,
-                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId.Value, p.Count)),
+                        ingredients: recipe.Ingredients.Select(p => new RecipeIngredientModel(p.InputId!.Value, p.Count)),
                         item: ingredient =>
                         {
                             SObject output = this.GetObjectBySpriteIndex(recipe.OutputId);
@@ -728,7 +730,7 @@ namespace Pathoschild.Stardew.LookupAnything
                             return output;
                         },
                         isKnown: () => true,
-                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id.Value, 1)),
+                        exceptIngredients: recipe.ExceptIngredients.Select(id => new RecipeIngredientModel(id!.Value, 1)),
                         outputItemIndex: recipe.OutputId,
                         minOutput: recipe.MinOutput,
                         maxOutput: recipe.MaxOutput,
@@ -767,7 +769,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 // simple tag lookup
                 if (contextTags.Count == 1 && !contextTags[0].StartsWith("!"))
                 {
-                    return contextLookupCache.TryGetValue(contextTags[0], out Item[] items)
+                    return contextLookupCache.TryGetValue(contextTags[0], out Item[]? items)
                         ? items
                         : Array.Empty<Item>();
                 }
@@ -776,7 +778,7 @@ namespace Pathoschild.Stardew.LookupAnything
                 {
                     string cacheKey = string.Join("|", contextTags.OrderBy(p => p));
 
-                    if (!contextLookupCache.TryGetValue(cacheKey, out Item[] items))
+                    if (!contextLookupCache.TryGetValue(cacheKey, out Item[]? items))
                     {
                         contextLookupCache[cacheKey] = items = objectList
                             .Where(entry => contextTags.All(entry.HasContextTag))
@@ -882,23 +884,23 @@ namespace Pathoschild.Stardew.LookupAnything
         /// <summary>Get construction recipes which use an item as a building material.</summary>
         /// <param name="input">The ingredient to match.</param>
         /// <remarks>Derived from <see cref="CarpenterMenu(bool)"/>.</remarks>
-        private IEnumerable<RecipeModel> GetConstructionRecipes(Item input)
+        private IEnumerable<RecipeModel> GetConstructionRecipes(Item? input)
         {
             if (input?.GetItemType() != ItemType.Object)
                 yield break;
 
             var data = Game1.content.Load<Dictionary<string, string>>("Data\\Blueprints");
-            foreach (var pair in data)
+            foreach ((string key, string value) in data)
             {
                 // ignore invalid blueprints
-                if (pair.Key == "Mine Elevator" || pair.Value.StartsWith("animal/"))
+                if (key == "Mine Elevator" || value.StartsWith("animal/"))
                     continue;
 
                 // parse blueprint
                 BluePrint blueprint;
                 try
                 {
-                    blueprint = new BluePrint(pair.Key);
+                    blueprint = new BluePrint(key);
                 }
                 catch
                 {

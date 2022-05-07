@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,10 +89,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // initialize
             this.Target = npc;
             this.TargetType = type;
-            CharacterData overrides = metadata.GetCharacter(npc, type);
+            CharacterData? overrides = metadata.GetCharacter(npc, type);
             this.Initialize(
                 name: npc.getName(),
-                description: overrides?.DescriptionKey != null ? I18n.GetByKey(overrides.DescriptionKey) : null,
+                description: overrides?.DescriptionKey != null ? (string?)I18n.GetByKey(overrides.DescriptionKey) : null,
                 type: CharacterSubject.GetTypeName(npc, type)
             );
 
@@ -131,7 +129,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         public override IEnumerable<IDebugField> GetDebugFields()
         {
             NPC target = this.Target;
-            Pet pet = target as Pet;
+            Pet? pet = target as Pet;
 
             // pinned fields
             yield return new GenericDebugField("facing direction", this.Stringify((FacingDirection)target.FacingDirection), pinned: true);
@@ -223,7 +221,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private IEnumerable<ICustomField> GetDataForGourmand()
         {
             // get cave
-            IslandFarmCave cave = (IslandFarmCave)Game1.getLocationFromName("IslandFarmCave");
+            IslandFarmCave? cave = (IslandFarmCave?)Game1.getLocationFromName("IslandFarmCave");
             if (cave == null)
                 yield break;
             int questsDone = cave.gourmandRequestsFulfilled.Value;
@@ -271,7 +269,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             yield return new GenericField(I18n.Monster_Attack(), this.Stringify(monster.DamageToFarmer));
 
             // Adventure Guild quest
-            AdventureGuildQuestData adventureGuildQuest = this.Metadata.GetAdventurerGuildQuest(monster.Name);
+            AdventureGuildQuestData? adventureGuildQuest = this.Metadata.GetAdventurerGuildQuest(monster.Name);
             if (adventureGuildQuest != null)
             {
                 int kills = adventureGuildQuest.Targets.Select(p => Game1.stats.getMonstersKilled(p)).Sum();
@@ -426,7 +424,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 case SubjectType.Pet:
                     {
                         string typeName = GameI18n.GetString($"Strings\\StringsFromCSFiles:Event.cs.{(npc is Cat ? "1242" : "1243")}");
-                        if (typeName?.Length > 1)
+                        if (typeName.Length > 1)
                             typeName = char.ToUpperInvariant(typeName[0]) + typeName.Substring(1);
                         return typeName;
                     }
@@ -479,7 +477,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private IEnumerable<ItemDropData> GetMonsterDrops(Monster monster)
         {
             // get possible drops
-            ItemDropData[] possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
+            ItemDropData[]? possibleDrops = this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == monster.Name)?.Drops;
             if (this.IsHauntedSkull)
                 possibleDrops ??= this.GameHelper.GetMonsterData().FirstOrDefault(p => p.Name == "Lava Bat")?.Drops; // haunted skulls use lava bat data
             possibleDrops ??= Array.Empty<ItemDropData>();
@@ -494,21 +492,22 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             // return possible drops
             foreach (var drop in possibleDrops.OrderByDescending(p => p.Probability))
             {
-                bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemID, out List<ItemDropData> actualDrops) && actualDrops.Any();
+                bool isGuaranteed = dropsLeft.TryGetValue(drop.ItemID, out List<ItemDropData>? actualDrops) && actualDrops.Any();
                 if (isGuaranteed)
                 {
-                    ItemDropData[] matches = actualDrops.Where(p => p.MinDrop >= drop.MinDrop && p.MaxDrop <= drop.MaxDrop).ToArray();
-                    ItemDropData bestMatch =
+                    ItemDropData[] matches = actualDrops!.Where(p => p.MinDrop >= drop.MinDrop && p.MaxDrop <= drop.MaxDrop).ToArray();
+                    ItemDropData? bestMatch =
                         matches.FirstOrDefault(p => p.MinDrop == drop.MinDrop && p.MaxDrop == drop.MaxDrop)
                         ?? matches.FirstOrDefault();
-                    actualDrops.Remove(bestMatch);
+                    if (bestMatch is not null)
+                        actualDrops!.Remove(bestMatch);
                 }
 
                 yield return new ItemDropData(
-                    itemID: drop.ItemID,
-                    minDrop: 1,
-                    maxDrop: drop.MaxDrop,
-                    probability: isGuaranteed ? 1 : drop.Probability
+                    ItemID: drop.ItemID,
+                    MinDrop: 1,
+                    MaxDrop: drop.MaxDrop,
+                    Probability: isGuaranteed ? 1 : drop.Probability
                 );
             }
 
@@ -550,7 +549,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             };
 
             // build model
-            return new ItemDropData(itemID: id, minDrop: minDrop, maxDrop: maxDrop, probability: 1);
+            return new ItemDropData(ItemID: id, MinDrop: minDrop, MaxDrop: maxDrop, Probability: 1);
         }
     }
 }

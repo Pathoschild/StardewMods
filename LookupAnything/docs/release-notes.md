@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Added support for custom NPC roommates.
 * Fixed error in crop lookup when it has invalid season data.
 

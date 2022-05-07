@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Linq;
 using Netcode;
@@ -54,9 +52,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Get whether the quest needs the given item.</summary>
         /// <param name="obj">The item to check.</param>
-        public bool NeedsItem(SObject obj)
+        public bool NeedsItem(SObject? obj)
         {
-            return this.NeedsItemImpl(obj);
+            return obj != null && this.NeedsItemImpl(obj);
         }
 
 
@@ -66,7 +64,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Get whether a quest needs the given item.</summary>
         /// <param name="quest">The quest to check.</param>
         /// <param name="item">The item to check.</param>
-        private bool NeedsItem(Quest quest, Item item)
+        private bool NeedsItem(Quest quest, Item? item)
         {
             switch (quest)
             {
@@ -96,7 +94,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Get whether a special order needs the given item.</summary>
         /// <param name="order">The special order to check.</param>
         /// <param name="item">The item to check.</param>
-        private bool NeedsItem(SpecialOrder order, Item item)
+        private bool NeedsItem(SpecialOrder order, Item? item)
         {
             return order.objectives
                 .Any(objective =>
@@ -130,7 +128,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <summary>Get whether an item matches the expected values.</summary>
         /// <param name="item">The item to check.</param>
         /// <param name="contextTags">The expected context tags.</param>
-        private bool IsMatch(Item item, NetStringList contextTags)
+        private bool IsMatch(Item? item, NetStringList contextTags)
         {
             QuestModel.DonateObjective.acceptableContextTagSets = contextTags;
             return QuestModel.DonateObjective.IsValidItem(item);
@@ -140,7 +138,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="item">The item to check.</param>
         /// <param name="id">The expected item ID.</param>
         /// <param name="type">The expected item type.</param>
-        private bool IsMatch(Item item, int id, ItemType type = ItemType.Object)
+        private bool IsMatch(Item? item, int id, ItemType type = ItemType.Object)
         {
             return
                 item?.ParentSheetIndex == id

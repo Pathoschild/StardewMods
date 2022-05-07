@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,10 +16,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         string Name { get; }
 
         /// <summary>The item description (if applicable).</summary>
-        string Description { get; }
+        string? Description { get; }
 
         /// <summary>The item type (if applicable).</summary>
-        string Type { get; }
+        string? Type { get; }
 
 
         /*********

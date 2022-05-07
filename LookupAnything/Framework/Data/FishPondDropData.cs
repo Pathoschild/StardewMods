@@ -1,11 +1,9 @@
-#nullable disable
-
 using System;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>An item that can be produced by a fish pond.</summary>
-    internal class FishPondDropData : ItemDropData
+    internal record FishPondDropData : ItemDropData
     {
         /*********
         ** Accessors

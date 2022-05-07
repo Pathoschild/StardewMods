@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -37,13 +35,6 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /*********
         ** Public methods
         *********/
-        /// <summary>Get a strongly-typed instance.</summary>
-        /// <typeparam name="T">The expected value type.</typeparam>
-        public T GetValue<T>()
-        {
-            return (T)(object)this.Value;
-        }
-
         /// <summary>Get the sprite's source rectangle within its texture.</summary>
         public abstract Rectangle GetSpritesheetArea();
 
@@ -100,8 +91,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /// <param name="spriteSheet">The sprite sheet containing the displayed sprite.</param>
         /// <param name="spriteSourceRectangle">The coordinates and dimensions of the sprite within the sprite sheet.</param>
         /// <param name="spriteEffects">The transformation to apply on the sprite.</param>
-        protected bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea, Texture2D spriteSheet, Rectangle spriteSourceRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
+        protected bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea, Texture2D? spriteSheet, Rectangle spriteSourceRectangle, SpriteEffects spriteEffects = SpriteEffects.None)
         {
+            if (spriteSheet is null)
+                return false;
+
             // get sprite sheet coordinate
             Vector2 spriteSheetPosition = this.GameHelper.GetSpriteSheetCoordinates(position, spriteArea, spriteSourceRectangle, spriteEffects);
             if (!spriteSourceRectangle.Contains((int)spriteSheetPosition.X, (int)spriteSheetPosition.Y))

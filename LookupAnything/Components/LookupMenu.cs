@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -264,7 +262,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 {
                     if (area.Value.Contains(x, y))
                     {
-                        ISubject subject = area.Key.GetLinkSubject();
+                        ISubject? subject = area.Key.GetLinkSubject();
                         if (subject != null)
                             this.ShowNewPage(subject);
                         break;
@@ -422,7 +420,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                         // end draw
                         contentBatch.End();
                     }
-                    catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle"))
+                    catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace?.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle") == true)
                     {
                         this.Monitor.Log("The viewport size seems to be inaccurate. Enabling compatibility mode; lookup menu may be misaligned.", LogLevel.Warn);
                         this.Monitor.Log(ex.ToString());

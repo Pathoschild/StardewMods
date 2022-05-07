@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
@@ -26,7 +24,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the text to display.</summary>
         /// <param name="giftTastes">NPCs by how much they like receiving this item.</param>
         /// <param name="showTaste">The gift taste to show.</param>
-        private static string GetText(IDictionary<GiftTaste, string[]> giftTastes, GiftTaste showTaste)
+        private static string? GetText(IDictionary<GiftTaste, string[]> giftTastes, GiftTaste showTaste)
         {
             if (!giftTastes.ContainsKey(showTaste))
                 return null;

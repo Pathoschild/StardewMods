@@ -1,11 +1,10 @@
-#nullable disable
-
+using System;
 using Pathoschild.Stardew.Common.Items.ItemData;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Provides override metadata about a game item.</summary>
-    internal class ObjectData
+    internal record ObjectData
     {
         /*********
         ** Accessors
@@ -20,19 +19,19 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         public ItemType Type { get; set; } = ItemType.Object;
 
         /// <summary>The sprite IDs for this object.</summary>
-        public int[] SpriteID { get; set; }
+        public int[] SpriteID { get; set; } = Array.Empty<int>();
 
         /****
         ** Overrides
         ****/
         /// <summary>The translation key which should override the item name (if any).</summary>
-        public string NameKey { get; set; }
+        public string? NameKey { get; set; }
 
         /// <summary>The translation key which should override the item description (if any).</summary>
-        public string DescriptionKey { get; set; }
+        public string? DescriptionKey { get; set; }
 
         /// <summary>The translation key which should override the item type name (if any).</summary>
-        public string TypeKey { get; set; }
+        public string? TypeKey { get; set; }
 
         /// <summary>Whether the player can pick up this item.</summary>
         public bool? ShowInventoryFields { get; set; }

@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -22,12 +20,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         /// <param name="menu">The active menu.</param>
         /// <param name="cursorX">The cursor's viewport-relative X coordinate.</param>
         /// <param name="cursorY">The cursor's viewport-relative Y coordinate.</param>
-        public ISubject GetSubject(IClickableMenu menu, int cursorX, int cursorY);
+        public ISubject? GetSubject(IClickableMenu menu, int cursorX, int cursorY);
 
         /// <summary>Get the subject for an in-game entity, if available.</summary>
         /// <param name="entity">The entity instance.</param>
         /// <param name="location">The location containing the entity, if applicable.</param>
-        public ISubject GetSubjectFor(object entity, GameLocation location);
+        public ISubject? GetSubjectFor(object entity, GameLocation? location);
 
         /// <summary>Get all known subjects for the search UI.</summary>
         public IEnumerable<ISubject> GetSearchSubjects();
