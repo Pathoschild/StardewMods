@@ -24,7 +24,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Construct an instance.</summary>
         /// <param name="name">The token name. This only needs to be unique for your mod; Content Patcher will prefix it with your mod ID automatically, like <c>Pathoschild.ExampleMod/SomeTokenName</c>.</param>
         /// <param name="getValue">A function which returns the current token value (if any). If this returns null, the token is considered unavailable for use.</param>
-        public ModSimpleValueProvider(string name, Func<IEnumerable<string>> getValue)
+        public ModSimpleValueProvider(string name, Func<IEnumerable<string>?> getValue)
             : base(name, mayReturnMultipleValuesForRoot: true)
         {
             this.GetValueImpl = getValue;

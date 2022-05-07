@@ -98,7 +98,7 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public void RegisterToken(IManifest mod, string name, Func<IEnumerable<string>> getValue)
+        public void RegisterToken(IManifest mod, string name, Func<IEnumerable<string>?> getValue)
         {
             this.RegisterValueProvider(mod, new ModSimpleValueProvider(name, getValue));
         }
