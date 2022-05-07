@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
@@ -17,7 +15,7 @@ namespace Pathoschild.Stardew.SkipIntro
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>Whether the game has launched.</summary>
         private bool IsLaunched;
@@ -52,7 +50,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForSkipIntro(
@@ -72,7 +70,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
         {
             if (Constants.TargetPlatform == GamePlatform.Android)
                 return; // return to title doesn't replay intro on Android
@@ -84,7 +82,7 @@ namespace Pathoschild.Stardew.SkipIntro
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             try
             {

@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Internal changes to prepare for the upcoming Stardew Valley 1.6.
 
 ## 1.9.8
