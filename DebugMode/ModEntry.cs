@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +21,7 @@ namespace Pathoschild.Stardew.DebugMode
         ** Fields
         *********/
         /// <summary>The mod configuration settings.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
@@ -91,7 +89,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForDebugMode(
@@ -107,7 +105,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             // toggle debug menu
             if (this.Keys.ToggleDebug.JustPressed())
@@ -131,7 +129,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
+        private void OnWarped(object? sender, WarpedEventArgs e)
         {
             if (this.GameDebugMode && e.IsLocalPlayer)
                 this.CorrectEntryPosition(e.NewLocation, Game1.player);
@@ -140,7 +138,7 @@ namespace Pathoschild.Stardew.DebugMode
         /// <inheritdoc cref="IDisplayEvents.Rendered"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        public void OnRendered(object sender, RenderedEventArgs e)
+        public void OnRendered(object? sender, RenderedEventArgs e)
         {
             if (this.ShowOverlay.Value)
                 this.DrawOverlay(Game1.spriteBatch, Game1.smallFont, this.Pixel.Value);
@@ -212,7 +210,7 @@ namespace Pathoschild.Stardew.DebugMode
                 string[] lines = this.GetDebugInfo().ToArray();
 
                 // get text
-                string text = string.Join(Environment.NewLine, lines.Where(p => p != null));
+                string text = string.Join(Environment.NewLine, lines.WhereNotNull());
                 Vector2 textSize = font.MeasureString(text);
                 const int scrollPadding = 5;
 
@@ -223,7 +221,7 @@ namespace Pathoschild.Stardew.DebugMode
                 int y = MathHelper.Clamp(mouseY, 0, viewport.Height - height);
 
                 // draw
-                CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out Rectangle bounds, padding: scrollPadding);
+                CommonHelper.DrawScroll(batch, new Vector2(x, y), textSize, out Vector2 contentPos, out _, padding: scrollPadding);
                 batch.DrawString(font, text, new Vector2(contentPos.X, contentPos.Y), Color.Black);
             }
 
@@ -248,8 +246,8 @@ namespace Pathoschild.Stardew.DebugMode
             if (Game1.activeClickableMenu != null)
             {
                 Type menuType = Game1.activeClickableMenu.GetType();
-                Type submenuType = this.GetSubmenu(Game1.activeClickableMenu)?.GetType();
-                string vanillaNamespace = typeof(TitleMenu).Namespace;
+                Type? submenuType = this.GetSubmenu(Game1.activeClickableMenu)?.GetType();
+                string? vanillaNamespace = typeof(TitleMenu).Namespace;
 
                 yield return $"{I18n.Label_Menu()}: {(menuType.Namespace == vanillaNamespace ? menuType.Name : menuType.FullName)}";
                 if (submenuType != null)
@@ -260,7 +258,7 @@ namespace Pathoschild.Stardew.DebugMode
             if (Game1.currentMinigame != null)
             {
                 Type minigameType = Game1.currentMinigame.GetType();
-                string vanillaNamespace = typeof(AbigailGame).Namespace;
+                string? vanillaNamespace = typeof(AbigailGame).Namespace;
 
                 yield return $"{I18n.Label_Minigame()}: {(minigameType.Namespace == vanillaNamespace ? minigameType.Name : minigameType.FullName)}";
             }
@@ -291,14 +289,14 @@ namespace Pathoschild.Stardew.DebugMode
 
         /// <summary>Get the submenu for the current menu, if any.</summary>
         /// <param name="menu">The submenu.</param>
-        private IClickableMenu GetSubmenu(IClickableMenu menu)
+        private IClickableMenu? GetSubmenu(IClickableMenu menu)
         {
-            if (menu is GameMenu gameMenu)
-                return gameMenu.pages[gameMenu.currentTab];
-            if (menu is TitleMenu)
-                return TitleMenu.subMenu;
-
-            return null;
+            return menu switch
+            {
+                GameMenu gameMenu => gameMenu.pages[gameMenu.currentTab],
+                TitleMenu => TitleMenu.subMenu,
+                _ => null
+            };
         }
     }
 }
