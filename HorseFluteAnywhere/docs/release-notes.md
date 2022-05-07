@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Improved translations. Thanks to wally232 (updated Korean)!
 
 ## 1.1.14

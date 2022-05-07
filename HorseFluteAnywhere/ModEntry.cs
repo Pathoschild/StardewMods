@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +29,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         private readonly Lazy<SObject> HorseFlute = new(() => new SObject(ModEntry.HorseFluteId, 1));
 
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The summon key binding.</summary>
         private KeybindList SummonKey => this.Config.SummonHorseKey;
@@ -71,7 +69,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForHorseFluteAnywhere(
@@ -96,7 +94,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (this.SummonKey.JustPressed() && this.CanPlayFlute(Game1.player))
             {
@@ -117,7 +115,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        private void OnLocationListChanged(object? sender, LocationListChangedEventArgs e)
         {
             // rescue lost horses
             if (Context.IsMainPlayer)
@@ -133,7 +131,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
+        private void OnWarped(object? sender, WarpedEventArgs e)
         {
             if (!e.IsLocalPlayer || !this.IsRidingHorse(Game1.player))
                 return;
@@ -182,11 +180,11 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
                     Multiplayer multiplayer = this.Helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer").GetValue();
                     GameLocation location = horse.currentLocation;
-                    Vector2 tile_location = horse.getTileLocation();
+                    Vector2 tileLocation = horse.getTileLocation();
 
                     for (int i = 0; i < 8; i++)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile_location.X + Utility.RandomFloat(-1, 1), tile_location.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
@@ -196,24 +194,24 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                     location.playSoundAt("wand", horse.getTileLocation());
 
                     location = Game1.player.currentLocation;
-                    tile_location = Game1.player.getTileLocation();
+                    tileLocation = Game1.player.getTileLocation();
 
-                    location.playSoundAt("wand", tile_location);
+                    location.playSoundAt("wand", tileLocation);
 
                     for (int i = 0; i < 8; i++)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tile_location.X + Utility.RandomFloat(-1, 1), tile_location.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(10, new Vector2(tileLocation.X + Utility.RandomFloat(-1, 1), tileLocation.Y + Utility.RandomFloat(-1, 0)) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             motion = new Vector2(Utility.RandomFloat(-0.5F, 0.5F), Utility.RandomFloat(-0.5F, 0.5F))
                         });
                     }
 
-                    Game1.warpCharacter(horse, Game1.player.currentLocation, tile_location);
+                    Game1.warpCharacter(horse, Game1.player.currentLocation, tileLocation);
                     int j = 0;
-                    for (int x = (int)tile_location.X + 3; x >= (int)tile_location.X - 3; x--)
+                    for (int x = (int)tileLocation.X + 3; x >= (int)tileLocation.X - 3; x--)
                     {
-                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tile_location.Y) * Game1.tileSize, Color.White, 8, false, 50f)
+                        multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite(6, new Vector2(x, tileLocation.Y) * Game1.tileSize, Color.White, 8, false, 50f)
                         {
                             layerDepth = 1f,
                             delayBeforeAnimationStart = j * 25,
@@ -280,8 +278,8 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
                 if (curChanged)
                 {
                     string message = isTractor
-                        ? $"Reset tractor {(hadName ? $"'{horse.Name}'" : "with no name")}."
-                        : $"Reset horse '{(hadName ? $"'{horse.Name}'" : "with no name")}'. The next player who interacts with it will become the owner.";
+                        ? $"Reset tractor {(hadName ? $"'{horse!.Name}'" : "with no name")}."
+                        : $"Reset horse '{(hadName ? $"'{horse!.Name}'" : "with no name")}'. The next player who interacts with it will become the owner.";
                     this.Monitor.Log(message, LogLevel.Info);
                 }
                 anyChanged |= curChanged;
@@ -321,7 +319,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
         private void WarpHome(Horse horse)
         {
             Farm farm = Game1.getFarm();
-            Stable stable = farm.buildings.OfType<Stable>().FirstOrDefault(p => p.HorseId == horse.HorseId);
+            Stable? stable = farm.buildings.OfType<Stable>().FirstOrDefault(p => p.HorseId == horse.HorseId);
 
             Game1.warpCharacter(horse, farm, Vector2.Zero);
             stable?.grabHorse();
@@ -350,7 +348,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere
 
         /// <summary>Get whether a horse should be ignored by the main horse logic.</summary>
         /// <param name="horse">The horse to check.</param>
-        private bool ShouldIgnore(Horse horse)
+        private bool ShouldIgnore(Horse? horse)
         {
             return
                 horse == null
