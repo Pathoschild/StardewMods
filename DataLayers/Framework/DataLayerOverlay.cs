@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -59,7 +58,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         private readonly TileGroup[] EmptyTileGroups = Array.Empty<TileGroup>();
 
         /// <summary>The visible tiles.</summary>
-        private Vector2[] VisibleTiles;
+        private Vector2[] VisibleTiles = Array.Empty<Vector2>();
 
         /// <summary>The tile layer data to render.</summary>
         private TileGroup[] TileGroups;
@@ -150,18 +149,19 @@ namespace Pathoschild.Stardew.DataLayers.Framework
 
         /// <summary>Switch to the data layer with the given ID, if any.</summary>
         /// <param name="id">The layer ID.</param>
-        public void TrySetLayer(string id)
+        public void TrySetLayer(string? id)
         {
             if (id == null)
                 return;
 
-            ILayer layer = this.Layers.FirstOrDefault(p => p.Id == id);
+            ILayer? layer = this.Layers.FirstOrDefault(p => p.Id == id);
             if (layer != null)
                 this.SetLayer(layer);
         }
 
         /// <summary>Switch to the given data layer.</summary>
         /// <param name="layer">The data layer to select.</param>
+        [MemberNotNull(nameof(DataLayerOverlay.CurrentLayer), nameof(DataLayerOverlay.Legend), nameof(DataLayerOverlay.LegendEntries), nameof(DataLayerOverlay.NextButton), nameof(DataLayerOverlay.PrevButton), nameof(DataLayerOverlay.TileGroups))]
         public void SetLayer(ILayer layer)
         {
             this.CurrentLayer = layer;
@@ -183,7 +183,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
             }
 
             // get updated tiles
-            if (Game1.currentLocation == null || this.CurrentLayer == null)
+            if (Game1.currentLocation == null)
             {
                 this.VisibleTiles = this.EmptyTiles;
                 this.TileGroups = this.EmptyTileGroups;
@@ -251,7 +251,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 // draw tile data
                 bool hasLeftBorder = false, hasRightBorder = false, hasTopBorder = false, hasBottomBorder = false;
                 int gridSize = this.ShowGrid || this.CurrentLayer.AlwaysShowGrid ? this.GridBorderSize : 0;
-                if (tiles.TryGetValue(tilePos, out TileDrawData tile))
+                if (tiles.TryGetValue(tilePos, out TileDrawData? tile))
                 {
                     // draw overlay
                     foreach (Color color in tile.Colors)
@@ -305,6 +305,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
         }
 
         /// <summary>Reinitialize the UI components.</summary>
+        [MemberNotNull(nameof(DataLayerOverlay.Legend), nameof(DataLayerOverlay.NextButton), nameof(DataLayerOverlay.PrevButton))]
         private void ReinitializeComponents()
         {
             // move UI to avoid covering 'paused' message (which has a hardcoded size)
@@ -313,8 +314,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 topMargin += 96;
 
             // init UI
-            var leftArrow = CommonSprites.Icons.LeftArrow;
-            var rightArrow = CommonSprites.Icons.RightArrow;
+            Rectangle leftArrow = CommonSprites.Icons.LeftArrow;
+            Rectangle rightArrow = CommonSprites.Icons.RightArrow;
 
             this.PrevButton = new ClickableTextureComponent(new Rectangle(this.LeftMargin, this.TopMargin + 10, leftArrow.Width, leftArrow.Height), CommonSprites.Icons.Sheet, leftArrow, 1);
             this.Legend = new LegendComponent(this.PrevButton.bounds.Right + this.ArrowPadding, topMargin, this.Layers, this.CurrentLayer.Name, this.LegendEntries);
@@ -369,7 +370,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                 {
                     // get tile data
                     Vector2 position = groupTile.TilePosition;
-                    if (!tiles.TryGetValue(position, out TileDrawData data))
+                    if (!tiles.TryGetValue(position, out TileDrawData? data))
                         data = tiles[position] = new TileDrawData(position);
 
                     // update data
@@ -412,10 +413,10 @@ namespace Pathoschild.Stardew.DataLayers.Framework
                         continue;
 
                     // get neighbors
-                    tiles.TryGetValue(new Vector2(x - 1, y), out TileDrawData left);
-                    tiles.TryGetValue(new Vector2(x + 1, y), out TileDrawData right);
-                    tiles.TryGetValue(new Vector2(x, y - 1), out TileDrawData top);
-                    tiles.TryGetValue(new Vector2(x, y + 1), out TileDrawData bottom);
+                    tiles.TryGetValue(new Vector2(x - 1, y), out TileDrawData? left);
+                    tiles.TryGetValue(new Vector2(x + 1, y), out TileDrawData? right);
+                    tiles.TryGetValue(new Vector2(x, y - 1), out TileDrawData? top);
+                    tiles.TryGetValue(new Vector2(x, y + 1), out TileDrawData? bottom);
 
                     // detect edges
                     foreach (Color color in data.BorderColors.Keys.ToArray())

@@ -1,9 +1,8 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewValley;
 using StardewValley.TerrainFeatures;
@@ -26,7 +25,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         private readonly LegendEntry SpeedGro;
 
         /// <summary>The legend for crops with multiple fertilizers applied, if MultiFertilizer is installed.</summary>
-        private readonly LegendEntry Multiple;
+        private readonly LegendEntry? Multiple;
 
         /// <summary>Handles access to the supported mod integrations.</summary>
         private readonly ModIntegrations Mods;
@@ -51,7 +50,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
                         ? new LegendEntry(I18n.Keys.CropFertilizer_Multiple, Color.Red)
                         : null
                 }
-                .Where(p => p != null)
+                .WhereNotNull()
                 .ToArray();
 
             this.Mods = mods;
@@ -66,7 +65,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         {
             FertilizedTile[] fertilizedTiles = this.GetFertilizedTiles(location, visibleTiles).ToArray();
 
-            bool hasMultiFertilizer = this.Mods.MultiFertilizer.IsLoaded;
+            bool hasMultiFertilizer = this.Multiple != null;
             return
                 new[]
                 {
@@ -76,10 +75,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 
                     // if MultiFertilizer is installed, show crops with multiple fertilizer types in their own group
                     hasMultiFertilizer
-                        ? this.GetGroup(fertilizedTiles, this.Multiple, tile => tile.HasMultiFertilizer)
+                        ? this.GetGroup(fertilizedTiles, this.Multiple!, tile => tile.HasMultiFertilizer)
                         : null
                 }
-                .Where(p => p != null)
+                .WhereNotNull()
                 .ToArray();
         }
 
@@ -122,10 +121,10 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         private FertilizedTile? TryGetFertilizedSoil(GameLocation location, Vector2 tile)
         {
             // get dirt tile
-            HoeDirt dirt = this.GetDirt(location, tile);
+            HoeDirt? dirt = this.GetDirt(location, tile);
 
             // get applied fertilizer item IDs
-            HashSet<int> applied = null;
+            HashSet<int>? applied = null;
             if (dirt is not null && !this.IsDeadCrop(dirt))
             {
                 if (this.Mods.MultiFertilizer.IsLoaded)

@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
@@ -34,6 +33,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>The action tile property values which trigger a warp.</summary>
         /// <remarks>See remarks on <see cref="IsWarp"/>.</remarks>
+        [SuppressMessage("ReSharper", "StringLiteralTypo", Justification = "These are game values.")]
         private readonly HashSet<string> WarpActions = new() { "EnterSewer", "LockedDoorWarp", "Mine", "Theater_Entrance", "Warp", "WarpCommunityCenter", "WarpGreenhouse", "WarpMensLocker", "WarpWomensLocker", "WizardHatch" };
 
         /// <summary>The touch action tile property values which trigger a warp.</summary>
@@ -131,12 +131,12 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
             // check tile actions
             Tile buildingTile = location.map.GetLayer("Buildings").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-            if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out PropertyValue action) && this.WarpActions.Contains(action.ToString().Split(' ')[0]))
+            if (buildingTile != null && buildingTile.Properties.TryGetValue("Action", out PropertyValue? action) && this.WarpActions.Contains(action.ToString().Split(' ')[0]))
                 return true;
 
             // check tile touch actions
             Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-            if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
+            if (backTile != null && backTile.Properties.TryGetValue("TouchAction", out PropertyValue? touchAction) && this.TouchWarpActions.Contains(touchAction.ToString().Split(' ')[0]))
                 return true;
 
             // check map warps
@@ -166,7 +166,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             if (location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Passable", "Buildings") != null)
             {
                 Tile backTile = location.map.GetLayer("Back").PickTile(new Location(tilePixels.X, tilePixels.Y), Game1.viewport.Size);
-                if (backTile == null || !backTile.TileIndexProperties.TryGetValue("Passable", out PropertyValue value) || value != "F")
+                if (backTile == null || !backTile.TileIndexProperties.TryGetValue("Passable", out PropertyValue? value) || value != "F")
                     return true;
             }
 

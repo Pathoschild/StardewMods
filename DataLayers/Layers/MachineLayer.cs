@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +61,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             return new[] { this.Empty, this.Processing, this.Finished }
                 .Select(type =>
                 {
-                    if (!tiles.TryGetValue(type.Id, out TileData[] groupTiles))
+                    if (!tiles.TryGetValue(type.Id, out TileData[]? groupTiles))
                         groupTiles = Array.Empty<TileData>();
 
                     return new TileGroup(groupTiles, outerBorderColor: type.Color);
@@ -84,7 +82,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             IDictionary<Vector2, int> machineStates = this.Mods.Automate.GetMachineStates(location, visibleArea);
             foreach (Vector2 tile in visibleTiles)
             {
-                LegendEntry type = null;
+                LegendEntry? type = null;
                 if (machineStates.TryGetValue(tile, out int state))
                 {
                     type = state switch

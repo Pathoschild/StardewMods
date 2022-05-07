@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,7 +94,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             }
 
             // yield unharvested crops
-            var unharvested = this
+            IEnumerable<TileData> unharvested = this
                 .GetUnharvestedCrops(location, visibleTiles, covered)
                 .Select(pos => new TileData(pos, this.NotCovered));
             groups.Add(new TileGroup(unharvested, outerBorderColor: this.NotCovered.Color));

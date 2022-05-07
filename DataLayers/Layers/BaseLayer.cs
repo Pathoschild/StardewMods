@@ -1,11 +1,11 @@
-#nullable disable
-
+using System;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.DataLayers.Framework;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.DataLayers.Layers
 {
@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         public KeybindList ShortcutKey { get; }
 
         /// <inheritdoc />
-        public LegendEntry[] Legend { get; protected set; }
+        public LegendEntry[] Legend { get; protected set; } = Array.Empty<LegendEntry>();
 
         /// <inheritdoc />
         public bool AlwaysShowGrid { get; protected set; }
@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="config">The data layers settings.</param>
         protected BaseLayer(string name, LayerConfig config)
         {
-            this.Id = this.GetType().FullName;
+            this.Id = this.GetType().FullName!;
             this.Name = name;
             this.UpdateTickRate = (int)(60 / config.UpdatesPerSecond);
             this.UpdateWhenVisibleTilesChange = config.UpdateWhenViewChange;
@@ -63,11 +63,11 @@ namespace Pathoschild.Stardew.DataLayers.Layers
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to check.</param>
         /// <param name="ignorePot">Whether to ignore dirt in indoor pots.</param>
-        protected HoeDirt GetDirt(GameLocation location, Vector2 tile, bool ignorePot = false)
+        protected HoeDirt? GetDirt(GameLocation location, Vector2 tile, bool ignorePot = false)
         {
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature terrain) && terrain is HoeDirt dirt)
                 return dirt;
-            if (!ignorePot && location.objects.TryGetValue(tile, out Object obj) && obj is IndoorPot pot)
+            if (!ignorePot && location.objects.TryGetValue(tile, out SObject obj) && obj is IndoorPot pot)
                 return pot.hoeDirt.Value;
 
             return null;
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
 
         /// <summary>Get whether dirt contains a dead crop.</summary>
         /// <param name="dirt">The dirt to check.</param>
-        protected bool IsDeadCrop(HoeDirt dirt)
+        protected bool IsDeadCrop(HoeDirt? dirt)
         {
             return dirt?.crop?.dead.Value == true;
         }

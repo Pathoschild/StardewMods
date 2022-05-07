@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.Common;
@@ -23,25 +21,25 @@ namespace Pathoschild.Stardew.DataLayers
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The available data layers.</summary>
-        private ILayer[] Layers;
+        private ILayer[]? Layers;
 
         /// <summary>Maps key bindings to the layers they should activate.</summary>
         private readonly IDictionary<KeybindList, ILayer> ShortcutMap = new Dictionary<KeybindList, ILayer>();
 
         /// <summary>Handles access to the supported mod integrations.</summary>
-        private ModIntegrations Mods;
+        private ModIntegrations? Mods;
 
         /// <summary>The current overlay being displayed, if any.</summary>
-        private readonly PerScreen<DataLayerOverlay> CurrentOverlay = new();
+        private readonly PerScreen<DataLayerOverlay?> CurrentOverlay = new();
 
         /// <summary>The last layer ID used by the player in this session.</summary>
-        private string LastLayerId;
+        private string? LastLayerId;
 
 
         /*********
@@ -76,7 +74,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // init mod integrations
             this.Mods = new ModIntegrations(this.Monitor, this.Helper.ModRegistry, this.Helper.Reflection);
@@ -85,11 +83,11 @@ namespace Pathoschild.Stardew.DataLayers
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
             // init layers
             // need to do this after the save is loaded so translations use the selected language
-            this.Layers = this.GetLayers(this.Config, this.Mods).ToArray();
+            this.Layers = this.GetLayers(this.Config, this.Mods!).ToArray();
             foreach (ILayer layer in this.Layers)
             {
                 if (layer.ShortcutKey.IsBound)
@@ -137,7 +135,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <inheritdoc cref="IGameLoopEvents.ReturnedToTitle"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        private void OnReturnedToTitle(object? sender, ReturnedToTitleEventArgs e)
         {
             this.CurrentOverlay.Value?.Dispose();
             this.CurrentOverlay.Value = null;
@@ -147,7 +145,7 @@ namespace Pathoschild.Stardew.DataLayers
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (this.Layers == null)
                 return;
@@ -166,7 +164,7 @@ namespace Pathoschild.Stardew.DataLayers
                 {
                     if (overlayVisible)
                     {
-                        this.CurrentOverlay.Value.Dispose();
+                        this.CurrentOverlay.Value!.Dispose();
                         this.CurrentOverlay.Value = null;
                     }
                     else
@@ -180,26 +178,26 @@ namespace Pathoschild.Stardew.DataLayers
                 // cycle layers
                 else if (overlayVisible && keys.NextLayer.JustPressed())
                 {
-                    this.CurrentOverlay.Value.NextLayer();
+                    this.CurrentOverlay.Value!.NextLayer();
                     this.Helper.Input.SuppressActiveKeybinds(keys.NextLayer);
                 }
                 else if (overlayVisible && keys.PrevLayer.JustPressed())
                 {
-                    this.CurrentOverlay.Value.PrevLayer();
+                    this.CurrentOverlay.Value!.PrevLayer();
                     this.Helper.Input.SuppressActiveKeybinds(keys.PrevLayer);
                 }
 
                 // shortcut to layer
                 else if (overlayVisible)
                 {
-                    foreach (var pair in this.ShortcutMap)
+                    foreach ((KeybindList key, ILayer layer) in this.ShortcutMap)
                     {
-                        if (pair.Key.JustPressed())
+                        if (key.JustPressed())
                         {
-                            if (pair.Value != this.CurrentOverlay.Value.CurrentLayer)
+                            if (layer != this.CurrentOverlay.Value!.CurrentLayer)
                             {
-                                this.CurrentOverlay.Value.SetLayer(pair.Value);
-                                this.Helper.Input.SuppressActiveKeybinds(pair.Key);
+                                this.CurrentOverlay.Value.SetLayer(layer);
+                                this.Helper.Input.SuppressActiveKeybinds(key);
                             }
                             break;
                         }
@@ -211,9 +209,9 @@ namespace Pathoschild.Stardew.DataLayers
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
-            var overlay = this.CurrentOverlay.Value;
+            DataLayerOverlay? overlay = this.CurrentOverlay.Value;
             if (overlay != null)
             {
                 overlay.Update();
@@ -230,7 +228,7 @@ namespace Pathoschild.Stardew.DataLayers
             return
                 Context.IsPlayerFree // player is free to roam
                 || (Game1.activeClickableMenu is CarpenterMenu && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()) // on Robin's or Wizard's build screen
-                || (this.Mods.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
+                || (this.Mods!.PelicanFiber.IsLoaded && this.Mods.PelicanFiber.IsBuildMenuOpen() && this.Helper.Reflection.GetField<bool>(Game1.activeClickableMenu, "onFarm").GetValue()); // on Pelican Fiber's build screen
         }
     }
 }

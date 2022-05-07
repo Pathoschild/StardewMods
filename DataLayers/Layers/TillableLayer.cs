@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -112,7 +110,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers
             // non-dirt terrain features
             if (location.terrainFeatures.TryGetValue(tile, out TerrainFeature feature))
             {
-                HoeDirt dirt = feature as HoeDirt;
+                HoeDirt? dirt = feature as HoeDirt;
                 if (dirt == null || dirt.crop != null)
                     return true;
             }

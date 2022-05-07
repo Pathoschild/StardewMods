@@ -1,5 +1,3 @@
-#nullable disable
-
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -70,7 +68,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
             foreach (Vector2 tile in visibleTiles)
             {
                 // get crop
-                Crop crop = this.GetDirt(location, tile)?.crop;
+                Crop? crop = this.GetDirt(location, tile)?.crop;
                 if (crop == null)
                     continue;
 
