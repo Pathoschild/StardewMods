@@ -1,6 +1,5 @@
-#nullable disable
-
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using StardewModdingAPI;
@@ -27,7 +26,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
             if (!Context.IsWorldReady)
                 return false;
 
-            var animation = Game1.player.Sprite.CurrentAnimation;
+            List<FarmerSprite.AnimationFrame>? animation = Game1.player.Sprite.CurrentAnimation;
             return
                 animation?.Any() == true
                 && animation[0].frame == 98;

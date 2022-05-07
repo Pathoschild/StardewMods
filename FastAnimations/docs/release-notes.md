@@ -2,6 +2,7 @@
 
 # Release notes
 ## Upcoming release
+* Updated for SMAPI 3.14.0.
 * Added support for horse flute animation.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
 

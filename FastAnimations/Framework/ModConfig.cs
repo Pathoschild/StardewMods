@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace Pathoschild.Stardew.FastAnimations.Framework
 {
     /// <summary>The mod configuration.</summary>

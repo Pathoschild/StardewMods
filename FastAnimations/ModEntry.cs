@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Pathoschild.Stardew.FastAnimations.Framework;
 using Pathoschild.Stardew.FastAnimations.Handlers;
@@ -17,10 +16,10 @@ namespace Pathoschild.Stardew.FastAnimations
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The animation handlers which skip or accelerate specific animations.</summary>
-        private IAnimationHandler[] Handlers;
+        private IAnimationHandler[] Handlers = null!; // set in Entry
 
 
         /*********
@@ -51,7 +50,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForFastAnimations(
@@ -76,7 +75,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
             // initialize handlers
             foreach (IAnimationHandler handler in this.Handlers)
@@ -86,7 +85,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
+        private void OnWarped(object? sender, WarpedEventArgs e)
         {
             if (!Context.IsWorldReady || Game1.eventUp || !this.Handlers.Any() || !e.IsLocalPlayer)
                 return;
@@ -98,7 +97,7 @@ namespace Pathoschild.Stardew.FastAnimations
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             if (Game1.eventUp || !this.Handlers.Any())
                 return;
@@ -118,6 +117,7 @@ namespace Pathoschild.Stardew.FastAnimations
         ** Methods
         ****/
         /// <summary>Apply the mod configuration if it changed.</summary>
+        [MemberNotNull(nameof(ModEntry.Handlers))]
         private void UpdateConfig()
         {
             this.Handlers = this.GetHandlers(this.Config).ToArray();
@@ -128,7 +128,7 @@ namespace Pathoschild.Stardew.FastAnimations
         {
             // player animations
             if (config.EatAndDrinkSpeed > 1 || config.DisableEatAndDrinkConfirmation)
-                yield return new EatingHandler(this.Helper.Reflection, config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
+                yield return new EatingHandler(config.EatAndDrinkSpeed, config.DisableEatAndDrinkConfirmation);
             if (config.FishingSpeed > 1)
                 yield return new FishingHandler(config.FishingSpeed);
             if (config.HarvestSpeed > 1)

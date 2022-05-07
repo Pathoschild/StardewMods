@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using StardewValley;
 
@@ -65,7 +63,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>Apply an animation update for each frame that should be skipped in the current tick.</summary>
         /// <param name="run">Run one animation frame.</param>
         /// <param name="until">Get whether the animation should stop being skipped.</param>
-        protected void ApplySkips(Action run, Func<bool> until = null)
+        protected void ApplySkips(Action run, Func<bool>? until = null)
         {
             this.ApplySkips(this.GetSkipsThisTick(), run, until);
         }
@@ -74,7 +72,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <param name="skips">The number of frames to skip for the current tick.</param>
         /// <param name="run">Run one animation frame.</param>
         /// <param name="until">Get whether the animation should stop being skipped.</param>
-        protected void ApplySkips(int skips, Action run, Func<bool> until = null)
+        protected void ApplySkips(int skips, Action run, Func<bool>? until = null)
         {
             for (int i = 0; i < skips; i++)
             {
@@ -87,7 +85,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
 
         /// <summary>Speed up the player by the given multiplier for the current update tick.</summary>
         /// <param name="until">Get whether the animation should stop being skipped.</param>
-        protected void SpeedUpPlayer(Func<bool> until = null)
+        protected void SpeedUpPlayer(Func<bool>? until = null)
         {
             this.ApplySkips(
                 run: () => Game1.player.Update(Game1.currentGameTime, Game1.player.currentLocation),

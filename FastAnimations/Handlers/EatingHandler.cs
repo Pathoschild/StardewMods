@@ -1,6 +1,5 @@
-#nullable disable
-
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
@@ -18,11 +17,8 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         /*********
         ** Fields
         *********/
-        /// <summary>Simplifies access to private code.</summary>
-        private readonly IReflectionHelper Reflection;
-
         /// <summary>The temporary animations showing the item thrown into the air.</summary>
-        private readonly HashSet<TemporaryAnimatedSprite> ItemAnimations = new HashSet<TemporaryAnimatedSprite>();
+        private readonly HashSet<TemporaryAnimatedSprite> ItemAnimations = new();
 
         /// <summary>Whether to disable the confirmation dialogue before eating or drinking.</summary>
         private readonly bool DisableConfirmation;
@@ -32,13 +28,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         ** Public methods
         *********/
         /// <summary>Construct an instance.</summary>
-        /// <param name="reflection">Simplifies access to private code.</param>
         /// <param name="multiplier">The animation speed multiplier to apply.</param>
         /// <param name="disableConfirmation">Whether to disable the confirmation dialogue before eating or drinking.</param>
-        public EatingHandler(IReflectionHelper reflection, float multiplier, bool disableConfirmation)
+        public EatingHandler(float multiplier, bool disableConfirmation)
             : base(multiplier)
         {
-            this.Reflection = reflection;
             this.DisableConfirmation = disableConfirmation;
         }
 
@@ -57,7 +51,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         public override void Update(int playerAnimationID)
         {
             // disable confirmation
-            if (this.DisableConfirmation && this.IsConfirmationShown(out DialogueBox eatMenu))
+            if (this.DisableConfirmation && this.IsConfirmationShown(out DialogueBox? eatMenu))
             {
                 // When the animation starts, the game shows a yes/no dialogue asking the player to
                 // confirm they really want to eat the item. This code answers 'yes' and closes the
@@ -80,7 +74,7 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
                 if ((indexInAnimation == 1 || (indexInAnimation == 2 && playerAnimationID == FarmerSprite.eat)) && Game1.player.itemToEat is Object obj && obj.ParentSheetIndex != Object.stardrop)
                 {
                     Rectangle sourceRect = Game1.getSourceRectForStandardTileSheet(Game1.objectSpriteSheet, obj.ParentSheetIndex, 16, 16);
-                    TemporaryAnimatedSprite tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
+                    TemporaryAnimatedSprite? tempAnimation = Game1.player.currentLocation.TemporarySprites.LastOrDefault(p => p.Texture == Game1.objectSpriteSheet && p.sourceRect == sourceRect);
                     if (tempAnimation != null)
                         this.ItemAnimations.Add(tempAnimation);
                 }
@@ -113,11 +107,11 @@ namespace Pathoschild.Stardew.FastAnimations.Handlers
         *********/
         /// <summary>Get whether the eat/drink confirmation is being shown.</summary>
         /// <param name="menu">The confirmation menu.</param>
-        private bool IsConfirmationShown(out DialogueBox menu)
+        private bool IsConfirmationShown([NotNullWhen(true)] out DialogueBox? menu)
         {
             if (Game1.player.itemToEat != null && Game1.activeClickableMenu is DialogueBox dialogue)
             {
-                string actualLine = dialogue.dialogues.FirstOrDefault();
+                string? actualLine = dialogue.dialogues.FirstOrDefault();
                 bool isConfirmation =
                     actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3159", Game1.player.itemToEat.DisplayName) // drink
                     || actualLine == GameI18n.GetString("Strings\\StringsFromCSFiles:Game1.cs.3160", Game1.player.itemToEat.DisplayName); // eat
