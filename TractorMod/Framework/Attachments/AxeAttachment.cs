@@ -1,8 +1,8 @@
-#nullable disable
-
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
@@ -48,7 +48,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             return tool is Axe;
         }
@@ -61,8 +61,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
+            tool = tool.AssertNotNull();
+
             // clear debris
             if (this.Config.ClearDebris && (this.IsTwig(tileObj) || this.IsWeed(tileObj)))
                 return this.UseToolOnTile(tool, tile, player, location);
@@ -94,22 +96,23 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // cut resource stumps
             if (this.Config.ClearDebris || this.Config.CutGiantCrops)
             {
-                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile, player, out var applyTool);
-
-                // giant crops
-                if (this.Config.CutGiantCrops && clump is GiantCrop)
+                if (this.TryGetResourceClumpCoveringTile(location, tile, player, out ResourceClump? clump, out Func<Tool, bool>? applyTool))
                 {
-                    applyTool(tool);
-                    return true;
-                }
+                    // giant crops
+                    if (this.Config.CutGiantCrops && clump is GiantCrop)
+                    {
+                        applyTool(tool);
+                        return true;
+                    }
 
-                // big stumps and fallen logs
-                // This needs to check if the axe upgrade level is high enough first, to avoid spamming
-                // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
-                if (this.Config.ClearDebris && clump != null && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
-                {
-                    applyTool(tool);
-                    return true;
+                    // big stumps and fallen logs
+                    // This needs to check if the axe upgrade level is high enough first, to avoid spamming
+                    // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
+                    if (this.Config.ClearDebris && this.ResourceUpgradeLevelsNeeded.ContainsKey(clump.parentSheetIndex.Value) && tool.UpgradeLevel >= this.ResourceUpgradeLevelsNeeded[clump.parentSheetIndex.Value])
+                    {
+                        applyTool(tool);
+                        return true;
+                    }
                 }
             }
 

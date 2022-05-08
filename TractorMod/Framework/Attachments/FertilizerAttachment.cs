@@ -1,5 +1,3 @@
-#nullable disable
-
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
@@ -37,9 +35,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
-            return this.Config.Enable && item?.Category == SObject.fertilizerCategory && item.Stack > 0;
+            return
+                this.Config.Enable
+                && item is { Category: SObject.fertilizerCategory, Stack: > 0 };
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             if (item == null || item.Stack <= 0)
                 return false;
@@ -68,8 +68,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
 
                 // crop fertilizer
                 default:
-                    // get unfertilised dirt
-                    if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj, out _) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
+                    // get unfertilized dirt
+                    if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out _) || dirt.fertilizer.Value != HoeDirt.noFertilizer)
                         return false;
 
                     // ignore if there's a giant crop, meteorite, etc covering the tile

@@ -1,5 +1,3 @@
-#nullable disable
-
 namespace Pathoschild.Stardew.TractorMod.Framework.Config
 {
     /// <summary>Configuration for the melee blunt weapon attachment.</summary>

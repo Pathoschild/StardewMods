@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
@@ -41,10 +40,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ** Accessors
         *********/
         /// <summary>The garage texture to apply.</summary>
-        public Texture2D GarageTexture { get; private set; }
+        public Texture2D? GarageTexture { get; private set; }
 
         /// <summary>The tractor texture to apply.</summary>
-        public Texture2D TractorTexture { get; private set; }
+        public Texture2D? TractorTexture { get; private set; }
 
 
         /*********
@@ -69,7 +68,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public void UpdateTextures()
         {
             // tractor
-            if (this.TryLoadFromContent("tractor", out Texture2D texture, out string error))
+            if (this.TryLoadFromContent("tractor", out Texture2D? texture, out string? error))
                 this.TractorTexture = texture;
             else
                 this.Monitor.Log(error, LogLevel.Error);
@@ -118,10 +117,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
         /// <param name="horse">The horse to change.</param>
         /// <param name="isTractor">Get whether a horse is a tractor.</param>
-        public void ApplyTextures(Horse horse, Func<Horse, bool> isTractor)
+        public void ApplyTextures(Horse? horse, Func<Horse?, bool> isTractor)
         {
             if (this.TractorTexture != null && isTractor(horse))
-                horse.Sprite.spriteTexture = this.TractorTexture;
+                horse!.Sprite.spriteTexture = this.TractorTexture;
         }
 
         /// <summary>Apply the mod textures to the given stable, if applicable.</summary>
@@ -139,7 +138,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         {
             // Allow for garages from older versions that didn't get normalized correctly.
             // This can be removed once support for legacy data is dropped.
-            if (e.NameWithoutLocale.IsEquivalentTo("Buildings/TractorGarage"))
+            if (e.NameWithoutLocale.IsEquivalentTo("Buildings/TractorGarage") && this.GarageTexture != null)
                 e.LoadFrom(() => this.GarageTexture, AssetLoadPriority.Low);
 
             // load tractor or garage texture
@@ -147,7 +146,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             {
                 string key = PathUtilities.GetSegments(e.NameWithoutLocale.Name).Last();
                 e.LoadFrom(
-                    () => this.TryLoadFromFile(key, out Texture2D texture, out string error)
+                    () => this.TryLoadFromFile(key, out Texture2D? texture, out string? error)
                         ? texture
                         : throw new InvalidOperationException(error),
                     AssetLoadPriority.Exclusive
@@ -170,7 +169,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'Tractor' or 'Garage').</param>
         /// <param name="texture">The loaded texture, if found.</param>
         /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
-        private bool TryLoadFromContent(string spritesheet, out Texture2D texture, out string error)
+        private bool TryLoadFromContent(string spritesheet, [NotNullWhen(true)] out Texture2D? texture, [NotNullWhen(false)] out string? error)
         {
             try
             {
@@ -191,9 +190,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
         /// <param name="texture">The loaded texture, if found.</param>
         /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
-        private bool TryLoadFromFile(string spritesheet, out Texture2D texture, out string error)
+        private bool TryLoadFromFile(string spritesheet, [NotNullWhen(true)] out Texture2D? texture, [NotNullWhen(false)] out string? error)
         {
-            texture = this.TryGetTextureKey(spritesheet, out string key, out error)
+            texture = this.TryGetTextureKey(spritesheet, out string? key, out error)
                 ? this.ContentHelper.Load<Texture2D>(key)
                 : null;
 
@@ -204,14 +203,14 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="spritesheet">The spritesheet name without the path or extension (like 'tractor' or 'garage').</param>
         /// <param name="key">The asset key to use, if found.</param>
         /// <param name="error">A human-readable error to show to the user if texture wasn't found.</param>
-        private bool TryGetTextureKey(string spritesheet, out string key, out string error)
+        private bool TryGetTextureKey(string spritesheet, [NotNullWhen(true)] out string? key, [NotNullWhen(false)] out string? error)
         {
             string seasonalKey = $"{Game1.currentSeason}_{spritesheet}.png";
             string defaultKey = $"{spritesheet}.png";
 
             foreach (string possibleKey in new[] { seasonalKey, defaultKey })
             {
-                if (this.AssetMap.TryGetValue(possibleKey, out string actualKey) && File.Exists(Path.Combine(this.DirectoryPath, $"assets/{actualKey}")))
+                if (this.AssetMap.TryGetValue(possibleKey, out string? actualKey) && File.Exists(Path.Combine(this.DirectoryPath, $"assets/{actualKey}")))
                 {
                     key = $"assets/{actualKey}";
                     error = null;
@@ -231,7 +230,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             var assetMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             // get assets folder
-            DirectoryInfo dir = new DirectoryInfo(Path.Combine(directoryPath, "assets"));
+            DirectoryInfo dir = new(Path.Combine(directoryPath, "assets"));
             if (!dir.Exists)
             {
                 this.Monitor.Log("Tractor Mod's 'assets' folder is missing. The mod will not work correctly. Try reinstalling the mod to fix this.", LogLevel.Error);

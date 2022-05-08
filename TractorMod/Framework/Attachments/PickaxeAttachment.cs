@@ -1,7 +1,8 @@
-#nullable disable
-
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
@@ -48,7 +49,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             return tool is Pickaxe;
         }
@@ -61,8 +62,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
+            tool = tool.AssertNotNull();
+
             // break stones
             if (this.Config.ClearDebris && tileObj?.Name == "Stone")
                 return this.UseToolOnTile(tool, tile, player, location);
@@ -100,8 +103,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             // 'need to upgrade your tool' messages. Based on ResourceClump.performToolAction.
             if (this.Config.ClearBouldersAndMeteorites)
             {
-                ResourceClump clump = this.GetResourceClumpCoveringTile(location, tile, player, out var applyTool);
-                if (clump != null && (!this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel) || tool.UpgradeLevel >= requiredUpgradeLevel))
+                if (this.CanBreakBoulderAt(location, tile, player, tool, out Func<Tool, bool>? applyTool))
                 {
                     applyTool(tool);
                     return true;
@@ -116,6 +118,26 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             }
 
             return false;
+        }
+
+
+        /*********
+        ** Private methods
+        *********/
+        /// <summary>Get whether the given tile contains a boulder which can be broken with the current pickaxe.</summary>
+        /// <param name="location">The location to check.</param>
+        /// <param name="tile">The tile to check.</param>
+        /// <param name="player">The current player.</param>
+        /// <param name="tool">The tool selected by the player.</param>
+        /// <param name="applyTool">Applies a tool to the resource clump.</param>
+        private bool CanBreakBoulderAt(GameLocation location, Vector2 tile, Farmer player, Tool tool, [NotNullWhen(true)] out Func<Tool, bool>? applyTool)
+        {
+            return
+                this.TryGetResourceClumpCoveringTile(location, tile, player, out ResourceClump? clump, out applyTool)
+                && (
+                    !this.ResourceUpgradeLevelsNeeded.TryGetValue(clump.parentSheetIndex.Value, out int requiredUpgradeLevel)
+                    || tool.UpgradeLevel >= requiredUpgradeLevel
+                );
         }
     }
 }

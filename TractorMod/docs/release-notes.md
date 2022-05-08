@@ -2,7 +2,7 @@
 
 # Release notes
 ## Upcoming release
-* Updated for the upcoming SMAPI 4.0.0.
+* Updated for SMAPI 3.14.0.
 * Fixed pickaxe breaking objects that are placed on dirt, even if breaking objects is disabled.
 
 ## 4.15.0

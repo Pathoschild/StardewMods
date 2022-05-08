@@ -1,7 +1,6 @@
-#nullable disable
-
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Common;
@@ -62,16 +61,16 @@ namespace Pathoschild.Stardew.TractorMod
         ** State
         ****/
         /// <summary>The mod settings.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Manages textures loaded for the tractor and garage.</summary>
-        private TextureManager TextureManager;
+        private TextureManager TextureManager = null!; // set in Entry
 
         /// <summary>The backing field for <see cref="TractorManager"/>.</summary>
-        private PerScreen<TractorManager> TractorManagerImpl;
+        private PerScreen<TractorManager> TractorManagerImpl = null!; // set in Entry
 
         /// <summary>The tractor being ridden by the current player.</summary>
         private TractorManager TractorManager => this.TractorManagerImpl.Value;
@@ -138,7 +137,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add to Farm Expansion carpenter menu
             FarmExpansionIntegration farmExpansion = new FarmExpansionIntegration(this.Helper.ModRegistry, this.Monitor);
@@ -171,7 +170,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
             // load legacy data
             Migrator.AfterLoad(this.Helper, this.Monitor, this.ModManifest.Version, this.GetBlueprint);
@@ -180,7 +179,7 @@ namespace Pathoschild.Stardew.TractorMod
             this.IsEnabled = Context.IsMainPlayer;
             if (!this.IsEnabled)
             {
-                ISemanticVersion hostVersion = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID)?.GetMod(this.ModManifest.UniqueID)?.Version;
+                ISemanticVersion? hostVersion = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID)?.GetMod(this.ModManifest.UniqueID)?.Version;
                 if (hostVersion == null)
                 {
                     this.IsEnabled = false;
@@ -199,7 +198,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnDayStarted(object sender, DayStartedEventArgs e)
+        private void OnDayStarted(object? sender, DayStartedEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
@@ -215,7 +214,7 @@ namespace Pathoschild.Stardew.TractorMod
                     foreach (Stable garage in this.GetGaragesIn(location))
                     {
                         // spawn new tractor if needed
-                        Horse tractor = this.FindHorse(garage.HorseId);
+                        Horse? tractor = this.FindHorse(garage.HorseId);
                         if (!garage.isUnderConstruction())
                         {
                             Vector2 tractorTile = this.GetDefaultTractorTile(garage);
@@ -247,7 +246,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IContentEvents.AssetRequested"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnAssetRequested(object sender, AssetRequestedEventArgs e)
+        private void OnAssetRequested(object? sender, AssetRequestedEventArgs e)
         {
             this.TextureManager.OnAssetRequested(e);
         }
@@ -255,7 +254,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        private void OnLocationListChanged(object? sender, LocationListChangedEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
@@ -274,7 +273,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IWorldEvents.NpcListChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnNpcListChanged(object sender, NpcListChangedEventArgs e)
+        private void OnNpcListChanged(object? sender, NpcListChangedEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
@@ -298,7 +297,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
+        private void OnWarped(object? sender, WarpedEventArgs e)
         {
             if (!e.IsLocalPlayer || !this.TractorManager.IsCurrentPlayerRiding)
                 return;
@@ -317,7 +316,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
@@ -353,13 +352,13 @@ namespace Pathoschild.Stardew.TractorMod
 
             // update tractor effects
             if (Context.IsPlayerFree)
-                this.TractorManager?.Update();
+                this.TractorManager.Update();
         }
 
         /// <inheritdoc cref="IGameLoopEvents.DayEnding"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnDayEnding(object sender, DayEndingEventArgs e)
+        private void OnDayEnding(object? sender, DayEndingEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
@@ -401,7 +400,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IGameLoopEvents.Saved"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnSaved(object sender, SavedEventArgs e)
+        private void OnSaved(object? sender, SavedEventArgs e)
         {
             Migrator.AfterSave();
         }
@@ -409,20 +408,20 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IDisplayEvents.RenderedWorld"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnRenderedWorld(object sender, RenderedWorldEventArgs e)
+        private void OnRenderedWorld(object? sender, RenderedWorldEventArgs e)
         {
             if (!this.IsEnabled)
                 return;
 
             // render debug radius
-            if (this.Config.HighlightRadius && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager?.IsCurrentPlayerRiding == true)
+            if (this.Config.HighlightRadius && Context.IsWorldReady && Game1.activeClickableMenu == null && this.TractorManager.IsCurrentPlayerRiding)
                 this.TractorManager.DrawRadius(Game1.spriteBatch);
         }
 
         /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
         {
             if (!this.IsEnabled || !Context.IsWorldReady)
                 return;
@@ -455,7 +454,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (!this.IsEnabled || !Context.IsPlayerFree)
                 return;
@@ -469,7 +468,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
+        private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
         {
             // tractor request from a farmhand
             if (e.Type == this.RequestTractorMessageID && Context.IsMainPlayer && e.FromModID == this.ModManifest.UniqueID)
@@ -505,7 +504,7 @@ namespace Pathoschild.Stardew.TractorMod
             var reflection = this.Helper.Reflection;
             var toolConfig = this.Config.StandardAttachments;
 
-            manager.UpdateConfig(this.Config, this.Keys, new IAttachment[]
+            manager.UpdateConfig(this.Config, this.Keys, new IAttachment?[]
             {
                 new CustomAttachment(this.Config.CustomAttachments, modRegistry, reflection), // should be first so it can override default attachments
                 new AxeAttachment(toolConfig.Axe, modRegistry, reflection),
@@ -545,7 +544,7 @@ namespace Pathoschild.Stardew.TractorMod
         /// <summary>Summon an unused tractor to a player's current position, if any are available. If the player is a farmhand in multiplayer, only tractors in synced locations can be found by this method.</summary>
         /// <param name="player">The target player.</param>
         /// <returns>Returns whether a tractor was successfully summoned.</returns>
-        private bool SummonLocalTractorTo(Farmer player)
+        private bool SummonLocalTractorTo(Farmer? player)
         {
             // get player info
             if (player == null)
@@ -554,17 +553,14 @@ namespace Pathoschild.Stardew.TractorMod
             Vector2 tile = player.getTileLocation();
 
             // find nearest tractor in player's current location (if available), else any location
-            Horse tractor = this
+            Horse? tractor = this
                 .GetTractorsIn(location, includeMounted: false)
                 .OrderBy(match => Utility.distance(tile.X, tile.Y, match.getTileX(), match.getTileY()))
                 .FirstOrDefault();
-            if (tractor == null)
-            {
-                tractor = this
-                    .GetLocations()
-                    .SelectMany(loc => this.GetTractorsIn(loc, includeMounted: false))
-                    .FirstOrDefault();
-            }
+            tractor ??= this
+                .GetLocations()
+                .SelectMany(loc => this.GetTractorsIn(loc, includeMounted: false))
+                .FirstOrDefault();
 
             // create a tractor if needed
             if (tractor == null && this.Config.CanSummonWithoutGarage && Context.IsMainPlayer)
@@ -585,7 +581,7 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Send a tractor back home.</summary>
         /// <param name="tractor">The tractor to dismiss.</param>
-        private void DismissTractor(Horse tractor)
+        private void DismissTractor(Horse? tractor)
         {
             if (tractor == null || !this.IsTractor(tractor))
                 return;
@@ -596,7 +592,7 @@ namespace Pathoschild.Stardew.TractorMod
 
             // get home position (garage may have been moved since the tractor was spawned)
             Farm location = Game1.getFarm();
-            Stable garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.HorseId == tractor.HorseId);
+            Stable? garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.HorseId == tractor.HorseId);
             Vector2 tile = garage != null
                 ? this.GetDefaultTractorTile(garage)
                 : tractor.DefaultPosition;
@@ -662,7 +658,7 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Find all horses with a given ID.</summary>
         /// <param name="id">The unique horse ID.</param>
-        private Horse FindHorse(Guid id)
+        private Horse? FindHorse(Guid id)
         {
             foreach (GameLocation location in this.GetLocations())
             {
@@ -678,7 +674,7 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Get whether a stable is a tractor garage.</summary>
         /// <param name="stable">The stable to check.</param>
-        private bool IsGarage(Stable stable)
+        private bool IsGarage([NotNullWhen(true)] Stable? stable)
         {
             return
                 stable != null
@@ -690,7 +686,7 @@ namespace Pathoschild.Stardew.TractorMod
 
         /// <summary>Get whether a horse is a tractor.</summary>
         /// <param name="horse">The horse to check.</param>
-        private bool IsTractor(Horse horse)
+        private bool IsTractor([NotNullWhen(true)] Horse? horse)
         {
             return TractorManager.IsTractor(horse);
         }
