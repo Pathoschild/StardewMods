@@ -161,7 +161,7 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
                     max: maxSpeed
                 )
 
-                .AddSectionTitle(I18n.Config_AnimationSpeeds)
+                .AddSectionTitle(I18n.Config_UiSpeeds)
                 .AddNumberField(
                     name: I18n.Config_TitleMenu_Name,
                     tooltip: () => I18n.Config_TitleMenu_Tooltip(defaultValue: defaultConfig.TitleMenuTransitionSpeed),
