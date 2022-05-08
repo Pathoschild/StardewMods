@@ -155,8 +155,9 @@ namespace ContentPatcher.Framework.Commands.Commands
                     return new[] { type };
             }
 
-            // else by full name
+            // by type name
             {
+                HashSet<Type> typesByName = new();
                 HashSet<Type> typesByFullName = new();
                 foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
@@ -169,6 +170,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                         {
                             if (string.Equals(type.FullName, name, StringComparison.OrdinalIgnoreCase))
                                 typesByFullName.Add(type);
+                            if (string.Equals(type.Name, name, StringComparison.OrdinalIgnoreCase))
+                                typesByName.Add(type);
                         }
                         catch
                         {
@@ -177,7 +180,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                     }
                 }
 
-                return typesByFullName.OrderBy(p => p.FullName, HumanSortComparer.DefaultIgnoreCase).ToArray();
+                HashSet<Type> matches = typesByFullName.Any()
+                    ? typesByFullName
+                    : typesByName;
+                return matches.OrderBy(p => p.FullName, HumanSortComparer.DefaultIgnoreCase).ToArray();
+
             }
         }
 
