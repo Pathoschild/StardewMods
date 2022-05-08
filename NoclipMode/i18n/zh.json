@@ -9,7 +9,6 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
     "config.title.general-options": "常规",
     "config.enabled-message.name": "显示启用提示",
     "config.enabled-message.desc": "当启用穿墙模式时，显示“已启用”的提示。",

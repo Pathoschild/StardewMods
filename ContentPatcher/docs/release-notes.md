@@ -12,6 +12,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Updated for SMAPI 3.14.0.
 * Added support for [config UI sections](author-guide/config.md#display-options) (thanks to Shockah!).
+* The `patch export` console command's optional type argument can now be `image` or an unqualified type name (thanks to atravita!).
 * Fixed content packs reloaded unnecessarily on startup.
 * Fixed `patch summary` showing non-ready token values in some cases.
 

@@ -4,6 +4,7 @@
 ## Upcoming release
 * Updated for SMAPI 3.14.0.
 * Internal changes to prepare for the upcoming Stardew Valley 1.6.
+* Improved translations. Thanks to Becks723 (added Chinese)!
 
 ## 1.9.8
 Released 27 February 2022 for SMAPI 3.13.0 or later.
