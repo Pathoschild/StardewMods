@@ -1,5 +1,3 @@
-#nullable disable
-
 using System;
 using Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu;
 using Pathoschild.Stardew.SmallBeachFarm.Framework.Config;
