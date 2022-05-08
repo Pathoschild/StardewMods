@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pathoschild.Stardew.Common.Commands;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Framework.ContentManagers;
 using StardewValley;
@@ -51,69 +52,46 @@ namespace ContentPatcher.Framework.Commands.Commands
                       - A string/string dictionary: System.Collections.Generic.Dictionary`2[[System.String],[System.String]]
                       - A number/string dictionary: System.Collections.Generic.Dictionary`2[[System.Int32],[System.String]]
                       - Movie reactions: System.Collections.Generic.List<StardewValley.GameData.Movies.MovieReaction>
+
+                  You can also specify 'image' as the type for a Texture2D value.
             ";
         }
 
         /// <inheritdoc />
         public override void Handle(string[] args)
         {
-            // get asset name
+            // validate arguments
             if (args.Length is < 1 or > 2)
             {
                 this.Monitor.Log("The 'patch export' command expects one argument containing the target asset name, and an optional second argument for the data type. See 'patch help' for more info.", LogLevel.Error);
                 return;
             }
+
+            // get arguments
             string assetName = args[0];
+            string? typeName = args.Length > 1 ? args[1] : null;
 
-            // get type
-            string typeName = args.Length > 1 ? args[1] : "System.Object";
-
-            // The fully qualified name for a Texture2D is kind of long.
-            // Here are some shortcuts.
-            if (typeName.Equals("image", StringComparison.OrdinalIgnoreCase))
+            // load type
+            Type? type = null;
             {
-                typeName = "Microsoft.Xna.Framework.Graphics.Texture2D, MonoGame.Framework";
-            }
-            Type? type = Type.GetType(typeName);
+                Type[] possibleTypes = this.TryGetTypes(typeName);
+                switch (possibleTypes.Length)
+                {
+                    case 0:
+                        this.Monitor.Log($"Couldn't find type '{typeName}'. Type `patch help export` for usage.", LogLevel.Error);
+                        break;
 
+                    case 1:
+                        type = possibleTypes[0];
+                        break;
+
+                    default:
+                        this.Monitor.Log($"Found multiple types matching '{typeName}'. Please enter one of these exact values:\n    - \"{string.Join("\n    - \"", possibleTypes.Select(possibleType => possibleType.AssemblyQualifiedName))}\"", LogLevel.Error);
+                        break;
+                }
+            }
             if (type is null)
-            { // Type.GetType has failed to find something. Let's try searching manually.
-
-                HashSet<Type> possibleTypes = new();
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    if (assembly.IsDynamic)
-                    {
-                        continue;
-                    }
-                    try
-                    {   // Maybe .GetExportedTypes() ? Wasn't sure if nonpublic types should be excluded.
-                        // It's fine to ignore case here, I check to see if only one type possibly matches later.
-                        possibleTypes.UnionWith(assembly.GetTypes().Where((Type t) => t.FullName?.Equals(typeName, StringComparison.OrdinalIgnoreCase) == true));
-                    }
-                    catch (Exception ex)
-                    {
-                        this.Monitor.Log($"Failed in searching for type '{typeName}' with error message: {ex}", LogLevel.Error);
-                    }
-                }
-
-                if (possibleTypes.Count == 0)
-                { // still empty handed.
-                    this.Monitor.Log($"Could not load type '{typeName}'. This must be the C# full type name like System.Collections.Generic.Dictionary`2[[System.String],[System.String]].", LogLevel.Error);
-                    return;
-                }
-                else if (possibleTypes.Count > 1)
-                {// more than one possible match. Ask user to specify.
-                    this.Monitor.Log($"Found more than one possible match for type '{typeName}'. Please specify the full qualified type name! Possibilites:\n\t{string.Join("\n\t", possibleTypes.Select( (a) => a.AssemblyQualifiedName ))}", LogLevel.Error);
-                    return;
-                }
-                else
-                {
-                    type = possibleTypes.First();
-                    this.Monitor.Log($"Attempting patch export with {type.AssemblyQualifiedName}.", LogLevel.Info);
-                }
-
-            }
+                return;
 
             // load asset
             object asset;
@@ -123,7 +101,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             }
             catch (ContentLoadException ex)
             {
-                this.Monitor.Log($"Can't load asset '{assetName}': {ex.Message}", LogLevel.Error);
+                this.Monitor.Log($"Can't load asset '{assetName}' with type '{type.FullName}': {ex.Message}", LogLevel.Error);
                 return;
             }
 
@@ -158,6 +136,51 @@ namespace ContentPatcher.Framework.Commands.Commands
         /*********
         ** Private methods
         *********/
+        /// <summary>Get the types matching a name, if any.</summary>
+        /// <param name="name">The type name.</param>
+        private Type[] TryGetTypes(string? name)
+        {
+            // none specified, default to object
+            if (string.IsNullOrWhiteSpace(name))
+                return new[] { typeof(object) };
+
+            // short alias
+            if (string.Equals(name, "image", StringComparison.OrdinalIgnoreCase))
+                return new[] { typeof(Texture2D) };
+
+            // by assembly-qualified name
+            {
+                Type? type = Type.GetType(name);
+                if (type != null)
+                    return new[] { type };
+            }
+
+            // else by full name
+            {
+                HashSet<Type> typesByFullName = new();
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if (assembly.IsDynamic)
+                        continue;
+
+                    foreach (Type type in assembly.GetExportedTypes())
+                    {
+                        try
+                        {
+                            if (string.Equals(type.FullName, name, StringComparison.OrdinalIgnoreCase))
+                                typesByFullName.Add(type);
+                        }
+                        catch
+                        {
+                            // ignore invalid types
+                        }
+                    }
+                }
+
+                return typesByFullName.OrderBy(p => p.FullName, HumanSortComparer.DefaultIgnoreCase).ToArray();
+            }
+        }
+
         /// <summary>Reverse premultiplication applied to an image asset by the XNA content pipeline.</summary>
         /// <param name="texture">The texture to adjust.</param>
         private Texture2D UnpremultiplyTransparency(Texture2D texture)
