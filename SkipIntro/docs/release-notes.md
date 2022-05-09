@@ -1,9 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.9.9
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
 * Updated for SMAPI 3.14.0.
-* Internal changes to prepare for the upcoming Stardew Valley 1.6.
+* Internal changes to prepare for the next game update.
 * Improved translations. Thanks to Becks723 (added Chinese)!
 
 ## 1.9.8

@@ -9,7 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.26.0
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
 * Updated for SMAPI 3.14.0.
 * Added support for [config UI sections](author-guide/config.md#display-options) (thanks to Shockah!).
 * The `patch export` console command's optional type argument can now be `image` or an unqualified type name (thanks to atravita!).

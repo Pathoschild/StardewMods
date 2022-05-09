@@ -1,9 +1,11 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.37.1
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
 * Updated for SMAPI 3.14.0.
-* Added support for custom NPC roommates.
+* Fixed support for custom NPC roommates.
 * Fixed error in crop lookup when it has invalid season data.
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian)!
 

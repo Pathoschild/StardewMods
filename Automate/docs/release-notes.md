@@ -1,10 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.26.0
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
 * Updated for SMAPI 3.14.0.
 * Added option to toggle whether Automate is enabled through [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098).
-* Fixed saving machine overrides through Generic Mod Config Menu.
+* Fixed machine overrides through Generic Mod Config Menu not saved correctly.
 * Fixed error when a geode crusher produces a [golden helmet](https://stardewvalleywiki.com/Golden_Helmet).
 * Improved translations. Thanks to ChulkyBow (updated Ukrainian), JingGongGi (added Chinese), and Pedrowser (added Portuguese)!
 
