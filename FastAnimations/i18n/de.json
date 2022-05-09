@@ -24,6 +24,9 @@
     "config.harvest.name": "Ernten",
     "config.harvest.tooltip": "Wie schnell Sie Getreide und Futter von Hand ernten. Standardwert {{defaultValue}}x.",
 
+    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
+
     "config.milk.name": "Melken",
     "config.milk.tooltip": "Wie schnell Sie den Milcheimer verwenden. Standardwert {{defaultValue}}x.",
 

@@ -3,24 +3,10 @@ using System.Collections.Generic;
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Metadata for a recipe that can be crafted using a building.</summary>
-    internal class BuildingRecipeData
-    {
-        /*********
-        ** Accessors
-        *********/
-        /// <summary>The building key.</summary>
-        public string BuildingKey { get; set; }
-
-        /// <summary>The items needed to craft the recipe (item ID => number needed).</summary>
-        public IDictionary<int, int> Ingredients { get; set; }
-
-        /// <summary>The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</summary>
-        public int[] ExceptIngredients { get; set; }
-
-        /// <summary>The item created by the recipe.</summary>
-        public int Output { get; set; }
-
-        /// <summary>The number of items produced by the recipe (or <c>null</c> for the default).</summary>
-        public int? OutputCount { get; set; }
-    }
+    /// <param name="BuildingKey">The building key.</param>
+    /// <param name="Ingredients">The items needed to craft the recipe (item ID => number needed).</param>
+    /// <param name="ExceptIngredients">The ingredients which can't be used in this recipe (typically exceptions for a category ingredient).</param>
+    /// <param name="Output">The item created by the recipe.</param>
+    /// <param name="OutputCount">The number of items produced by the recipe (or <c>null</c> for the default).</param>
+    internal record BuildingRecipeData(string BuildingKey, Dictionary<int, int> Ingredients, int[]? ExceptIngredients, int Output, int? OutputCount);
 }

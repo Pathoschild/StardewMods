@@ -19,46 +19,46 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             public static readonly Texture2D Sheet = Game1.menuTexture;
 
             /// <summary>The top-left corner.</summary>
-            public static readonly Rectangle TopLeft = new Rectangle(12, 12, 24, 24);
+            public static readonly Rectangle TopLeft = new(12, 12, 24, 24);
 
             /// <summary>The top-right corner.</summary>
-            public static readonly Rectangle TopRight = new Rectangle(220, 12, 24, 24);
+            public static readonly Rectangle TopRight = new(220, 12, 24, 24);
 
             /// <summary>The bottom-left corner.</summary>
-            public static readonly Rectangle BottomLeft = new Rectangle(12, 220, 24, 24);
+            public static readonly Rectangle BottomLeft = new(12, 220, 24, 24);
 
             /// <summary>The bottom-right corner.</summary>
-            public static readonly Rectangle BottomRight = new Rectangle(220, 220, 24, 24);
+            public static readonly Rectangle BottomRight = new(220, 220, 24, 24);
 
             /// <summary>The middle-left corner.</summary>
-            public static readonly Rectangle MiddleLeft = new Rectangle(12, 84, 24, 24);
+            public static readonly Rectangle MiddleLeft = new(12, 84, 24, 24);
 
             /// <summary>The middle-right corner.</summary>
-            public static readonly Rectangle MiddleRight = new Rectangle(220, 84, 24, 24);
+            public static readonly Rectangle MiddleRight = new(220, 84, 24, 24);
 
             /// <summary>The top border.</summary>
-            public static readonly Rectangle Top = new Rectangle(40, 12, 1, 24);
+            public static readonly Rectangle Top = new(40, 12, 1, 24);
 
             /// <summary>The left border.</summary>
-            public static readonly Rectangle Left = new Rectangle(12, 36, 24, 1);
+            public static readonly Rectangle Left = new(12, 36, 24, 1);
 
             /// <summary>The right border.</summary>
-            public static readonly Rectangle Right = new Rectangle(220, 40, 24, 1);
+            public static readonly Rectangle Right = new(220, 40, 24, 1);
 
             /// <summary>The bottom border.</summary>
-            public static readonly Rectangle Bottom = new Rectangle(36, 220, 1, 24);
+            public static readonly Rectangle Bottom = new(36, 220, 1, 24);
 
             /// <summary>The middle border.</summary>
-            public static readonly Rectangle Middle = new Rectangle(132, 84, 1, 24);
+            public static readonly Rectangle Middle = new(132, 84, 1, 24);
 
             /// <summary>The menu background.</summary>
-            public static readonly Rectangle Background = new Rectangle(64, 128, 64, 64);
+            public static readonly Rectangle Background = new(64, 128, 64, 64);
 
             /// <summary>The square borders representing an inventory slot.</summary>
-            public static readonly Rectangle Slot = new Rectangle(128, 128, 64, 64);
+            public static readonly Rectangle Slot = new(128, 128, 64, 64);
 
             /// <summary>A disabled variant of <see cref="Slot"/>.</summary>
-            public static readonly Rectangle SlotDisabled = new Rectangle(64, 896, 64, 64);
+            public static readonly Rectangle SlotDisabled = new(64, 896, 64, 64);
         }
 
         /// <summary>Sprites used to draw buttons.</summary>
@@ -68,7 +68,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
             public static readonly Texture2D Sheet = Game1.mouseCursors;
 
             /// <summary>The inventory 'organize' button.</summary>
-            public static readonly Rectangle Organize = new Rectangle(162, 440, 16, 16);
+            public static readonly Rectangle Organize = new(162, 440, 16, 16);
         }
 
         /// <summary>Sprites used to draw a textbox.</summary>

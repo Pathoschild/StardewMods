@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -34,23 +35,23 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input arguments.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidateInput(IInputArguments input, out string error);
+        bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error);
 
         /// <summary>Validate that the provided values are valid for the given input arguments (regardless of whether they match).</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidateValues(IInputArguments input, InvariantHashSet values, out string error);
+        bool TryValidateValues(IInputArguments input, InvariantHashSet values, [NotNullWhen(false)] out string? error);
 
-        /// <summary>Get the set of valid input arguments if restricted, or an empty collection if unrestricted.</summary>
-        InvariantHashSet GetValidPositionalArgs();
+        /// <summary>Get the set of valid input arguments if restricted, or null/empty if unrestricted.</summary>
+        InvariantHashSet? GetValidPositionalArgs();
 
         /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
-        bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues);
+        bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
@@ -61,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
         /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
         /// <param name="value">The raw value.</param>
-        string NormalizeValue(string value);
+        string? NormalizeValue(string? value);
 
         /// <summary>Get the current values in the expected sort order for indexing.</summary>
         /// <param name="input">The input arguments.</param>

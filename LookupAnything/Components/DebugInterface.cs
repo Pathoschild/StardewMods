@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                 {
                     // get metadata
                     bool spriteAreaIntersects = target.GetWorldArea().Intersects(tileArea);
-                    ISubject subject = target.GetSubject();
+                    ISubject? subject = target.GetSubject();
 
                     // draw tile
                     {
@@ -116,7 +116,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
                 // show current target name (if any)
                 {
-                    ISubject subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, hasCursor: Game1.wasMouseVisibleThisFrame);
+                    ISubject? subject = this.TargetFactory.GetSubjectFrom(Game1.player, currentLocation, hasCursor: Game1.wasMouseVisibleThisFrame);
                     if (subject != null)
                         this.GameHelper.DrawHoverBox(spriteBatch, subject.Name, new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f), Game1.uiViewport.Width / 4f);
                 }

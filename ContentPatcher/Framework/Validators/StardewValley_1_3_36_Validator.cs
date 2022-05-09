@@ -29,28 +29,30 @@ namespace ContentPatcher.Framework.Validators
         ** Public methods
         *********/
         /// <summary>Validate a content pack.</summary>
-        /// <param name="asset">The asset being loaded.</param>
+        /// <param name="assetName">The asset name being loaded.</param>
         /// <param name="data">The loaded asset data to validate.</param>
         /// <param name="patch">The patch which loaded the asset.</param>
         /// <param name="error">An error message which indicates why validation failed.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        public override bool TryValidate<T>(IAssetInfo asset, T data, IPatch patch, out string error)
+        public override bool TryValidate<T>(IAssetName assetName, T data, IPatch patch, [NotNullWhen(false)] out string? error)
         {
             // detect vanilla tilesheets removed in SDV 1.3.36
             if (data is Map map)
             {
-                string mapFolderPath = Path.GetDirectoryName(patch.FromAsset);
+                string? mapFolderPath = Path.GetDirectoryName(patch.FromAsset);
                 foreach (TileSheet tilesheet in map.TileSheets)
                 {
                     string curKey = tilesheet.ImageSource;
 
                     // skip if tilesheet exists relative to the content pack
-                    string mapRelativeSource = Path.Combine(mapFolderPath, curKey);
+                    string mapRelativeSource = mapFolderPath != null
+                        ? Path.Combine(mapFolderPath, curKey)
+                        : curKey;
                     if (patch.ContentPack.HasFile(mapRelativeSource))
                         continue;
 
                     // detect obsolete tilesheet references
-                    if (this.IsObsoleteTilesheet(curKey, out string newKey))
+                    if (this.IsObsoleteTilesheet(curKey, out string? newKey))
                     {
                         error = $"references vanilla tilesheet '{curKey}' removed in Stardew Valley 1.3.36, should use '{newKey}' instead";
                         return false;
@@ -69,7 +71,7 @@ namespace ContentPatcher.Framework.Validators
         /// <summary>Get whether a given tilesheet image source is obsolete.</summary>
         /// <param name="curKey">The tilesheet image source.</param>
         /// <param name="newKey">The key that <paramref name="curKey"/> should be replaced with, if it's obsolete.</param>
-        private bool IsObsoleteTilesheet(string curKey, out string newKey)
+        private bool IsObsoleteTilesheet(string? curKey, [NotNullWhen(true)] out string? newKey)
         {
             if (curKey == null)
             {

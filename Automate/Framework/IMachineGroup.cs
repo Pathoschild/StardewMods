@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
 namespace Pathoschild.Stardew.Automate.Framework
@@ -9,7 +10,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Accessors
         *********/
         /// <summary>The main location containing the group (as formatted by <see cref="MachineGroupFactory.GetLocationKey"/>), unless this is an aggregate machine group.</summary>
-        string LocationKey { get; }
+        string? LocationKey { get; }
 
         /// <summary>The machines in the group.</summary>
         IMachine[] Machines { get; }
@@ -21,6 +22,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         Vector2[] Tiles { get; }
 
         /// <summary>Whether the machine group is linked to a Junimo chest.</summary>
+        [MemberNotNullWhen(false, nameof(IMachineGroup.LocationKey))]
         bool IsJunimoGroup { get; }
 
         /// <summary>Whether the group has the minimum requirements to enable internal automation (i.e., at least one chest and one machine).</summary>

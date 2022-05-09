@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location);
+        bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location);
 
         /// <summary>Apply the tool to the given tile.</summary>
         /// <param name="tile">The tile to modify.</param>
@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location);
+        bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location);
 
         /// <summary>Method called when the tractor attachments have been activated for a location.</summary>
         /// <param name="location">The current tractor location.</param>

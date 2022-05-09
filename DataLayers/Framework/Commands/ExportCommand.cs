@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
         ** Fields
         *********/
         /// <summary>Get the current data layer, if any.</summary>
-        private readonly Func<ILayer> CurrentLayer;
+        private readonly Func<ILayer?> CurrentLayer;
 
 
         /*********
@@ -27,7 +27,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="currentLayer">Get the current data layer, if any.</param>
-        public ExportCommand(IMonitor monitor, Func<ILayer> currentLayer)
+        public ExportCommand(IMonitor monitor, Func<ILayer?> currentLayer)
             : base(monitor, "export")
         {
             this.CurrentLayer = currentLayer;
@@ -54,7 +54,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
             }
 
             // get current data layer
-            ILayer layer = this.CurrentLayer();
+            ILayer? layer = this.CurrentLayer();
             if (layer == null)
             {
                 this.Monitor.Log("There's no data layer being rendered; open the overlay in-game before using this command.", LogLevel.Error);
@@ -70,7 +70,7 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
 
                 foreach (TileData tile in group.Tiles)
                 {
-                    if (!export.TryGetValue(tile.Type.Id, out ExportLegendGroup exportGroup))
+                    if (!export.TryGetValue(tile.Type.Id, out ExportLegendGroup? exportGroup))
                         export[tile.Type.Id] = exportGroup = new ExportLegendGroup(tile.Type.Id, tile.Type.Name);
 
                     exportGroup.Tiles.Add(tile.TilePosition);
@@ -79,8 +79,8 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
 
             // init export path
             string exportName = $"{DateTime.UtcNow:yyyy-MM-dd'T'HHmmss} {layer.Name} @ {Game1.currentLocation.Name}";
-            string fullTargetPath = Path.Combine(Constants.ExecutionPath, "layer-export", string.Join("_", exportName.Split(Path.GetInvalidFileNameChars())) + ".json");
-            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath));
+            string fullTargetPath = Path.Combine(Constants.GamePath, "layer-export", string.Join("_", exportName.Split(Path.GetInvalidFileNameChars())) + ".json");
+            Directory.CreateDirectory(Path.GetDirectoryName(fullTargetPath)!);
 
             // export
             File.WriteAllText(fullTargetPath, JsonConvert.SerializeObject(export, Formatting.Indented));
@@ -111,32 +111,12 @@ namespace Pathoschild.Stardew.DataLayers.Framework.Commands
         }
 
         /// <summary>A group of tiles associated with a given legend.</summary>
-        private class ExportLegendGroup
+        /// <param name="Id">A unique identifier for the legend entry.</param>
+        /// <param name="DisplayName">The translated legend entry name.</param>
+        private record ExportLegendGroup(string Id, string DisplayName)
         {
-            /*********
-            ** Accessors
-            *********/
-            /// <summary>A unique identifier for the legend entry.</summary>
-            public string Id { get; }
-
-            /// <summary>The translated legend entry name.</summary>
-            public string DisplayName { get; }
-
             /// <summary>The tiles in the group.</summary>
-            public List<Vector2> Tiles { get; } = new List<Vector2>();
-
-
-            /*********
-            ** Public methods
-            *********/
-            /// <summary>Construct an instance.</summary>
-            /// <param name="id">A unique identifier for the legend entry.</param>
-            /// <param name="displayName">The translated legend entry name.</param>
-            public ExportLegendGroup(string id, string displayName)
-            {
-                this.Id = id;
-                this.DisplayName = displayName;
-            }
+            public List<Vector2> Tiles { get; } = new();
         }
     }
 }

@@ -16,5 +16,8 @@
     "config.islands.tooltip": "Füge Meeresinseln mit zusätzlicher Landfläche hinzu.",
 
     "config.beach-sounds.name": "Strandgeräusche abspielen",
-    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab."
+    "config.beach-sounds.tooltip": "Spiele die Hintergrundmusik des Strandes (z. B. Wellengeräusche) auf der Strandfarm ab.",
+
+    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
 }

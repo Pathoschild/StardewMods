@@ -39,7 +39,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         public bool UpdateContext(IContext context)
         {
             bool changed = this.TokenString.UpdateContext(context);
-            this.SetValue(this.TokenString.Value);
+            this.SetValue(this.TokenString.Value!);
             return changed;
         }
 

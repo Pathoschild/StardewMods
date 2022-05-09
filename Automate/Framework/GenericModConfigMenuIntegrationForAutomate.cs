@@ -52,6 +52,12 @@ namespace Pathoschild.Stardew.Automate.Framework
             menu
                 .AddSectionTitle(I18n.Config_Title_MainOptions)
                 .AddCheckbox(
+                    name: I18n.Config_Enabled_Name,
+                    tooltip: I18n.Config_Enabled_Desc,
+                    get: config => config.Enabled,
+                    set: (config, value) => config.Enabled = value
+                )
+                .AddCheckbox(
                     name: I18n.Config_JunimoHutsOutputGems_Name,
                     tooltip: I18n.Config_JunimoHutsOutputGems_Desc,
                     get: config => config.PullGemstonesFromJunimoHuts,
@@ -110,17 +116,14 @@ namespace Pathoschild.Stardew.Automate.Framework
 
             // machine overrides
             menu.AddSectionTitle(I18n.Config_Title_MachineOverrides);
-            if (this.Data != null)
+            foreach (var entry in this.Data.DefaultMachineOverrides)
             {
-                foreach (var entry in this.Data.DefaultMachineOverrides)
-                {
-                    menu.AddCheckbox(
-                        name: () => this.GetTranslatedMachineName(entry.Key),
-                        tooltip: () => I18n.Config_Override_Desc(machineName: this.GetTranslatedMachineName(entry.Key)),
-                        get: config => this.IsMachineEnabled(config, entry.Key),
-                        set: (config, value) => this.SetCustomOverride(config, entry.Key, value)
-                    );
-                }
+                menu.AddCheckbox(
+                    name: () => this.GetTranslatedMachineName(entry.Key),
+                    tooltip: () => I18n.Config_Override_Desc(machineName: this.GetTranslatedMachineName(entry.Key)),
+                    get: config => this.IsMachineEnabled(config, entry.Key),
+                    set: (config, value) => this.SetCustomOverride(config, entry.Key, value)
+                );
             }
             menu.AddParagraph(I18n.Config_CustomOverridesNote);
         }
@@ -198,26 +201,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the custom override for a mod, if any.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        public ModConfigMachine GetCustomOverride(ModConfig config, string name)
+        public ModConfigMachine? GetCustomOverride(ModConfig config, string name)
         {
-            return config.MachineOverrides.TryGetValue(name, out ModConfigMachine @override) && @override != null
+            return config.MachineOverrides.TryGetValue(name, out ModConfigMachine? @override)
                 ? @override
                 : null;
         }
 
         /// <summary>Get the default override for a mod, if any.</summary>
-        /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
-        public ModConfigMachine GetDefaultOverride(string name)
+        public ModConfigMachine? GetDefaultOverride(string name)
         {
-            if (this.Data != null)
-            {
-                return this.Data.DefaultMachineOverrides.TryGetValue(name, out ModConfigMachine @override) && @override != null
-                ? @override
-                : null;
-            }
-
-            return null;
+            return this.Data.DefaultMachineOverrides.TryGetValue(name, out ModConfigMachine? @override)
+            ? @override
+            : null;
         }
 
         /// <summary>Get whether a machine is currently enabled.</summary>
@@ -234,15 +231,20 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the custom override for a mod, if any.</summary>
         /// <param name="config">The mod configuration.</param>
         /// <param name="name">The machine name.</param>
+        /// <param name="enabled">Whether to set the machine to enabled.</param>
         public void SetCustomOverride(ModConfig config, string name, bool enabled)
         {
+            // get updated settings
             ModConfigMachine options = this.GetCustomOverride(config, name) ?? new ModConfigMachine { Enabled = enabled };
-            ModConfigMachine defaults = this.GetDefaultOverride(name);
+            options.Enabled = enabled;
 
+            // check if it matches the default
+            ModConfigMachine? defaults = this.GetDefaultOverride(name);
             bool isDefault = defaults != null
                 ? options.Enabled == defaults.Enabled && options.Priority == defaults.Priority
                 : !options.GetCustomSettings().Any();
 
+            // apply
             if (isDefault)
                 config.MachineOverrides.Remove(name);
             else

@@ -143,17 +143,17 @@ namespace ContentPatcher.Framework.Commands.Commands
                 var tokensByProvider =
                     (
                         from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
-                        let inputArgs = token.GetAllowedInputArguments().ToArray()
+                        let inputArgs = token.GetAllowedInputArguments()?.ToArray()
                         let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : Array.Empty<string>()
                         let isMultiValue =
-                            inputArgs.Length > 1
+                            inputArgs?.Length > 1
                             || rootValues.Length > 1
-                            || (inputArgs.Length == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input"))), sort).Count() > 1)
+                            || (inputArgs?.Length == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input"))), sort).Count() > 1)
                         let mod = (token as ModProvidedToken)?.Mod
                         orderby isMultiValue // single-value tokens first, then alphabetically
-                        select new { Mod = mod, Token = token }
+                        select new { Mod = (IManifest?)mod, Token = token }
                     )
-                    .GroupBy(p => p.Mod?.Name?.Trim())
+                    .GroupBy(p => p.Mod?.Name.Trim())
                     .OrderByHuman(p => p.Key) // default tokens (key is null), then tokens added by other mods
                     .ToArray();
                 int labelWidth = Math.Max(tokensByProvider.Max(group => group.Max(p => p.Token.Name.Length)), "token name".Length);
@@ -161,7 +161,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                 // group by provider mod (if any)
                 foreach (var tokenGroup in tokensByProvider)
                 {
-                    if (tokenGroup.Key != null && forModIds.Any() && !forModIds.Contains(tokenGroup.First().Mod.UniqueID))
+                    if (tokenGroup.Key != null && forModIds.Any() && !forModIds.Contains(tokenGroup.First().Mod!.UniqueID))
                         continue;
 
                     // print mod name
@@ -181,8 +181,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine("[ ] n/a");
                         else if (token.RequiresInput)
                         {
-                            InvariantHashSet allowedInputs = token.GetAllowedInputArguments();
-                            if (allowedInputs.Any())
+                            InvariantHashSet? allowedInputs = token.GetAllowedInputArguments();
+                            if (allowedInputs?.Any() == true)
                             {
                                 bool isFirst = true;
                                 foreach (string input in allowedInputs.OrderByHuman())
@@ -281,8 +281,8 @@ namespace ContentPatcher.Framework.Commands.Commands
 
                                 // get input arguments
                                 let validInputs = token.IsReady && token.RequiresInput
-                                    ? token.GetAllowedInputArguments().Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString>()
-                                    : new ITokenString[] { null }
+                                    ? token.GetAllowedInputArguments()?.Select(p => new LiteralString(p, path.With(patchGroup.Key, token.Name, $"input '{p}'"))).AsEnumerable<ITokenString?>() ?? Array.Empty<ITokenString?>()
+                                    : new ITokenString?[] { null }
                                 from ITokenString input in validInputs
 
                                 where !token.RequiresInput || validInputs.Any() // don't show tokens which can't be represented
@@ -291,7 +291,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                                 let result = new
                                 {
                                     Name = token.RequiresInput ? $"{token.Name}:{input}" : token.Name,
-                                    Values = token.IsReady ? this.GetValues(token, new InputArguments(input), sort).ToArray() : Array.Empty<string>(),
+                                    Values = token.IsReady ? this.GetValues(token, input != null ? new InputArguments(input) : InputArguments.Empty, sort).ToArray() : Array.Empty<string>(),
                                     token.IsReady
                                 }
                                 orderby result.Name
@@ -326,22 +326,22 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log target value if different from name
                         {
                             // get patch values
-                            string rawIdentifyingPath = PathUtilities.NormalizeAssetName(patch.ParsedType == PatchType.Include
+                            string? rawIdentifyingPath = PathUtilities.NormalizeAssetName(patch.ParsedType == PatchType.Include
                                 ? patch.RawFromAsset
                                 : patch.RawTargetAsset
                             );
-                            ITokenString parsedIdentifyingPath = patch.ParsedType == PatchType.Include
+                            ITokenString? parsedIdentifyingPath = patch.ParsedType == PatchType.Include
                                 ? patch.ParsedFromAsset
                                 : patch.ParsedTargetAsset;
 
                             // get raw name if different
                             // (ignore differences in whitespace, capitalization, and path separators)
-                            string rawValue = !PathUtilities.NormalizeAssetName(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
+                            string? rawValue = !PathUtilities.NormalizeAssetName(patch.PathWithoutContentPackPrefix.ToString().Replace(" ", "")).ContainsIgnoreCase(rawIdentifyingPath?.Replace(" ", ""))
                                 ? $"{patch.ParsedType?.ToString() ?? patch.RawType} {rawIdentifyingPath}"
                                 : null;
 
                             // get parsed value
-                            string parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
+                            string? parsedValue = patch.MatchesContext && parsedIdentifyingPath?.HasAnyTokens == true
                                 ? PathUtilities.NormalizeAssetName(parsedIdentifyingPath.Value)
                                 : null;
 
@@ -362,16 +362,16 @@ namespace ContentPatcher.Framework.Commands.Commands
                         }
 
                         // log reason not applied
-                        string errorReason = patch.GetReasonNotLoaded();
+                        string? errorReason = patch.GetReasonNotLoaded();
                         if (errorReason != null)
                             output.Append($"  // {errorReason}");
 
                         // log common issues if not applied
                         if (errorReason == null && patch.IsLoaded && !patch.IsApplied && patch.ParsedTargetAsset.IsMeaningful())
                         {
-                            string assetName = patch.ParsedTargetAsset.Value;
+                            string assetName = patch.ParsedTargetAsset.Value!;
 
-                            List<string> issues = new List<string>();
+                            List<string> issues = new();
                             if (this.AssetNameWithContentPattern.IsMatch(assetName))
                                 issues.Add("shouldn't include 'Content/' prefix");
                             if (this.AssetNameWithExtensionPattern.IsMatch(assetName))
@@ -389,12 +389,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log update rate issues
                         if (patch.Patch != null)
                         {
-                            foreach (var pair in tokenManager.TokensWithSpecialUpdateRates)
+                            foreach ((UpdateRate rate, string label, InvariantHashSet tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
                             {
-                                UpdateRate rate = pair.Item1;
-                                string label = pair.Item2;
-                                InvariantHashSet tokenNames = pair.Item3;
-
                                 if (!patch.Patch.UpdateRate.HasFlag(rate))
                                 {
                                     var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
@@ -422,10 +418,13 @@ namespace ContentPatcher.Framework.Commands.Commands
                             if (!changeLabels.Any())
                                 continue;
 
-                            if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet effects))
-                                effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
+                            if (patch.ParsedTargetAsset?.Value != null)
+                            {
+                                if (!effectsByPatch.TryGetValue(patch.ParsedTargetAsset.Value, out InvariantHashSet? effects))
+                                    effectsByPatch[patch.ParsedTargetAsset.Value] = effects = new InvariantHashSet();
 
-                            effects.AddMany(patch.GetChangeLabels());
+                                effects.AddMany(patch.GetChangeLabels());
+                            }
                         }
 
                         output.AppendLine();
@@ -437,8 +436,8 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine($"      asset name{"".PadRight(maxAssetNameWidth - "asset name".Length)} | changes");
                             output.AppendLine($"      ----------{"".PadRight(maxAssetNameWidth - "----------".Length, '-')} | -------");
 
-                            foreach (var pair in effectsByPatch.OrderByHuman(p => p.Key))
-                                output.AppendLine($"      {pair.Key}{"".PadRight(maxAssetNameWidth - pair.Key.Length)} | {string.Join("; ", pair.Value.OrderByHuman())}");
+                            foreach ((string target, InvariantHashSet patchesForTarget) in effectsByPatch.OrderByHuman(p => p.Key))
+                                output.AppendLine($"      {target}{"".PadRight(maxAssetNameWidth - target.Length)} | {string.Join("; ", patchesForTarget.OrderByHuman())}");
                         }
                         else
                             output.AppendLine("   No current changes.");
@@ -472,6 +471,9 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <param name="sort">Whether to sort the values for display.</param>
         private IEnumerable<string> GetValues(IToken token, IInputArguments input, bool sort)
         {
+            if (!token.IsReady)
+                return Array.Empty<string>();
+
             IEnumerable<string> values = token.GetValues(input);
 
             if (sort && Enum.TryParse(token.Name, ignoreCase: true, out ConditionType type) && this.SortTokens.Contains(type))

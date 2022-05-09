@@ -5,7 +5,9 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using Object = StardewValley.Object;
 
 namespace Pathoschild.Stardew.Automate.Framework
 {
@@ -38,7 +40,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to check.</param>
         public IEnumerable<object> GetEntities(Vector2 tile)
         {
-            return this.Entities.TryGetValue(tile, out object[] entities)
+            return this.Entities.TryGetValue(tile, out object[]? entities)
                 ? entities
                 : Array.Empty<object>();
         }
@@ -52,21 +54,21 @@ namespace Pathoschild.Stardew.Automate.Framework
         private IEnumerable<KeyValuePair<Vector2, object>> Scan(GameLocation location)
         {
             // objects
-            foreach (var pair in location.netObjects.Pairs)
-                yield return new KeyValuePair<Vector2, object>(pair.Key, pair.Value);
-            foreach (var pair in location.overlayObjects)
-                yield return new KeyValuePair<Vector2, object>(pair.Key, pair.Value);
+            foreach ((Vector2 tile, Object obj) in location.netObjects.Pairs)
+                yield return new KeyValuePair<Vector2, object>(tile, obj);
+            foreach ((Vector2 tile, Object obj) in location.overlayObjects)
+                yield return new KeyValuePair<Vector2, object>(tile, obj);
 
             // furniture
-            foreach (var furniture in location.furniture)
+            foreach (Furniture furniture in location.furniture)
                 yield return new KeyValuePair<Vector2, object>(furniture.TileLocation, furniture);
 
             // terrain features
-            foreach (var pair in location.terrainFeatures.Pairs)
+            foreach ((Vector2 originTile, TerrainFeature feature) in location.terrainFeatures.Pairs)
             {
-                Rectangle box = this.AbsoluteToTileArea(pair.Value.getBoundingBox(pair.Key));
+                Rectangle box = this.AbsoluteToTileArea(feature.getBoundingBox(originTile));
                 foreach (Vector2 tile in this.GetTilesIn(box))
-                    yield return new KeyValuePair<Vector2, object>(tile, pair.Value);
+                    yield return new KeyValuePair<Vector2, object>(tile, feature);
             }
 
             // large terrain features

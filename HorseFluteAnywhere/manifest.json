@@ -1,8 +1,8 @@
 ﻿{
     "Name": "Horse Flute Anywhere",
     "Author": "Pathoschild",
-    "Version": "1.1.14",
-    "MinimumApiVersion": "3.13.0",
+    "Version": "1.1.15",
+    "MinimumApiVersion": "3.14.0",
     "Description": "Summon your horse anywhere at the press of a button.",
     "UniqueID": "Pathoschild.HorseFluteAnywhere",
     "EntryDll": "HorseFluteAnywhere.dll",

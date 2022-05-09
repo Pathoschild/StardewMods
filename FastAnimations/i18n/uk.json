@@ -24,6 +24,9 @@
     "config.harvest.name": "Збір",
     "config.harvest.tooltip": "Як швидко ви можете збирати культури та косити рукою. За замовчуванням: {{defaultValue}}x.",
 
+    "config.horse-flute.name": "Гра на флейті коня",
+    "config.horse-flute.tooltip": "Як швидко ви граєте на флейті коня. За замовчуванням: {{defaultValue}}x.",
+
     "config.milk.name": "Молоко",
     "config.milk.tooltip": "Як швидко ви використовуєте відро для молока. За замовчуванням: {{defaultValue}}x.",
 

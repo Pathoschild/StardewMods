@@ -67,9 +67,9 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IToken GetToken(string name, bool enforceContext)
+        public IToken? GetToken(string name, bool enforceContext)
         {
-            return this.Tokens.TryGetValue(name, out IToken token) && this.ShouldConsider(token, enforceContext)
+            return this.Tokens.TryGetValue(name, out IToken? token) && this.ShouldConsider(token, enforceContext)
                 ? token
                 : null;
         }
@@ -87,7 +87,7 @@ namespace ContentPatcher.Framework
         /// <inheritdoc />
         public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
-            IToken token = this.GetToken(name, enforceContext);
+            IToken? token = this.GetToken(name, enforceContext);
             return token?.GetValues(input) ?? Array.Empty<string>();
         }
 

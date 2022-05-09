@@ -88,7 +88,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
 
         /// <summary>Get whether a bush is an automateable type.</summary>
         /// <param name="bush">The bush to check.</param>
-        public static bool CanAutomate(Bush bush)
+        public static bool CanAutomate(Bush? bush)
         {
             if (bush == null)
                 return false;

@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
-        public IAutomatable GetFor(SObject obj, GameLocation location, in Vector2 tile)
+        public IAutomatable? GetFor(SObject obj, GameLocation location, in Vector2 tile)
         {
             // chest
             if (obj is Chest chest && chest.playerChest.Value)
@@ -218,7 +218,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
-        public IAutomatable GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
+        public IAutomatable? GetFor(TerrainFeature feature, GameLocation location, in Vector2 tile)
         {
             // machine
             switch (feature)
@@ -245,7 +245,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to check.</param>
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
-        public IAutomatable GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
+        public IAutomatable? GetFor(Building building, BuildableGameLocation location, in Vector2 tile)
         {
             // building by type
             switch (building)
@@ -279,7 +279,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile position to check.</param>
         /// <returns>Returns an instance or <c>null</c>.</returns>
         /// <remarks>Shipping bin logic from <see cref="Farm.leftClick"/>, garbage can logic from <see cref="Town.checkAction"/>.</remarks>
-        public IAutomatable GetForTile(GameLocation location, in Vector2 tile)
+        public IAutomatable? GetForTile(GameLocation location, in Vector2 tile)
         {
             // shipping bin on island farm
             if (location is IslandWest farm && (int)tile.X == farm.shippingBinPosition.X && (int)tile.Y == farm.shippingBinPosition.Y)
@@ -323,7 +323,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                 case Flooring floor:
                     return
-                        this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out DataModelFloor entry)
+                        this.Data.FloorNames.TryGetValue(floor.whichFloor.Value, out DataModelFloor? entry)
                         && config.ConnectorNames.Contains(entry.Name);
 
                 default:

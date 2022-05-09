@@ -22,7 +22,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The value provider name.</param>
         /// <param name="isBounded">Whether the token can only contain those values that are explicitly added as possible values.</param>
         /// <param name="scope">The mod namespace in which the token is accessible, or <c>null</c> for any namespace.</param>
-        public ManagedManualToken(string name, bool isBounded, string scope = null)
+        public ManagedManualToken(string name, bool isBounded, string? scope = null)
         {
             this.ValueProvider = new ManualValueProvider(name, isBounded);
             this.Token = new Token(this.ValueProvider, scope);

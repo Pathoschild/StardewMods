@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 
@@ -26,17 +27,17 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="parsedConditions">The parsed conditions (if available).</param>
         /// <param name="matchesContext">Whether the patch should be applied in the current context.</param>
         /// <param name="state">Diagnostic info about the patch.</param>
-        public PatchBaseInfo(Condition[] parsedConditions, bool matchesContext, IContextualState state)
+        public PatchBaseInfo(Condition[]? parsedConditions, bool matchesContext, IContextualState state)
         {
-            this.ParsedConditions = parsedConditions;
+            this.ParsedConditions = parsedConditions ?? Array.Empty<Condition>();
             this.MatchesContext = matchesContext;
             this.State = state;
         }
 
         /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
-        public virtual string GetReasonNotLoaded()
+        public virtual string? GetReasonNotLoaded()
         {
-            var state = this.State;
+            IContextualState state = this.State;
 
             // state error
             if (state.InvalidTokens.Any())
@@ -47,7 +48,7 @@ namespace ContentPatcher.Framework.Commands
                 return string.Join("; ", state.Errors);
 
             // conditions not matched
-            if (!this.MatchesContext && this.ParsedConditions != null)
+            if (!this.MatchesContext && this.ParsedConditions.Any())
             {
                 string[] failedConditions = (
                     from condition in this.ParsedConditions

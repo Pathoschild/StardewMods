@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework.Containers;
@@ -29,8 +30,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
             foreach (ManagedChest chest in chestFactory.GetChests(RangeHandler.Unlimited()))
             {
                 // get underlying item
-                Item item = Migrator.GetStorageItem(chest.Container);
-                if (item == null)
+                Item? item = Migrator.GetStorageItem(chest.Container);
+                if (item is null)
                     continue;
 
                 // ignore custom chests added by another mod
@@ -38,7 +39,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     continue;
 
                 // migrate legacy data
-                if (Migrator.TryParseLegacyData(item, out string originalName, out ContainerData data))
+                if (Migrator.TryParseLegacyData(item, out string? originalName, out ContainerData? data))
                 {
                     item.Name = originalName;
                     data.ToModData(item.modData);
@@ -47,7 +48,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
             // Migrate shipping bin options stored in the save file from ≤1.19.8
             {
-                ContainerData binData = dataHelper.ReadSaveData<ContainerData>("shipping-bin");
+                ContainerData? binData = dataHelper.ReadSaveData<ContainerData>("shipping-bin");
                 if (binData != null)
                 {
                     Farm farm = Game1.getFarm();
@@ -64,7 +65,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Get the underlying storage item from a container, if applicable.</summary>
         /// <param name="container">The container instance.</param>
         /// <returns>Returns the storage item if found, else <c>null</c>.</returns>
-        private static Item GetStorageItem(IContainer container)
+        private static Item? GetStorageItem(IContainer container)
         {
             return container switch
             {
@@ -79,7 +80,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="originalName">The original name for the container.</param>
         /// <param name="data">The parsed container data.</param>
         /// <returns>Returns whether the container has legacy data.</returns>
-        private static bool TryParseLegacyData(Item item, out string originalName, out ContainerData data)
+        private static bool TryParseLegacyData(Item? item, out string? originalName, [NotNullWhen(true)] out ContainerData? data)
         {
             // no serialized info
             if (string.IsNullOrWhiteSpace(item?.Name))
@@ -137,7 +138,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>Get the default name for an item.</summary>
         /// <param name="item">The container whose default name to get.</param>
-        private static string GetLegacyDefaultName(Item item)
+        private static string? GetLegacyDefaultName(Item item)
         {
             // This gets the original item name for items which could be edited in previous Chests
             // Anywhere versions. This deliberately does *not* support new or custom containers

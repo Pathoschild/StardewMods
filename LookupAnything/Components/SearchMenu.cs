@@ -250,7 +250,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
                     // end draw
                     contentBatch.End();
                 }
-                catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle"))
+                catch (ArgumentException ex) when (!BaseMenu.UseSafeDimensions && ex.ParamName == "value" && ex.StackTrace?.Contains("Microsoft.Xna.Framework.Graphics.GraphicsDevice.set_ScissorRectangle") == true)
                 {
                     this.Monitor.Log("The viewport size seems to be inaccurate. Enabling compatibility mode; lookup menu may be misaligned.", LogLevel.Warn);
                     this.Monitor.Log(ex.ToString());
@@ -324,7 +324,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
 
         /// <summary>The method invoked when the player changes the search text.</summary>
         /// <param name="search">The new search text.</param>
-        private void ReceiveSearchTextboxChanged(string search)
+        private void ReceiveSearchTextboxChanged(string? search)
         {
             // get search words
             string[] words = (search ?? "").Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);

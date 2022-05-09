@@ -13,204 +13,193 @@
     /****
     ** Section titles
     ****/
-    // TODO
-    "config.main-options": "Main Options",
-    "config.controls": "Controls",
-    "config.axe": "Axe Features",
-    "config.hoe": "Hoe Features",
-    "config.pickaxe": "Pickaxe Features",
-    "config.scythe": "Scythe Features",
-    "config.melee-blunt": "Melee Blunt Weapons Features",
-    "config.melee-dagger": "Melee Dagger Features",
-    "config.melee-sword": "Melee Sword Features",
-    "config.other-tools": "Other Tools",
-    "config.custom-tools": "Custom Tools",
+    "config.main-options": "常规",
+    "config.controls": "键位",
+    "config.axe": "斧头",
+    "config.hoe": "锄头",
+    "config.pickaxe": "镐子",
+    "config.scythe": "镰刀",
+    "config.melee-blunt": "武器-锤",
+    "config.melee-dagger": "武器-匕首",
+    "config.melee-sword": "武器-剑",
+    "config.other-tools": "其他工具",
+    "config.custom-tools": "自定义工具",
 
 
     /****
     ** Main options
     ****/
-    // TODO
-    "config.distance.name": "Distance",
-    "config.distance.tooltip": "The number of tiles in each direction around the tractor to affect (in addition to the tile under it). Default {{defaultValue}}; a value of {{maxRecommendedValue}} covers most of the visible screen, and higher values may negatively impact game performance.",
+    "config.distance.name": "距离",
+    "config.distance.tooltip": "坐在拖拉机上能够得着的最远网格数。默认{{defaultValue}}格；{{maxRecommendedValue}}格就能覆盖整个屏幕，最好不要超过这个数，因为可能影响性能。",
 
-    "config.speed.name": "Tractor Speed",
-    "config.speed.tooltip": "The speed modifier when riding a tractor. Default {{defaultValue}}.",
+    "config.speed.name": "拖拉机车速",
+    "config.speed.tooltip": "拖拉机车速。默认{{defaultValue}}。",
 
-    "config.magnetic-radius.name": "Magnetic Radius",
-    "config.magnetic-radius.tooltip": "The item magnetism amount (higher values attract items from father away). Default {{defaultValue}}.",
+    "config.magnetic-radius.name": "吸附半径",
+    "config.magnetic-radius.tooltip": "能够吸起掉落物的距离。默认{{defaultValue}}。",
 
-    "config.build-price.name": "Build Price",
-    "config.build-price.tooltip": "The gold price to buy a tractor garage. Default {{defaultValue}}g.",
+    "config.build-price.name": "建造价格",
+    "config.build-price.tooltip": "拖拉机仓库的价格。默认{{defaultValue}}g。",
 
-    "config.can-summon-without-garage.name": "Can Summon Without Garage",
-    "config.can-summon-without-garage.tooltip": "Whether you can summon a temporary tractor without building a garage first.",
+    "config.can-summon-without-garage.name": "未建造仓库时召唤拖拉机",
+    "config.can-summon-without-garage.tooltip": "在未建造拖拉机仓库的情况下，是否能召唤一台临时拖拉机。",
 
-    "config.invincible-on-tractor.name": "Invincible on Tractor",
-    "config.invincible-on-tractor.tooltip": "Whether you should be immune to damage from any source when riding the tractor.",
+    "config.invincible-on-tractor.name": "拖拉机上无敌",
+    "config.invincible-on-tractor.tooltip": "坐在拖拉机上，是否能够免疫任何伤害。",
 
-    "config.highlight-radius.name": "Highlight Radius (Debug)",
-    "config.highlight-radius.tooltip": "Whether to highlight the tractor radius when riding one, to help visualize the distance option.",
+    "config.highlight-radius.name": "高亮显示距离（调试）",
+    "config.highlight-radius.tooltip": "是否突出显示能触及的范围，从而可视化“距离”选项。",
 
 
     /****
     ** Keybind options
     ****/
-    // TODO
-    "config.summon-key.name": "Summon Tractor",
-    "config.summon-key.tooltip": "Warp an available tractor to your position. Default backspace.",
+    "config.summon-key.name": "召唤拖拉机",
+    "config.summon-key.tooltip": "将一台可用的拖拉机传送至你的位置。默认退格键。",
 
-    "config.dismiss-key.name": "Dismiss Tractor",
-    "config.dismiss-key.tooltip": "Return the tractor you're riding to its home.",
+    "config.dismiss-key.name": "收回拖拉机",
+    "config.dismiss-key.tooltip": "将你正在开的拖拉机收回仓库。",
 
-    "config.hold-to-activate-key.name": "Hold to Activate",
-    "config.hold-to-activate-key.tooltip": "If specified, the tractor will only do something while you're holding this button. If nothing is specified, the tractor will work automatically while you're riding it.",
+    "config.hold-to-activate-key.name": "按住以激活功能",
+    "config.hold-to-activate-key.tooltip": "如果有指定键位，只有按住此键时才能激活拖拉机功能。",
 
 
     /****
     ** Trees & bushes
     ****/
-    // TODO
-    "config.chop-fruit-trees-seeds.name": "Chop Fruit Trees (Seeds)",
-    "config.chop-fruit-trees-seeds.tooltip": "Whether to clear fruit tree seeds.",
+    "config.chop-fruit-trees-seeds.name": "清除水果树（种子）",
+    "config.chop-fruit-trees-seeds.tooltip": "是否清除处于种子阶段的水果树。",
 
-    "config.chop-fruit-trees-saplings.name": "Chop Fruit Trees (Saplings)",
-    "config.chop-fruit-trees-saplings.tooltip": "Whether to clear fruit trees which aren't fully grown.",
+    "config.chop-fruit-trees-saplings.name": "清除水果树（树苗）",
+    "config.chop-fruit-trees-saplings.tooltip": "是否清除处于树苗阶段的水果树。",
 
-    "config.chop-fruit-trees-grown.name": "Chop Fruit Trees (Grown)",
-    "config.chop-fruit-trees-grown.tooltip": "Whether to cut fully-grown fruit trees.",
+    "config.chop-fruit-trees-grown.name": "清除水果树（成熟）",
+    "config.chop-fruit-trees-grown.tooltip": "是否清除已长成的水果树。",
 
-    "config.chop-trees-seeds.name": "Chop Trees (Seeds)",
-    "config.chop-trees-seeds.tooltip": "Whether to clear non-fruit tree seeds.",
+    "config.chop-trees-seeds.name": "清除树（种子）",
+    "config.chop-trees-seeds.tooltip": "是否清除处于种子阶段的树。",
 
-    "config.chop-trees-saplings.name": "Chop Trees (Saplings)",
-    "config.chop-trees-saplings.tooltip": "Whether to clear non-fruit trees which aren't fully grown.",
+    "config.chop-trees-saplings.name": "清除树（树苗）",
+    "config.chop-trees-saplings.tooltip": "是否清除处于树苗阶段的树。",
 
-    "config.chop-trees-grown.name": "Chop Trees (Grown)",
-    "config.chop-trees-grown.tooltip": "Whether to clear fully-grown non-fruit trees.",
+    "config.chop-trees-grown.name": "清除树（成熟）",
+    "config.chop-trees-grown.tooltip": "是否清除已长成的树。",
 
-    "config.chop-bushes.name": "Chop Bushes",
-    "config.chop-bushes.tooltip": "Whether to cut bushes that can be chopped.",
+    "config.chop-bushes.name": "清除灌木丛",
+    "config.chop-bushes.tooltip": "是否清除能够砍掉的灌木丛。",
 
-    "config.harvest-fruit-trees.name": "Harvest Fruit Trees",
-    "config.harvest-fruit-trees.tooltip": "Whether to harvest fruit trees.",
+    "config.harvest-fruit-trees.name": "收获水果树",
+    "config.harvest-fruit-trees.tooltip": "是否收获水果树。",
 
 
     /****
     ** Crops/forage/grass
     ****/
-    // TODO
-    "config.clear-dead-crops.name": "Clear Dead Crops",
-    "config.clear-dead-crops.tooltip": "Whether to destroy dead crops.",
+    "config.clear-dead-crops.name": "清除枯萎的农作物",
+    "config.clear-dead-crops.tooltip": "是否清除枯萎的农作物。",
 
-    "config.clear-live-crops.name": "Clear Live Crops",
-    "config.clear-live-crops.tooltip": "Whether to destroy live crops.",
+    "config.clear-live-crops.name": "清除活的农作物",
+    "config.clear-live-crops.tooltip": "是否清除活的农作物。",
 
-    "config.harvest-giant-crops.name": "Harvest Giant Crops",
-    "config.harvest-giant-crops.tooltip": "Whether to cut giant crops.",
+    "config.harvest-giant-crops.name": "收获巨大作物",
+    "config.harvest-giant-crops.tooltip": "是否收获巨大作物。",
 
-    "config.harvest-crops.name": "Harvest Crops",
-    "config.Harvest Crops.tooltip": "Whether to harvest crops.",
+    "config.harvest-crops.name": "收获农作物",
+    "config.Harvest Crops.tooltip": "是否收获农作物。",
 
-    "config.harvest-flowers.name": "Harvest Flowers",
-    "config.harvest-flowers.tooltip": "Whether to harvest flowers.",
+    "config.harvest-flowers.name": "收获花",
+    "config.harvest-flowers.tooltip": "是否收获花。",
 
-    "config.harvest-forage.name": "Harvest Forage",
-    "config.harvest-forage.tooltip": "Whether to harvest forage.",
+    "config.harvest-forage.name": "收获觅食物品",
+    "config.harvest-forage.tooltip": "是否收获觅食物品。",
 
-    "config.harvest-grass.name": "Harvest Grass",
-    "config.harvest-grass.tooltip": "Whether to cut grass. If you have free silo space, this gives you hay as usual.",
+    "config.harvest-grass.name": "收获草",
+    "config.harvest-grass.tooltip": "是否清除草，如果有筒仓，通常会给干草。",
 
 
     /****
     ** Debris
     ****/
-    // TODO
-    "config.clear-debris.name": "Clear Debris",
-    "config.clear-debris.tooltip": "Whether to destroy debris like weeds, twigs, giant stumps, and fallen logs.",
+    "config.clear-debris.name": "清除杂物",
+    "config.clear-debris.tooltip": "是否清除杂物，如杂草、树枝、树桩。",
 
-    "config.clear-weeds.name": "Clear Weeds",
-    "config.clear-weeds.tooltip": "Whether to destroy weeds.",
+    "config.clear-weeds.name": "清除杂草",
+    "config.clear-weeds.tooltip": "是否清除杂草。",
 
 
     /****
     ** Dirt
     ****/
-    // TODO
-    "config.till-dirt.name": "Till Dirt",
-    "config.till-dirt.tooltip": "Whether to till empty dirt.",
+    "config.till-dirt.name": "耕地",
+    "config.till-dirt.tooltip": "是否耕地。",
 
-    "config.dig-artifact-spots.name": "Dig Artifact Spots",
-    "config.dig-artifact-spots.tooltip": "Whether to dig up artifact spots.",
+    "config.dig-artifact-spots.name": "挖蚯蚓（远古斑点）",
+    "config.dig-artifact-spots.tooltip": "是否填挖出远古斑点。",
 
-    "config.clear-tilled-dirt.name": "Clear Tilled Dirt",
-    "config.clear-tilled-dirt.tooltip": "Whether to clear tilled dirt.",
+    "config.clear-tilled-dirt.name": "填平耕地",
+    "config.clear-tilled-dirt.tooltip": "是否填平已耕的地块。",
 
 
     /****
     ** Mining
     ****/
-    // TODO
-    "config.break-boulders-and-meteorites.name": "Break Boulders and Meteorites",
-    "config.break-boulders-and-meteorites.tooltip": "Whether to break boulders and meteorites.",
+    "config.break-boulders-and-meteorites.name": "清除巨石和陨石",
+    "config.break-boulders-and-meteorites.tooltip": "是否能敲碎巨石（原石）和陨石。",
 
-    "config.harvest-mine-spawns.name": "Harvest Mine Spawns",
-    "config.harvest-mine-spawns.tooltip": "Whether to harvest spawned mine items like quartz and frozen tears.",
+    "config.harvest-mine-spawns.name": "收获矿物",
+    "config.harvest-mine-spawns.tooltip": "是否收获矿物，如石英、泪晶。",
 
 
     /****
     ** Placed items
     ****/
-    // TODO
-    "config.break-flooring.name": "Break Flooring",
-    "config.break-flooring.tooltip": "Whether to break placed flooring.",
+    "config.break-flooring.name": "清除地板",
+    "config.break-flooring.tooltip": "清除放置的地板和小径。",
 
-    "config.break-objects.name": "Break Objects",
-    "config.break-objects.tooltip": "Whether to break placed objects.",
+    "config.break-objects.name": "清除实物",
+    "config.break-objects.tooltip": "清除放置的实物。",
 
-    "config.break-mine-containers.name": "Break Mine Containers",
-    "config.break-mine-containers.tooltip": "Whether to break containers in the mine.",
+    "config.break-mine-containers.name": "清除矿井中的容器",
+    "config.break-mine-containers.tooltip": "是否砸开矿井中的木箱、木桶。",
 
-    "config.harvest-machines.name": "Harvest Machines",
-    "config.harvest-machines.tooltip": "Whether to collect machine output.",
+    "config.harvest-machines.name": "收获机器",
+    "config.harvest-machines.tooltip": "是否收获机器的产出。",
 
 
     /****
     ** Melee
     ****/
-    // TODO
-    "config.Attack-monsters.name": "Attack Monsters",
-    "config.Attack-monsters.tooltip": "Whether to attack monsters. (This is massively overpowered due to the tractor tool speed.)",
+    "config.Attack-monsters.name": "攻击怪物",
+    "config.Attack-monsters.tooltip": "是否攻击怪物。（由于拖拉机的攻速，基本上开了就无敌了）",
 
 
     /****
     ** Other
     ****/
-    // TODO
-    "config.milk-pail.name": "Enable Milk Pail",
-    "config.milk-pail.tooltip": "Whether to collect milk from farm animals using the milk pail.",
+    "config.milk-pail.name": "挤奶桶",
+    "config.milk-pail.tooltip": "是否能够使用挤奶桶挤奶。",
 
-    "config.shears.name": "Enable Shears",
-    "config.shears.tooltip": "Whether to collect wool from farm animals using the shears.",
+    "config.shears.name": "剪刀",
+    "config.shears.tooltip": "是否能够使用剪刀剪动物毛。",
 
-    "config.watering-can.name": "Enable Watering Can",
-    "config.watering-can.tooltip": "Whether to water nearby tiles using the watering can. This doesn't consume water in the watering can.",
+    "config.watering-can.name": "喷壶",
+    "config.watering-can.tooltip": "是否能够使用喷壶灌溉，且不会消耗喷壶内的水。",
 
-    "config.fertilizer.name": "Enable Fertilizer",
-    "config.fertilizer.tooltip": "Whether to apply fertilizer to crops and tilled dirt.",
+    "config.fertilizer.name": "肥料",
+    "config.fertilizer.tooltip": "是否能够播撒肥料。",
 
-    "config.grass-starters.name": "Enable Grass Starters",
-    "config.grass-starters.tooltip": "Whether to plant grass starters.",
+    "config.grass-starters.name": "草籽",
+    "config.grass-starters.tooltip": "是否能够种植草籽。",
 
-    "config.seeds.name": "Enable Seeds",
-    "config.seeds.tooltip": "Whether to plant seeds.",
+    "config.seeds.name": "种子",
+    "config.seeds.tooltip": "是否能够播撒种子。",
 
-    "config.seed-bags.name": "Enable Seed Bags",
-    "config.seed-bags.tooltip": "Whether to plant seeds from the Seed Bag mod.",
+    "config.seed-bags.name": "种子袋",
+    "config.seed-bags.tooltip": "是否能够使用种子袋mod播撒种子。",
 
-    "config.slingshot.name": "Enable Slingshot",
-    "config.slingshot.tooltip": "Whether to fire the slingshot towards the cursor. (This is massively overpowered and will consume ammo voraciously due to the tractor tool speed.)",
+    "config.slingshot.name": "弹弓",
+    "config.slingshot.tooltip": "是否能够发射弹弓。（由于拖拉机的攻速，基本上开了就无敌了，但是会消耗大量弹药）",
 
-    "config.custom-tool-names.name": "Custom Tool Names",
-    "config.custom-tool-names.tooltip": "The custom items/tools to enable while riding the tractor. Tools will be used on each surrounding tile, while items will be put down. If you specify something that's already supported (like the axe), this overrides all limitations on its use. You must specify the exact internal name (not the translated display name), like 'Axe' or 'Mega Bomb'. Separate multiple values with commas."
+    "config.custom-tool-names.name": "自定义工具名称",
+    "config.custom-tool-names.tooltip": "自定义的工具/物品。工具将被用于周围的每个方格；而物品将会被放置。如果指定了已经支持的东西，比如斧头，那么将会覆盖它的所有使用限制。你必须指定确切的内部名称（而不是翻译后的显示名称），比如'Axe'或'Mega Bomb'。多个值之间用逗号分隔。"
 }

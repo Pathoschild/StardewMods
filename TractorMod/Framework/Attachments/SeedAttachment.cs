@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
@@ -37,9 +38,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
-            return this.Config.Enable && item?.Category == SObject.SeedsCategory && item.Stack > 0;
+            return
+                this.Config.Enable
+                && item is { Category: SObject.SeedsCategory, Stack: > 0 };
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -50,13 +53,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
             if (item is not { Stack: > 0 })
                 return false;
 
             // get dirt
-            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt dirt, out bool dirtCoveredByObj, out _) || dirt.crop != null)
+            if (!this.TryGetHoeDirt(tileFeature, tileObj, out HoeDirt? dirt, out bool dirtCoveredByObj, out _) || dirt.crop != null)
                 return false;
 
             // ignore if there's a giant crop, meteorite, etc covering the tile
@@ -69,7 +72,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
             {
                 this.ConsumeItem(player, item);
 
-                if (this.TryGetEnricher(location, tile, out Chest enricher, out Item fertilizer) && dirt.plant(fertilizer.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, true, location))
+                if (this.TryGetEnricher(location, tile, out Chest? enricher, out Item? fertilizer) && dirt.plant(fertilizer.ParentSheetIndex, (int)tile.X, (int)tile.Y, player, true, location))
                     this.ConsumeItem(enricher, fertilizer);
             }
             return sowed;
@@ -85,9 +88,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework.Attachments
         /// <param name="enricher">The enricher found.</param>
         /// <param name="fertilizer">The fertilizer item within the enricher.</param>
         /// <returns>Returns whether an enricher with fertilizer was found.</returns>
-        private bool TryGetEnricher(GameLocation location, Vector2 tile, out Chest enricher, out Item fertilizer)
+        private bool TryGetEnricher(GameLocation location, Vector2 tile, [NotNullWhen(true)] out Chest? enricher, [NotNullWhen(true)] out Item? fertilizer)
         {
-            var entry = this.GetEnricher(location, tile);
+            (Chest enricher, Item fertilizer)? entry = this.GetEnricher(location, tile);
 
             fertilizer = entry?.fertilizer;
             enricher = entry?.enricher;

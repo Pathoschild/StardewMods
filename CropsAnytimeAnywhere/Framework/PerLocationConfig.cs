@@ -1,5 +1,3 @@
-using System.Runtime.Serialization;
-
 namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
 {
     /// <summary>Per-location mod configuration.</summary>
@@ -9,24 +7,32 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Framework
         ** Accessors
         *********/
         /// <summary>Whether crops can grow here.</summary>
-        public bool GrowCrops { get; set; }
+        public bool GrowCrops { get; }
 
         /// <summary>Whether out-of-season crops grow here too.</summary>
-        public bool GrowCropsOutOfSeason { get; set; }
+        public bool GrowCropsOutOfSeason { get; }
 
         /// <summary>Whether to allow hoeing anywhere.</summary>
-        public ModConfigForceTillable ForceTillable { get; set; }
+        public ModConfigForceTillable ForceTillable { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="growCrops">Whether crops can grow here.</param>
+        /// <param name="growCropsOutOfSeason">Whether out-of-season crops grow here too.</param>
+        /// <param name="forceTillable">Whether to allow hoeing anywhere.</param>
+        public PerLocationConfig(bool growCrops, bool growCropsOutOfSeason, ModConfigForceTillable? forceTillable)
         {
-            this.ForceTillable ??= new();
+            this.GrowCrops = growCrops;
+            this.GrowCropsOutOfSeason = growCropsOutOfSeason;
+            this.ForceTillable = forceTillable ?? new(
+                dirt: true,
+                grass: true,
+                stone: false,
+                other: false
+            );
         }
     }
 }

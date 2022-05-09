@@ -29,11 +29,11 @@ namespace ContentPatcher.Framework.Patches.EditData
 
         /// <summary>Get the value of an entry.</summary>
         /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
-        object GetEntry(object key);
+        object? GetEntry(object key);
 
         /// <summary>Get the expected type for an entry.</summary>
         /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>
-        Type GetEntryType(object key);
+        Type? GetEntryType(object key);
 
         /// <summary>Remove an entry.</summary>
         /// <param name="key">The entry key parsed by <see cref="ParseKey"/>.</param>

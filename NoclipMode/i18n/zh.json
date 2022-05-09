@@ -1,4 +1,21 @@
 ﻿{
+    /*********
+    ** In-game messages
+    *********/
     "enabled-message": "启用穿墙模式; 再次按下{{button}}可以关闭穿墙。",
-    "disabled-message": "禁用穿墙模式; 再次按下{{button}}可以开启穿墙。"
+    "disabled-message": "禁用穿墙模式; 再次按下{{button}}可以开启穿墙。",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.title.general-options": "常规",
+    "config.enabled-message.name": "显示启用提示",
+    "config.enabled-message.desc": "当启用穿墙模式时，显示“已启用”的提示。",
+    "config.disabled-message.name": "显示禁用提示",
+    "config.disabled-message.desc": "当禁用穿墙模式时，显示“已禁用”的提示。",
+
+    "config.title.controls": "键位",
+    "config.toggle-key.name": "开/关功能",
+    "config.toggle-key.desc": "启用/禁用穿墙模式"
 }

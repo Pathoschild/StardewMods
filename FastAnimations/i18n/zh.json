@@ -1,0 +1,72 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    /****
+    ** 'General Options' section
+    ****/
+    "config.general-options": "常规",
+
+    "config.disable-eat-prompt.name": "禁用吃喝提示",
+    "config.disable-eat-prompt.tooltip": "跳过吃喝时“是否要吃掉XX”的确认提示对话框。",
+
+    /****
+    ** 'Player Animation Speeds' section
+    ****/
+    "config.animation-speeds": "玩家动画速度",
+
+    "config.eat-or-drink.name": "吃东西",
+    "config.eat-or-drink.tooltip": "吃/喝的速度。默认{{defaultValue}}x。",
+
+    "config.fish.name": "钓鱼",
+    "config.fish.tooltip": "钓鱼时抛竿和收竿的速度（不包括小游戏）。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+
+    "config.harvest.name": "采集",
+    "config.harvest.tooltip": "采集作物或觅食的速度。默认{{defaultValue}}x。",
+
+    "config.horse-flute.name": "马笛",
+    "config.horse-flute.tooltip": "演奏马笛的速度。默认{{defaultValue}}x。",
+
+    "config.milk.name": "挤奶",
+    "config.milk.tooltip": "使用挤奶桶的速度。默认{{defaultValue}}x。",
+
+    "config.mount.name": "上下马",
+    "config.mount.tooltip": "上/下马的速度，这里的马包括魔改后的马，比如拖拉机。默认{{defaultValue}}x。",
+
+    "config.shear.name": "剪毛",
+    "config.shear.tooltip": "使用剪刀的速度。默认{{defaultValue}}x。",
+
+    "config.tool.name": "使用工具",
+    "config.tool.tooltip": "使用工具（除去武器和鱼竿）的速度，比如斧、喷壶、镰刀等。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+
+    "config.weapon.name": "武器",
+    "config.weapon.tooltip": "使用武器的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+
+    /****
+    ** 'World Animation Speeds' section
+    ****/
+    "config.world-speeds": "世界动画速度",
+
+    "config.break-geodes.name": "敲晶球",
+    "config.break-geodes.tooltip": "铁匠破开晶球的速度。默认{{defaultValue}}x。",
+
+    "config.casino-slots.name": "Casino slots赌场老虎机",
+    "config.casino-slots.tooltip": "赌场老虎机的转速。默认{{defaultValue}}x。",
+
+    "config.bus.name": "公交车",
+    "config.bus.tooltip": "往返沙漠公交车的车速。默认{{defaultValue}}x。",
+
+    "config.tree-fall.name": "树倒下",
+    "config.tree-fall.tooltip": "树被砍倒的速度。默认{{defaultValue}}x，建议{{suggestedValue}}x。",
+
+    /****
+    ** 'UI Animation Speeds' section
+    ****/
+    "config.ui-speeds": "UI动画速度",
+
+    "config.title-menu.name": "标题菜单的转场效果",
+    "config.title-menu.tooltip": "标题菜单的转场速度，即新建、加载存档时屏幕切换的速度。默认{{defaultValue}}x。",
+
+    "config.load-game-blink.name": "点击存档后的闪烁效果",
+    "config.load-game-blink.tooltip": "加载存档时，点击某个存档后闪烁的速度。默认{{defaultValue}}x。"
+}

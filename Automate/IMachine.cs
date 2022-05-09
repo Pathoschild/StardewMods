@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Automate
         MachineState GetState();
 
         /// <summary>Get the output item.</summary>
-        ITrackedStack GetOutput();
+        ITrackedStack? GetOutput();
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>

@@ -21,6 +21,9 @@ namespace Pathoschild.Stardew.FastAnimations.Framework
         /// <summary>The speed multiplier for harvesting crops or forage.</summary>
         public float HarvestSpeed { get; set; } = 3;
 
+        /// <summary>The speed multiplier for playing the horse flute.</summary>
+        public float HorseFluteSpeed { get; set; } = 6;
+
         /// <summary>The speed multiplier for milking.</summary>
         public float MilkSpeed { get; set; } = 5;
 

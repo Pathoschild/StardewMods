@@ -1,3 +1,5 @@
+#nullable disable
+
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.RotateToolbar.Framework;
 using StardewModdingAPI;

@@ -23,10 +23,13 @@ namespace ContentPatcher.Framework.ConfigModels
         public bool AllowMultiple { get; }
 
         /// <summary>The value read from the player settings.</summary>
-        public InvariantHashSet Value { get; set; }
+        public InvariantHashSet Value { get; }
 
         /// <summary>An optional explanation of the config field for players.</summary>
-        public string Description { get; set; }
+        public string? Description { get; }
+
+        /// <summary>An optional section key to group related fields.</summary>
+        public string? Section { get; }
 
 
         /*********
@@ -35,16 +38,20 @@ namespace ContentPatcher.Framework.ConfigModels
         /// <summary>Construct an instance.</summary>
         /// <param name="allowValues">The values to allow.</param>
         /// <param name="defaultValues">The default values if the field is missing or (if <paramref name="allowBlank"/> is <c>false</c>) blank.</param>
+        /// <param name="value">The value read from the player settings.</param>
         /// <param name="allowBlank">Whether to allow blank values.</param>
         /// <param name="allowMultiple">Whether the player can specify multiple values for this field.</param>
         /// <param name="description">An optional explanation of the config field for players.</param>
-        public ConfigField(InvariantHashSet allowValues, InvariantHashSet defaultValues, bool allowBlank, bool allowMultiple, string description)
+        /// <param name="section">An optional section key to group related fields.</param>
+        public ConfigField(InvariantHashSet? allowValues, InvariantHashSet? defaultValues, InvariantHashSet? value, bool allowBlank, bool allowMultiple, string? description, string? section)
         {
-            this.AllowValues = allowValues;
-            this.DefaultValues = defaultValues;
+            this.AllowValues = allowValues ?? new();
+            this.DefaultValues = defaultValues ?? new();
+            this.Value = value ?? new();
             this.AllowBlank = allowBlank;
             this.AllowMultiple = allowMultiple;
             this.Description = description;
+            this.Section = section;
         }
 
         /// <summary>Get whether the field represents a boolean value.</summary>

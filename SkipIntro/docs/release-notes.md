@@ -1,6 +1,13 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.9.9
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
+* Updated for SMAPI 3.14.0.
+* Internal changes to prepare for the next game update.
+* Improved translations. Thanks to Becks723 (added Chinese)!
+
 ## 1.9.8
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 

@@ -5,15 +5,8 @@ using StardewModdingAPI;
 namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
 {
     /// <summary>Handles the logic for integrating with the Better Sprinklers mod.</summary>
-    internal class BetterSprinklersIntegration : BaseIntegration
+    internal class BetterSprinklersIntegration : BaseIntegration<IBetterSprinklersApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly IBetterSprinklersApi ModApi;
-
-
         /*********
         ** Accessors
         *********/
@@ -30,13 +23,8 @@ namespace Pathoschild.Stardew.Common.Integrations.BetterSprinklers
         public BetterSprinklersIntegration(IModRegistry modRegistry, IMonitor monitor)
             : base("Better Sprinklers", "Speeder.BetterSprinklers", "2.3.1-unofficial.6-pathoschild", modRegistry, monitor)
         {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<IBetterSprinklersApi>();
-            this.IsLoaded = this.ModApi != null;
-            this.MaxRadius = this.ModApi?.GetMaxGridSize() ?? 0;
+            if (base.IsLoaded)
+                this.MaxRadius = this.ModApi.GetMaxGridSize();
         }
 
         /// <summary>Get the configured Sprinkler tiles relative to (0, 0).</summary>

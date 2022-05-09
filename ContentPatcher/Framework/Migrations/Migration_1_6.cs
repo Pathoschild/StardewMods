@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -24,15 +25,15 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
 
             // before 1.6, the 'sun' weather included 'wind'
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes.WhereNotNull())
             {
-                if (patch.When.TryGetValue(ConditionType.Weather.ToString(), out string value) && value.Contains("Sun"))
+                if (patch.When.TryGetValue(ConditionType.Weather.ToString(), out string? value) && value?.Contains("Sun") == true)
                     patch.When[ConditionType.Weather.ToString()] = $"{value}, Wind";
             }
 

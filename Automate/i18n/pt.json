@@ -1,0 +1,35 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "Opções Principais",
+    "config.enabled.name": "Enabled", // TODO
+    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
+    "config.junimo-huts-output-gems.name": "Cabanas Junimo retiram gemas",
+    "config.junimo-huts-output-gems.desc": "Tirar gemas de cabanas junimo. Se habilitado, você não poderá trocar cores de Junimos colocando gemas em suas cabanas.",
+    "config.automation-interval.name": "Intervalo de Automação",
+    "config.automation-interval.desc": "O número de ticks entre processos (60 para uma vez por segundo, 120 para cada dois segundos, etc).",
+    "config.toggle-overlay-key.name": "Tecla de Interface",
+    "config.toggle-overlay-key.desc": "A tecla que abrirá a interface de automação.",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "Compatibilidade de Mod",
+    "config.better-junimos.name": "Better Junimos",
+    "config.better-junimos.desc": "Ativa a compatibilidade com Better Junimos. Se estiver instalado, cabanas junimo não retirarão fertilizantes ou sementes.",
+    "config.warn-for-missing-bridge-mod.name": "Aviso para falta de mod de ponte",
+    "config.warn-for-missing-bridge-mod.desc": "Se deve ou não informar ao início caso você tenha instalado um mod de máquina customizada que requer um pacote de estabilidade que não está instalado.",
+
+    // connectors
+    "config.title.connectors": "Habilitar Conectores",
+    "config.connector.desc": "Se {{itemName}} interligam máquinas e baús .",
+    "config.custom-connectors.name": "Conectores Customizados",
+    "config.custom-connectors.desc": "Os nomes em inlgês de conectores que juntarão baús e máquinas. Você pode listar vários usando vírgulas. (Precisa ser em inglês).", // note: connector names must be English even when playing in other languages
+
+    // machine overrides
+    "config.title.machine-overrides": "Prioridade de Máquinas",
+    "config.override.ShippingBin-name": "Caixa de Remessas",
+    "config.override.MiniShippingBin-name": "Mini Caixa de Remessas",
+    "config.override.desc": "Para habilitar automação de {{machineName}}.",
+    "config.custom-overrides-note": "Para prioridades customizadas, veja https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure para ajuda na edição do arquivo config.json diretamente."
+}

@@ -1227,7 +1227,7 @@ For example, you can use this to provide the textures for a custom farm type:
 
 ```js
 {
-    "Format": "1.25.0",
+    "Format": "1.26.0",
     "Changes": [
         {
             "Action": "EditData",
@@ -1393,7 +1393,7 @@ For example, you can use config values as tokens and conditions:
 
 ```js
 {
-    "Format": "1.25.0",
+    "Format": "1.26.0",
     "ConfigSchema": {
         "EnableJohn": {
             "AllowValues": "true, false",
@@ -1611,7 +1611,7 @@ crop sprites depending on the weather:
 
 ```js
 {
-   "Format": "1.25.0",
+   "Format": "1.26.0",
    "DynamicTokens": [
       {
          "Name": "Style",
@@ -1644,7 +1644,7 @@ Query expressions are evaluated using the `Query` token. It can be used as a pla
 and can include nested tokens. Here's an example which includes all of those:
 ```js
 {
-   "Format": "1.25.0",
+   "Format": "1.26.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1764,12 +1764,12 @@ The supported operators are listed below.
   ```
 
 ### Mod-provided tokens
-SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](extensibility.md)),
+SMAPI mods can add new tokens for content packs to use (see [_extensibility for modders_](../extensibility.md)),
 which work just like normal Content Patcher tokens. For example, this patch uses a token from Json
 Assets:
 ```js
 {
-   "Format": "1.25.0",
+   "Format": "1.26.0",
    "Changes": [
       {
          "Action": "EditData",
@@ -1789,7 +1789,7 @@ To use a mod-provided token, at least one of these must be true:
   which lists the mod:
   ```js
   {
-     "Format": "1.25.0",
+     "Format": "1.26.0",
      "Changes": [
         {
            "Action": "EditData",
@@ -1815,7 +1815,7 @@ alternate name and the value is the original token name. For example:
 
 ```js
 {
-    "Format": "1.25.0",
+    "Format": "1.26.0",
     "AliasTokenNames": {
         "ItemID": "spacechase0.jsonAssets/ObjectId",
         "ItemSprite": "spacechase0.jsonAssets/ObjectSpriteSheetIndex"
@@ -1841,7 +1841,7 @@ token](#dynamic-tokens):
 
 ```js
 {
-    "Format": "1.25.0",
+    "Format": "1.26.0",
     "DynamicValues": [
         {
             "Name": "PufferchickId",

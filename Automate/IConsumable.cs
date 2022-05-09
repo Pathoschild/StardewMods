@@ -29,6 +29,6 @@ namespace Pathoschild.Stardew.Automate
         void Reduce();
 
         /// <summary>Remove the needed number of this item from the stack and return a new stack matching the count.</summary>
-        Item Take();
+        Item? Take();
     }
 }

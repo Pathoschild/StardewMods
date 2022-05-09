@@ -16,6 +16,6 @@ namespace Pathoschild.Stardew.Common.Integrations.CustomFarmingRedux
         *********/
         /// <summary>Get metadata for a custom machine and draw metadata for an object.</summary>
         /// <param name="dummy">The item that would be replaced by the custom item.</param>
-        Tuple<Item, Texture2D, Rectangle, Color> getRealItemAndTexture(SObject dummy);
+        Tuple<Item, Texture2D, Rectangle, Color>? getRealItemAndTexture(SObject dummy);
     }
 }

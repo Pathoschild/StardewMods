@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json.Linq;
 
 namespace ContentPatcher.Framework.Patches.EditData
@@ -40,9 +41,9 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override object GetEntry(object key)
+        public override object? GetEntry(object key)
         {
-            return this.TryGetField(key, out string value, out _)
+            return this.TryGetField(key, out string? value)
                 ? value
                 : null;
         }
@@ -60,7 +61,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override void SetEntry(object key, JToken value)
+        public override void SetEntry(object key, JToken? value)
         {
             // get index
             int index = (int)key;
@@ -68,7 +69,7 @@ namespace ContentPatcher.Framework.Patches.EditData
                 return;
 
             // get fields
-            string[] fields = this.GetFields();
+            string[]? fields = this.GetFields();
             if (fields is null)
                 return;
 
@@ -86,7 +87,7 @@ namespace ContentPatcher.Framework.Patches.EditData
             }
 
             // apply change
-            fields[index] = value.Value<string>();
+            fields[index] = value?.Value<string>() ?? string.Empty;
             this.EntryEditor.SetEntry(this.EntryKey, string.Join(this.FieldDelimiter, fields));
         }
 
@@ -95,7 +96,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         ** Private methods
         *********/
         /// <summary>Get the fields for the entry.</summary>
-        private string[] GetFields()
+        private string[]? GetFields()
         {
             if (this.EntryEditor.GetEntry(this.EntryKey) is not string str)
                 return null;
@@ -106,11 +107,10 @@ namespace ContentPatcher.Framework.Patches.EditData
         /// <summary>Get a field from the underlying data.</summary>
         /// <param name="key">The raw field key.</param>
         /// <param name="value">The value found in the delimited string.</param>
-        /// <param name="index">The value's index within the string.</param>
-        private bool TryGetField(object key, out string value, out int index)
+        private bool TryGetField(object key, [NotNullWhen(true)] out string? value)
         {
             // get index
-            index = (int)key;
+            int index = (int)key;
             if (index < 0)
             {
                 value = null;
@@ -118,7 +118,7 @@ namespace ContentPatcher.Framework.Patches.EditData
             }
 
             // get fields
-            string[] fields = this.GetFields();
+            string[]? fields = this.GetFields();
             if (fields is null || index >= fields.Length)
             {
                 value = null;

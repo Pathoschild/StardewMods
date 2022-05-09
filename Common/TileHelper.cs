@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.Common
         ****/
         /// <summary>Get the tile coordinates in the game location.</summary>
         /// <param name="location">The game location to search.</param>
-        public static IEnumerable<Vector2> GetTiles(this GameLocation location)
+        public static IEnumerable<Vector2> GetTiles(this GameLocation? location)
         {
             if (location?.Map?.Layers == null)
                 return Enumerable.Empty<Vector2>();

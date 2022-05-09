@@ -23,7 +23,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
         private readonly LegendEntry NotInRange;
 
         /// <summary>The previous location for which <see cref="TilesInRange"/> was cached.</summary>
-        private GameLocation LastLocation;
+        private GameLocation? LastLocation;
 
         /// <summary>The cached tiles in range of open water for the current location.</summary>
         private readonly IDictionary<Vector2, bool> TilesInRange = new Dictionary<Vector2, bool>();
@@ -102,7 +102,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Crops
 
             // dirt tile
             // note: paddyWaterCheck() only works if the dirt contains a paddy crop
-            HoeDirt dirt = this.GetDirt(location, tile, ignorePot: true);
+            HoeDirt? dirt = this.GetDirt(location, tile, ignorePot: true);
             if (dirt?.hasPaddyCrop() != true && this.IsTillable(location, tile) && location.isTilePassable(new Location((int)tile.X, (int)tile.Y), Game1.viewport))
                 dirt = new HoeDirt(HoeDirt.watered, samplePaddyCrop.Value);
             return dirt?.paddyWaterCheck(location, tile) ?? false;

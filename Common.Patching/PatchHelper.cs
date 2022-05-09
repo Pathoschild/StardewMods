@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.Common.Patching
         /// <typeparam name="TTarget">The type containing the method.</typeparam>
         /// <param name="parameters">The method parameter types, or <c>null</c> if it's not overloaded.</param>
         /// <exception cref="InvalidOperationException">The type has no matching constructor.</exception>
-        public static ConstructorInfo RequireConstructor<TTarget>(Type[] parameters = null)
+        public static ConstructorInfo RequireConstructor<TTarget>(Type[]? parameters = null)
         {
             return
                 AccessTools.Constructor(typeof(TTarget), parameters)
@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.Common.Patching
         /// <param name="parameters">The method parameter types, or <c>null</c> if it's not overloaded.</param>
         /// <param name="generics">The method generic types, or <c>null</c> if it's not generic.</param>
         /// <exception cref="InvalidOperationException">The type has no matching method.</exception>
-        public static MethodInfo RequireMethod<TTarget>(string name, Type[] parameters = null, Type[] generics = null)
+        public static MethodInfo RequireMethod<TTarget>(string name, Type[]? parameters = null, Type[]? generics = null)
         {
             return
                 AccessTools.Method(typeof(TTarget), name, parameters, generics)
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.Common.Patching
         /// <param name="name">The method name, or <c>null</c> for a constructor.</param>
         /// <param name="parameters">The method parameter types, or <c>null</c> if it's not overloaded.</param>
         /// <param name="generics">The method generic types, or <c>null</c> if it's not generic.</param>
-        public static string GetMethodString(Type type, string name, Type[] parameters = null, Type[] generics = null)
+        public static string GetMethodString(Type type, string? name, Type[]? parameters = null, Type[]? generics = null)
         {
             StringBuilder str = new();
 

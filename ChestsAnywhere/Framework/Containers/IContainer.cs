@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
         ** Accessors
         *********/
         /// <summary>The underlying inventory.</summary>
-        IList<Item> Inventory { get; }
+        IList<Item?> Inventory { get; }
 
         /// <summary>The persisted data for this container.</summary>
         ContainerData Data { get; }
@@ -29,11 +29,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="container">The other container.</param>
-        bool IsSameAs(IContainer container);
+        bool IsSameAs(IContainer? container);
 
         /// <summary>Get whether another instance wraps the same underlying container.</summary>
         /// <param name="inventory">The other container's inventory.</param>
-        bool IsSameAs(IList<Item> inventory);
+        bool IsSameAs(IList<Item?>? inventory);
 
         /// <summary>Open a menu to transfer items between the player's inventory and this container.</summary>
         IClickableMenu OpenMenu();

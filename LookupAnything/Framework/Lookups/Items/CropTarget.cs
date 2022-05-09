@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private readonly IReflectionHelper Reflection;
 
         /// <summary>The underlying tree texture.</summary>
-        private readonly Texture2D Texture;
+        private readonly Texture2D? Texture;
 
         /// <summary>The source rectangle containing the current crop sprite in the <see cref="Texture"/>.</summary>
         private readonly Rectangle SourceRect;
@@ -51,14 +51,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Get a rectangle which roughly bounds the visible sprite relative the viewport.</summary>
         public override Rectangle GetWorldArea()
         {
-            return this.GetSpriteArea(this.Value.getBoundingBox(this.GetTile()), this.GetSpritesheetArea());
+            return this.GetSpriteArea(this.Value.getBoundingBox(this.Tile), this.GetSpritesheetArea());
         }
 
         /// <summary>Get whether the visible sprite intersects the specified coordinate. This can be an expensive test.</summary>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative coordinates to search.</param>
         /// <param name="spriteArea">The approximate sprite area calculated by <see cref="GetWorldArea"/>.</param>
-        /// <remarks>Derived from <see cref="StardewValley.Crop.draw"/>.</remarks>
+        /// <remarks>Derived from <see cref="Crop.draw"/>.</remarks>
         public override bool SpriteIntersectsPixel(Vector2 tile, Vector2 position, Rectangle spriteArea)
         {
             Crop crop = this.Value.crop;
@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
         /// <remarks>Derived from <see cref="Crop.draw"/>.</remarks>
-        private void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
+        private void GetSpriteSheet(Crop target, JsonAssetsIntegration jsonAssets, out Texture2D? texture, out Rectangle sourceRect)
         {
             // get from Json Assets
             if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect, currentSpriteOnly: true))

@@ -19,7 +19,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         ** Fields
         *********/
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
-        private static IMonitor Monitor;
+        private static IMonitor Monitor = null!; // set when constructor is called
 
 
         /*********
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         /// <summary>A method called via Harmony after <see cref="Utility.findHorse"/>.</summary>
         /// <param name="horseId">The horse ID to find.</param>
         /// <param name="__result">The return value to use for the method.</param>
-        private static void After_FindHorse(Guid horseId, ref Horse __result)
+        private static void After_FindHorse(Guid horseId, ref Horse? __result)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         /// <summary>A method called via Harmony after <see cref="Utility.findHorseForPlayer"/>.</summary>
         /// <param name="uid">The unique player ID.</param>
         /// <param name="__result">The return value to use for the method.</param>
-        private static void After_FindHorseForPlayer(long uid, ref Horse __result)
+        private static void After_FindHorseForPlayer(long uid, ref Horse? __result)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Pathoschild.Stardew.HorseFluteAnywhere.Patches
         ****/
         /// <summary>Get the first horse matching a condition.</summary>
         /// <param name="match">The condition to match.</param>
-        private static Horse TryFindHorse(Func<Horse, bool> match)
+        private static Horse? TryFindHorse(Func<Horse, bool> match)
         {
             return CommonHelper.GetLocations(includeTempLevels: true)
                 .SelectMany(location => location.characters)

@@ -18,16 +18,16 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         ** Fields
         *********/
         /// <summary>Encapsulates logging for the Harmony patch.</summary>
-        private static IMonitor Monitor;
+        private static IMonitor Monitor = null!; // set in constructor
 
         /// <summary>The mod configuration.</summary>
-        private static ModConfig Config;
+        private static ModConfig Config = null!; // set in constructor
 
         /// <summary>Get whether the given location is the Small Beach Farm.</summary>
-        private static Func<GameLocation, bool> IsSmallBeachFarm;
+        private static Func<GameLocation?, bool> IsSmallBeachFarm = null!; // set in constructor
 
         /// <summary>Get the fish that should be available from the given tile.</summary>
-        private static Func<Farm, int, int, FishType> GetFishType;
+        private static Func<Farm, int, int, FishType> GetFishType = null!; // set in constructor
 
         /// <summary>Whether the mod is currently applying patch changes (to avoid infinite recursion),</summary>
         private static bool IsInPatch;
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         /// <param name="config">The mod configuration.</param>
         /// <param name="isSmallBeachFarm">Get whether the given location is the Small Beach Farm.</param>
         /// <param name="getFishType">Get the fish that should be available from the given tile.</param>
-        public FarmPatcher(IMonitor monitor, ModConfig config, Func<GameLocation, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
+        public FarmPatcher(IMonitor monitor, ModConfig config, Func<GameLocation?, bool> isSmallBeachFarm, Func<Farm, int, int, FishType> getFishType)
         {
             FarmPatcher.Monitor = monitor;
             FarmPatcher.Config = config;
@@ -89,7 +89,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
         /// <param name="__result">The return value to use for the method.</param>
         /// <returns>Returns <c>true</c> if the original logic should run, or <c>false</c> to use <paramref name="__result"/> as the return value.</returns>
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
-        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, ref SObject __result)
+        private static bool Before_GetFish(Farm __instance, float millisecondsAfterNibble, int bait, int waterDepth, Farmer? who, double baitPotency, Vector2 bobberTile, ref SObject __result)
         {
             if (FarmPatcher.IsInPatch || !FarmPatcher.IsSmallBeachFarm(who?.currentLocation))
                 return true;
@@ -176,6 +176,7 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Patches
 
         /// <summary>A method called via Harmony after <see cref="GameLocation.getRandomTile"/>.</summary>
         /// <param name="__instance">The farm instance.</param>
+        /// <param name="__result">The return value to use for the method.</param>
         [SuppressMessage("ReSharper", "InconsistentNaming", Justification = "The naming convention is defined by Harmony.")]
         private static void After_GetRandomTile(GameLocation __instance, ref Vector2 __result)
         {

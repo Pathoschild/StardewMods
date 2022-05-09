@@ -14,7 +14,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         ** Fields
         *********/
         /// <summary>The underlying tree texture.</summary>
-        private readonly Texture2D Texture;
+        private readonly Texture2D? Texture;
 
         /// <summary>The source rectangle containing the tree sprites in the <see cref="Texture"/>.</summary>
         private readonly Rectangle SourceRect;
@@ -76,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
             if (tree.growthStage.Value < 4)
             {
                 // apply crazy offset logic for growing fruit trees
-                Vector2 tile = this.GetTile();
+                Vector2 tile = this.Tile;
                 Vector2 offset = new Vector2((float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)), (float)Math.Max(-8.0, Math.Min(Game1.tileSize, Math.Sin(tile.X * 200.0 / (2.0 * Math.PI)) * -16.0)));
                 Vector2 centerBottom = new Vector2(tile.X * Game1.tileSize + Game1.tileSize / 2 + offset.X, tile.Y * Game1.tileSize - sprite.Height + Game1.tileSize * 2 + offset.Y) - new Vector2(Game1.uiViewport.X, Game1.uiViewport.Y);
                 x = (int)centerBottom.X - width / 2;
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="texture">The custom sprite texture.</param>
         /// <param name="sourceRect">The custom area within the texture. </param>
         /// <returns>Returns true if the entity has a custom sprite, else false.</returns>
-        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D texture, out Rectangle sourceRect)
+        public void GetSpriteSheet(FruitTree target, JsonAssetsIntegration jsonAssets, out Texture2D? texture, out Rectangle sourceRect)
         {
             // get from Json Assets
             if (jsonAssets.IsLoaded && jsonAssets.TryGetCustomSpriteSheet(target, out texture, out sourceRect))

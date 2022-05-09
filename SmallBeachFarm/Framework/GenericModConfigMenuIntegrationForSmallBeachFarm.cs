@@ -59,6 +59,12 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework
                     tooltip: I18n.Config_BeachSounds_Tooltip,
                     get: config => config.UseBeachMusic,
                     set: (config, value) => config.UseBeachMusic = value
+                )
+                .AddCheckbox(
+                    name: I18n.Config_ShippingBinPath_Name,
+                    tooltip: I18n.Config_ShippingBinPath_Tooltip,
+                    get: config => config.ShippingBinPath,
+                    set: (config, value) => config.ShippingBinPath = value
                 );
         }
     }

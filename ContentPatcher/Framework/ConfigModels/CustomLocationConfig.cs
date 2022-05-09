@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace ContentPatcher.Framework.ConfigModels
 {
@@ -10,24 +9,27 @@ namespace ContentPatcher.Framework.ConfigModels
         ** Accessors
         *********/
         /// <summary>The unique location name.</summary>
-        public string Name { get; set; }
+        public string? Name { get; }
 
         /// <summary>The initial map file to load.</summary>
-        public string FromMapFile { get; set; }
+        public string? FromMapFile { get; }
 
         /// <summary>The fallback location names to migrate if no location is found matching <see cref="Name"/>.</summary>
-        public string[] MigrateLegacyNames { get; set; }
+        public string?[] MigrateLegacyNames { get; }
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>Normalize the model after it's deserialized.</summary>
-        /// <param name="context">The deserialization context.</param>
-        [OnDeserialized]
-        public void OnDeserialized(StreamingContext context)
+        /// <summary>Construct an instance.</summary>
+        /// <param name="name">The unique location name.</param>
+        /// <param name="fromMapFile">The initial map file to load.</param>
+        /// <param name="migrateLegacyNames">The fallback location names to migrate if no location is found matching <paramref name="name"/>.</param>
+        public CustomLocationConfig(string? name, string? fromMapFile, string[]? migrateLegacyNames)
         {
-            this.MigrateLegacyNames ??= Array.Empty<string>();
+            this.Name = name;
+            this.FromMapFile = fromMapFile;
+            this.MigrateLegacyNames = migrateLegacyNames ?? Array.Empty<string>();
         }
     }
 }

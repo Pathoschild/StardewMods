@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -29,14 +30,14 @@ namespace ContentPatcher.Framework.Migrations
         ** Public methods
         *********/
         /// <inheritdoc />
-        public virtual bool TryMigrate(ContentConfig content, out string error)
+        public virtual bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             error = null;
             return true;
         }
 
         /// <inheritdoc />
-        public virtual bool TryMigrate(ref ILexToken lexToken, out string error)
+        public virtual bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             if (lexToken is LexTokenToken token)
             {
@@ -50,7 +51,7 @@ namespace ContentPatcher.Framework.Migrations
                 // check input arguments
                 if (token.HasInputArgs())
                 {
-                    var parts = token.InputArgs.Parts;
+                    ILexToken[] parts = token.InputArgs.Parts;
                     for (int i = 0; i < parts.Length; i++)
                     {
                         if (!this.TryMigrate(ref parts[i], out error))
@@ -65,7 +66,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public virtual bool TryMigrate(IManagedTokenString tokenStr, out string error)
+        public virtual bool TryMigrate(IManagedTokenString tokenStr, [NotNullWhen(false)] out string? error)
         {
             // no issue found
             error = null;
@@ -73,7 +74,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public bool TryMigrate(TokenizableJToken tokenStructure, out string error)
+        public bool TryMigrate(TokenizableJToken tokenStructure, [NotNullWhen(false)] out string? error)
         {
             foreach (IManagedTokenString str in tokenStructure.GetTokenStrings())
             {
@@ -86,7 +87,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public virtual bool TryMigrate(Condition condition, out string error)
+        public virtual bool TryMigrate(Condition condition, [NotNullWhen(false)] out string? error)
         {
             error = null;
             return true;
@@ -112,15 +113,26 @@ namespace ContentPatcher.Framework.Migrations
 
         /// <summary>Get the action type for a patch.</summary>
         /// <param name="patch">The patch to parse.</param>
-        protected PatchType? GetAction(PatchConfig patch)
+        protected PatchType? GetAction(PatchConfig? patch)
         {
+            if (patch is null)
+                return null;
+
             return this.GetEnum<PatchType>(patch.Action);
+        }
+
+        /// <summary>Get whether the patch is of the given type.</summary>
+        /// <param name="patch">The patch to check.</param>
+        /// <param name="type">The expected patch type.</param>
+        protected bool HasAction([NotNullWhen(true)] PatchConfig? patch, PatchType type)
+        {
+            return this.GetAction(patch) == type;
         }
 
         /// <summary>Get a parsed enum value, or <c>null</c> if it's not valid.</summary>
         /// <typeparam name="TEnum">The enum type.</typeparam>
         /// <param name="raw">The raw value.</param>
-        protected TEnum? GetEnum<TEnum>(string raw)
+        protected TEnum? GetEnum<TEnum>(string? raw)
             where TEnum : struct
         {
             return Enum.TryParse(raw, ignoreCase: true, out TEnum parsed)

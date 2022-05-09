@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using StardewModdingAPI.Utilities;
 
@@ -19,10 +20,11 @@ namespace ContentPatcher.Framework.Api
         ** Accessors
         *********/
         /// <inheritdoc />
+        [MemberNotNullWhen(false, nameof(ApiManagedConditions.ValidationError))]
         public bool IsValid => this.Conditions.Value.IsValid;
 
         /// <inheritdoc />
-        public string ValidationError => this.Conditions.Value.ValidationError;
+        public string? ValidationError => this.Conditions.Value.ValidationError;
 
         /// <inheritdoc />
         public bool IsReady => this.Conditions.Value.IsReady;
@@ -56,7 +58,7 @@ namespace ContentPatcher.Framework.Api
         }
 
         /// <inheritdoc />
-        public string GetReasonNotMatched()
+        public string? GetReasonNotMatched()
         {
             return this.Conditions.Value.GetReasonNotMatched();
         }

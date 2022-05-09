@@ -9,9 +9,9 @@ automatically pull raw items from the chest and push processed items into it.
   * [Examples](#examples)
 * [Automation techniques](#automation-techniques)
   * [Connectors](#connectors)
-  * [Machine pipelines](#machine-pipelines)
-  * [Machine priority](#machine-priority)
   * [Junimo chests](#junimo-chests)
+  * [Machine priority](#machine-priority)
+  * [Machine pipelines](#machine-pipelines)
 * [Configure](#configure)
   * [config.json](#configjson)
   * [In-game settings](#in-game-settings)
@@ -137,39 +137,16 @@ together. For example, here are wooden paths used as connectors:
 Workbenches are the only connectors by default. You can edit the `config.json` to add connectors
 (see _[configure](#configure)_ below).
 
-### Machine pipelines
-A _pipeline_ is the directional flow of items along a set of machines. For example, milk in the
-chest gets processed in the cheese presses, then aged in the casks, then shipped:
-```
- milk         cheese      aged 
- ----------> ----------> ---------->
-┌──────────┐┌──────────┐┌──────────┐┌──────────┐
-│  input   ││  cheese  ││   cask   ││ shipping │
-│  chest   ││  press   ││          ││   bin    │
-└──────────┘└──────────┘└──────────┘└──────────┘
-            ┌──────────┐┌──────────┐
-            │  cheese  ││   cask   │
-            │  press   ││          │
-            └──────────┘└──────────┘
-                        ┌──────────┐
-                        │   cask   │
-                        │          │
-                        └──────────┘
-```
+### Junimo chests
+Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
+is part of a global machine group. This global group behaves just like a regular machine group
+(including for [machine priority](#machine-priority)), even if it's spread across many locations.
 
-Automate doesn't _directly_ support pipelines: every machine (including the shipping bin) always
-has access to every connected chest.
-
-You can still have pipelines using [machine priorities](#machine-priority) though. The shipping bin
-has the lowest priority by default, so milk in the chest will go into the cheese press first
-automatically. The caveat is that **priority only matters when different machines are ready to take
-items**. For example, the shipping bin will happily take any remaining items if your other machines
-are all busy. There are two common solutions:
-
-* Add enough machines to handle all your input, so you never have unused items for the shipping bin.
-* Leave a space between the shipping bin and other machines, so it's not connected. When you're
-  ready to ship all the output, put down a [path connector](#connectors) temporarily so it pulls
-  all the available items.
+Due to their special behaviour:
+* You can't change input/output options for a Junimo chest. Junimo chests are always automated if
+  at least one is connected to a machine.
+* Machines always take items out of a Junimo chest first, and only push items into one if no other
+  chest is available. Items are still available to all machines in the global group either way.
 
 ### Machine priority
 The default order that machines are processed is unpredictable and subject to change, except that
@@ -191,25 +168,113 @@ predictable.
 Note that if all higher-priority machines are busy, any remaining items may go into lower-priority
 machines.
 
-### Junimo chests
-Every machine and chest connected to a [Junimo chest](https://stardewvalleywiki.com/Junimo_Chest)
-is part of a global machine group. This global group behaves just like a regular machine group
-(including for [machine priority](#machine-priority)), even if it's spread across many locations.
+### Machine pipelines
+A _pipeline_ pushes an item through a multi-step process. For example, milk in the chest gets
+processed in the cheese presses, then aged in the casks, then shipped:
+```
+ milk         cheese      aged
+ ──────────> ──────────> ──────────> shipped
+┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+│  chest   ││  cheese  ││   cask   ││ shipping │
+│          ││  press   ││          ││   bin    │
+└──────────┘├──────────┤├──────────┤└──────────┘
+            │  cheese  ││   cask   │
+            │  press   ││          │
+            └──────────┘└──────────┘
+```
 
-For example, you can use this to distribute automation across the world:
+There's two caveats though:
 
-1. Junimo huts on your farm collect crops;
-2. kegs in a shed turn them into juice/wine;
-3. cellar casks age the juice/wine;
-4. the shipping bin collects the final output.
+1. The machine positions don't decide which will process an item. Every connected machine has
+   direct access to all of the connected chests, the items don't 'flow' across game tiles.
+2. The shipping bin is lower-priority, but it'll still empty the connected chest if all the other
+   machines are busy.
 
-Caveats:
-* Due to their special behaviour, you can't change input/output options for a Junimo chest. Junimo
-  chests are always automated if at least one is connected to a machine.
- 
-  They have the highest priority for machine input, and the lowest priority for machine output.
-  (That is, items are only pushed into a Junimo chest if no other chest is available. Items are
-  still available to all machines in the global group either way.)
+So there are three common ways to implement a pipeline:
+
+<dl>
+<dt>Simple pipeline with machine priorities</dt>
+<dd>
+
+If you have enough machines to process every input item, that pipeline will work fine even if
+there's a shipping bin. The shipping bin will only take items from the chest if every other machine
+is full. If needed, you can set [custom machine priorities](#machine-priorities) to do the same
+with other machine types.
+
+</dd>
+
+<dt>Simple pipeline with air gap</dt>
+<dd>
+
+Another approach is to keep the shipping bin separate from the rest of the machines:
+
+```
+                 back to chest <───┐
+                                   │
+ milk         cheese      aged     │
+ ──────────> ──────────> ──────────┘
+┌──────────┐┌──────────┐┌──────────┐            ┌──────────┐
+│  chest   ││  cheese  ││   cask   │            │ shipping │
+│          ││  press   ││          │            │   bin    │
+└──────────┘├──────────┤├──────────┤            └──────────┘
+            │  cheese  ││   cask   │
+            │  press   ││          │
+            └──────────┘└──────────┘
+```
+
+All the processed items will be put back into the chest when they're done. Occasionally you can
+manually connect the shipping bin (e.g. using a [path connector](#connectors)) to empty out all the
+processed items.
+
+</dd>
+
+<dt>Advanced pipeline with Super Hopper</dt>
+<dd>
+
+[Super Hopper](https://www.nexusmods.com/stardewvalley/mods/9418) is a mod which lets hoppers
+transfer items from the chest above them to the one below. These are ignored by Automate, so you
+can use them to create a chain of machine groups. That lets you support any number of input items
+without sending unprocessed items to the shipping bin or wrong machine.
+
+The trick is:
+
+1. Put each machine type is in its own group, not connected to the other machine types.
+2. Give each group an 'input chest' (which receives items to process) and 'output chest' (which
+   receives items processed by the connected machines). [Use Chests Anywhere to set the chests'
+   automation options](#Configure) to "_never put items in this chest_" and "_never take items from
+   this chest_" respectively.
+3. Add a super hopper below the 'output chest' of one group, and the 'input chest' of the next.
+
+Here's the same example using super hoppers:
+```
+                   1. milk turned into cheese
+                   ────────────────────────────────────────────────────>
+                 ┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+                 │  input   ││  cheese  ││  cheese  ││  cheese  ││  output  │  │
+                 │  chest   ││  press   ││  press   ││  press   ││  chest   │  │
+                 └──────────┘└──────────┘└──────────┘└──────────┘└──────────┘  │
+                                                                 ┌──────────┐  │ 2.
+                                                                 │  super   │  │ Super Hopper
+                                                                 │  hopper  │  │ transfers item
+                                                                 └──────────┘  │ to next group
+                 ┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐  │
+               │ │  output  ││   cask   ││   cask   ││   cask   ││  input   │  v
+               │ │  chest   ││          ││          ││          ││  chest   │
+4.             │ └──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+Super Hopper   │ ┌──────────┐  <────────────────────────────────────────────
+transfers item │ │  super   │               3. cheese aged to iridum quality
+to next group  │ │  hopper  │
+               │ └──────────┘
+               │ ┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+               v │  input   ││ mini     ││ mini     ││ mini     ││ mini     │
+                 │  chest   ││ ship bin ││ ship bin ││ ship bin ││ ship bin │
+                 └──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+                   ────────────────────────────────────────────────────>
+                   5. item shipped
+```
+
+</dd>
+</dl>
 
 ## Configure
 ### In-game settings
@@ -252,6 +317,14 @@ These are the available settings:
   <th>what it affects</th>
 </tr>
 <tr>
+<tr>
+  <td><code>Enabled</code></td>
+  <td>
+
+Whether Automate features are enabled. If this is `false`, no machines will be automated and the overlay won't appear.
+
+  </td>
+</tr>
 <tr>
   <td><code>Controls</code></td>
   <td>

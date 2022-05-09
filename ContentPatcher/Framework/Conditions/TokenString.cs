@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Lexing;
@@ -47,7 +48,7 @@ namespace ContentPatcher.Framework.Conditions
         public bool IsSingleTokenOnly { get; }
 
         /// <inheritdoc />
-        public string Value { get; private set; }
+        public string? Value { get; private set; }
 
         /// <inheritdoc />
         public bool IsReady => this.State.IsReady;
@@ -70,15 +71,17 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="inputArgs">The raw token input arguments.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(LexTokenInput inputArgs, IContext context, LogPathBuilder path)
+        public TokenString(LexTokenInput? inputArgs, IContext context, LogPathBuilder path)
             : this(lexTokens: inputArgs?.Parts, context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
+        public TokenString(ILexToken[]? lexTokens, IContext context, LogPathBuilder path)
         {
+            this.Path = path.ToString();
+
             // get lexical tokens
             this.Parts =
                 (
@@ -104,7 +107,7 @@ namespace ContentPatcher.Framework.Conditions
             foreach (LexTokenToken lexToken in this.GetTokenPlaceholders(this.LexTokens, recursive: true))
             {
                 hasTokens = true;
-                IToken token = context.GetToken(lexToken.Name, enforceContext: false);
+                IToken? token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
                 {
                     this.TokensUsed.Add(token.Name);
@@ -112,7 +115,7 @@ namespace ContentPatcher.Framework.Conditions
                 }
                 else
                 {
-                    string requiredModId = lexToken.GetProviderModId();
+                    string? requiredModId = lexToken.GetProviderModId();
                     if (!string.IsNullOrWhiteSpace(requiredModId) && !context.IsModInstalled(requiredModId))
                         this.State.AddUnavailableModTokens(requiredModId);
                     else
@@ -126,7 +129,6 @@ namespace ContentPatcher.Framework.Conditions
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
             this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);
-            this.Path = path.ToString();
 
             // set initial context
             if (this.State.IsReady)
@@ -170,7 +172,7 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public override string ToString()
+        public override string? ToString()
         {
             return this.IsReady
                 ? this.Value
@@ -191,7 +193,7 @@ namespace ContentPatcher.Framework.Conditions
                 return false;
 
             // reset
-            string wasValue = this.Value;
+            string? wasValue = this.Value;
             bool wasReady = this.State.IsReady;
             this.State.Reset();
 
@@ -199,7 +201,7 @@ namespace ContentPatcher.Framework.Conditions
             {
                 StringBuilder str = new StringBuilder();
                 foreach (TokenStringPart part in this.Parts)
-                    str.Append(this.TryGetTokenText(context, part, this.State, out string text) ? text : part.LexToken.ToString());
+                    str.Append(this.TryGetTokenText(context, part, this.State, out string? text) ? text : part.LexToken.ToString());
 
                 this.Value = this.State.IsReady
                     ? str.ToString().Trim()
@@ -233,7 +235,7 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Recursively get the token placeholders from the given lexical tokens.</summary>
         /// <param name="lexTokens">The lexical tokens to scan.</param>
         /// <param name="recursive">Whether to scan recursively.</param>
-        private IEnumerable<LexTokenToken> GetTokenPlaceholders(IEnumerable<ILexToken> lexTokens, bool recursive)
+        private IEnumerable<LexTokenToken> GetTokenPlaceholders(IEnumerable<ILexToken>? lexTokens, bool recursive)
         {
             lexTokens = lexTokens?.ToArray();
 
@@ -258,14 +260,14 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="state">The context state to update with errors, unavailable tokens, etc.</param>
         /// <param name="text">The text representation, if available.</param>
         /// <returns>Returns true if the token is ready and <paramref name="text"/> was set, else false.</returns>
-        private bool TryGetTokenText(IContext context, TokenStringPart part, ContextualState state, out string text)
+        private bool TryGetTokenText(IContext context, TokenStringPart part, ContextualState state, [NotNullWhen(true)] out string? text)
         {
             switch (part.LexToken)
             {
                 case LexTokenToken lexToken:
                     {
                         // get token
-                        IToken token = context.GetToken(lexToken.Name, enforceContext: false);
+                        IToken? token = context.GetToken(lexToken.Name, enforceContext: false);
                         if (token == null)
                         {
                             state.AddInvalidTokens(lexToken.Name);
@@ -292,7 +294,7 @@ namespace ContentPatcher.Framework.Conditions
                         }
 
                         // validate input
-                        if (!token.TryValidateInput(part.InputArgs, out string error))
+                        if (!token.TryValidateInput(part.InputArgs, out string? error))
                         {
                             state.AddErrors(error);
                             text = null;
@@ -351,7 +353,7 @@ namespace ContentPatcher.Framework.Conditions
             public ILexToken LexToken { get; }
 
             /// <summary>The input to the lex token, if it's a <see cref="LexTokenType.Token"/>.</summary>
-            public TokenString Input { get; }
+            public TokenString? Input { get; }
 
             /// <summary>The parsed version of <see cref="Input"/>.</summary>
             public IInputArguments InputArgs { get; }
@@ -363,11 +365,13 @@ namespace ContentPatcher.Framework.Conditions
             /// <summary>Construct an instance.</summary>
             /// <param name="lexToken">The underlying lex token.</param>
             /// <param name="input">The parsed version of <see cref="Input"/>.</param>
-            public TokenStringPart(ILexToken lexToken, TokenString input)
+            public TokenStringPart(ILexToken lexToken, TokenString? input)
             {
                 this.LexToken = lexToken;
                 this.Input = input;
-                this.InputArgs = new InputArguments(input);
+                this.InputArgs = input != null
+                    ? new InputArguments(input)
+                    : InputArguments.Empty;
             }
         }
     }

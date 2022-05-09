@@ -44,16 +44,6 @@ namespace Pathoschild.Stardew.Common.Items.ItemData
             this.Item = createItem(this);
         }
 
-        /// <summary>Construct an instance.</summary>
-        /// <param name="item">The item metadata to copy.</param>
-        public SearchableItem(SearchableItem item)
-        {
-            this.Type = item.Type;
-            this.ID = item.ID;
-            this.CreateItem = item.CreateItem;
-            this.Item = item.Item;
-        }
-
         /// <summary>Get whether the item name contains a case-insensitive substring.</summary>
         /// <param name="substring">The substring to find.</param>
         public bool NameContains(string substring)

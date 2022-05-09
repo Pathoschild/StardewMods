@@ -15,7 +15,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Construct an instance.</summary>
         /// <param name="label">A short field label.</param>
         /// <param name="fields">The debug fields to display.</param>
-        public DataMiningField(string label, IEnumerable<IDebugField> fields)
+        public DataMiningField(string label, IEnumerable<IDebugField>? fields)
             : base(label)
         {
             IDebugField[] fieldArray = fields?.ToArray() ?? Array.Empty<IDebugField>();

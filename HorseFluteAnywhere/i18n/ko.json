@@ -5,6 +5,6 @@
     "config.require-flute.name": "말 피리 필요",
     "config.require-flute.description": "말을 소환하기 위해 인벤토리의 말피리 아이템이 필요한지 여부. 기본값 - false",
 
-    "config.summon-horse-button.name": "말 버튼 소환",
-    "config.summon-horse-button.description": "피리를 연주하고 말을 소환할 때 누르는 버튼. 기본값 - {{defaultValue}}."
+    "config.summon-horse-button.name": "말 소환 버튼",
+    "config.summon-horse-button.description": "피리를 연주하고 말을 소환하는 버튼. 기본값 - {{defaultValue}}."
 }

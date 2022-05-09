@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
@@ -26,10 +27,11 @@ namespace ContentPatcher.Framework.Locations
         public IContentPack ContentPack { get; }
 
         /// <summary>Whether the location is enabled.</summary>
+        [MemberNotNullWhen(false, nameof(CustomLocationData.Error))]
         public bool IsEnabled { get; private set; }
 
         /// <summary>The reason the custom location is disabled, if applicable.</summary>
-        public string Error { get; private set; }
+        public string? Error { get; private set; }
 
         /// <summary>Whether the custom location defines any legacy names.</summary>
         public bool HasLegacyNames { get; }

@@ -20,10 +20,10 @@ namespace ContentPatcher.Framework.Patches
         public ITokenString ID { get; }
 
         /// <summary>The ID of another entry this one should be inserted before.</summary>
-        public ITokenString BeforeID { get; }
+        public ITokenString? BeforeID { get; }
 
         /// <summary>The ID of another entry this one should be inserted after.</summary>
-        public ITokenString AfterID { get; }
+        public ITokenString? AfterID { get; }
 
         /// <summary>The position to set.</summary>
         public MoveEntryPosition ToPosition { get; }
@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="beforeID">The ID of another entry this one should be inserted before.</param>
         /// <param name="afterID">The ID of another entry this one should be inserted after.</param>
         /// <param name="toPosition">The position to set.</param>
-        public EditDataPatchMoveRecord(IManagedTokenString id, IManagedTokenString beforeID, IManagedTokenString afterID, MoveEntryPosition toPosition)
+        public EditDataPatchMoveRecord(IManagedTokenString id, IManagedTokenString? beforeID, IManagedTokenString? afterID, MoveEntryPosition toPosition)
         {
             this.ID = id;
             this.BeforeID = beforeID;

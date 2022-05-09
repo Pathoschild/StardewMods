@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.10.0
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
+* Updated for SMAPI 3.14.0.
+* Added support for horse flute animation.
+* Fixed incorrect label in config UI (thanks to Becks723!).
+* Improved translations. Thanks to Becks723 (added Chinese) and ChulkyBow (updated Ukrainian)!
+
 ## 1.9.12
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Pathoschild.Stardew.Common
 {
@@ -25,7 +26,7 @@ namespace Pathoschild.Stardew.Common
         /// <param name="index">The item index within the list.</param>
         /// <param name="value">The retrieved value, if applicable.</param>
         /// <returns>Returns whether the index was in range.</returns>
-        public static bool TryGetIndex<T>(this IList<T> list, int index, out T value)
+        public static bool TryGetIndex<T>(this IList<T> list, int index, [NotNullWhen(true)] out T? value)
         {
             if (!list.IsInRange(index))
             {
@@ -33,7 +34,7 @@ namespace Pathoschild.Stardew.Common
                 return false;
             }
 
-            value = list[index];
+            value = list[index]!;
             return true;
         }
     }

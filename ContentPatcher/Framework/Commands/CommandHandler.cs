@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        public CommandHandler(PerScreen<ScreenManager> screenManager, IMonitor monitor, IContentHelper contentHelper, LoadedContentPack[] contentPacks, Func<string, IContext> getContext, Action updateContext)
+        public CommandHandler(PerScreen<ScreenManager> screenManager, IMonitor monitor, IGameContentHelper contentHelper, LoadedContentPack[] contentPacks, Func<string?, IContext> getContext, Action updateContext)
             : base("patch", "Content Patcher", CommandHandler.BuildCommands(screenManager, monitor, contentHelper, contentPacks, getContext, updateContext), monitor) { }
 
 
@@ -34,7 +34,7 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="contentPacks">The loaded content packs.</param>
         /// <param name="getContext">Get the current token context.</param>
         /// <param name="updateContext">A callback which immediately updates the current condition context.</param>
-        private static ICommand[] BuildCommands(PerScreen<ScreenManager> screenManager, IMonitor monitor, IContentHelper contentHelper, LoadedContentPack[] contentPacks, Func<string, IContext> getContext, Action updateContext)
+        private static ICommand[] BuildCommands(PerScreen<ScreenManager> screenManager, IMonitor monitor, IGameContentHelper contentHelper, LoadedContentPack[] contentPacks, Func<string?, IContext> getContext, Action updateContext)
         {
             return new ICommand[]
             {
@@ -43,7 +43,8 @@ namespace ContentPatcher.Framework.Commands
                     getPatchManager: () => screenManager.Value.PatchManager
                 ),
                 new ExportCommand(
-                    monitor: monitor
+                    monitor: monitor,
+                    contentHelper: contentHelper
                 ),
                 new InvalidateCommand(
                     monitor: monitor,

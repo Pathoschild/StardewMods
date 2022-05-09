@@ -17,14 +17,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         ** Fields
         *********/
         /// <summary>The item that can be created by this recipe, given the ingredient.</summary>
-        private readonly Func<Item, Item> Item;
+        private readonly Func<Item?, Item?>? Item;
 
 
         /*********
         ** Accessors
         *********/
         /// <summary>The recipe's lookup name (if any).</summary>
-        public string Key { get; }
+        public string? Key { get; }
 
         /// <summary>The object parent sheet index for the machine, if applicable.</summary>
         public int? MachineParentSheetIndex { get; }
@@ -63,7 +63,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         public Func<bool> IsKnown { get; }
 
         /// <summary>The sprite and display text for a non-standard recipe output.</summary>
-        public RecipeItemEntry SpecialOutput { get; }
+        public RecipeItemEntry? SpecialOutput { get; }
 
 
         /*********
@@ -84,7 +84,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
         /// <param name="minOutput">The minimum number of items output by the recipe.</param>
         /// <param name="maxOutput">The maximum number of items output by the recipe.</param>
         /// <param name="outputChance">The percentage chance of this recipe being produced (or <c>null</c> if the recipe is always used).</param>
-        public RecipeModel(string key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item, Item> item, Func<bool> isKnown, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel> exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
+        public RecipeModel(string? key, RecipeType type, string displayType, IEnumerable<RecipeIngredientModel> ingredients, Func<Item?, Item?>? item, Func<bool> isKnown, int? machineParentSheetIndex, Func<object, bool> isForMachine, IEnumerable<RecipeIngredientModel>? exceptIngredients = null, int? outputItemIndex = null, ItemType? outputItemType = null, int? minOutput = null, int? maxOutput = null, decimal? outputChance = null)
         {
             // normalize values
             if (minOutput == null && maxOutput == null)
@@ -109,8 +109,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             this.IsKnown = isKnown;
             this.OutputItemIndex = outputItemIndex;
             this.OutputItemType = outputItemType;
-            this.MinOutput = minOutput.Value;
-            this.MaxOutput = maxOutput.Value;
+            this.MinOutput = minOutput!.Value;
+            this.MaxOutput = maxOutput!.Value;
             this.OutputChance = outputChance is > 0 and < 100 ? outputChance.Value : 100;
         }
 
@@ -151,8 +151,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
             )
         {
             this.SpecialOutput = new RecipeItemEntry(
-                sprite: new SpriteInfo(building.texture.Value, building.getSourceRectForMenu()),
-                displayText: blueprint.displayName ?? building.buildingType.Value
+                Sprite: new SpriteInfo(building.texture.Value, building.getSourceRectForMenu()),
+                DisplayText: blueprint.displayName ?? building.buildingType.Value
             );
         }
 
@@ -177,8 +177,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Models
 
         /// <summary>Create the item crafted by this recipe if it's valid.</summary>
         /// <param name="ingredient">The optional ingredient for which to create an item.</param>
-        public Item TryCreateItem(Item ingredient)
+        public Item? TryCreateItem(Item? ingredient)
         {
+            if (this.Item is null)
+                return null;
+
             try
             {
                 return this.Item(ingredient);

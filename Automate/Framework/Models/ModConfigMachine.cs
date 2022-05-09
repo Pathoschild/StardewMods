@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Pathoschild.Stardew.Automate.Framework.Models
 {
@@ -19,17 +20,18 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         ** Public methods
         *********/
         /// <summary>Get the machine settings which don't match the default.</summary>
-        public IDictionary<string, string> GetCustomSettings()
+        public IDictionary<string, string?> GetCustomSettings()
         {
-            IDictionary<string, string> customSettings = new Dictionary<string, string>();
+            Dictionary<string, string?> customSettings = new();
 
             var defaults = new ModConfigMachine();
-            foreach (var property in this.GetType().GetProperties())
+            foreach (PropertyInfo property in this.GetType().GetProperties())
             {
-                object curValue = property.GetValue(this);
-                object defaultValue = property.GetValue(defaults);
+                object? curValue = property.GetValue(this);
+                object? defaultValue = property.GetValue(defaults);
 
-                if (!defaultValue.Equals(curValue))
+                bool equal = defaultValue?.Equals(curValue) ?? curValue is null;
+                if (!equal)
                     customSettings[property.Name] = curValue?.ToString();
             }
 

@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
+using Pathoschild.Stardew.LookupAnything.Framework.Data;
 using Pathoschild.Stardew.LookupAnything.Framework.Fields.Models;
 using StardewValley;
 using StardewValley.Buildings;
@@ -151,11 +152,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <remarks>Derived from <see cref="FishPond.dayUpdate"/> and <see cref="FishPond.GetFishProduce"/>.</remarks>
         private IEnumerable<FishPondDrop> GetEntries(int currentPopulation, FishPondData data, GameHelper gameHelper)
         {
-            foreach (var drop in gameHelper.GetFishPondDrops(data))
+            foreach (FishPondDropData drop in gameHelper.GetFishPondDrops(data))
             {
                 bool isUnlocked = currentPopulation >= drop.MinPopulation;
                 SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
-                SpriteInfo sprite = gameHelper.GetSprite(item);
+                SpriteInfo? sprite = gameHelper.GetSprite(item);
                 yield return new FishPondDrop(drop, item, sprite, isUnlocked);
             }
         }

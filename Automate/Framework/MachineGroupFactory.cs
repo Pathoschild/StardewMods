@@ -24,7 +24,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         private readonly IList<IAutomationFactory> AutomationFactories = new List<IAutomationFactory>();
 
         /// <summary>Get the configuration for specific machines by ID, if any.</summary>
-        private readonly Func<string, ModConfigMachine> GetMachineOverride;
+        private readonly Func<string, ModConfigMachine?> GetMachineOverride;
 
         /// <summary>Build a storage manager for the given containers.</summary>
         private readonly Func<IContainer[], StorageManager> BuildStorage;
@@ -36,7 +36,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Construct an instance.</summary>
         /// <param name="getMachineOverride">Get the configuration for specific machines by ID, if any.</param>
         /// <param name="buildStorage">Build a storage manager for the given containers.</param>
-        public MachineGroupFactory(Func<string, ModConfigMachine> getMachineOverride, Func<IContainer[], StorageManager> buildStorage)
+        public MachineGroupFactory(Func<string, ModConfigMachine?> getMachineOverride, Func<IContainer[], StorageManager> buildStorage)
         {
             this.GetMachineOverride = getMachineOverride;
             this.BuildStorage = buildStorage;
@@ -75,8 +75,8 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         public IEnumerable<IMachineGroup> GetMachineGroups(GameLocation location)
         {
-            MachineGroupBuilder builder = new MachineGroupBuilder(this.GetLocationKey(location), this.SortMachines, this.BuildStorage);
-            LocationFloodFillIndex locationIndex = new LocationFloodFillIndex(location);
+            MachineGroupBuilder builder = new(this.GetLocationKey(location), this.SortMachines, this.BuildStorage);
+            LocationFloodFillIndex locationIndex = new(location);
             ISet<Vector2> visited = new HashSet<Vector2>();
             foreach (Vector2 tile in location.GetTiles())
             {
@@ -176,7 +176,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="tile">The tile to search.</param>
         private bool TryAddEntity(MachineGroupBuilder group, GameLocation location, LocationFloodFillIndex locationIndex, in Vector2 tile)
         {
-            IAutomatable entity = this.GetEntity(location, locationIndex, tile);
+            IAutomatable? entity = this.GetEntity(location, locationIndex, tile);
             switch (entity)
             {
                 case null:
@@ -205,7 +205,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         /// <param name="locationIndex">An indexed view of the location.</param>
         /// <param name="tile">The tile to search.</param>
-        private IAutomatable GetEntity(GameLocation location, LocationFloodFillIndex locationIndex, Vector2 tile)
+        private IAutomatable? GetEntity(GameLocation location, LocationFloodFillIndex locationIndex, Vector2 tile)
         {
             // from entity
             foreach (object target in locationIndex.GetEntities(tile))
@@ -214,7 +214,7 @@ namespace Pathoschild.Stardew.Automate.Framework
                 {
                     case SObject obj:
                         {
-                            IAutomatable entity = this.GetEntityFor(location, tile, obj);
+                            IAutomatable? entity = this.GetEntityFor(location, tile, obj);
                             if (entity != null)
                                 return entity;
 
@@ -229,7 +229,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                     case TerrainFeature feature:
                         {
-                            IAutomatable entity = this.GetEntityFor(location, tile, feature);
+                            IAutomatable? entity = this.GetEntityFor(location, tile, feature);
                             if (entity != null)
                                 return entity;
                         }
@@ -237,7 +237,7 @@ namespace Pathoschild.Stardew.Automate.Framework
 
                     case Building building:
                         {
-                            IAutomatable entity = this.GetEntityFor((BuildableGameLocation)location, tile, building);
+                            IAutomatable? entity = this.GetEntityFor((BuildableGameLocation)location, tile, building);
                             if (entity != null)
                                 return entity;
                         }
@@ -248,7 +248,7 @@ namespace Pathoschild.Stardew.Automate.Framework
             // from tile position
             foreach (IAutomationFactory factory in this.AutomationFactories)
             {
-                IAutomatable entity = factory.GetForTile(location, tile);
+                IAutomatable? entity = factory.GetForTile(location, tile);
                 if (entity != null)
                     return entity;
             }
@@ -261,11 +261,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="obj">The object to check.</param>
-        private IAutomatable GetEntityFor(GameLocation location, Vector2 tile, SObject obj)
+        private IAutomatable? GetEntityFor(GameLocation location, Vector2 tile, SObject obj)
         {
             foreach (IAutomationFactory factory in this.AutomationFactories)
             {
-                IAutomatable entity = factory.GetFor(obj, location, tile);
+                IAutomatable? entity = factory.GetFor(obj, location, tile);
                 if (entity != null)
                     return entity;
             }
@@ -277,11 +277,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="feature">The terrain feature to check.</param>
-        private IAutomatable GetEntityFor(GameLocation location, Vector2 tile, TerrainFeature feature)
+        private IAutomatable? GetEntityFor(GameLocation location, Vector2 tile, TerrainFeature feature)
         {
             foreach (IAutomationFactory factory in this.AutomationFactories)
             {
-                IAutomatable entity = factory.GetFor(feature, location, tile);
+                IAutomatable? entity = factory.GetFor(feature, location, tile);
                 if (entity != null)
                     return entity;
             }
@@ -293,11 +293,11 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The location to search.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="building">The building to check.</param>
-        private IAutomatable GetEntityFor(BuildableGameLocation location, Vector2 tile, Building building)
+        private IAutomatable? GetEntityFor(BuildableGameLocation location, Vector2 tile, Building building)
         {
             foreach (IAutomationFactory factory in this.AutomationFactories)
             {
-                IAutomatable entity = factory.GetFor(building, location, tile);
+                IAutomatable? entity = factory.GetFor(building, location, tile);
                 if (entity != null)
                     return entity;
             }

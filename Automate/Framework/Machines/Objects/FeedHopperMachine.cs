@@ -36,16 +36,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             return null;
-        }
-
-        /// <summary>Reset the machine so it's ready to accept a new input.</summary>
-        /// <param name="outputTaken">Whether the current output was taken.</param>
-        public void Reset(bool outputTaken)
-        {
-            // not applicable
         }
 
         /// <summary>Provide input to the machine.</summary>

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 
@@ -32,7 +33,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         ** NPCs
         ****/
         /// <summary>The names of villagers for which to override the <see cref="StardewValley.NPC.CanSocialize"/> field.</summary>
-        public IDictionary<string, bool> ForceSocialVillagers { get; set; }
+        public Dictionary<string, bool> ForceSocialVillagers { get; set; } = new();
 
         /// <summary>The number of hearts for dateable NPCs which are locked until you give them a bouquet.</summary>
         public int DatingHearts { get; set; }
@@ -52,7 +53,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 
         /// <summary>The experience points needed for each skill level.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Farmer.checkForLevelGain"/>.</remarks>
-        public int[] PlayerSkillPointsPerLevel { get; set; }
+        public int[] PlayerSkillPointsPerLevel { get; set; } = Array.Empty<int>();
 
         /****
         ** Time
@@ -69,7 +70,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         ****/
         /// <summary>The age thresholds for casks.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Objects.Cask.checkForMaturity"/>.</remarks>
-        public IDictionary<ItemQuality, int> CaskAgeSchedule { get; set; }
+        public Dictionary<ItemQuality, int> CaskAgeSchedule { get; set; } = new();
 
         /****
         ** Items
@@ -82,14 +83,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Data
         /// - artisanal products aged in the cask (derived from <see cref="StardewValley.Objects.Cask.performObjectDropInAction"/>);
         /// - forage crops.
         /// </remarks>
-        public int[] ItemsWithIridiumQuality { get; set; }
+        public int[] ItemsWithIridiumQuality { get; set; } = Array.Empty<int>();
 
         /****
         ** Achievements
         ****/
         /// <summary>The crops that must be shipped for the polyculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>
-        public int[] PolycultureCrops { get; set; }
+        public int[] PolycultureCrops { get; set; } = Array.Empty<int>();
 
         /// <summary>The number of each crop that must be shipped for the polyculture achievement.</summary>
         /// <remarks>Derived from <see cref="StardewValley.Stats.checkForShippingAchievements"/>.</remarks>

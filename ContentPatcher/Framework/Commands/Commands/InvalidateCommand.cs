@@ -10,7 +10,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         ** Fields
         *********/
         /// <summary>The content helper with which to invalidate assets.</summary>
-        private readonly IContentHelper ContentHelper;
+        private readonly IGameContentHelper ContentHelper;
 
 
         /*********
@@ -19,7 +19,7 @@ namespace ContentPatcher.Framework.Commands.Commands
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         /// <param name="contentHelper">The content helper with which to invalidate assets.</param>
-        public InvalidateCommand(IMonitor monitor, IContentHelper contentHelper)
+        public InvalidateCommand(IMonitor monitor, IGameContentHelper contentHelper)
             : base(monitor, "invalidate")
         {
             this.ContentHelper = contentHelper;

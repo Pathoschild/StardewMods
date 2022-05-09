@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
@@ -66,7 +67,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="targetFields">The field within the data asset to which edits should be applied, or empty to apply to the root asset.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetFields, out string error);
+        public delegate bool TryParseFieldsDelegate(IContext context, PatchConfig entry, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out List<IManagedTokenString> targetFields, [NotNullWhen(false)] out string? error);
 
 
         /*********
@@ -87,9 +88,9 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
+        /// <param name="parseAssetName">Parse an asset name.</param>
         /// <param name="tryParseFields">Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</param>
-        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromFile, IEnumerable<EditDataPatchRecord> records, IEnumerable<EditDataPatchField> fields, IEnumerable<EditDataPatchMoveRecord> moveRecords, IEnumerable<TextOperation> textOperations, IEnumerable<IManagedTokenString> targetField, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName, TryParseFieldsDelegate tryParseFields)
+        public EditDataPatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString? fromFile, IEnumerable<EditDataPatchRecord>? records, IEnumerable<EditDataPatchField>? fields, IEnumerable<EditDataPatchMoveRecord>? moveRecords, IEnumerable<TextOperation>? textOperations, IEnumerable<IManagedTokenString>? targetField, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName, TryParseFieldsDelegate tryParseFields)
             : base(
                 indexPath: indexPath,
                 path: path,
@@ -99,14 +100,14 @@ namespace ContentPatcher.Framework.Patches
                 updateRate: updateRate,
                 contentPack: contentPack,
                 parentPatch: parentPatch,
-                normalizeAssetName: normalizeAssetName,
+                parseAssetName: parseAssetName,
                 fromAsset: fromFile
             )
         {
             // set fields
-            this.Records = records?.ToArray();
-            this.Fields = fields?.ToArray();
-            this.MoveRecords = moveRecords?.ToArray();
+            this.Records = records?.ToArray() ?? Array.Empty<EditDataPatchRecord>();
+            this.Fields = fields?.ToArray() ?? Array.Empty<EditDataPatchField>();
+            this.MoveRecords = moveRecords?.ToArray() ?? Array.Empty<EditDataPatchMoveRecord>();
             this.TextOperations = textOperations?.ToArray() ?? Array.Empty<TextOperation>();
             this.TargetField = targetField?.ToArray() ?? Array.Empty<IManagedTokenString>();
             this.Monitor = monitor;
@@ -126,11 +127,11 @@ namespace ContentPatcher.Framework.Patches
         public override bool UpdateContext(IContext context)
         {
             // skip: don't need to handle a data file
-            if (this.RawFromAsset == null)
+            if (!this.HasFromAsset)
                 return base.UpdateContext(context);
 
             // skip: file already loaded and target didn't change
-            if (!this.ManagedRawTargetAsset.UpdateContext(context) && this.AttemptedDataLoad)
+            if (!this.ManagedRawTargetAsset!.UpdateContext(context) && this.AttemptedDataLoad)
                 return base.UpdateContext(context);
 
             // reload non-data changes
@@ -146,7 +147,7 @@ namespace ContentPatcher.Framework.Patches
             this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
             if (this.IsReady)
             {
-                if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord> records, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error))
+                if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord>? records, out List<EditDataPatchField>? fields, out List<EditDataPatchMoveRecord>? moveEntries, out string? error))
                 {
                     this.Records = records.ToArray();
                     this.Fields = fields.ToArray();
@@ -175,8 +176,7 @@ namespace ContentPatcher.Framework.Patches
             string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
 
             // get editor
-            IKeyValueEditor editor = this.EditorFactory.GetEditorFor(asset.Data);
-            if (editor is null)
+            if (!this.EditorFactory.TryGetEditorFor(asset.Data, out IKeyValueEditor? editor))
             {
                 this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError("the target asset", asset.Data, entryExists: true)}", LogLevel.Warn);
                 return;
@@ -189,14 +189,13 @@ namespace ContentPatcher.Framework.Patches
 
                 foreach (IManagedTokenString fieldName in this.TargetField)
                 {
-                    path.Add(fieldName.Value);
+                    path.Add(fieldName.Value!);
                     IKeyValueEditor parentEditor = editor;
 
-                    object key = parentEditor.ParseKey(fieldName.Value);
-                    object data = parentEditor.GetEntry(key);
+                    object key = parentEditor.ParseKey(fieldName.Value!);
+                    object? data = parentEditor.GetEntry(key);
 
-                    editor = this.EditorFactory.GetEditorFor(data);
-                    if (editor is null)
+                    if (!this.EditorFactory.TryGetEditorFor(data, out editor))
                     {
                         this.Monitor.Log($"{errorPrefix}: {this.GetEditorNotCompatibleError($"the field '{string.Join("' > '", path)}'", data, entryExists: parentEditor.HasEntry(key))}", LogLevel.Warn);
                         return;
@@ -212,13 +211,13 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
-            if (this.Records?.Any(p => p.Value?.Value == null) == true)
+            if (this.Records.Any(p => p.Value?.Value == null))
                 yield return "deleted entries";
 
-            if (this.Fields?.Any() == true || this.Records?.Any(p => p.Value?.Value != null) == true)
+            if (this.Fields.Any() || this.Records.Any(p => p.Value?.Value != null))
                 yield return "changed entries";
 
-            if (this.MoveRecords?.Any() == true)
+            if (this.MoveRecords.Any())
                 yield return "reordered entries";
 
             if (this.TextOperations.Any())
@@ -237,7 +236,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="moveEntries">The parsed move entry records.</param>
         /// <param name="error">The error message indicating why parsing failed, if applicable.</param>
         /// <returns>Returns whether parsing succeeded.</returns>
-        private bool TryLoadFile(ITokenString fromFile, IContext context, out List<EditDataPatchRecord> entries, out List<EditDataPatchField> fields, out List<EditDataPatchMoveRecord> moveEntries, out string error)
+        private bool TryLoadFile(ITokenString fromFile, IContext context, [NotNullWhen(true)] out List<EditDataPatchRecord>? entries, [NotNullWhen(true)] out List<EditDataPatchField>? fields, [NotNullWhen(true)] out List<EditDataPatchMoveRecord>? moveEntries, [NotNullWhen(false)] out string? error)
         {
             if (fromFile.IsMutable && !fromFile.IsReady)
             {
@@ -249,7 +248,7 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // validate path
-            if (!this.ContentPack.HasFile(fromFile.Value))
+            if (!this.ContentPack.HasFile(fromFile.Value!))
             {
                 error = "that file doesn't exist in the content pack";
                 entries = null;
@@ -259,10 +258,18 @@ namespace ContentPatcher.Framework.Patches
             }
 
             // load JSON file
-            PatchConfig model;
+            PatchConfig? model;
             try
             {
-                model = this.ContentPack.ReadJsonFile<PatchConfig>(fromFile.Value);
+                model = this.ContentPack.ReadJsonFile<PatchConfig>(fromFile.Value!);
+                if (model == null)
+                {
+                    error = "could not parse that file: file contains a null patch.";
+                    entries = null;
+                    fields = null;
+                    moveEntries = null;
+                    return false;
+                }
             }
             catch (JsonException ex)
             {
@@ -294,9 +301,6 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="editor">The asset editor to apply.</param>
         private void ApplyRecords(IKeyValueEditor editor)
         {
-            if (this.Records == null)
-                return;
-
             int i = 0;
             foreach (EditDataPatchRecord record in this.Records)
             {
@@ -304,8 +308,8 @@ namespace ContentPatcher.Framework.Patches
                 i++;
 
                 // get entry info
-                object key = editor.ParseKey(record.Key.Value);
-                Type valueType = editor.GetEntryType(key);
+                object key = editor.ParseKey(record.Key.Value!);
+                Type? valueType = editor.GetEntryType(key);
 
                 // validate
                 if (!editor.CanAddEntries && !editor.HasEntry(key))
@@ -340,16 +344,13 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
         private void ApplyFields(IKeyValueEditor editor, char fieldDelimiter)
         {
-            if (this.Fields == null)
-                return;
-
-            foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value))
+            foreach (IGrouping<string, EditDataPatchField> recordGroup in this.Fields.GroupByIgnoreCase(p => p.EntryKey.Value!))
             {
                 string errorPrefix = $"Can't apply data patch \"{this.Path}\" to {this.TargetAsset}";
 
                 // get entry info
                 object key = editor.ParseKey(recordGroup.Key);
-                Type valueType = editor.GetEntryType(key);
+                Type? valueType = editor.GetEntryType(key);
 
                 // skip if doesn't exist
                 if (!editor.HasEntry(key))
@@ -361,7 +362,7 @@ namespace ContentPatcher.Framework.Patches
                 // apply string
                 if (valueType == typeof(string))
                 {
-                    string[] actualFields = ((string)editor.GetEntry(key)).Split(fieldDelimiter);
+                    string[] actualFields = ((string)editor.GetEntry(key)!).Split(fieldDelimiter);
                     foreach (EditDataPatchField field in recordGroup)
                     {
                         if (!int.TryParse(field.FieldKey.Value, out int index))
@@ -375,7 +376,7 @@ namespace ContentPatcher.Framework.Patches
                             continue;
                         }
 
-                        actualFields[index] = field.Value.Value.Value<string>();
+                        actualFields[index] = field.Value?.Value.Value<string?>() ?? string.Empty;
                     }
 
                     editor.SetEntry(key, string.Join(fieldDelimiter.ToString(), actualFields));
@@ -386,9 +387,9 @@ namespace ContentPatcher.Framework.Patches
                 {
                     JObject obj = new();
                     foreach (EditDataPatchField field in recordGroup)
-                        obj[field.FieldKey.Value] = field.Value.Value;
+                        obj[field.FieldKey.Value!] = field.Value?.Value;
                     using JsonReader reader = obj.CreateReader();
-                    this.Serializer.Value.Populate(reader, editor.GetEntry(key));
+                    this.Serializer.Value.Populate(reader, editor.GetEntry(key)!);
                 }
             }
         }
@@ -400,7 +401,7 @@ namespace ContentPatcher.Framework.Patches
         {
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
-                if (!this.TryApplyTextOperation(this.TextOperations[i], editor, fieldDelimiter, out string error))
+                if (!this.TryApplyTextOperation(this.TextOperations[i], editor, fieldDelimiter, out string? error))
                     this.Monitor.Log($"Can't apply data patch \"{this.Path} > text operation #{i}\" to {this.TargetAsset}: {error}", LogLevel.Warn);
             }
         }
@@ -423,7 +424,7 @@ namespace ContentPatcher.Framework.Patches
                 if (!moveRecord.IsReady)
                     continue;
 
-                object key = editor.ParseKey(moveRecord.ID.Value);
+                object key = editor.ParseKey(moveRecord.ID.Value!);
                 string errorLabel = $"record \"{this.Path}\" > {nameof(PatchConfig.MoveEntries)} > \"{moveRecord.ID}\"";
 
                 // move record
@@ -434,7 +435,7 @@ namespace ContentPatcher.Framework.Patches
                 {
                     // get config
                     bool isAfter = moveRecord.AfterID.IsMeaningful();
-                    string rawAnchorKey = isAfter ? moveRecord.AfterID.Value : moveRecord.BeforeID.Value;
+                    string rawAnchorKey = (isAfter ? moveRecord.AfterID!.Value : moveRecord.BeforeID!.Value)!;
                     object anchorKey = editor.ParseKey(rawAnchorKey);
 
                     // move entry
@@ -473,7 +474,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="fieldDelimiter">The field delimiter for the data asset's string values, if applicable.</param>
         /// <param name="error">An error indicating why applying the operation failed, if applicable.</param>
         /// <returns>Returns whether applying the operation succeeded.</returns>
-        private bool TryApplyTextOperation(TextOperation operation, IKeyValueEditor editor, char fieldDelimiter, out string error)
+        private bool TryApplyTextOperation(TextOperation operation, IKeyValueEditor editor, char fieldDelimiter, [NotNullWhen(false)] out string? error)
         {
             var targetRoot = operation.GetTargetRoot();
             switch (targetRoot)
@@ -485,11 +486,11 @@ namespace ContentPatcher.Framework.Patches
                             return this.Fail($"an '{TextOperationTargetRoot.Entries}' path must have exactly one other segment: the entry key.", out error);
 
                         // get entry
-                        object key = editor.ParseKey(operation.Target[1].Value);
-                        Type entryType = editor.GetEntryType(key);
+                        object key = editor.ParseKey(operation.Target[1].Value!);
+                        Type? entryType = editor.GetEntryType(key);
                         if (entryType != typeof(string))
                             return this.Fail($"can't apply text operation to the '{operation.Target[1].Value}' entry because it's not a string value.", out error);
-                        string value = (string)editor.GetEntry(key);
+                        string? value = (string?)editor.GetEntry(key);
 
                         // set value
                         editor.SetEntry(key, operation.Apply(value));
@@ -503,41 +504,40 @@ namespace ContentPatcher.Framework.Patches
                             return this.Fail($"a '{TextOperationTargetRoot.Fields}' path must have exactly two other segments: one for the entry key, and one for the field key or index.", out error);
 
                         // get entry editor
-                        string rawEntryKey = operation.Target[1].Value;
-                        string rawFieldKey = operation.Target[2].Value;
-                        IKeyValueEditor entryEditor;
+                        string rawEntryKey = operation.Target[1].Value!;
+                        string rawFieldKey = operation.Target[2].Value!;
+                        IKeyValueEditor? entryEditor;
                         {
                             object key = editor.ParseKey(rawEntryKey);
-                            Type entryType = editor.GetEntryType(key);
-                            object entry = editor.GetEntry(key);
+                            Type? entryType = editor.GetEntryType(key);
+                            object? entry = editor.GetEntry(key);
                             if (entry is null)
                                 return this.Fail($"record '{rawEntryKey}' has no value, so field '{rawFieldKey}' can't be modified using text operations.", out error);
 
                             // get entry editor
-                            entryEditor = this.EditorFactory.GetEditorFor(entry);
-                            if (entryEditor is null)
+                            if (!this.EditorFactory.TryGetEditorFor(entry, out entryEditor))
                             {
                                 if (entryType == typeof(string))
                                     entryEditor = new DelimitedStringKeyValueEditor(editor, key, fieldDelimiter);
                                 else
-                                    return this.Fail($"record '{rawEntryKey}' > field '{rawFieldKey}' can't be modified using text operations because its type ({entryType.FullName}) isn't supported.", out error);
+                                    return this.Fail($"record '{rawEntryKey}' > field '{rawFieldKey}' can't be modified using text operations because its type ({entryType?.FullName ?? "<unknown>"}) isn't supported.", out error);
                             }
                         }
 
                         // get field
                         object fieldKey = entryEditor.ParseKey(rawFieldKey);
-                        Type fieldType = entryEditor.GetEntryType(fieldKey);
-                        object fieldValue = entryEditor.GetEntry(fieldKey);
+                        Type? fieldType = entryEditor.GetEntryType(fieldKey);
+                        object? fieldValue = entryEditor.GetEntry(fieldKey);
 
                         // validate type
                         if (fieldType != typeof(string))
                             return this.Fail($"field '{rawEntryKey}' > '{rawFieldKey}' has type '{fieldType}', but you can only apply text operations to a text field.", out error);
 
                         // edit value
-                        if (fieldValue is null)
-                            entryEditor.SetEntry(fieldKey, operation.Apply(""));
-                        else
-                            entryEditor.SetEntry(fieldKey, operation.Apply((string)fieldValue));
+                        entryEditor.SetEntry(
+                            fieldKey,
+                            operation.Apply(fieldValue as string ?? "")
+                        );
                     }
                     break;
 
@@ -558,7 +558,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="asset">The asset being edited.</param>
         private char GetStringFieldDelimiter(IAssetInfo asset)
         {
-            return asset.AssetNameEquals("Data/Achievements")
+            return asset.Name.IsEquivalentTo("Data/Achievements", useBaseName: true)
                 ? '^'
                 : '/';
         }
@@ -567,7 +567,7 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="nounPhrase">A noun phase </param>
         /// <param name="data">The data for which an editor couldn't be constructed.</param>
         /// <param name="entryExists">Whether the entry exists in the asset.</param>
-        private string GetEditorNotCompatibleError(string nounPhrase, object data, bool entryExists)
+        private string GetEditorNotCompatibleError(string nounPhrase, object? data, bool entryExists)
         {
             if (!entryExists || data is null)
                 return $"{nounPhrase} is null and can't be targeted for edits";

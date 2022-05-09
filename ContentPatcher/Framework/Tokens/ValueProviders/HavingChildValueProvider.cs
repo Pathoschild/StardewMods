@@ -51,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     foreach (Farmer player in this.SaveReader.GetAllPlayers())
                     {
                         // get spouse info
-                        if (!this.SaveReader.TryGetSpouseInfo(player, out string spouseName, out Friendship relationship, out Gender spouseGender, out bool isPlayerSpouse))
+                        if (!this.SaveReader.TryGetSpouseInfo(player, out string? spouseName, out Friendship? relationship, out Gender spouseGender, out bool isPlayerSpouse))
                             continue;
 
                         // check for pregnancy

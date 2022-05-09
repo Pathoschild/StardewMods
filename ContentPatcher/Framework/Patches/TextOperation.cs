@@ -46,12 +46,12 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="target">The specific text field to change as a breadcrumb path. Each value in the list represents a field to navigate into.</param>
         /// <param name="value">The value to append or prepend.</param>
         /// <param name="delimiter">If the target field already has a value, text to add between the previous and inserted values, if any.</param>
-        public TextOperation(TextOperationType operation, IManagedTokenString[] target, IManagedTokenString value, string delimiter)
+        public TextOperation(TextOperationType operation, IManagedTokenString[] target, IManagedTokenString value, string? delimiter)
         {
             this.Operation = operation;
             this.Target = target.Cast<ITokenString>().ToArray();
             this.Value = value;
-            this.Delimiter = delimiter;
+            this.Delimiter = delimiter ?? string.Empty;
 
             this.Contextuals = new AggregateContextual()
                 .Add(target)
@@ -90,7 +90,7 @@ namespace ContentPatcher.Framework.Patches
 
         /// <summary>Get a copy of the input with the text operation applied.</summary>
         /// <param name="text">The input to modify.</param>
-        public string Apply(string text)
+        public string Apply(string? text)
         {
             string delimiter = string.IsNullOrEmpty(text)
                 ? ""

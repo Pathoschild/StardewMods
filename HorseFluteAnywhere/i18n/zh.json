@@ -1,0 +1,10 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    "config.require-flute.name": "需要马笛",
+    "config.require-flute.description": "需要马笛在手上或者背包里才能召唤马。默认false。",
+
+    "config.summon-horse-button.name": "召唤",
+    "config.summon-horse-button.description": "召唤马的键位。默认{{defaultValue}}。"
+}

@@ -19,10 +19,10 @@ namespace ContentPatcher.Framework.Patches
         private readonly IMonitor Monitor;
 
         /// <summary>The sprite area from which to read an image.</summary>
-        private readonly TokenRectangle FromArea;
+        private readonly TokenRectangle? FromArea;
 
         /// <summary>The sprite area to overwrite.</summary>
-        private readonly TokenRectangle ToArea;
+        private readonly TokenRectangle? ToArea;
 
         /// <summary>Indicates how the image should be patched.</summary>
         private readonly PatchImageMode PatchMode;
@@ -47,15 +47,15 @@ namespace ContentPatcher.Framework.Patches
         /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="parentPatch">The parent patch for which this patch was loaded, if any.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="normalizeAssetName">Normalize an asset name.</param>
-        public EditImagePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle fromArea, TokenRectangle toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch parentPatch, IMonitor monitor, Func<string, string> normalizeAssetName)
+        /// <param name="parseAssetName">Parse an asset name.</param>
+        public EditImagePatch(int[] indexPath, LogPathBuilder path, IManagedTokenString assetName, IEnumerable<Condition> conditions, IManagedTokenString fromAsset, TokenRectangle? fromArea, TokenRectangle? toArea, PatchImageMode patchMode, UpdateRate updateRate, IContentPack contentPack, IPatch? parentPatch, IMonitor monitor, Func<string, IAssetName> parseAssetName)
             : base(
                 indexPath: indexPath,
                 path: path,
                 type: PatchType.EditImage,
                 assetName: assetName,
                 conditions: conditions,
-                normalizeAssetName: normalizeAssetName,
+                parseAssetName: parseAssetName,
                 fromAsset: fromAsset,
                 updateRate: updateRate,
                 contentPack: contentPack,
@@ -91,8 +91,8 @@ namespace ContentPatcher.Framework.Patches
 
             // fetch data
             IAssetDataForImage editor = asset.AsImage();
-            Texture2D source = this.ContentPack.LoadAsset<Texture2D>(this.FromAsset);
-            if (!this.TryReadArea(this.FromArea, 0, 0, source.Width, source.Height, out Rectangle sourceArea, out string error))
+            Texture2D source = this.ContentPack.ModContent.Load<Texture2D>(this.FromAsset);
+            if (!this.TryReadArea(this.FromArea, 0, 0, source.Width, source.Height, out Rectangle sourceArea, out string? error))
             {
                 this.Monitor.Log($"{errorPrefix}: the source area is invalid: {error}.", LogLevel.Warn);
                 return;

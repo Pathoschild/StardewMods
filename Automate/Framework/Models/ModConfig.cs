@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Serialization;
 using Pathoschild.Stardew.Common;
@@ -11,6 +12,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /*********
         ** Accessors
         *********/
+        /// <summary>Whether Automate is enabled.</summary>
+        public bool Enabled { get; set; } = true;
+
         /// <summary>Whether to pull gemstones out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.</summary>
         public bool PullGemstonesFromJunimoHuts { get; set; } = false;
 
@@ -27,7 +31,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         public ModCompatibilityConfig ModCompatibility { get; set; } = new();
 
         /// <summary>The configuration for specific machines by ID.</summary>
-        public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new Dictionary<string, ModConfigMachine>();
+        public Dictionary<string, ModConfigMachine> MachineOverrides { get; set; } = new();
 
 
         /*********
@@ -36,6 +40,8 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
         /// <summary>Normalize the model after it's deserialized.</summary>
         /// <param name="context">The deserialization context.</param>
         [OnDeserialized]
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "This is the method that prevents null values in the rest of the code.")]
+        [SuppressMessage("ReSharper", "ConstantNullCoalescingCondition", Justification = "This is the method that prevents null values in the rest of the code.")]
         public void OnDeserialized(StreamingContext context)
         {
             // normalize
@@ -45,7 +51,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Models
             this.MachineOverrides = this.MachineOverrides.ToNonNullCaseInsensitive();
 
             // remove null values
-            this.ConnectorNames.Remove(null);
+            this.ConnectorNames.Remove(null!);
             foreach (string key in this.MachineOverrides.Where(p => p.Value == null).Select(p => p.Key).ToArray())
                 this.MachineOverrides.Remove(key);
         }

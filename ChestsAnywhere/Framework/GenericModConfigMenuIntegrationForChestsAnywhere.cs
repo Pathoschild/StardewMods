@@ -153,7 +153,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                         if (config.DisabledInLocations.Contains(MinesName))
                             parsed.Add(MinesName);
 
-                        config.DisabledInLocations = parsed;
+                        config.DisabledInLocations.Clear();
+                        config.DisabledInLocations.AddMany(parsed);
                     }
                 );
         }

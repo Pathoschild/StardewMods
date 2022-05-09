@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
 
         /// <summary>Get the output item.</summary>
         /// <remarks>The coop incubator never produces an object output.</remarks>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             return null;
         }

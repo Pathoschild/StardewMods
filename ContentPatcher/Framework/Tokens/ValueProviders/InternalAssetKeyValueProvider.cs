@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ContentPatcher.Framework.Conditions;
+using StardewModdingAPI;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -11,7 +12,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         ** Fields
         *********/
         /// <summary>Get the internal asset key for a relative path.</summary>
-        private readonly Func<string, string> GetInternalAssetKey;
+        private readonly Func<string, IAssetName> GetInternalAssetKey;
 
 
         /*********
@@ -19,7 +20,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="getInternalAssetKey">Get the internal asset key for a relative path.</param>
-        public InternalAssetKeyValueProvider(Func<string, string> getInternalAssetKey)
+        public InternalAssetKeyValueProvider(Func<string, IAssetName> getInternalAssetKey)
             : base(ConditionType.InternalAssetKey, mayReturnMultipleValuesForRoot: false)
         {
             this.GetInternalAssetKey = getInternalAssetKey;
@@ -40,10 +41,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            string path = input.GetPositionalSegment();
+            string? path = input.GetPositionalSegment();
 
             if (!string.IsNullOrWhiteSpace(path))
-                yield return this.GetInternalAssetKey(path);
+                yield return this.GetInternalAssetKey(path).Name;
         }
     }
 }

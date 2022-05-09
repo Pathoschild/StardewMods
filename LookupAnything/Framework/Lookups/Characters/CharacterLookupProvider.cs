@@ -79,7 +79,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         }
 
         /// <inheritdoc />
-        public override ISubject GetSubject(IClickableMenu menu, int cursorX, int cursorY)
+        public override ISubject? GetSubject(IClickableMenu menu, int cursorX, int cursorY)
         {
             IClickableMenu targetMenu = (menu as GameMenu)?.GetCurrentPage() ?? menu;
             switch (targetMenu)
@@ -118,7 +118,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             // NPC slot
                             if (socialID is string villagerName)
                             {
-                                NPC npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
+                                NPC? npc = this.GameHelper.GetAllCharacters().FirstOrDefault(p => p.isVillager() && p.Name == villagerName);
                                 if (npc != null)
                                     return this.BuildSubject(npc);
                             }
@@ -145,7 +145,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                             return null;
 
                         // get villager with a birthday on that date
-                        NPC target = this.GameHelper
+                        NPC? target = this.GameHelper
                             .GetAllCharacters()
                             .Where(p => p.Birthday_Season == Game1.currentSeason && p.Birthday_Day == selectedDay)
                             .OrderByDescending(p => p.CanSocialize) // SVE duplicates the Marlon NPC, but only one of them is marked social
@@ -160,12 +160,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 ****/
                 case TitleMenu when TitleMenu.subMenu is LoadGameMenu loadMenu:
                     {
-                        ClickableComponent button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
+                        ClickableComponent? button = loadMenu.slotButtons.FirstOrDefault(p => p.containsPoint(cursorX, cursorY));
                         if (button != null)
                         {
                             int index = this.Reflection.GetField<int>(loadMenu, "currentItemIndex").GetValue() + int.Parse(button.name);
                             var slots = this.Reflection.GetProperty<List<LoadGameMenu.MenuSlot>>(loadMenu, "MenuSlots").GetValue();
-                            LoadGameMenu.SaveFileSlot slot = slots[index] as LoadGameMenu.SaveFileSlot;
+                            LoadGameMenu.SaveFileSlot? slot = slots[index] as LoadGameMenu.SaveFileSlot;
                             if (slot?.Farmer != null)
                                 return new FarmerSubject(this.GameHelper, slot.Farmer, isLoadMenu: true);
                         }
@@ -175,7 +175,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                 /****
                 ** mod: Animal Social Menu
                 ****/
-                case IClickableMenu when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
+                case not null when targetMenu.GetType().FullName == "AnimalSocialMenu.Framework.AnimalSocialPage":
                     {
                         int slotOffset = this.Reflection.GetField<int>(targetMenu, "SlotPosition").GetValue();
                         List<ClickableTextureComponent> slots = this.Reflection.GetField<List<ClickableTextureComponent>>(targetMenu, "Sprites").GetValue();
@@ -185,9 +185,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
                         {
                             if (slots[i].containsPoint(cursorX, cursorY))
                             {
-                                if (animalIds.TryGetIndex(i, out object rawId) && rawId is long id)
+                                if (animalIds.TryGetIndex(i, out object? rawId) && rawId is long id)
                                 {
-                                    FarmAnimal animal = Game1
+                                    FarmAnimal? animal = Game1
                                         .getFarm()
                                         .getAllFarmAnimals()
                                         .FirstOrDefault(p => p.myID.Value == id);
@@ -206,7 +206,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         }
 
         /// <inheritdoc />
-        public override ISubject GetSubjectFor(object entity, GameLocation location)
+        public override ISubject? GetSubjectFor(object entity, GameLocation? location)
         {
             return entity switch
             {
@@ -241,7 +241,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             }
 
             // filter duplicates (e.g. multiple monsters)
-            HashSet<string> seen = new HashSet<string>();
+            HashSet<string> seen = new();
             foreach (ISubject subject in GetAll())
             {
                 if (!seen.Add($"{subject.GetType().FullName}::{subject.Type}::{subject.Name}"))

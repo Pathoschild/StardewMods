@@ -28,28 +28,30 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             // get raw output
-            SObject output = this.Machine.heldObject.Value;
+            SObject? output = this.Machine.heldObject.Value;
             if (output == null)
                 return null;
 
             // get flower data
             int flowerId = -1;
-            string flowerName = null;
+            string? flowerName = null;
             int addedPrice = 0;
-            Crop flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation, 5, crop => !crop.forageCrop.Value);
-            if (flower != null)
             {
-                flowerId = flower.indexOfHarvest.Value;
-                string[] fields = Game1.objectInformation[flowerId].Split('/');
-                flowerName = fields[0];
-                addedPrice = Convert.ToInt32(fields[1]) * 2;
+                Crop? flower = Utility.findCloseFlower(this.Location, this.Machine.TileLocation, 5, crop => !crop.forageCrop.Value);
+                if (flower != null)
+                {
+                    flowerId = flower.indexOfHarvest.Value;
+                    string[] fields = Game1.objectInformation[flowerId].Split('/');
+                    flowerName = fields[0];
+                    addedPrice = Convert.ToInt32(fields[1]) * 2;
+                }
             }
 
             // build object
-            SObject result = new SObject(output.ParentSheetIndex, output.Stack)
+            SObject result = new(output.ParentSheetIndex, output.Stack)
             {
                 name = $"{flowerName ?? "Wild"} Honey",
                 Price = output.Price + addedPrice,
