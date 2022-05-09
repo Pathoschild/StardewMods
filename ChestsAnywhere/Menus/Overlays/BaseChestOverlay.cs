@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Pathoschild.Stardew.Automate.Framework;
 using Pathoschild.Stardew.ChestsAnywhere.Framework;
+using Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack;
 using Pathoschild.Stardew.ChestsAnywhere.Menus.Components;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.UI;
@@ -87,6 +88,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
         /// <summary>The edit button.</summary>
         protected ClickableTextureComponent EditButton;
+
+        /// <summary>The quickstack button.</summary>
+        protected ClickableTextureComponent QuickStackButton;
+
+        /// <summary>Icon for quickstack button.</summary>
+        public static Texture2D QuickStackIcon;
 
         /// <summary>The Y offset to apply relative to <see cref="IClickableMenu.yPositionOnScreen"/> when drawing the top UI elements.</summary>
         private readonly int TopOffset;
@@ -231,6 +238,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
 
                 // edit button
                 this.EditButton.draw(batch, Color.White * navOpacity, 1f);
+
+                // quickstack button
+                if (this.Config.EnableQuickstackToAllAvailableChests)
+                {
+                    this.QuickStackButton.draw(batch, Color.White * navOpacity, 1f);
+                }
             }
 
             // edit mode
@@ -420,8 +433,12 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                             this.SelectNextChest();
                         else
                             this.SelectPreviousChest();
+                        return true;
                     }
-                    return false;
+                    if (scrollNext)
+                        return this.SelectNextChestContainingHoveredItem();
+                    else
+                        return this.SelectLastChestContainingHoveredItem();
 
                 case Element.ChestList:
                     this.ChestDropdown.ReceiveScrollWheelAction(amount);
@@ -540,6 +557,8 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                     bool canNavigate = this.CanCloseChest;
                     if (this.EditButton.containsPoint(x, y) && canNavigate)
                         this.OpenEdit();
+                    else if (this.Config.EnableQuickstackToAllAvailableChests && this.QuickStackButton.containsPoint(x, y) && canNavigate)
+                        this.InvokeQuickStackAction();
                     else if (this.ChestDropdown.TryClick(x, y) && canNavigate)
                     {
                         this.ChestDropdown.IsExpanded = true;
@@ -639,6 +658,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
                 float zoom = Game1.pixelZoom / 2f;
                 Rectangle buttonBounds = new Rectangle(this.ChestDropdown.bounds.X + this.ChestDropdown.bounds.Width, this.ChestDropdown.bounds.Y, (int)(sprite.Width * zoom), (int)(sprite.Height * zoom));
                 this.EditButton = new ClickableTextureComponent("edit-chest", buttonBounds, null, I18n.Button_EditChest(), CommonSprites.Icons.Sheet, sprite, zoom);
+            }
+
+            // edit quick stack button overlay
+            if (this.Config.EnableQuickstackToAllAvailableChests)
+            {
+                Rectangle sprite = BaseChestOverlay.QuickStackIcon.Bounds;
+                var buttonBounds = new Rectangle(bounds.Left - (int)(Game1.tileSize * 1.3), bounds.Y + bounds.Height / 3, Game1.tileSize, Game1.tileSize);
+                this.QuickStackButton = new ClickableTextureComponent("quickstackButton", buttonBounds, null, I18n.Button_Quickstack(), BaseChestOverlay.QuickStackIcon, Rectangle.Empty, Game1.pixelZoom);
             }
 
             // edit form
@@ -826,6 +853,140 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.SelectChest(this.Chests.First(chest => chest.DisplayCategory == category));
         }
 
+        /// <summary>
+        /// Selects the next chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        private bool SelectNextChestContainingHoveredItem()
+        {
+            return this.SelectChestContainingHoveredItem(true);
+        }
+
+        /// <summary>
+        /// Selects the last chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        private bool SelectLastChestContainingHoveredItem()
+        {
+            return this.SelectChestContainingHoveredItem(false);
+        }
+
+        /// <summary>
+        /// Selects the next (next == true) or last (next == false) chest containing the hovered item
+        /// </summary>
+        /// <returns>Whether the event has been handled and shouldn't be propagated further.</returns>
+        private bool SelectChestContainingHoveredItem(bool next)
+        {
+            if(this.Menu is ItemGrabMenu menuWithInventory)
+            {
+                var item = menuWithInventory.hoveredItem;
+                var playerInventoryItems = Game1.player.Items;
+                // Only check for items in inventory
+                if (item != null && playerInventoryItems.IndexOf(item) > -1)
+                {
+                    int currentChestIndex = this.GetChestIndex(this.Chest, this.Chests);
+                    if(currentChestIndex >= 0)
+                    {
+                        // Determine all items of this group in the inventory
+                        InventorySameNameGroup inventoryGroup = new(playerInventoryItems, item);
+                        inventoryGroup.DetermineGroupInThisInventory();
+                        if (inventoryGroup.IsEmpty())
+                            return false;
+                        var chestsIndexesHasItem = new HashSet<int>();
+                        Dictionary<int, InventorySameNameGroup> chestIndexToInventoryGroup = new();
+                        for(int i = 0; i < this.Chests.Length; i++)
+                        {
+                            var chest = this.Chests[i];
+                            if (chest == null)
+                                continue;
+                            var chestItemGroup = new InventorySameNameGroup(chest.Container.Inventory, item);
+                            chestItemGroup.DetermineGroupInThisInventory();
+                            chestIndexToInventoryGroup.Add(i, chestItemGroup);
+                            if (!chestItemGroup.IsEmpty())
+                            {
+                                chestsIndexesHasItem.Add(i);
+                            }
+                        }
+
+                        if(chestsIndexesHasItem.Count > 0)
+                        {
+                            int firstContainingItemIndex;
+                            if (next)
+                                firstContainingItemIndex = this.GetFirstIndexAfter(chestsIndexesHasItem, currentChestIndex);
+                            else
+                                firstContainingItemIndex = this.GetFirstIndexBefore(chestsIndexesHasItem, currentChestIndex);
+                            var firstChest = this.Chests[firstContainingItemIndex];
+                            this.SelectChest(firstChest);
+
+                            // new inventory has just been created, so take it from Game
+                            if(Game1.activeClickableMenu is ItemGrabMenu menu)
+                            {
+                                // indicate items by shaking them
+                                var inventory = menu.inventory;
+                                var grabInventory = menu.ItemsToGrabMenu;
+                                foreach (int invItemIndex in inventoryGroup.GetIndexes())
+                                {
+                                    if (inventory != null)
+                                    {
+                                        inventory.ShakeItem(invItemIndex);
+                                    }
+                                }
+                                var inventoryGroupForChest = chestIndexToInventoryGroup[firstContainingItemIndex];
+                                foreach (int itemIndex in inventoryGroupForChest.GetIndexes())
+                                {
+                                    if (grabInventory != null)
+                                    {
+                                        grabInventory.ShakeItem(itemIndex);
+                                    }
+                                }
+                                Game1.playSound("smallSelect");
+                            }
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Gets the first index in the given set of indexes of the current chests after the given index
+        /// </summary>
+        /// <param name="chestsIndexesHasItem">Set of chest indexes that also contain the item</param>
+        /// <param name="currentIndex">The current chest index</param>
+        /// <returns>The found integer</returns>
+        private int GetFirstIndexAfter(HashSet<int> chestsIndexesHasItem, int currentIndex)
+        {
+            int firstChestAfterContainingItem;
+            for (firstChestAfterContainingItem = currentIndex + 1; firstChestAfterContainingItem != currentIndex; firstChestAfterContainingItem++)
+            {
+                if (firstChestAfterContainingItem >= this.Chests.Length)
+                    firstChestAfterContainingItem = 0;
+                if (chestsIndexesHasItem.Contains(firstChestAfterContainingItem))
+                    break;
+            }
+            return firstChestAfterContainingItem;
+        }
+
+        /// <summary>
+        /// Gets the first index in the given set of indexes of the current chests before the given index
+        /// </summary>
+        /// <param name="chestsIndexesHasItem">Set of chest indexes that also contain the item</param>
+        /// <param name="currentIndex">The current chest index</param>
+        /// <returns>The found integer</returns>
+        private int GetFirstIndexBefore(HashSet<int> chestsIndexesHasItem, int currentIndex)
+        {
+            int firstChestAfterContainingItem;
+            for (firstChestAfterContainingItem = currentIndex - 1; firstChestAfterContainingItem != currentIndex; firstChestAfterContainingItem--)
+            {
+                if (firstChestAfterContainingItem < 0)
+                    firstChestAfterContainingItem = this.Chests.Length;
+                if (chestsIndexesHasItem.Contains(firstChestAfterContainingItem))
+                    break;
+            }
+            return firstChestAfterContainingItem;
+        }
+
         /// <summary>Reset and display the edit screen.</summary>
         private void OpenEdit()
         {
@@ -838,6 +999,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
             this.EditAutomateFetch.TrySelect(this.Chest.AutomateTakeItems);
 
             this.ActiveElement = Element.EditForm;
+        }
+
+        /// <summary>Do quick stack logic.</summary>
+        private void InvokeQuickStackAction()
+        {
+            QuickStackCommand quickStackCommand = new(this.Config.QuickStackOptions, new List<ManagedChest>(this.Chests), Game1.player, this.Menu);
+            quickStackCommand.Execute();
         }
 
         /// <summary>Get the chests in a given category.</summary>

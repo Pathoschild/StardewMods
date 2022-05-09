@@ -1,3 +1,4 @@
+using Pathoschild.Stardew.ChestsAnywhere.Framework.QuickStack;
 using Pathoschild.Stardew.Common.Utilities;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework
@@ -22,6 +23,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>The key bindings.</summary>
         public ModConfigKeys Controls { get; set; } = new();
+
+        public bool EnableQuickstackToAllAvailableChests { get; set; } = true;
+
+        /// <summary>Options for quickstack functionality.</summary>
+        public QuickStackConfig QuickStackOptions { get; set;} = new();
 
         /// <summary>The locations in which to disable remote chest lookups.</summary>
         public InvariantHashSet DisabledInLocations { get; } = new();

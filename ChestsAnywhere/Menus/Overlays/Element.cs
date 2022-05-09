@@ -13,6 +13,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         CategoryList,
 
         /// <summary>The edit form.</summary>
-        EditForm
+        EditForm,
+
+        /// <summary>QuickStack Button.</summary>
+        QuickStack
     }
 }

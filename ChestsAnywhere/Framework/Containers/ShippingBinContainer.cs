@@ -5,6 +5,7 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using SFarmer = StardewValley.Farmer;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
@@ -48,6 +49,9 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework.Containers
 
         /// <summary>The type of shipping bin menu to create.</summary>
         public ShippingBinMode Mode { get; }
+
+        /// <summary>Number of items that can be put into shipping bin without them disappearing.</summary>
+        public int ActualCapacity => 36;
 
 
         /*********
