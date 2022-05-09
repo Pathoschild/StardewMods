@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
@@ -45,7 +46,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool TryValidateInput(IInputArguments input, out string error)
+        public override bool TryValidateInput(IInputArguments input, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryValidateInput(input, out error))
                 return false;
@@ -61,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             if (this.TryParseAndRound(input, out decimal value, out _))
             {
@@ -80,7 +81,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            if (!this.TryParseAndRound(input, out decimal value, out string parseError))
+            if (!this.TryParseAndRound(input, out decimal value, out string? parseError))
                 throw new InvalidOperationException($"Invalid input value '{input.TokenString}': {parseError}"); // should never happen
 
             yield return value.ToString(CultureInfo.InvariantCulture);
@@ -94,7 +95,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="input">The input to parse.</param>
         /// <param name="result">The rounded value, if applicable.</param>
         /// <param name="parseError">A human-readable error indicating why parsing failed, if applicable.</param>
-        private bool TryParseAndRound(IInputArguments input, out decimal result, out string parseError)
+        private bool TryParseAndRound(IInputArguments input, out decimal result, [NotNullWhen(false)] out string? parseError)
         {
             if (!this.TryParse(input, out decimal value, out int decimals, out RoundMode mode, out parseError))
             {
@@ -137,7 +138,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="decimals">The number of digits after the decimal point to keep.</param>
         /// <param name="mode">The rounding logic to apply.</param>
         /// <param name="parseError">A human-readable error indicating why parsing failed, if applicable.</param>
-        private bool TryParse(IInputArguments input, out decimal value, out int decimals, out RoundMode mode, out string parseError)
+        private bool TryParse(IInputArguments input, out decimal value, out int decimals, out RoundMode mode, [NotNullWhen(false)] out string? parseError)
         {
             // set defaults
             value = 0;
@@ -145,7 +146,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             mode = RoundMode.Default;
 
             // skip if not ready
-            if (!input.TokenString.IsReady)
+            if (input.TokenString?.IsReady != true)
             {
                 parseError = "input isn't ready";
                 return false;

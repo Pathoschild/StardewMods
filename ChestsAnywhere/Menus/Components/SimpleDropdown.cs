@@ -10,6 +10,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
     /// <summary>An input control which represents a dropdown of values.</summary>
     /// <typeparam name="TKey">The input key type.</typeparam>
     internal class SimpleDropdown<TKey>
+        where TKey : notnull
     {
         /*********
         ** Fields
@@ -45,21 +46,21 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <param name="options">The available dropdown options.</param>
         /// <param name="selected">The selected key, if any.</param>
         /// <param name="getKeyString">The logic to get the </param>
-        public SimpleDropdown(IReflectionHelper reflection, IEnumerable<KeyValuePair<TKey, string>> options, TKey selected = default, Func<TKey, string> getKeyString = null)
+        public SimpleDropdown(IReflectionHelper reflection, IEnumerable<KeyValuePair<TKey, string>> options, TKey? selected = default, Func<TKey, string>? getKeyString = null)
         {
-            getKeyString ??= raw => raw?.ToString();
+            getKeyString ??= raw => raw.ToString() ?? string.Empty;
 
             // parse options
-            var optionKeys = new List<string>();
+            var optionKeys = new List<string?>();
             var optionLabels = new List<string>();
             var lookup = new List<Tuple<string, TKey, string>>();
-            foreach (var option in options)
+            foreach ((TKey key, string value) in options)
             {
-                string keyStr = getKeyString(option.Key);
+                string keyStr = getKeyString(key);
 
                 optionKeys.Add(keyStr);
-                optionLabels.Add(option.Value);
-                lookup.Add(Tuple.Create(keyStr, option.Key, option.Value));
+                optionLabels.Add(value);
+                lookup.Add(Tuple.Create(keyStr, key, value));
             }
 
             // build dropdown
@@ -78,7 +79,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Components
         /// <summary>Try to select the given key in the dropdown.</summary>
         /// <param name="key">The key to select.</param>
         /// <returns>Returns whether the value was selected.</returns>
-        public bool TrySelect(TKey key)
+        public bool TrySelect(TKey? key)
         {
             int selectedIndex = this.Options.FindIndex(p => p.Item2.Equals(key));
             if (selectedIndex >= 0)

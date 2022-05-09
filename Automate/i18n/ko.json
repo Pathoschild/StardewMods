@@ -4,6 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "메인 옵션",
+    "config.enabled.name": "Enabled", // TODO
+    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.", // TODO
     "config.junimo-huts-output-gems.name": "주니모 오두막에서 보석 생산",
     "config.junimo-huts-output-gems.desc": "주니모 오두막에서 보석을 꺼낼지 여부입니다.\ntrue인 경우 오두막에 보석을 놓아 주니모 색상을 변경할 수 없습니다.",
     "config.automation-interval.name": "자동화 간격",

@@ -6,6 +6,7 @@ using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Constants;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -30,7 +31,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ref ILexToken lexToken, out string error)
+        public override bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;
@@ -53,20 +54,20 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
 
             // 1.25 is more forgiving about Format version
-            if (content.Format.PatchVersion != 0 || content.Format.PrereleaseTag != null)
+            if (content.Format!.PatchVersion != 0 || content.Format.PrereleaseTag != null)
             {
                 error = this.GetNounPhraseError($"using {nameof(content.Format)} with a patch version (like {content.Format} instead of {new SemanticVersion(content.Format.MajorVersion, content.Format.MinorVersion, 0)})");
                 return false;
             }
 
             // 1.25 adds TargetField
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes.WhereNotNull())
             {
                 if (patch.TargetField.Any())
                 {

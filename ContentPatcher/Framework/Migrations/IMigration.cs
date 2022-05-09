@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing.LexTokens;
@@ -23,30 +24,30 @@ namespace ContentPatcher.Framework.Migrations
         /// <param name="content">The content pack data to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed.</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ContentConfig content, out string error);
+        bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error);
 
         /// <summary>Migrate a lexical token.</summary>
         /// <param name="lexToken">The lexical token to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(ref ILexToken lexToken, out string error);
+        bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error);
 
         /// <summary>Migrate a tokenized string.</summary>
         /// <param name="tokenStr">The tokenized string to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(IManagedTokenString tokenStr, out string error);
+        bool TryMigrate(IManagedTokenString tokenStr, [NotNullWhen(false)] out string? error);
 
         /// <summary>Migrate a tokenized JSON structure.</summary>
         /// <param name="tokenStructure">The tokenized JSON structure to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(TokenizableJToken tokenStructure, out string error);
+        bool TryMigrate(TokenizableJToken tokenStructure, [NotNullWhen(false)] out string? error);
 
         /// <summary>Migrate a condition.</summary>
         /// <param name="condition">The condition to migrate.</param>
         /// <param name="error">An error message which indicates why migration failed (if any).</param>
         /// <returns>Returns whether migration succeeded.</returns>
-        bool TryMigrate(Condition condition, out string error);
+        bool TryMigrate(Condition condition, [NotNullWhen(false)] out string? error);
     }
 }

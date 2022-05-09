@@ -30,7 +30,7 @@ namespace Pathoschild.Stardew.Common.Utilities
 
         /// <summary>Get a new dictionaries with values copied from this one.</summary>
         /// <param name="cloneValue">Custom logic to clone the values if needed.</param>
-        public InvariantDictionary<TValue> Clone(Func<TValue, TValue> cloneValue = null)
+        public InvariantDictionary<TValue> Clone(Func<TValue, TValue>? cloneValue = null)
         {
             return cloneValue != null
                 ? new InvariantDictionary<TValue>(this.ToDictionary(p => p.Key, p => cloneValue(p.Value)))

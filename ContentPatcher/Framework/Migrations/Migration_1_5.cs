@@ -32,7 +32,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
@@ -45,10 +45,10 @@ namespace ContentPatcher.Framework.Migrations
             }
 
             // check patch format
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig? patch in content.Changes)
             {
                 // 1.5 adds multiple Target values
-                if (patch.Target?.Contains(",") == true)
+                if (patch?.Target?.Contains(",") == true)
                 {
                     error = this.GetNounPhraseError($"specifying multiple {nameof(PatchConfig.Target)} values");
                     return false;

@@ -3,6 +3,7 @@ using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.ConfigModels;
 using ContentPatcher.Framework.Lexing;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
@@ -32,15 +33,15 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ContentConfig content, out string error)
+        public override bool TryMigrate(ContentConfig content, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(content, out error))
                 return false;
 
-            foreach (PatchConfig patch in content.Changes)
+            foreach (PatchConfig patch in content.Changes.WhereNotNull())
             {
                 // 1.19 adds PatchMode for maps
-                if (patch.PatchMode != null && this.GetAction(patch) == PatchType.EditMap)
+                if (patch.PatchMode != null && this.HasAction(patch, PatchType.EditMap))
                 {
                     error = this.GetNounPhraseError($"using {nameof(patch.PatchMode)} for a map patch");
                     return false;
@@ -65,13 +66,13 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(Condition condition, out string error)
+        public override bool TryMigrate(Condition condition, [NotNullWhen(false)] out string? error)
         {
             // 1.19 adds boolean query expressions
             bool isQuery = condition.Name?.EqualsIgnoreCase(nameof(ConditionType.Query)) == true;
             if (isQuery)
             {
-                InvariantHashSet values = condition.Values?.SplitValuesUnique();
+                InvariantHashSet? values = condition.Values?.SplitValuesUnique();
                 if (values?.Any() == true && values.All(p => bool.TryParse(p, out bool _)))
                 {
                     error = "using boolean query expressions";
@@ -88,7 +89,7 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Get whether a value has multiple top-level lexical values.</summary>
         /// <param name="raw">The raw unparsed value.</param>
-        private bool HasMultipleValues(string raw)
+        private bool HasMultipleValues(string? raw)
         {
             // quick check
             if (raw?.Contains(",") != true)

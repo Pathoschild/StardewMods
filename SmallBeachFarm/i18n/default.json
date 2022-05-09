@@ -16,5 +16,8 @@
     "config.islands.tooltip": "Add ocean islands with extra land area.",
 
     "config.beach-sounds.name": "Play beach sounds",
-    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm."
+    "config.beach-sounds.tooltip": "Play the beach's background music (i.e. wave sounds) on the beach farm.",
+
+    "config.shipping-bin-path.name": "Add shipping bin path",
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position."
 }

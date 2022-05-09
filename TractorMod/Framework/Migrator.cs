@@ -104,7 +104,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // load legacy save data
             // Tractor Mod 4.7 replaces custom data files with vanilla stables/horses.
             {
-                LegacySaveDataBuilding[] legacyBuildings =
+                LegacySaveDataBuilding[]? legacyBuildings =
                     helper.Data.ReadSaveData<LegacySaveData>("tractors")?.Buildings // 4.6
                     ?? helper.Data.ReadJsonFile<LegacySaveData>(Migrator.LegacySaveDataRelativePath)?.Buildings; // pre-4.6
 
@@ -115,7 +115,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     foreach (LegacySaveDataBuilding garageData in legacyBuildings)
                     {
                         // get location
-                        BuildableGameLocation location = locations.FirstOrDefault(p => p.NameOrUniqueName == (garageData.Map ?? "Farm"));
+                        BuildableGameLocation? location = locations.FirstOrDefault(p => p.NameOrUniqueName == (garageData.Map ?? "Farm"));
                         if (location == null)
                         {
                             monitor.Log($"Ignored legacy tractor garage in unknown location '{garageData.Map}'.", LogLevel.Warn);
@@ -123,7 +123,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                         }
 
                         // add garage
-                        Stable garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.tileX.Value == (int)garageData.Tile.X && p.tileY.Value == (int)garageData.Tile.Y);
+                        Stable? garage = location.buildings.OfType<Stable>().FirstOrDefault(p => p.tileX.Value == (int)garageData.Tile.X && p.tileY.Value == (int)garageData.Tile.Y);
                         if (garage == null)
                         {
                             garage = new Stable(garageData.TractorID, getBlueprint(), garageData.Tile)
@@ -144,7 +144,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // remove legacy pre-4.6 data
             Migrator.OnSaved.Add(() =>
             {
-                FileInfo legacyFile = new FileInfo(Path.Combine(helper.DirectoryPath, Migrator.LegacySaveDataRelativePath));
+                FileInfo legacyFile = new(Path.Combine(helper.DirectoryPath, Migrator.LegacySaveDataRelativePath));
                 if (legacyFile.Exists)
                     legacyFile.Delete();
             });
@@ -173,9 +173,9 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         ****/
         /// <summary>Get a version value from a <see cref="Game1.CustomData"/> entry.</summary>
         /// <param name="key">The entry key to read.</param>
-        private static ISemanticVersion GetVersion(string key)
+        private static ISemanticVersion? GetVersion(string key)
         {
-            return Game1.CustomData.TryGetValue(key, out string rawVersion) && SemanticVersion.TryParse(rawVersion, out ISemanticVersion version)
+            return Game1.CustomData.TryGetValue(key, out string? rawVersion) && SemanticVersion.TryParse(rawVersion, out ISemanticVersion? version)
                 ? version
                 : null;
         }

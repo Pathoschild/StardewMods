@@ -16,5 +16,8 @@
     "config.islands.tooltip": "육지 면적이 넓은 바다 섬을 추가하세요.",
 
     "config.beach-sounds.name": "해변 소리 재생",
-    "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다."
+    "config.beach-sounds.tooltip": "해변 농장에서 해변의 배경 음악(파도 소리)을 재생합니다.",
+
+    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
 }

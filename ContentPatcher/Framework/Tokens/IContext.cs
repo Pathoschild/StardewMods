@@ -30,7 +30,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The token name.</param>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>
         /// <returns>Returns the matching token, or <c>null</c> if none was found.</returns>
-        IToken GetToken(string name, bool enforceContext);
+        IToken? GetToken(string name, bool enforceContext);
 
         /// <summary>Get the underlying tokens.</summary>
         /// <param name="enforceContext">Whether to only consider tokens that are available in the context.</param>

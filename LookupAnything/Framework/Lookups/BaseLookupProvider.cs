@@ -29,13 +29,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups
         }
 
         /// <inheritdoc />
-        public virtual ISubject GetSubject(IClickableMenu menu, int cursorX, int cursorY)
+        public virtual ISubject? GetSubject(IClickableMenu menu, int cursorX, int cursorY)
         {
             return null;
         }
 
         /// <inheritdoc />
-        public virtual ISubject GetSubjectFor(object entity, GameLocation location)
+        public virtual ISubject? GetSubjectFor(object entity, GameLocation? location)
         {
             return null;
         }

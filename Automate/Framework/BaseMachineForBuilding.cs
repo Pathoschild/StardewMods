@@ -11,7 +11,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         ** Protected methods
         *********/
         /// <inheritdoc />
-        protected BaseMachineForBuilding(TMachine machine, GameLocation location, in Rectangle tileArea, string machineTypeId = null)
+        protected BaseMachineForBuilding(TMachine machine, GameLocation location, in Rectangle tileArea, string? machineTypeId = null)
             : base(machine, location, in tileArea, machineTypeId) { }
 
         /// <summary>Get the player who 'owns' the machine.</summary>

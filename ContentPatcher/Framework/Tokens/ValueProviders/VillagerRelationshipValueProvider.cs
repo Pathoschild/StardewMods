@@ -40,8 +40,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 this.Values.Clear();
                 if (this.MarkReady(this.SaveReader.IsReady))
                 {
-                    foreach (KeyValuePair<string, Friendship> pair in this.SaveReader.GetFriendships())
-                        this.Values[pair.Key] = pair.Value?.Status.ToString() ?? "Unmet";
+                    foreach ((string npc, Friendship? friendship) in this.SaveReader.GetFriendships())
+                        this.Values[npc] = friendship?.Status.ToString() ?? "Unmet";
                 }
             });
         }
@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             if (input.HasPositionalArgs)
             {
-                return this.Values.TryGetValue(input.GetFirstPositionalArg(), out string value)
+                return this.Values.TryGetValue(input.GetFirstPositionalArg()!, out string? value)
                     ? new[] { value }
                     : Enumerable.Empty<string>();
             }

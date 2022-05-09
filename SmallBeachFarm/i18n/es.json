@@ -16,5 +16,8 @@
     "config.islands.tooltip": "Añade islas oceánicas con superficie extra.",
 
     "config.beach-sounds.name": "Reproducir sonidos de la playa",
-    "config.beach-sounds.tooltip": "Reproduce la música de fondo de la playa (por ejemplo, sonidos de las olas) en la granja de la playa."
+    "config.beach-sounds.tooltip": "Reproduce la música de fondo de la playa (por ejemplo, sonidos de las olas) en la granja de la playa.",
+
+    "config.shipping-bin-path.name": "Add shipping bin path", // TODO
+    "config.shipping-bin-path.tooltip": "Place stone path tiles in front of the default shipping bin position." // TODO
 }

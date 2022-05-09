@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -34,15 +35,17 @@ namespace ContentPatcher.Framework.Conditions
         public ITokenString Values { get; }
 
         /// <summary>The current values from <see cref="Values"/>.</summary>
-        public InvariantHashSet CurrentValues { get; private set; }
+        public InvariantHashSet? CurrentValues { get; private set; }
 
         /// <inheritdoc />
         public bool IsMutable => this.IsTokenMutable || this.Contextuals.IsMutable;
 
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(Condition.CurrentValues))]
         public bool IsReady => this.Contextuals.IsReady && this.State.IsReady && this.CurrentValues != null;
 
         /// <summary>Whether the condition matches the current context.</summary>
+        [MemberNotNullWhen(true, nameof(Condition.CurrentValues))]
         public bool IsMatch { get; private set; }
 
 
@@ -93,7 +96,7 @@ namespace ContentPatcher.Framework.Conditions
             bool changed = this.Contextuals.UpdateContext(context);
 
             // get token
-            IToken token = context.GetToken(this.Name, enforceContext: true);
+            IToken? token = context.GetToken(this.Name, enforceContext: true);
             if (token == null)
                 this.State.AddUnreadyTokens(this.Name);
 

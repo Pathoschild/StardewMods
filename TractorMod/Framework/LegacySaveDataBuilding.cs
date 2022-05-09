@@ -13,10 +13,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public Vector2 Tile { get; }
 
         /// <summary>The associated tractor ID.</summary>
-        public Guid TractorID { get; set; }
+        public Guid TractorID { get; }
 
         /// <summary>The associated tractor's hat ID.</summary>
-        public int? TractorHatID { get; set; }
+        public int? TractorHatID { get; }
 
         /// <summary>The building type.</summary>
         public string Type { get; }
@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         public int DaysOfConstructionLeft { get; }
 
         /// <summary>The name of the map containing the building.</summary>
-        public string Map { get; }
+        public string? Map { get; }
 
 
         /*********

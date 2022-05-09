@@ -63,8 +63,8 @@ namespace Pathoschild.Stardew.Common.UI
         /// <param name="selectedItem">The selected item.</param>
         /// <param name="items">The items in the list.</param>
         /// <param name="getLabel">Get the display label for an item.</param>
-        public Dropdown(int x, int y, SpriteFont font, TItem selectedItem, TItem[] items, Func<TItem, string> getLabel)
-            : base(Rectangle.Empty, getLabel(selectedItem))
+        public Dropdown(int x, int y, SpriteFont font, TItem? selectedItem, TItem[] items, Func<TItem, string> getLabel)
+            : base(Rectangle.Empty, selectedItem != null ? getLabel(selectedItem) : string.Empty)
         {
             this.Font = font;
             this.List = new DropdownList<TItem>(selectedItem, items, getLabel, x, y, font);

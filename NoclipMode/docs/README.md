@@ -20,6 +20,15 @@ through anything (even map boundaries).
 Just press `F11` (configurable) to toggle noclip mode. When it's enabled, nothing can stop you.
 
 ## Configure
+### In-game settings
+If you have [Generic Mod Config Menu](https://www.nexusmods.com/stardewvalley/mods/5098) installed,
+you can click the cog button (⚙) on the title screen or the "mod options" button at the bottom of
+the in-game menu to configure the mod. Hover the cursor over a field for details, or see the next
+section.
+
+![](screenshots/generic-config-menu.png)
+
+### `config.json`
 The mod creates a `config.json` file in its mod folder the first time you run it. You can open that
 file in a text editor to configure the mod.
 

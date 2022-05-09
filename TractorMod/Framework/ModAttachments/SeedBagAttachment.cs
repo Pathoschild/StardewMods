@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.TractorMod.Framework.Config;
 using StardewModdingAPI;
 using StardewValley;
@@ -42,9 +43,11 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool IsEnabled(Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool IsEnabled(Farmer player, Tool? tool, Item? item, GameLocation location)
         {
-            return this.Config.Enable && tool?.Name == "Seed Bag";
+            return
+                this.Config.Enable
+                && tool is { Name: "Seed Bag" };
         }
 
         /// <summary>Apply the tool to the given tile.</summary>
@@ -55,8 +58,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework.ModAttachments
         /// <param name="tool">The tool selected by the player (if any).</param>
         /// <param name="item">The item selected by the player (if any).</param>
         /// <param name="location">The current location.</param>
-        public override bool Apply(Vector2 tile, SObject tileObj, TerrainFeature tileFeature, Farmer player, Tool tool, Item item, GameLocation location)
+        public override bool Apply(Vector2 tile, SObject? tileObj, TerrainFeature? tileFeature, Farmer player, Tool? tool, Item? item, GameLocation location)
         {
+            tool = tool.AssertNotNull();
+
             // apply to plain dirt
             if (tileFeature is HoeDirt { crop: null })
                 return this.UseToolOnTile(tool, tile, player, location);

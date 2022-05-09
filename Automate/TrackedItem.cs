@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Pathoschild.Stardew.Common;
 using StardewValley;
 
@@ -14,10 +15,10 @@ namespace Pathoschild.Stardew.Automate
         private readonly Item Item;
 
         /// <summary>The callback invoked when the stack size is reduced (including reduced to zero).</summary>
-        protected readonly Action<Item> OnReduced;
+        protected readonly Action<Item>? OnReduced;
 
         /// <summary>The callback invoked when the stack is empty.</summary>
-        protected readonly Action<Item> OnEmpty;
+        protected readonly Action<Item>? OnEmpty;
 
         /// <summary>The last stack size handlers were notified of.</summary>
         private int LastCount;
@@ -46,7 +47,7 @@ namespace Pathoschild.Stardew.Automate
         /// <param name="item">The item stack.</param>
         /// <param name="onReduced">The callback invoked when the stack size is reduced (including reduced to zero).</param>
         /// <param name="onEmpty">The callback invoked when the stack is empty.</param>
-        public TrackedItem(Item item, Action<Item> onReduced = null, Action<Item> onEmpty = null)
+        public TrackedItem(Item item, Action<Item>? onReduced = null, Action<Item>? onEmpty = null)
         {
             this.Item = item ?? throw new InvalidOperationException("Can't track a null item stack.");
             this.Type = (ItemType)item.GetItemType();
@@ -70,7 +71,7 @@ namespace Pathoschild.Stardew.Automate
         }
 
         /// <inheritdoc />
-        public Item Take(int count)
+        public Item? Take(int count)
         {
             if (count <= 0)
                 return null;
@@ -110,7 +111,8 @@ namespace Pathoschild.Stardew.Automate
         /// <summary>Create a new stack of the given item.</summary>
         /// <param name="original">The item stack to clone.</param>
         /// <param name="stackSize">The new stack size.</param>
-        private Item GetNewStack(Item original, int stackSize = 1)
+        [return: NotNullIfNotNull("original")]
+        private Item? GetNewStack(Item? original, int stackSize = 1)
         {
             if (original == null)
                 return null;

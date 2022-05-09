@@ -55,7 +55,7 @@ namespace Pathoschild.Stardew.Common.Commands
             string commandName = args.FirstOrDefault() ?? GenericHelpCommand.CommandName;
             string[] commandArgs = args.Skip(1).ToArray();
 
-            if (this.Commands.TryGetValue(commandName, out ICommand command))
+            if (this.Commands.TryGetValue(commandName, out ICommand? command))
             {
                 command.Handle(commandArgs);
                 return true;

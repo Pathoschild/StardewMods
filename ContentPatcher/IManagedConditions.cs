@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ContentPatcher
 {
@@ -9,10 +10,11 @@ namespace ContentPatcher
         ** Accessors
         *********/
         /// <summary>Whether the conditions were parsed successfully (regardless of whether they're in scope currently).</summary>
+        [MemberNotNullWhen(false, nameof(IManagedConditions.ValidationError))]
         bool IsValid { get; }
 
         /// <summary>If <see cref="IsValid"/> is false, an error phrase indicating why the conditions failed to parse, formatted like this: <c>'seasonz' isn't a valid token name; must be one of &lt;token list&gt;</c>. If the conditions are valid, this is <c>null</c>.</summary>
-        string ValidationError { get; }
+        string? ValidationError { get; }
 
         /// <summary>Whether the conditions' tokens are all valid in the current context. For example, this would be false if the conditions use <c>Season</c> and a save isn't loaded yet.</summary>
         bool IsReady { get; }
@@ -32,6 +34,6 @@ namespace ContentPatcher
         IEnumerable<int> UpdateContext();
 
         /// <summary>If <see cref="IsMatch"/> is false, analyze the conditions/context and get a human-readable reason phrase explaining why the conditions don't match the context. For example: <c>conditions don't match: season</c>. If the conditions do match, this returns <c>null</c>.</summary>
-        string GetReasonNotMatched();
+        string? GetReasonNotMatched();
     }
 }

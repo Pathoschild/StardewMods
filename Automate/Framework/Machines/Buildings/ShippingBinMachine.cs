@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         ** Fields
         *********/
         /// <summary>The constructed shipping bin, if applicable.</summary>
-        private readonly ShippingBin Bin;
+        private readonly ShippingBin? Bin;
 
 
         /*********
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             return null; // no output
         }
@@ -68,12 +68,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         public override bool SetInput(IStorage input)
         {
             // get next item
-            ITrackedStack tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && obj.canBeShipped());
+            ITrackedStack? tracker = input.GetItems().FirstOrDefault(p => p.Sample is SObject obj && obj.canBeShipped());
             if (tracker == null)
                 return false;
 
             // ship item
-            SObject item = (SObject)tracker.Take(tracker.Count);
+            SObject item = (SObject)tracker.Take(tracker.Count)!;
             var binList = (this.Location as Farm ?? Game1.getFarm()).getShippingBin(Game1.MasterPlayer);
             Utility.addItemToThisInventoryList(item, binList, listMaxSpace: int.MaxValue);
 

@@ -32,13 +32,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            string path = input.GetPositionalSegment();
+            string? path = input.GetPositionalSegment();
 
             if (!string.IsNullOrWhiteSpace(path))
             {
                 path = PathUtilities.NormalizeAssetName(path);
 
-                if (input.NamedArgs.TryGetValue("separator", out IInputArgumentValue separator))
+                if (input.NamedArgs.TryGetValue("separator", out IInputArgumentValue? separator))
                     path = path.Replace(PathUtilities.PreferredAssetSeparator.ToString(), separator.Parsed.FirstOrDefault());
 
                 yield return path;

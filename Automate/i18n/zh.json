@@ -1,0 +1,35 @@
+﻿{
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // main options
+    "config.title.main-options": "主要选项",
+    "config.enabled.name": "启用",
+    "config.enabled.desc": "是否启用自动化功能。如果禁用此选项，则不会自动运行任何机器，热键也不能使用",
+    "config.junimo-huts-output-gems.name": "祝尼魔小屋输出宝石",
+    "config.junimo-huts-output-gems.desc": "是否将宝石从祝尼魔小屋中拉出。 如果设置为true，你将无法通过在祝尼魔小屋中放置宝石来改变祝尼魔的颜色。",
+    "config.automation-interval.name": "自动化间隔",
+    "config.automation-interval.desc": "每个自动化进程之间的间隔数 (每1秒60，每2秒120，以此类推).",
+    "config.toggle-overlay-key.name": "切换配置键位",
+    "config.toggle-overlay-key.desc": "切换自动化配置的键位",
+
+    // mod compatibility
+    "config.title.mod-compatibility": "模组兼容性",
+    "config.better-junimos.name": "Better Junimos（更好的祝尼魔）",
+    "config.better-junimos.desc": "启用与 Better Junimos 的兼容性。 如果安装该模组，祝尼魔小屋不会输出肥料或种子",
+    "config.warn-for-missing-bridge-mod.name": "缺少连接模块警告",
+    "config.warn-for-missing-bridge-mod.desc": "如果你安装了自定义机器模组但未安装其所需要另外安装的兼容性补丁，是否在启动时记录警告",
+
+    // connectors
+    "config.title.connectors": "启动连接",
+    "config.connector.desc": "{{itemName}}是否将机器与宝箱连接",
+    "config.custom-connectors.name": "自定义连接",
+    "config.custom-connectors.desc": "将相邻机器连接在一起的项目的确切英文名称，您可以使用逗号列出多个项目（注意逗号的输入法）", // note: connector names must be English even when playing in other languages
+
+    // machine overrides
+    "config.title.machine-overrides": "机器禁用",
+    "config.override.ShippingBin-name": "出货箱",
+    "config.override.MiniShippingBin-name": "迷你出货箱",
+    "config.override.desc": "是否启用{{machineName}}自动化",
+    "config.custom-overrides-note": "对于自定义禁用，请参阅 https://github.com/Pathoschild/StardewMods/tree/develop/Automate#configure 帮助直接编辑 config.json 文件"
+}

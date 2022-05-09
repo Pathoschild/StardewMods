@@ -1,6 +1,12 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 1.22.0
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
+* Updated for SMAPI 3.14.0.
+* Added [mod-provided API to get overlay info](README.md#mod-integrations).
+
 ## 1.21.3
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 

@@ -37,13 +37,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private readonly Item DisplayItem;
 
         /// <summary>The crop which will drop the item (if applicable).</summary>
-        private readonly Crop FromCrop;
+        private readonly Crop? FromCrop;
 
         /// <summary>The dirt containing the crop (if applicable).</summary>
-        private readonly HoeDirt FromDirt;
+        private readonly HoeDirt? FromDirt;
 
         /// <summary>The crop grown by this seed item (if applicable).</summary>
-        private readonly Crop SeedForCrop;
+        private readonly Crop? SeedForCrop;
 
         /// <summary>The context of the object being looked up.</summary>
         private readonly ObjectContext Context;
@@ -52,7 +52,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private readonly bool KnownQuality;
 
         /// <summary>The location containing the item, if applicable.</summary>
-        private readonly GameLocation Location;
+        private readonly GameLocation? Location;
 
         /// <summary>Whether to only show content once the player discovers it.</summary>
         private readonly bool ProgressionMode;
@@ -67,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         private readonly ISubjectRegistry Codex;
 
         /// <summary>Get a lookup subject for a crop.</summary>
-        private readonly Func<Crop, ObjectContext, HoeDirt, ISubject> GetCropSubject;
+        private readonly Func<Crop, ObjectContext, HoeDirt?, ISubject> GetCropSubject;
 
 
         /*********
@@ -86,7 +86,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="getCropSubject">Get a lookup subject for a crop.</param>
         /// <param name="fromCrop">The crop associated with the item (if applicable).</param>
         /// <param name="fromDirt">The dirt containing the crop (if applicable).</param>
-        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, Item item, ObjectContext context, bool knownQuality, GameLocation location, Func<Crop, ObjectContext, HoeDirt, ISubject> getCropSubject, Crop fromCrop = null, HoeDirt fromDirt = null)
+        public ItemSubject(ISubjectRegistry codex, GameHelper gameHelper, bool progressionMode, bool highlightUnrevealedGiftTastes, bool showAllGiftTastes, Item item, ObjectContext context, bool knownQuality, GameLocation? location, Func<Crop, ObjectContext, HoeDirt?, ISubject> getCropSubject, Crop? fromCrop = null, HoeDirt? fromDirt = null)
             : base(gameHelper)
         {
             this.Codex = codex;
@@ -114,7 +114,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         {
             // get data
             Item item = this.Target;
-            SObject obj = item as SObject;
+            SObject? obj = item as SObject;
             bool isCrop = this.FromCrop != null;
             bool isSeed = this.SeedForCrop != null;
             bool isDeadCrop = this.FromCrop?.dead.Value == true;
@@ -124,7 +124,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // get overrides
             bool showInventoryFields = !this.IsSpawnedStoneNode();
             {
-                ObjectData objData = this.Metadata.GetObject(item, this.Context);
+                ObjectData? objData = this.Metadata.GetObject(item, this.Context);
                 if (objData != null)
                 {
                     this.Name = objData.NameKey != null ? I18n.GetByKey(objData.NameKey) : this.Name;
@@ -148,8 +148,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // indoor pot crop
             if (obj is IndoorPot pot)
             {
-                Crop potCrop = pot.hoeDirt.Value.crop;
-                Bush potBush = pot.bush.Value;
+                Crop? potCrop = pot.hoeDirt.Value.crop;
+                Bush? potBush = pot.bush.Value;
 
                 if (potCrop != null)
                 {
@@ -159,7 +159,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 if (potBush != null)
                 {
-                    ISubject subject = this.Codex.GetByEntity(potBush, this.Location ?? potBush.currentLocation);
+                    ISubject? subject = this.Codex.GetByEntity(potBush, this.Location ?? potBush.currentLocation);
                     if (subject != null)
                         yield return new LinkField(I18n.Item_Contents(), subject.Name, () => subject);
                 }
@@ -187,11 +187,11 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
                 if (canSell && !isCrop)
                 {
                     // sale price
-                    string saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
+                    string? saleValueSummary = GenericField.GetSaleValueString(this.GetSaleValue(item, this.KnownQuality), item.Stack);
                     yield return new GenericField(I18n.Item_SellsFor(), saleValueSummary);
 
                     // sell to
-                    List<string> buyers = new List<string>();
+                    List<string> buyers = new();
                     if (obj?.canBeShipped() == true)
                         buyers.Add(I18n.Item_SellsTo_ShippingBox());
                     buyers.AddRange(
@@ -339,12 +339,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // see also crop
             bool seeAlsoCrop =
                 isSeed
-                && item.ParentSheetIndex != this.SeedForCrop.indexOfHarvest.Value // skip seeds which produce themselves (e.g. coffee beans)
+                && item.ParentSheetIndex != this.SeedForCrop!.indexOfHarvest.Value // skip seeds which produce themselves (e.g. coffee beans)
                 && item.ParentSheetIndex is not (495 or 496 or 497) // skip random seasonal seeds
                 && item.ParentSheetIndex != 770; // skip mixed seeds
             if (seeAlsoCrop)
             {
-                Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop.indexOfHarvest.Value);
+                Item drop = this.GameHelper.GetObjectBySpriteIndex(this.SeedForCrop!.indexOfHarvest.Value);
                 yield return new LinkField(I18n.Item_SeeAlso(), drop.DisplayName, () => this.GetCropSubject(this.SeedForCrop, ObjectContext.Inventory, null));
             }
         }
@@ -353,8 +353,8 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         public override IEnumerable<IDebugField> GetDebugFields()
         {
             Item target = this.Target;
-            SObject obj = target as SObject;
-            Crop crop = this.FromCrop ?? this.SeedForCrop;
+            SObject? obj = target as SObject;
+            Crop? crop = this.FromCrop ?? this.SeedForCrop;
 
             // pinned fields
             yield return new GenericDebugField("item ID", target.ParentSheetIndex, pinned: true);
@@ -412,7 +412,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <summary>Get the item description.</summary>
         /// <param name="item">The item.</param>
         [SuppressMessage("ReSharper", "AssignmentIsFullyDiscarded", Justification = "Discarding the value is deliberate. We need to call the property to trigger the data load, but we don't actually need the result.")]
-        private string GetDescription(Item item)
+        private string? GetDescription(Item item)
         {
             try
             {
@@ -437,14 +437,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
         /// <summary>Get the crop which grows from the given seed, if applicable.</summary>
         /// <param name="seed">The potential seed item to check.</param>
-        private Crop TryGetCropForSeed(Item seed)
+        private Crop? TryGetCropForSeed(Item seed)
         {
             if (seed is not SObject obj || obj.bigCraftable.Value)
                 return null;
 
             try
             {
-                Crop crop = new Crop(seed.ParentSheetIndex, 0, 0);
+                Crop crop = new(seed.ParentSheetIndex, 0, 0);
                 return crop.netSeedIndex.Value > -1
                     ? crop
                     : null;
@@ -459,7 +459,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="dirt">The dirt the crop is planted in, if applicable.</param>
         /// <param name="crop">The crop to represent.</param>
         /// <param name="isSeed">Whether the crop being displayed is for an unplanted seed.</param>
-        private IEnumerable<ICustomField> GetCropFields(HoeDirt dirt, Crop crop, bool isSeed)
+        private IEnumerable<ICustomField> GetCropFields(HoeDirt? dirt, Crop? crop, bool isSeed)
         {
             if (crop == null)
                 yield break;
@@ -488,7 +488,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // crop summary
             if (!isForage)
             {
-                List<string> summary = new List<string>();
+                List<string> summary = new();
 
                 // harvest
                 if (!crop.forageCrop.Value)
@@ -510,7 +510,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
                 // crop sale price
                 Item drop = data.GetSampleDrop();
-                summary.Add(I18n.Crop_Summary_SellsFor(price: GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1)));
+                summary.Add(I18n.Crop_Summary_SellsFor(price: GenericField.GetSaleValueString(this.GetSaleValue(drop, false), 1)!));
 
                 // generate field
                 yield return new GenericField(I18n.Crop_Summary(), "-" + string.Join($"{Environment.NewLine}-", summary));
@@ -549,7 +549,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
         /// <summary>Get the custom fields for machine output.</summary>
         /// <param name="machine">The machine whose output to represent.</param>
-        private IEnumerable<ICustomField> GetMachineOutputFields(SObject machine)
+        private IEnumerable<ICustomField> GetMachineOutputFields(SObject? machine)
         {
             if (machine == null)
                 yield break;
@@ -636,7 +636,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
             // auto-grabber
             else if (machine.ParentSheetIndex == Constant.ObjectIndexes.AutoGrabber && machine.GetItemType() == ItemType.BigCraftable)
             {
-                string readyText = I18n.Stringify(heldObj is Chest output && output.GetItemsForPlayer(Game1.player.UniqueMultiplayerID).Any());
+                string? readyText = I18n.Stringify(heldObj is Chest output && output.GetItemsForPlayer(Game1.player.UniqueMultiplayerID).Any());
                 yield return new GenericField(I18n.Item_Contents(), readyText);
             }
 
@@ -657,12 +657,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
 
         /// <summary>Get the custom fields indicating what an item is needed for.</summary>
         /// <param name="obj">The machine whose output to represent.</param>
-        private IEnumerable<ICustomField> GetNeededForFields(SObject obj)
+        private IEnumerable<ICustomField> GetNeededForFields(SObject? obj)
         {
             if (obj == null || obj.GetItemType() != ItemType.Object)
                 yield break;
 
-            List<string> neededFor = new List<string>();
+            List<string> neededFor = new();
 
             // bundles
             {
@@ -798,7 +798,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Items
         /// <param name="qualityIsKnown">Whether the item quality is known. This is <c>true</c> for an inventory item, <c>false</c> for a map object.</param>
         private IDictionary<ItemQuality, int> GetSaleValue(Item item, bool qualityIsKnown)
         {
-            SObject obj = item.getOne() as SObject;
+            SObject? obj = item.getOne() as SObject;
 
             // single quality
             if (obj == null || !this.GameHelper.CanHaveQuality(item) || qualityIsKnown)

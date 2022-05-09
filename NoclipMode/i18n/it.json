@@ -1,4 +1,22 @@
 ﻿{
+    /*********
+    ** In-game messages
+    *********/
     "enabled-message": "Modalità noclip abilitata; premi di nuovo {{button}} per disattivare.",
-    "disabled-message": "Modalità noclip disabilitata; premi di nuovo {{button}} per attivare."
+    "disabled-message": "Modalità noclip disabilitata; premi di nuovo {{button}} per attivare.",
+
+
+    /*********
+    ** Generic Mod Config Menu UI
+    *********/
+    // TODO
+    "config.title.general-options": "General options",
+    "config.enabled-message.name": "Show enabled message",
+    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
+    "config.disabled-message.name": "Show disabled message",
+    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+
+    "config.title.controls": "Controls",
+    "config.toggle-key.name": "Toggle key",
+    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
 }

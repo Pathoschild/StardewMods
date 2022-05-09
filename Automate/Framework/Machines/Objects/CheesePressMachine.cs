@@ -63,11 +63,11 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (input.TryGetIngredient(this.Recipes, out IConsumable consumable, out IRecipe recipe))
+            if (input.TryGetIngredient(this.Recipes, out IConsumable? consumable, out IRecipe? recipe))
             {
                 // get output
-                var inputStack = consumable.Take();
-                this.Machine.heldObject.Value = recipe.Output(inputStack);
+                Item inputStack = consumable.Take()!;
+                this.Machine.heldObject.Value = (SObject)recipe.Output(inputStack);
                 this.Machine.MinutesUntilReady = recipe.Minutes(inputStack);
                 return true;
             }

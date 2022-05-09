@@ -10,7 +10,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         ** Accessors
         *********/
         /// <summary>The parent entity which contains the item (e.g. location, chest, furniture, etc).</summary>
-        public object Parent { get; }
+        public object? Parent { get; }
 
         /// <summary>The item instance.</summary>
         public Item Item { get; }
@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.ItemScanning
         /// <param name="item">The item instance.</param>
         /// <param name="parent">The parent entity which contains the item (e.g. location, chest, furniture, etc).</param>
         /// <param name="isInInventory">Whether the item was found in the current player's inventory.</param>
-        public FoundItem(Item item, object parent, bool isInInventory)
+        public FoundItem(Item item, object? parent, bool isInInventory)
         {
             this.Item = item;
             this.Parent = parent;

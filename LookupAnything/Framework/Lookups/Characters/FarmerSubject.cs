@@ -26,7 +26,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         private readonly bool IsLoadMenu;
 
         /// <summary>The raw save data for this player, if <see cref="IsLoadMenu"/> is true.</summary>
-        private readonly Lazy<XElement> RawSaveData;
+        private readonly Lazy<XElement?>? RawSaveData;
 
 
         /*********
@@ -42,7 +42,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
             this.Target = farmer;
             this.IsLoadMenu = isLoadMenu;
             this.RawSaveData = isLoadMenu
-                ? new Lazy<XElement>(() => this.ReadSaveFile(farmer.slotName))
+                ? new Lazy<XElement?>(() => this.ReadSaveFile(farmer.slotName))
                 : null;
         }
 
@@ -77,7 +77,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
             // save version
             if (this.IsLoadMenu)
-                yield return new GenericField(I18n.Player_SaveFormat(), this.GetSaveFormat(this.RawSaveData.Value));
+                yield return new GenericField(I18n.Player_SaveFormat(), this.GetSaveFormat(this.RawSaveData?.Value));
         }
 
         /// <summary>Get raw debug data to display for this subject.</summary>
@@ -121,12 +121,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         *********/
         /// <summary>Get a summary of the player's luck today.</summary>
         /// <remarks>Derived from <see cref="GameLocation.answerDialogueAction"/>.</remarks>
-        private string GetSpiritLuckMessage()
+        private string? GetSpiritLuckMessage()
         {
             // inject daily luck if not loaded yet
             if (this.IsLoadMenu)
             {
-                string rawDailyLuck = this.RawSaveData.Value?.Element("dailyLuck")?.Value;
+                string? rawDailyLuck = this.RawSaveData?.Value?.Element("dailyLuck")?.Value;
                 if (rawDailyLuck == null)
                     return null;
 
@@ -138,13 +138,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
         }
 
         /// <summary>Get the human-readable farm type selected by the player.</summary>
-        private string GetFarmType()
+        private string? GetFarmType()
         {
             // get farm type
             int farmType = Game1.whichFarm;
             if (this.IsLoadMenu)
             {
-                string rawType = this.RawSaveData.Value?.Element("whichFarm")?.Value;
+                XElement? saveData = this.RawSaveData?.Value;
+                string? rawType = saveData?.Element("whichFarm")?.Value;
                 farmType = rawType != null ? int.Parse(rawType) : -1;
             }
 
@@ -167,26 +168,26 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
         /// <summary>Get the player's spouse name, if they're married.</summary>
         /// <returns>Returns the spouse name, or <c>null</c> if they're not married.</returns>
-        private string GetSpouseName()
+        private string? GetSpouseName()
         {
             if (this.IsLoadMenu)
                 return this.Target.spouse;
 
             long? spousePlayerID = this.Target.team.GetSpouse(this.Target.UniqueMultiplayerID);
-            SFarmer spousePlayer = spousePlayerID.HasValue ? Game1.getFarmerMaybeOffline(spousePlayerID.Value) : null;
+            SFarmer? spousePlayer = spousePlayerID.HasValue ? Game1.getFarmerMaybeOffline(spousePlayerID.Value) : null;
 
             return spousePlayer?.displayName ?? Game1.player.getSpouse()?.displayName;
         }
 
         /// <summary>Load the raw save file as an XML document.</summary>
         /// <param name="slotName">The slot file to read.</param>
-        private XElement ReadSaveFile(string slotName)
+        private XElement? ReadSaveFile(string? slotName)
         {
             if (slotName == null)
                 return null; // not available (e.g. farmhand)
 
             // get file
-            FileInfo file = new FileInfo(Path.Combine(StardewModdingAPI.Constants.SavesPath, slotName, slotName));
+            FileInfo file = new(Path.Combine(StardewModdingAPI.Constants.SavesPath, slotName, slotName));
             if (!file.Exists)
                 return null;
 
@@ -197,10 +198,14 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Characters
 
         /// <summary>Get the last game version which wrote to a save file.</summary>
         /// <param name="saveData">The save data to check.</param>
-        private string GetSaveFormat(XElement saveData)
+        private string GetSaveFormat(XElement? saveData)
         {
+            // invalid save?
+            if (saveData is null)
+                return "???";
+
             // >=1.4
-            string version = saveData.Element("gameVersion")?.Value;
+            string? version = saveData.Element("gameVersion")?.Value;
             if (!string.IsNullOrWhiteSpace(version))
                 return version;
 

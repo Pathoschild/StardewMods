@@ -6,15 +6,12 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
 {
     /// <summary>Handles the logic for integrating with the Generic Mod Configuration Menu mod.</summary>
     /// <typeparam name="TConfig">The mod configuration type.</typeparam>
-    internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration
+    internal class GenericModConfigMenuIntegration<TConfig> : BaseIntegration<IGenericModConfigMenuApi>
         where TConfig : new()
     {
         /*********
         ** Fields
         *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly IGenericModConfigMenuApi ModApi;
-
         /// <summary>The manifest for the mod consuming the API.</summary>
         private readonly IManifest ConsumerManifest;
 
@@ -41,18 +38,10 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
         public GenericModConfigMenuIntegration(IModRegistry modRegistry, IMonitor monitor, IManifest consumerManifest, Func<TConfig> getConfig, Action reset, Action saveAndApply)
             : base("Generic Mod Config Menu", "spacechase0.GenericModConfigMenu", "1.6.0", modRegistry, monitor)
         {
-            // init
             this.ConsumerManifest = consumerManifest;
             this.GetConfig = getConfig;
             this.Reset = reset;
             this.SaveAndApply = saveAndApply;
-
-            // get mod API
-            if (this.IsLoaded)
-            {
-                this.ModApi = this.GetValidatedApi<IGenericModConfigMenuApi>();
-                this.IsLoaded = this.ModApi != null;
-            }
         }
 
         /// <summary>Register the mod config.</summary>
@@ -69,7 +58,7 @@ namespace Pathoschild.Stardew.Common.Integrations.GenericModConfigMenu
         /// <summary>Add a section title at the current position in the form.</summary>
         /// <param name="text">The title text shown in the form.</param>
         /// <param name="tooltip">The tooltip text shown when the cursor hovers on the title, or <c>null</c> to disable the tooltip.</param>
-        public GenericModConfigMenuIntegration<TConfig> AddSectionTitle(Func<string> text, Func<string> tooltip = null)
+        public GenericModConfigMenuIntegration<TConfig> AddSectionTitle(Func<string> text, Func<string>? tooltip = null)
         {
             this.AssertLoaded();
 

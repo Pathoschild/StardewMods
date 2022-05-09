@@ -4,6 +4,8 @@
     *********/
     // main options
     "config.title.main-options": "Main options",
+    "config.enabled.name": "Enabled",
+    "config.enabled.desc": "Whether to enable Automate features. If this is disabled, no machines will be automated and the overlay won't appear.",
     "config.junimo-huts-output-gems.name": "Junimo huts output gems",
     "config.junimo-huts-output-gems.desc": "Whether to pull gems out of Junimo huts. If true, you won't be able to change Junimo colors by placing gemstones in their hut.",
     "config.automation-interval.name": "Automation interval",

@@ -34,6 +34,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <summary>Construct an instance.</summary>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
         /// <param name="bush">The lookup target.</param>
+        /// <param name="location">The location which contains the bush.</param>
         /// <param name="reflection">Simplifies access to private game code.</param>
         public BushSubject(GameHelper gameHelper, Bush bush, GameLocation location, IReflectionHelper reflection)
             : base(gameHelper)
@@ -114,18 +115,18 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
 
             // get source info
             Rectangle sourceArea = this.Reflection.GetField<NetRectangle>(bush, "sourceRect").GetValue().Value;
-            Point spriteSize = new Point(sourceArea.Width * Game1.pixelZoom, sourceArea.Height * Game1.pixelZoom);
+            Point spriteSize = new(sourceArea.Width * Game1.pixelZoom, sourceArea.Height * Game1.pixelZoom);
             SpriteEffects spriteEffects = bush.flipped.Value ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
 
             // calculate target area
             float scale = Math.Min(size.X / spriteSize.X, size.Y / spriteSize.Y);
-            Point targetSize = new Point((int)(spriteSize.X * scale), (int)(spriteSize.Y * scale));
+            Point targetSize = new((int)(spriteSize.X * scale), (int)(spriteSize.Y * scale));
             Vector2 offset = new Vector2(size.X - targetSize.X, size.Y - targetSize.Y) / 2;
 
             // draw portrait
             spriteBatch.Draw(
                 texture: Bush.texture.Value,
-                destinationRectangle: new Rectangle((int)(position.X + offset.X), (int)(position.Y + offset.Y), targetSize.X, targetSize.Y),
+                destinationRectangle: new((int)(position.X + offset.X), (int)(position.Y + offset.Y), targetSize.X, targetSize.Y),
                 sourceRectangle: sourceArea,
                 color: Color.White,
                 rotation: 0,
@@ -158,7 +159,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
         /// <param name="bush">The bush to check.</param>
         private SDate GetDatePlanted(Bush bush)
         {
-            SDate date = new SDate(1, "spring", 1);
+            SDate date = new(1, "spring", 1);
             if (this.IsTeaBush(bush) && bush.datePlanted.Value > 0) // Caroline's sun room bush has datePlanted = -999
                 date = date.AddDays(bush.datePlanted.Value);
             return date;
@@ -194,24 +195,24 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.TerrainFeatures
                     minDate = tomorrow;
 
                 if (minDate.Season == "winter" && !bush.greenhouseBush.Value && this.Location.locationContext != GameLocation.LocationContext.Island)
-                    return new SDate(22, "spring", minDate.Year + 1);
+                    return new(22, "spring", minDate.Year + 1);
                 if (minDate.Day < 22)
-                    return new SDate(22, minDate.Season);
+                    return new(22, minDate.Season);
                 return minDate;
             }
 
             // wild bushes produce salmonberries in spring 15-18, and blackberries in fall 8-11
-            SDate springStart = new SDate(15, "spring");
-            SDate springEnd = new SDate(18, "spring");
-            SDate fallStart = new SDate(8, "fall");
-            SDate fallEnd = new SDate(11, "fall");
+            SDate springStart = new(15, "spring");
+            SDate springEnd = new(18, "spring");
+            SDate fallStart = new(8, "fall");
+            SDate fallEnd = new(11, "fall");
 
             if (tomorrow < springStart)
                 return springStart;
             if (tomorrow > springEnd && tomorrow < fallStart)
                 return fallStart;
             if (tomorrow > fallEnd)
-                return new SDate(springStart.Day, springStart.Season, springStart.Year + 1);
+                return new(springStart.Day, springStart.Season, springStart.Year + 1);
             return tomorrow;
         }
     }

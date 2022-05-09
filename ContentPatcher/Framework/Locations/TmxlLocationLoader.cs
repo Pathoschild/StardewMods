@@ -76,9 +76,9 @@ namespace ContentPatcher.Framework.Locations
         /// <param name="name">The location name to load.</param>
         /// <param name="location">The loaded location data, if applicable.</param>
         /// <returns>Returns whether the location was successfully loaded.</returns>
-        public bool TryGetLocation(string name, out GameLocation location)
+        public bool TryGetLocation(string name, [NotNullWhen(true)] out GameLocation? location)
         {
-            if (this.SerializedLocations.Value.TryGetValue(name, out string xml) && this.TryDeserialize(name, xml, out location))
+            if (this.SerializedLocations.Value.TryGetValue(name, out string? xml) && this.TryDeserialize(name, xml, out location))
                 return true;
 
             location = null;
@@ -94,15 +94,15 @@ namespace ContentPatcher.Framework.Locations
         /// <param name="xml">The raw serialized XML to parse.</param>
         /// <param name="location">The parsed location, if applicable.</param>
         /// <returns>Returns whether the location was successfully deserialized.</returns>
-        private bool TryDeserialize(string name, string xml, out GameLocation location)
+        private bool TryDeserialize(string name, string xml, [NotNullWhen(true)] out GameLocation? location)
         {
             try
             {
                 using var stringReader = new StringReader(xml);
                 using var xmlReader = XmlReader.Create(stringReader, new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Auto });
 
-                location = (GameLocation)this.LocationSerializer.Value.Deserialize(xmlReader);
-                return true;
+                location = (GameLocation?)this.LocationSerializer.Value.Deserialize(xmlReader);
+                return location != null;
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace ContentPatcher.Framework.Locations
         {
             try
             {
-                if (SaveGame.loaded.CustomData.TryGetValue("smapi/mod-data/platonymous.tmxloader/locations", out string json) && !string.IsNullOrWhiteSpace(json))
+                if (SaveGame.loaded.CustomData.TryGetValue("smapi/mod-data/platonymous.tmxloader/locations", out string? json) && !string.IsNullOrWhiteSpace(json))
                 {
                     var saveData = JsonConvert.DeserializeObject<SaveData>(json);
                     return saveData.Locations.ToDictionary(p => p.Name, p => p.Objects);
@@ -134,22 +134,12 @@ namespace ContentPatcher.Framework.Locations
         }
 
         /// <summary>The model for TMXL Map Toolkit's save data.</summary>
-        [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = "Used via deserialization.")]
-        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = "Used via deserialization.")]
-        private class SaveData
-        {
-            /// <summary>The serialized location data.</summary>
-            public SaveLocation[] Locations { get; set; }
+        /// <param name="Locations">The serialized location data.</param>
+        private record SaveData(SaveLocation[] Locations);
 
-            /// <summary>The data model for a serialized TMXL location.</summary>
-            public class SaveLocation
-            {
-                /// <summary>The location name.</summary>
-                public string Name { get; set; }
-
-                /// <summary>The serialized location instance.</summary>
-                public string Objects { get; set; }
-            }
-        }
+        /// <summary>The data model for a serialized TMXL location.</summary>
+        /// <param name="Name">The location name.</param>
+        /// <param name="Objects">The serialized location instance.</param>
+        public record SaveLocation(string Name, string Objects);
     }
 }

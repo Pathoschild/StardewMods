@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Menus.Overlays
         private readonly InventoryMenu.highlightThisItem DefaultInventoryHighlighter;
 
         /// <summary>The button which sorts the player inventory.</summary>
-        private ClickableTextureComponent SortInventoryButton;
+        private ClickableTextureComponent? SortInventoryButton;
 
 
         /*********

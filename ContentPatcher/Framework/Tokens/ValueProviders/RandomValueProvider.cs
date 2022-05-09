@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
 using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
@@ -47,7 +48,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 yield break;
 
             // get random number for input
-            string seedString = input.GetRawArgumentValue("key") ?? input.TokenString.Path;
+            string seedString = input.GetRawArgumentValue("key") ?? input.TokenString!.Path;
             int randomNumber = new Random(unchecked(this.BaseSeed + this.GetDeterministicHashCode(seedString))).Next();
 
             // choose value
@@ -55,7 +56,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, out InvariantHashSet allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
         {
             allowedValues = !input.IsMutable
                 ? new InvariantHashSet(input.PositionalArgs)

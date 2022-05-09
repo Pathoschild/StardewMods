@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         public abstract MachineState GetState();
 
         /// <summary>Get the output item.</summary>
-        public abstract ITrackedStack GetOutput();
+        public abstract ITrackedStack? GetOutput();
 
         /// <summary>Provide input to the machine.</summary>
         /// <param name="input">The available items.</param>
@@ -53,7 +53,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The machine's in-game location.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
         /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
-        protected BaseMachine(GameLocation location, in Rectangle tileArea, string machineTypeId = null)
+        protected BaseMachine(GameLocation location, in Rectangle tileArea, string? machineTypeId = null)
         {
             this.MachineTypeID = machineTypeId ?? this.GetDefaultMachineId();
             this.Location = location;
@@ -72,6 +72,16 @@ namespace Pathoschild.Stardew.Automate.Framework
         protected static Rectangle GetTileAreaFor(in Vector2 tile)
         {
             return new Rectangle((int)tile.X, (int)tile.Y, 1, 1);
+        }
+
+        /// <summary>Get a tracked stack for an item, if it's not null.</summary>
+        /// <param name="item">The item to track.</param>
+        /// <param name="onEmpty">The callback invoked when the stack is empty.</param>
+        protected ITrackedStack? GetTracked(Item? item, Action<Item>? onEmpty = null)
+        {
+            return item != null
+                ? new TrackedItem(item, onEmpty: onEmpty)
+                : null;
         }
 
         /// <summary>Get the default ID for the machine type.</summary>
@@ -99,7 +109,7 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <param name="location">The machine's in-game location.</param>
         /// <param name="tileArea">The tile area covered by the machine.</param>
         /// <param name="machineTypeId">A unique ID for the machine type, or <c>null</c> to generate it from the type name.</param>
-        protected BaseMachine(TMachine machine, GameLocation location, in Rectangle tileArea, string machineTypeId = null)
+        protected BaseMachine(TMachine machine, GameLocation location, in Rectangle tileArea, string? machineTypeId = null)
             : base(location, tileArea, machineTypeId)
         {
             this.Machine = machine;

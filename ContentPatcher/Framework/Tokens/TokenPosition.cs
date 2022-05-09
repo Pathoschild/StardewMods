@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using xTile.Dimensions;
 
 namespace ContentPatcher.Framework.Tokens
@@ -11,7 +12,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Fields
         *********/
         /// <summary>The underlying contextual values.</summary>
-        protected readonly AggregateContextual Contextuals = new AggregateContextual();
+        protected readonly AggregateContextual Contextuals = new();
 
 
         /*********
@@ -50,7 +51,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="position">The parsed value, if valid.</param>
         /// <param name="error">An error phrase indicating why the value can't be constructed.</param>
         /// <returns>Returns whether the value was successfully created.</returns>
-        public bool TryGetLocation(out Location position, out string error)
+        public bool TryGetLocation(out Location position, [NotNullWhen(false)] out string? error)
         {
             if (
                 !this.TryGetNumber(this.X, nameof(this.X), out int x, out error)
@@ -92,7 +93,7 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="name">The field name for errors.</param>
         /// <param name="parsed">The parsed number, if the input was valid.</param>
         /// <param name="error">An error phrase indicating why the value can't be parsed, if applicable.</param>
-        protected bool TryGetNumber(ITokenString raw, string name, out int parsed, out string error)
+        protected bool TryGetNumber(ITokenString raw, string name, out int parsed, [NotNullWhen(false)] out string? error)
         {
             if (!raw.IsReady)
             {

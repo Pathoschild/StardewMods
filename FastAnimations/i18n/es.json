@@ -24,6 +24,9 @@
     "config.harvest.name": "Cosechar",
     "config.harvest.tooltip": "La rapidez con la que se recogen los cultivos y el forraje a mano. Por defecto {{defaultValue}}x.",
 
+    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
+
     "config.milk.name": "Ordeñar",
     "config.milk.tooltip": "La rapidez con la que se utiliza la cubeta lechera. Por defecto {{defaultValue}}x.",
 

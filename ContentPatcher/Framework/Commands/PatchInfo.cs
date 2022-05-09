@@ -20,22 +20,22 @@ namespace ContentPatcher.Framework.Commands
         public LogPathBuilder PathWithoutContentPackPrefix { get; }
 
         /// <summary>The raw patch type.</summary>
-        public string RawType { get; }
+        public string? RawType { get; }
 
         /// <summary>The parsed patch type, if valid.</summary>
         public PatchType? ParsedType { get; }
 
         /// <summary>The local asset name to load.</summary>
-        public string RawFromAsset { get; set; }
+        public string? RawFromAsset { get; set; }
 
         /// <summary>The parsed asset name to load (if available).</summary>
-        public ITokenString ParsedFromAsset { get; set; }
+        public ITokenString? ParsedFromAsset { get; set; }
 
         /// <summary>The asset name to intercept.</summary>
-        public string RawTargetAsset { get; }
+        public string? RawTargetAsset { get; }
 
         /// <summary>The parsed asset name (if available).</summary>
-        public ITokenString ParsedTargetAsset { get; }
+        public ITokenString? ParsedTargetAsset { get; }
 
         /// <summary>The content pack which requested the patch.</summary>
         public IContentPack ContentPack { get; }
@@ -47,7 +47,7 @@ namespace ContentPatcher.Framework.Commands
         public bool IsApplied { get; }
 
         /// <summary>The underlying patch, if any.</summary>
-        public IPatch Patch { get; }
+        public IPatch? Patch { get; }
 
 
         /*********
@@ -62,11 +62,11 @@ namespace ContentPatcher.Framework.Commands
                 parsedType: patch.ParsedType,
                 conditions: Array.Empty<Condition>(),
                 matchesContext: false,
-                state: new ContextualState().AddErrors(patch.ReasonDisabled)
+                state: new ContextualState().AddErrors(patch.ReasonDisabled),
+                contentPack: patch.ContentPack
             )
         {
             this.RawTargetAsset = patch.AssetName;
-            this.ContentPack = patch.ContentPack;
         }
 
         /// <summary>Construct an instance.</summary>
@@ -78,7 +78,8 @@ namespace ContentPatcher.Framework.Commands
                 parsedType: patch.Type,
                 conditions: patch.Conditions,
                 matchesContext: patch.IsReady,
-                state: patch.GetDiagnosticState()
+                state: patch.GetDiagnosticState(),
+                contentPack: patch.ContentPack
             )
         {
             this.ParsedType = patch.Type;
@@ -87,7 +88,6 @@ namespace ContentPatcher.Framework.Commands
 
             this.RawTargetAsset = patch.RawTargetAsset?.Raw;
             this.ParsedTargetAsset = patch.RawTargetAsset;
-            this.ContentPack = patch.ContentPack;
             this.IsLoaded = true;
             this.IsApplied = patch.IsApplied;
             this.Patch = patch;
@@ -100,7 +100,7 @@ namespace ContentPatcher.Framework.Commands
         }
 
         /// <summary>Get a human-readable reason that the patch isn't applied.</summary>
-        public override string GetReasonNotLoaded()
+        public override string? GetReasonNotLoaded()
         {
             return !this.IsApplied
                 ? base.GetReasonNotLoaded()
@@ -116,14 +116,16 @@ namespace ContentPatcher.Framework.Commands
         /// <param name="rawType">The raw patch type.</param>
         /// <param name="parsedType">The parsed patch type, if valid.</param>
         /// <param name="conditions">The parsed conditions (if available).</param>
+        /// <param name="contentPack">The content pack which requested the patch.</param>
         /// <param name="matchesContext">Whether the patch should be applied in the current context.</param>
         /// <param name="state">Diagnostic info about the patch.</param>
-        private PatchInfo(LogPathBuilder path, string rawType, PatchType? parsedType, Condition[] conditions, bool matchesContext, IContextualState state)
+        private PatchInfo(LogPathBuilder path, string? rawType, PatchType? parsedType, Condition[] conditions, IContentPack contentPack, bool matchesContext, IContextualState state)
             : base(conditions, matchesContext, state)
         {
             this.Path = path;
             this.RawType = rawType;
             this.ParsedType = parsedType;
+            this.ContentPack = contentPack;
 
             this.PathWithoutContentPackPrefix = new LogPathBuilder(path.Segments.Skip(1));
         }

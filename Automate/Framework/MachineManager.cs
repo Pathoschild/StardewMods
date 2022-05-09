@@ -96,21 +96,21 @@ namespace Pathoschild.Stardew.Automate.Framework
         /// <summary>Get the registered override settings.</summary>
         public IDictionary<string, ModConfigMachine> GetMachineOverrides()
         {
-            var config = this.Config();
+            ModConfig config = this.Config();
 
-            var overrides = new Dictionary<string, ModConfigMachine>(this.Data.DefaultMachineOverrides, StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, ModConfigMachine> overrides = new(this.Data.DefaultMachineOverrides, StringComparer.OrdinalIgnoreCase);
 
-            foreach (var pair in config.MachineOverrides)
-                overrides[pair.Key] = pair.Value;
+            foreach ((string id, ModConfigMachine machineConfig) in config.MachineOverrides)
+                overrides[id] = machineConfig;
 
             return overrides;
         }
 
         /// <summary>Get the settings for a machine.</summary>
         /// <param name="id">The unique machine ID.</param>
-        public ModConfigMachine GetMachineOverride(string id)
+        public ModConfigMachine? GetMachineOverride(string id)
         {
-            return this.Config().MachineOverrides.TryGetValue(id, out var config) || this.Data.DefaultMachineOverrides.TryGetValue(id, out config)
+            return this.Config().MachineOverrides.TryGetValue(id, out ModConfigMachine? config) || this.Data.DefaultMachineOverrides.TryGetValue(id, out config)
                 ? config
                 : null;
         }
@@ -118,13 +118,19 @@ namespace Pathoschild.Stardew.Automate.Framework
         /****
         ** State management
         ****/
-        /// <summary>Clear all registered machines and add all locations to the reload queue.</summary>
-        public void Reset()
+        /// <summary>Clear all registered machines.</summary>
+        public void Clear()
         {
             this.ActiveMachineGroups.Clear();
             this.DisabledMachineGroups.Clear();
-
             this.JunimoMachineGroup.RemoveAll(_ => true);
+        }
+
+        /// <summary>Clear all registered machines and add all locations to the reload queue.</summary>
+        public void Reset()
+        {
+            this.Clear();
+
             this.JunimoMachineGroup.Rebuild();
 
             this.ReloadQueue.AddMany(CommonHelper.GetLocations());
@@ -189,9 +195,9 @@ namespace Pathoschild.Stardew.Automate.Framework
                 HashSet<string> locationKeys = new(locations.Concat(removedLocations).Select(this.Factory.GetLocationKey));
                 this.Monitor.VerboseLog($"Reloading machines in {locationKeys.Count} locations: {string.Join(", ", locationKeys)}...");
 
-                this.DisabledMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey));
-                this.ActiveMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey));
-                junimoGroupChanged = this.JunimoMachineGroup.RemoveAll(p => locationKeys.Contains(p.LocationKey));
+                this.DisabledMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
+                this.ActiveMachineGroups.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
+                junimoGroupChanged = this.JunimoMachineGroup.RemoveAll(p => locationKeys.Contains(p.LocationKey!));
             }
 
             // add new groups

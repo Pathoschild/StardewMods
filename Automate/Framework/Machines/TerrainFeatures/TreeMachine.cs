@@ -50,7 +50,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             Tree tree = this.Machine;
 
@@ -58,13 +58,20 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
             var drops = this.ItemDrops.Value;
             if (!drops.Any())
             {
-                drops.Push(TreeMachine.GetSeedForTree(tree)!.Value); // must be last item dropped, since collecting the seed will reset the stack
+                // seed must be last item dropped, since collecting the seed will reset the stack
+                int? seedId = TreeMachine.GetSeedForTree(tree);
+                if (seedId.HasValue)
+                    drops.Push(seedId.Value);
+
+                // get extra drops
                 foreach (int itemId in this.GetRandomExtraDrops())
                     drops.Push(itemId);
             }
 
             // get next drop
-            return new TrackedItem(new SObject(drops.Peek(), 1), onReduced: this.OnOutputReduced);
+            return drops.Any()
+                ? new TrackedItem(new SObject(drops.Peek(), 1), onReduced: this.OnOutputReduced)
+                : null;
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -90,12 +97,12 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.TerrainFeatures
         /// <param name="item">The output item that was taken.</param>
         private void OnOutputReduced(Item item)
         {
-            var tree = this.Machine;
+            Tree tree = this.Machine;
 
             if (item.ParentSheetIndex == TreeMachine.GetSeedForTree(tree))
                 tree.hasSeed.Value = false;
 
-            var drops = this.ItemDrops.Value;
+            Stack<int> drops = this.ItemDrops.Value;
             if (drops.Any() && drops.Peek() == item.ParentSheetIndex)
                 drops.Pop();
         }

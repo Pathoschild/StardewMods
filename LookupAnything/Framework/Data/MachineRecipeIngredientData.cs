@@ -1,23 +1,16 @@
-using StardewValley;
+using SObject = StardewValley.Object;
 
 namespace Pathoschild.Stardew.LookupAnything.Framework.Data
 {
     /// <summary>Metadata for an ingredient in a machine recipe.</summary>
-    internal class MachineRecipeIngredientData
-    {
-        /*********
-        ** Accessors
-        *********/
-        /// <summary>The unique item IDs.</summary>
-        public int[] PossibleIds { get; set; }
-
-        /// <summary>The number required (or <c>null</c> for the default).</summary>
-        public int? Count { get; set; }
-
-        /// <summary>The <see cref="StardewValley.Object.preserve"/> value to match (or <c>null</c> to ignore it).</summary>
-        public Object.PreserveType? PreserveType { get; set; }
-
-        /// <summary>The <see cref="StardewValley.Object.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</summary>
-        public int? PreservedParentSheetIndex { get; set; }
-    }
+    /// <param name="PossibleIds">The unique item IDs.</param>
+    /// <param name="Count">The number required (or <c>null</c> for the default).</param>
+    /// <param name="PreserveType">The <see cref="SObject.preserve"/> value to match (or <c>null</c> to ignore it).</param>
+    /// <param name="PreservedParentSheetIndex">The <see cref="SObject.preservedParentSheetIndex"/> value to match (or <c>null</c> to ignore it).</param>
+    internal record MachineRecipeIngredientData(
+        int[] PossibleIds,
+        int? Count,
+        SObject.PreserveType? PreserveType,
+        int? PreservedParentSheetIndex
+    );
 }

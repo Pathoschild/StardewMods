@@ -19,13 +19,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         protected GameHelper GameHelper;
 
         /// <summary>The possible drops.</summary>
-        private readonly Tuple<ItemDropData, SObject, SpriteInfo>[] Drops;
+        private readonly Tuple<ItemDropData, SObject, SpriteInfo?>[] Drops;
 
         /// <summary>The text to display before the list, if any.</summary>
-        private readonly string Preface;
+        private readonly string? Preface;
 
         /// <summary>The text to display if there are no items.</summary>
-        private readonly string DefaultText;
+        private readonly string? DefaultText;
 
         /// <summary>Whether to fade out non-guaranteed drops.</summary>
         private readonly bool FadeNonGuaranteed;
@@ -46,7 +46,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <param name="crossOutNonGuaranteed">Whether to cross out non-guaranteed drops.</param>
         /// <param name="defaultText">The text to display if there are no items (or <c>null</c> to hide the field).</param>
         /// <param name="preface">The text to display before the list, if any.</param>
-        public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string defaultText = null, string preface = null)
+        public ItemDropListField(GameHelper gameHelper, string label, IEnumerable<ItemDropData> drops, bool sort = true, bool fadeNonGuaranteed = false, bool crossOutNonGuaranteed = false, string? defaultText = null, string? preface = null)
             : base(label)
         {
             this.GameHelper = gameHelper;
@@ -82,13 +82,10 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             }
 
             // list drops
-            Vector2 iconSize = new Vector2(font.MeasureString("ABC").Y);
-            foreach (var entry in this.Drops)
+            Vector2 iconSize = new(font.MeasureString("ABC").Y);
+            foreach ((ItemDropData drop, SObject item, SpriteInfo? sprite) in this.Drops)
             {
                 // get data
-                ItemDropData drop = entry.Item1;
-                SObject item = entry.Item2;
-                SpriteInfo sprite = entry.Item3;
                 bool isGuaranteed = drop.Probability > .99f;
                 bool shouldFade = this.FadeNonGuaranteed && !isGuaranteed;
                 bool shouldCrossOut = this.CrossOutNonGuaranteed && !isGuaranteed;
@@ -122,12 +119,12 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         /// <summary>Get the internal drop list entries.</summary>
         /// <param name="drops">The possible drops.</param>
         /// <param name="gameHelper">Provides utility methods for interacting with the game code.</param>
-        private IEnumerable<Tuple<ItemDropData, SObject, SpriteInfo>> GetEntries(IEnumerable<ItemDropData> drops, GameHelper gameHelper)
+        private IEnumerable<Tuple<ItemDropData, SObject, SpriteInfo?>> GetEntries(IEnumerable<ItemDropData> drops, GameHelper gameHelper)
         {
             foreach (ItemDropData drop in drops)
             {
                 SObject item = this.GameHelper.GetObjectBySpriteIndex(drop.ItemID);
-                SpriteInfo sprite = gameHelper.GetSprite(item);
+                SpriteInfo? sprite = gameHelper.GetSprite(item);
                 yield return Tuple.Create(drop, item, sprite);
             }
         }

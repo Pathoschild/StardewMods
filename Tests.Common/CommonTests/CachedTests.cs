@@ -10,9 +10,9 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
         /*********
         ** Unit tests
         *********/
-        /// <summary>Ensure that <see cref="Cached{T}.Value"/> doesn't refetch the value if the cache key didn't change.</summary>
+        /// <summary>Ensure that <see cref="Cached{T}.Value"/> doesn't refresh the value if the cache key didn't change.</summary>
         [TestCase]
-        public void SameCacheKey_DoesNotRefetch()
+        public void SameCacheKey_DoesNotRefresh()
         {
             // arrange
             int timesFetched = 0;
@@ -31,9 +31,9 @@ namespace Pathoschild.Stardew.Tests.Common.CommonTests
             Assert.AreEqual(lastValue, timesFetched, "The cached value doesn't match the expected value.");
         }
 
-        /// <summary>Ensure that <see cref="Cached{T}.Value"/> refetches the value each time the cache key changes.</summary>
+        /// <summary>Ensure that <see cref="Cached{T}.Value"/> refreshes the value each time the cache key changes.</summary>
         [TestCase]
-        public void DifferentCacheKeys_Refetches()
+        public void DifferentCacheKeys_Refreshes()
         {
             // arrange
             int cacheKey = 0;

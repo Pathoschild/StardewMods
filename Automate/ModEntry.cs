@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Pathoschild.Stardew.Automate.Framework;
@@ -20,28 +21,28 @@ namespace Pathoschild.Stardew.Automate
         ** Fields
         *********/
         /// <summary>The internal mod data.</summary>
-        private DataModel Data;
+        private DataModel Data = null!; // set in Entry
 
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>Manages machine groups.</summary>
-        private MachineManager MachineManager;
+        private MachineManager MachineManager = null!; // set in Entry
 
         /// <summary>Handles console commands from players.</summary>
-        private CommandHandler CommandHandler;
+        private CommandHandler CommandHandler = null!; // set in Entry
 
         /// <summary>Whether to enable automation for the current save.</summary>
-        private bool EnableAutomation => Context.IsMainPlayer;
+        private bool EnableAutomation => Context.IsMainPlayer && this.Config.Enabled;
 
         /// <summary>The number of ticks until the next automation cycle.</summary>
         private int AutomateCountdown;
 
         /// <summary>The current overlay being displayed, if any.</summary>
-        private OverlayMenu CurrentOverlay;
+        private OverlayMenu? CurrentOverlay;
 
 
         /*********
@@ -57,16 +58,17 @@ namespace Pathoschild.Stardew.Automate
             const string dataPath = "assets/data.json";
             try
             {
-                this.Data = this.Helper.Data.ReadJsonFile<DataModel>(dataPath);
-                if (this.Data == null)
+                DataModel? data = this.Helper.Data.ReadJsonFile<DataModel>(dataPath);
+                if (data == null)
                 {
-                    this.Data = new();
+                    data = new(null);
                     this.Monitor.Log($"The {dataPath} file seems to be missing or invalid. Floor connectors will be disabled.", LogLevel.Error);
                 }
+                this.Data = data;
             }
             catch (Exception ex)
             {
-                this.Data = new();
+                this.Data = new(null);
                 this.Monitor.Log($"The {dataPath} file seems to be invalid. Floor connectors will be disabled.\n{ex}", LogLevel.Error);
             }
 
@@ -126,8 +128,8 @@ namespace Pathoschild.Stardew.Automate
         ****/
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForAutomate(
@@ -147,23 +149,28 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
             // disable if secondary player
             if (!this.EnableAutomation)
             {
-                if (this.HostHasAutomate(out ISemanticVersion installedVersion))
-                    this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
+                if (Context.IsMultiplayer)
+                {
+                    if (this.HostHasAutomate(out ISemanticVersion? installedVersion))
+                        this.Monitor.Log($"Automate {installedVersion} is installed by the main player, so machines will be automated by their instance.");
+                    else
+                        this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                }
                 else
-                    this.Monitor.Log("Automate isn't installed by the main player, so machines won't be automated.", LogLevel.Warn);
+                    this.Monitor.Log("You disabled Automate in the mod settings, so it won't do anything.", LogLevel.Info);
             }
         }
 
         /// <inheritdoc cref="IGameLoopEvents.DayStarted"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnDayStarted(object sender, DayStartedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnDayStarted(object? sender, DayStartedEventArgs e)
         {
             // reset
             this.MachineManager.Reset();
@@ -171,10 +178,10 @@ namespace Pathoschild.Stardew.Automate
             this.DisableOverlay();
         }
 
-        /// <summary>The method invoked when the player warps to a new location.</summary>
+        /// <inheritdoc cref="IPlayerEvents.Warped"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnWarped(object sender, WarpedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnWarped(object? sender, WarpedEventArgs e)
         {
             if (e.IsLocalPlayer)
                 this.ResetOverlayIfShown();
@@ -182,8 +189,8 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.LocationListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnLocationListChanged(object sender, LocationListChangedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnLocationListChanged(object? sender, LocationListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -205,8 +212,8 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.BuildingListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnBuildingListChanged(object sender, BuildingListChangedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnBuildingListChanged(object? sender, BuildingListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -220,8 +227,8 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.ObjectListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnObjectListChanged(object sender, ObjectListChangedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnObjectListChanged(object? sender, ObjectListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -235,8 +242,8 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IWorldEvents.TerrainFeatureListChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnTerrainFeatureListChanged(object sender, TerrainFeatureListChangedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnTerrainFeatureListChanged(object? sender, TerrainFeatureListChangedEventArgs e)
         {
             if (!this.EnableAutomation)
                 return;
@@ -250,8 +257,8 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             if (!Context.IsWorldReady || !this.EnableAutomation)
                 return;
@@ -281,8 +288,11 @@ namespace Pathoschild.Stardew.Automate
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
+            if (!this.Config.Enabled) // don't check EnableAutomation, since overlay is still available for farmhands
+                return;
+
             try
             {
                 // toggle overlay
@@ -302,14 +312,16 @@ namespace Pathoschild.Stardew.Automate
 
         /// <inheritdoc cref="IMultiplayerEvents.ModMessageReceived"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnModMessageReceived(object? sender, ModMessageReceivedEventArgs e)
         {
             // update automation if chest options changed
             if (Context.IsMainPlayer && e.FromModID == "Pathoschild.ChestsAnywhere" && e.Type == nameof(AutomateUpdateChestMessage))
             {
                 var message = e.ReadAs<AutomateUpdateChestMessage>();
-                var location = Game1.getLocationFromName(message.LocationName);
+                var location = message.LocationName != null
+                    ? Game1.getLocationFromName(message.LocationName)
+                    : null;
                 var player = Game1.getFarmer(e.FromPlayerID);
 
                 string label = player != Game1.MasterPlayer
@@ -334,8 +346,19 @@ namespace Pathoschild.Stardew.Automate
         {
             this.AutomateCountdown = Math.Min(this.AutomateCountdown, this.Config.AutomationInterval);
 
-            this.MachineManager.Reset();
-            this.ResetOverlayIfShown();
+            if (!this.Config.Enabled)
+            {
+                if (this.MachineManager.GetActiveMachineGroups().Any())
+                    this.Monitor.Log("Disabled per config change. Machines are no longer automated.", LogLevel.Warn);
+
+                this.MachineManager.Clear();
+                this.DisableOverlay();
+            }
+            else
+            {
+                this.MachineManager.Reset();
+                this.ResetOverlayIfShown();
+            }
         }
 
         /// <summary>Log warnings if custom-machine frameworks are installed without their automation component.</summary>
@@ -343,7 +366,7 @@ namespace Pathoschild.Stardew.Automate
         private void ReportMissingBridgeMods(DataModelIntegration[] integrations)
         {
             var registry = this.Helper.ModRegistry;
-            foreach (var integration in integrations)
+            foreach (DataModelIntegration integration in integrations)
             {
                 if (registry.IsLoaded(integration.Id) && !registry.IsLoaded(integration.SuggestedId))
                     this.Monitor.Log($"Machine recipes added by {integration.Name} aren't currently automated. Install {integration.SuggestedName} too to enable them: {integration.SuggestedUrl}.", LogLevel.Warn);
@@ -352,7 +375,7 @@ namespace Pathoschild.Stardew.Automate
 
         /// <summary>Get whether the host player has Automate installed.</summary>
         /// <param name="version">The installed version, if any.</param>
-        private bool HostHasAutomate(out ISemanticVersion version)
+        private bool HostHasAutomate([NotNullWhen(true)] out ISemanticVersion? version)
         {
             if (Context.IsMainPlayer)
             {
@@ -360,8 +383,8 @@ namespace Pathoschild.Stardew.Automate
                 return true;
             }
 
-            IMultiplayerPeer host = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID);
-            IMultiplayerPeerMod mod = host?.Mods?.SingleOrDefault(p => string.Equals(p.ID, this.ModManifest.UniqueID, StringComparison.OrdinalIgnoreCase));
+            IMultiplayerPeer? host = this.Helper.Multiplayer.GetConnectedPlayer(Game1.MasterPlayer.UniqueMultiplayerID);
+            IMultiplayerPeerMod? mod = host?.Mods.SingleOrDefault(p => string.Equals(p.ID, this.ModManifest.UniqueID, StringComparison.OrdinalIgnoreCase));
 
             version = mod?.Version;
             return mod != null;

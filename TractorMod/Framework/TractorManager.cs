@@ -36,10 +36,10 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private readonly IReflectionHelper Reflection;
 
         /// <summary>The tractor attachments to apply.</summary>
-        private IAttachment[] Attachments;
+        private IAttachment[] Attachments = Array.Empty<IAttachment>();
 
         /// <summary>The attachment cooldowns in ticks for each rate-limited attachment.</summary>
-        private IDictionary<IAttachment, int> AttachmentCooldowns;
+        private Dictionary<IAttachment, int> AttachmentCooldowns = new();
 
         /// <summary>The mod settings.</summary>
         private ModConfig Config;
@@ -57,7 +57,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         private bool WasEnabled;
 
         /// <summary>The tractor location during the last tick.</summary>
-        private GameLocation WasLocation;
+        private GameLocation? WasLocation;
 
         /// <summary>The rider health to maintain if they're invincible.</summary>
         private int RiderHealth;
@@ -97,7 +97,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
 
         /// <summary>Get whether the given horse should be treated as a tractor.</summary>
         /// <param name="horse">The horse to check.</param>
-        public static bool IsTractor(Horse horse)
+        public static bool IsTractor([NotNullWhen(true)] Horse? horse)
         {
             return horse?.modData.TryGetValue(TractorManager.TractorDataKey, out _) == true;
         }
@@ -181,7 +181,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             foreach (Vector2 tile in this.GetTileGrid(Game1.player.getTileLocation(), this.Config.Distance))
             {
                 // get tile area in screen pixels
-                Rectangle area = new Rectangle((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
+                Rectangle area = new((int)(tile.X * Game1.tileSize - Game1.viewport.X), (int)(tile.Y * Game1.tileSize - Game1.viewport.Y), Game1.tileSize, Game1.tileSize);
 
                 // choose tile color
                 Color color = enabled ? Color.Green : Color.Red;
@@ -203,12 +203,12 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <param name="config">The new mod configuration.</param>
         /// <param name="keys">The new key bindings.</param>
         /// <param name="attachments">The tractor attachments to apply.</param>
-        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IEnumerable<IAttachment> attachments)
+        public void UpdateConfig(ModConfig config, ModConfigKeys keys, IEnumerable<IAttachment?> attachments)
         {
             // update config
             this.Config = config;
             this.Keys = keys;
-            this.Attachments = attachments.Where(p => p != null).ToArray();
+            this.Attachments = attachments.WhereNotNull().ToArray();
             this.AttachmentCooldowns = this.Attachments.Where(p => p.RateLimit > this.TicksPerAction).ToDictionary(p => p, _ => 0);
 
             // clear buff so it's reapplied with new values
@@ -239,7 +239,7 @@ namespace Pathoschild.Stardew.TractorMod.Framework
         /// <summary>Apply the tractor buff to the current player.</summary>
         private void UpdateBuff()
         {
-            Buff buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
+            Buff? buff = Game1.buffsDisplay.otherBuffs.FirstOrDefault(p => p.which == this.BuffUniqueID);
             if (buff == null)
             {
                 buff = new Buff(0, 0, 0, 0, 0, 0, 0, 0, this.Config.MagneticRadius, this.Config.TractorSpeed, 0, 0, 1, "Tractor Power", I18n.Buff_Name()) { which = this.BuffUniqueID };
@@ -275,8 +275,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // get context
             Farmer player = Game1.player;
             GameLocation location = Game1.currentLocation;
-            Tool tool = player.CurrentTool;
-            Item item = player.CurrentItem;
+            Tool? tool = player.CurrentTool;
+            Item? item = player.CurrentItem;
 
             // get active attachments
             IAttachment[] attachments = this.GetApplicableAttachmentsAfterCooldown(player, tool, item, location).ToArray();
@@ -300,8 +300,8 @@ namespace Pathoschild.Stardew.TractorMod.Framework
                     player.FacingDirection = facingDirection;
 
                     // apply attachment effects
-                    location.objects.TryGetValue(tile, out SObject tileObj);
-                    location.terrainFeatures.TryGetValue(tile, out TerrainFeature tileFeature);
+                    location.objects.TryGetValue(tile, out SObject? tileObj);
+                    location.terrainFeatures.TryGetValue(tile, out TerrainFeature? tileFeature);
                     foreach (IAttachment attachment in attachments)
                     {
                         if (attachment.Apply(tile, tileObj, tileFeature, Game1.player, tool, item, Game1.currentLocation))
@@ -387,13 +387,13 @@ namespace Pathoschild.Stardew.TractorMod.Framework
             // (Note: change net values directly to avoid sync bugs, since the value will be reset when we're done.)
             Farmer player = Game1.player;
             NetRef<Horse> mountField = this.Reflection.GetField<NetRef<Horse>>(Game1.player, "netMount").GetValue();
-            IReflectedField<Horse> mountFieldValue = this.Reflection.GetField<Horse>(mountField, "value");
+            IReflectedField<Horse?> mountFieldValue = this.Reflection.GetField<Horse?>(mountField, "value");
             IReflectedField<Vector2> mountPositionValue = this.Reflection.GetField<Vector2>(player.mount.position.Field, "value");
 
             // save current state
             Horse mount = mountField.Value;
             Vector2 mountPosition = mount.Position;
-            WateringCan wateringCan = player.CurrentTool as WateringCan;
+            WateringCan? wateringCan = player.CurrentTool as WateringCan;
             int waterInCan = wateringCan?.WaterLeft ?? 0;
             float stamina = player.stamina;
             Vector2 position = player.Position;

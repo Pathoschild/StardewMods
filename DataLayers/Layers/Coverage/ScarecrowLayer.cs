@@ -112,7 +112,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         /// <param name="scarecrow">The scarecrow to check.</param>
         /// <param name="overrideOrigin">The tile position to check from, if different from <see cref="Object.TileLocation"/>.</param>
         /// <remarks>Derived from <see cref="Farm.addCrows"/>.</remarks>
-        private IEnumerable<Vector2> GetCoverage(Object scarecrow, Vector2? overrideOrigin = null)
+        private IEnumerable<Vector2> GetCoverage(SObject scarecrow, Vector2? overrideOrigin = null)
         {
             Vector2 origin = overrideOrigin ?? scarecrow.TileLocation;
             int radius = scarecrow.GetRadiusForScarecrow();

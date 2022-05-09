@@ -1,4 +1,4 @@
-﻿using StardewModdingAPI;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace Pathoschild.Stardew.ChestsAnywhere.Framework

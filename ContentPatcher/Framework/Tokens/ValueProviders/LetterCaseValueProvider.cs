@@ -52,8 +52,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             yield return this.Type switch
             {
-                ConditionType.Lowercase => input.TokenString.Value.ToLowerInvariant(),
-                ConditionType.Uppercase => input.TokenString.Value.ToUpperInvariant(),
+                ConditionType.Lowercase => input.TokenString!.Value!.ToLowerInvariant(),
+                ConditionType.Uppercase => input.TokenString!.Value!.ToUpperInvariant(),
                 _ => throw new NotSupportedException($"Unimplemented letter case type '{this.Type}'.") // should never happen
             };
         }

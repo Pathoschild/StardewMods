@@ -16,10 +16,10 @@ namespace Pathoschild.Stardew.Common.Utilities
         private readonly Func<TValue> FetchNew;
 
         /// <summary>The last cache key which was cached.</summary>
-        private string LastCacheKey;
+        private string? LastCacheKey;
 
         /// <summary>The cached value.</summary>
-        private TValue LastValue;
+        private TValue? LastValue;
 
 
         /*********
@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.Common.Utilities
                     this.LastValue = this.FetchNew();
                 }
 
-                return this.LastValue;
+                return this.LastValue!;
             }
         }
 

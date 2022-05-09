@@ -1,6 +1,14 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
+## 2.2.0
+Released 09 May 2022 for SMAPI 3.14.0 or later.
+
+* Updated for SMAPI 3.14.0.
+* Added option to remove stone path tiles in front of shipping bin.
+* Fixed some missing tile metadata (e.g. some tiles not marked diggable).
+* Internal refactoring.
+
 ## 2.1.1
 Released 27 February 2022 for SMAPI 3.13.0 or later.
 

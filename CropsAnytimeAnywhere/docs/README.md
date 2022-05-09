@@ -44,7 +44,7 @@ in-season crops anywhere _and_ out-of-season crops in the secret woods:
          "GrowCrops": true,
          "GrowCropsOutOfSeason": false
       },
-      "SecretWoods": {
+      "Woods": {
          "GrowCrops": true,
          "GrowCropsOutOfSeason": true
       },

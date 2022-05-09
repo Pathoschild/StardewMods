@@ -16,7 +16,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         private readonly ChestRange Range;
 
         /// <summary>The player's current zone.</summary>
-        private readonly string CurrentZone;
+        private readonly string? CurrentZone;
 
         /// <summary>A location => zone lookup if <see cref="Range"/> is <see cref="ChestRange.CurrentWorldArea"/>.</summary>
         private readonly Lazy<IDictionary<GameLocation, string>> WorldAreaZones;
@@ -29,7 +29,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
         /// <param name="range">The range within which chests should be accessible.</param>
         /// <param name="currentLocation">The player's current location.</param>
-        public RangeHandler(IDictionary<string, HashSet<string>> worldAreas, ChestRange range, GameLocation currentLocation)
+        public RangeHandler(IDictionary<string, HashSet<string>>? worldAreas, ChestRange range, GameLocation currentLocation)
         {
             this.Range = range;
 
@@ -41,7 +41,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <param name="location">The location to check.</param>
         public bool IsInRange(GameLocation location)
         {
-            string zone = this.GetZone(location, this.Range);
+            string? zone = this.GetZone(location, this.Range);
             return zone != null && zone == this.CurrentZone;
         }
 
@@ -71,7 +71,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
         /// <summary>Get the zone key for a location.</summary>
         /// <param name="location">The location to check.</param>
         /// <param name="range">The range within which chests should be accessible.</param>
-        private string GetZone(GameLocation location, ChestRange range)
+        private string? GetZone(GameLocation location, ChestRange range)
         {
             switch (range)
             {
@@ -83,7 +83,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
                     {
                         MineShaft mine => mine.mineLevel <= 120 ? "Mine" : "SkullCave",
                         VolcanoDungeon => "VolcanoDungeon",
-                        _ => this.WorldAreaZones.Value.TryGetValue(location, out string zone) ? zone : location.Name
+                        _ => this.WorldAreaZones.Value.TryGetValue(location, out string? zone) ? zone : location.Name
                     };
 
                 case ChestRange.CurrentLocation:
@@ -99,14 +99,14 @@ namespace Pathoschild.Stardew.ChestsAnywhere.Framework
 
         /// <summary>Get a lookup which matches locations to world area zones.</summary>
         /// <param name="worldAreas">The predefined world areas for <see cref="ChestRange.CurrentWorldArea"/>.</param>
-        private IDictionary<GameLocation, string> GetWorldAreaZones(IDictionary<string, HashSet<string>> worldAreas)
+        private IDictionary<GameLocation, string> GetWorldAreaZones(IDictionary<string, HashSet<string>>? worldAreas)
         {
             IDictionary<GameLocation, string> zones = new Dictionary<GameLocation, string>();
 
             foreach (GameLocation location in Game1.locations)
             {
                 // get zone key
-                string explicitZone = (from area in worldAreas where area.Value.Contains(location.Name) select area.Key).FirstOrDefault();
+                string? explicitZone = (from area in worldAreas where area.Value.Contains(location.Name) select area.Key).FirstOrDefault();
                 string zone = explicitZone ?? location.Name;
 
                 // map locations to zone (unless already mapped through a parent location)

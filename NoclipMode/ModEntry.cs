@@ -13,7 +13,7 @@ namespace Pathoschild.Stardew.NoclipMode
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The keys which toggle noclip mode.</summary>
         private KeybindList ToggleKey => this.Config.ToggleKey;
@@ -34,6 +34,7 @@ namespace Pathoschild.Stardew.NoclipMode
             this.Config = helper.ReadConfig<ModConfig>();
 
             // hook events
+            helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             helper.Events.Input.ButtonsChanged += this.OnButtonsChanged;
         }
 
@@ -41,10 +42,26 @@ namespace Pathoschild.Stardew.NoclipMode
         /*********
         ** Private methods
         *********/
-        /// <summary>Raised after the player presses any buttons on the keyboard, controller, or mouse.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+        {
+            // add Generic Mod Config Menu integration
+            new GenericModConfigMenuIntegrationForNoclipMode(
+                getConfig: () => this.Config,
+                reset: () => this.Config = new ModConfig(),
+                saveAndApply: () => this.Helper.WriteConfig(this.Config),
+                modRegistry: this.Helper.ModRegistry,
+                monitor: this.Monitor,
+                manifest: this.ModManifest
+            ).Register();
+        }
+
+        /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
+        /// <param name="sender">The event sender.</param>
+        /// <param name="e">The event data.</param>
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (this.CanToggle() && this.ToggleKey.JustPressed())
             {
@@ -66,7 +83,7 @@ namespace Pathoschild.Stardew.NoclipMode
 
             // show message
             Game1.hudMessages.RemoveAll(p => p.number == ModEntry.MessageID);
-            string keybindStr = keybind.GetKeybindCurrentlyDown().ToString();
+            string? keybindStr = keybind.GetKeybindCurrentlyDown()?.ToString();
             string text = noclipEnabled ? I18n.EnabledMessage(keybindStr) : I18n.DisabledMessage(keybindStr);
             Game1.addHUDMessage(new HUDMessage(text, HUDMessage.error_type) { noIcon = true, number = ModEntry.MessageID });
         }

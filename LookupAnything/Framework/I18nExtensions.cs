@@ -77,9 +77,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 return season;
 
             int id = Utility.getSeasonNumber(season);
-            if (id == -1)
-                throw new InvalidOperationException($"Can't translate unknown season '{season}'.");
-            return Utility.getSeasonNameFromNumber(id);
+            return id != -1
+                ? Utility.getSeasonNameFromNumber(id)
+                : season;
         }
 
         /// <summary>Get translated season names from the game.</summary>
@@ -96,7 +96,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
             /// <summary>The translated name for a location, or the internal name if no translation is available.</summary>
             public static string LocationName(string locationName)
             {
-                return I18n.Translations.Get($"location.{locationName}").Default(locationName);
+                return I18n.Translations!.Get($"location.{locationName}").Default(locationName);
             }
 
             /// <summary>The translated name for a fishing area.</summary>
@@ -107,7 +107,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                     return I18n.Location_UndergroundMine_Level(level: id);
 
                 // dynamic area override
-                Translation areaTranslation = I18n.Translations.Get(int.TryParse(id, out int _)
+                Translation areaTranslation = I18n.Translations!.Get(int.TryParse(id, out int _)
                     ? $"location.{locationName}.fish-area-{id}"
                     : $"location.{locationName}.{id}");
                 return areaTranslation
@@ -117,7 +117,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
 
         /// <summary>Get a human-readable representation of a value.</summary>
         /// <param name="value">The underlying value.</param>
-        public static string Stringify(object value)
+        public static string? Stringify(object? value)
         {
             switch (value)
             {
@@ -206,7 +206,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                 // enumerable
                 case IEnumerable array when value is not string:
                     {
-                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val)).ToArray();
+                        string[] values = (from val in array.Cast<object>() select I18n.Stringify(val) ?? "<null>").ToArray()!;
                         return "(" + string.Join(", ", values) + ")";
                     }
 
@@ -219,13 +219,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
                             Type genericType = type.GetGenericTypeDefinition();
                             if (genericType == typeof(NetDictionary<,,,,>))
                             {
-                                object dict = type.GetProperty("FieldDict").GetValue(value);
+                                object? dict = type.GetProperty("FieldDict")?.GetValue(value);
                                 return I18n.Stringify(dict);
                             }
                             if (genericType == typeof(KeyValuePair<,>))
                             {
-                                string k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key)).GetValue(value));
-                                string v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value)).GetValue(value));
+                                string? k = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Key))?.GetValue(value));
+                                string? v = I18n.Stringify(type.GetProperty(nameof(KeyValuePair<byte, byte>.Value))?.GetValue(value));
                                 return $"({k}: {v})";
                             }
                         }

@@ -31,7 +31,7 @@ namespace Pathoschild.Stardew.Common.Patching
         /// <param name="name">The method name.</param>
         /// <param name="parameters">The method parameter types, or <c>null</c> if it's not overloaded.</param>
         /// <param name="generics">The method generic types, or <c>null</c> if it's not generic.</param>
-        protected MethodInfo RequireMethod<TTarget>(string name, Type[] parameters = null, Type[] generics = null)
+        protected MethodInfo RequireMethod<TTarget>(string name, Type[]? parameters = null, Type[]? generics = null)
         {
             return PatchHelper.RequireMethod<TTarget>(name, parameters, generics);
         }

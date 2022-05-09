@@ -12,7 +12,7 @@ namespace ContentPatcher.Framework.Conditions
         ** Accessors
         *********/
         /// <inheritdoc />
-        public string Raw { get; }
+        public string? Raw { get; }
 
         /// <inheritdoc />
         public IEnumerable<ILexToken> LexTokens { get; }
@@ -42,10 +42,10 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Construct an instance.</summary>
         /// <param name="value">The literal string value.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public LiteralString(string value, LogPathBuilder path)
+        public LiteralString(string? value, LogPathBuilder path)
         {
             this.Raw = value;
-            this.Value = value;
+            this.Value = value ?? string.Empty;
             this.LexTokens = new ILexToken[] { new LexTokenLiteral(value) };
             this.Path = path.ToString();
         }

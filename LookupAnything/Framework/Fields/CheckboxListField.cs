@@ -18,7 +18,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
         protected KeyValuePair<IFormattedText[], bool>[] Checkboxes;
 
         /// <summary>The intro text to show before the checkboxes.</summary>
-        protected IFormattedText[] Intro;
+        protected IFormattedText[]? Intro;
 
 
         /*********
@@ -58,13 +58,13 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
             if (this.Intro != null)
                 topOffset += spriteBatch.DrawTextBlock(font, this.Intro, position, wrapWidth).Y;
 
-            foreach (KeyValuePair<IFormattedText[], bool> entry in this.Checkboxes)
+            foreach ((IFormattedText[] label, bool isChecked) in this.Checkboxes)
             {
                 // draw icon
                 spriteBatch.Draw(
                     texture: CommonSprites.Icons.Sheet,
                     position: new Vector2(position.X, position.Y + topOffset + checkboxOffset),
-                    sourceRectangle: entry.Value ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
+                    sourceRectangle: isChecked ? CommonSprites.Icons.FilledCheckbox : CommonSprites.Icons.EmptyCheckbox,
                     color: Color.White,
                     rotation: 0,
                     origin: Vector2.Zero,
@@ -74,7 +74,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Fields
                 );
 
                 // draw text
-                Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, entry.Key, new Vector2(position.X + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
+                Vector2 textSize = spriteBatch.DrawTextBlock(Game1.smallFont, label, new Vector2(position.X + checkboxSize + 7, position.Y + topOffset), wrapWidth - checkboxSize - 7);
 
                 // update offset
                 topOffset += Math.Max(checkboxSize, textSize.Y);

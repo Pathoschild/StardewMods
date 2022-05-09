@@ -74,14 +74,14 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="content">The content pack being validated, if any.</param>
-        public Migration_1_15_Rewrites(ContentConfig content)
+        public Migration_1_15_Rewrites(ContentConfig? content)
             : base(new SemanticVersion(1, 15, 0))
         {
             this.LocalTokenNames = new Lazy<ISet<string>>(() => this.GetLocalTokenNames(content));
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ref ILexToken lexToken, out string error)
+        public override bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;
@@ -107,7 +107,7 @@ namespace ContentPatcher.Framework.Migrations
                 // 1.15 changes {{Random: choices | pinned-key}} to {{Random: choices |key=pinned-key}}
                 if (conditionType == ConditionType.Random)
                 {
-                    LexTokenLiteral lexSeparator = token.InputArgs.Parts.OfType<LexTokenLiteral>().FirstOrDefault(p => p.ToString().Contains("|"));
+                    LexTokenLiteral? lexSeparator = token.InputArgs.Parts.OfType<LexTokenLiteral>().FirstOrDefault(p => p.ToString().Contains("|"));
                     if (lexSeparator != null && !IgnoreRandomArgumentPattern.IsMatch(lexSeparator.Text))
                     {
                         int sepIndex = lexSeparator.Text.IndexOf("|", StringComparison.Ordinal);
@@ -127,21 +127,21 @@ namespace ContentPatcher.Framework.Migrations
         *********/
         /// <summary>Get the dynamic and config token names defined by a content pack.</summary>
         /// <param name="content">The content pack to read.</param>
-        private ISet<string> GetLocalTokenNames(ContentConfig content)
+        private ISet<string> GetLocalTokenNames(ContentConfig? content)
         {
             InvariantHashSet names = new();
 
             if (content != null)
             {
                 // dynamic tokens
-                foreach (string name in content.DynamicTokens.Select(p => p.Name))
+                foreach (string? name in content.DynamicTokens.Select(p => p?.Name))
                 {
                     if (!string.IsNullOrWhiteSpace(name))
                         names.Add(name);
                 }
 
                 // config schema
-                foreach (string name in content.ConfigSchema.Select(p => p.Key))
+                foreach (string? name in content.ConfigSchema.Select(p => p.Key))
                 {
                     if (!string.IsNullOrWhiteSpace(name))
                         names.Add(name);

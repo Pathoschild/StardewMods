@@ -129,6 +129,22 @@ Multiplayer notes:
 * If you're not the main player, you can only access chests in synced locations (usually the farm, farmhouse, constructed farm buildings, and your current location). This is due to limitations in how the game syncs data.
 
 ## Mod integrations
+### Get overlay info
+You can access Chests Anywhere's mod-provided API to get info about its menu overlay (i.e. the UI
+it floats over the chest UI). For example:
+
+```cs
+var api = helper.ModRegistry<IChestsAnywhereApi>("Pathoschild.ChestsAnywhere");
+if (api != null)
+{
+    bool isOverlayOpen = api.IsOverlayActive();
+    bool isOverlayInterceptingInput = api.IsOverlayModal();
+}
+```
+
+See [mod-provided APIs](https://stardewvalleywiki.com/Modding:Modder_Guide/APIs/Integrations#Mod-provided_APIs)
+on the wiki for more info.
+
 ### Setting chest options
 Chests Anywhere stores its options in each chest's `modData` field. You can add them explicitly to
 set the options yourself (e.g. to hide chests that shouldn't appear in the dropdowns).

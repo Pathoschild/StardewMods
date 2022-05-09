@@ -66,7 +66,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                 .ToArray();
 
             // yield coverage
-            var covered = new HashSet<Vector2>();
             var groups = new List<TileGroup>();
             foreach (SObject beeHouse in beeHouses)
             {
@@ -74,9 +73,6 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
                     .GetCoverage(location, beeHouse.TileLocation)
                     .Select(pos => new TileData(pos, this.Covered))
                     .ToArray();
-
-                foreach (TileData tile in tiles)
-                    covered.Add(tile.TilePosition);
 
                 groups.Add(new TileGroup(tiles, outerBorderColor: beeHouse.TileLocation == cursorTile ? this.SelectedColor : this.Covered.Color));
             }
@@ -100,7 +96,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
         *********/
         /// <summary>Get whether a map object is a bee house.</summary>
         /// <param name="obj">The map object.</param>
-        private bool IsBeeHouse(SObject obj)
+        private bool IsBeeHouse(SObject? obj)
         {
             return obj != null && obj.bigCraftable.Value && obj.Name == "Bee House";
         }
@@ -127,7 +123,7 @@ namespace Pathoschild.Stardew.DataLayers.Layers.Coverage
             Queue<Vector2> queue = new Queue<Vector2>();
             HashSet<Vector2> visited = new HashSet<Vector2>();
             queue.Enqueue(Vector2.Zero);
-            for (int i = 0; queue.Count > 0; i++)
+            while (queue.Count > 0)
             {
                 Vector2 tile = queue.Dequeue();
                 yield return tile;

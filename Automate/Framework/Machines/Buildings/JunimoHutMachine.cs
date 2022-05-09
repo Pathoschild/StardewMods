@@ -54,9 +54,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the machine output.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
-            return new TrackedItem(this.GetNextOutput(), onEmpty: this.OnOutputTaken);
+            return this.GetTracked(this.GetNextOutput(), onEmpty: this.OnOutputTaken);
         }
 
         /// <summary>Provide input to the machine.</summary>
@@ -80,7 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Buildings
         }
 
         /// <summary>Get the next output item.</summary>
-        private Item GetNextOutput()
+        private Item? GetNextOutput()
         {
             foreach (Item item in this.Output.items.Where(p => p != null))
             {

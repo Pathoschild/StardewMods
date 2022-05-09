@@ -17,7 +17,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
             new Recipe(
                 input: item => Utility.IsGeode(item, disallow_special_geodes: true),
                 inputCount: 1,
-                output: input => (SObject)Utility.getTreasureFromGeode(input),
+                output: Utility.getTreasureFromGeode,
                 minutes: _ => 60
             )
         };
@@ -38,7 +38,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         /// <returns>Returns whether the machine started processing an item.</returns>
         public override bool SetInput(IStorage input)
         {
-            if (input.TryGetIngredient(SObject.coal, 1, out IConsumable coal) && this.GenericPullRecipe(input, this.Recipes))
+            if (input.TryGetIngredient(SObject.coal, 1, out IConsumable? coal) && this.GenericPullRecipe(input, this.Recipes))
             {
                 coal.Reduce();
                 this.Machine.showNextIndex.Value = true;

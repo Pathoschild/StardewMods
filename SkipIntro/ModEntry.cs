@@ -1,5 +1,4 @@
 using System;
-using Microsoft.Xna.Framework.Input;
 using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.SkipIntro.Framework;
 using StardewModdingAPI;
@@ -16,7 +15,7 @@ namespace Pathoschild.Stardew.SkipIntro
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>Whether the game has launched.</summary>
         private bool IsLaunched;
@@ -48,10 +47,10 @@ namespace Pathoschild.Stardew.SkipIntro
         /****
         ** Event handlers
         ****/
-        /// <summary>The event called after the first game update, once all mods are loaded.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForSkipIntro(
@@ -68,10 +67,10 @@ namespace Pathoschild.Stardew.SkipIntro
             ).Register();
         }
 
-        /// <summary>The method called when the player returns to the title screen.</summary>
+        /// <inheritdoc cref="IDisplayEvents.MenuChanged"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnMenuChanged(object? sender, MenuChangedEventArgs e)
         {
             if (Constants.TargetPlatform == GamePlatform.Android)
                 return; // return to title doesn't replay intro on Android
@@ -80,10 +79,10 @@ namespace Pathoschild.Stardew.SkipIntro
                 this.CurrentStage = Stage.SkipIntro;
         }
 
-        /// <summary>Receives an update tick.</summary>
+        /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             try
             {
@@ -147,82 +146,116 @@ namespace Pathoschild.Stardew.SkipIntro
             if (TitleMenu.subMenu is ConfirmationDialog)
                 return Stage.None;
 
-            switch (currentStage)
+            // apply skip step
+            return currentStage switch
             {
-                // skip to title screen
-                case Stage.SkipIntro:
-                    if (Constants.TargetPlatform == GamePlatform.Android)
-                    {
-                        // skip to title screen
-                        menu.skipToTitleButtons();
+                Stage.SkipIntro => this.SkipToTitle(menu),
+                Stage.TransitionToLoad => this.TransitionToLoad(menu),
+                Stage.StartTransitionToCoop => this.StartTransitionToCoop(menu),
+                Stage.TransitionToCoop => this.TransitionToCoop(menu),
+                Stage.TransitionToCoopHost => this.TransitionToCoopHost(),
+                _ => Stage.None
+            };
+        }
 
-                        // skip button transition
-                        while (this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons").GetValue())
-                            menu.update(Game1.currentGameTime);
-                    }
-                    else
-                    {
-                        // skip to title screen
-                        menu.receiveKeyPress(Keys.Escape);
-                        menu.update(Game1.currentGameTime);
+        /// <summary>Skip to the title screen.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage SkipToTitle(TitleMenu menu)
+        {
+            // skip to title screen
+            menu.skipToTitleButtons();
 
-                        // skip button transition
-                        while (this.Helper.Reflection.GetField<int>(menu, "buttonsToShow").GetValue() < TitleMenu.numberOfButtons)
-                            menu.update(Game1.currentGameTime);
-                    }
+            // skip button transition
+            if (Constants.TargetPlatform == GamePlatform.Android)
+            {
+                IReflectedField<bool> isTransitioningButtons = this.Helper.Reflection.GetField<bool>(menu, "isTransitioningButtons");
+                while (isTransitioningButtons.GetValue())
+                    menu.update(Game1.currentGameTime);
+            }
+            else
+            {
+                IReflectedField<int> buttonsToShow = this.Helper.Reflection.GetField<int>(menu, "buttonsToShow");
+                while (buttonsToShow.GetValue() < TitleMenu.numberOfButtons)
+                    menu.update(Game1.currentGameTime);
+            }
 
-                    // skip to next screen
-                    switch (this.Config.SkipTo)
-                    {
-                        case Screen.Title:
-                            return Stage.None;
+            // set next step
+            switch (this.Config.SkipTo)
+            {
+                case Screen.Title:
+                    return Stage.None;
 
-                        case Screen.Load:
-                            // skip to load screen
-                            menu.performButtonAction("Load");
-                            while (TitleMenu.subMenu == null)
-                                menu.update(Game1.currentGameTime);
-                            return Stage.None;
+                case Screen.Load:
+                    return Stage.TransitionToLoad;
 
-                        case Screen.JoinCoop:
-                        case Screen.HostCoop:
-                            // skip to co-op screen
-                            menu.performButtonAction("Co-op");
-                            return Stage.TransitioningToCoop; // need a full game update before the next step to avoid crashes
-
-                        default:
-                            this.Monitor.Log($"Unrecognized skip option {this.Config.SkipTo}.", LogLevel.Warn);
-                            return Stage.None;
-                    }
-
-                // skip to co-op screen
-                case Stage.TransitioningToCoop:
-                    while (TitleMenu.subMenu == null)
-                        menu.update(Game1.currentGameTime);
-
-                    return this.Config.SkipTo == Screen.JoinCoop
-                        ? Stage.None
-                        : Stage.WaitingForConnection;
-
-                // skip to host tab after connection is established
-                case Stage.WaitingForConnection:
-                    {
-                        // not applicable
-                        if (this.Config.SkipTo != Screen.HostCoop || TitleMenu.subMenu is not CoopMenu submenu)
-                            return Stage.None;
-
-                        // not connected yet
-                        if (submenu.hostTab == null)
-                            return currentStage;
-
-                        // select host tab
-                        submenu.receiveLeftClick(submenu.hostTab.bounds.X, submenu.hostTab.bounds.Y, playSound: false);
-                        return Stage.None;
-                    }
+                case Screen.JoinCoop:
+                case Screen.HostCoop:
+                    return Stage.StartTransitionToCoop;
 
                 default:
+                    this.Monitor.Log($"Unrecognized skip option {this.Config.SkipTo}.", LogLevel.Warn);
                     return Stage.None;
             }
+        }
+
+        /// <summary>Skip from the title screen to the load menu.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage TransitionToLoad(TitleMenu menu)
+        {
+            // start transition
+            menu.performButtonAction("Load");
+
+            // skip animation
+            while (TitleMenu.subMenu == null)
+                menu.update(Game1.currentGameTime);
+
+            return Stage.None;
+        }
+
+        /// <summary>Start transitioning from the title screen to the co-op section.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage StartTransitionToCoop(TitleMenu menu)
+        {
+            // start transition
+            menu.performButtonAction("Co-op");
+
+            // need a full game update before the next step to avoid crashes
+            return Stage.TransitionToCoop;
+        }
+
+        /// <summary>Finish transitioning from the title screen to the co-op section.</summary>
+        /// <param name="menu">The title menu.</param>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage TransitionToCoop(TitleMenu menu)
+        {
+            // skip animation
+            while (TitleMenu.subMenu == null)
+                menu.update(Game1.currentGameTime);
+
+            // set next step
+            return this.Config.SkipTo == Screen.HostCoop
+                ? Stage.TransitionToCoopHost
+                : Stage.None;
+        }
+
+        /// <summary>Skip from the co-op section to the host screen.</summary>
+        /// <returns>Returns the next step in the skip logic.</returns>
+        private Stage TransitionToCoopHost()
+        {
+            // not applicable
+            if (TitleMenu.subMenu is not CoopMenu submenu)
+                return Stage.None;
+
+            // not connected yet
+            if (submenu.hostTab == null)
+                return Stage.TransitionToCoopHost;
+
+            // select host tab
+            submenu.receiveLeftClick(submenu.hostTab.bounds.X, submenu.hostTab.bounds.Y, playSound: false);
+            return Stage.None;
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -41,7 +42,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <inheritdoc />
         public override IEnumerable<ITarget> GetTargets(GameLocation location, Vector2 lookupTile)
         {
-            ISubject subject = this.BuildSubject(location, lookupTile);
+            ISubject? subject = this.BuildSubject(location, lookupTile);
             if (subject != null)
                 yield return new TileTarget(this.GameHelper, lookupTile, () => subject);
         }
@@ -53,7 +54,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <summary>Build a subject.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile being looked up.</param>
-        private ISubject BuildSubject(GameLocation location, Vector2 tile)
+        private ISubject? BuildSubject(GameLocation location, Vector2 tile)
         {
             bool showRaw = this.ShowRawTileInfo();
             ModConfig config = this.Config();
@@ -149,7 +150,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <param name="arguments">The space-separated property values, if any.</param>
         private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, out string[] arguments)
         {
-            bool found = this.HasTileProperty(location, tile, name, layer, out string value);
+            bool found = this.HasTileProperty(location, tile, name, layer, out string? value);
             arguments = value?.Split(' ').ToArray() ?? Array.Empty<string>();
             return found;
         }
@@ -160,7 +161,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework.Lookups.Tiles
         /// <param name="name">The property name.</param>
         /// <param name="layer">The map layer name to check.</param>
         /// <param name="value">The property value, if any.</param>
-        private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, out string value)
+        private bool HasTileProperty(GameLocation location, Vector2 tile, string name, string layer, [NotNullWhen(true)] out string? value)
         {
             value = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, name, layer);
             return value != null;

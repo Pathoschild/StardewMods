@@ -7,7 +7,7 @@ namespace Pathoschild.Stardew.Common.Utilities
     ///    <para>
     ///       Unlike a typical collection, a constraint set doesn't necessarily track the values it contains. For
     ///       example, a constraint set of <see cref="uint"/> values with one exclusion only stores one number but
-    ///       logically contains <see cref="uint.MaxValue"/> elements.
+    ///       logically contains <see cref="uint.MaxValue"/> - 1 elements.
     ///    </para>
     /// 
     ///    <para>

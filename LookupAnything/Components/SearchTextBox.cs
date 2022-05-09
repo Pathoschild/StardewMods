@@ -25,7 +25,7 @@ namespace Pathoschild.Stardew.LookupAnything.Components
         ** Accessors
         *********/
         /// <summary>The event raised when the search text changes.</summary>
-        public event EventHandler<string> OnChanged;
+        public event EventHandler<string>? OnChanged;
 
         public Rectangle Bounds
         {

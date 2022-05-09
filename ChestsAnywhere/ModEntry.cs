@@ -22,16 +22,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         ** Fields
         *********/
         /// <summary>The mod configuration.</summary>
-        private ModConfig Config;
+        private ModConfig Config = null!; // set in Entry
 
         /// <summary>The configured key bindings.</summary>
         private ModConfigKeys Keys => this.Config.Controls;
 
         /// <summary>The internal mod settings.</summary>
-        private ModData Data;
+        private ModData Data = null!; // set in Entry
 
         /// <summary>Encapsulates logic for finding chests.</summary>
-        private ChestFactory ChestFactory;
+        private ChestFactory ChestFactory = null!; // set in Entry
 
         /// <summary>The last selected chest.</summary>
         private readonly PerScreen<ManagedChest> LastChest = new();
@@ -40,14 +40,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         private readonly PerScreen<IClickableMenu> ForMenuInstance = new();
 
         /// <summary>The overlay for the current menu which which lets the player navigate and edit chests (or <c>null</c> if not applicable).</summary>
-        private readonly PerScreen<IStorageOverlay> CurrentOverlay = new();
+        private readonly PerScreen<IStorageOverlay?> CurrentOverlay = new();
 
 
         /*********
         ** Public methods
         *********/
-        /// <summary>The mod entry point, called after the mod is first loaded.</summary>
-        /// <param name="helper">Provides methods for interacting with the mod directory, such as read/writing a config file or custom JSON files.</param>
+        /// <inheritdoc />
         public override void Entry(IModHelper helper)
         {
             // initialize
@@ -69,14 +68,20 @@ namespace Pathoschild.Stardew.ChestsAnywhere
                 this.Monitor.Log("The translation files in this mod's i18n folder seem to be missing. The mod will still work, but you'll see 'missing translation' messages. Try reinstalling the mod to fix this.", LogLevel.Warn);
         }
 
+        /// <inheritdoc />
+        public override object GetApi()
+        {
+            return new ChestsAnywhereApi(() => this.CurrentOverlay.Value);
+        }
+
 
         /*********
         ** Private methods
         *********/
         /// <inheritdoc cref="IGameLoopEvents.GameLaunched"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
         {
             // add Generic Mod Config Menu integration
             new GenericModConfigMenuIntegrationForChestsAnywhere(
@@ -91,11 +96,11 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IGameLoopEvents.SaveLoaded"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnSaveLoaded(object? sender, SaveLoadedEventArgs e)
         {
             // validate game version
-            string versionError = this.ValidateGameVersion();
+            string? versionError = this.ValidateGameVersion();
             if (versionError != null)
             {
                 this.Monitor.Log(versionError, LogLevel.Error);
@@ -113,13 +118,13 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IDisplayEvents.RenderedHud"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnRenderedHud(object sender, RenderedHudEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnRenderedHud(object? sender, RenderedHudEventArgs e)
         {
             // show chest label
             if (this.Config.ShowHoverTooltips)
             {
-                ManagedChest cursorChest = this.ChestFactory.GetChestFromTile(Game1.currentCursorTile);
+                ManagedChest? cursorChest = this.ChestFactory.GetChestFromTile(Game1.currentCursorTile);
                 if (cursorChest != null && !cursorChest.HasDefaultName())
                 {
                     Vector2 tooltipPosition = new Vector2(Game1.getMouseX(), Game1.getMouseY()) + new Vector2(Game1.tileSize / 2f);
@@ -130,16 +135,16 @@ namespace Pathoschild.Stardew.ChestsAnywhere
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicking"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicking(object sender, UpdateTickingEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicking(object? sender, UpdateTickingEventArgs e)
         {
             this.ChangeOverlayIfNeeded();
         }
 
         /// <inheritdoc cref="IGameLoopEvents.UpdateTicked"/>
         /// <param name="sender">The event sender.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
+        /// <param name="e">The event data.</param>
+        private void OnUpdateTicked(object? sender, UpdateTickedEventArgs e)
         {
             this.ChangeOverlayIfNeeded();
         }
@@ -147,7 +152,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <inheritdoc cref="IInputEvents.ButtonsChanged"/>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event data.</param>
-        private void OnButtonsChanged(object sender, ButtonsChangedEventArgs e)
+        private void OnButtonsChanged(object? sender, ButtonsChangedEventArgs e)
         {
             if (!Context.IsWorldReady)
                 return;
@@ -200,7 +205,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             // get open chest
-            ManagedChest chest = this.ChestFactory.GetChestFromMenu(menu);
+            ManagedChest? chest = this.ChestFactory.GetChestFromMenu(menu);
             if (chest == null)
                 return;
 
@@ -233,12 +238,15 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             }
 
             // hook new overlay
-            this.CurrentOverlay.Value.OnChestSelected += selected =>
+            if (this.CurrentOverlay.Value is { } overlay)
             {
-                this.LastChest.Value = selected;
-                Game1.activeClickableMenu = selected.OpenMenu();
-            };
-            this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
+                overlay.OnChestSelected += selected =>
+                {
+                    this.LastChest.Value = selected;
+                    Game1.activeClickableMenu = selected.OpenMenu();
+                };
+                this.CurrentOverlay.Value.OnAutomateOptionsChanged += this.NotifyAutomateOfChestUpdate;
+            }
         }
 
         /// <summary>Open the menu UI.</summary>
@@ -257,7 +265,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
             // get chests
             RangeHandler range = this.GetCurrentRange();
             ManagedChest[] chests = this.ChestFactory.GetChests(range, excludeHidden: true).ToArray();
-            ManagedChest selectedChest =
+            ManagedChest? selectedChest =
                 ChestFactory.GetBestMatch(chests, this.LastChest.Value)
                 ?? chests.FirstOrDefault(p => object.ReferenceEquals(p.Location, Game1.currentLocation))
                 ?? chests.FirstOrDefault();
@@ -283,7 +291,7 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         }
 
         /// <summary>Validate that the game versions match the minimum requirements, and return an appropriate error message if not.</summary>
-        private string ValidateGameVersion()
+        private string? ValidateGameVersion()
         {
             if (Constant.MinimumApiVersion.IsNewerThan(Constants.ApiVersion))
                 return $"The Chests Anywhere mod requires a newer version of SMAPI. Please update SMAPI from {Constants.ApiVersion} to {Constant.MinimumApiVersion}.";
@@ -304,9 +312,6 @@ namespace Pathoschild.Stardew.ChestsAnywhere
         /// <param name="location">The game location.</param>
         private bool IsDisabledLocation(GameLocation location)
         {
-            if (this.Config.DisabledInLocations == null)
-                return false;
-
             return
                 this.Config.DisabledInLocations.Contains(location.Name)
                 || (location is MineShaft && location.Name.StartsWith("UndergroundMine") && this.Config.DisabledInLocations.Contains("UndergroundMine"));

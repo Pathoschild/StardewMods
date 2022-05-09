@@ -11,5 +11,8 @@ namespace Pathoschild.Stardew.SmallBeachFarm.Framework.Config
 
         /// <summary>Use the beach's background music (i.e. wave sounds) on the beach farm.</summary>
         public bool UseBeachMusic { get; set; } = false;
+
+        /// <summary>Place the stone path tiles in front of the default shipping bin position.</summary>
+        public bool ShippingBinPath { get; set; } = true;
     }
 }

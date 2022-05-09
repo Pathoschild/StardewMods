@@ -37,13 +37,14 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             SObject machine = this.Machine;
-            SObject heldObject = machine.heldObject.Value;
-            return new TrackedItem(heldObject.getOne(), _ =>
+            Item? output = machine.heldObject.Value?.getOne();
+
+            return this.GetTracked(output, onEmpty: _ =>
             {
-                machine.MinutesUntilReady = this.Reflection.GetMethod(machine, "getMinutesForCrystalarium").Invoke<int>(heldObject.ParentSheetIndex);
+                machine.MinutesUntilReady = this.Reflection.GetMethod(machine, "getMinutesForCrystalarium").Invoke<int>(output!.ParentSheetIndex);
                 machine.readyForHarvest.Value = false;
             });
         }

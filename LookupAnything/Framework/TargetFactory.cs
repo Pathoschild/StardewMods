@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Pathoschild.Stardew.Common;
 using Pathoschild.Stardew.Common.Integrations.JsonAssets;
 using Pathoschild.Stardew.LookupAnything.Framework.Constants;
 using Pathoschild.Stardew.LookupAnything.Framework.Lookups;
@@ -66,7 +67,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         {
             var targets = this.LookupProviders
                 .SelectMany(p => p.GetTargets(location, originTile))
-                .Where(p => p != null);
+                .WhereNotNull();
 
             foreach (ITarget target in targets)
                 yield return target;
@@ -75,7 +76,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get the target on the specified tile.</summary>
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
-        public ITarget GetTargetFromTile(GameLocation location, Vector2 tile)
+        public ITarget? GetTargetFromTile(GameLocation location, Vector2 tile)
         {
             return (
                 from target in this.GetNearbyTargets(location, tile)
@@ -88,7 +89,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="location">The current location.</param>
         /// <param name="tile">The tile to search.</param>
         /// <param name="position">The viewport-relative pixel coordinate to search.</param>
-        public ITarget GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position)
+        public ITarget? GetTargetFromScreenCoordinate(GameLocation location, Vector2 tile, Vector2 position)
         {
             // get target sprites which might overlap cursor position (first approximation)
             Rectangle tileArea = this.GameHelper.GetScreenCoordinatesFromTile(tile);
@@ -118,9 +119,9 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <param name="player">The player performing the lookup.</param>
         /// <param name="location">The current location.</param>
         /// <param name="hasCursor">Whether the player has a visible cursor.</param>
-        public ISubject GetSubjectFrom(Farmer player, GameLocation location, bool hasCursor)
+        public ISubject? GetSubjectFrom(Farmer player, GameLocation location, bool hasCursor)
         {
-            ITarget target = hasCursor
+            ITarget? target = hasCursor
                 ? this.GetTargetFromScreenCoordinate(location, Game1.currentCursorTile, this.GameHelper.GetScreenCoordinatesFromCursor())
                 : this.GetTargetFromTile(location, this.GetFacingTile(player));
 
@@ -130,7 +131,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get metadata for a menu element at the specified position.</summary>
         /// <param name="menu">The active menu.</param>
         /// <param name="cursorPos">The cursor's viewport-relative coordinates.</param>
-        public ISubject GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
+        public ISubject? GetSubjectFrom(IClickableMenu menu, Vector2 cursorPos)
         {
             int cursorX = (int)cursorPos.X;
             int cursorY = (int)cursorPos.Y;
@@ -143,7 +144,7 @@ namespace Pathoschild.Stardew.LookupAnything.Framework
         /// <summary>Get the subject for an in-game entity.</summary>
         /// <param name="entity">The entity instance.</param>
         /// <param name="location">The location containing the entity, if applicable.</param>
-        public ISubject GetByEntity(object entity, GameLocation location)
+        public ISubject? GetByEntity(object entity, GameLocation? location)
         {
             return this.LookupProviders
                 .Select(p => p.GetSubjectFor(entity, location))

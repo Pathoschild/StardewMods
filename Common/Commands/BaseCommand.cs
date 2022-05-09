@@ -37,7 +37,7 @@ namespace Pathoschild.Stardew.Common.Commands
         *********/
         /// <summary>Construct an instance.</summary>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
-        /// <param name="name">The command's subname (e.g. the 'export' in 'patch export').</param>
+        /// <param name="name">The command's sub-name (e.g. the 'export' in 'patch export').</param>
         protected BaseCommand(IMonitor monitor, string name)
         {
             this.Monitor = monitor;

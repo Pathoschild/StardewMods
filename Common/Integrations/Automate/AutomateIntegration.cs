@@ -6,15 +6,8 @@ using StardewValley;
 namespace Pathoschild.Stardew.Common.Integrations.Automate
 {
     /// <summary>Handles the logic for integrating with the Automate mod.</summary>
-    internal class AutomateIntegration : BaseIntegration
+    internal class AutomateIntegration : BaseIntegration<IAutomateApi>
     {
-        /*********
-        ** Fields
-        *********/
-        /// <summary>The mod's public API.</summary>
-        private readonly IAutomateApi ModApi;
-
-
         /*********
         ** Public methods
         *********/
@@ -22,15 +15,7 @@ namespace Pathoschild.Stardew.Common.Integrations.Automate
         /// <param name="modRegistry">An API for fetching metadata about loaded mods.</param>
         /// <param name="monitor">Encapsulates monitoring and logging.</param>
         public AutomateIntegration(IModRegistry modRegistry, IMonitor monitor)
-            : base("Automate", "Pathoschild.Automate", "1.11.0", modRegistry, monitor)
-        {
-            if (!this.IsLoaded)
-                return;
-
-            // get mod API
-            this.ModApi = this.GetValidatedApi<IAutomateApi>();
-            this.IsLoaded = this.ModApi != null;
-        }
+            : base("Automate", "Pathoschild.Automate", "1.11.0", modRegistry, monitor) { }
 
         /// <summary>Get the status of machines in a tile area. This is a specialized API for Data Layers and similar mods.</summary>
         /// <param name="location">The location for which to display data.</param>

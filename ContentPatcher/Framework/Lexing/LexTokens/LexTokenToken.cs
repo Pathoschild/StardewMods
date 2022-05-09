@@ -1,4 +1,4 @@
-using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace ContentPatcher.Framework.Lexing.LexTokens
@@ -10,13 +10,13 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         ** Accessors
         *********/
         /// <summary>The lexical token type.</summary>
-        public LexTokenType Type { get; } = LexTokenType.Token;
+        public LexTokenType Type => LexTokenType.Token;
 
         /// <summary>The Content Patcher token name.</summary>
         public string Name { get; private set; }
 
         /// <summary>The input arguments passed to the Content Patcher token.</summary>
-        public LexTokenInput InputArgs { get; private set; }
+        public LexTokenInput? InputArgs { get; private set; }
 
         /// <summary>Whether the token omits the start/end character patterns because it's in a token-only context.</summary>
         public bool ImpliedBraces { get; }
@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        public LexTokenToken(string name, LexTokenInput inputArgs, bool impliedBraces)
+        public LexTokenToken(string name, LexTokenInput? inputArgs, bool impliedBraces)
         {
             this.ImpliedBraces = impliedBraces;
             this.MigrateTo(name, inputArgs);
@@ -38,22 +38,24 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <summary>Apply changes for a format migration.</summary>
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
-        public void MigrateTo(string name, LexTokenInput inputArgs)
+        [MemberNotNull(nameof(LexTokenToken.Name))]
+        public void MigrateTo(string name, LexTokenInput? inputArgs)
         {
             this.Name = name;
             this.InputArgs = inputArgs;
         }
 
         /// <summary>Get the unique ID of the mod which provides this token, if applicable.</summary>
-        public string GetProviderModId()
+        public string? GetProviderModId()
         {
-            string[] nameParts = this.Name.Split(new[] { InternalConstants.ModTokenSeparator }, 2, StringSplitOptions.None);
+            string[] nameParts = this.Name.Split(InternalConstants.ModTokenSeparator, 2);
             return nameParts.Length == 2
                 ? nameParts[0].Trim()
                 : null;
         }
 
         /// <summary>Get whether the token has any input arguments.</summary>
+        [MemberNotNullWhen(true, nameof(LexTokenToken.InputArgs))]
         public bool HasInputArgs()
         {
             return this.InputArgs?.Parts.Length > 0;
@@ -73,9 +75,9 @@ namespace ContentPatcher.Framework.Lexing.LexTokens
         /// <param name="name">The Content Patcher token name.</param>
         /// <param name="inputArgs">The input arguments passed to the Content Patcher token.</param>
         /// <param name="impliedBraces">Whether the token omits the start/end character patterns because it's in a token-only context.</param>
-        private static string GetRawText(string name, LexTokenInput inputArgs, bool impliedBraces)
+        private static string GetRawText(string name, LexTokenInput? inputArgs, bool impliedBraces)
         {
-            StringBuilder str = new StringBuilder();
+            StringBuilder str = new();
             if (!impliedBraces)
                 str.Append("{{");
             str.Append(name);

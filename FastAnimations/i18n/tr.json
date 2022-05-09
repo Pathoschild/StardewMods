@@ -24,6 +24,9 @@
     "config.harvest.name": "Hasat",
     "config.harvest.tooltip": "Mahsulleri ve yemleri elle ne kadar hızlı hasat ettiğiniz. Varsayılan {{defaultValue}}x.",
 
+    "config.horse-flute.name": "PLay Horse Flute", // TODO
+    "config.horse-flute.tooltip": "How fast you play the horse flute. Default {{defaultValue}}x.", // TODO
+
     "config.milk.name": "Süt",
     "config.milk.tooltip": "Süt kovasını ne kadar hızlı kullandığınız. Varsayılan {{defaultValue}}x.",
 

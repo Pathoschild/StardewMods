@@ -55,15 +55,15 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
             // get trash
-            Item item = this.GetRandomTrash(this.TrashCanIndex);
+            Item? item = this.GetRandomTrash(this.TrashCanIndex);
             if (item != null)
-                return new TrackedItem(item, onEmpty: this.MarkChecked);
+                return new TrackedItem(item, onEmpty: _ => this.MarkChecked());
 
             // if nothing is returned, mark trash can checked
-            this.MarkChecked(null);
+            this.MarkChecked();
             return null;
         }
 
@@ -80,8 +80,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
         ** Private methods
         *********/
         /// <summary>Reset the machine so it starts processing the next item.</summary>
-        /// <param name="item">The output item that was taken.</param>
-        private void MarkChecked(Item item)
+        private void MarkChecked()
         {
             this.TrashCansChecked[this.TrashCanIndex] = true;
             Game1.stats.incrementStat("trashCansChecked", 1);
@@ -89,7 +88,7 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Tiles
 
         /// <summary>Get a random trash item ID.</summary>
         /// <param name="index">The trash can index.</param>
-        private Item GetRandomTrash(int index)
+        private Item? GetRandomTrash(int index)
         {
             // Note: this code must match the exact sequence of random calls to produce the same output as the game code.
             Random random = new Random((int)Game1.uniqueIDForThisGame / 2 + (int)Game1.stats.DaysPlayed + 777 + index * 77);

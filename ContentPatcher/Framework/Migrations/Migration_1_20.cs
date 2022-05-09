@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -27,7 +28,7 @@ namespace ContentPatcher.Framework.Migrations
         }
 
         /// <inheritdoc />
-        public override bool TryMigrate(ref ILexToken lexToken, out string error)
+        public override bool TryMigrate(ref ILexToken lexToken, [NotNullWhen(false)] out string? error)
         {
             if (!base.TryMigrate(ref lexToken, out error))
                 return false;
@@ -53,7 +54,7 @@ namespace ContentPatcher.Framework.Migrations
                 lexToken = new LexTokenToken(
                     name: token.Name,
                     inputArgs: new LexTokenInput(
-                        valleyArg.Concat(token.InputArgs?.Parts ?? new ILexToken[0]).ToArray()
+                        valleyArg.Concat(token.InputArgs?.Parts ?? Array.Empty<ILexToken>()).ToArray()
                     ),
                     impliedBraces: true
                 );

@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text.RegularExpressions;
 using ContentPatcher.Framework.Tokens;
 using ContentPatcher.Framework.Tokens.ValueProviders;
 using ContentPatcher.Framework.Tokens.ValueProviders.ModConvention;
+using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 
 namespace ContentPatcher.Framework
@@ -51,7 +54,7 @@ namespace ContentPatcher.Framework
         /// <param name="rawConditions">The raw conditions to parse.</param>
         /// <param name="formatVersion">The format version for which to parse conditions.</param>
         /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
-        internal delegate IManagedConditions ParseConditionsDelegate(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null);
+        internal delegate IManagedConditions ParseConditionsDelegate(IManifest manifest, InvariantDictionary<string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null);
 
 
         /*********
@@ -75,24 +78,27 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string> rawConditions, ISemanticVersion formatVersion, string[] assumeModIds = null)
+        public IManagedConditions ParseConditions(IManifest manifest, IDictionary<string, string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null)
         {
             // validate lifecycle
             if (!this.IsConditionsApiReady)
                 throw new InvalidOperationException($"'{manifest.Name}' accessed Content Patcher's conditions API before it was ready to use. (For mod authors: see the documentation on {nameof(IContentPatcherAPI)}.{nameof(IContentPatcherAPI.IsConditionsApiReady)} for details.)");
 
             // validate dependency on Content Patcher
-            if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion minVersion, canBeOptional: false))
+            if (!manifest.HasDependency(this.ContentPatcherID, out ISemanticVersion? minVersion, canBeOptional: false))
                 throw new InvalidOperationException($"'{manifest.Name}' must list Content Patcher as a required dependency in its manifest.json to access the conditions API.");
             if (minVersion == null || minVersion.IsOlderThan("1.22.0"))
                 throw new InvalidOperationException($"'{manifest.Name}' must specify Content Patcher 1.22.0 as the minimum required version in its manifest.json to access the conditions API.");
 
             // parse conditions
-            return this.ParseConditionsImpl(manifest, rawConditions, formatVersion, assumeModIds);
+            InvariantDictionary<string?>? conditions = rawConditions?.Any() == true
+               ? new(rawConditions)
+               : null;
+            return this.ParseConditionsImpl(manifest, conditions, formatVersion, assumeModIds);
         }
 
         /// <inheritdoc />
-        public void RegisterToken(IManifest mod, string name, Func<IEnumerable<string>> getValue)
+        public void RegisterToken(IManifest mod, string name, Func<IEnumerable<string>?> getValue)
         {
             this.RegisterValueProvider(mod, new ModSimpleValueProvider(name, getValue));
         }
@@ -110,10 +116,12 @@ namespace ContentPatcher.Framework
         /// <summary>Register a token.</summary>
         /// <param name="mod">The manifest of the mod defining the token.</param>
         /// <param name="valueProvider">The token value provider.</param>
+        [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse", Justification = "The validation ensures input values match the expected nullability.")]
+        [SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier", Justification = "The validation ensures input values match the expected nullability.")]
         private void RegisterValueProvider(IManifest mod, IValueProvider valueProvider)
         {
             // validate token + mod
-            if (valueProvider == null)
+            if (valueProvider is null)
             {
                 this.Monitor.Log($"Rejected token added by {mod.Name} because the token is null.", LogLevel.Error);
                 return;
@@ -125,7 +133,7 @@ namespace ContentPatcher.Framework
             }
 
             // validate name format
-            string name = valueProvider.Name?.Trim();
+            string? name = valueProvider.Name?.Trim();
             if (string.IsNullOrWhiteSpace(name))
             {
                 this.Monitor.Log($"Rejected token added by {mod.Name} because the token has no name.", LogLevel.Error);
@@ -138,7 +146,7 @@ namespace ContentPatcher.Framework
             }
 
             // format name
-            ModProvidedToken token = new ModProvidedToken(name, mod, valueProvider, this.Monitor);
+            ModProvidedToken token = new(name, mod, valueProvider, this.Monitor);
 
             // add token
             this.AddModToken(token);
@@ -148,7 +156,7 @@ namespace ContentPatcher.Framework
         /// <param name="mod">The manifest of the mod defining the token.</param>
         /// <param name="name">The token name.</param>
         /// <param name="provider">The token value provider.</param>
-        private void RegisterValueProviderByConvention(IManifest mod, string name, object provider)
+        private void RegisterValueProviderByConvention(IManifest mod, string name, object? provider)
         {
             // validate token
             if (provider == null)
@@ -158,7 +166,7 @@ namespace ContentPatcher.Framework
             }
 
             // get a strongly-typed wrapper
-            if (!ConventionWrapper.TryCreate(provider, this.Reflection, out ConventionWrapper wrapper, out string error))
+            if (!ConventionWrapper.TryCreate(provider, this.Reflection, out ConventionWrapper? wrapper, out string? error))
             {
                 this.Monitor.Log($"Rejected token '{name}' added by {mod.Name} because it could not be mapped: {error}", LogLevel.Error);
                 return;

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 namespace Pathoschild.Stardew.Common.Utilities
 {
     /// <summary>A comparer which sorts values by comparing alphabetical and numeric sequences within the strings, resulting in a more intuitive order like "1, 2, 10" instead of "1, 10, 2".</summary>
-    internal class HumanSortComparer : IComparer<string>
+    internal class HumanSortComparer : IComparer<string?>
     {
         /*********
         ** Fields
         *********/
         /// <summary>The comparer to use for alphabetical sequences.</summary>
-        private readonly IComparer<string> AlphaComparer;
+        private readonly IComparer<string?> AlphaComparer;
 
 
         /*********
@@ -33,7 +33,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         }
 
         /// <inheritdoc />
-        public int Compare(string a, string b)
+        public int Compare(string? a, string? b)
         {
             // no special sorting needed
             if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
@@ -45,8 +45,8 @@ namespace Pathoschild.Stardew.Common.Utilities
             while (true)
             {
                 // get next parts
-                this.GetNextPart(a, ref indexA, out string rawA, out long? numericA);
-                this.GetNextPart(b, ref indexB, out string rawB, out long? numericB);
+                this.GetNextPart(a, ref indexA, out string? rawA, out long? numericA);
+                this.GetNextPart(b, ref indexB, out string? rawB, out long? numericB);
                 bool isNumeric = numericA.HasValue && numericB.HasValue;
 
                 // null is less than any other value
@@ -78,7 +78,7 @@ namespace Pathoschild.Stardew.Common.Utilities
 
                 // else compare alphanumerically
                 int result = isNumeric
-                    ? numericA.Value.CompareTo(numericB.Value)
+                    ? numericA!.Value.CompareTo(numericB!.Value)
                     : this.AlphaComparer.Compare(rawA, rawB);
 
                 // normalize return value
@@ -98,7 +98,7 @@ namespace Pathoschild.Stardew.Common.Utilities
         /// <param name="position">The next position in the string.</param>
         /// <param name="raw">The raw sequence value.</param>
         /// <param name="numeric">The numeric sequence, if applicable.</param>
-        private void GetNextPart(string str, ref int position, out string raw, out long? numeric)
+        private void GetNextPart(string str, ref int position, out string? raw, out long? numeric)
         {
             // sequence over
             if (position >= str.Length)

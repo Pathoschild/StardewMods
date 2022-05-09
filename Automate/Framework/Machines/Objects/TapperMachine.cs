@@ -31,9 +31,9 @@ namespace Pathoschild.Stardew.Automate.Framework.Machines.Objects
         }
 
         /// <summary>Get the output item.</summary>
-        public override ITrackedStack GetOutput()
+        public override ITrackedStack? GetOutput()
         {
-            return new TrackedItem(this.Machine.heldObject.Value, onEmpty: this.Reset);
+            return this.GetTracked(this.Machine.heldObject.Value, onEmpty: this.Reset);
         }
 
         /// <summary>Provide input to the machine.</summary>

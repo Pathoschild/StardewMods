@@ -41,11 +41,11 @@ namespace ContentPatcher.Framework.Patches.EditData
         }
 
         /// <inheritdoc />
-        public override object GetEntry(object key)
+        public override object? GetEntry(object key)
         {
             TKey parsedKey = (TKey)key;
 
-            return this.Data.TryGetValue(parsedKey, out TValue value)
+            return this.Data.TryGetValue(parsedKey, out TValue? value)
                 ? value
                 : default;
         }
@@ -69,7 +69,7 @@ namespace ContentPatcher.Framework.Patches.EditData
         {
             TKey parsedKey = (TKey)key;
 
-            this.Data[parsedKey] = value.ToObject<TValue>();
+            this.Data[parsedKey] = value.ToObject<TValue>()!;
         }
     }
 }
