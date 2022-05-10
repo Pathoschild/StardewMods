@@ -113,7 +113,10 @@ namespace ContentPatcher.Framework
                     changed = true;
 
                 if (!contextual.IsReady)
+                {
                     this.IsReady = false;
+                    break;
+                }
             }
 
             this.WasEverUpdated = true;
