@@ -72,7 +72,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             // validate
             if (Path.IsPathRooted(path))
-                throw new InvalidOperationException($"The {this.Name} token requires a relative path.");
+                return false; // don't throw an error since this is often an empty token like "{{FolderName}}/asset.png"
             if (!PathUtilities.IsSafeRelativePath(path))
                 throw new InvalidOperationException($"The {this.Name} token requires a relative path and cannot contain directory climbing (../).");
 

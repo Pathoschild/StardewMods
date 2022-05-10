@@ -994,13 +994,15 @@ These tokens provide meta info about tokens, content pack files, installed mods,
 <td>FirstValidFile</td>
 <td>
 
-Get the first path which matches a file in the content pack folder, given a list of
-relative file paths. You can specify any number of files.
+Get the first path which matches a file in the content pack folder, given a list of file paths. You
+can specify any number of files.
+
+Each file path must be relative to the content pack's main folder, and can't contain `../`.
 
 For example:
 
 ```js
-// load `assets/<language>.json` if it exists, otherwise `assets/default.json`
+// from `assets/<language>.json` if it exists, otherwise `assets/default.json`
 "FromFile": "{{FirstValidFile: assets/{{language}}.json, assets/default.json }}"
 ```
 
@@ -1022,8 +1024,11 @@ The installed mod IDs (matching the `UniqueID` field in their `manifest.json`).
 <td>HasFile</td>
 <td>
 
-Whether a file exists in the content pack folder. The file path must be specified as an input
-argument. Returns `true` or `false`. For example:
+Whether a file exists in the content pack folder given its path. Returns `true` or `false`.
+
+The file path must be relative to the content pack's main folder, and can't contain `../`.
+
+For example:
 
 ```js
 "When": {
@@ -1187,7 +1192,8 @@ These are advanced tokens meant to support some specific situations.
 <td>AbsoluteFilePath</td>
 <td>
 
-Get the absolute path for a file in your content pack's folder.
+Get the absolute path for a file in your content pack's folder, given its path relative to the
+content pack's main folder (which can't contain `../`).
 
 For example, for a player with a default Windows Steam install, `{{AbsoluteFilePath: assets/portraits.png}}`
 will return a value similar to
@@ -1234,9 +1240,8 @@ For example, you can use this to provide the textures for a custom farm type:
             "Target": "Data/AdditionalFarms",
             "Entries": {
                 "Example.ModId/FarmId": {
-                    ...,
                     "IconTexture": "{{InternalAssetKey: assets/icon.png}}",
-                    "WorldMapTexture": "{{InternalAssetKey: assets/world-map.png}}"
+                    …
                 }
             }
         }
@@ -1246,7 +1251,30 @@ For example, you can use this to provide the textures for a custom farm type:
 
 Note that other content packs can't target an internal asset key (which is why it's internal). If
 you need to let other content packs edit it, you can use [`Action: Load`](action-load.md) to create
-a new asset for it, then use that asset name instead.
+a new asset for it, then use that asset name instead. When doing this, prefixing `Mods/` and your
+mod ID to the asset name is highly recommended to avoid conflicts. For example:
+```js
+{
+    "Format": "1.26.0",
+    "Changes": [
+        {
+            "Action": "EditData",
+            "Target": "Data/AdditionalFarms",
+            "Entries": {
+                "Example.ModId/FarmId": {
+                    "IconTexture": "Mods/Your.ModId/FarmIcon",
+                    …
+                }
+            }
+        },
+        {
+            "Action": "Load",
+            "Target": "Mods/Your.ModId/FarmIcon",
+            "FromFile": "assets/icon.png"
+        }
+    ]
+}
+```
 
 </td>
 <td><a href="#InternalAssetKey">#</a></td>

@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed error when a content pack uses the `HasFile` or `FirstValidFile` tokens with a string which contains only empty tokens before the first path separator.
+
 ## 1.26.0
 Released 09 May 2022 for SMAPI 3.14.0 or later. See the [release highlights](https://www.patreon.com/posts/66203059).
 
