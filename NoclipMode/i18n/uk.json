@@ -9,14 +9,13 @@
     /*********
     ** Generic Mod Config Menu UI
     *********/
-    // TODO
-    "config.title.general-options": "General options",
-    "config.enabled-message.name": "Show enabled message",
-    "config.enabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned on.",
-    "config.disabled-message.name": "Show disabled message",
-    "config.disabled-message.desc": "Whether to show an in-game message in the corner of the screen when noclip mode is turned off.",
+    "config.title.general-options": "Загальні налаштування",
+    "config.enabled-message.name": "Показувати повідомлення ввімкнення",
+    "config.enabled-message.desc": "Чи показувати повідомлення в грі в кутку екрана, коли ввімкнено режим всюдихіддя.",
+    "config.disabled-message.name": "Показати повідомлення вименення",
+    "config.disabled-message.desc": "Чи показувати повідомлення в грі в кутку екрана, коли режим всюдихіддя вимкнено.",
 
-    "config.title.controls": "Controls",
-    "config.toggle-key.name": "Toggle key",
-    "config.toggle-key.desc": "The keys which turn noclip mode on or off in-game."
+    "config.title.controls": "Керування",
+    "config.toggle-key.name": "Клавіша перемикання",
+    "config.toggle-key.desc": "Клавіші, які вмикають або вимикають режим всюдихіддя у грі."
 }
