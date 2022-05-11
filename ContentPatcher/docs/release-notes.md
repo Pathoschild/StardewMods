@@ -12,6 +12,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 ## Upcoming release
 * Internal performance optimizations:
   * If a patch is unready, it now stops updating at the first unready field.
+  * Reduced allocations for tokenizable string updates.
 * Fixed content packs which include the `.xnb` extension in the `Target` field.
 * Fixed error when a content pack uses the `HasFile` or `FirstValidFile` tokens with a string which contains only empty tokens before the first path separator.
 

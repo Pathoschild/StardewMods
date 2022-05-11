@@ -28,6 +28,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Metadata for each lexical token in the string.</summary>
         private readonly TokenStringPart[] Parts;
 
+        /// <summary>The string builder with which to build the value.</summary>
+        private StringBuilder? StringBuilder;
+
 
         /*********
         ** Accessors
@@ -199,13 +202,18 @@ namespace ContentPatcher.Framework.Conditions
 
             // update value
             {
-                StringBuilder str = new StringBuilder();
+                StringBuilder str = this.StringBuilder ??= new();
                 foreach (TokenStringPart part in this.Parts)
                     str.Append(this.TryGetTokenText(context, part, this.State, out string? text) ? text : part.LexToken.ToString());
 
                 this.Value = this.State.IsReady
                     ? str.ToString().Trim()
                     : null;
+
+                if (this.IsMutable)
+                    str.Clear();
+                else
+                    this.StringBuilder = null;
             }
 
             // sanity check (should never happen)
