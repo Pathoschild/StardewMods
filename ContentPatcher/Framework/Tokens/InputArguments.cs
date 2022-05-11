@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Lexing;
 using Pathoschild.Stardew.Common.Utilities;
 
@@ -63,7 +62,7 @@ namespace ContentPatcher.Framework.Tokens
         ** Accessors
         *********/
         /// <summary>A singleton instance representing zero input arguments.</summary>
-        public static IInputArguments Empty { get; } = new InputArguments(new LiteralString(string.Empty, new LogPathBuilder()));
+        public static IInputArguments Empty { get; } = new EmptyInputArguments();
 
         /****
         ** Values
