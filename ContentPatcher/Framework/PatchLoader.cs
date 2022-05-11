@@ -986,8 +986,8 @@ namespace ContentPatcher.Framework
                     return Fail($"'{name}' isn't a valid token name", out error, out condition);
                 keyLexToken = lexToken;
             }
-            IManagedTokenString keyInputStr = new TokenString(keyLexToken.InputArgs, tokenParser.Context, path.With("key"));
-            IInputArguments keyInputArgs = new InputArguments(keyInputStr);
+            IManagedTokenString? keyInputStr = tokenParser.CreateTokenStringOrNull(keyLexToken.InputArgs?.Parts, tokenParser.Context, path.With("key"));
+            IInputArguments keyInputArgs = tokenParser.CreateInputArgs(keyInputStr);
 
             // get token
             IToken? token = tokenParser.Context.GetToken(keyLexToken.Name, enforceContext: false);
@@ -1059,7 +1059,9 @@ namespace ContentPatcher.Framework
                 // parse token
                 LexTokenToken lexToken = parsed.GetTokenPlaceholders(recursive: false).Single();
                 IToken? token = tokenParser.Context.GetToken(lexToken.Name, enforceContext: false);
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
+                IInputArguments input = tokenParser.CreateInputArgs(
+                    tokenParser.CreateTokenStringOrNull(lexToken.InputArgs?.Parts, tokenParser.Context, path.With("input"))
+                );
 
                 // check token options
                 if (token == null)
@@ -1223,7 +1225,9 @@ namespace ContentPatcher.Framework
                     error = $"unknown token {lexToken.Name}";
                     return false;
                 }
-                IInputArguments input = new InputArguments(new TokenString(lexToken.InputArgs, tokenParser.Context, path.With("input")));
+                IInputArguments input = tokenParser.CreateInputArgs(
+                    tokenParser.CreateTokenStringOrNull(lexToken.InputArgs?.Parts, tokenParser.Context, path.With("input"))
+                );
 
                 // check token options
                 if (!token.BypassesContextValidation)

@@ -57,6 +57,44 @@ namespace ContentPatcher.Framework
             this.InstalledMods = installedMods;
         }
 
+        /// <summary>Create a token string instance for the given values.</summary>
+        /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
+        /// <param name="context">The available token context.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
+        public IManagedTokenString CreateTokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
+        {
+            return this.CreateTokenStringOrNull(lexTokens, context, path)
+                ?? new LiteralString(string.Empty, path);
+        }
+
+        /// <summary>Create a token string instance for the given values, or null if the string is empty.</summary>
+        /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
+        /// <param name="context">The available token context.</param>
+        /// <param name="path">The path to the value from the root content file.</param>
+        public IManagedTokenString? CreateTokenStringOrNull(ILexToken[]? lexTokens, IContext context, LogPathBuilder path)
+        {
+            if (lexTokens?.Length is null or 0)
+                return null;
+
+            if (lexTokens.Length == 1 && lexTokens[0] is LexTokenLiteral literal)
+            {
+                return string.IsNullOrWhiteSpace(literal.Text)
+                    ? null
+                    : new LiteralString(literal.Text, path);
+            }
+
+            return new TokenString(lexTokens, context, path);
+        }
+
+        /// <summary>Create a token string instance for the given values, or null if the string is empty.</summary>
+        /// <param name="inputStr">The token string for the input argument.</param>
+        public IInputArguments CreateInputArgs(ITokenString? inputStr)
+        {
+            return inputStr is not null
+                ? new InputArguments(inputStr)
+                : InputArguments.Empty;
+        }
+
         /// <summary>Parse a string which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawValue">The raw string which may contain tokens.</param>
         /// <param name="assumeModIds">Mod IDs to assume are installed for purposes of token validation.</param>
@@ -77,7 +115,7 @@ namespace ContentPatcher.Framework
             }
 
             // get token string
-            parsed = new TokenString(bits, this.Context, path);
+            parsed = this.CreateTokenString(bits, this.Context, path);
             if (!this.Migrator.TryMigrate(parsed, out error))
                 return false;
 
@@ -92,7 +130,6 @@ namespace ContentPatcher.Framework
             error = null;
             return true;
         }
-
 
         /// <summary>Parse a JSON structure which can contain tokens, and validate that it's valid.</summary>
         /// <param name="rawJson">The raw JSON structure which may contain tokens.</param>

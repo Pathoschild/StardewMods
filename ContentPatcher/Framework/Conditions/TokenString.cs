@@ -71,24 +71,17 @@ namespace ContentPatcher.Framework.Conditions
             : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="inputArgs">The raw token input arguments.</param>
-        /// <param name="context">The available token context.</param>
-        /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(LexTokenInput? inputArgs, IContext context, LogPathBuilder path)
-            : this(lexTokens: inputArgs?.Parts, context: context, path: path) { }
-
-        /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(ILexToken[]? lexTokens, IContext context, LogPathBuilder path)
+        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
         {
             this.Path = path.ToString();
 
             // get lexical tokens
             this.Parts =
                 (
-                    from token in (lexTokens ?? Array.Empty<ILexToken>())
+                    from token in lexTokens
                     let input = token is LexTokenToken lexToken && lexToken.HasInputArgs()
                         ? new TokenString(lexToken.InputArgs.Parts, context, path.With(lexToken.Name))
                         : null
@@ -201,6 +194,9 @@ namespace ContentPatcher.Framework.Conditions
             this.State.Reset();
 
             // update value
+            if (this.Parts.Length == 1 && this.Parts[0].LexToken is LexTokenLiteral literal)
+                this.Value = literal.Text;
+            else
             {
                 StringBuilder str = this.StringBuilder ??= new();
                 foreach (TokenStringPart part in this.Parts)
@@ -377,7 +373,7 @@ namespace ContentPatcher.Framework.Conditions
             {
                 this.LexToken = lexToken;
                 this.Input = input;
-                this.InputArgs = input != null
+                this.InputArgs = !string.IsNullOrWhiteSpace(input?.Raw)
                     ? new InputArguments(input)
                     : InputArguments.Empty;
             }

@@ -57,11 +57,13 @@ namespace ContentPatcher.Framework.Conditions
         /// <param name="input">The token input arguments.</param>
         /// <param name="values">The token values for which this condition is valid.</param>
         /// <param name="isTokenMutable">Whether the token represented by <paramref name="name"/> is mutable.</param>
-        public Condition(string name, IManagedTokenString input, IManagedTokenString values, bool isTokenMutable)
+        public Condition(string name, IManagedTokenString? input, IManagedTokenString values, bool isTokenMutable)
         {
             // save values
             this.Name = name;
-            this.Input = new InputArguments(input);
+            this.Input = !string.IsNullOrWhiteSpace(input?.Raw)
+                ? new InputArguments(input)
+                : InputArguments.Empty;
             this.Values = values;
             this.IsTokenMutable = isTokenMutable;
             this.Contextuals = new AggregateContextual()
