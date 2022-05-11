@@ -243,17 +243,29 @@ namespace ContentPatcher.Framework.Conditions
         {
             lexTokens = lexTokens?.ToArray();
 
+            // no tokens
             if (lexTokens?.Any() != true)
                 yield break;
 
-            foreach (LexTokenToken token in lexTokens.OfType<LexTokenToken>())
+            // not recursive
+            if (!recursive)
             {
+                foreach (LexTokenToken token in lexTokens.OfType<LexTokenToken>())
+                    yield return token;
+                yield break;
+            }
+
+            // recursive scan
+            Stack<LexTokenToken> stack = new(lexTokens.OfType<LexTokenToken>());
+            while (stack.Count > 0)
+            {
+                LexTokenToken token = stack.Pop();
                 yield return token;
 
-                if (recursive && token.HasInputArgs())
+                if (token.HasInputArgs())
                 {
-                    foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(token.InputArgs.Parts, recursive: true))
-                        yield return subtoken;
+                    foreach (LexTokenToken subToken in token.InputArgs.Parts.OfType<LexTokenToken>())
+                        stack.Push(subToken);
                 }
             }
         }
