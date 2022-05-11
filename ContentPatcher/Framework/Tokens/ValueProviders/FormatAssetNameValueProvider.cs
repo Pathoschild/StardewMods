@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -41,8 +42,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                 if (input.NamedArgs.TryGetValue("separator", out IInputArgumentValue? separator))
                     path = path.Replace(PathUtilities.PreferredAssetSeparator.ToString(), separator.Parsed.FirstOrDefault());
 
-                yield return path;
+                return new[] { path };
             }
+
+            return Array.Empty<string>();
         }
     }
 }

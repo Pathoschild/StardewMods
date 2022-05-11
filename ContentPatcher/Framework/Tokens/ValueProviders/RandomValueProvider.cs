@@ -45,14 +45,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // validate
             this.AssertInput(input);
             if (!input.HasPositionalArgs)
-                yield break;
+                return Array.Empty<string>();
 
             // get random number for input
             string seedString = input.GetRawArgumentValue("key") ?? input.TokenString!.Path;
             int randomNumber = new Random(unchecked(this.BaseSeed + this.GetDeterministicHashCode(seedString))).Next();
 
             // choose value
-            yield return input.PositionalArgs[randomNumber % input.PositionalArgs.Length];
+            return new[] { input.PositionalArgs[randomNumber % input.PositionalArgs.Length] };
         }
 
         /// <inheritdoc />

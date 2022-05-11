@@ -84,7 +84,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryParseAndRound(input, out decimal value, out string? parseError))
                 throw new InvalidOperationException($"Invalid input value '{input.TokenString}': {parseError}"); // should never happen
 
-            yield return value.ToString(CultureInfo.InvariantCulture);
+            return new[] { value.ToString(CultureInfo.InvariantCulture) };
         }
 
 

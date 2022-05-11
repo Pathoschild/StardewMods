@@ -35,7 +35,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return input.HasPositionalArgs.ToString();
+            return new[] { input.HasPositionalArgs.ToString() };
         }
     }
 }

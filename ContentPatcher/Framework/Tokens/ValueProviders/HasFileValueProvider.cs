@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.GetPathExists(input.GetPositionalSegment()).ToString();
+            return new[] { this.GetPathExists(input.GetPositionalSegment()).ToString() };
         }
 
 

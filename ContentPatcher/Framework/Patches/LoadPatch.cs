@@ -45,7 +45,7 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override IEnumerable<string> GetChangeLabels()
         {
-            yield return "replaced asset";
+            return new[] { "replaced asset" };
         }
     }
 }

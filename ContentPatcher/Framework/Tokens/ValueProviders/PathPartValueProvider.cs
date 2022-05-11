@@ -53,8 +53,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryGetPart(input.PositionalArgs[0], input.PositionalArgs[1], out string? part, out string? error))
                 throw new InvalidOperationException(error); // shouldn't happen since we check the input in TryValidateInput
 
-            if (part != null)
-                yield return part;
+            return part != null
+                ? new[] { part }
+                : Array.Empty<string>();
         }
 
 

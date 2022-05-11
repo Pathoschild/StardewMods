@@ -52,12 +52,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            yield return this.TryCalculate(input.GetPositionalSegment(), out object? result, out _)
+            string output = this.TryCalculate(input.GetPositionalSegment(), out object? result, out _)
                 ? (result is IConvertible convertible
                     ? convertible.ToString(CultureInfo.InvariantCulture)
                     : (result.ToString() ?? string.Empty)
                 )
                 : "0";
+            return new[] { output };
         }
 
         /// <inheritdoc />

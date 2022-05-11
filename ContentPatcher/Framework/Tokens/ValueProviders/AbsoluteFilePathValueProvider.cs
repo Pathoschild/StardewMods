@@ -42,8 +42,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.AssertInput(input);
 
             string? path = this.GetAbsolutePath(input.GetPositionalSegment());
-            if (path != null)
-                yield return path;
+
+            return path != null
+                ? new[] { path }
+                : Array.Empty<string>();
         }
 
 
