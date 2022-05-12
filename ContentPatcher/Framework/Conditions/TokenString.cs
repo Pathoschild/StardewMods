@@ -28,6 +28,9 @@ namespace ContentPatcher.Framework.Conditions
         /// <summary>Metadata for each lexical token in the string.</summary>
         private readonly TokenStringPart[] Parts;
 
+        /// <summary>The string builder with which to build the value.</summary>
+        private StringBuilder? StringBuilder;
+
 
         /*********
         ** Accessors
@@ -68,24 +71,17 @@ namespace ContentPatcher.Framework.Conditions
             : this(lexTokens: TokenString.Lexer.ParseBits(raw, impliedBraces: false).ToArray(), context: context, path: path) { }
 
         /// <summary>Construct an instance.</summary>
-        /// <param name="inputArgs">The raw token input arguments.</param>
-        /// <param name="context">The available token context.</param>
-        /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(LexTokenInput? inputArgs, IContext context, LogPathBuilder path)
-            : this(lexTokens: inputArgs?.Parts, context: context, path: path) { }
-
-        /// <summary>Construct an instance.</summary>
         /// <param name="lexTokens">The lexical tokens parsed from the raw string.</param>
         /// <param name="context">The available token context.</param>
         /// <param name="path">The path to the value from the root content file.</param>
-        public TokenString(ILexToken[]? lexTokens, IContext context, LogPathBuilder path)
+        public TokenString(ILexToken[] lexTokens, IContext context, LogPathBuilder path)
         {
             this.Path = path.ToString();
 
             // get lexical tokens
             this.Parts =
                 (
-                    from token in (lexTokens ?? Array.Empty<ILexToken>())
+                    from token in lexTokens
                     let input = token is LexTokenToken lexToken && lexToken.HasInputArgs()
                         ? new TokenString(lexToken.InputArgs.Parts, context, path.With(lexToken.Name))
                         : null
@@ -198,14 +194,22 @@ namespace ContentPatcher.Framework.Conditions
             this.State.Reset();
 
             // update value
+            if (this.Parts.Length == 1 && this.Parts[0].LexToken is LexTokenLiteral literal)
+                this.Value = literal.Text;
+            else
             {
-                StringBuilder str = new StringBuilder();
+                StringBuilder str = this.StringBuilder ??= new();
                 foreach (TokenStringPart part in this.Parts)
                     str.Append(this.TryGetTokenText(context, part, this.State, out string? text) ? text : part.LexToken.ToString());
 
                 this.Value = this.State.IsReady
                     ? str.ToString().Trim()
                     : null;
+
+                if (this.IsMutable)
+                    str.Clear();
+                else
+                    this.StringBuilder = null;
             }
 
             // sanity check (should never happen)
@@ -239,17 +243,29 @@ namespace ContentPatcher.Framework.Conditions
         {
             lexTokens = lexTokens?.ToArray();
 
+            // no tokens
             if (lexTokens?.Any() != true)
                 yield break;
 
-            foreach (LexTokenToken token in lexTokens.OfType<LexTokenToken>())
+            // not recursive
+            if (!recursive)
             {
+                foreach (LexTokenToken token in lexTokens.OfType<LexTokenToken>())
+                    yield return token;
+                yield break;
+            }
+
+            // recursive scan
+            Stack<LexTokenToken> stack = new(lexTokens.OfType<LexTokenToken>());
+            while (stack.Count > 0)
+            {
+                LexTokenToken token = stack.Pop();
                 yield return token;
 
-                if (recursive && token.HasInputArgs())
+                if (token.HasInputArgs())
                 {
-                    foreach (LexTokenToken subtoken in this.GetTokenPlaceholders(token.InputArgs.Parts, recursive: true))
-                        yield return subtoken;
+                    foreach (LexTokenToken subToken in token.InputArgs.Parts.OfType<LexTokenToken>())
+                        stack.Push(subToken);
                 }
             }
         }
@@ -369,7 +385,7 @@ namespace ContentPatcher.Framework.Conditions
             {
                 this.LexToken = lexToken;
                 this.Input = input;
-                this.InputArgs = input != null
+                this.InputArgs = !string.IsNullOrWhiteSpace(input?.Raw)
                     ? new InputArguments(input)
                     : InputArguments.Empty;
             }

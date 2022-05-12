@@ -209,7 +209,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         public virtual IEnumerable<string> GetValues(IInputArguments input)
         {
             this.AssertInput(input);
-            yield break;
+            return Array.Empty<string>();
         }
 
         /// <inheritdoc />

@@ -292,7 +292,7 @@ namespace ContentPatcher.Framework
             if (language == LocalizedContentManager.LanguageCode.mod)
                 code = contentHelper.CurrentLocale ?? code;
 
-            yield return code;
+            return new[] { code };
         }
     }
 }

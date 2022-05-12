@@ -9,6 +9,16 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## 1.26.1
+Released 11 May 2022 for SMAPI 3.14.0 or later.
+
+* Optimized performance and memory allocation:
+  * Reduced time spent updating patches (they now stop updating at the first unready field).
+  * Reduced allocations for immutable values and empty inputs.
+  * Removed unneeded/recursive yields.
+* Fixed content packs which include the `.xnb` extension in the `Target` field.
+* Fixed error when a content pack uses `HasFile` or `FirstValidFile` with a path which contains only empty tokens before the first path separator.
+
 ## 1.26.0
 Released 09 May 2022 for SMAPI 3.14.0 or later. See the [release highlights](https://www.patreon.com/posts/66203059).
 

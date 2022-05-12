@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -53,7 +54,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // get translation
             string? key = input.GetFirstPositionalArg();
             if (string.IsNullOrWhiteSpace(key))
-                yield break;
+                return Array.Empty<string>();
             Translation translation = this.TranslationHelper.Get(key);
 
             // add tokens
@@ -73,7 +74,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     .UsePlaceholder(false); // allow setting a blank default
             }
 
-            yield return translation;
+            return new string[] { translation };
         }
 
 

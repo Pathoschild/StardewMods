@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -129,7 +130,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         /// <inheritdoc />
         public IEnumerable<string> GetTokensUsed()
         {
-            yield break;
+            return Array.Empty<string>();
         }
 
 

@@ -43,8 +43,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
 
             string? path = input.GetPositionalSegment();
 
-            if (!string.IsNullOrWhiteSpace(path))
-                yield return this.GetInternalAssetKey(path).Name;
+            return !string.IsNullOrWhiteSpace(path)
+                ? new[] { this.GetInternalAssetKey(path).Name }
+                : Array.Empty<string>();
         }
     }
 }
