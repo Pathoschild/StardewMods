@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -319,9 +320,9 @@ namespace ContentPatcher
         }
 
         /// <summary>Get the unique IDs for all installed mods and content packs.</summary>
-        private InvariantHashSet GetInstalledMods()
+        private IImmutableSet<string> GetInstalledMods()
         {
-            return new InvariantHashSet(
+            return ImmutableSets.From(
                 this.Helper.ModRegistry
                     .GetAll()
                     .Select(p => p.Manifest.UniqueID)
@@ -361,7 +362,9 @@ namespace ContentPatcher
         /// <param name="assumeModIds">The unique IDs of mods whose custom tokens to allow in the <paramref name="rawConditions"/>.</param>
         private IManagedConditions ParseConditionsForApi(IManifest manifest, InvariantDictionary<string?>? rawConditions, ISemanticVersion formatVersion, string[]? assumeModIds = null)
         {
-            InvariantHashSet assumeModIdsLookup = new(assumeModIds ?? Enumerable.Empty<string>()) { manifest.UniqueID };
+            IImmutableSet<string> assumeModIdsLookup = assumeModIds is not null
+                ? ImmutableSets.From(assumeModIds)
+                : ImmutableSets.FromValue(manifest.UniqueID);
             IMigration migrator = new AggregateMigration(formatVersion, this.GetFormatVersions(null));
 
             return new ApiManagedConditions(
@@ -430,17 +433,17 @@ namespace ContentPatcher
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
         /// <param name="field">The field value to parse.</param>
-        private InvariantHashSet ParseCommaDelimitedField(string? field)
+        private IImmutableSet<string> ParseCommaDelimitedField(string? field)
         {
             if (string.IsNullOrWhiteSpace(field))
-                return new InvariantHashSet();
+                return ImmutableSets.Empty;
 
-            IEnumerable<string> values = (
+            string[] values = (
                 from value in field.Split(',')
                 where !string.IsNullOrWhiteSpace(value)
                 select value.Trim()
-            );
-            return new InvariantHashSet(values);
+            ).ToArray();
+            return ImmutableSets.From(values);
         }
     }
 }

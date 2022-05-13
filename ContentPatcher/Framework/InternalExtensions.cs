@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -88,37 +89,16 @@ namespace ContentPatcher.Framework
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static InvariantHashSet SplitValuesUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
+        public static IImmutableSet<string> SplitValuesUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
         {
-            return new InvariantHashSet(tokenStr.SplitValuesNonUnique(normalize));
-        }
-
-        /// <summary>Get comma-separated values from a token string.</summary>
-        /// <param name="tokenStr">The token string to parse.</param>
-        /// <param name="normalize">Normalize a value.</param>
-        /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static IEnumerable<string> SplitValuesNonUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
-        {
-            if (tokenStr == null)
-                return Enumerable.Empty<string>();
-
-            if (!tokenStr.IsReady)
+            if (tokenStr?.IsReady is false)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
 
-            return tokenStr.Value.SplitValuesNonUnique(normalize);
-        }
+            if (string.IsNullOrWhiteSpace(tokenStr?.Value))
+                return ImmutableSets.Empty;
 
-        /// <summary>Get comma-separated values from a string.</summary>
-        /// <param name="str">The string to parse.</param>
-        /// <param name="separator">The separator by which to split the value.</param>
-        /// <param name="normalize">Normalize a value.</param>
-        public static IEnumerable<string> SplitValuesNonUnique(this string? str, Func<string, string?>? normalize = null, string separator = ",")
-        {
-            if (string.IsNullOrWhiteSpace(str))
-                return Enumerable.Empty<string>();
-
-            return (
-                from raw in str.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+            return ImmutableSets.From(
+                from raw in tokenStr.Value.Split(',', StringSplitOptions.RemoveEmptyEntries)
                 let value = normalize != null
                     ? normalize(raw.Trim())
                     : raw.Trim()

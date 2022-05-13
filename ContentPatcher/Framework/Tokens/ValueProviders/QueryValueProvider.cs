@@ -58,7 +58,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
                     : (result.ToString() ?? string.Empty)
                 )
                 : "0";
-            return new[] { output };
+
+            return output switch
+            {
+                "True" => ImmutableSets.True,
+                "False" => ImmutableSets.False,
+                _ => ImmutableSets.FromValue(output)
+            };
         }
 
         /// <inheritdoc />

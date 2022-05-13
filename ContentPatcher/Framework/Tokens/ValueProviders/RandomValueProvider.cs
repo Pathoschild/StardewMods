@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 using StardewModdingAPI;
 using StardewModdingAPI.Utilities;
 using StardewValley;
@@ -27,7 +27,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Random, mayReturnMultipleValuesForRoot: false)
         {
             this.EnableInputArguments(required: true, mayReturnMultipleValues: false, maxPositionalArgs: null);
-            this.ValidNamedArguments.Add("key");
+            this.ValidNamedArguments = this.ValidNamedArguments.Add("key");
             this.BaseSeed = this.GenerateBaseSeed();
         }
 
@@ -45,21 +45,21 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // validate
             this.AssertInput(input);
             if (!input.HasPositionalArgs)
-                return Array.Empty<string>();
+                return ImmutableSets.Empty;
 
             // get random number for input
             string seedString = input.GetRawArgumentValue("key") ?? input.TokenString!.Path;
             int randomNumber = new Random(unchecked(this.BaseSeed + this.GetDeterministicHashCode(seedString))).Next();
 
             // choose value
-            return new[] { input.PositionalArgs[randomNumber % input.PositionalArgs.Length] };
+            return ImmutableSets.FromValue(input.PositionalArgs[randomNumber % input.PositionalArgs.Length]);
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             allowedValues = !input.IsMutable
-                ? new InvariantHashSet(input.PositionalArgs)
+                ? ImmutableSets.From(input.PositionalArgs)
                 : null;
 
             return allowedValues != null;

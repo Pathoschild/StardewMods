@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -15,7 +15,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         private readonly Func<IEnumerable<string>?> GetValueImpl;
 
         /// <summary>The current values.</summary>
-        private readonly InvariantHashSet Values = new();
+        private IImmutableSet<string> Values = ImmutableSets.Empty;
 
 
         /*********
@@ -38,8 +38,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             this.AssertInput(input);
 
             return this.IsReady
-                ? this.Values.ToArray()
-                : Enumerable.Empty<string>();
+                ? this.Values
+                : ImmutableSets.Empty;
         }
 
         /// <inheritdoc />
@@ -47,9 +47,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             return this.IsChanged(this.Values, () =>
             {
-                this.Values.Clear();
-                this.Values.AddMany(this.GetValueImpl() ?? Enumerable.Empty<string>());
+                IEnumerable<string>? raw = this.GetValueImpl();
+                this.Values = raw != null
+                    ? ImmutableSets.From(raw)
+                    : ImmutableSets.Empty;
+
                 this.MarkReady(this.Values.Any());
+
+                return this.Values;
             });
         }
     }

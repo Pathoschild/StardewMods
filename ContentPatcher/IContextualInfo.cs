@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace ContentPatcher
 {
@@ -18,7 +18,7 @@ namespace ContentPatcher
         /*********
         ** Methods
         *********/
-        /// <summary>Get the token names used by this patch in its fields.</summary>
-        IEnumerable<string> GetTokensUsed();
+        /// <summary>Get the token names used by this entity.</summary>
+        IImmutableSet<string> GetTokensUsed();
     }
 }

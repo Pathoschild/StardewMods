@@ -44,8 +44,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             string? path = this.GetAbsolutePath(input.GetPositionalSegment());
 
             return path != null
-                ? new[] { path }
-                : Array.Empty<string>();
+                ? ImmutableSets.FromValue(path)
+                : ImmutableSets.Empty;
         }
 
 

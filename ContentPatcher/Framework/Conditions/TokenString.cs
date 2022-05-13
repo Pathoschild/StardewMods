@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using ContentPatcher.Framework.Lexing;
 using ContentPatcher.Framework.Lexing.LexTokens;
 using ContentPatcher.Framework.Tokens;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Conditions
 {
@@ -20,7 +20,7 @@ namespace ContentPatcher.Framework.Conditions
         private static readonly Lexer Lexer = Lexer.Instance;
 
         /// <summary>The token names used in the string.</summary>
-        private readonly InvariantHashSet TokensUsed = new();
+        private readonly IImmutableSet<string> TokensUsed = ImmutableSets.Empty;
 
         /// <summary>Diagnostic info about the contextual instance.</summary>
         private readonly ContextualState State = new();
@@ -100,13 +100,16 @@ namespace ContentPatcher.Framework.Conditions
             // extract tokens
             bool isMutable = false;
             bool hasTokens = false;
+            List<string>? tokensUsed = null;
             foreach (LexTokenToken lexToken in this.GetTokenPlaceholders(this.LexTokens, recursive: true))
             {
                 hasTokens = true;
                 IToken? token = context.GetToken(lexToken.Name, enforceContext: false);
                 if (token != null)
                 {
-                    this.TokensUsed.Add(token.Name);
+                    tokensUsed ??= new();
+                    tokensUsed.Add(token.Name);
+
                     isMutable = isMutable || token.IsMutable;
                 }
                 else
@@ -122,6 +125,8 @@ namespace ContentPatcher.Framework.Conditions
             }
 
             // set metadata
+            if (tokensUsed != null)
+                this.TokensUsed = ImmutableSets.From(tokensUsed);
             this.IsMutable = isMutable;
             this.HasAnyTokens = hasTokens;
             this.IsSingleTokenOnly = TokenString.GetIsSingleTokenOnly(this.Parts);
@@ -138,7 +143,7 @@ namespace ContentPatcher.Framework.Conditions
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
             return this.TokensUsed;
         }

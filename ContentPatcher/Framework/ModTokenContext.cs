@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
@@ -267,10 +268,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
+        public IImmutableSet<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken? token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? Enumerable.Empty<string>();
+            return token?.GetValues(input) ?? ImmutableSets.Empty;
         }
 
 

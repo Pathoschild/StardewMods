@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -26,7 +27,7 @@ namespace ContentPatcher.Framework
         private readonly InvariantDictionary<CachedContext> LocalTokens = new();
 
         /// <summary>The installed mod IDs.</summary>
-        private readonly InvariantHashSet InstalledMods;
+        private readonly IImmutableSet<string> InstalledMods;
 
         /// <summary>Whether the next context update is the first one.</summary>
         private bool IsFirstUpdate = true;
@@ -50,9 +51,9 @@ namespace ContentPatcher.Framework
         public bool IsSaveBasicInfoLoaded { get; set; }
 
         /// <summary>The tokens which should always be used with a specific update rate.</summary>
-        public Tuple<UpdateRate, string, InvariantHashSet>[] TokensWithSpecialUpdateRates { get; } = {
-            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", new InvariantHashSet { ConditionType.LocationContext.ToString(), ConditionType.LocationName.ToString(), ConditionType.LocationUniqueName.ToString(), ConditionType.IsOutdoors.ToString() }),
-            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", new InvariantHashSet { ConditionType.Time.ToString() })
+        public Tuple<UpdateRate, string, IImmutableSet<string>>[] TokensWithSpecialUpdateRates { get; } = {
+            Tuple.Create(UpdateRate.OnLocationChange, "location tokens", ImmutableSets.From(new[] { ConditionType.LocationContext.ToString(), ConditionType.LocationName.ToString(), ConditionType.LocationUniqueName.ToString(), ConditionType.IsOutdoors.ToString() })),
+            Tuple.Create(UpdateRate.OnTimeChange, "time tokens", ImmutableSets.FromValue(ConditionType.Time.ToString()))
         };
 
 
@@ -63,7 +64,7 @@ namespace ContentPatcher.Framework
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
-        public TokenManager(IGameContentHelper contentHelper, InvariantHashSet installedMods, IEnumerable<IToken> modTokens)
+        public TokenManager(IGameContentHelper contentHelper, IImmutableSet<string> installedMods, IEnumerable<IToken> modTokens)
         {
             this.InstalledMods = installedMods;
             this.GlobalContext = new GenericTokenContext(this.IsModInstalled, () => this.UpdateTick);
@@ -171,7 +172,7 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
+        public IImmutableSet<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             return this.GlobalContext.GetValues(name, input, enforceContext);
         }
@@ -183,7 +184,7 @@ namespace ContentPatcher.Framework
         /// <summary>Get the global value providers with which to initialize the token manager.</summary>
         /// <param name="contentHelper">The content helper from which to load data assets.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
-        private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, InvariantHashSet installedMods)
+        private IEnumerable<IValueProvider> GetGlobalValueProviders(IGameContentHelper contentHelper, IImmutableSet<string> installedMods)
         {
             bool NeedsSave() => this.IsSaveParsed;
             var save = new TokenSaveReader(updateTick: () => this.UpdateTick, isSaveParsed: NeedsSave, isSaveBasicInfoLoaded: () => this.IsSaveBasicInfoLoaded);

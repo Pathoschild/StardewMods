@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -19,7 +20,7 @@ namespace ContentPatcher.Framework
         private readonly string Filename;
 
         /// <summary>Parse a comma-delimited set of case-insensitive condition values.</summary>
-        private readonly Func<string?, InvariantHashSet> ParseCommaDelimitedField;
+        private readonly Func<string?, IImmutableSet<string>> ParseCommaDelimitedField;
 
         /// <summary>A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</summary>
         private readonly Action<IContentPack, string, string> LogWarning;
@@ -32,7 +33,7 @@ namespace ContentPatcher.Framework
         /// <param name="filename">The name of the config file.</param>
         /// <param name="parseCommandDelimitedField">Parse a comma-delimited set of case-insensitive condition values.</param>
         /// <param name="logWarning">A callback to invoke when a validation warning occurs. This is passed the content pack, label, and reason phrase respectively.</param>
-        public ConfigFileHandler(string filename, Func<string?, InvariantHashSet> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
+        public ConfigFileHandler(string filename, Func<string?, IImmutableSet<string>> parseCommandDelimitedField, Action<IContentPack, string, string> logWarning)
         {
             this.Filename = filename;
             this.ParseCommaDelimitedField = parseCommandDelimitedField;
@@ -112,8 +113,8 @@ namespace ContentPatcher.Framework
                 }
 
                 // read allowed/default values
-                InvariantHashSet allowValues = this.ParseCommaDelimitedField(field.AllowValues);
-                InvariantHashSet defaultValues = this.ParseCommaDelimitedField(field.Default);
+                IImmutableSet<string> allowValues = this.ParseCommaDelimitedField(field.AllowValues);
+                IImmutableSet<string> defaultValues = this.ParseCommaDelimitedField(field.Default);
 
                 // pre-1.7 behaviour
                 if (formatVersion.IsOlderThan("1.7"))
@@ -127,7 +128,7 @@ namespace ContentPatcher.Framework
 
                     // inject default if needed
                     if (!defaultValues.Any() && !field.AllowBlank)
-                        defaultValues = new InvariantHashSet(allowValues.First());
+                        defaultValues = ImmutableSets.FromValue(allowValues.First());
                 }
 
                 // validate allowed values
@@ -157,7 +158,7 @@ namespace ContentPatcher.Framework
                 schema[rawKey] = new ConfigField(
                     allowValues: allowValues,
                     defaultValues: defaultValues,
-                    value: new(),
+                    value: ImmutableSets.Empty,
                     allowBlank: field.AllowBlank,
                     allowMultiple: field.AllowMultiple,
                     description: field.Description,
@@ -178,11 +179,11 @@ namespace ContentPatcher.Framework
                 return;
 
             // read raw config
-            InvariantDictionary<InvariantHashSet> configValues = new InvariantDictionary<InvariantHashSet>(
-                from entry in (contentPack.ReadJsonFile<InvariantDictionary<string>>(this.Filename) ?? new InvariantDictionary<string>())
+            InvariantDictionary<IImmutableSet<string>> configValues = new(
+                from entry in (contentPack.ReadJsonFile<InvariantDictionary<string>>(this.Filename) ?? new())
                 let key = entry.Key.Trim()
                 let value = this.ParseCommaDelimitedField(entry.Value)
-                select new KeyValuePair<string, InvariantHashSet>(key, value)
+                select new KeyValuePair<string, IImmutableSet<string>>(key, value)
             );
 
             // remove invalid values
@@ -196,7 +197,7 @@ namespace ContentPatcher.Framework
             foreach (string key in config.Keys)
             {
                 ConfigField field = config[key];
-                if (!configValues.TryGetValue(key, out InvariantHashSet? values) || (!field.AllowBlank && !values.Any()))
+                if (!configValues.TryGetValue(key, out IImmutableSet<string>? values) || (!field.AllowBlank && !values.Any()))
                     configValues[key] = field.DefaultValues;
             }
 
@@ -209,7 +210,7 @@ namespace ContentPatcher.Framework
                 if (!field.AllowMultiple && field.Value.Count > 1)
                 {
                     logWarning(key, "field only allows a single value.");
-                    field.Value.ReplaceWith(field.DefaultValues);
+                    field.SetValue(field.DefaultValues);
                     continue;
                 }
 
@@ -220,13 +221,13 @@ namespace ContentPatcher.Framework
                     if (invalidValues.Any())
                     {
                         logWarning(key, $"found invalid values ({string.Join(", ", invalidValues)}), expected: {string.Join(", ", field.AllowValues)}.");
-                        field.Value.ReplaceWith(field.DefaultValues);
+                        field.SetValue(field.DefaultValues);
                         continue;
                     }
                 }
 
                 // save values
-                field.Value.ReplaceWith(configValues[key]);
+                field.SetValue(configValues[key]);
             }
         }
     }

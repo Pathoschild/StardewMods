@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -102,7 +103,7 @@ namespace ContentPatcher.Framework.Commands.Commands
             // parse arguments
             bool showFull = false;
             bool sort = true;
-            var forModIds = new InvariantHashSet();
+            InvariantHashSet forModIds = new();
             foreach (string arg in args)
             {
                 // flags
@@ -181,7 +182,7 @@ namespace ContentPatcher.Framework.Commands.Commands
                             output.AppendLine("[ ] n/a");
                         else if (token.RequiresInput)
                         {
-                            InvariantHashSet? allowedInputs = token.GetAllowedInputArguments();
+                            IImmutableSet<string>? allowedInputs = token.GetAllowedInputArguments();
                             if (allowedInputs?.Any() == true)
                             {
                                 bool isFirst = true;
@@ -389,11 +390,11 @@ namespace ContentPatcher.Framework.Commands.Commands
                         // log update rate issues
                         if (patch.Patch != null)
                         {
-                            foreach ((UpdateRate rate, string label, InvariantHashSet tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
+                            foreach ((UpdateRate rate, string label, IImmutableSet<string> tokenNames) in tokenManager.TokensWithSpecialUpdateRates)
                             {
                                 if (!patch.Patch.UpdateRate.HasFlag(rate))
                                 {
-                                    var tokensUsed = new InvariantHashSet(patch.Patch.GetTokensUsed());
+                                    IImmutableSet<string> tokensUsed = patch.Patch.GetTokensUsed();
 
                                     string[] locationTokensUsed = tokenNames.Where(p => tokensUsed.Contains(p)).ToArray();
                                     if (locationTokensUsed.Any())

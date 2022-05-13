@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Tokens.ValueProviders;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens
 {
@@ -59,7 +59,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual IEnumerable<string> GetTokensUsed()
+        public virtual IImmutableSet<string> GetTokensUsed()
         {
             return this.Values.GetTokensUsed();
         }
@@ -99,7 +99,7 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual bool TryValidateValues(IInputArguments input, InvariantHashSet values, IContext context, [NotNullWhen(false)] out string? error)
+        public virtual bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, IContext context, [NotNullWhen(false)] out string? error)
         {
             // 'contains' limited to true/false
             if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
@@ -127,18 +127,18 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual InvariantHashSet? GetAllowedInputArguments()
+        public virtual IImmutableSet<string>? GetAllowedInputArguments()
         {
             return this.Values.GetValidPositionalArgs();
         }
 
         /// <inheritdoc />
-        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public virtual bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             // 'contains' limited to true/false
             if (input.ReservedArgs.ContainsKey(InputArguments.ContainsKey))
             {
-                allowedValues = InvariantHashSet.Boolean();
+                allowedValues = ImmutableSets.Boolean;
                 return true;
             }
 
@@ -168,16 +168,14 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual IEnumerable<string> GetValues(IInputArguments input)
+        public virtual IImmutableSet<string> GetValues(IInputArguments input)
         {
             // default logic
-            IEnumerable<string> rawValues = this.Values.GetValues(input);
+            IEnumerable<string> values = this.Values.GetValues(input);
 
             // apply global input arguments
             if (input.ReservedArgs.Any())
             {
-                string[] values = rawValues.ToArray();
-
                 foreach ((string name, IInputArgumentValue value) in input.ReservedArgsList)
                 {
                     if (InputArguments.ContainsKey.EqualsIgnoreCase(name))
@@ -185,11 +183,9 @@ namespace ContentPatcher.Framework.Tokens
                     else if (InputArguments.ValueAtKey.EqualsIgnoreCase(name))
                         values = this.ApplyValueAt(values, value);
                 }
-
-                rawValues = values;
             }
 
-            return rawValues;
+            return ImmutableSets.From(values);
         }
 
 
@@ -209,31 +205,46 @@ namespace ContentPatcher.Framework.Tokens
         /// <summary>Apply the <see cref="InputArguments.ContainsKey"/> argument.</summary>
         /// <param name="values">The underlying values to modify.</param>
         /// <param name="argValue">The argument value.</param>
-        private string[] ApplyContains(string[] values, IInputArgumentValue argValue)
+        private IImmutableSet<string> ApplyContains(IEnumerable<string> values, IInputArgumentValue argValue)
         {
-            InvariantHashSet search = new(
+            // skip empty search
+            if (string.IsNullOrWhiteSpace(argValue.Raw))
+                return ImmutableSets.False;
+
+            // get search values
+            IEnumerable<string> search = (
                 from string? arg in argValue.Parsed
                 select this.NormalizeValue(arg) ?? string.Empty
             );
-            bool match = search.Any() && values.Any(value => search.Contains(value));
-            return new[] { match.ToString() };
+
+            // get result
+            bool found = values is IImmutableSet<string> set
+                ? set.Overlaps(search)
+                : ImmutableSets.From(search).Overlaps(values);
+
+            return ImmutableSets.FromValue(found);
         }
 
         /// <summary>Apply the <see cref="InputArguments.ValueAtKey"/> argument.</summary>
         /// <param name="values">The underlying values to modify.</param>
         /// <param name="argValue">The argument value.</param>
-        private string[] ApplyValueAt(string[] values, IInputArgumentValue argValue)
+        private IImmutableSet<string> ApplyValueAt(IEnumerable<string> values, IInputArgumentValue argValue)
         {
             // parse index
             if (!int.TryParse(argValue.Raw, out int index))
                 throw new FormatException($"Invalid '{InputArguments.ValueAtKey}' index '{argValue.Raw}', must be a numeric index."); // should never happen since it's validated before this point
-            if (Math.Abs(index) >= values.Length)
-                return Array.Empty<string>();
+
+            // get list
+            if (values is not IList<string> list)
+                list = values.ToArray();
 
             // get value at index (negative index = from end)
-            return index >= 0
-                ? new[] { values[index] }
-                : new[] { values[values.Length + index] };
+            if (Math.Abs(index) >= list.Count)
+                return ImmutableSets.Empty;
+            return ImmutableSets.FromValue(index >= 0
+                ? list[index]
+                : list[list.Count + index]
+            );
         }
     }
 }

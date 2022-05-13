@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace ContentPatcher.Framework.Tokens.Json
 {
@@ -44,7 +44,7 @@ namespace ContentPatcher.Framework.Tokens.Json
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
             return this.TokenString.GetTokensUsed();
         }

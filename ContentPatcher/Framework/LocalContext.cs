@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using ContentPatcher.Framework.Conditions;
 using ContentPatcher.Framework.Tokens;
 using Pathoschild.Stardew.Common.Utilities;
@@ -88,10 +88,10 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetValues(string name, IInputArguments input, bool enforceContext)
+        public IImmutableSet<string> GetValues(string name, IInputArguments input, bool enforceContext)
         {
             IToken? token = this.GetToken(name, enforceContext);
-            return token?.GetValues(input) ?? Array.Empty<string>();
+            return token?.GetValues(input) ?? ImmutableSets.Empty;
         }
 
         /// <summary>Set a local token value.</summary>

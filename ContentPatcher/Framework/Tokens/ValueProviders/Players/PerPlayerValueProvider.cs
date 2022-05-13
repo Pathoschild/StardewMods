@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -19,13 +20,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         private readonly TokenSaveReader SaveReader;
 
         /// <summary>The allowed root values (or <c>null</c> if any value is allowed).</summary>
-        private readonly InvariantHashSet? AllowedRootValues;
+        private readonly IImmutableSet<string>? AllowedRootValues;
 
         /// <summary>Get the current values for a player.</summary>
-        private readonly Func<Farmer, InvariantHashSet> FetchValues;
+        private readonly Func<Farmer, IImmutableSet<string>> FetchValues;
 
         /// <summary>The values as of the last context update.</summary>
-        private readonly IDictionary<long, InvariantHashSet> Values = new Dictionary<long, InvariantHashSet>();
+        private readonly IDictionary<long, IImmutableSet<string>> Values = new Dictionary<long, IImmutableSet<string>>();
 
         /// <summary>The player ID for the host player.</summary>
         private long HostPlayerId;
@@ -47,8 +48,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             : base(type, mayReturnMultipleValues)
         {
             this.SaveReader = saveReader;
-            this.AllowedRootValues = allowedValues != null ? new InvariantHashSet(allowedValues) : null;
-            this.FetchValues = player => new InvariantHashSet(values(player));
+            this.AllowedRootValues = allowedValues != null ? ImmutableSets.From(allowedValues) : null;
+            this.FetchValues = player => ImmutableSets.From(values(player));
             this.EnableInputArguments(required: false, mayReturnMultipleValues: mayReturnMultipleValues, maxPositionalArgs: null);
         }
 
@@ -85,8 +86,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
                     {
                         // get values
                         long id = player.UniqueMultiplayerID;
-                        InvariantHashSet newValues = this.FetchValues(player);
-                        if (!this.Values.TryGetValue(id, out InvariantHashSet? oldValues))
+                        IImmutableSet<string> newValues = this.FetchValues(player);
+                        if (!this.Values.TryGetValue(id, out IImmutableSet<string>? oldValues))
                             oldValues = null;
 
                         // track changes
@@ -127,7 +128,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             allowedValues = this.AllowedRootValues;
             return allowedValues != null;
@@ -144,7 +145,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             var playerIds = new HashSet<long>();
             return this.TryParseInput(input, playerIds, out _)
                 ? this.GetValuesFor(playerIds)
-                : Enumerable.Empty<string>();
+                : ImmutableSets.Empty;
         }
 
 
@@ -207,7 +208,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
             HashSet<string> values = new();
             foreach (long id in playerIds)
             {
-                if (this.Values.TryGetValue(id, out InvariantHashSet? set))
+                if (this.Values.TryGetValue(id, out IImmutableSet<string>? set))
                     values.AddMany(set);
             }
             return values;
@@ -215,11 +216,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.Players
 
         /// <summary>Get the cached values for the given player ID.</summary>
         /// <param name="playerId">The player ID.</param>
-        private IEnumerable<string> GetValuesFor(long playerId)
+        private IImmutableSet<string> GetValuesFor(long playerId)
         {
-            return this.Values.TryGetValue(playerId, out InvariantHashSet? set)
+            return this.Values.TryGetValue(playerId, out IImmutableSet<string>? set)
                 ? set
-                : Array.Empty<string>();
+                : ImmutableSets.Empty;
         }
     }
 }

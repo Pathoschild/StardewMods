@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -64,7 +65,7 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The installed mod IDs.</param>
         /// <param name="modTokens">The custom tokens provided by mods.</param>
         /// <param name="assetValidators">Handle special validation logic on loaded or edited assets.</param>
-        public ScreenManager(IModHelper helper, IMonitor monitor, InvariantHashSet installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators)
+        public ScreenManager(IModHelper helper, IMonitor monitor, IImmutableSet<string> installedMods, ModProvidedToken[] modTokens, IAssetValidator[] assetValidators)
         {
             this.Helper = helper;
             this.Monitor = monitor;
@@ -77,7 +78,7 @@ namespace ContentPatcher.Framework
         /// <summary>Initialize the mod and content packs.</summary>
         /// <param name="contentPacks">The content packs to load.</param>
         /// <param name="installedMods">The installed mod IDs.</param>
-        public void Initialize(LoadedContentPack[] contentPacks, InvariantHashSet installedMods)
+        public void Initialize(LoadedContentPack[] contentPacks, IImmutableSet<string> installedMods)
         {
             if (this.IsInitialized)
                 this.Monitor.Log($"{nameof(ScreenManager)}.{nameof(this.Initialize)} was called more than once for screen {Context.ScreenId}.", LogLevel.Error);
@@ -209,7 +210,7 @@ namespace ContentPatcher.Framework
         /// <param name="installedMods">The mod IDs which are currently installed.</param>
         /// <returns>Returns the loaded content pack IDs.</returns>
         [SuppressMessage("ReSharper", "AccessToModifiedClosure", Justification = "The value is used immediately, so this isn't an issue.")]
-        private void LoadContentPacks(IEnumerable<LoadedContentPack> contentPacks, InvariantHashSet installedMods)
+        private void LoadContentPacks(IEnumerable<LoadedContentPack> contentPacks, IImmutableSet<string> installedMods)
         {
             // load content packs
             foreach (LoadedContentPack current in contentPacks)
@@ -279,7 +280,7 @@ namespace ContentPatcher.Framework
 
                             // parse conditions
                             Condition[] conditions;
-                            InvariantHashSet immutableRequiredModIDs;
+                            IImmutableSet<string> immutableRequiredModIDs;
                             {
                                 if (!this.PatchLoader.TryParseConditions(entry.When, tokenParser, localPath.With(nameof(entry.When)), out conditions, out immutableRequiredModIDs, out string? conditionError))
                                 {

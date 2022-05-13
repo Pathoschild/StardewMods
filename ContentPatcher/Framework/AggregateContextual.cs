@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using ContentPatcher.Framework.Tokens;
 
@@ -124,9 +125,11 @@ namespace ContentPatcher.Framework
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
-            return this.ValuesImpl.SelectMany(p => p.GetTokensUsed());
+            return ImmutableSets.From(
+                this.ValuesImpl.SelectMany(p => p.GetTokensUsed())
+            );
         }
 
         /// <inheritdoc />

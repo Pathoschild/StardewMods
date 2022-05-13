@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 {
@@ -68,23 +67,23 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public bool TryValidateValues(IInputArguments input, InvariantHashSet values, [NotNullWhen(false)] out string? error)
+        public bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, [NotNullWhen(false)] out string? error)
         {
             return this.Provider.TryValidateValues(this.ToApiInput(input), values, out error);
         }
 
         /// <inheritdoc />
-        public InvariantHashSet GetValidPositionalArgs()
+        public IImmutableSet<string> GetValidPositionalArgs()
         {
-            return new InvariantHashSet(this.Provider.GetValidInputs());
+            return ImmutableSets.From(this.Provider.GetValidInputs());
         }
 
         /// <inheritdoc />
-        public bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             if (this.Provider.HasBoundedValues(this.ToApiInput(input), out IEnumerable<string>? values))
             {
-                allowedValues = new InvariantHashSet(values);
+                allowedValues = ImmutableSets.From(values);
                 return true;
             }
 
@@ -128,9 +127,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
         }
 
         /// <inheritdoc />
-        public IEnumerable<string> GetTokensUsed()
+        public IImmutableSet<string> GetTokensUsed()
         {
-            return Array.Empty<string>();
+            return ImmutableSets.Empty;
         }
 
 

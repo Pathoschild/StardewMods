@@ -10,6 +10,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 -->
 ## Upcoming release
+* Optimized performance and memory allocation:
+  * Migrated to immutable sets internally, so Content Patcher can avoid copying values in many cases.
+  * Added predefined reusable sets for common values to reduce allocations.
 * Fixed error when passing a null input to the `LowerCase`/`UpperCase` or `Render` tokens.
 
 ## 1.26.1

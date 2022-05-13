@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -42,16 +42,16 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <param name="values">The values to validate.</param>
         /// <param name="error">The validation error, if any.</param>
         /// <returns>Returns whether validation succeeded.</returns>
-        bool TryValidateValues(IInputArguments input, InvariantHashSet values, [NotNullWhen(false)] out string? error);
+        bool TryValidateValues(IInputArguments input, IImmutableSet<string> values, [NotNullWhen(false)] out string? error);
 
         /// <summary>Get the set of valid input arguments if restricted, or null/empty if unrestricted.</summary>
-        InvariantHashSet? GetValidPositionalArgs();
+        IImmutableSet<string>? GetValidPositionalArgs();
 
         /// <summary>Get whether the token always chooses from a set of known values for the given input. Mutually exclusive with <see cref="HasBoundedRangeValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
         /// <param name="allowedValues">The possible values for the input.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
-        bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues);
+        bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues);
 
         /// <summary>Get whether the token always returns a value within a bounded numeric range for the given input. Mutually exclusive with <see cref="HasBoundedValues"/>.</summary>
         /// <param name="input">The input arguments.</param>
@@ -67,6 +67,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <summary>Get the current values in the expected sort order for indexing.</summary>
         /// <param name="input">The input arguments.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
-        IEnumerable<string> GetValues(IInputArguments input);
+        IEnumerable<string> GetValues(IInputArguments input);  // NOTE: don't change to IImmutableSet<string>. The order must be maintained for `valueAt`, and unordered value providers can still return an immutable set to avoid a copy later.
     }
 }

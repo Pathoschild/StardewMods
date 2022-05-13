@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using ContentPatcher.Framework.Conditions;
-using Pathoschild.Stardew.Common.Utilities;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
 {
@@ -62,11 +62,11 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out InvariantHashSet? allowedValues)
+        public override bool HasBoundedValues(IInputArguments input, [NotNullWhen(true)] out IImmutableSet<string>? allowedValues)
         {
             if (this.TryParseAndRound(input, out decimal value, out _))
             {
-                allowedValues = new InvariantHashSet(value.ToString(CultureInfo.InvariantCulture));
+                allowedValues = ImmutableSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
                 return true;
             }
             else
@@ -84,7 +84,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (!this.TryParseAndRound(input, out decimal value, out string? parseError))
                 throw new InvalidOperationException($"Invalid input value '{input.TokenString}': {parseError}"); // should never happen
 
-            return new[] { value.ToString(CultureInfo.InvariantCulture) };
+            return ImmutableSets.FromValue(value.ToString(CultureInfo.InvariantCulture));
         }
 
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -51,9 +52,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         }
 
         /// <inheritdoc />
-        public override InvariantHashSet GetValidPositionalArgs()
+        public override IImmutableSet<string> GetValidPositionalArgs()
         {
-            return new InvariantHashSet(this.Values.Keys);
+            return ImmutableSets.From(this.Values.Keys);
         }
 
         /// <inheritdoc />
@@ -64,8 +65,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             if (input.HasPositionalArgs)
             {
                 return this.Values.TryGetValue(input.GetFirstPositionalArg()!, out string? value)
-                    ? new[] { value }
-                    : Enumerable.Empty<string>();
+                    ? ImmutableSets.FromValue(value)
+                    : ImmutableSets.Empty;
             }
             else
                 return this.Values.Select(pair => $"{pair.Key}:{pair.Value}");
