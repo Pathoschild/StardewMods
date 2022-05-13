@@ -29,7 +29,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
 
-            return new[] { input.TokenString!.Value! };
+            return new[] { input.TokenString?.Value ?? string.Empty };
         }
     }
 }

@@ -9,6 +9,9 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
+## Upcoming release
+* Fixed error when passing a null input to the `LowerCase`/`UpperCase` or `Render` tokens.
+
 ## 1.26.1
 Released 11 May 2022 for SMAPI 3.14.0 or later.
 

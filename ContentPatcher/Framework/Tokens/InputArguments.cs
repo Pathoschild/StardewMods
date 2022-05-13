@@ -86,9 +86,11 @@ namespace ContentPatcher.Framework.Tokens
         ** Metadata
         ****/
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         public bool HasNamedArgs => this.NamedArgs.Any();
 
         /// <inheritdoc />
+        [MemberNotNullWhen(true, nameof(InputArguments.TokenString))]
         public bool HasPositionalArgs => this.PositionalArgs.Any();
 
         /// <inheritdoc />
