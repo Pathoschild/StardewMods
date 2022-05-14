@@ -18,6 +18,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
   * Optimized string splitting.
   * Removed unneeded array copies.
 * Fixed error when passing a null input to the `LowerCase`/`UpperCase` or `Render` tokens.
+* Fixed `EditData` patches in older content packs not updated if their `FromFile` changes.
 
 ## 1.26.1
 Released 11 May 2022 for SMAPI 3.14.0 or later.

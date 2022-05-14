@@ -45,9 +45,6 @@ namespace ContentPatcher.Framework.Patches
         /// <summary>Parse the data change fields for an <see cref="PatchType.EditData"/> patch.</summary>
         private readonly TryParseFieldsDelegate TryParseFields;
 
-        /// <summary>Whether the patch already tried loading the <see cref="Patch.FromAsset"/> asset for the current context. This doesn't necessarily means it succeeded (e.g. the file may not have existed).</summary>
-        private bool AttemptedDataLoad;
-
         /// <summary>The cached JSON serializer used to apply JSON structures to a model.</summary>
         private readonly Lazy<JsonSerializer> Serializer = new(() => new()
         {
@@ -126,48 +123,45 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override bool UpdateContext(IContext context)
         {
-            // skip: don't need to handle a data file
-            if (!this.HasFromAsset)
-                return base.UpdateContext(context);
-
-            // skip: file already loaded and target didn't change
-            if (!this.ManagedRawTargetAsset!.UpdateContext(context) && this.AttemptedDataLoad)
-                return base.UpdateContext(context);
-
-            // reload non-data changes
-            this.Contextuals
-                .Remove(this.Records)
-                .Remove(this.Fields)
-                .Remove(this.MoveRecords);
-            base.UpdateContext(context);
-
-            // reload data
-            this.Records = Array.Empty<EditDataPatchRecord>();
-            this.Fields = Array.Empty<EditDataPatchField>();
-            this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
-            if (this.IsReady)
+            // need to reload data for legacy FromFile
+            if (this.HasFromAsset && this.ManagedRawFromAsset.UpdateContext(context))
             {
-                if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord>? records, out List<EditDataPatchField>? fields, out List<EditDataPatchMoveRecord>? moveEntries, out string? error))
-                {
-                    this.Records = records.ToArray();
-                    this.Fields = fields.ToArray();
-                    this.MoveRecords = moveEntries.ToArray();
-                }
-                else
-                    this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
+                // reload non-data changes
+                this.Contextuals
+                    .Remove(this.Records)
+                    .Remove(this.Fields)
+                    .Remove(this.MoveRecords);
+                base.UpdateContext(context);
 
-                this.AttemptedDataLoad = true;
+                // reload data
+                this.Records = Array.Empty<EditDataPatchRecord>();
+                this.Fields = Array.Empty<EditDataPatchField>();
+                this.MoveRecords = Array.Empty<EditDataPatchMoveRecord>();
+                if (this.IsReady)
+                {
+                    if (this.TryLoadFile(this.RawFromAsset, context, out List<EditDataPatchRecord>? records, out List<EditDataPatchField>? fields, out List<EditDataPatchMoveRecord>? moveEntries, out string? error))
+                    {
+                        this.Records = records.ToArray();
+                        this.Fields = fields.ToArray();
+                        this.MoveRecords = moveEntries.ToArray();
+                    }
+                    else
+                        this.Monitor.Log($"Can't load \"{this.Path}\" fields from file '{this.RawFromAsset}': {error}.", LogLevel.Warn);
+                }
+
+                // update context
+                this.Contextuals
+                    .Add(this.Records)
+                    .Add(this.Fields)
+                    .Add(this.MoveRecords)
+                    .UpdateContext(context);
+                this.IsReady = this.IsReady && this.Contextuals.IsReady;
+
+                return this.MarkUpdated();
             }
 
-            // update context
-            this.Contextuals
-                .Add(this.Records)
-                .Add(this.Fields)
-                .Add(this.MoveRecords)
-                .UpdateContext(context);
-            this.IsReady = this.IsReady && this.Contextuals.IsReady;
-
-            return this.MarkUpdated();
+            // no custom logic needed
+            return base.UpdateContext(context);
         }
 
         /// <inheritdoc />
