@@ -38,6 +38,9 @@ namespace ContentPatcher.Framework.Tokens
         /// <inheritdoc />
         public bool BypassesContextValidation => this.Values.BypassesContextValidation;
 
+        /// <inheritdoc />
+        public Func<string, string>? NormalizeValue { get; protected set; }
+
 
         /*********
         ** Public methods
@@ -162,12 +165,6 @@ namespace ContentPatcher.Framework.Tokens
         }
 
         /// <inheritdoc />
-        public virtual string? NormalizeValue(string? value)
-        {
-            return this.Values.NormalizeValue(value);
-        }
-
-        /// <inheritdoc />
         public virtual IImmutableSet<string> GetValues(IInputArguments input)
         {
             // default logic
@@ -212,10 +209,12 @@ namespace ContentPatcher.Framework.Tokens
                 return ImmutableSets.False;
 
             // get search values
-            IEnumerable<string> search = (
-                from string? arg in argValue.Parsed
-                select this.NormalizeValue(arg) ?? string.Empty
-            );
+            string[] search = argValue.Parsed;
+            if (this.NormalizeValue != null)
+            {
+                for (int i = 0; i < search.Length; i++)
+                    search[i] = this.NormalizeValue(search[i]);
+            }
 
             // get result
             bool found = values is IImmutableSet<string> set

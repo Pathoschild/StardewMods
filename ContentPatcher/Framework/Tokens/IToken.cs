@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
@@ -22,6 +21,9 @@ namespace ContentPatcher.Framework.Tokens
 
         /// <summary>Whether to allow using this token in any value context (e.g. as a number or boolean) without validating ahead of time.</summary>
         bool BypassesContextValidation { get; }
+
+        /// <summary>Normalize a token value so it matches the format expected by the token, if needed. This receives the raw vakue, already trimmed and non-empty.</summary>
+        Func<string, string>? NormalizeValue { get; }
 
 
         /*********
@@ -60,10 +62,6 @@ namespace ContentPatcher.Framework.Tokens
         /// <param name="max">The maximum value this token may return.</param>
         /// <exception cref="InvalidOperationException">The input doesn't match this value provider.</exception>
         bool HasBoundedRangeValues(IInputArguments input, out int min, out int max);
-
-        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
-        /// <param name="value">The raw value.</param>
-        string? NormalizeValue(string? value);
 
         /// <summary>Get the current token values.</summary>
         /// <param name="input">The input arguments.</param>

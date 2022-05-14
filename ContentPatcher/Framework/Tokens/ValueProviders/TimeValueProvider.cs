@@ -25,6 +25,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             : base(ConditionType.Time, mayReturnMultipleValuesForRoot: false)
         {
             this.SaveReader = saveReader;
+            this.NormalizeValue = this.NormalizeValueImpl;
         }
 
         /// <inheritdoc />
@@ -34,7 +35,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             {
                 string? oldTime = this.TimeOfDay;
                 this.TimeOfDay = this.MarkReady(this.SaveReader.IsReady)
-                    ? this.NormalizeValue(this.SaveReader.GetTime())
+                    ? this.NormalizeValueImpl(this.SaveReader.GetTime())
                     : null;
                 return oldTime != this.TimeOfDay;
             });
@@ -56,25 +57,26 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             return true;
         }
 
-        /// <inheritdoc />
-        public override string? NormalizeValue(string? value)
-        {
-            if (value?.Length > 4)
-                value = value.TrimStart('0');
-
-            if (value?.Length < 4)
-                value = value.PadLeft(4, '0');
-
-            return value;
-        }
-
 
         /*********
         ** Private methods
         *********/
         /// <summary>Normalize a time value to 24-hour military format.</summary>
+        /// <param name="value">The value to normalize, already trimmed and non-empty.</param>
+        private string NormalizeValueImpl(string value)
+        {
+            if (value.Length > 4)
+                value = value.TrimStart('0');
+
+            if (value.Length < 4)
+                value = value.PadLeft(4, '0');
+
+            return value;
+        }
+
+        /// <summary>Normalize a time value to 24-hour military format.</summary>
         /// <param name="value">The value to normalize.</param>
-        private string NormalizeValue(int value)
+        private string NormalizeValueImpl(int value)
         {
             return value.ToString("D4");
         }

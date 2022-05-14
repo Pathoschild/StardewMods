@@ -53,6 +53,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public bool BypassesContextValidation { get; protected set; } = false;
 
+        /// <inheritdoc />
+        public Func<string, string>? NormalizeValue { get; protected set; }
+
 
         /*********
         ** Public methods
@@ -210,12 +213,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         {
             this.AssertInput(input);
             return ImmutableSets.Empty;
-        }
-
-        /// <inheritdoc />
-        public virtual string? NormalizeValue(string? value)
-        {
-            return value;
         }
 
 

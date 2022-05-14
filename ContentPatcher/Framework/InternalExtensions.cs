@@ -89,7 +89,7 @@ namespace ContentPatcher.Framework
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>
-        public static IImmutableSet<string> SplitValuesUnique(this ITokenString? tokenStr, Func<string, string?>? normalize = null)
+        public static IImmutableSet<string> SplitValuesUnique(this ITokenString? tokenStr, Func<string, string>? normalize = null)
         {
             if (tokenStr?.IsReady is false)
                 throw new InvalidOperationException($"Can't get values from a non-ready token string (raw value: {tokenStr.Raw}).");
@@ -97,14 +97,14 @@ namespace ContentPatcher.Framework
             if (string.IsNullOrWhiteSpace(tokenStr?.Value))
                 return ImmutableSets.Empty;
 
-            return ImmutableSets.From(
-                from raw in tokenStr.Value.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                let value = normalize != null
-                    ? normalize(raw.Trim())
-                    : raw.Trim()
-                where !string.IsNullOrEmpty(value)
-                select value
-            );
+            string[] values = tokenStr.Value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (normalize != null)
+            {
+                for (int i = 0; i < values.Length; i++)
+                    values[i] = normalize(values[i]);
+            }
+
+            return ImmutableSets.From(values);
         }
 
         /****

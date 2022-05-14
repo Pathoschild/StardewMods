@@ -63,6 +63,14 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
 
 
         /*********
+        ** Accessors
+        *********/
+        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
+        /// <param name="value">The raw value.</param>
+        public Func<string, string>? NormalizeValue { get; protected set; }
+
+
+        /*********
         ** Public methods
         *********/
         /// <summary>Try to create a convention wrapper for a given token instance.</summary>
@@ -129,6 +137,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                     && TryMap<ConventionDelegates.GetValues>(out error)
                     && TryMap<ConventionDelegates.UpdateContext>(out error);
             }
+            if (succeeded && result.NormalizeValueImpl is not null)
+                result.NormalizeValue = value => result.NormalizeValueImpl(value);
 
             wrapper = succeeded ? result : null;
             return succeeded;
@@ -221,15 +231,6 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
             error = null;
 
             return this.TryValidateValuesImpl?.Invoke(input, values, out error) ?? true;
-        }
-
-        /// <summary>Normalize a raw value so it can be compared with the token values.</summary>
-        /// <param name="value">The raw value.</param>
-        public string? NormalizeValue(string? value)
-        {
-            return this.NormalizeValueImpl != null
-                ? this.NormalizeValueImpl(value)
-                : value;
         }
 
 
