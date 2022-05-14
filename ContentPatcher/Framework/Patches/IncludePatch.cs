@@ -89,14 +89,13 @@ namespace ContentPatcher.Framework.Patches
             this.IsApplied = false;
             if (this.AttemptedDataLoad)
             {
-                string errorPrefix = $"Error loading patch '{this.Path}'";
                 try
                 {
                     // validate file existence
                     if (!this.FromAssetExists())
                     {
                         if (this.IsReady)
-                            this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
+                            this.WarnForPatch($"file '{this.FromAsset}' doesn't exist.");
                         return this.MarkUpdated();
                     }
 
@@ -113,7 +112,7 @@ namespace ContentPatcher.Framework.Patches
                                     loopPaths.Reverse();
                                     loopPaths.Add(this.FromAsset);
 
-                                    this.Monitor.Log($"{errorPrefix}: patch skipped because it would cause an infinite loop ({string.Join(" > ", loopPaths)}).", LogLevel.Warn);
+                                    this.WarnForPatch($"patch skipped because it would cause an infinite loop ({string.Join(" > ", loopPaths)}).");
                                     return this.MarkUpdated();
                                 }
                             }
@@ -124,7 +123,7 @@ namespace ContentPatcher.Framework.Patches
                     var content = this.ContentPack.ModContent.Load<ContentConfig>(this.FromAsset);
                     if (!content.Changes.Any())
                     {
-                        this.Monitor.Log($"{errorPrefix}: file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?", LogLevel.Warn);
+                        this.WarnForPatch($"file '{this.FromAsset}' doesn't have anything in the {nameof(content.Changes)} field. Is the file formatted correctly?");
                         return this.MarkUpdated();
                     }
 
@@ -132,7 +131,7 @@ namespace ContentPatcher.Framework.Patches
                     string[] invalidFields = this.GetInvalidFields(content).ToArray();
                     if (invalidFields.Any())
                     {
-                        this.Monitor.Log($"{errorPrefix}: file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).", LogLevel.Warn);
+                        this.WarnForPatch($"file contains fields which aren't allowed for a secondary file ({string.Join(", ", invalidFields.OrderByHuman())}).");
                         return this.MarkUpdated();
                     }
 
@@ -149,7 +148,7 @@ namespace ContentPatcher.Framework.Patches
                 }
                 catch (Exception ex)
                 {
-                    this.Monitor.Log($"{errorPrefix}. Technical details:\n{ex}", LogLevel.Error);
+                    this.WarnForPatch($"an error occurred.\n{ex}", LogLevel.Error);
                     return this.MarkUpdated();
                 }
             }
@@ -222,6 +221,14 @@ namespace ContentPatcher.Framework.Patches
             return logName.ContainsIgnoreCase(filePath)
                 ? this.Path // no need to add file to path if it's already in the name
                 : this.Path.With(filePath);
+        }
+
+        /// <summary>Log a warning for an issue when applying the patch.</summary>
+        /// <param name="message">The message to log.</param>
+        /// <param name="level">The message log level.</param>
+        private void WarnForPatch(string message, LogLevel level = LogLevel.Warn)
+        {
+            this.Monitor.Log($"Error loading patch '{this.Path}': {message}.", level);
         }
     }
 }

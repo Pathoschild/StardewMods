@@ -111,17 +111,15 @@ namespace ContentPatcher.Framework.Patches
         /// <inheritdoc />
         public override void Edit<T>(IAssetData asset)
         {
-            string errorPrefix = $"Can't apply map patch \"{this.Path}\" to {this.TargetAsset}";
-
             // validate
             if (typeof(T) != typeof(Map))
             {
-                this.Monitor.Log($"{errorPrefix}: this file isn't a map file (found {typeof(T)}).", LogLevel.Warn);
+                this.WarnForPatch($"this file isn't a map file (found {typeof(T)}).");
                 return;
             }
             if (this.AppliesMapPatch && !this.FromAssetExists())
             {
-                this.Monitor.Log($"{errorPrefix}: the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.", LogLevel.Warn);
+                this.WarnForPatch($"the {nameof(PatchConfig.FromFile)} file '{this.FromAsset}' doesn't exist.");
                 return;
             }
 
@@ -134,7 +132,7 @@ namespace ContentPatcher.Framework.Patches
             {
                 Map source = this.ContentPack.ModContent.Load<Map>(this.FromAsset!);
                 if (!this.TryApplyMapPatch(source, targetAsset, out string? error))
-                    this.Monitor.Log($"{errorPrefix}: map patch couldn't be applied: {error}", LogLevel.Warn);
+                    this.WarnForPatch($"map patch couldn't be applied: {error}");
             }
 
             // patch map tiles
@@ -145,7 +143,7 @@ namespace ContentPatcher.Framework.Patches
                 {
                     i++;
                     if (!this.TryApplyTile(target, tilePatch, out string? error))
-                        this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.MapTiles)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
+                        this.WarnForPatch($"{nameof(PatchConfig.MapTiles)} > entry {i} couldn't be applied: {error}");
                 }
             }
 
@@ -166,14 +164,14 @@ namespace ContentPatcher.Framework.Patches
             {
                 this.ApplyWarps(target, out IDictionary<string, string> errors);
                 foreach ((string warp, string error) in errors)
-                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.AddWarps)} > warp '{warp}' couldn't be applied: {error}", LogLevel.Warn);
+                    this.WarnForPatch($"{nameof(PatchConfig.AddWarps)} > warp '{warp}' couldn't be applied: {error}");
             }
 
             // apply text operations
             for (int i = 0; i < this.TextOperations.Length; i++)
             {
                 if (!this.TryApplyTextOperation(target, this.TextOperations[i], out string? error))
-                    this.Monitor.Log($"{errorPrefix}: {nameof(PatchConfig.TextOperations)} > entry {i} couldn't be applied: {error}", LogLevel.Warn);
+                    this.WarnForPatch($"{nameof(PatchConfig.TextOperations)} > entry {i} couldn't be applied: {error}");
             }
         }
 
@@ -442,13 +440,11 @@ namespace ContentPatcher.Framework.Patches
         /// <returns>Returns whether parsing the tile succeeded.</returns>
         private bool TryValidateArea(Rectangle area, Point? maxSize, string name, [NotNullWhen(false)] out string? error)
         {
-            string errorPrefix = $"{name} area (X:{area.X}, Y:{area.Y}, Width:{area.Width}, Height:{area.Height})";
-
             if (area.X < 0 || area.Y < 0 || area.Width < 0 || area.Height < 0)
-                return this.Fail($"{errorPrefix} has negative values, which isn't valid.", out error);
+                return this.FailArea(area, name, "has negative values, which isn't valid.", out error);
 
             if (maxSize.HasValue && (area.Right > maxSize.Value.X || area.Bottom > maxSize.Value.Y))
-                return this.Fail($"{errorPrefix} extends past the edges of the {name} map, which isn't allowed.", out error);
+                return this.FailArea(area, name, $"extends past the edges of the {name} map, which isn't allowed.", out error);
 
             error = null;
             return true;
@@ -470,6 +466,24 @@ namespace ContentPatcher.Framework.Patches
             }
 
             return new Rectangle(0, 0, maxWidth, maxHeight);
+        }
+
+        /// <summary>A utility method for returning false with an out error specific to an area error.</summary>
+        /// <param name="area">The area to validate.</param>
+        /// <param name="name">The label for the area (e.g. 'source' or 'target').</param>
+        /// <param name="inError">The error message.</param>
+        /// <param name="outError">The input error.</param>
+        /// <returns>Return false.</returns>
+        private bool FailArea(Rectangle area, string name, string inError, out string outError)
+        {
+            return this.Fail($"{name} area (X:{area.X}, Y:{area.Y}, Width:{area.Width}, Height:{area.Height}) {inError}", out outError);
+        }
+
+        /// <summary>Log a warning for an issue when applying the patch.</summary>
+        /// <param name="message">The message to log.</param>
+        private void WarnForPatch(string message)
+        {
+            this.Monitor.Log($"Can't apply map patch \"{this.Path}\" to {this.TargetAsset}: {message}", LogLevel.Warn);
         }
     }
 }

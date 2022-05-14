@@ -346,11 +346,10 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                 ParameterInfo sourceParam = sourceParams[i];
                 ParameterInfo targetParam = targetParams[i];
 
-                string paramErrorPrefix = $"method {name} > parameter {i + 1} ({targetParam.Name}) ";
                 if (sourceParam.ParameterType != targetParam.ParameterType)
-                    return $"{paramErrorPrefix} has type {GetTypeName(targetParam.ParameterType)}, but expected {GetTypeName(sourceParam.ParameterType)}.";
+                    return $"method {name} > parameter {i + 1} ({targetParam.Name}) has type {GetTypeName(targetParam.ParameterType)}, but expected {GetTypeName(sourceParam.ParameterType)}.";
                 if (sourceParam.Attributes != targetParam.Attributes)
-                    return $"{paramErrorPrefix} has attributes {targetParam.Attributes}, but expected {sourceParam.Attributes}.";
+                    return $"method {name} > parameter {i + 1} ({targetParam.Name}) has attributes {targetParam.Attributes}, but expected {sourceParam.Attributes}.";
             }
 
             // unknown reason
