@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 
 namespace ContentPatcher.Framework
 {
@@ -74,19 +73,22 @@ namespace ContentPatcher.Framework
 
                         case 1:
                             return ImmutableSets.FromValue(list[0]);
+
+                        case 2 when bool.TryParse(list[0], out bool left) && bool.TryParse(list[1], out bool right):
+                            if (left != right)
+                                return ImmutableSets.Boolean;
+                            return left
+                                ? ImmutableSets.True
+                                : ImmutableSets.False;
                     }
                     break;
             }
 
             // create custom set
             ImmutableHashSet<string> result = values.ToImmutableHashSet(ImmutableSets.Comparer);
-            return result.Count switch
-            {
-                0 => ImmutableSets.Empty,
-                1 => ImmutableSets.FromPredefinedValueOnly(result.First()) ?? result,
-                2 when (result.Contains("true") && result.Contains("false")) => ImmutableSets.Boolean,
-                _ => result
-            };
+            return result.Count == 0
+                ? ImmutableSets.Empty
+                : result;
         }
 
         /// <summary>Get an immutable set containing only the given value.</summary>
@@ -127,14 +129,17 @@ namespace ContentPatcher.Framework
         /// <param name="value">The value for which to get a set.</param>
         private static IImmutableSet<string>? FromPredefinedValueOnly(string value)
         {
+            if (bool.TryParse(value, out bool boolean))
+            {
+                return boolean
+                    ? ImmutableSets.True
+                    : ImmutableSets.False;
+            }
+
             return value switch
             {
                 // blank string
                 "" => ImmutableSets.BlankString,
-
-                // boolean
-                "true" or "True" => ImmutableSets.True,
-                "false" or "False" => ImmutableSets.False,
 
                 // common digits
                 "0" => ImmutableSets.Zero,
