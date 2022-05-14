@@ -10,6 +10,7 @@ using Pathoschild.Stardew.CropsAnytimeAnywhere.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.TerrainFeatures;
 using xTile.ObjectModel;
 using xTile.Tiles;
 
@@ -103,8 +104,11 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         {
             if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops && config.GrowCropsOutOfSeason)
             {
-                if (!LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate))) // game skips tilled dirt decay on DayUpdate if we return true here
-                    __result = true;
+                // special case: game skips tilled dirt decay on GameLocation.DayUpdate if we return true here
+                if (LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate)) && !LocationPatcher.CallStackIncludes(typeof(HoeDirt), nameof(HoeDirt.dayUpdate)))
+                    return;
+
+                __result = true;
             }
         }
 
