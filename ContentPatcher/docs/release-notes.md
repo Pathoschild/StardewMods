@@ -15,6 +15,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
   * Added predefined reusable sets for common values to reduce allocations.
   * Optimized token normalization when parsing content pack values.
   * Optimized `{{time}}` formatting.
+  * Optimized string splitting.
 * Fixed error when passing a null input to the `LowerCase`/`UpperCase` or `Render` tokens.
 
 ## 1.26.1

@@ -389,7 +389,7 @@ namespace Pathoschild.Stardew.Common
 
             // get word list
             List<string> words = new List<string>();
-            foreach (string word in text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
+            foreach (string word in text.Split(' ', StringSplitOptions.RemoveEmptyEntries))
             {
                 // split on newlines
                 string wordPart = word;

@@ -438,12 +438,9 @@ namespace ContentPatcher
             if (string.IsNullOrWhiteSpace(field))
                 return ImmutableSets.Empty;
 
-            string[] values = (
-                from value in field.Split(',')
-                where !string.IsNullOrWhiteSpace(value)
-                select value.Trim()
-            ).ToArray();
-            return ImmutableSets.From(values);
+            return ImmutableSets.From(
+                field.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            );
         }
     }
 }

@@ -56,7 +56,7 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
             // get possible values from literal token
             IImmutableSet<string> splitValues = possibleValues.SplitValuesUnique();
             this.AllowedRootValues = this.AllowedRootValues.Union(
-                possibleValues.SplitValuesUnique().Select(value => value.Trim())
+                possibleValues.SplitValuesUnique()
             );
             if (splitValues.Count > 1)
                 this.MayReturnMultipleValuesForRoot = true;

@@ -85,7 +85,7 @@ namespace ContentPatcher.Framework
             return !string.IsNullOrWhiteSpace(str?.Value);
         }
 
-        /// <summary>Get unique comma-separated values from a token string.</summary>
+        /// <summary>Get unique, trimmed, comma-separated values from a token string.</summary>
         /// <param name="tokenStr">The token string to parse.</param>
         /// <param name="normalize">Normalize a value.</param>
         /// <exception cref="InvalidOperationException">The token string is not ready (<see cref="IContextual.IsReady"/> is false).</exception>

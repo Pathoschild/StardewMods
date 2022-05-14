@@ -298,7 +298,7 @@ internal class InitialsToken
             yield break;
 
         // get initials
-        yield return string.Join("", name.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
+        yield return string.Join("", name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(p => p[0]));
     }
 }
 ```
