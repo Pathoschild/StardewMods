@@ -14,6 +14,7 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
   * Migrated to immutable sets internally, so Content Patcher can avoid copying values in many cases.
   * Added predefined reusable sets for common values to reduce allocations.
   * Optimized token normalization when parsing content pack values.
+  * Optimized `EditData` edits.
   * Optimized `{{time}}` formatting.
   * Optimized string splitting.
   * Removed unneeded array copies.
