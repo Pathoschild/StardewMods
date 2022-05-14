@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using ContentPatcher.Framework.Conditions;
 
 namespace ContentPatcher.Framework.Tokens.ValueProviders
@@ -60,11 +59,13 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         /// <inheritdoc />
         public override string? NormalizeValue(string? value)
         {
-            value = value?.Trim();
-            if (string.IsNullOrEmpty(value))
-                return value;
+            if (value?.Length > 4)
+                value = value.TrimStart('0');
 
-            return value.TrimStart('0').PadLeft(4, '0');
+            if (value?.Length < 4)
+                value = value.PadLeft(4, '0');
+
+            return value;
         }
 
 
@@ -73,9 +74,9 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders
         *********/
         /// <summary>Normalize a time value to 24-hour military format.</summary>
         /// <param name="value">The value to normalize.</param>
-        private string? NormalizeValue(int value)
+        private string NormalizeValue(int value)
         {
-            return this.NormalizeValue(value.ToString(CultureInfo.InvariantCulture));
+            return value.ToString("D4");
         }
     }
 }
