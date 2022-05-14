@@ -49,7 +49,7 @@ namespace ContentPatcher.Framework.Patches
         public TextOperation(TextOperationType operation, IManagedTokenString[] target, IManagedTokenString value, string? delimiter)
         {
             this.Operation = operation;
-            this.Target = target.Cast<ITokenString>().ToArray();
+            this.Target = target.ToArray<ITokenString>();
             this.Value = value;
             this.Delimiter = delimiter ?? string.Empty;
 

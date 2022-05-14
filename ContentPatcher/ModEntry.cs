@@ -300,7 +300,7 @@ namespace ContentPatcher
         /// <summary>Create a raw uninitialized screen manager instance.</summary>
         private ScreenManager CreateScreenManager()
         {
-            var modTokens = this.QueuedModTokens.ToArray();
+            ModProvidedToken[] modTokens = this.QueuedModTokens.ToArray();
             return new ScreenManager(
                 helper: this.Helper,
                 monitor: this.Monitor,

@@ -123,7 +123,7 @@ namespace ContentPatcher.Framework
                 this.ConfigMenu.AddTextbox(
                     name: GetName,
                     tooltip: GetDescription,
-                    get: _ => string.Join(", ", field.Value.ToArray()),
+                    get: _ => string.Join(", ", field.Value),
                     set: (_, newValue) =>
                     {
                         IImmutableSet<string> values = this.ParseCommaDelimitedField(newValue);

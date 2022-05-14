@@ -336,8 +336,8 @@ namespace ContentPatcher.Framework.Tokens.ValueProviders.ModConvention
                 return $"method {name} is a generic method, which isn't supported.";
 
             // check arguments
-            ParameterInfo[] sourceParams = source.GetParameters().ToArray();
-            ParameterInfo[] targetParams = target.GetParameters().ToArray();
+            ParameterInfo[] sourceParams = source.GetParameters();
+            ParameterInfo[] targetParams = target.GetParameters();
             if (sourceParams.Length != targetParams.Length)
                 return $"method {name} has {targetParams.Length} arguments, but expected {sourceParams.Length}.";
 

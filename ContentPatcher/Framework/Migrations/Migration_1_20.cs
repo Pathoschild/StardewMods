@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using ContentPatcher.Framework.Conditions;
@@ -50,11 +49,14 @@ namespace ContentPatcher.Framework.Migrations
                 }
 
                 // default to valley
-                var valleyArg = new[] { new LexTokenLiteral(LocationContext.Valley.ToString()) };
+                ILexToken[] valleyArg = new[] { new LexTokenLiteral(LocationContext.Valley.ToString()) };
+                ILexToken[]? inputParts = token.InputArgs?.Parts;
                 lexToken = new LexTokenToken(
                     name: token.Name,
                     inputArgs: new LexTokenInput(
-                        valleyArg.Concat(token.InputArgs?.Parts ?? Array.Empty<ILexToken>()).ToArray()
+                        inputParts?.Any() == true
+                            ? valleyArg.Concat(inputParts).ToArray()
+                            : valleyArg
                     ),
                     impliedBraces: true
                 );

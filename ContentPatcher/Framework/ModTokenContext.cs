@@ -116,7 +116,7 @@ namespace ContentPatcher.Framework
 
             // create token value handler
             var tokenValue = new DynamicTokenValue(managed, rawValue, conditions);
-            string[] tokensUsed = tokenValue.GetTokensUsed().ToArray();
+            IImmutableSet<string> tokensUsed = tokenValue.GetTokensUsed();
 
             // save value info
             managed.ValueProvider.AddTokensUsed(tokensUsed);

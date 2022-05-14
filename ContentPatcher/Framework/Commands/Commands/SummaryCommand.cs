@@ -144,12 +144,12 @@ namespace ContentPatcher.Framework.Commands.Commands
                 var tokensByProvider =
                     (
                         from token in tokenManager.GetTokens(enforceContext: false).OrderByHuman(p => p.Name)
-                        let inputArgs = token.GetAllowedInputArguments()?.ToArray()
+                        let inputArgs = token.GetAllowedInputArguments()
                         let rootValues = !token.RequiresInput ? this.GetValues(token, InputArguments.Empty, sort).ToArray() : Array.Empty<string>()
                         let isMultiValue =
-                            inputArgs?.Length > 1
+                            inputArgs?.Count > 1
                             || rootValues.Length > 1
-                            || (inputArgs?.Length == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs[0], path.With(token.Name, "input"))), sort).Count() > 1)
+                            || (inputArgs?.Count == 1 && this.GetValues(token, new InputArguments(new LiteralString(inputArgs.First(), path.With(token.Name, "input"))), sort).Count() > 1)
                         let mod = (token as ModProvidedToken)?.Mod
                         orderby isMultiValue // single-value tokens first, then alphabetically
                         select new { Mod = (IManifest?)mod, Token = token }
