@@ -1,7 +1,9 @@
 ﻿[← back to readme](README.md)
 
 # Release notes
-## Upcoming release
+## 1.4.4
+Released 15 May 2022 for SMAPI 3.14.0 or later.
+
 * Fixed out-of-season crops dying overnight in 1.4.3.
 
 ## 1.4.3

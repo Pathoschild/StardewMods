@@ -9,14 +9,13 @@ When releasing a format change, don't forget to update the smapi.io/json schema!
 
 
 -->
-## Upcoming release
+## 1.26.2
+Released 15 May 2022 for SMAPI 3.14.0 or later.
+
 * Optimized performance and memory allocation:
   * Migrated to immutable sets internally, so Content Patcher can avoid copying values in many cases.
-  * Added predefined reusable sets for common values to reduce allocations.
-  * Optimized token normalization when parsing content pack values.
-  * Optimized `EditData` edits.
-  * Optimized `{{time}}` formatting.
-  * Optimized string splitting.
+  * Added predefined sets for common values to reduce allocations.
+  * Optimized token normalization, string splitting, `EditData` edits, and `{{time}}` formatting.
   * Removed unneeded array copies.
 * Fixed error when passing a null input to the `LowerCase`/`UpperCase` or `Render` tokens.
 * Fixed `EditData` patches in older content packs not updated if their `FromFile` changes.
