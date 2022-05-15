@@ -93,7 +93,7 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="__result">The return value to use for the method.</param>
         private static void After_CanPlantSeedsOrTreesHere(GameLocation __instance, ref bool __result)
         {
-            if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops)
+            if (!__result && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops)
                 __result = true;
         }
 
@@ -102,14 +102,8 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
         /// <param name="__result">The return value to use for the method.</param>
         private static void After_SeedsIgnoreSeasonsHere(GameLocation __instance, ref bool __result)
         {
-            if (LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops && config.GrowCropsOutOfSeason)
-            {
-                // special case: game skips tilled dirt decay on GameLocation.DayUpdate if we return true here
-                if (LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate)) && !LocationPatcher.CallStackIncludes(typeof(HoeDirt), nameof(HoeDirt.dayUpdate)))
-                    return;
-
+            if (!__result && LocationPatcher.Config.TryGetForLocation(__instance, out PerLocationConfig? config) && config.GrowCrops && config.GrowCropsOutOfSeason && !LocationPatcher.IsGameClearingTilledDirt())
                 __result = true;
-            }
         }
 
         /// <summary>A method called via Harmony after <see cref="GameLocation.doesTileHaveProperty"/>.</summary>
@@ -217,6 +211,14 @@ namespace Pathoschild.Stardew.CropsAnytimeAnywhere.Patches
             return found
                 ? type
                 : null;
+        }
+
+        /// <summary>Get whether the game is currently clearing tilled dirt.</summary>
+        private static bool IsGameClearingTilledDirt()
+        {
+            return Game1.fadeToBlack
+                && LocationPatcher.CallStackIncludes(typeof(GameLocation), nameof(GameLocation.DayUpdate))
+                && !LocationPatcher.CallStackIncludes(typeof(HoeDirt), nameof(HoeDirt.dayUpdate));
         }
 
         /// <summary>Get whether the given method appears in the call stack.</summary>
